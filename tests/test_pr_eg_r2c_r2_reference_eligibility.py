@@ -157,6 +157,71 @@ def test_independent_clarification_holdout(case):
  assert got['action']=='clarify' and got['line']==case['line'] and got['owner']=='gm'
  assert ss==before
 
+@pytest.mark.parametrize('question,line',[
+ ('Can you repeat that?', 'Which ferry should I use?'),
+ ('What did you mean by that?', 'Are you asking about the orchard or the mill?'),
+ ('Say that again in simpler words.', 'Which bell are you pointing at?'),
+])
+def test_current_gm_clarification_precedes_present_npc_history(question,line):
+ from game.conversational_continuity import continuity_directive
+ ss={};soc=dict(npc_id='speaker',npc_name='Harbormaster Lis')
+ record_delivered_exchange(ss,player_text='What is open?',delivered_text='Harbormaster Lis says, "The old quay is open."',social=soc,scene_id='harbor')
+ record_delivered_exchange(ss,player_text='I ask one of them.',delivered_text=line,social={},scene_id='harbor',ownership='gm')
+ ss['conversational_context']['last_gm_exchange']=dict(category='CLARIFY',scene_id='harbor',response=line)
+ ss['conversational_context']['pending_clarification']=dict(kind='ambiguous_addressee',status='pending')
+ ss['interaction_context']=dict(active_interaction_kind='social',active_interaction_target_id='speaker')
+ world=dict(npcs=[dict(id='speaker',name='Harbormaster Lis',location='harbor')])
+ before=copy.deepcopy(ss)
+ got=continuity_directive(question,session=ss,scene=dict(id='harbor'),world=world)
+ assert got==dict(action='clarify',owner='gm',npc_id='',npc_name='',line=line,reason='repeat_pending_clarification')
+ assert ss==before
+
+
+@pytest.mark.parametrize('variant,question,reason',[
+ ('missing_gm', 'Can you repeat that?', 'absent_npc_reference'),
+ ('other_scene', 'Can you repeat that?', 'absent_npc_reference'),
+ ('other_response', 'Can you repeat that?', 'absent_npc_reference'),
+ ('other_category', 'Can you repeat that?', 'absent_npc_reference'),
+ ('newer_npc', 'Can you repeat that?', 'absent_npc_reference'),
+ ('newer_gm', 'Can you repeat that?', 'absent_npc_reference'),
+ ('npc_owned', 'Can you repeat that?', 'absent_npc_reference'),
+ ('explicit_subject', 'Can you repeat the old quay statement?', 'absent_npc_reference'),
+ ('explicit_absent_speaker', 'Can you repeat Harbormaster Lis?', 'absent_npc_reference'),
+ ('explicit_present_speaker', 'Can you repeat Harbormaster Lis?', 'repeat_delivered_statement'),
+ ('explicit_ask', 'I ask Harbormaster Lis what is open.', None),
+ ('scene_request', 'Describe our surroundings.', None),
+])
+def test_clarification_repeat_keeps_existing_selection_boundaries(variant,question,reason):
+ from game.conversational_continuity import continuity_directive
+ ss={};soc=dict(npc_id='speaker',npc_name='Harbormaster Lis')
+ record_delivered_exchange(ss,player_text='What is open?',delivered_text='Harbormaster Lis says, "The old quay is open."',social=soc,scene_id='harbor')
+ line='Which ferry should I use?'
+ row=record_delivered_exchange(ss,player_text='I ask one of them.',delivered_text=line,social={},scene_id='harbor',ownership='gm')
+ ctx=ss['conversational_context'];ctx['last_gm_exchange']=dict(category='CLARIFY',scene_id='harbor',response=line)
+ ctx['pending_clarification']=dict(kind='ambiguous_addressee',status='pending')
+ scene=dict(id='harbor');world=dict(npcs=[])
+ if variant=='missing_gm':ctx.pop('last_gm_exchange')
+ if variant=='other_scene':scene=dict(id='lane')
+ if variant=='other_response':ctx['last_gm_exchange']['response']='Which other ferry?'
+ if variant=='other_category':ctx['last_gm_exchange']['category']='ANSWER'
+ if variant=='newer_npc':
+  record_delivered_exchange(ss,player_text='What is open?',delivered_text='Harbormaster Lis says, "The old quay is open."',social=soc,scene_id='harbor')
+ if variant=='newer_gm':
+  record_delivered_exchange(ss,player_text='Look around.',delivered_text='The tide turns.',social={},scene_id='harbor',ownership='gm')
+ if variant=='npc_owned':row['ownership']='npc'
+ if variant=='explicit_present_speaker':world=dict(npcs=[dict(id='speaker',name='Harbormaster Lis',location='harbor')])
+ before=copy.deepcopy(ss)
+ got=continuity_directive(question,session=ss,scene=scene,world=world)
+ if reason is None:
+  assert got is None
+ else:
+  assert got['reason']==reason
+  assert got['owner']==('npc' if reason=='repeat_delivered_statement' else 'gm')
+  assert 'The old quay is open.' in got['line']
+  assert got['line']!=line
+ assert ss==before
+
+
 @pytest.mark.parametrize('followup',['Can you repeat that?','What did you mean by that?','Say that again in simpler words.'])
 def test_T17_actual_http_pending_clarification(followup,scene,monkeypatch):
  monkeypatch.setenv('ASHEN_DISABLE_PROVIDER_CALLS','0');monkeypatch.setenv('ASHEN_DISABLE_LIVE_INTERPRETATION','0')

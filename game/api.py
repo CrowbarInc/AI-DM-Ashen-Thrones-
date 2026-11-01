@@ -4793,7 +4793,7 @@ def _opening_response_rejection(
 ) -> str | None:
     """Reject an opening that the existing contract does not accept.
 
-    Safe fallback text is not a completed scene_opening. Structured validation
+    Safe fallback text cannot complete this operation. Structured validation
     is unchanged: a rejected envelope stays rejected.
     """
     if not _opening_operation_required(resolution, response_type_contract):

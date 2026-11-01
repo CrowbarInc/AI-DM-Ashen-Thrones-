@@ -643,7 +643,9 @@ def continuity_directive(
             if historical_disclosure_permitted(r, people.get(str(r.get("speaker_id") or "")))]
     ctx = (session or {}).get("conversational_context") or {}
     last_gm = ctx.get("last_gm_exchange") or {}
-    latest = rows[-1] if rows else {}
+    # Conversational recency includes GM questions that are not NPC disclosures.
+    # Keep the filtered rows for historical recall below.
+    latest = last_delivered_exchange(session) or {}
     scene_id = str(((scene or {}).get("scene") or scene or {}).get("id") or "")
     # A bare request to repeat/clarify refers to the latest delivered question,
     # not an older NPC disclosure. Explicit speaker/subject recall still uses
