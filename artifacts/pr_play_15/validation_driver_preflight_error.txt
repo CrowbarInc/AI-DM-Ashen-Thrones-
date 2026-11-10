@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\playtest\validate_startup.py", line 114, in <module>
+    main()
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\playtest\validate_startup.py", line 94, in main
+    measurements['cycles'].append(check(run, result, True))
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\playtest\validate_startup.py", line 59, in check
+    assert entries and all(e['event'] == 'initialized' for e in entries)
+AssertionError

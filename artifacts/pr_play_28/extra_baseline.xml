@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="10.063" timestamp="2026-11-01T17:25:51.584218-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_27_expression_recovery" name="test_budget_stops_real_controller_after_recovery" time="5.412" /><testcase classname="tests.test_clue_idempotence" name="test_apply_socially_revealed_leads_twice_preserves_canonical_state" time="0.002"><failure message="assert 0 == 1&#10; +  where 0 = len([])">tests\test_clue_idempotence.py:122: in test_apply_socially_revealed_leads_twice_preserves_canonical_state
+    assert len([e for e in social_events if e.get("clue_id") == "missing_patrol"]) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])</failure></testcase></testsuite></testsuites>

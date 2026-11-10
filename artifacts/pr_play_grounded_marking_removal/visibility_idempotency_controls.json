@@ -1,0 +1,302 @@
+{
+  "request": {
+    "version": 1,
+    "operation": "set_marking_visibility",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+    "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+    "visibility": {
+      "classification": "visible"
+    },
+    "expected_revision": 1,
+    "request_id": "classify-1",
+    "authorization": {
+      "caller_id": "trusted-fixture",
+      "decision_id": "PRIVATE-CLASSIFICATION",
+      "mechanics": "not_applicable",
+      "preconditions": {
+        "capability": "PRIVATE:capability",
+        "rights": "PRIVATE:rights",
+        "classification_basis": "PRIVATE:classification_basis",
+        "target_exists": "PRIVATE:target_exists",
+        "marking_exists": "PRIVATE:marking_exists"
+      }
+    },
+    "request_digest": "76ad8c690fd57cb9b7972bbe86259e72674957327498f2dca81f1def834c396d"
+  },
+  "result": {
+    "version": 1,
+    "status": "applied",
+    "persistence": "committed",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+    "request_id": "classify-1",
+    "request_digest": "76ad8c690fd57cb9b7972bbe86259e72674957327498f2dca81f1def834c396d",
+    "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+    "previous_revision": 1,
+    "resulting_revision": 2,
+    "operation": "set_marking_visibility",
+    "request": {
+      "version": 1,
+      "operation": "set_marking_visibility",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+      "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+      "visibility": {
+        "classification": "visible"
+      },
+      "expected_revision": 1,
+      "request_id": "classify-1",
+      "authorization": {
+        "caller_id": "trusted-fixture",
+        "decision_id": "PRIVATE-CLASSIFICATION",
+        "mechanics": "not_applicable",
+        "preconditions": {
+          "capability": "PRIVATE:capability",
+          "rights": "PRIVATE:rights",
+          "classification_basis": "PRIVATE:classification_basis",
+          "target_exists": "PRIVATE:target_exists",
+          "marking_exists": "PRIVATE:marking_exists"
+        }
+      },
+      "request_digest": "76ad8c690fd57cb9b7972bbe86259e72674957327498f2dca81f1def834c396d"
+    }
+  },
+  "removed": {
+    "version": 1,
+    "status": "applied",
+    "persistence": "committed",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+    "request_id": "remove-1",
+    "request_digest": "b6eda5202eb8c8fb95ef1f4681b2f690bff6201c333c4a29bb2f6cf5ee767385",
+    "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+    "previous_revision": 2,
+    "resulting_revision": 3,
+    "operation": "remove_marking",
+    "request": {
+      "version": 1,
+      "operation": "remove_marking",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+      "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+      "request_id": "remove-1",
+      "expected_revision": 2,
+      "authorization": {
+        "caller_id": "internal-test",
+        "decision_id": "remove-approved",
+        "mechanics": "not_applicable",
+        "preconditions": {
+          "capability": "evidence:capability",
+          "removable": "evidence:removable",
+          "rights": "evidence:rights",
+          "target_exists": "evidence:target_exists",
+          "accessible": "evidence:accessible",
+          "marking_exists": "evidence:marking_exists"
+        }
+      },
+      "request_digest": "b6eda5202eb8c8fb95ef1f4681b2f690bff6201c333c4a29bb2f6cf5ee767385"
+    },
+    "removed_marking": {
+      "version": 1,
+      "type": "add_marking",
+      "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+      "content": "Northwest track",
+      "source": {
+        "kind": "explicit_literal",
+        "reference": "controlled-fixture"
+      },
+      "authorization": {
+        "caller_id": "internal-test",
+        "decision_id": "approval-1",
+        "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+        "preconditions": {
+          "capability": "fixture-evidence:capability",
+          "source_disclosed": "fixture-evidence:source_disclosed",
+          "writable_surface": "fixture-evidence:writable_surface",
+          "medium_compatible": "fixture-evidence:medium_compatible",
+          "rights": "fixture-evidence:rights",
+          "target_exists": "fixture-evidence:target_exists",
+          "accessible": "fixture-evidence:accessible",
+          "medium_available": "fixture-evidence:medium_available"
+        },
+        "mechanics": "not_applicable"
+      },
+      "request_id": "mark-request-1",
+      "request_digest": "d32fa4ddd0103d0c0cac26f916ffb88de437c96e680831ef53445135ae164b26",
+      "applied_revision": 1
+    }
+  },
+  "replay_after_removal": {
+    "version": 1,
+    "status": "applied",
+    "persistence": "committed",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+    "request_id": "classify-1",
+    "request_digest": "76ad8c690fd57cb9b7972bbe86259e72674957327498f2dca81f1def834c396d",
+    "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+    "previous_revision": 1,
+    "resulting_revision": 2,
+    "operation": "set_marking_visibility",
+    "request": {
+      "version": 1,
+      "operation": "set_marking_visibility",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+      "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+      "visibility": {
+        "classification": "visible"
+      },
+      "expected_revision": 1,
+      "request_id": "classify-1",
+      "authorization": {
+        "caller_id": "trusted-fixture",
+        "decision_id": "PRIVATE-CLASSIFICATION",
+        "mechanics": "not_applicable",
+        "preconditions": {
+          "capability": "PRIVATE:capability",
+          "rights": "PRIVATE:rights",
+          "classification_basis": "PRIVATE:classification_basis",
+          "target_exists": "PRIVATE:target_exists",
+          "marking_exists": "PRIVATE:marking_exists"
+        }
+      },
+      "request_digest": "76ad8c690fd57cb9b7972bbe86259e72674957327498f2dca81f1def834c396d"
+    }
+  },
+  "shared_ledger": {
+    "version": 1,
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "entries": {
+      "mark-request-1": {
+        "version": 1,
+        "status": "applied",
+        "persistence": "committed",
+        "campaign_run_id": "identity-test-campaign",
+        "character_id": "hero",
+        "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+        "request_id": "mark-request-1",
+        "request_digest": "d32fa4ddd0103d0c0cac26f916ffb88de437c96e680831ef53445135ae164b26",
+        "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+        "previous_revision": 0,
+        "resulting_revision": 1
+      },
+      "classify-1": {
+        "version": 1,
+        "status": "applied",
+        "persistence": "committed",
+        "campaign_run_id": "identity-test-campaign",
+        "character_id": "hero",
+        "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+        "request_id": "classify-1",
+        "request_digest": "76ad8c690fd57cb9b7972bbe86259e72674957327498f2dca81f1def834c396d",
+        "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+        "previous_revision": 1,
+        "resulting_revision": 2,
+        "operation": "set_marking_visibility",
+        "request": {
+          "version": 1,
+          "operation": "set_marking_visibility",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+          "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+          "visibility": {
+            "classification": "visible"
+          },
+          "expected_revision": 1,
+          "request_id": "classify-1",
+          "authorization": {
+            "caller_id": "trusted-fixture",
+            "decision_id": "PRIVATE-CLASSIFICATION",
+            "mechanics": "not_applicable",
+            "preconditions": {
+              "capability": "PRIVATE:capability",
+              "rights": "PRIVATE:rights",
+              "classification_basis": "PRIVATE:classification_basis",
+              "target_exists": "PRIVATE:target_exists",
+              "marking_exists": "PRIVATE:marking_exists"
+            }
+          },
+          "request_digest": "76ad8c690fd57cb9b7972bbe86259e72674957327498f2dca81f1def834c396d"
+        }
+      },
+      "remove-1": {
+        "version": 1,
+        "status": "applied",
+        "persistence": "committed",
+        "campaign_run_id": "identity-test-campaign",
+        "character_id": "hero",
+        "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+        "request_id": "remove-1",
+        "request_digest": "b6eda5202eb8c8fb95ef1f4681b2f690bff6201c333c4a29bb2f6cf5ee767385",
+        "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+        "previous_revision": 2,
+        "resulting_revision": 3,
+        "operation": "remove_marking",
+        "request": {
+          "version": 1,
+          "operation": "remove_marking",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "0f4b6b46-f47c-453c-815d-b5de46345c10",
+          "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+          "request_id": "remove-1",
+          "expected_revision": 2,
+          "authorization": {
+            "caller_id": "internal-test",
+            "decision_id": "remove-approved",
+            "mechanics": "not_applicable",
+            "preconditions": {
+              "capability": "evidence:capability",
+              "removable": "evidence:removable",
+              "rights": "evidence:rights",
+              "target_exists": "evidence:target_exists",
+              "accessible": "evidence:accessible",
+              "marking_exists": "evidence:marking_exists"
+            }
+          },
+          "request_digest": "b6eda5202eb8c8fb95ef1f4681b2f690bff6201c333c4a29bb2f6cf5ee767385"
+        },
+        "removed_marking": {
+          "version": 1,
+          "type": "add_marking",
+          "modification_id": "2dfcd936-c63a-4952-8d87-ae082ccac73d",
+          "content": "Northwest track",
+          "source": {
+            "kind": "explicit_literal",
+            "reference": "controlled-fixture"
+          },
+          "authorization": {
+            "caller_id": "internal-test",
+            "decision_id": "approval-1",
+            "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+            "preconditions": {
+              "capability": "fixture-evidence:capability",
+              "source_disclosed": "fixture-evidence:source_disclosed",
+              "writable_surface": "fixture-evidence:writable_surface",
+              "medium_compatible": "fixture-evidence:medium_compatible",
+              "rights": "fixture-evidence:rights",
+              "target_exists": "fixture-evidence:target_exists",
+              "accessible": "fixture-evidence:accessible",
+              "medium_available": "fixture-evidence:medium_available"
+            },
+            "mechanics": "not_applicable"
+          },
+          "request_id": "mark-request-1",
+          "request_digest": "d32fa4ddd0103d0c0cac26f916ffb88de437c96e680831ef53445135ae164b26",
+          "applied_revision": 1
+        }
+      }
+    }
+  }
+}

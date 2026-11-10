@@ -1,0 +1,126 @@
+{
+  "scene": {
+    "id": "frontier_gate",
+    "location": "Cinderwatch Gate District",
+    "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+    "mode": "social",
+    "visible_facts": [
+      "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "Ash Compact census delays have tightened the eastern caravan choke point."
+    ],
+    "opening_seed_facts": [
+      "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+      "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+      "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+      "A tavern runner shouts offers of hot stew and paid rumor.",
+      "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+      "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+    ],
+    "journal_seed_facts": [
+      "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+      "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+      "A notice board announces new taxes and curfews, and names a missing patrol.",
+      "A tavern runner is hawking hot stew and rumor for coin.",
+      "A ragged stranger hangs back, watching the crowd more than the queue."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "notice_patrol_route",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "hidden_facts": [
+      "An agent of a noble house is watching new arrivals from the square's edge.",
+      "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+      "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+      "A spotter above the lane is matching faces to a written list paid for in silver."
+    ],
+    "exits": [
+      {
+        "label": "Enter Cinderwatch",
+        "target_scene_id": "market_quarter"
+      },
+      {
+        "label": "Follow the missing patrol rumor",
+        "target_scene_id": "old_milestone"
+      }
+    ],
+    "enemies": [],
+    "actions": [],
+    "addressables": [
+      {
+        "id": "guard_captain",
+        "name": "Guard Captain",
+        "scene_id": "frontier_gate",
+        "kind": "npc",
+        "addressable": true,
+        "address_priority": 0,
+        "address_roles": [
+          "guard",
+          "watchman",
+          "sentry",
+          "guardsman",
+          "captain"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "scene_id": "frontier_gate",
+        "kind": "npc",
+        "addressable": true,
+        "address_priority": 1,
+        "address_roles": [
+          "runner",
+          "informant"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "refugee",
+        "name": "Ragged stranger",
+        "scene_id": "frontier_gate",
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 2,
+        "address_roles": [
+          "stranger",
+          "refugee"
+        ],
+        "aliases": [
+          "ragged stranger"
+        ]
+      },
+      {
+        "id": "threadbare_watcher",
+        "name": "Threadbare watcher",
+        "scene_id": "frontier_gate",
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 3,
+        "address_roles": [
+          "watcher"
+        ],
+        "aliases": []
+      }
+    ],
+    "interactables": [
+      {
+        "id": "notice_board",
+        "label": "Notice board",
+        "aliases": [
+          "notice",
+          "board",
+          "curfew notice",
+          "missing patrol warning"
+        ],
+        "type": "investigate",
+        "reveals_clue": "notice_patrol_route"
+      }
+    ]
+  }
+}

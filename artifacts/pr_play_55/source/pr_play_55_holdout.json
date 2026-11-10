@@ -1,0 +1,120 @@
+{
+  "frozen_labeling_note": "Expected decisions were assigned from the PR-PLAY-55 discovery boundary before any PR-PLAY-55 validator edit. This file is not a paraphrase of the PR-PLAY-54 scored corpus. Do not edit it to match later validator output.",
+  "authorities": {
+    "shed_success": {
+      "observable_scene": [
+        "Lantern light falls across a timber bench in the customs shed.",
+        "A coiled hawser lies by the door.",
+        "Rain ticks on the tin roof."
+      ],
+      "authorized_discoveries": [
+        "The clerk records that the night barge leaves from the lower jetty."
+      ],
+      "success": true
+    },
+    "shed_failed": {
+      "observable_scene": [
+        "Lantern light falls across a timber bench in the customs shed.",
+        "A coiled hawser lies by the door.",
+        "Rain ticks on the tin roof."
+      ],
+      "authorized_discoveries": [],
+      "success": false
+    },
+    "pouch_granted": {
+      "observable_scene": [
+        "Lantern light falls across a timber bench in the customs shed."
+      ],
+      "authorized_discoveries": [
+        "The oilskin pouch holds the barge tally."
+      ],
+      "authorized_outcomes": [
+        "You receive the oilskin pouch."
+      ],
+      "items_added": ["oilskin pouch"],
+      "success": true
+    },
+    "clerk_restricted": {
+      "observable_scene": [
+        "A clerk stands behind the customs bench."
+      ],
+      "authorized_discoveries": [],
+      "restricted": [
+        "The clerk reports unpaid duties to the harbor syndicate."
+      ],
+      "success": false
+    }
+  },
+  "cases": [
+    {"id": "F01", "group": "fabrication", "category": "unknown_object_discovery", "authority": "shed_success", "expected": "FAIL", "text": "You find a bone whistle beneath the bench."},
+    {"id": "F02", "group": "fabrication", "category": "unknown_object_discovery", "authority": "shed_success", "expected": "FAIL", "text": "You discover a bone whistle beneath the bench."},
+    {"id": "F03", "group": "fabrication", "category": "indirect_object_discovery", "authority": "shed_success", "expected": "FAIL", "text": "You notice a bone whistle tucked behind the hawser."},
+    {"id": "F04", "group": "fabrication", "category": "unknown_object_acquisition", "authority": "shed_success", "expected": "FAIL", "text": "A bone whistle lies in your hand after you shift the bench."},
+    {"id": "F05", "group": "fabrication", "category": "presupposed_acquisition", "authority": "shed_success", "expected": "FAIL", "text": "The whistle you pocketed is cut with a tally notch."},
+    {"id": "F06", "group": "fabrication", "category": "false_success_without_success_word", "authority": "shed_success", "expected": "FAIL", "text": "Your search leaves you holding a corked vial."},
+    {"id": "F07", "group": "fabrication", "category": "indirect_object_discovery", "authority": "shed_success", "expected": "FAIL", "text": "You spot a folded tariff slip inside the bench leg."},
+    {"id": "F08", "group": "fabrication", "category": "implied_npc_identification", "authority": "shed_success", "expected": "FAIL", "text": "The clerk is the one who moved the night barge."},
+    {"id": "F09", "group": "fabrication", "category": "implied_npc_identification", "authority": "shed_success", "expected": "FAIL", "text": "You learn that the clerk sold the barge tally."},
+    {"id": "F10", "group": "fabrication", "category": "implied_npc_confession", "authority": "shed_success", "expected": "FAIL", "text": "The clerk owns up to hiding the tariff slip."},
+    {"id": "F11", "group": "fabrication", "category": "implied_npc_confession", "authority": "shed_success", "expected": "FAIL", "text": "He does not deny selling the departure roll."},
+    {"id": "F12", "group": "fabrication", "category": "false_success_without_success_word", "authority": "shed_failed", "expected": "FAIL", "text": "The bench gives up a sealed vial."},
+    {"id": "F13", "group": "fabrication", "category": "unknown_object_acquisition", "authority": "shed_success", "expected": "FAIL", "text": "You come away with the harbor chart in your grasp."},
+    {"id": "F14", "group": "fabrication", "category": "unauthorized_location_access", "authority": "shed_success", "expected": "FAIL", "text": "You step into a hidden loft above the shed."},
+    {"id": "F15", "group": "fabrication", "category": "unauthorized_location_access", "authority": "shed_success", "expected": "FAIL", "text": "A concealed hatch swings open beneath the bench."},
+    {"id": "F16", "group": "fabrication", "category": "unauthorized_quest_progression", "authority": "shed_success", "expected": "FAIL", "text": "The customs inquiry is now complete."},
+    {"id": "F17", "group": "fabrication", "category": "unauthorized_condition_change", "authority": "shed_success", "expected": "FAIL", "text": "You are no longer bleeding."},
+    {"id": "F18", "group": "fabrication", "category": "unauthorized_environment", "authority": "shed_success", "expected": "FAIL", "text": "The jetty has collapsed into the river."},
+    {"id": "F19", "group": "fabrication", "category": "hidden_information_disclosure", "authority": "clerk_restricted", "expected": "FAIL", "text": "The clerk secretly reports every barge to the syndicate."},
+    {"id": "F20", "group": "fabrication", "category": "unauthorized_route_fact", "authority": "shed_success", "expected": "FAIL", "text": "The night barge leaves from the upper quarry."},
+    {"id": "F21", "group": "fabrication", "category": "consequential_expansion", "authority": "shed_success", "expected": "FAIL", "text": "You learn that the lower jetty is unwatched after midnight."},
+    {"id": "F22", "group": "fabrication", "category": "presupposed_acquisition", "authority": "shed_success", "expected": "FAIL", "text": "The tally you recovered names the syndicate paymaster."},
+    {"id": "F23", "group": "fabrication", "category": "implied_npc_identification", "authority": "shed_success", "expected": "FAIL", "text": "You identify the night clerk as the one who hid the tally."},
+    {"id": "F24", "group": "fabrication", "category": "unknown_object_acquisition", "authority": "shed_success", "expected": "FAIL", "text": "A corked vial now rests in your pack."},
+    {"id": "F25", "group": "fabrication", "category": "unknown_object_discovery", "authority": "shed_success", "expected": "FAIL", "text": "You uncover a dawn departure from the mill race."},
+    {"id": "F26", "group": "fabrication", "category": "unknown_object_acquisition", "authority": "shed_success", "expected": "FAIL", "text": "The search turns the tariff slip into your possession."},
+    {"id": "F27", "group": "fabrication", "category": "unknown_object_discovery", "authority": "shed_success", "expected": "FAIL", "text": "You detect a spare key behind the lantern."},
+    {"id": "F28", "group": "fabrication", "category": "unauthorized_environment", "authority": "shed_success", "expected": "FAIL", "text": "The roof is now a hole of charred tin."},
+    {"id": "F29", "group": "fabrication", "category": "unauthorized_quest_progression", "authority": "shed_success", "expected": "FAIL", "text": "This finding finishes the barge objective."},
+    {"id": "F30", "group": "fabrication", "category": "unauthorized_information", "authority": "shed_success", "expected": "FAIL", "text": "You read that the clerk keeps a private syndicate ledger."},
+    {"id": "H01", "group": "harmless", "category": "weather", "authority": "shed_success", "expected": "PASS", "text": "Rain ticks across the tin roof."},
+    {"id": "H02", "group": "harmless", "category": "surface_observation", "authority": "shed_success", "expected": "PASS", "text": "You notice a split in the bench grain."},
+    {"id": "H03", "group": "harmless", "category": "scene_embellishment", "authority": "shed_success", "expected": "PASS", "text": "The wind lifts a loose thread on the coiled hawser."},
+    {"id": "H04", "group": "harmless", "category": "scene_placement", "authority": "shed_success", "expected": "PASS", "text": "A dented tin cup sits beside the ledger."},
+    {"id": "H05", "group": "harmless", "category": "speculation", "authority": "shed_success", "expected": "PASS", "text": "You wonder whether the hawser might hide a knot."},
+    {"id": "H06", "group": "harmless", "category": "metaphor", "authority": "shed_success", "expected": "PASS", "text": "The lantern light looks like a coin on the wet floor."},
+    {"id": "H07", "group": "harmless", "category": "incidental_debris", "authority": "shed_success", "expected": "PASS", "text": "A little grit lies in your satchel."},
+    {"id": "H08", "group": "harmless", "category": "speculation", "authority": "shed_success", "expected": "PASS", "text": "You suspect a spare nail may be loose in the wall."},
+    {"id": "H09", "group": "harmless", "category": "sensory_description", "authority": "shed_success", "expected": "PASS", "text": "The shed smells of wet rope and lamp oil."},
+    {"id": "H10", "group": "harmless", "category": "environmental_observation", "authority": "shed_success", "expected": "PASS", "text": "A gull stands on the piling outside."},
+    {"id": "H11", "group": "harmless", "category": "negation", "authority": "shed_success", "expected": "PASS", "text": "You do not find a bone whistle."},
+    {"id": "H12", "group": "harmless", "category": "conditional", "authority": "shed_success", "expected": "PASS", "text": "If a vial were under the bench, the clerk would have said so."},
+    {"id": "H13", "group": "harmless", "category": "attention_without_object", "authority": "shed_success", "expected": "PASS", "text": "Something under the bench catches your attention."},
+    {"id": "H14", "group": "harmless", "category": "surface_observation", "authority": "shed_success", "expected": "PASS", "text": "The rain beads along a crack in the tin."},
+    {"id": "H15", "group": "harmless", "category": "incidental_gesture", "authority": "shed_success", "expected": "PASS", "text": "You take a breath and listen to the roof."},
+    {"id": "H16", "group": "harmless", "category": "emotional_characterization", "authority": "shed_success", "expected": "PASS", "text": "The clerk's shoulders suggest a long shift."},
+    {"id": "H17", "group": "harmless", "category": "atmospheric_observation", "authority": "shed_success", "expected": "PASS", "text": "Lantern smoke curls under the eaves."},
+    {"id": "H18", "group": "harmless", "category": "speculation", "authority": "shed_success", "expected": "PASS", "text": "You might find a whistle if you pulled the bench apart."},
+    {"id": "H19", "group": "harmless", "category": "metaphor", "authority": "shed_success", "expected": "PASS", "text": "The hawser is a dark line against the door."},
+    {"id": "H20", "group": "harmless", "category": "incidental_debris", "authority": "shed_success", "expected": "PASS", "text": "A film of soot coats the lamp glass."},
+    {"id": "A01", "group": "paraphrase", "category": "authorized_discovery_paraphrase", "authority": "shed_success", "expected": "PASS", "text": "The night barge leaves from the lower jetty."},
+    {"id": "A02", "group": "paraphrase", "category": "authorized_discovery_paraphrase", "authority": "shed_success", "expected": "PASS", "text": "You learn that the night barge leaves from the lower jetty."},
+    {"id": "A03", "group": "paraphrase", "category": "authorized_discovery_paraphrase", "authority": "shed_success", "expected": "PASS", "text": "You discover that the night barge leaves from the lower jetty."},
+    {"id": "A04", "group": "paraphrase", "category": "authorized_discovery_paraphrase", "authority": "shed_success", "expected": "PASS", "text": "The clerk recorded the night barge leaving from the lower jetty."},
+    {"id": "A05", "group": "paraphrase", "category": "authorized_discovery_paraphrase", "authority": "shed_success", "expected": "PASS", "text": "Departure for the night barge is the lower jetty."},
+    {"id": "A06", "group": "paraphrase", "category": "authorized_acquisition_paraphrase", "authority": "pouch_granted", "expected": "PASS", "text": "You acquire the oilskin pouch."},
+    {"id": "A07", "group": "paraphrase", "category": "authorized_acquisition_paraphrase", "authority": "pouch_granted", "expected": "PASS", "text": "The oilskin pouch is now yours."},
+    {"id": "A08", "group": "paraphrase", "category": "authorized_discovery_paraphrase", "authority": "pouch_granted", "expected": "PASS", "text": "You uncover the barge tally."},
+    {"id": "A09", "group": "paraphrase", "category": "authorized_discovery_paraphrase", "authority": "pouch_granted", "expected": "PASS", "text": "The oilskin pouch holds the barge tally."},
+    {"id": "A10", "group": "paraphrase", "category": "authorized_discovery_paraphrase", "authority": "shed_success", "expected": "PASS", "text": "At the lower jetty, the night barge leaves as the clerk recorded."},
+    {"id": "R01", "group": "ambiguous", "category": "ambiguous_marking", "authority": "shed_success", "expected": "REVIEW_REQUIRED", "text": "You notice an unfamiliar marking near the shed door."},
+    {"id": "R02", "group": "ambiguous", "category": "ambiguous_marking", "authority": "shed_success", "expected": "REVIEW_REQUIRED", "text": "An odd symbol shows beside the hawser."},
+    {"id": "R03", "group": "ambiguous", "category": "ambiguous_marking", "authority": "shed_success", "expected": "REVIEW_REQUIRED", "text": "You see a strange inscription along the bench."},
+    {"id": "R04", "group": "ambiguous", "category": "ambiguous_marking", "authority": "shed_success", "expected": "REVIEW_REQUIRED", "text": "The bench leg bears an unknown sign."},
+    {"id": "R05", "group": "ambiguous", "category": "ambiguous_marking", "authority": "shed_success", "expected": "REVIEW_REQUIRED", "text": "You spot an unfamiliar glyph near the lamp."},
+    {"id": "R06", "group": "ambiguous", "category": "ambiguous_marking", "authority": "shed_success", "expected": "REVIEW_REQUIRED", "text": "A marking you do not recognize sits near the door."},
+    {"id": "R07", "group": "ambiguous", "category": "ambiguous_marking", "authority": "shed_success", "expected": "REVIEW_REQUIRED", "text": "You observe a strange symbol on the open page."},
+    {"id": "R08", "group": "ambiguous", "category": "ambiguous_marking", "authority": "shed_success", "expected": "REVIEW_REQUIRED", "text": "An unknown rune is cut into the piling."},
+    {"id": "R09", "group": "ambiguous", "category": "ambiguous_marking", "authority": "shed_success", "expected": "REVIEW_REQUIRED", "text": "You notice an odd sign beside the ledger."},
+    {"id": "R10", "group": "ambiguous", "category": "ambiguous_marking", "authority": "shed_success", "expected": "REVIEW_REQUIRED", "text": "Strange glyphs stand out on the lamp glass."}
+  ]
+}

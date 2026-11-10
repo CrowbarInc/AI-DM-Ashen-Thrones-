@@ -1,0 +1,1567 @@
+{
+  "holdout": {
+    "total": 70,
+    "fabrication_total": 30,
+    "fabrication_fail": 30,
+    "fabrication_review": 0,
+    "fabrication_pass": 0,
+    "critical_false_negative_ids": [],
+    "harmless_total": 20,
+    "harmless_false_fail_ids": [],
+    "harmless_false_review_ids": [],
+    "paraphrase_total": 10,
+    "paraphrase_pass": 10,
+    "ambiguous_total": 10,
+    "ambiguous_correct": 10,
+    "review_required": 10,
+    "validation_errors": 0,
+    "correct": 70,
+    "mismatch_ids": [],
+    "confusion": {
+      "FAIL->FAIL": 30,
+      "PASS->PASS": 30,
+      "REVIEW_REQUIRED->REVIEW_REQUIRED": 10
+    },
+    "latency": {
+      "average_ms": 0.2129,
+      "median_ms": 0.1103,
+      "maximum_ms": 6.8801,
+      "count": 70
+    },
+    "provider_requests": 0,
+    "manifest_sha256": "24ff35e8f4096e865dcf3ffd6f98a92d18a208e1329c445c33525e5e5fed1495"
+  },
+  "holdout_rows": [
+    {
+      "id": "F01",
+      "group": "fabrication",
+      "category": "unknown_object_discovery",
+      "text": "You find a bone whistle beneath the bench.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 6.880100001581013
+    },
+    {
+      "id": "F02",
+      "group": "fabrication",
+      "category": "unknown_object_discovery",
+      "text": "You discover a bone whistle beneath the bench.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.18480001017451286
+    },
+    {
+      "id": "F03",
+      "group": "fabrication",
+      "category": "indirect_object_discovery",
+      "text": "You notice a bone whistle tucked behind the hawser.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.25270000332966447
+    },
+    {
+      "id": "F04",
+      "group": "fabrication",
+      "category": "unknown_object_acquisition",
+      "text": "A bone whistle lies in your hand after you shift the bench.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_acquisition"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.22620000527240336
+    },
+    {
+      "id": "F05",
+      "group": "fabrication",
+      "category": "presupposed_acquisition",
+      "text": "The whistle you pocketed is cut with a tally notch.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1340000017080456
+    },
+    {
+      "id": "F06",
+      "group": "fabrication",
+      "category": "false_success_without_success_word",
+      "text": "Your search leaves you holding a corked vial.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_acquisition"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.10349997319281101
+    },
+    {
+      "id": "F07",
+      "group": "fabrication",
+      "category": "indirect_object_discovery",
+      "text": "You spot a folded tariff slip inside the bench leg.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.16120000509545207
+    },
+    {
+      "id": "F08",
+      "group": "fabrication",
+      "category": "implied_npc_identification",
+      "text": "The clerk is the one who moved the night barge.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_identity"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.12599999899975955
+    },
+    {
+      "id": "F09",
+      "group": "fabrication",
+      "category": "implied_npc_identification",
+      "text": "You learn that the clerk sold the barge tally.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_identity"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.20459998631849885
+    },
+    {
+      "id": "F10",
+      "group": "fabrication",
+      "category": "implied_npc_confession",
+      "text": "The clerk owns up to hiding the tariff slip.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_confession"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.11970000923611224
+    },
+    {
+      "id": "F11",
+      "group": "fabrication",
+      "category": "implied_npc_confession",
+      "text": "He does not deny selling the departure roll.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_confession"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.21359999664127827
+    },
+    {
+      "id": "F12",
+      "group": "fabrication",
+      "category": "false_success_without_success_word",
+      "text": "The bench gives up a sealed vial.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "false_mechanical_success"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.16570001025684178
+    },
+    {
+      "id": "F13",
+      "group": "fabrication",
+      "category": "unknown_object_acquisition",
+      "text": "You come away with the harbor chart in your grasp.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_acquisition"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1094000181183219
+    },
+    {
+      "id": "F14",
+      "group": "fabrication",
+      "category": "unauthorized_location_access",
+      "text": "You step into a hidden loft above the shed.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_access"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.31319999834522605
+    },
+    {
+      "id": "F15",
+      "group": "fabrication",
+      "category": "unauthorized_location_access",
+      "text": "A concealed hatch swings open beneath the bench.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_access"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.11909997556358576
+    },
+    {
+      "id": "F16",
+      "group": "fabrication",
+      "category": "unauthorized_quest_progression",
+      "text": "The customs inquiry is now complete.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_quest"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.07310000364668667
+    },
+    {
+      "id": "F17",
+      "group": "fabrication",
+      "category": "unauthorized_condition_change",
+      "text": "You are no longer bleeding.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_condition"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.06160000339150429
+    },
+    {
+      "id": "F18",
+      "group": "fabrication",
+      "category": "unauthorized_environment",
+      "text": "The jetty has collapsed into the river.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_environment"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.09329998283647001
+    },
+    {
+      "id": "F19",
+      "group": "fabrication",
+      "category": "hidden_information_disclosure",
+      "text": "The clerk secretly reports every barge to the syndicate.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "hidden_disclosure"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.12209999840706587
+    },
+    {
+      "id": "F20",
+      "group": "fabrication",
+      "category": "unauthorized_route_fact",
+      "text": "The night barge leaves from the upper quarry.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.17590000061318278
+    },
+    {
+      "id": "F21",
+      "group": "fabrication",
+      "category": "consequential_expansion",
+      "text": "You learn that the lower jetty is unwatched after midnight.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery",
+        "consequential_expansion"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1947999990079552
+    },
+    {
+      "id": "F22",
+      "group": "fabrication",
+      "category": "presupposed_acquisition",
+      "text": "The tally you recovered names the syndicate paymaster.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.11739999172277749
+    },
+    {
+      "id": "F23",
+      "group": "fabrication",
+      "category": "implied_npc_identification",
+      "text": "You identify the night clerk as the one who hid the tally.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_identity"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.14020001981407404
+    },
+    {
+      "id": "F24",
+      "group": "fabrication",
+      "category": "unknown_object_acquisition",
+      "text": "A corked vial now rests in your pack.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_acquisition"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.0838999985717237
+    },
+    {
+      "id": "F25",
+      "group": "fabrication",
+      "category": "unknown_object_discovery",
+      "text": "You uncover a dawn departure from the mill race.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.13110000872984529
+    },
+    {
+      "id": "F26",
+      "group": "fabrication",
+      "category": "unknown_object_acquisition",
+      "text": "The search turns the tariff slip into your possession.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_acquisition"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.10850001126527786
+    },
+    {
+      "id": "F27",
+      "group": "fabrication",
+      "category": "unknown_object_discovery",
+      "text": "You detect a spare key behind the lantern.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1304999750573188
+    },
+    {
+      "id": "F28",
+      "group": "fabrication",
+      "category": "unauthorized_environment",
+      "text": "The roof is now a hole of charred tin.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_environment"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.10699999984353781
+    },
+    {
+      "id": "F29",
+      "group": "fabrication",
+      "category": "unauthorized_quest_progression",
+      "text": "This finding finishes the barge objective.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_quest"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.0740000104997307
+    },
+    {
+      "id": "F30",
+      "group": "fabrication",
+      "category": "unauthorized_information",
+      "text": "You read that the clerk keeps a private syndicate ledger.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.16549997963011265
+    },
+    {
+      "id": "H01",
+      "group": "harmless",
+      "category": "weather",
+      "text": "Rain ticks across the tin roof.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.06310001481324434
+    },
+    {
+      "id": "H02",
+      "group": "harmless",
+      "category": "surface_observation",
+      "text": "You notice a split in the bench grain.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.09399998816661537
+    },
+    {
+      "id": "H03",
+      "group": "harmless",
+      "category": "scene_embellishment",
+      "text": "The wind lifts a loose thread on the coiled hawser.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.10400000610388815
+    },
+    {
+      "id": "H04",
+      "group": "harmless",
+      "category": "scene_placement",
+      "text": "A dented tin cup sits beside the ledger.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.08060000254772604
+    },
+    {
+      "id": "H05",
+      "group": "harmless",
+      "category": "speculation",
+      "text": "You wonder whether the hawser might hide a knot.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.08359999628737569
+    },
+    {
+      "id": "H06",
+      "group": "harmless",
+      "category": "metaphor",
+      "text": "The lantern light looks like a coin on the wet floor.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.02640002639964223
+    },
+    {
+      "id": "H07",
+      "group": "harmless",
+      "category": "incidental_debris",
+      "text": "A little grit lies in your satchel.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.08860000525601208
+    },
+    {
+      "id": "H08",
+      "group": "harmless",
+      "category": "speculation",
+      "text": "You suspect a spare nail may be loose in the wall.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.01650000922381878
+    },
+    {
+      "id": "H09",
+      "group": "harmless",
+      "category": "sensory_description",
+      "text": "The shed smells of wet rope and lamp oil.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.014899997040629387
+    },
+    {
+      "id": "H10",
+      "group": "harmless",
+      "category": "environmental_observation",
+      "text": "A gull stands on the piling outside.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.08669999078847468
+    },
+    {
+      "id": "H11",
+      "group": "harmless",
+      "category": "negation",
+      "text": "You do not find a bone whistle.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.10699999984353781
+    },
+    {
+      "id": "H12",
+      "group": "harmless",
+      "category": "conditional",
+      "text": "If a vial were under the bench, the clerk would have said so.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.03029999788850546
+    },
+    {
+      "id": "H13",
+      "group": "harmless",
+      "category": "attention_without_object",
+      "text": "Something under the bench catches your attention.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.08699999307282269
+    },
+    {
+      "id": "H14",
+      "group": "harmless",
+      "category": "surface_observation",
+      "text": "The rain beads along a crack in the tin.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.0813000078778714
+    },
+    {
+      "id": "H15",
+      "group": "harmless",
+      "category": "incidental_gesture",
+      "text": "You take a breath and listen to the roof.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.0845999747980386
+    },
+    {
+      "id": "H16",
+      "group": "harmless",
+      "category": "emotional_characterization",
+      "text": "The clerk's shoulders suggest a long shift.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.030199997127056122
+    },
+    {
+      "id": "H17",
+      "group": "harmless",
+      "category": "atmospheric_observation",
+      "text": "Lantern smoke curls under the eaves.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.10049997945316136
+    },
+    {
+      "id": "H18",
+      "group": "harmless",
+      "category": "speculation",
+      "text": "You might find a whistle if you pulled the bench apart.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.11490000179037452
+    },
+    {
+      "id": "H19",
+      "group": "harmless",
+      "category": "metaphor",
+      "text": "The hawser is a dark line against the door.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.09159999899566174
+    },
+    {
+      "id": "H20",
+      "group": "harmless",
+      "category": "incidental_debris",
+      "text": "A film of soot coats the lamp glass.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.07949999417178333
+    },
+    {
+      "id": "A01",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "The night barge leaves from the lower jetty.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1303000026382506
+    },
+    {
+      "id": "A02",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "You learn that the night barge leaves from the lower jetty.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.16490000416524708
+    },
+    {
+      "id": "A03",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "You discover that the night barge leaves from the lower jetty.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.17079999088309705
+    },
+    {
+      "id": "A04",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "The clerk recorded the night barge leaving from the lower jetty.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.11649998486973345
+    },
+    {
+      "id": "A05",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "Departure for the night barge is the lower jetty.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1010000123642385
+    },
+    {
+      "id": "A06",
+      "group": "paraphrase",
+      "category": "authorized_acquisition_paraphrase",
+      "text": "You acquire the oilskin pouch.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.11850000009872019
+    },
+    {
+      "id": "A07",
+      "group": "paraphrase",
+      "category": "authorized_acquisition_paraphrase",
+      "text": "The oilskin pouch is now yours.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.07639999967068434
+    },
+    {
+      "id": "A08",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "You uncover the barge tally.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.09100002353079617
+    },
+    {
+      "id": "A09",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "The oilskin pouch holds the barge tally.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.0735999783501029
+    },
+    {
+      "id": "A10",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "At the lower jetty, the night barge leaves as the clerk recorded.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.12820001575164497
+    },
+    {
+      "id": "R01",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "You notice an unfamiliar marking near the shed door.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.13249999028630555
+    },
+    {
+      "id": "R02",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "An odd symbol shows beside the hawser.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.09759998647496104
+    },
+    {
+      "id": "R03",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "You see a strange inscription along the bench.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.12010001228190958
+    },
+    {
+      "id": "R04",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "The bench leg bears an unknown sign.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.1506999833509326
+    },
+    {
+      "id": "R05",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "You spot an unfamiliar glyph near the lamp.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.11500000255182385
+    },
+    {
+      "id": "R06",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "A marking you do not recognize sits near the door.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.12379998224787414
+    },
+    {
+      "id": "R07",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "You observe a strange symbol on the open page.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.12250000145286322
+    },
+    {
+      "id": "R08",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "An unknown rune is cut into the piling.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.09970000246539712
+    },
+    {
+      "id": "R09",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "You notice an odd sign beside the ledger.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.1112000027205795
+    },
+    {
+      "id": "R10",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "Strange glyphs stand out on the lamp glass.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.09960000170394778
+    }
+  ],
+  "development": {
+    "total": 40,
+    "fabrication_total": 21,
+    "fabrication_fail": 21,
+    "fabrication_review": 0,
+    "fabrication_pass": 0,
+    "critical_false_negative_ids": [],
+    "harmless_total": 15,
+    "harmless_false_fail_ids": [],
+    "harmless_false_review_ids": [],
+    "paraphrase_total": 3,
+    "paraphrase_pass": 3,
+    "ambiguous_total": 1,
+    "ambiguous_correct": 1,
+    "review_required": 1,
+    "validation_errors": 0,
+    "correct": 40,
+    "mismatch_ids": [],
+    "confusion": {
+      "FAIL->FAIL": 21,
+      "PASS->PASS": 18,
+      "REVIEW_REQUIRED->REVIEW_REQUIRED": 1
+    },
+    "latency": {
+      "average_ms": 0.1976,
+      "median_ms": 0.1711,
+      "maximum_ms": 0.7443,
+      "count": 40
+    },
+    "provider_requests": 0
+  },
+  "development_rows": [
+    {
+      "id": "D01",
+      "group": "negative",
+      "category": "unknown_object_discovery",
+      "text": "You find a ribbon beneath the board.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.7442999922204763
+    },
+    {
+      "id": "D02",
+      "group": "negative",
+      "category": "unknown_object_discovery",
+      "text": "You discover a ribbon beneath the board.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.3499999875202775
+    },
+    {
+      "id": "D03",
+      "group": "negative",
+      "category": "unknown_object_discovery",
+      "text": "You notice a ribbon beneath the board.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.33099998836405575
+    },
+    {
+      "id": "D04",
+      "group": "negative",
+      "category": "indirect_object_discovery",
+      "text": "You spot a ribbon tucked beneath the board.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.34890000824816525
+    },
+    {
+      "id": "D05",
+      "group": "positive",
+      "category": "surface_observation",
+      "text": "You notice a crack in the board.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.26020000223070383
+    },
+    {
+      "id": "D06",
+      "group": "positive",
+      "category": "surface_observation",
+      "text": "You notice a crack running through the weathered board.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.3040999872609973
+    },
+    {
+      "id": "D07",
+      "group": "positive",
+      "category": "surface_observation",
+      "text": "You find a crack in the board.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.15609999536536634
+    },
+    {
+      "id": "D08",
+      "group": "positive",
+      "category": "scene_embellishment",
+      "text": "The wind catches a ribbon tied to the nearby fence.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.17579999985173345
+    },
+    {
+      "id": "D09",
+      "group": "positive",
+      "category": "scene_embellishment",
+      "text": "The rain catches on a loose ribbon tied to the fence.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.17380001372657716
+    },
+    {
+      "id": "D10",
+      "group": "negative",
+      "category": "unknown_object_acquisition",
+      "text": "A ribbon lies in your hand after the search.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_acquisition"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1587000151630491
+    },
+    {
+      "id": "D11",
+      "group": "negative",
+      "category": "presupposed_acquisition",
+      "text": "The ribbon you recovered is marked with a symbol.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1883000077214092
+    },
+    {
+      "id": "D12",
+      "group": "negative",
+      "category": "false_success_without_success_word",
+      "text": "Your search leaves you holding a narrow strip of cloth.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_acquisition"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.23780000628903508
+    },
+    {
+      "id": "D13",
+      "group": "positive",
+      "category": "attention_without_object",
+      "text": "Something beneath the board catches your attention.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1703999878372997
+    },
+    {
+      "id": "D14",
+      "group": "positive",
+      "category": "speculation",
+      "text": "You suspect something may be concealed beneath the board.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.07989999721758068
+    },
+    {
+      "id": "D15",
+      "group": "positive",
+      "category": "speculation",
+      "text": "You wonder whether something might be hidden beneath the board.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.07460001506842673
+    },
+    {
+      "id": "D16",
+      "group": "positive",
+      "category": "speculation",
+      "text": "The ribbon might conceal a message.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1346999779343605
+    },
+    {
+      "id": "D17",
+      "group": "ambiguous",
+      "category": "ambiguous_marking",
+      "text": "You notice an unfamiliar marking near the door.",
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "reasons": [
+        "ambiguous_consequential"
+      ],
+      "reason_codes": [
+        "AMBIGUOUS_CONSEQUENCE"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.1832999987527728
+    },
+    {
+      "id": "D18",
+      "group": "negative",
+      "category": "unknown_object_discovery",
+      "text": "You recover the ribbon containing the smuggler's cipher.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.2164000179618597
+    },
+    {
+      "id": "D19",
+      "group": "positive",
+      "category": "harmless_unfamiliar_object",
+      "text": "A dented tin cup sits beside the rain barrel.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.15269999857991934
+    },
+    {
+      "id": "D20",
+      "group": "positive",
+      "category": "surface_observation",
+      "text": "You see the grain of the board.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.14680001186206937
+    },
+    {
+      "id": "D21",
+      "group": "negative",
+      "category": "false_failure_without_failure_word",
+      "text": "The search comes up empty.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "false_mechanical_failure"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1202999847009778
+    },
+    {
+      "id": "D22",
+      "group": "positive",
+      "category": "accurate_failure",
+      "text": "The search comes up empty.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.11490000179037452
+    },
+    {
+      "id": "D23",
+      "group": "negative",
+      "category": "false_success_without_success_word",
+      "text": "The board gives up a sealed ribbon.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "false_mechanical_success"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.17010001465678215
+    },
+    {
+      "id": "D24",
+      "group": "negative",
+      "category": "false_failure_without_failure_word",
+      "text": "You come away empty-handed.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "false_mechanical_failure"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.12589999823831022
+    },
+    {
+      "id": "D25",
+      "group": "negative",
+      "category": "implied_npc_identification",
+      "text": "The runner is the one who sold the route.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_identity"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.16799999866634607
+    },
+    {
+      "id": "D26",
+      "group": "negative",
+      "category": "implied_npc_confession",
+      "text": "The guard owns up to selling the route.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_confession"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.16750002396292984
+    },
+    {
+      "id": "D27",
+      "group": "negative",
+      "category": "implied_npc_confession",
+      "text": "He does not deny selling the patrol route.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_confession"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.17180002760142088
+    },
+    {
+      "id": "D28",
+      "group": "negative",
+      "category": "unauthorized_location_access",
+      "text": "You step into a hidden loft behind the board.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_access"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.18670002464205027
+    },
+    {
+      "id": "D29",
+      "group": "negative",
+      "category": "unauthorized_quest_progression",
+      "text": "This finding finishes the patrol objective.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_quest"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.14470002497546375
+    },
+    {
+      "id": "D30",
+      "group": "negative",
+      "category": "unauthorized_environment",
+      "text": "The watchtower has collapsed.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_environment"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.135900016175583
+    },
+    {
+      "id": "D31",
+      "group": "negative",
+      "category": "consequential_expansion",
+      "text": "You learn that the western gate is unwatched at dusk.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_discovery",
+        "consequential_expansion"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.25019998429343104
+    },
+    {
+      "id": "D32",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "At sunset, the sentry makes his rounds along the west road.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.19109999993816018
+    },
+    {
+      "id": "D33",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "You uncover the patrol route recorded on the notice board.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.21500000730156898
+    },
+    {
+      "id": "D34",
+      "group": "paraphrase",
+      "category": "authorized_discovery_paraphrase",
+      "text": "You learn that the guard patrols the western road at dusk.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.2046999870799482
+    },
+    {
+      "id": "D35",
+      "group": "negative",
+      "category": "consequential_expansion",
+      "text": "The western gate is completely unguarded at dusk.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "consequential_expansion"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1838000025600195
+    },
+    {
+      "id": "D36",
+      "group": "positive",
+      "category": "metaphor",
+      "text": "The rain is a curtain across the board.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.14359998749569058
+    },
+    {
+      "id": "D37",
+      "group": "negative",
+      "category": "indirect_object_acquisition",
+      "text": "A narrow strip of cloth lies in your grasp after the search.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "unauthorized_acquisition"
+      ],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1745999907143414
+    },
+    {
+      "id": "D38",
+      "group": "positive",
+      "category": "negation",
+      "text": "You do not notice a ribbon beneath the board.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.1511000155005604
+    },
+    {
+      "id": "D39",
+      "group": "negative",
+      "category": "discovery_contradiction",
+      "text": "The guard patrols the east road at dusk.",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "reasons": [
+        "discovery_contradiction"
+      ],
+      "reason_codes": [
+        "CONTRADICTORY_AUTHORITY"
+      ],
+      "provider_requests": 0,
+      "latency_ms": 0.15279999934136868
+    },
+    {
+      "id": "D40",
+      "group": "positive",
+      "category": "incidental_debris",
+      "text": "A little grit lies in your satchel.",
+      "expected": "PASS",
+      "actual": "PASS",
+      "reasons": [],
+      "reason_codes": [],
+      "provider_requests": 0,
+      "latency_ms": 0.14150000060908496
+    }
+  ],
+  "previous_scored_corpus": {
+    "total": 83,
+    "fabrication_fail": 49,
+    "fabrication_total": 49,
+    "critical_false_negatives": [],
+    "harmless_and_paraphrase_not_pass": [],
+    "paraphrase_pass": 7,
+    "paraphrase_total": 7,
+    "review_required": 2,
+    "latency": {
+      "average_ms": 0.1961,
+      "median_ms": 0.1582,
+      "maximum_ms": 0.6976,
+      "count": 83
+    },
+    "provider_requests": 0
+  },
+  "repeated_development_latency": {
+    "repeats": 30,
+    "validations": 1200,
+    "average_ms": 0.5431,
+    "median_ms": 0.5081,
+    "maximum_ms": 11.5702,
+    "throughput_per_second": 1837.3,
+    "tracemalloc_peak_bytes": 3160442,
+    "provider_requests": 0,
+    "additional_tokens": 0
+  }
+}

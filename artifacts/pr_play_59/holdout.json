@@ -1,0 +1,580 @@
+{
+  "cases": [
+    {
+      "id": "H01",
+      "group": "unauthorized",
+      "text": "The copper iris has been opened.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H02",
+      "group": "unauthorized",
+      "text": "The trapdoor is now unlocked.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H03",
+      "group": "unauthorized",
+      "text": "The aqueduct is now accessible.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H04",
+      "group": "unauthorized",
+      "text": "The crystal lens has been destroyed.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H05",
+      "group": "unauthorized",
+      "text": "The lookout is now unconscious.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H06",
+      "group": "unauthorized",
+      "text": "The ferryman is now dead.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H07",
+      "group": "unauthorized",
+      "text": "You are now poisoned.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H08",
+      "group": "unauthorized",
+      "text": "You pick up the opal and place it in your pack.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H09",
+      "group": "unauthorized",
+      "text": "The pilgrimage quest is now complete.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H10",
+      "group": "unauthorized",
+      "text": "The courtyard is now flooded.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H11",
+      "group": "unauthorized",
+      "text": "The ward is permanently broken.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H12",
+      "group": "unauthorized",
+      "text": "The sluice will remain open from now on.",
+      "authority": {
+        "authorized_outcomes": [
+          "The sluice opens temporarily."
+        ],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H13",
+      "group": "unauthorized",
+      "text": "The west shutter opens.",
+      "authority": {
+        "authorized_outcomes": [
+          "The east shutter opens."
+        ],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H14",
+      "group": "unauthorized",
+      "text": "The portal opens and the seal breaks.",
+      "authority": {
+        "authorized_outcomes": [
+          "The portal opens."
+        ],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H15",
+      "group": "unauthorized",
+      "text": "The hatch can no longer be closed.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized"
+    },
+    {
+      "id": "H16",
+      "group": "authorized",
+      "text": "The copper iris swings open.",
+      "authority": {
+        "authorized_outcomes": [
+          "The copper iris opens."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized"
+    },
+    {
+      "id": "H17",
+      "group": "authorized",
+      "text": "The trapdoor stands unlocked.",
+      "authority": {
+        "authorized_outcomes": [
+          "The trapdoor is unlocked."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized"
+    },
+    {
+      "id": "H18",
+      "group": "authorized",
+      "text": "The aqueduct is now accessible.",
+      "authority": {
+        "authorized_outcomes": [
+          "The aqueduct becomes accessible."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized"
+    },
+    {
+      "id": "H19",
+      "group": "authorized",
+      "text": "The crystal lens is destroyed.",
+      "authority": {
+        "authorized_outcomes": [
+          "The crystal lens is destroyed."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized"
+    },
+    {
+      "id": "H20",
+      "group": "authorized",
+      "text": "The lookout falls unconscious.",
+      "authority": {
+        "authorized_outcomes": [
+          "The lookout is unconscious."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized"
+    },
+    {
+      "id": "H21",
+      "group": "authorized",
+      "text": "The ferryman is now dead.",
+      "authority": {
+        "authorized_outcomes": [
+          "The ferryman is dead."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized"
+    },
+    {
+      "id": "H22",
+      "group": "authorized",
+      "text": "The courtyard becomes flooded.",
+      "authority": {
+        "authorized_outcomes": [
+          "The courtyard is flooded."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized"
+    },
+    {
+      "id": "H23",
+      "group": "authorized",
+      "text": "The ward has been broken.",
+      "authority": {
+        "authorized_outcomes": [
+          "The ward is broken."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized"
+    },
+    {
+      "id": "H24",
+      "group": "authorized",
+      "text": "The shutter closes with a clatter.",
+      "authority": {
+        "authorized_outcomes": [
+          "The shutter closes."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized"
+    },
+    {
+      "id": "H25",
+      "group": "authorized",
+      "text": "The gangway gives way and falls into the ravine.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gangway collapses."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized"
+    },
+    {
+      "id": "H26",
+      "group": "harmless",
+      "text": "The copper iris rattles in the wind.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless"
+    },
+    {
+      "id": "H27",
+      "group": "harmless",
+      "text": "Rain runs down the trapdoor.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless"
+    },
+    {
+      "id": "H28",
+      "group": "harmless",
+      "text": "The aqueduct creaks beneath your feet.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless"
+    },
+    {
+      "id": "H29",
+      "group": "harmless",
+      "text": "The lookout shifts his weight.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless"
+    },
+    {
+      "id": "H30",
+      "group": "harmless",
+      "text": "Dust settles on the courtyard.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless"
+    },
+    {
+      "id": "H31",
+      "group": "harmless",
+      "text": "The hinges groan.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless"
+    },
+    {
+      "id": "H32",
+      "group": "harmless",
+      "text": "The lantern flickers.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless"
+    },
+    {
+      "id": "H33",
+      "group": "harmless",
+      "text": "The ward looks old and weathered.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless"
+    },
+    {
+      "id": "H34",
+      "group": "harmless",
+      "text": "The shutter appears difficult to open.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless"
+    },
+    {
+      "id": "H35",
+      "group": "harmless",
+      "text": "The gangway seems narrow.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless"
+    },
+    {
+      "id": "H36",
+      "group": "negated",
+      "text": "The iris does not open.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "negated"
+    },
+    {
+      "id": "H37",
+      "group": "negated",
+      "text": "The hatch remains closed.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "negated"
+    },
+    {
+      "id": "H38",
+      "group": "negated",
+      "text": "The lens has not been destroyed.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "negated"
+    },
+    {
+      "id": "H39",
+      "group": "hypothetical",
+      "text": "The ward might break.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "hypothetical"
+    },
+    {
+      "id": "H40",
+      "group": "hypothetical",
+      "text": "If you repair it, the iris will open.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "hypothetical"
+    },
+    {
+      "id": "H41",
+      "group": "hypothetical",
+      "text": "The shutter could be unlocked.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "hypothetical"
+    },
+    {
+      "id": "H42",
+      "group": "attempted",
+      "text": "You try to open the trapdoor.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "attempted"
+    },
+    {
+      "id": "H43",
+      "group": "attempted",
+      "text": "You attempt to break the seal.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "attempted"
+    },
+    {
+      "id": "H44",
+      "group": "attempted",
+      "text": "You try to pick up the opal.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "attempted"
+    },
+    {
+      "id": "H45",
+      "group": "negated",
+      "text": "The guard does not become unconscious.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "negated"
+    },
+    {
+      "id": "H46",
+      "group": "ambiguous",
+      "text": "The iris seems to have opened.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "REVIEW_REQUIRED",
+      "expected_classification": "ambiguous"
+    },
+    {
+      "id": "H47",
+      "group": "ambiguous",
+      "text": "The seal may already be broken.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "REVIEW_REQUIRED",
+      "expected_classification": "ambiguous"
+    },
+    {
+      "id": "H48",
+      "group": "ambiguous",
+      "text": "Something about the hatch has changed.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "REVIEW_REQUIRED",
+      "expected_classification": "ambiguous"
+    },
+    {
+      "id": "H49",
+      "group": "ambiguous",
+      "text": "It is now open.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "REVIEW_REQUIRED",
+      "expected_classification": "ambiguous"
+    },
+    {
+      "id": "H50",
+      "group": "ambiguous",
+      "text": "The ward yields.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "REVIEW_REQUIRED",
+      "expected_classification": "ambiguous"
+    }
+  ]
+}

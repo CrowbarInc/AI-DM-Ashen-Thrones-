@@ -1,0 +1,1232 @@
+{
+  "campaign_id": "PR-PLAY-71",
+  "campaign_name": "Normal Campaign Lifecycle and Branch Continuity",
+  "campaign_date": "2026-11-05",
+  "purpose": "Review normal UI creation, start, branch choice, save/resume and continuity, including preserved failures.",
+  "objective_status": "B — PARTIAL / BOTH NORMAL PLAYER LIFECYCLES DEMONSTRATED; FINAL HOLDOUT COVERAGE INCOMPLETE",
+  "executive_summary": "Both normal browser lifecycles demonstrated; one frozen holdout 46/50 precedes targeted persistence/import repairs. Final-source holdout/browser coverage incomplete. No commit/push.",
+  "primary_report": "development/campaigns/product_realization/pr_play_71/01_EXECUTIVE_SUMMARY.md",
+  "evidence_packets": [],
+  "max_file_bytes": 60000000,
+  "changes": {
+    "production": [
+      "Explicit default-off new-campaign enrollment; trusted prerequisite disclosure; full transcript resume; bounded start deadline/busy guards.",
+      "Bounded same-file Windows rename retry and failed-New-Campaign rollback; existing adapter dependency retained."
+    ],
+    "validation": [
+      "50-case frozen developer holdout once: 46 passed, four failures retained.",
+      "Final focused recovery/publication/branch and boundary checks; separate baseline comparison for newly measured startup failures."
+    ],
+    "tooling": [
+      "Isolated normal browser/TCP host, full transport/authority capture and selected sanitized review export."
+    ],
+    "documentation": [
+      "23 cycle reports and NEXT_SESSION orientation."
+    ],
+    "generated_artifacts": [
+      "Original failure traces, screenshots, frozen manifest/source and final repair results."
+    ]
+  },
+  "testing": {
+    "focused": "{'passed': 102, 'failed': [], 'total': 102}",
+    "broader": "Nine historical authority failures; exact XML/log included.",
+    "full_suite": "Not run; no official ATGB or external independence.",
+    "runtime_validation": "Both normal UI branches plus separate TCP replay; final persistence repair has final TCP but no live-browser rerun.",
+    "model_runtime_boundary": "15 live requests, 189036 tokens including preflight/required gameplay; no shadow study.",
+    "new_regressions": "PR49 direct-import regression fixed and retested; temporary test directory collisions retained then rerun with isolated basetemp.",
+    "pre_existing_failures": "Three historical focused, nine broader, plus six newly measured startup failures verified against exact entry API."
+  },
+  "decisions_requiring_human_review": [
+    "No approval requested; no commit/push."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Frozen holdout precedes final recovery changes; raw score 46/50.",
+      "Cached frontend initially kept the previous transcript; reopened context verified current frontend.",
+      "Complete per-operation browser startup/substage timings unavailable."
+    ],
+    "pre_existing": [
+      "Six startup failures reproduced on entry API.",
+      "Permanent filesystem outages can still prevent rollback."
+    ]
+  },
+  "missing_concepts": [
+    "Final-source fresh holdout and live-browser coverage for final persistence repair."
+  ],
+  "does_not_prove": [
+    "Full suite, official ATGB, external independent validation, process-crash durability, multiplayer authorization or broad open-world initiative."
+  ],
+  "recommended_next_step": "PR-PLAY-71 verification closure: use a fresh, correctly specified holdout against the final persistence repair, including transient and permanent Windows rename failures. Preserve this frozen run without rerunning or tuning it.",
+  "self_contained_review_test": "23 requested reports, exact player-facing responses, original failure traces, final repair checks, explicit baseline and scope limits.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_71/A_choices.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_choices.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/A_consequence.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_final.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_final.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/A_followup.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_opening.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_post_resume.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_post_resume.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/A_post_resume_submission.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/A_reload.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_reopened.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_reopened.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/A_repaired_choices.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_resume_wide.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_resumed.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/A_save.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/A_saved.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/analyze.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/B_choices.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/B_consequence.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/B_final.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/B_final.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/B_followup.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/B_opening.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/B_post_resume.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/B_post_resume_wide.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/B_reload.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/B_reload.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/B_resume.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/B_resumed.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/B_save.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/B_saved.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/baseline.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/baseline_opening.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/baseline_route.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/baseline_start_regression.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/baseline_start_regression.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/baseline_start_regression.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/boundary_final.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/boundary_final.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/broader_final.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/broader_final.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/cached_frontend_resume_mismatch.png",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/cached_frontend_resume_mismatch.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/cases.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/development_disclosure.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/development_initial.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/development_second.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/development_third.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/diagnose_openings.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/entry_api.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/entry_sources.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/final_boundary.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/final_boundary.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/final_boundary_collided.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/final_boundary_collided.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/final_optional_gate.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/final_optional_gate.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/finalize.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/focused_final.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/freeze_holdout.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/frozen_source/artifacts/pr_play_71/cases.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/frozen_source/artifacts/pr_play_71/holdout.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/frozen_source/game/api.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/frozen_source/game/authored_consequences.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/frozen_source/game/campaign_reset.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/frozen_source/static/app.js",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/frozen_source/tests/test_pr_play_71_lifecycle.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/holdout.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/holdout_run.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/host.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/host_after_log.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/host_enabled_log.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/host_log.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/host_repaired_log.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/http_final_run.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/http_lifecycle.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/http_run.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/implementation.diff",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/opening_diagnostics_run.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/optional_preservation.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/optional_preservation.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/package_review.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/package_run.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/persistence_recovery_final.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/persistence_recovery_final.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/post_holdout_repair.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/post_holdout_repair.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/post_holdout_repair_collided.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/post_holdout_repair_collided.xml",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/publication_reproduction.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/regression.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/regression_run.txt",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/report.py",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/baseline.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/browser_console.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/browser_measurements.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/browser_network.jsonl",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/browser_observations.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/browser_results.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/complete_payload_scan.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/entry_source_provenance.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/final_implementation_freeze.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/final_repository_status.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/final_validation.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/freeze_integrity.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/frozen_holdout.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/frozen_holdout_manifest.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/holdout_results.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/holdout_started.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/holdout_summary.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/http_summary.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/http_summary_pre_recovery.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/http_traces.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/http_traces_pre_recovery.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/implementation_freeze.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/inherited_protected_integrity.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/latency.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/metrics.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/opening_diagnostics.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/protected_integrity.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/provenance.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/provider_usage.jsonl",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/provider_usage_22944.jsonl",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/provider_usage_28560.jsonl",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/provider_usage_32308.jsonl",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/provider_usage_summary.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/publication_500_diagnostics.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/regression_comparison.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/regression_summary.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/state_integrity.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/review_data/verdict.json",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71/working_tree.diff",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/01_EXECUTIVE_SUMMARY.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/02_BASELINE_AND_SCOPE.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/03_LIFECYCLE_ARCHITECTURE.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/04_NEW_CAMPAIGN_BASELINE.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/05_START_CAMPAIGN_RELIABILITY.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/06_INITIALIZATION_CONTRACT.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/07_BRANCH_A_LIFECYCLE.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/08_BRANCH_B_LIFECYCLE.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/09_SAVE_RESUME.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/10_CROSS_CAMPAIGN_ISOLATION.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/11_PUBLICATION_HTTP_500.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/12_FAILURE_RECOVERY.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/13_DEVELOPMENT_TESTS.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/14_FROZEN_HOLDOUT.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/15_REAL_HTTP_LIFECYCLE.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/16_BROWSER_LIFECYCLE.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/17_PLAYER_SAFE_PROJECTION.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/18_STATE_AND_DISCLOSURE.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/19_LATENCY.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/20_PLAYER_EXPERIENCE.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/21_REGRESSION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/22_LIMITATIONS_AND_OPEN_RISKS.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71/23_NEXT_SESSION.md",
+      "role": "campaign_evidence",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "source",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "source",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/authored_consequences.py",
+      "role": "source",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/campaign_reset.py",
+      "role": "source",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/quarantined_investigation_narration.py",
+      "role": "source",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/storage.py",
+      "role": "source",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "static/app.js",
+      "role": "source",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_71_lifecycle.py",
+      "role": "source",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_71_persistence_recovery.py",
+      "role": "source",
+      "why": "Selected PR71 implementation, original evidence, or final repair verification.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    }
+  ]
+}

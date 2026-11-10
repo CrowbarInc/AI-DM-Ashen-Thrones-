@@ -1,0 +1,561 @@
+{
+  "campaign_id": "pr_play_67",
+  "campaign_name": "PR-PLAY-67 — Player-safe HTTP state projection",
+  "campaign_date": "2026-11-04",
+  "purpose": "Repair and verify the server/player HTTP trust boundary.",
+  "objective_status": "A — PASS / PLAYER-SAFE HTTP BOUNDARY ESTABLISHED",
+  "executive_summary": "# EXECUTIVE SUMMARY\n\nA — PASS / PLAYER-SAFE HTTP BOUNDARY ESTABLISHED\n\nThe critical leak reproduced through real localhost TCP with experimental narration disabled and enabled. Explicit source-specific nested DTOs now exclude internal state from all registered /api JSON responses. 78 endpoint/fault HTTP requests and 50 one-shot developer-authored holdout cases contain zero hidden sentinel exposures; a separate ten-request raw-authority comparison passes for all five actions. The exact milestone sentence survives the final chat HTTP response; server stores and snapshots retain hidden information.\n\nDevelopment: 42 passed. Frozen holdout: 50/50 (developer-authored, not independent external validation). Focused: 893 passed / 3 failed. Boundary/frontend/persistence: 82 passed / 0 failed. Broader: 9 historical failures. New focused failures: 0. See regression report for identities and contract-test migration.\n\nBrowser verifies initial scene, structured investigation, existing exit travel, character/inventory and discovered-clue journal. Its milestone action button still displays a legacy refusal, while the exact fact appears in the journal. An offline entry-source comparison reproduces the identical refusal: preexisting and outside this projection repair. Five-action chat replay passes. This is not a claim of natural narration or universal semantic safety.\n\nNo commit or push. Zero live-provider requests. Existing narration validators, deterministic resolution and persistence owners were not changed. Primary next step: PR-PLAY-68: AI PRESENTATION ACCEPTANCE & NATURALNESS.\n",
+  "primary_report": "development\\campaigns\\product_realization\\pr_play_67\\01_EXECUTIVE_SUMMARY.md",
+  "evidence_packets": [],
+  "max_file_bytes": 134217728,
+  "changes": {
+    "production": [
+      "Explicit player HTTP nested DTOs; shared final JSON boundary and safe error responses."
+    ],
+    "validation": [
+      "42 development tests; existing private-metadata assertions migrated to server logs without removing authoritative checks."
+    ],
+    "tooling": [
+      "Real TCP endpoint/replay/fault tests, one-shot frozen holdout, raw authority control and browser entry comparison."
+    ],
+    "documentation": [
+      "20 requested reports and canonical NEXT_SESSION orientation."
+    ],
+    "generated_artifacts": [
+      "Redacted complete HTTP bodies, state/persistence evidence, provenance/hashes, latency and regression summaries."
+    ]
+  },
+  "testing": {
+    "focused": "893 passed / 3 failed",
+    "broader": "82 boundary/frontend/persistence checks; nine historical broader failures.",
+    "full_suite": "Not run; official ATGB not run.",
+    "runtime_validation": "78 TCP endpoint/fault requests; 50 frozen HTTP holdout cases; ten raw-authority control requests; browser-originated core display/action/navigation smoke.",
+    "model_runtime_boundary": "Zero live provider calls. Synthetic controlled narration only.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "Three focused and nine broader historical failures. New Windows file-replacement failures preserved separately, with focused retry evidence."
+  },
+  "decisions_requiring_human_review": [
+    "No approval is required to review the repair. No commit, push, deployment or default flag enablement was performed."
+  ],
+  "known_problems": {
+    "campaign_specific": [],
+    "pre_existing": [
+      "Structured milestone button narration refusal remains identical in entry source; clue reaches the journal.",
+      "Three focused and nine broader historical failures."
+    ]
+  },
+  "missing_concepts": [
+    "Item-level public visibility contracts for world factions/projects/events; natural optional presentation remains deferred."
+  ],
+  "does_not_prove": [
+    "Universal semantic safety, independent external validation, official ATGB, live-provider quality, concurrent multi-tenant authorization, browser verification of every endpoint or client delivery ACK."
+  ],
+  "recommended_next_step": "PR-PLAY-68: AI PRESENTATION ACCEPTANCE & NATURALNESS",
+  "self_contained_review_test": "20 reports, redacted full HTTP schemas/bodies, exact replay, frozen manifest/results/hash, raw authority/persistence comparisons, endpoint/field contract, browser proof and incremental implementation diff.",
+  "supporting_files": [
+    {
+      "path": "artifacts\\pr_play_67\\boundary_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\broader_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\browser_entry_comparison.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\browser_smoke.png",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\build_reports.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\development.xml",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\focused_retry_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\holdout.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\http_harness.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\implementation.diff",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\integration.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\package_review.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\prepare.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\raw_authority_audit.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\regression.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\retry_regression.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\baseline.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\browser_entry_comparison.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\browser_results.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\complete_payload_scan.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\endpoint_inventory.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\failure_injection.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\freeze_integrity.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\frozen_holdout.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\frozen_holdout_manifest.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\gameplay_replay.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\holdout_results.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\holdout_summary.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\http_integration.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\implementation_freeze.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\metrics.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\original_leak_reproduction.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\persistence.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\protected_integrity.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\provenance.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\raw_authority_audit.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\regression_summary.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\regression_summary_initial.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\response_contract.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\serialized_http_payloads.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\state_comparisons.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\state_equivalence_audit.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\supplemental_http.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\verdict.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\review_data\\visibility_classification.json",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_67\\summarize.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\supplemental.py",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_67\\winerror_diagnostic_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\01_EXECUTIVE_SUMMARY.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\02_BASELINE_AND_SCOPE.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\03_ORIGINAL_LEAK_REPRODUCTION.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\04_ENDPOINT_INVENTORY.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\05_PLAYER_SAFE_RESPONSE_CONTRACT.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\06_PROJECTION_ARCHITECTURE.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\07_NESTED_DATA_PROTECTION.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\08_DISCOVERY_VISIBILITY.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\09_FRONTEND_COMPATIBILITY.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\10_DEVELOPMENT_TESTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\11_ADVERSARIAL_LEAKAGE_TESTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\12_FROZEN_HOLDOUT.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\13_REAL_HTTP_INTEGRATION.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\14_GAMEPLAY_REPLAY.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\15_FAILURE_INJECTION.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\16_STATE_AND_PERSISTENCE.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\17_REGRESSION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\18_PERFORMANCE.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\19_LIMITATIONS_AND_OPEN_RISKS.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_67\\20_NEXT_SESSION.md",
+      "role": "campaign_evidence",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "docs\\NEXT_SESSION.md",
+      "role": "source",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game\\player_http_boundary.py",
+      "role": "source",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game\\player_http_projection.py",
+      "role": "source",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests\\test_pr_play_67_player_projection.py",
+      "role": "source",
+      "why": "Explicitly selected scoped implementation or redacted PR67 evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    }
+  ]
+}

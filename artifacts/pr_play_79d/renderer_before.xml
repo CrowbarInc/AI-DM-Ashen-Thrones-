@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="8.283" timestamp="2026-11-08T07:17:30.469260-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_47_controlled_renderer" name="test_matrix[5]" time="3.366"><failure message="AssertionError: assert {'id': 'known....', ...}, ...} == {'id': 'known....', ...}, ...}&#10;  &#10;  Omitting 6 identical items, use -vv to show&#10;  Differing items:&#10;  {'resolution': {'kind': 'already_searched', 'action_id': 'rubbing', 'label': 'rubbing', 'prompt': 'I examine the rubbing.', ...}} != {'resolution': {'kind': 'already_searched', 'action_id': 'rubbing', 'label': 'rubbing', 'prompt': 'I examine the rubbing.', ...}}&#10;  &#10;  Full diff:&#10;    {...&#10;  &#10;  ...Full output truncated (84 lines hidden), use '-vv' to show">tests\test_pr_play_47_controlled_renderer.py:156: in test_matrix
+    assert row == original
+E   AssertionError: assert {'id': 'known....', ...}, ...} == {'id': 'known....', ...}, ...}
+E     
+E     Omitting 6 identical items, use -vv to show
+E     Differing items:
+E     {'resolution': {'kind': 'already_searched', 'action_id': 'rubbing', 'label': 'rubbing', 'prompt': 'I examine the rubbing.', ...}} != {'resolution': {'kind': 'already_searched', 'action_id': 'rubbing', 'label': 'rubbing', 'prompt': 'I examine the rubbing.', ...}}
+E     
+E     Full diff:
+E       {...
+E     
+E     ...Full output truncated (84 lines hidden), use '-vv' to show</failure></testcase></testsuite></testsuites>

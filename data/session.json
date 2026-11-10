@@ -1,11 +1,11 @@
 {
   "persistence_version": 1,
   "kind": "session",
-  "saved_at": "2026-10-27T00:17:24.764093Z",
+  "saved_at": "2026-11-08T22:16:42.896398Z",
   "payload": {
-    "active_scene_id": "frontier_gate",
+    "active_scene_id": "mill_loft",
     "visited_scene_ids": [
-      "frontier_gate"
+      "mill_loft"
     ],
     "current_date": "Day 1",
     "turn_counter": 1,
@@ -19,469 +19,27 @@
     },
     "interaction_context": {
       "active_interaction_target_id": null,
-      "active_interaction_kind": null,
-      "interaction_mode": "none",
-      "engagement_level": "none",
+      "active_interaction_kind": "investigate",
+      "interaction_mode": "activity",
+      "engagement_level": "focused",
       "conversation_privacy": null,
       "player_position_context": null
     },
     "scene_state": {
-      "active_scene_id": "frontier_gate",
+      "active_scene_id": "mill_loft",
       "active_entities": [
-        "gate_guard",
-        "gate_serjeant",
-        "tavern_runner",
-        "guard_captain",
-        "refugee",
-        "threadbare_watcher"
+        "loft_clerk"
       ],
       "entity_presence": {
-        "gate_guard": "active",
-        "gate_serjeant": "active",
-        "tavern_runner": "active",
-        "guard_captain": "active",
-        "threadbare_watcher": "active",
-        "refugee": "active"
+        "loft_clerk": "active"
       },
       "current_interlocutor": null,
       "emergent_addressables": [],
       "promoted_actor_npc_map": {}
     },
     "runtime_scene_overlays": {
-      "arch_lane": {
-        "scene_id": "arch_lane",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "alley": {
-        "scene_id": "alley",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "s1": {
-        "scene_id": "s1",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "npc_repeat_scene_a": {
-        "scene_id": "npc_repeat_scene_a",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "hidden_meeting_room": {
-        "scene_id": "hidden_meeting_room",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "lane": {
-        "scene_id": "lane",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "kiln_yard": {
-        "scene_id": "kiln_yard",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "yard": {
-        "scene_id": "yard",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "t_scene": {
-        "scene_id": "t_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "empty_opening": {
-        "scene_id": "empty_opening",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "market_quarter": {
-        "scene_id": "market_quarter",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "old_milestone": {
-        "scene_id": "old_milestone",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "alley_door": {
-        "scene_id": "alley_door",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "gate_yard": {
-        "scene_id": "gate_yard",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "ward": {
-        "scene_id": "ward",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "crossroads": {
-        "scene_id": "crossroads",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "market_square": {
-        "scene_id": "market_square",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "river_arch": {
-        "scene_id": "river_arch",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "frontier_gate": {
-        "scene_id": "frontier_gate",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "beacon_yard": {
-        "scene_id": "beacon_yard",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "gate": {
-        "scene_id": "gate",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "granary_scene": {
-        "scene_id": "granary_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "scene_investigate": {
-        "scene_id": "scene_investigate",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "cedar_wharf": {
-        "scene_id": "cedar_wharf",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "hut": {
-        "scene_id": "hut",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "ward_raid": {
-        "scene_id": "ward_raid",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "lower_ward": {
-        "scene_id": "lower_ward",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "watch_post": {
-        "scene_id": "watch_post",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "lane_scene": {
-        "scene_id": "lane_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "cellar": {
-        "scene_id": "cellar",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "scene": {
-        "scene_id": "scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "partial_scene": {
-        "scene_id": "partial_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "market_yard": {
-        "scene_id": "market_yard",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "wild_moors": {
-        "scene_id": "wild_moors",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "hall": {
-        "scene_id": "hall",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "s_inn": {
-        "scene_id": "s_inn",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "checkpoint": {
-        "scene_id": "checkpoint",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "storeroom": {
-        "scene_id": "storeroom",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "s": {
-        "scene_id": "s",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "m": {
-        "scene_id": "m",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "eastern_square": {
-        "scene_id": "eastern_square",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "street": {
-        "scene_id": "street",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "market_lane": {
-        "scene_id": "market_lane",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "npc_repeat_scene_b": {
-        "scene_id": "npc_repeat_scene_b",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "bridge": {
-        "scene_id": "bridge",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "test_scene": {
-        "scene_id": "test_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "watchtower": {
-        "scene_id": "watchtower",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "market": {
-        "scene_id": "market",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "ember_kiln": {
-        "scene_id": "ember_kiln",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "npc_repeat_scene_c": {
-        "scene_id": "npc_repeat_scene_c",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "npc_repeat_scene_d": {
-        "scene_id": "npc_repeat_scene_d",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "test": {
-        "scene_id": "test",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "wall": {
-        "scene_id": "wall",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "scene_docks": {
-        "scene_id": "scene_docks",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "office": {
-        "scene_id": "office",
+      "mill_loft": {
+        "scene_id": "mill_loft",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -496,32 +54,112 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "x": {
-        "scene_id": "x",
+      "ember_kiln": {
+        "scene_id": "ember_kiln",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "rope_bridge": {
-        "scene_id": "rope_bridge",
+      "test_scene": {
+        "scene_id": "test_scene",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "tavern": {
-        "scene_id": "tavern",
+      "ward": {
+        "scene_id": "ward",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "pier": {
-        "scene_id": "pier",
+      "granary_scene": {
+        "scene_id": "granary_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "market_square": {
+        "scene_id": "market_square",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "empty_opening": {
+        "scene_id": "empty_opening",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "checkpoint": {
+        "scene_id": "checkpoint",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "beacon_yard": {
+        "scene_id": "beacon_yard",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "s_inn": {
+        "scene_id": "s_inn",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "t_scene": {
+        "scene_id": "t_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "s": {
+        "scene_id": "s",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "arch_lane": {
+        "scene_id": "arch_lane",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "s1": {
+        "scene_id": "s1",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "m": {
+        "scene_id": "m",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -536,8 +174,368 @@
         "runtime_entities": [],
         "mutations": {}
       },
+      "scene": {
+        "scene_id": "scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "watchtower": {
+        "scene_id": "watchtower",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "cellar": {
+        "scene_id": "cellar",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "market": {
+        "scene_id": "market",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "eastern_square": {
+        "scene_id": "eastern_square",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "hut": {
+        "scene_id": "hut",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "scene_investigate": {
+        "scene_id": "scene_investigate",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "market_quarter": {
+        "scene_id": "market_quarter",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "npc_repeat_scene_d": {
+        "scene_id": "npc_repeat_scene_d",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "scene_docks": {
+        "scene_id": "scene_docks",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "frontier_gate": {
+        "scene_id": "frontier_gate",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "alley_door": {
+        "scene_id": "alley_door",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "gate": {
+        "scene_id": "gate",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "wall": {
+        "scene_id": "wall",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "hidden_meeting_room": {
+        "scene_id": "hidden_meeting_room",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "cedar_wharf": {
+        "scene_id": "cedar_wharf",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "lane": {
+        "scene_id": "lane",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "office": {
+        "scene_id": "office",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
       "stone_quay": {
         "scene_id": "stone_quay",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "watch_post": {
+        "scene_id": "watch_post",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "wild_moors": {
+        "scene_id": "wild_moors",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "x": {
+        "scene_id": "x",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "street": {
+        "scene_id": "street",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "npc_repeat_scene_b": {
+        "scene_id": "npc_repeat_scene_b",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "crossroads": {
+        "scene_id": "crossroads",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "lane_scene": {
+        "scene_id": "lane_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "market_yard": {
+        "scene_id": "market_yard",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "npc_repeat_scene_c": {
+        "scene_id": "npc_repeat_scene_c",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "pier": {
+        "scene_id": "pier",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "rope_bridge": {
+        "scene_id": "rope_bridge",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "gate_yard": {
+        "scene_id": "gate_yard",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "river_arch": {
+        "scene_id": "river_arch",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "storeroom": {
+        "scene_id": "storeroom",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "tavern": {
+        "scene_id": "tavern",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "lower_ward": {
+        "scene_id": "lower_ward",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "test": {
+        "scene_id": "test",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "bridge": {
+        "scene_id": "bridge",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "kiln_yard": {
+        "scene_id": "kiln_yard",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "partial_scene": {
+        "scene_id": "partial_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "old_milestone": {
+        "scene_id": "old_milestone",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "ward_raid": {
+        "scene_id": "ward_raid",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "yard": {
+        "scene_id": "yard",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "market_lane": {
+        "scene_id": "market_lane",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "npc_repeat_scene_a": {
+        "scene_id": "npc_repeat_scene_a",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "alley": {
+        "scene_id": "alley",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "hall": {
+        "scene_id": "hall",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -546,18 +544,20 @@
       }
     },
     "scene_runtime": {
-      "frontier_gate": {
+      "mill_loft": {
         "discovered_clues": [],
         "discovered_clue_ids": [],
         "pending_leads": [],
         "revealed_hidden_facts": [],
         "suspicion_flags": [],
-        "searched_targets": [],
+        "searched_targets": [
+          "i_inspect_the_brass_token"
+        ],
         "resolved_interactables": [],
-        "last_exploration_action_key": "campaign_start_opening_scene",
+        "last_exploration_action_key": "i_inspect_the_brass_token",
         "repeated_action_count": 1,
-        "last_resolution_kind": "scene_opening",
-        "last_description_hash": null,
+        "last_resolution_kind": "investigate",
+        "last_description_hash": "d127ef336ee8760c2abc4a5a763394cf",
         "last_perception_visible_facts": [],
         "last_perception_narration": "",
         "last_perception_turn": null,
@@ -568,78 +568,46 @@
         "passive_action_streak": 0,
         "recent_player_actions": [
           {
-            "text": "",
+            "text": "I inspect the brass token.",
             "passive": false,
             "markers": [],
             "resolution_kind": null,
             "turn": 1
           }
         ],
-        "last_player_action_text": "",
+        "last_player_action_text": "I inspect the brass token.",
         "last_player_action_passive": false,
         "recent_contextual_leads": []
       }
     },
     "clue_knowledge": {},
     "lead_registry": {},
-    "npc_runtime": {
-      "gate_guard": {
-        "attitude": 0,
-        "trust": 0,
-        "fear": 0,
-        "suspicion": 0,
-        "known_topics": [],
-        "revealed_topics": [],
-        "last_interaction_turn": null
-      },
-      "gate_serjeant": {
-        "attitude": 0,
-        "trust": 0,
-        "fear": 0,
-        "suspicion": 0,
-        "known_topics": [],
-        "revealed_topics": [],
-        "last_interaction_turn": null
-      },
-      "tavern_runner": {
-        "attitude": 0,
-        "trust": 0,
-        "fear": 0,
-        "suspicion": 0,
-        "known_topics": [],
-        "revealed_topics": [],
-        "last_interaction_turn": null
-      }
-    },
+    "npc_runtime": {},
     "last_action_debug": {
-      "last_action_type": "start_campaign",
-      "player_input": "",
+      "last_action_type": "chat",
+      "player_input": "I inspect the brass token.",
       "normalized_action": {
-        "id": "campaign_start_opening_scene",
-        "label": "start_campaign",
-        "type": "scene_opening",
-        "prompt": "",
-        "targetSceneId": "frontier_gate",
-        "target_scene_id": "frontier_gate"
+        "id": "i_inspect_the_brass_token",
+        "label": "I inspect the brass token.",
+        "type": "investigate",
+        "targetSceneId": null,
+        "target_scene_id": null,
+        "prompt": "I inspect the brass token."
       },
-      "resolution_kind": "scene_opening",
+      "resolution_kind": "investigate",
       "target_scene": null,
       "resolver_result": {
-        "kind": "scene_opening",
-        "action_id": "campaign_start_opening_scene",
-        "label": "start_campaign",
-        "prompt": "",
+        "kind": "investigate",
+        "action_id": "i_inspect_the_brass_token",
+        "label": "I inspect the brass token.",
+        "prompt": "I inspect the brass token.",
         "success": true,
         "resolved_transition": false,
-        "target_scene_id": "frontier_gate",
+        "target_scene_id": null,
         "clue_id": null,
         "discovered_clues": [],
-        "state_changes": {
-          "opening_scene_turn": true,
-          "arrived_at_scene": true,
-          "new_scene_context_available": true
-        },
-        "hint": "Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.",
+        "state_changes": {},
+        "hint": "Player named a surface that is not currently discoverable. Do not confirm or reveal it.",
         "world_tick_events": [
           {
             "type": "faction_pressure",
@@ -654,16 +622,12 @@
         ]
       },
       "scene_transition": null,
-      "narration_state_mismatch_detected": false,
-      "mismatch_kind": "",
-      "mismatch_repair_applied": "none",
-      "mismatch_repairs_applied": [],
       "response_type_contract": {
-        "required_response_type": "scene_opening",
+        "required_response_type": "action_outcome",
         "source_route": "exploration",
         "allow_escalation": false,
         "debug_reasons": [
-          "scene_opening_requires_opening_response",
+          "resolved_world_action_requires_action_outcome",
           "non_hostile_world_action_guard"
         ]
       },
@@ -680,18 +644,11 @@
         "changed_area": "scene_state.active_entities"
       },
       {
-        "kind": "state_mutation",
-        "domain": "scene_state",
-        "owner_module": "game.interaction_context",
-        "operation": "rebuild_active_scene_entities",
-        "changed_area": "scene_state.active_entities"
-      },
-      {
         "event": "resolution_contract",
-        "raw_input": "",
+        "raw_input": "I inspect the brass token.",
         "resolution_contract": {
-          "request_kind": "action",
-          "operation": "unresolved",
+          "request_kind": "inquiry",
+          "operation": "inspect",
           "target": null,
           "interlocutor": null,
           "subject": null,
@@ -701,18 +658,18 @@
           "authority": "unknown_allowed",
           "constraint": "The referent is not unambiguous. Ask which one is meant, or say it cannot be identified. Do not guess."
         },
-        "referent_provenance": "explicit_player",
+        "referent_provenance": "unresolved",
         "discourse_ref": null,
         "discourse_focus": {
-          "scene_id": "frontier_gate",
+          "scene_id": "mill_loft",
           "active_interlocutor": null,
           "active_claim": null,
           "active_actionable_lead": null,
           "active_inspected": null,
           "last_attempted_action": null
         },
-        "interaction_obligation_kind": "question",
-        "authority_route": "grounded_information_request",
+        "interaction_obligation_kind": "clarification",
+        "authority_route": "authoritative_mechanical_action",
         "semantic_result": null,
         "echo_detected": false,
         "action_outcome": null,
@@ -721,14 +678,14 @@
         "construction": {
           "cues": [],
           "referent_slot": null,
-          "referent_reason": "no_anaphor",
-          "ambiguity_detected": false,
+          "referent_reason": "target_not_canonical",
+          "ambiguity_detected": true,
           "actionable_inherited": false,
           "active_claim_inherited": false,
           "fast_path_proposal": true,
-          "fast_path_used": true,
-          "fast_path_abstained": false,
-          "fast_path_abstention_reason": null,
+          "fast_path_used": false,
+          "fast_path_abstained": true,
+          "fast_path_abstention_reason": "target_not_canonical",
           "model_interpreter_invoked": false,
           "model_proposal_rejected": false,
           "clarification_after_model": false,
@@ -736,83 +693,57 @@
           "interpretation_error": null,
           "canonical_candidates": [
             {
-              "id": "frontier_gate",
+              "id": "mill_loft",
               "type": "place",
-              "label": "Cinderwatch Gate District"
+              "label": "Mill Loft"
             },
             {
-              "id": "notice_board",
+              "id": "grain_hopper",
               "type": "object",
-              "label": "Notice board"
+              "label": "Grain hopper"
             },
             {
-              "id": "market_quarter",
-              "type": "place",
-              "label": "Enter Cinderwatch"
+              "id": "tariff_slate",
+              "type": "object",
+              "label": "Tariff slate"
             },
             {
-              "id": "old_milestone",
-              "type": "place",
-              "label": "Follow the missing patrol rumor"
-            },
-            {
-              "id": "guard_captain",
+              "id": "loft_clerk",
               "type": "interlocutor",
-              "label": "Guard Captain"
-            },
-            {
-              "id": "tavern_runner",
-              "type": "interlocutor",
-              "label": "Tavern Runner"
-            },
-            {
-              "id": "refugee",
-              "type": "interlocutor",
-              "label": "Ragged stranger"
-            },
-            {
-              "id": "threadbare_watcher",
-              "type": "interlocutor",
-              "label": "Threadbare watcher"
-            },
-            {
-              "id": "gate_guard",
-              "type": "interlocutor",
-              "label": "Gate Guard"
-            },
-            {
-              "id": "gate_serjeant",
-              "type": "interlocutor",
-              "label": "Gate Serjeant"
+              "label": "Loft Clerk"
             }
           ],
           "proposal_source": "deterministic_fast_path",
-          "proposed_operation": "unresolved",
+          "proposed_operation": "inspect",
           "proposed_supporting_operations": [],
-          "proposed_raw_target": null,
+          "proposed_raw_target": "brass token",
           "canonicalization_attempted": true,
           "canonical_target_found": false,
           "operation_conflict": false,
-          "validation_status": "validated",
+          "validation_status": "abstained",
           "validation_result": {
-            "status": "validated",
-            "reason": null,
-            "failed_fields": [],
-            "clarification_required": false,
-            "model_interpretation_appropriate": false,
+            "status": "abstained",
+            "reason": "target_not_canonical",
+            "failed_fields": [
+              "raw_target_text"
+            ],
+            "clarification_required": true,
+            "model_interpretation_appropriate": true,
             "canonical_target_id": null,
             "canonical_target_label": null,
             "canonical_target_type": null,
             "canonical_basis": null,
-            "authoritative_operation": null,
-            "discourse_commit_allowed": true,
+            "authoritative_operation": "unresolved",
+            "discourse_commit_allowed": false,
             "compatibility_bridge": null
           },
-          "abstention_reason": null,
-          "failed_fields": [],
-          "clarification_required": false,
-          "model_interpretation_appropriate": false,
-          "discourse_commit_allowed": true,
+          "abstention_reason": "target_not_canonical",
+          "failed_fields": [
+            "raw_target_text"
+          ],
+          "clarification_required": true,
+          "model_interpretation_appropriate": true,
+          "discourse_commit_allowed": false,
           "interlocutor_rejected": false,
           "entity_binding": {
             "status": "unresolved",
@@ -826,18 +757,18 @@
             "authority_reasons": [],
             "claim_binding": "none"
           },
-          "authoritative": true,
-          "semantic_completeness": "sufficient",
+          "authoritative": false,
+          "semantic_completeness": "not_applied",
           "compatibility_bridge": null,
           "interpretation_proposal": {
-            "raw_input": "",
+            "raw_input": "I inspect the brass token.",
             "source": "deterministic_fast_path",
-            "primary_operation": "unresolved",
+            "primary_operation": "inspect",
             "supporting_operations": [],
-            "raw_target_text": null,
+            "raw_target_text": "brass token",
             "proposed_target_id": null,
-            "target_capture": "none",
-            "has_determiner": false,
+            "target_capture": "verb_object",
+            "has_determiner": true,
             "interlocutor_id": null,
             "conversational_subject": null,
             "dimension": null,
@@ -852,12 +783,12 @@
             "operation_conflict": false,
             "notes": {}
           },
-          "commitment_status": "contemplated",
-          "primary_operation": "unresolved",
-          "resolution_subject": "action",
+          "commitment_status": "executed_now",
+          "primary_operation": "inspect",
+          "resolution_subject": "perception",
           "resolution_subject_coherence": "accepted",
-          "semantic_input_length": 0,
-          "provenance_excerpt": "",
+          "semantic_input_length": 26,
+          "provenance_excerpt": "I inspect the brass token.",
           "secondary_operations": [],
           "executable_obligations": {
             "primary": null,
@@ -870,12 +801,364 @@
         }
       },
       {
+        "event": "resolution_contract",
+        "raw_input": "I inspect the brass token.",
+        "resolution_contract": {
+          "request_kind": "inquiry",
+          "operation": "inspect",
+          "target": null,
+          "interlocutor": null,
+          "subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "answer",
+          "authority": "unknown_allowed",
+          "constraint": "The referent is not unambiguous. Ask which one is meant, or say it cannot be identified. Do not guess."
+        },
+        "referent_provenance": "unresolved",
+        "discourse_ref": null,
+        "discourse_focus": {
+          "scene_id": "mill_loft",
+          "active_interlocutor": null,
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null
+        },
+        "interaction_obligation_kind": "clarification",
+        "authority_route": "authoritative_mechanical_action",
+        "semantic_result": null,
+        "echo_detected": false,
+        "action_outcome": null,
+        "claim_promoted": false,
+        "retry_preserved": false,
+        "construction": {
+          "cues": [],
+          "referent_slot": null,
+          "referent_reason": "target_not_canonical",
+          "ambiguity_detected": true,
+          "actionable_inherited": false,
+          "active_claim_inherited": false,
+          "fast_path_proposal": true,
+          "fast_path_used": false,
+          "fast_path_abstained": true,
+          "fast_path_abstention_reason": "target_not_canonical",
+          "model_interpreter_invoked": false,
+          "model_proposal_rejected": false,
+          "clarification_after_model": false,
+          "interpretation_api_calls": 0,
+          "interpretation_error": null,
+          "canonical_candidates": [
+            {
+              "id": "mill_loft",
+              "type": "place",
+              "label": "Mill Loft"
+            },
+            {
+              "id": "grain_hopper",
+              "type": "object",
+              "label": "Grain hopper"
+            },
+            {
+              "id": "tariff_slate",
+              "type": "object",
+              "label": "Tariff slate"
+            },
+            {
+              "id": "loft_clerk",
+              "type": "interlocutor",
+              "label": "Loft Clerk"
+            }
+          ],
+          "proposal_source": "deterministic_fast_path",
+          "proposed_operation": "inspect",
+          "proposed_supporting_operations": [],
+          "proposed_raw_target": "brass token",
+          "canonicalization_attempted": true,
+          "canonical_target_found": false,
+          "operation_conflict": false,
+          "validation_status": "abstained",
+          "validation_result": {
+            "status": "abstained",
+            "reason": "target_not_canonical",
+            "failed_fields": [
+              "raw_target_text"
+            ],
+            "clarification_required": true,
+            "model_interpretation_appropriate": true,
+            "canonical_target_id": null,
+            "canonical_target_label": null,
+            "canonical_target_type": null,
+            "canonical_basis": null,
+            "authoritative_operation": "unresolved",
+            "discourse_commit_allowed": false,
+            "compatibility_bridge": null
+          },
+          "abstention_reason": "target_not_canonical",
+          "failed_fields": [
+            "raw_target_text"
+          ],
+          "clarification_required": true,
+          "model_interpretation_appropriate": true,
+          "discourse_commit_allowed": false,
+          "interlocutor_rejected": false,
+          "entity_binding": {
+            "status": "unresolved",
+            "entity_class": "ambiguous_unresolved",
+            "proposed_interlocutor": null,
+            "proposed_span": null,
+            "bound_interlocutor_id": null,
+            "entity_id": null,
+            "label": null,
+            "explicit_new_interlocutor": false,
+            "authority_reasons": [],
+            "claim_binding": "none"
+          },
+          "authoritative": false,
+          "semantic_completeness": "not_applied",
+          "compatibility_bridge": null,
+          "interpretation_proposal": {
+            "raw_input": "I inspect the brass token.",
+            "source": "deterministic_fast_path",
+            "primary_operation": "inspect",
+            "supporting_operations": [],
+            "raw_target_text": "brass token",
+            "proposed_target_id": null,
+            "target_capture": "verb_object",
+            "has_determiner": true,
+            "interlocutor_id": null,
+            "conversational_subject": null,
+            "dimension": null,
+            "dimensions": [],
+            "expected_resolution": "answer",
+            "referenced_claim_id": null,
+            "referenced_action_id": null,
+            "referenced_inspected_id": null,
+            "confidence": null,
+            "clarification_required": false,
+            "ambiguous": false,
+            "operation_conflict": false,
+            "notes": {}
+          },
+          "commitment_status": "executed_now",
+          "primary_operation": "inspect",
+          "resolution_subject": "perception",
+          "resolution_subject_coherence": "accepted",
+          "semantic_input_length": 26,
+          "provenance_excerpt": "I inspect the brass token.",
+          "secondary_operations": [],
+          "executable_obligations": {
+            "primary": null,
+            "mutation_owner": null,
+            "sequence": [],
+            "supporting": []
+          },
+          "requested_addressee": null,
+          "addressee_binding_status": "unresolved",
+          "conversational_authorization": {
+            "communication_ownership": "character_action",
+            "intent_purpose": "perform_action",
+            "target_resolution": "none_required",
+            "target_provenance": "none",
+            "target_id": null,
+            "candidate_target_ids": [],
+            "operation_eligibility": "executable",
+            "mutation_eligibility": true,
+            "authority_provenance": "resolution_contract",
+            "conflict_status": "none",
+            "conflict_details": {},
+            "pending_intention_relationship": "starts_new",
+            "allowed_operation": "inspect",
+            "clarification": "",
+            "choices": [],
+            "direct_address": false,
+            "player_text": "I inspect the brass token."
+          }
+        }
+      },
+      {
+        "event": "resolution_contract",
+        "raw_input": "I inspect the brass token.",
+        "resolution_contract": {
+          "request_kind": "inquiry",
+          "operation": "inspect",
+          "target": null,
+          "interlocutor": null,
+          "subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "answer",
+          "authority": "unknown_allowed",
+          "constraint": "The referent is not unambiguous. Ask which one is meant, or say it cannot be identified. Do not guess."
+        },
+        "referent_provenance": "unresolved",
+        "discourse_ref": null,
+        "discourse_focus": {
+          "scene_id": null,
+          "active_interlocutor": null,
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null
+        },
+        "interaction_obligation_kind": "clarification",
+        "authority_route": null,
+        "semantic_result": null,
+        "echo_detected": false,
+        "action_outcome": null,
+        "claim_promoted": false,
+        "retry_preserved": true,
+        "construction": {
+          "cues": [],
+          "referent_slot": null,
+          "referent_reason": "target_not_canonical",
+          "ambiguity_detected": true,
+          "actionable_inherited": false,
+          "active_claim_inherited": false,
+          "fast_path_proposal": true,
+          "fast_path_used": false,
+          "fast_path_abstained": true,
+          "fast_path_abstention_reason": "target_not_canonical",
+          "model_interpreter_invoked": false,
+          "model_proposal_rejected": false,
+          "clarification_after_model": false,
+          "interpretation_api_calls": 0,
+          "interpretation_error": null,
+          "canonical_candidates": [
+            {
+              "id": "mill_loft",
+              "type": "place",
+              "label": "Mill Loft"
+            },
+            {
+              "id": "grain_hopper",
+              "type": "object",
+              "label": "Grain hopper"
+            },
+            {
+              "id": "tariff_slate",
+              "type": "object",
+              "label": "Tariff slate"
+            },
+            {
+              "id": "loft_clerk",
+              "type": "interlocutor",
+              "label": "Loft Clerk"
+            }
+          ],
+          "proposal_source": "deterministic_fast_path",
+          "proposed_operation": "inspect",
+          "proposed_supporting_operations": [],
+          "proposed_raw_target": "brass token",
+          "canonicalization_attempted": true,
+          "canonical_target_found": false,
+          "operation_conflict": false,
+          "validation_status": "abstained",
+          "validation_result": {
+            "status": "abstained",
+            "reason": "target_not_canonical",
+            "failed_fields": [
+              "raw_target_text"
+            ],
+            "clarification_required": true,
+            "model_interpretation_appropriate": true,
+            "canonical_target_id": null,
+            "canonical_target_label": null,
+            "canonical_target_type": null,
+            "canonical_basis": null,
+            "authoritative_operation": "unresolved",
+            "discourse_commit_allowed": false,
+            "compatibility_bridge": null
+          },
+          "abstention_reason": "target_not_canonical",
+          "failed_fields": [
+            "raw_target_text"
+          ],
+          "clarification_required": true,
+          "model_interpretation_appropriate": true,
+          "discourse_commit_allowed": false,
+          "interlocutor_rejected": false,
+          "entity_binding": {
+            "status": "unresolved",
+            "entity_class": "ambiguous_unresolved",
+            "proposed_interlocutor": null,
+            "proposed_span": null,
+            "bound_interlocutor_id": null,
+            "entity_id": null,
+            "label": null,
+            "explicit_new_interlocutor": false,
+            "authority_reasons": [],
+            "claim_binding": "none"
+          },
+          "authoritative": false,
+          "semantic_completeness": "not_applied",
+          "compatibility_bridge": null,
+          "interpretation_proposal": {
+            "raw_input": "I inspect the brass token.",
+            "source": "deterministic_fast_path",
+            "primary_operation": "inspect",
+            "supporting_operations": [],
+            "raw_target_text": "brass token",
+            "proposed_target_id": null,
+            "target_capture": "verb_object",
+            "has_determiner": true,
+            "interlocutor_id": null,
+            "conversational_subject": null,
+            "dimension": null,
+            "dimensions": [],
+            "expected_resolution": "answer",
+            "referenced_claim_id": null,
+            "referenced_action_id": null,
+            "referenced_inspected_id": null,
+            "confidence": null,
+            "clarification_required": false,
+            "ambiguous": false,
+            "operation_conflict": false,
+            "notes": {}
+          },
+          "commitment_status": "executed_now",
+          "primary_operation": "inspect",
+          "resolution_subject": "perception",
+          "resolution_subject_coherence": "accepted",
+          "semantic_input_length": 26,
+          "provenance_excerpt": "I inspect the brass token.",
+          "secondary_operations": [],
+          "executable_obligations": {
+            "primary": null,
+            "mutation_owner": null,
+            "sequence": [],
+            "supporting": []
+          },
+          "requested_addressee": null,
+          "addressee_binding_status": "unresolved",
+          "conversational_authorization": {
+            "communication_ownership": "character_action",
+            "intent_purpose": "perform_action",
+            "target_resolution": "none_required",
+            "target_provenance": "none",
+            "target_id": null,
+            "candidate_target_ids": [],
+            "operation_eligibility": "executable",
+            "mutation_eligibility": true,
+            "authority_provenance": "resolution_contract",
+            "conflict_status": "none",
+            "conflict_details": {},
+            "pending_intention_relationship": "starts_new",
+            "allowed_operation": "inspect",
+            "clarification": "",
+            "choices": [],
+            "direct_address": false,
+            "player_text": "I inspect the brass token."
+          }
+        }
+      },
+      {
         "kind": "state_mutation",
         "domain": "scene_state",
         "owner_module": "game.api",
         "operation": "authoritative_resolution_mutation",
         "changed_area": "session+world+scene_runtime",
-        "resolution_kind": "scene_opening"
+        "resolution_kind": "investigate"
       },
       {
         "kind": "state_mutation",
@@ -886,11 +1169,11 @@
         "report": {
           "enabled": true,
           "owner_module": "game.api",
-          "path_label": "scene_opening",
+          "path_label": "action_outcome",
           "ctir_present": true,
-          "ctir_stamp": "1:1ac9775e600:0",
+          "ctir_stamp": "1:216f7b57380:aff405dc",
           "narrative_plan_present": true,
-          "narrative_plan_stamp": "1:1ac9775e600:0",
+          "narrative_plan_stamp": "1:216f7b57380:aff405dc",
           "stamp_matches": true,
           "prompt_consumes_plan": false,
           "raw_state_prompt_bypass_detected": false,
@@ -907,11 +1190,11 @@
         "report": {
           "enabled": true,
           "owner_module": "game.api",
-          "path_label": "scene_opening",
+          "path_label": "action_outcome",
           "ctir_present": true,
-          "ctir_stamp": "1:1ac9775e600:0",
+          "ctir_stamp": "1:216f7b57380:aff405dc",
           "narrative_plan_present": true,
-          "narrative_plan_stamp": "1:1ac9775e600:0",
+          "narrative_plan_stamp": "1:216f7b57380:aff405dc",
           "stamp_matches": true,
           "prompt_consumes_plan": true,
           "raw_state_prompt_bypass_detected": false,
@@ -921,10 +1204,10 @@
       },
       {
         "event": "resolution_contract",
-        "raw_input": "",
+        "raw_input": "I inspect the brass token.",
         "resolution_contract": {
-          "request_kind": "action",
-          "operation": "unresolved",
+          "request_kind": "inquiry",
+          "operation": "inspect",
           "target": null,
           "interlocutor": null,
           "subject": null,
@@ -934,38 +1217,38 @@
           "authority": "unknown_allowed",
           "constraint": "The referent is not unambiguous. Ask which one is meant, or say it cannot be identified. Do not guess."
         },
-        "referent_provenance": "explicit_player",
+        "referent_provenance": "unresolved",
         "discourse_ref": null,
         "discourse_focus": {
-          "scene_id": "frontier_gate",
+          "scene_id": "mill_loft",
           "active_interlocutor": null,
           "active_claim": null,
           "active_actionable_lead": null,
           "active_inspected": null,
           "last_attempted_action": null
         },
-        "interaction_obligation_kind": "question",
+        "interaction_obligation_kind": "clarification",
         "authority_route": "unknown_allowed",
         "semantic_result": {
-          "status": "legitimate_nonresolution",
+          "status": "satisfied",
           "reasons": [],
-          "preserved": false
+          "preserved": true
         },
         "echo_detected": false,
         "action_outcome": null,
         "claim_promoted": false,
-        "retry_preserved": false,
+        "retry_preserved": true,
         "construction": {
           "cues": [],
           "referent_slot": null,
-          "referent_reason": "no_anaphor",
-          "ambiguity_detected": false,
+          "referent_reason": "target_not_canonical",
+          "ambiguity_detected": true,
           "actionable_inherited": false,
           "active_claim_inherited": false,
           "fast_path_proposal": true,
-          "fast_path_used": true,
-          "fast_path_abstained": false,
-          "fast_path_abstention_reason": null,
+          "fast_path_used": false,
+          "fast_path_abstained": true,
+          "fast_path_abstention_reason": "target_not_canonical",
           "model_interpreter_invoked": false,
           "model_proposal_rejected": false,
           "clarification_after_model": false,
@@ -973,83 +1256,57 @@
           "interpretation_error": null,
           "canonical_candidates": [
             {
-              "id": "frontier_gate",
+              "id": "mill_loft",
               "type": "place",
-              "label": "Cinderwatch Gate District"
+              "label": "Mill Loft"
             },
             {
-              "id": "notice_board",
+              "id": "grain_hopper",
               "type": "object",
-              "label": "Notice board"
+              "label": "Grain hopper"
             },
             {
-              "id": "market_quarter",
-              "type": "place",
-              "label": "Enter Cinderwatch"
+              "id": "tariff_slate",
+              "type": "object",
+              "label": "Tariff slate"
             },
             {
-              "id": "old_milestone",
-              "type": "place",
-              "label": "Follow the missing patrol rumor"
-            },
-            {
-              "id": "guard_captain",
+              "id": "loft_clerk",
               "type": "interlocutor",
-              "label": "Guard Captain"
-            },
-            {
-              "id": "tavern_runner",
-              "type": "interlocutor",
-              "label": "Tavern Runner"
-            },
-            {
-              "id": "refugee",
-              "type": "interlocutor",
-              "label": "Ragged stranger"
-            },
-            {
-              "id": "threadbare_watcher",
-              "type": "interlocutor",
-              "label": "Threadbare watcher"
-            },
-            {
-              "id": "gate_guard",
-              "type": "interlocutor",
-              "label": "Gate Guard"
-            },
-            {
-              "id": "gate_serjeant",
-              "type": "interlocutor",
-              "label": "Gate Serjeant"
+              "label": "Loft Clerk"
             }
           ],
           "proposal_source": "deterministic_fast_path",
-          "proposed_operation": "unresolved",
+          "proposed_operation": "inspect",
           "proposed_supporting_operations": [],
-          "proposed_raw_target": null,
+          "proposed_raw_target": "brass token",
           "canonicalization_attempted": true,
           "canonical_target_found": false,
           "operation_conflict": false,
-          "validation_status": "validated",
+          "validation_status": "abstained",
           "validation_result": {
-            "status": "validated",
-            "reason": null,
-            "failed_fields": [],
-            "clarification_required": false,
-            "model_interpretation_appropriate": false,
+            "status": "abstained",
+            "reason": "target_not_canonical",
+            "failed_fields": [
+              "raw_target_text"
+            ],
+            "clarification_required": true,
+            "model_interpretation_appropriate": true,
             "canonical_target_id": null,
             "canonical_target_label": null,
             "canonical_target_type": null,
             "canonical_basis": null,
-            "authoritative_operation": null,
-            "discourse_commit_allowed": true,
+            "authoritative_operation": "unresolved",
+            "discourse_commit_allowed": false,
             "compatibility_bridge": null
           },
-          "abstention_reason": null,
-          "failed_fields": [],
-          "clarification_required": false,
-          "model_interpretation_appropriate": false,
-          "discourse_commit_allowed": true,
+          "abstention_reason": "target_not_canonical",
+          "failed_fields": [
+            "raw_target_text"
+          ],
+          "clarification_required": true,
+          "model_interpretation_appropriate": true,
+          "discourse_commit_allowed": false,
           "interlocutor_rejected": false,
           "entity_binding": {
             "status": "unresolved",
@@ -1063,18 +1320,18 @@
             "authority_reasons": [],
             "claim_binding": "none"
           },
-          "authoritative": true,
-          "semantic_completeness": "sufficient",
+          "authoritative": false,
+          "semantic_completeness": "not_applied",
           "compatibility_bridge": null,
           "interpretation_proposal": {
-            "raw_input": "",
+            "raw_input": "I inspect the brass token.",
             "source": "deterministic_fast_path",
-            "primary_operation": "unresolved",
+            "primary_operation": "inspect",
             "supporting_operations": [],
-            "raw_target_text": null,
+            "raw_target_text": "brass token",
             "proposed_target_id": null,
-            "target_capture": "none",
-            "has_determiner": false,
+            "target_capture": "verb_object",
+            "has_determiner": true,
             "interlocutor_id": null,
             "conversational_subject": null,
             "dimension": null,
@@ -1089,12 +1346,12 @@
             "operation_conflict": false,
             "notes": {}
           },
-          "commitment_status": "contemplated",
-          "primary_operation": "unresolved",
-          "resolution_subject": "action",
+          "commitment_status": "executed_now",
+          "primary_operation": "inspect",
+          "resolution_subject": "perception",
           "resolution_subject_coherence": "accepted",
-          "semantic_input_length": 0,
-          "provenance_excerpt": "",
+          "semantic_input_length": 26,
+          "provenance_excerpt": "I inspect the brass token.",
           "secondary_operations": [],
           "executable_obligations": {
             "primary": null,
@@ -1103,7 +1360,26 @@
             "supporting": []
           },
           "requested_addressee": null,
-          "addressee_binding_status": "unresolved"
+          "addressee_binding_status": "unresolved",
+          "conversational_authorization": {
+            "communication_ownership": "character_action",
+            "intent_purpose": "perform_action",
+            "target_resolution": "none_required",
+            "target_provenance": "none",
+            "target_id": null,
+            "candidate_target_ids": [],
+            "operation_eligibility": "executable",
+            "mutation_eligibility": true,
+            "authority_provenance": "resolution_contract",
+            "conflict_status": "none",
+            "conflict_details": {},
+            "pending_intention_relationship": "starts_new",
+            "allowed_operation": "inspect",
+            "clarification": "",
+            "choices": [],
+            "direct_address": false,
+            "player_text": "I inspect the brass token."
+          }
         }
       },
       {
@@ -1124,9 +1400,9 @@
         "risk_class": "low",
         "needs_gateway": false,
         "proposed_future_owner": "no_change",
-        "scene_id": "frontier_gate",
+        "scene_id": "mill_loft",
         "resolution": {
-          "kind": "scene_opening"
+          "kind": "investigate"
         },
         "accepted_count": 0,
         "promoted_count": 0,
@@ -1151,9 +1427,9 @@
         "risk_class": "low",
         "needs_gateway": false,
         "proposed_future_owner": "no_change",
-        "scene_id": "frontier_gate",
+        "scene_id": "mill_loft",
         "resolution": {
-          "kind": "scene_opening"
+          "kind": "investigate"
         },
         "response_policy_enforcement_marker_present": false,
         "validation_reason_codes": [
@@ -1177,9 +1453,9 @@
         "risk_class": "low",
         "needs_gateway": false,
         "proposed_future_owner": "telemetry_only",
-        "scene_id": "frontier_gate",
+        "scene_id": "mill_loft",
         "resolution": {
-          "kind": "scene_opening"
+          "kind": "investigate"
         },
         "surfaced_clue_count": 0,
         "player_text_present": true
@@ -1203,9 +1479,9 @@
         "risk_class": "high",
         "needs_gateway": true,
         "proposed_future_owner": "post_gm_adoption_gateway",
-        "scene_id": "frontier_gate",
+        "scene_id": "mill_loft",
         "resolution": {
-          "kind": "scene_opening"
+          "kind": "investigate"
         },
         "validation_reason_codes": [
           "social_lead_supplement:legacy_shape_allowed"
@@ -1243,9 +1519,9 @@
         "risk_class": "medium",
         "needs_gateway": false,
         "proposed_future_owner": "engine_resolution_gateway",
-        "scene_id": "frontier_gate",
+        "scene_id": "mill_loft",
         "resolution": {
-          "kind": "scene_opening"
+          "kind": "investigate"
         },
         "gm_output_present": true
       },
@@ -1267,9 +1543,9 @@
         "risk_class": "medium",
         "needs_gateway": true,
         "proposed_future_owner": "post_gm_adoption_gateway",
-        "scene_id": "frontier_gate",
+        "scene_id": "mill_loft",
         "resolution": {
-          "kind": "scene_opening"
+          "kind": "investigate"
         },
         "gm_output_present": true
       },
@@ -1291,9 +1567,9 @@
         "risk_class": "high",
         "needs_gateway": true,
         "proposed_future_owner": "post_gm_adoption_gateway",
-        "scene_id": "frontier_gate",
+        "scene_id": "mill_loft",
         "resolution": {
-          "kind": "scene_opening"
+          "kind": "investigate"
         },
         "validation_reason_codes": [
           "emergent_actor_adoption:legacy_shape_allowed"
@@ -1319,10 +1595,24 @@
         "changed_area": "scene_state.active_entities"
       },
       {
-        "timestamp": "2026-10-27T00:15:43.278785Z",
-        "source": "start_campaign",
-        "action_type": "start_campaign",
-        "raw_input": "",
+        "timestamp": "2026-11-08T22:16:42.703669Z",
+        "source": "chat",
+        "action_type": "chat",
+        "raw_input": "I inspect the brass token.",
+        "processing_input": "I inspect the brass token.",
+        "communication_mode": {
+          "mode": "AUTO",
+          "source": "automatic",
+          "textual_mode": null,
+          "textual_label": null,
+          "caller_override": null
+        },
+        "live_chat_interpretation": {
+          "status": "skipped",
+          "reason": "live_interpretation_disabled",
+          "provider_requests": [],
+          "record": null
+        },
         "turn_stage_order": [
           "player_input",
           "intent_normalization_expansion",
@@ -1335,47 +1625,67 @@
           "response_debug_packaging"
         ],
         "incoming_payload": {
-          "start_campaign": true
+          "text": "I inspect the brass token."
         },
         "parsed_intent": {
-          "id": "campaign_start_opening_scene",
-          "label": "start_campaign",
-          "type": "scene_opening",
-          "prompt": "",
-          "targetSceneId": "frontier_gate",
-          "target_scene_id": "frontier_gate"
+          "id": "i_inspect_the_brass_token",
+          "label": "I inspect the brass token.",
+          "type": "investigate",
+          "prompt": "I inspect the brass token.",
+          "targetSceneId": null,
+          "target_scene_id": null,
+          "target_id": "brass token",
+          "targetEntityId": "brass token",
+          "metadata": {
+            "referenced_surface_authority": "authored_hidden",
+            "referenced_surface_target": "brass token",
+            "referenced_surface_existence": true,
+            "referenced_surface_visibility": false,
+            "referenced_surface_inspectability": false,
+            "referenced_surface_interactable_id": "",
+            "referenced_surface_visible_fact": "",
+            "referenced_surface_inspectable_text": "",
+            "skip_unrelated_clue_discovery": true
+          }
         },
-        "segmented_turn": null,
+        "segmented_turn": {
+          "declared_action_text": "I inspect the brass token."
+        },
         "normalized_action": {
-          "id": "campaign_start_opening_scene",
-          "label": "start_campaign",
-          "type": "scene_opening",
-          "prompt": "",
-          "targetSceneId": "frontier_gate",
-          "target_scene_id": "frontier_gate"
+          "id": "i_inspect_the_brass_token",
+          "label": "I inspect the brass token.",
+          "type": "investigate",
+          "prompt": "I inspect the brass token.",
+          "targetSceneId": null,
+          "target_scene_id": null
         },
         "resolution": {
-          "kind": "scene_opening",
-          "action_id": "campaign_start_opening_scene",
-          "label": "start_campaign",
-          "prompt": "",
+          "kind": "investigate",
+          "action_id": "i_inspect_the_brass_token",
+          "label": "I inspect the brass token.",
+          "prompt": "I inspect the brass token.",
           "success": true,
           "resolved_transition": false,
-          "target_scene_id": "frontier_gate",
+          "target_scene_id": null,
           "clue_id": null,
           "discovered_clues": [],
-          "state_changes": {
-            "opening_scene_turn": true,
-            "arrived_at_scene": true,
-            "new_scene_context_available": true
-          },
-          "hint": "Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.",
+          "state_changes": {},
+          "hint": "Player named a surface that is not currently discoverable. Do not confirm or reveal it.",
           "metadata": {
+            "referenced_surface_authority": "authored_hidden",
+            "referenced_surface_target": "brass token",
+            "referenced_surface_existence": true,
+            "referenced_surface_visibility": false,
+            "referenced_surface_inspectability": false,
+            "referenced_surface_interactable_id": "",
+            "referenced_surface_visible_fact": "",
+            "referenced_surface_inspectable_text": "",
+            "skip_unrelated_clue_discovery": true,
             "resolution_contract": {
-              "contract_id": "rc_dd89a2b89c62",
+              "contract_id": "rc_9efeac7e7298",
               "turn_index": 1,
-              "request_kind": "action",
-              "operation": "unresolved",
+              "request_kind": "inquiry",
+              "operation": "inspect",
               "target_ref": null,
               "interlocutor_id": null,
               "conversational_subject": null,
@@ -1384,20 +1694,20 @@
               "expected_resolution": "answer",
               "epistemic_mode": "unknown_allowed",
               "discourse_ref": null,
-              "referent_provenance": "explicit_player",
-              "ambiguous": false,
-              "raw_input": "",
+              "referent_provenance": "unresolved",
+              "ambiguous": true,
+              "raw_input": "I inspect the brass token.",
               "construction": {
                 "cues": [],
                 "referent_slot": null,
-                "referent_reason": "no_anaphor",
-                "ambiguity_detected": false,
+                "referent_reason": "target_not_canonical",
+                "ambiguity_detected": true,
                 "actionable_inherited": false,
                 "active_claim_inherited": false,
                 "fast_path_proposal": true,
-                "fast_path_used": true,
-                "fast_path_abstained": false,
-                "fast_path_abstention_reason": null,
+                "fast_path_used": false,
+                "fast_path_abstained": true,
+                "fast_path_abstention_reason": "target_not_canonical",
                 "model_interpreter_invoked": false,
                 "model_proposal_rejected": false,
                 "clarification_after_model": false,
@@ -1405,83 +1715,57 @@
                 "interpretation_error": null,
                 "canonical_candidates": [
                   {
-                    "id": "frontier_gate",
+                    "id": "mill_loft",
                     "type": "place",
-                    "label": "Cinderwatch Gate District"
+                    "label": "Mill Loft"
                   },
                   {
-                    "id": "notice_board",
+                    "id": "grain_hopper",
                     "type": "object",
-                    "label": "Notice board"
+                    "label": "Grain hopper"
                   },
                   {
-                    "id": "market_quarter",
-                    "type": "place",
-                    "label": "Enter Cinderwatch"
+                    "id": "tariff_slate",
+                    "type": "object",
+                    "label": "Tariff slate"
                   },
                   {
-                    "id": "old_milestone",
-                    "type": "place",
-                    "label": "Follow the missing patrol rumor"
-                  },
-                  {
-                    "id": "guard_captain",
+                    "id": "loft_clerk",
                     "type": "interlocutor",
-                    "label": "Guard Captain"
-                  },
-                  {
-                    "id": "tavern_runner",
-                    "type": "interlocutor",
-                    "label": "Tavern Runner"
-                  },
-                  {
-                    "id": "refugee",
-                    "type": "interlocutor",
-                    "label": "Ragged stranger"
-                  },
-                  {
-                    "id": "threadbare_watcher",
-                    "type": "interlocutor",
-                    "label": "Threadbare watcher"
-                  },
-                  {
-                    "id": "gate_guard",
-                    "type": "interlocutor",
-                    "label": "Gate Guard"
-                  },
-                  {
-                    "id": "gate_serjeant",
-                    "type": "interlocutor",
-                    "label": "Gate Serjeant"
+                    "label": "Loft Clerk"
                   }
                 ],
                 "proposal_source": "deterministic_fast_path",
-                "proposed_operation": "unresolved",
+                "proposed_operation": "inspect",
                 "proposed_supporting_operations": [],
-                "proposed_raw_target": null,
+                "proposed_raw_target": "brass token",
                 "canonicalization_attempted": true,
                 "canonical_target_found": false,
                 "operation_conflict": false,
-                "validation_status": "validated",
+                "validation_status": "abstained",
                 "validation_result": {
-                  "status": "validated",
-                  "reason": null,
-                  "failed_fields": [],
-                  "clarification_required": false,
-                  "model_interpretation_appropriate": false,
+                  "status": "abstained",
+                  "reason": "target_not_canonical",
+                  "failed_fields": [
+                    "raw_target_text"
+                  ],
+                  "clarification_required": true,
+                  "model_interpretation_appropriate": true,
                   "canonical_target_id": null,
                   "canonical_target_label": null,
                   "canonical_target_type": null,
                   "canonical_basis": null,
-                  "authoritative_operation": null,
-                  "discourse_commit_allowed": true,
+                  "authoritative_operation": "unresolved",
+                  "discourse_commit_allowed": false,
                   "compatibility_bridge": null
                 },
-                "abstention_reason": null,
-                "failed_fields": [],
-                "clarification_required": false,
-                "model_interpretation_appropriate": false,
-                "discourse_commit_allowed": true,
+                "abstention_reason": "target_not_canonical",
+                "failed_fields": [
+                  "raw_target_text"
+                ],
+                "clarification_required": true,
+                "model_interpretation_appropriate": true,
+                "discourse_commit_allowed": false,
                 "interlocutor_rejected": false,
                 "entity_binding": {
                   "status": "unresolved",
@@ -1495,18 +1779,18 @@
                   "authority_reasons": [],
                   "claim_binding": "none"
                 },
-                "authoritative": true,
-                "semantic_completeness": "sufficient",
+                "authoritative": false,
+                "semantic_completeness": "not_applied",
                 "compatibility_bridge": null,
                 "interpretation_proposal": {
-                  "raw_input": "",
+                  "raw_input": "I inspect the brass token.",
                   "source": "deterministic_fast_path",
-                  "primary_operation": "unresolved",
+                  "primary_operation": "inspect",
                   "supporting_operations": [],
-                  "raw_target_text": null,
+                  "raw_target_text": "brass token",
                   "proposed_target_id": null,
-                  "target_capture": "none",
-                  "has_determiner": false,
+                  "target_capture": "verb_object",
+                  "has_determiner": true,
                   "interlocutor_id": null,
                   "conversational_subject": null,
                   "dimension": null,
@@ -1521,12 +1805,12 @@
                   "operation_conflict": false,
                   "notes": {}
                 },
-                "commitment_status": "contemplated",
-                "primary_operation": "unresolved",
-                "resolution_subject": "action",
+                "commitment_status": "executed_now",
+                "primary_operation": "inspect",
+                "resolution_subject": "perception",
                 "resolution_subject_coherence": "accepted",
-                "semantic_input_length": 0,
-                "provenance_excerpt": "",
+                "semantic_input_length": 26,
+                "provenance_excerpt": "I inspect the brass token.",
                 "secondary_operations": [],
                 "executable_obligations": {
                   "primary": null,
@@ -1535,19 +1819,39 @@
                   "supporting": []
                 },
                 "requested_addressee": null,
-                "addressee_binding_status": "unresolved"
-              }
+                "addressee_binding_status": "unresolved",
+                "conversational_authorization": {
+                  "communication_ownership": "character_action",
+                  "intent_purpose": "perform_action",
+                  "target_resolution": "none_required",
+                  "target_provenance": "none",
+                  "target_id": null,
+                  "candidate_target_ids": [],
+                  "operation_eligibility": "executable",
+                  "mutation_eligibility": true,
+                  "authority_provenance": "resolution_contract",
+                  "conflict_status": "none",
+                  "conflict_details": {},
+                  "pending_intention_relationship": "starts_new",
+                  "allowed_operation": "inspect",
+                  "clarification": "",
+                  "choices": [],
+                  "direct_address": false,
+                  "player_text": "I inspect the brass token."
+                }
+              },
+              "retry_preserved": true
             },
             "interaction_obligation": {
-              "kind": "question",
-              "target": "frontier_gate",
+              "kind": "clarification",
+              "target": null,
               "interlocutor_id": null,
-              "subject": "frontier_gate",
-              "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+              "subject": "brass token",
+              "requested_outcome": "clarify the referenced subject or state that it cannot be identified",
               "claim_id": null,
-              "resolution_mode": "grounded_information_request",
+              "resolution_mode": "authoritative_mechanical_action",
               "turn_index": 1,
-              "resolution_contract_id": "rc_dd89a2b89c62",
+              "resolution_contract_id": "rc_9efeac7e7298",
               "executable_obligations": {
                 "primary": null,
                 "mutation_owner": null,
@@ -1556,15 +1860,15 @@
               }
             },
             "gm_resolution_decision": {
-              "contract_id": "rc_dd89a2b89c62",
-              "resolution_method": "scene_opening",
-              "outcome_classification": "state_mutation",
+              "contract_id": "rc_9efeac7e7298",
+              "resolution_method": "inspect",
+              "outcome_classification": "established_or_retrieved",
               "established_fact_refs": [
                 "scene_world_authored_corpus"
               ],
               "proposed_facts": [
                 {
-                  "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                  "text": "A soot-stained skylight leaks pale noon light onto the loft floor.",
                   "provenance": "authored_world_fact",
                   "consequence": "consequential",
                   "authorized": true,
@@ -1578,7 +1882,7 @@
                   "semantic_identity": {}
                 },
                 {
-                  "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                  "text": "Sacks of cracked maize lean against the hopper braces.",
                   "provenance": "authored_world_fact",
                   "consequence": "consequential",
                   "authorized": true,
@@ -1592,7 +1896,7 @@
                   "semantic_identity": {}
                 },
                 {
-                  "text": "A tavern runner trades hot stew and rumors near the rain barrel.",
+                  "text": "A tariff slate hangs from a nail by the loft stair.",
                   "provenance": "authored_world_fact",
                   "consequence": "consequential",
                   "authorized": true,
@@ -1606,189 +1910,7 @@
                   "semantic_identity": {}
                 },
                 {
-                  "text": "Threadbare watchers and refugees cluster along the muddy gate line.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.visible_facts.3",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "Ash Compact census delays have tightened the eastern caravan choke point.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.visible_facts.4",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.0",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.1",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.2",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "A tavern runner shouts offers of hot stew and paid rumor.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.3",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.4",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.5",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.journal_seed_facts.0",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.journal_seed_facts.1",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "A notice board announces new taxes and curfews, and names a missing patrol.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.journal_seed_facts.2",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "A tavern runner is hawking hot stew and rumor for coin.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.journal_seed_facts.3",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "A ragged stranger hangs back, watching the crowd more than the queue.",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_state_source"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.journal_seed_facts.4",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {}
-                },
-                {
-                  "text": "Gate Guard exists",
+                  "text": "Loft Clerk exists",
                   "provenance": "authored_world_fact",
                   "consequence": "consequential",
                   "authorized": true,
@@ -1801,140 +1923,18 @@
                   "outcome_classification": "established_or_retrieved",
                   "semantic_identity": {
                     "kind": "entity",
-                    "subject": "gate_guard",
+                    "subject": "loft_clerk",
                     "subject_aliases": [
-                      "Gate Guard"
+                      "Loft Clerk"
                     ],
                     "relation": "exists",
                     "value": "present",
-                    "authority": "world_truth"
-                  }
-                },
-                {
-                  "text": "Gate Serjeant exists",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_world_npc"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "world.npcs.1",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {
-                    "kind": "entity",
-                    "subject": "gate_serjeant",
-                    "subject_aliases": [
-                      "Gate Serjeant"
-                    ],
-                    "relation": "exists",
-                    "value": "present",
-                    "authority": "world_truth"
-                  }
-                },
-                {
-                  "text": "Tavern Runner exists",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authored_world_npc"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "world.npcs.2",
-                  "outcome_classification": "established_or_retrieved",
-                  "semantic_identity": {
-                    "kind": "entity",
-                    "subject": "tavern_runner",
-                    "subject_aliases": [
-                      "Tavern Runner"
-                    ],
-                    "relation": "exists",
-                    "value": "present",
-                    "authority": "world_truth"
-                  }
-                },
-                {
-                  "text": "State opening_scene_turn changes to True",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authorized_state_mutation"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "resolution.state_changes.opening_scene_turn",
-                  "outcome_classification": "authorized_state_outcome",
-                  "semantic_identity": {
-                    "kind": "state_change",
-                    "subject": "opening_scene_turn",
-                    "relation": "state_change",
-                    "value": "True",
-                    "authority": "world_truth"
-                  }
-                },
-                {
-                  "text": "State arrived_at_scene changes to True",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authorized_state_mutation"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "resolution.state_changes.arrived_at_scene",
-                  "outcome_classification": "authorized_state_outcome",
-                  "semantic_identity": {
-                    "kind": "state_change",
-                    "subject": "arrived_at_scene",
-                    "relation": "state_change",
-                    "value": "True",
-                    "authority": "world_truth"
-                  }
-                },
-                {
-                  "text": "State new_scene_context_available changes to True",
-                  "provenance": "authored_world_fact",
-                  "consequence": "consequential",
-                  "authorized": true,
-                  "reason_codes": [
-                    "authorized_state_mutation"
-                  ],
-                  "authority": "world_truth",
-                  "persistence": "world_truth",
-                  "source_ref": "resolution.state_changes.new_scene_context_available",
-                  "outcome_classification": "authorized_state_outcome",
-                  "semantic_identity": {
-                    "kind": "state_change",
-                    "subject": "new_scene_context_available",
-                    "relation": "state_change",
-                    "value": "True",
                     "authority": "world_truth"
                   }
                 }
               ],
-              "permitted_state_mutations": [
-                {
-                  "type": "state_change",
-                  "key": "opening_scene_turn",
-                  "value": true
-                },
-                {
-                  "type": "state_change",
-                  "key": "arrived_at_scene",
-                  "value": true
-                },
-                {
-                  "type": "state_change",
-                  "key": "new_scene_context_available",
-                  "value": true
-                }
-              ],
-              "persistence_policy": "world_truth",
+              "permitted_state_mutations": [],
+              "persistence_policy": "do_not_persist",
               "narration_constraints": [
                 "Narration may not establish consequential world facts absent this decision.",
                 "Generated proposals are not world truth unless already grounded or explicitly permitted.",
@@ -1966,167 +1966,23 @@
                 },
                 {
                   "act": "establish",
-                  "source_ref": "scene.visible_facts.3",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.visible_facts.4",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.opening_seed_facts.0",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.opening_seed_facts.1",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.opening_seed_facts.2",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.opening_seed_facts.3",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.opening_seed_facts.4",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.opening_seed_facts.5",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.journal_seed_facts.0",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.journal_seed_facts.1",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.journal_seed_facts.2",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.journal_seed_facts.3",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "scene.journal_seed_facts.4",
-                  "authority": "world_truth",
-                  "semantic_identity": {}
-                },
-                {
-                  "act": "establish",
                   "source_ref": "world.npcs.0",
                   "authority": "world_truth",
                   "semantic_identity": {
                     "kind": "entity",
-                    "subject": "gate_guard",
+                    "subject": "loft_clerk",
                     "subject_aliases": [
-                      "Gate Guard"
+                      "Loft Clerk"
                     ],
                     "relation": "exists",
                     "value": "present",
-                    "authority": "world_truth"
-                  }
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "world.npcs.1",
-                  "authority": "world_truth",
-                  "semantic_identity": {
-                    "kind": "entity",
-                    "subject": "gate_serjeant",
-                    "subject_aliases": [
-                      "Gate Serjeant"
-                    ],
-                    "relation": "exists",
-                    "value": "present",
-                    "authority": "world_truth"
-                  }
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "world.npcs.2",
-                  "authority": "world_truth",
-                  "semantic_identity": {
-                    "kind": "entity",
-                    "subject": "tavern_runner",
-                    "subject_aliases": [
-                      "Tavern Runner"
-                    ],
-                    "relation": "exists",
-                    "value": "present",
-                    "authority": "world_truth"
-                  }
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "resolution.state_changes.opening_scene_turn",
-                  "authority": "world_truth",
-                  "semantic_identity": {
-                    "kind": "state_change",
-                    "subject": "opening_scene_turn",
-                    "relation": "state_change",
-                    "value": "True",
-                    "authority": "world_truth"
-                  }
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "resolution.state_changes.arrived_at_scene",
-                  "authority": "world_truth",
-                  "semantic_identity": {
-                    "kind": "state_change",
-                    "subject": "arrived_at_scene",
-                    "relation": "state_change",
-                    "value": "True",
-                    "authority": "world_truth"
-                  }
-                },
-                {
-                  "act": "establish",
-                  "source_ref": "resolution.state_changes.new_scene_context_available",
-                  "authority": "world_truth",
-                  "semantic_identity": {
-                    "kind": "state_change",
-                    "subject": "new_scene_context_available",
-                    "relation": "state_change",
-                    "value": "True",
                     "authority": "world_truth"
                   }
                 }
               ],
               "realization_claims": [
                 {
-                  "claim_id": "rc_a83c5bcfc65e",
+                  "claim_id": "rc_ebdecefb9b92",
                   "semantic_identity": {},
                   "provenance": "authored_world_fact",
                   "authority": "world_truth",
@@ -2135,12 +1991,12 @@
                   "realization_role": "MUST_STATE",
                   "persistence": "world_truth",
                   "source_ref": "scene.visible_facts.0",
-                  "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                  "text": "A soot-stained skylight leaks pale noon light onto the loft floor.",
                   "relation_kind": "ordinary_predicate",
                   "premise_claim_ids": []
                 },
                 {
-                  "claim_id": "rc_d40a1efdddb3",
+                  "claim_id": "rc_4cbfe0464766",
                   "semantic_identity": {},
                   "provenance": "authored_world_fact",
                   "authority": "world_truth",
@@ -2149,12 +2005,12 @@
                   "realization_role": "MUST_STATE",
                   "persistence": "world_truth",
                   "source_ref": "scene.visible_facts.1",
-                  "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                  "text": "Sacks of cracked maize lean against the hopper braces.",
                   "relation_kind": "ordinary_predicate",
                   "premise_claim_ids": []
                 },
                 {
-                  "claim_id": "rc_3b26b521977b",
+                  "claim_id": "rc_ca459453e191",
                   "semantic_identity": {},
                   "provenance": "authored_world_fact",
                   "authority": "world_truth",
@@ -2163,199 +2019,17 @@
                   "realization_role": "MUST_STATE",
                   "persistence": "world_truth",
                   "source_ref": "scene.visible_facts.2",
-                  "text": "A tavern runner trades hot stew and rumors near the rain barrel.",
+                  "text": "A tariff slate hangs from a nail by the loft stair.",
                   "relation_kind": "ordinary_predicate",
                   "premise_claim_ids": []
                 },
                 {
-                  "claim_id": "rc_b59727e13c62",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.visible_facts.3",
-                  "text": "Threadbare watchers and refugees cluster along the muddy gate line.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_be348e85a5e6",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.visible_facts.4",
-                  "text": "Ash Compact census delays have tightened the eastern caravan choke point.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_31feab1dcf72",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.0",
-                  "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_a0201a45af25",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.1",
-                  "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_280f5390057f",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.2",
-                  "text": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_4a217a3c17bc",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.3",
-                  "text": "A tavern runner shouts offers of hot stew and paid rumor.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_819bf0e987bb",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.4",
-                  "text": "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_6c31b34a1529",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.opening_seed_facts.5",
-                  "text": "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_b0360b7546fa",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.journal_seed_facts.0",
-                  "text": "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_c76f50a053b2",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.journal_seed_facts.1",
-                  "text": "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_315c2f595d6b",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.journal_seed_facts.2",
-                  "text": "A notice board announces new taxes and curfews, and names a missing patrol.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_a7b51dead883",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.journal_seed_facts.3",
-                  "text": "A tavern runner is hawking hot stew and rumor for coin.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_815adf89f4e9",
-                  "semantic_identity": {},
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "scene.journal_seed_facts.4",
-                  "text": "A ragged stranger hangs back, watching the crowd more than the queue.",
-                  "relation_kind": "ordinary_predicate",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_a68997d3f56c",
+                  "claim_id": "rc_1b34bd2eb80f",
                   "semantic_identity": {
                     "kind": "entity",
-                    "subject": "gate_guard",
+                    "subject": "loft_clerk",
                     "subject_aliases": [
-                      "Gate Guard"
+                      "Loft Clerk"
                     ],
                     "relation": "exists",
                     "value": "present",
@@ -2368,113 +2042,7 @@
                   "realization_role": "MUST_STATE",
                   "persistence": "world_truth",
                   "source_ref": "world.npcs.0",
-                  "text": "Gate Guard exists",
-                  "relation_kind": "observation",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_d4c6871ad645",
-                  "semantic_identity": {
-                    "kind": "entity",
-                    "subject": "gate_serjeant",
-                    "subject_aliases": [
-                      "Gate Serjeant"
-                    ],
-                    "relation": "exists",
-                    "value": "present",
-                    "authority": "world_truth"
-                  },
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "world.npcs.1",
-                  "text": "Gate Serjeant exists",
-                  "relation_kind": "observation",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_d16f842ab4f5",
-                  "semantic_identity": {
-                    "kind": "entity",
-                    "subject": "tavern_runner",
-                    "subject_aliases": [
-                      "Tavern Runner"
-                    ],
-                    "relation": "exists",
-                    "value": "present",
-                    "authority": "world_truth"
-                  },
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "world.npcs.2",
-                  "text": "Tavern Runner exists",
-                  "relation_kind": "observation",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_b02455154413",
-                  "semantic_identity": {
-                    "kind": "state_change",
-                    "subject": "opening_scene_turn",
-                    "relation": "state_change",
-                    "value": "True",
-                    "authority": "world_truth"
-                  },
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "resolution.state_changes.opening_scene_turn",
-                  "text": "State opening_scene_turn changes to True",
-                  "relation_kind": "observation",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_563a75fc8560",
-                  "semantic_identity": {
-                    "kind": "state_change",
-                    "subject": "arrived_at_scene",
-                    "relation": "state_change",
-                    "value": "True",
-                    "authority": "world_truth"
-                  },
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "resolution.state_changes.arrived_at_scene",
-                  "text": "State arrived_at_scene changes to True",
-                  "relation_kind": "observation",
-                  "premise_claim_ids": []
-                },
-                {
-                  "claim_id": "rc_7e2860bc66ed",
-                  "semantic_identity": {
-                    "kind": "state_change",
-                    "subject": "new_scene_context_available",
-                    "relation": "state_change",
-                    "value": "True",
-                    "authority": "world_truth"
-                  },
-                  "provenance": "authored_world_fact",
-                  "authority": "world_truth",
-                  "epistemic_status": "established",
-                  "modality": "",
-                  "realization_role": "MUST_STATE",
-                  "persistence": "world_truth",
-                  "source_ref": "resolution.state_changes.new_scene_context_available",
-                  "text": "State new_scene_context_available changes to True",
+                  "text": "Loft Clerk exists",
                   "relation_kind": "observation",
                   "premise_claim_ids": []
                 }
@@ -2487,17 +2055,52 @@
               },
               "authority_algorithm": "proposition_claim_control_v1"
             },
+            "ordinary_contract_established": true,
+            "semantic_owner": "resolution_contract",
+            "contract_before_resolver": true,
+            "contract_construction_source": "deterministic",
+            "selected_resolver": "exploration",
+            "turn_segmentation": {
+              "declared_action_text": "I inspect the brass token."
+            },
+            "unknown_legacy_keys": {
+              "noncombat_resolution": {
+                "framework_version": "2026.04.noncombat.v1",
+                "kind": "investigation",
+                "subkind": "investigate",
+                "authority_domain": "scene_state",
+                "deterministic_resolved": true,
+                "requires_check": false,
+                "check_request": null,
+                "outcome_type": "closed",
+                "success_state": "success",
+                "discovered_entities": [],
+                "surfaced_facts": [],
+                "state_changes": {},
+                "blocked_reason_codes": [],
+                "ambiguous_reason_codes": [],
+                "unsupported_reason_codes": [],
+                "authoritative_outputs": [
+                  {
+                    "output_kind": "resolution_trace",
+                    "source_engine": "game.exploration",
+                    "route": "exploration",
+                    "engine_action_id": "i_inspect_the_brass_token"
+                  }
+                ]
+              }
+            },
             "response_type_contract": {
-              "required_response_type": "scene_opening",
+              "required_response_type": "action_outcome",
               "source_route": "exploration",
               "allow_escalation": false,
               "escalation_block_reason": "non_hostile_world_action_guard",
               "strict_target_id": null,
               "strict_answer_expected": false,
               "strict_dialogue_expected": false,
-              "action_must_preserve_agency": false,
+              "action_must_preserve_agency": true,
               "debug_reasons": [
-                "scene_opening_requires_opening_response",
+                "resolved_world_action_requires_action_outcome",
                 "non_hostile_world_action_guard"
               ]
             },
@@ -2626,18 +2229,18 @@
               },
               "scene_state_anchor": {
                 "enabled": true,
-                "scene_id": "frontier_gate",
+                "scene_id": "mill_loft",
                 "counts": {
-                  "location": 14,
-                  "actor": 9,
-                  "player_action": 3
+                  "location": 12,
+                  "actor": 1,
+                  "player_action": 6
                 }
               },
               "context_separation": {
                 "enabled": true,
-                "interaction_kind": "scene_opening",
-                "pressure_focus_allowed": false,
-                "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=26 ambient=3"
+                "interaction_kind": "investigate",
+                "pressure_focus_allowed": true,
+                "debug_reason": "context_separation: pressure_focus_allowed=True primary_topics=19 ambient=3"
               },
               "conversational_memory_window": {
                 "enabled": true,
@@ -2650,12 +2253,7 @@
                 "soft_memory_limit": 12,
                 "stale_after_turns": 18,
                 "active_scene_entity_ids": [
-                  "gate_guard",
-                  "gate_serjeant",
-                  "guard_captain",
-                  "refugee",
-                  "tavern_runner",
-                  "threadbare_watcher"
+                  "loft_clerk"
                 ],
                 "anchored_interlocutor_id": "",
                 "active_interaction_target_id": "",
@@ -2666,7 +2264,6 @@
                   "matched_topics": [],
                   "matched_grounded_ids": [],
                   "callback_marker_hit": null,
-                  "reason": "empty_player_text",
                   "source_of_activity_anchor": "none",
                   "source_of_recentness": "session.turn_counter",
                   "source_of_reintroductions": "player_text+visibility_aliases"
@@ -2675,41 +2272,15 @@
               "selected_conversational_memory": [],
               "conversational_memory": {
                 "selected_count": 0
-              },
-              "speaker_contract_enforcement": {
-                "contract_present": false,
-                "validation": {
-                  "ok": true,
-                  "reason_code": "speaker_contract_match",
-                  "canonical_speaker_id": null,
-                  "canonical_speaker_name": null,
-                  "repair_mode": "none",
-                  "details": {
-                    "signature": {
-                      "speaker_name": "Cold rain spatters the soot-dark stone of Cinderwatch's eastern gate, where frayed banners flutter above the muddy approach. A gate serjeant stands watch over the restless crowd, casting cautious",
-                      "speaker_label": "Cold rain spatters the soot-dark stone of Cinderwatch's eastern gate, where frayed banners flutter above the muddy approach. A gate serjeant stands watch over the restless crowd, casting cautious",
-                      "is_explicitly_attributed": true,
-                      "is_generic_fallback_label": false,
-                      "has_interruption_framing": false,
-                      "confidence": "high"
-                    },
-                    "skipped": "no_contract"
-                  }
-                },
-                "final_reason_code": "speaker_contract_match"
               }
             },
-            "narration_state_consistency": {
-              "narration_state_mismatch_detected": false,
-              "mismatch_kind": "",
-              "mismatch_repair_applied": "none",
-              "mismatch_repairs_applied": [],
-              "repaired_discovered_clue_texts": [],
-              "emergent_actor_hint_detected": false,
-              "scene_opening_reconcile_telemetry_only": true,
-              "scene_opening_text_len": 54,
-              "scene_opening_text_empty": false
-            }
+            "live_chat_interpretation": {
+              "status": "skipped",
+              "reason": "live_interpretation_disabled",
+              "provider_requests": [],
+              "record": null
+            },
+            "communication_mode": "AUTO"
           },
           "world_tick_events": [
             {
@@ -2724,34 +2295,49 @@
             }
           ]
         },
-        "scene_before": "frontier_gate",
-        "scene_after": "frontier_gate",
+        "scene_before": "mill_loft",
+        "scene_after": "mill_loft",
         "clue_updates": [],
         "world_flag_updates": [
           "clock:time_pressure=1"
         ],
         "turn_trace": {
-          "source": "start_campaign",
-          "player_input": "",
+          "source": "chat",
+          "player_input": "I inspect the brass token.",
           "intent": {
             "parsed": {
-              "id": "campaign_start_opening_scene",
-              "label": "start_campaign",
-              "type": "scene_opening",
-              "prompt": "",
-              "targetSceneId": "frontier_gate",
-              "target_scene_id": "frontier_gate"
+              "id": "i_inspect_the_brass_token",
+              "label": "I inspect the brass token.",
+              "type": "investigate",
+              "prompt": "I inspect the brass token.",
+              "targetSceneId": null,
+              "target_scene_id": null,
+              "target_id": "brass token",
+              "targetEntityId": "brass token",
+              "metadata": {
+                "referenced_surface_authority": "authored_hidden",
+                "referenced_surface_target": "brass token",
+                "referenced_surface_existence": true,
+                "referenced_surface_visibility": false,
+                "referenced_surface_inspectability": false,
+                "referenced_surface_interactable_id": "",
+                "referenced_surface_visible_fact": "",
+                "referenced_surface_inspectable_text": "",
+                "skip_unrelated_clue_discovery": true
+              }
             },
-            "segmented_turn": null,
+            "segmented_turn": {
+              "declared_action_text": "I inspect the brass token."
+            },
             "normalized": {
-              "id": "campaign_start_opening_scene",
-              "label": "start_campaign",
-              "type": "scene_opening",
-              "prompt": "",
-              "targetSceneId": "frontier_gate",
-              "target_scene_id": "frontier_gate",
-              "targetEntityId": null,
-              "target_id": null
+              "id": "i_inspect_the_brass_token",
+              "label": "I inspect the brass token.",
+              "type": "investigate",
+              "prompt": "I inspect the brass token.",
+              "targetSceneId": null,
+              "target_scene_id": null,
+              "targetEntityId": "brass token",
+              "target_id": "brass token"
             },
             "implied_context": {
               "applied": false,
@@ -2762,22 +2348,22 @@
             }
           },
           "classification": {
-            "action_type": "start_campaign",
-            "resolved_kind": "scene_opening",
+            "action_type": "chat",
+            "resolved_kind": "investigate",
             "requires_check": false
           },
           "response_type_contract": {
-            "required_response_type": "scene_opening",
+            "required_response_type": "action_outcome",
             "source_route": "exploration",
             "allow_escalation": false,
             "debug_reasons": [
-              "scene_opening_requires_opening_response",
+              "resolved_world_action_requires_action_outcome",
               "non_hostile_world_action_guard"
             ]
           },
           "social_contract_trace": {
             "route_selected": "action",
-            "routing_reason_code": "empty_turn",
+            "routing_reason_code": "non_dialogue_world_action",
             "social_followup_recovery": "not_applicable",
             "reply_owner_actor_id": null,
             "interlocutor_status": "none",
@@ -2789,19 +2375,15 @@
           "resolution_path": "exploration_engine",
           "authoritative_state_changes": {
             "scene_transition": null,
-            "resolution_state_changes": {
-              "opening_scene_turn": true,
-              "arrived_at_scene": true,
-              "new_scene_context_available": true
-            },
+            "resolution_state_changes": {},
             "resolution_world_updates": [],
             "check_request": null
           },
           "interaction_after": {
             "active_interaction_target_id": null,
-            "active_interaction_kind": null,
-            "interaction_mode": "none",
-            "engagement_level": "none",
+            "active_interaction_kind": "investigate",
+            "interaction_mode": "activity",
+            "engagement_level": "focused",
             "conversation_privacy": null,
             "player_position_context": null
           },
@@ -2830,33 +2412,32 @@
           },
           "affordances_after": [
             {
-              "id": "question_gate_guard",
+              "id": "question_loft_clerk",
               "type": "question",
-              "label": "Talk to Gate Guard",
-              "targetEntityId": "gate_guard"
+              "label": "Talk to Loft Clerk",
+              "targetEntityId": "loft_clerk"
             },
             {
-              "id": "question_gate_serjeant",
-              "type": "question",
-              "label": "Talk to Gate Serjeant",
-              "targetEntityId": "gate_serjeant"
-            },
-            {
-              "id": "question_tavern_runner",
-              "type": "question",
-              "label": "Talk to Tavern Runner",
-              "targetEntityId": "tavern_runner"
-            },
-            {
-              "id": "notice_board",
+              "id": "grain_hopper",
               "type": "investigate",
-              "label": "Examine the Notice board",
-              "targetEntityId": "notice_board"
+              "label": "Examine the Grain hopper",
+              "targetEntityId": "grain_hopper"
             },
             {
-              "id": "examine_the_notice_board_lists_taxes",
+              "id": "tariff_slate",
               "type": "investigate",
-              "label": "Examine The notice board lists taxes"
+              "label": "Examine the Tariff slate",
+              "targetEntityId": "tariff_slate"
+            },
+            {
+              "id": "examine_a_soot_stained_skylight_leaks_pale_no",
+              "type": "investigate",
+              "label": "Examine A soot-stained skylight leaks pale no"
+            },
+            {
+              "id": "examine_the_sacks_of_cracked_maize_lean_against_t",
+              "type": "investigate",
+              "label": "Examine the Sacks of cracked maize lean against t"
             }
           ],
           "emergent_actor": {
@@ -2870,14 +2451,14 @@
             "changed_count": 0
           },
           "latency_ms": {
-            "intent_classification": 0,
-            "engine_resolution": 1,
-            "prompt_construction": 27,
-            "gpt_call": 10549,
+            "intent_classification": 11,
+            "engine_resolution": 0,
+            "prompt_construction": 17,
+            "gpt_call": 1,
             "retry_loop_total": 0,
             "final_emission_gate": 0,
-            "fallback_repair": 1,
-            "total_turn": 10790
+            "fallback_repair": 2,
+            "total_turn": 99
           }
         },
         "gpt_called": true,
@@ -2887,7 +2468,7 @@
           "should_route_social": false,
           "target_actor_id": null,
           "target_source": null,
-          "reason": "empty_turn",
+          "reason": "non_dialogue_world_action",
           "spoken_text": null,
           "declared_switch_detected": false,
           "declared_switch_target_actor_id": null,
@@ -2897,54 +2478,106 @@
           "continuity_overridden_by_spoken_vocative": false
         },
         "canonical_entry_path": "undecided",
-        "canonical_entry_reason": "empty_turn",
+        "canonical_entry_reason": "non_dialogue_world_action",
         "canonical_entry_target_actor_id": null,
+        "selected_resolver": "exploration",
+        "ordinary_semantic_owner": "resolution_contract",
+        "stored_interpretation_bridge": {
+          "source": "stored_interpretation",
+          "accepted": false,
+          "reason": "missing_record"
+        },
         "response_type_contract": {
-          "required_response_type": "scene_opening",
+          "required_response_type": "action_outcome",
           "source_route": "exploration",
           "allow_escalation": false,
           "debug_reasons": [
-            "scene_opening_requires_opening_response",
+            "resolved_world_action_requires_action_outcome",
             "non_hostile_world_action_guard"
           ]
         },
         "latency_ms": {
-          "intent_classification": 0,
-          "engine_resolution": 1,
-          "prompt_construction": 27,
-          "gpt_call": 10549,
+          "intent_classification": 11,
+          "engine_resolution": 0,
+          "prompt_construction": 17,
+          "gpt_call": 1,
           "retry_loop_total": 0,
           "final_emission_gate": 0,
-          "fallback_repair": 1,
-          "total_turn": 10790
+          "fallback_repair": 2,
+          "total_turn": 99
         },
         "performance": {
-          "elapsed_ms": 10790,
-          "interpretation_ms": 0,
-          "resolution_ms": 1,
-          "narration_ms": 10549,
+          "elapsed_ms": 99,
+          "interpretation_ms": 11,
+          "resolution_ms": 0,
+          "narration_ms": 1,
           "validation_ms": 0,
           "retry_ms": 0,
           "provider_call_count": 1,
-          "input_tokens": 26593,
-          "output_tokens": 1407,
+          "input_tokens": null,
+          "output_tokens": null,
           "retry_count": 0,
-          "retry_reason": "primary_turn",
-          "disposition": "start_campaign",
+          "retry_reason": null,
+          "disposition": "chat",
           "successful": true,
           "provider_narration_skipped": false
         }
       }
     ],
     "flags": {},
-    "character_name": "Galinor",
-    "campaign_run_id": "19d0e9a85993af53c8ee0c17",
-    "session_id": "19d0e9a85993af53c8ee0c17",
-    "campaign_started": true,
-    "last_saved_at": "2026-10-27T00:17:24.764093Z",
+    "character_name": null,
+    "campaign_run_id": "ce8400b2fc9bd9e16e7b840e",
+    "session_id": "ce8400b2fc9bd9e16e7b840e",
+    "campaign_started": false,
+    "last_saved_at": "2026-11-08T22:16:42.896398Z",
+    "conversational_context": {
+      "last_executed_intention": {
+        "status": "executed",
+        "text": "I inspect the brass token.",
+        "operation": null,
+        "target": null,
+        "scene_id": "mill_loft"
+      },
+      "pending_intention": null,
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I inspect the brass token.",
+          "delivered_text": "You pry up the hopper and pocket the brass token.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "mill_loft",
+          "turn": 1,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "a801705cbc27024a9e6d18496ede049a295d1a22b596be047d4311bd15be7c54",
+          "authorization_source": "initial_generation",
+          "adoption_turn_identity": "rc_9efeac7e7298"
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "RESOLVED",
+        "owner": "GM",
+        "purpose": "ACTION_RESULT",
+        "subject": "I inspect the brass token.",
+        "response": "You pry up the hopper and pocket the brass token.",
+        "refusal_reason": null,
+        "scene_id": "mill_loft",
+        "operation": "investigate"
+      }
+    },
     "interpretation_telemetry": {
-      "fast_path_success": 1,
-      "fast_path_abstention": 0,
+      "fast_path_success": 0,
+      "fast_path_abstention": 2,
       "model_interpreter_invoked": 0,
       "proposal_accepted": 0,
       "proposal_rejected": 0,
@@ -2954,50 +2587,39 @@
     "_runtime_canonical_ctir_v1": {
       "version": 1,
       "turn_id": 1,
-      "scene_id": "frontier_gate",
-      "player_input": "",
+      "scene_id": "mill_loft",
+      "player_input": "I inspect the brass token.",
       "intent": {
-        "raw_text": null,
-        "normalized_kind": "scene_opening",
-        "mode": "scene_opening",
-        "classified_action": "scene_opening",
+        "raw_text": "I inspect the brass token.",
+        "normalized_kind": "investigate",
+        "mode": "investigate",
+        "classified_action": "investigate",
         "requires_check": false,
         "check_request": null,
         "targets": [
-          "frontier_gate",
-          "frontier_gate"
+          "brass token"
         ],
         "labels": []
       },
       "resolution": {
-        "kind": "scene_opening",
+        "kind": "investigate",
         "outcome_type": null,
         "success_state": "success",
-        "consequences": [
-          "arrived_at_scene",
-          "new_scene_context_available",
-          "opening_scene_turn"
-        ],
+        "consequences": [],
         "authoritative_outputs": {
-          "action_id": "campaign_start_opening_scene",
-          "resolved_transition": false,
-          "target_scene_id": "frontier_gate"
+          "action_id": "i_inspect_the_brass_token",
+          "resolved_transition": false
         },
-        "state_changes": {
-          "arrived_at_scene": true,
-          "new_scene_context_available": true
-        },
-        "action_id": "campaign_start_opening_scene",
-        "resolved_transition": false,
-        "target_scene_id": "frontier_gate"
+        "action_id": "i_inspect_the_brass_token",
+        "resolved_transition": false
       },
       "noncombat": {},
       "state_mutations": {
         "scene": {
-          "scene_id": "frontier_gate"
+          "scene_id": "mill_loft"
         },
         "session": {
-          "scene_id": "frontier_gate"
+          "scene_id": "mill_loft"
         },
         "combat": {
           "combat_active": false,
@@ -3079,10 +2701,10 @@
         "normalization_notes": []
       }
     },
-    "_runtime_canonical_ctir_stamp_v1": "1:1ac9775e600:0",
+    "_runtime_canonical_ctir_stamp_v1": "1:216f7b57380:aff405dc",
     "_runtime_narration_plan_bundle_v1": {
       "plan_metadata": {
-        "ctir_stamp": "1:1ac9775e600:0",
+        "ctir_stamp": "1:216f7b57380:aff405dc",
         "narrative_plan_bundle_version": 1,
         "narrative_plan_version": 1,
         "narration_plan_bundle_error": null,
@@ -3096,23 +2718,21 @@
       "narrative_plan": {
         "version": 1,
         "scene_anchors": {
-          "scene_id": "frontier_gate",
+          "scene_id": "mill_loft",
           "scene_name": null,
           "location_anchors": [
-            "board",
-            "cinderwatch gate",
-            "cinderwatch gate district",
-            "curfew",
-            "frontier gate",
-            "frontier_gate",
-            "gate district",
-            "lists",
-            "missing",
-            "notice",
-            "patrol",
-            "rules",
-            "taxes",
-            "warning"
+            "floor",
+            "leaks",
+            "light",
+            "loft",
+            "mill loft",
+            "mill_loft",
+            "noon",
+            "onto",
+            "pale",
+            "skylight",
+            "soot",
+            "stained"
           ],
           "active_interlocutor": null,
           "active_target": null,
@@ -3131,95 +2751,35 @@
             "kind": "authoritative_output_keys",
             "keys": [
               "action_id",
-              "resolved_transition",
-              "target_scene_id"
-            ]
-          },
-          {
-            "kind": "consequence_atoms",
-            "values": [
-              "arrived_at_scene",
-              "new_scene_context_available",
-              "opening_scene_turn"
+              "resolved_transition"
             ]
           },
           {
             "kind": "resolution_kind",
-            "value": "scene_opening"
-          },
-          {
-            "kind": "state_change",
-            "flag": "arrived_at_scene"
-          },
-          {
-            "kind": "state_change",
-            "flag": "new_scene_context_available"
+            "value": "investigate"
           },
           {
             "kind": "success_state",
             "value": "success"
-          },
-          {
-            "kind": "transition",
-            "target_scene_id": "frontier_gate"
           }
         ],
         "allowable_entity_references": [
           {
-            "entity_id": "gate_guard",
-            "descriptor": "gate guard"
-          },
-          {
-            "entity_id": "gate_serjeant",
-            "descriptor": "gate serjeant"
-          },
-          {
-            "entity_id": "guard_captain",
-            "descriptor": "guard captain"
-          },
-          {
-            "entity_id": "refugee",
-            "descriptor": "ragged stranger"
-          },
-          {
-            "entity_id": "tavern_runner",
-            "descriptor": "tavern runner"
-          },
-          {
-            "entity_id": "threadbare_watcher",
-            "descriptor": "threadbare watcher"
+            "entity_id": "loft_clerk",
+            "descriptor": "loft clerk"
           }
         ],
         "transition_node": {
-          "transition_required": true,
-          "transition_type": "scene_entry",
-          "before_anchor": {
-            "scene_id": "frontier_gate",
-            "location_id": null,
-            "location_label": "frontier_gate",
-            "time_anchor": null
-          },
-          "after_anchor": {
-            "scene_id": "frontier_gate",
-            "location_id": null,
-            "location_label": null,
-            "time_anchor": null
-          },
+          "transition_required": false,
+          "transition_type": "none",
+          "before_anchor": null,
+          "after_anchor": null,
           "continuity_anchor_ids": [],
           "derivation_codes": [
-            "signal:resolution.state_changes.arrived_at_scene",
-            "signal:resolution.state_changes.new_scene_context_available",
-            "signal:resolution.target_scene_id",
-            "signal:state_mutations.scene",
             "transition_node:before_location:public_slice",
             "transition_node:derive"
           ],
-          "source_fields": [
-            "resolution.state_changes.arrived_at_scene",
-            "resolution.state_changes.new_scene_context_available",
-            "resolution.target_scene_id",
-            "state_mutations.scene.(scene_id|activate_scene_id)"
-          ]
+          "source_fields": []
         },
         "answer_exposition_plan": {
           "enabled": false,
@@ -3299,18 +2859,16 @@
               "mode_biases_scene_setting",
               "multi_location_token"
             ],
-            "location_token_n": 14,
+            "location_token_n": 12,
             "scene_id_present": true,
             "scene_label_present": false
           },
           "actor_anchor": {
-            "emphasis_band": "low",
-            "signals": [
-              "multi_visible_entity_handles"
-            ],
+            "emphasis_band": "minimal",
+            "signals": [],
             "relevant_actor_n": 0,
             "interlocutor_present": false,
-            "visible_entity_handle_n": 6
+            "visible_entity_handle_n": 1
           },
           "pressure": {
             "emphasis_band": "minimal",
@@ -3323,47 +2881,42 @@
             "clock_summary_n": 0
           },
           "hook": {
-            "emphasis_band": "high",
+            "emphasis_band": "moderate",
             "signals": [
               "multi_information_kinds",
               "prompt_obligations_nonempty",
               "required_information_nonempty"
             ],
-            "required_new_information_n": 7,
-            "distinct_information_kind_n": 6,
+            "required_new_information_n": 3,
+            "distinct_information_kind_n": 3,
             "information_kind_tags": [
               "authoritative_output_keys",
-              "consequence_atoms",
               "resolution_kind",
-              "state_change",
-              "success_state",
-              "transition"
+              "success_state"
             ],
             "narrative_mode_contract_enabled": true,
             "prompt_obligation_key_n": 3
           },
           "consequence": {
-            "emphasis_band": "high",
+            "emphasis_band": "moderate",
             "signals": [
-              "consequence_information_present",
-              "state_or_mutation_information_present",
-              "transition_information_present"
+              "state_or_mutation_information_present"
             ],
             "outcome_forward_tier": "low",
-            "has_consequence_information": true,
+            "has_consequence_information": false,
             "has_state_or_mutation_information": true,
-            "has_transition_information": true
+            "has_transition_information": false
           }
         },
         "action_outcome": {
           "present": false,
           "source_kind": "unknown",
           "result": {
-            "result_kind": "scene_opening",
+            "result_kind": "investigate",
             "success_state": "success",
             "actor_id": null,
             "target_id": null,
-            "action_id": "campaign_start_opening_scene",
+            "action_id": "i_inspect_the_brass_token",
             "roll_summary": {}
           },
           "effects": {
@@ -3391,23 +2944,21 @@
         },
         "scene_opening": {
           "opening_required": true,
-          "opening_reason": "campaign_start",
-          "scene_id": "frontier_gate",
+          "opening_reason": "scene_entry",
+          "scene_id": "mill_loft",
           "location_anchors": [
-            "board",
-            "cinderwatch gate",
-            "cinderwatch gate district",
-            "curfew",
-            "frontier gate",
-            "frontier_gate",
-            "gate district",
-            "lists",
-            "missing",
-            "notice",
-            "patrol",
-            "rules",
-            "taxes",
-            "warning"
+            "floor",
+            "leaks",
+            "light",
+            "loft",
+            "mill loft",
+            "mill_loft",
+            "noon",
+            "onto",
+            "pale",
+            "skylight",
+            "soot",
+            "stained"
           ],
           "actor_anchors": [],
           "active_pressures": {
@@ -3420,16 +2971,12 @@
           },
           "visible_fact_categories": [
             "A",
-            "B",
-            "C",
-            "D"
+            "E"
           ],
           "visible_fact_anchor_ids": [
             "vf_slot:0",
             "vf_slot:1",
-            "vf_slot:2",
-            "vf_slot:3",
-            "vf_slot:4"
+            "vf_slot:2"
           ],
           "prohibited_content_codes": [
             "no_backstage_plot_briefings",
@@ -3439,11 +2986,9 @@
             "no_unintroduced_offscene_npc_names"
           ],
           "derivation_codes": [
-            "opening_reason:campaign_start",
-            "visible_fact:cat:A",
-            "visible_fact:cat:B",
-            "visible_fact:cat:C",
-            "visible_fact:cat:D"
+            "opening_reason:scene_entry",
+            "visible_fact:cat:E",
+            "visible_fact:cat:A"
           ],
           "validator": {
             "ok": true,
@@ -3455,10 +3000,7 @@
         "debug": {
           "derivation_codes": [
             "req:resolution_kind",
-            "req:state_change",
             "req:authoritative_outputs",
-            "req:transition_target",
-            "req:consequence_list",
             "entity_filter:published_intersect",
             "mode:opening:narration_obligations.is_opening_scene",
             "nroles:location_anchor",
@@ -3467,15 +3009,9 @@
             "nroles:hook",
             "nroles:consequence",
             "action_outcome:derive",
-            "opening_reason:campaign_start",
+            "opening_reason:scene_entry",
+            "visible_fact:cat:E",
             "visible_fact:cat:A",
-            "visible_fact:cat:B",
-            "visible_fact:cat:C",
-            "visible_fact:cat:D",
-            "signal:resolution.state_changes.arrived_at_scene",
-            "signal:resolution.state_changes.new_scene_context_available",
-            "signal:resolution.target_scene_id",
-            "signal:state_mutations.scene",
             "transition_node:before_location:public_slice",
             "transition_node:derive",
             "answer_exposition_plan:derive"
@@ -3498,16 +3034,16 @@
             "version": 1,
             "applied": true,
             "weak_roles": [
-              "actor_anchor"
+              "consequence"
             ],
             "reinforced_families": [
-              "actor_anchor"
+              "consequence"
             ],
             "actions": [
-              "bump_emphasis:actor_anchor:minimal->low"
+              "bump_emphasis:consequence:low->moderate"
             ],
             "safety_notes": [
-              "safe:actor_anchor:metadata_only_band_bump_no_counters_no_allocation_contract_slice_unchanged"
+              "safe:consequence:metadata_only_band_bump_no_counters_no_allocation_contract_slice_unchanged"
             ],
             "skip_reason": null
           }
@@ -3562,7 +3098,9 @@
               "strict_social_answer_seek_override": false,
               "same_interlocutor_followup": false,
               "answer_pressure_suppressed_because": [
-                "empty_player_input"
+                "no_active_interlocutor",
+                "no_prior_log_exchange",
+                "not_question_or_answer_pressure"
               ],
               "answer_pressure_family": null,
               "answer_pressure_anchor_kind": null,
@@ -3581,7 +3119,7 @@
               "correction_reask_followup_detected": false,
               "answer_pressure_reasons": [],
               "trigger_source": "none",
-              "resolution_kind": "scene_opening",
+              "resolution_kind": "investigate",
               "uncertainty_suggests_partial": false,
               "suppressed_because": [
                 "no_follow_up_pressure",
@@ -3648,7 +3186,9 @@
               "strict_social_answer_seek_override": false,
               "same_interlocutor_followup": false,
               "answer_pressure_suppressed_because": [
-                "empty_player_input"
+                "no_active_interlocutor",
+                "no_prior_log_exchange",
+                "not_question_or_answer_pressure"
               ],
               "answer_pressure_family": null,
               "answer_pressure_anchor_kind": null,
@@ -3693,37 +3233,30 @@
             }
           },
           "response_type_contract": {
-            "required_response_type": "scene_opening",
+            "required_response_type": "action_outcome",
             "source_route": "exploration",
             "allow_escalation": false,
             "escalation_block_reason": "non_hostile_world_action_guard",
             "strict_target_id": null,
             "strict_answer_expected": false,
             "strict_dialogue_expected": false,
-            "action_must_preserve_agency": false,
+            "action_must_preserve_agency": true,
             "debug_reasons": [
               "phrase_heuristics_suppressed_for_ctir_planner_seam",
-              "scene_opening_requires_opening_response",
+              "resolved_world_action_requires_action_outcome",
               "non_hostile_world_action_guard"
             ]
           }
         },
         "narration_visibility": {
           "visible_entities": [
-            "gate guard",
-            "gate serjeant",
-            "guard captain",
-            "ragged stranger",
-            "tavern runner",
-            "threadbare watcher"
+            "loft clerk"
           ],
           "active_interlocutor_id": null,
           "visible_facts": [
-            "rain spatters soot-dark stone; frayed banners hang above cinderwatch's eastern gate",
-            "a well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor",
-            "one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue",
-            "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
-            "a notice board lists new taxes, curfews, and a posted warning about a missing patrol"
+            "a soot-stained skylight leaks pale noon light onto the loft floor",
+            "sacks of cracked maize lean against the hopper braces",
+            "a tariff slate hangs from a nail by the loft stair"
           ],
           "rules": {
             "no_unseen_entities": true,
@@ -3739,46 +3272,39 @@
             "player_action"
           ],
           "minimum_anchor_hits": 1,
-          "scene_id": "frontier_gate",
-          "scene_location_label": "Cinderwatch Gate District",
+          "scene_id": "mill_loft",
+          "scene_location_label": "Mill Loft",
           "location_tokens": [
-            "frontier_gate",
-            "frontier gate",
-            "cinderwatch gate district",
-            "cinderwatch gate",
-            "gate district",
-            "notice",
-            "board",
-            "lists",
-            "taxes",
-            "curfew",
-            "rules",
-            "warning",
-            "missing",
-            "patrol"
+            "mill_loft",
+            "mill loft",
+            "soot",
+            "stained",
+            "skylight",
+            "leaks",
+            "pale",
+            "noon",
+            "light",
+            "onto",
+            "loft",
+            "floor"
           ],
           "actor_tokens": [
-            "gate guard",
-            "gate serjeant",
-            "guard captain",
-            "ragged stranger",
-            "tavern runner",
-            "threadbare watcher",
-            "guard",
-            "serjeant",
-            "runner"
+            "loft clerk"
           ],
           "player_action_tokens": [
-            "scene_opening",
-            "campaign_start_opening_scene",
-            "campaign start opening scene"
+            "investigate",
+            "i_inspect_the_brass_token",
+            "i inspect the brass token",
+            "inspect",
+            "brass",
+            "token"
           ],
           "preferred_repair_order": [
             "actor",
             "player_action",
             "location"
           ],
-          "debug_reason": "scene_state_anchor: loc=14 actor=9 player_action=3 enabled=True",
+          "debug_reason": "scene_state_anchor: loc=12 actor=1 player_action=6 enabled=True",
           "debug_sources": {
             "location": [
               "scene.id",
@@ -3791,7 +3317,8 @@
             ],
             "player_action": [
               "resolution.kind",
-              "resolution.action_id"
+              "resolution.action_id",
+              "scene_runtime.last_player_action_text"
             ]
           }
         },
@@ -3812,9 +3339,9 @@
         "turn_packet": {
           "version": 1,
           "turn_id": null,
-          "scene_id": "frontier_gate",
-          "player_text": null,
-          "resolution_kind": "scene_opening",
+          "scene_id": "mill_loft",
+          "player_text": "I inspect the brass token.",
+          "resolution_kind": "investigate",
           "route": {
             "interaction_mode": "none",
             "active_target_id": null,
@@ -3869,7 +3396,9 @@
                 "strict_social_answer_seek_override": false,
                 "same_interlocutor_followup": false,
                 "answer_pressure_suppressed_because": [
-                  "empty_player_input"
+                  "no_active_interlocutor",
+                  "no_prior_log_exchange",
+                  "not_question_or_answer_pressure"
                 ],
                 "answer_pressure_family": null,
                 "answer_pressure_anchor_kind": null,
@@ -3888,7 +3417,7 @@
                 "correction_reask_followup_detected": false,
                 "answer_pressure_reasons": [],
                 "trigger_source": "none",
-                "resolution_kind": "scene_opening",
+                "resolution_kind": "investigate",
                 "uncertainty_suggests_partial": false,
                 "suppressed_because": [
                   "no_follow_up_pressure",
@@ -3955,7 +3484,9 @@
                 "strict_social_answer_seek_override": false,
                 "same_interlocutor_followup": false,
                 "answer_pressure_suppressed_because": [
-                  "empty_player_input"
+                  "no_active_interlocutor",
+                  "no_prior_log_exchange",
+                  "not_question_or_answer_pressure"
                 ],
                 "answer_pressure_family": null,
                 "answer_pressure_anchor_kind": null,
@@ -4000,17 +3531,17 @@
               }
             },
             "response_type_contract": {
-              "required_response_type": "scene_opening",
+              "required_response_type": "action_outcome",
               "source_route": "exploration",
               "allow_escalation": false,
               "escalation_block_reason": "non_hostile_world_action_guard",
               "strict_target_id": null,
               "strict_answer_expected": false,
               "strict_dialogue_expected": false,
-              "action_must_preserve_agency": false,
+              "action_must_preserve_agency": true,
               "debug_reasons": [
                 "phrase_heuristics_suppressed_for_ctir_planner_seam",
-                "scene_opening_requires_opening_response",
+                "resolved_world_action_requires_action_outcome",
                 "non_hostile_world_action_guard"
               ]
             }
@@ -4027,7 +3558,9 @@
                 "strict_social_answer_seek_override": false,
                 "same_interlocutor_followup": false,
                 "answer_pressure_suppressed_because": [
-                  "empty_player_input"
+                  "no_active_interlocutor",
+                  "no_prior_log_exchange",
+                  "not_question_or_answer_pressure"
                 ],
                 "answer_pressure_family": null,
                 "answer_pressure_anchor_kind": null,
@@ -4087,7 +3620,9 @@
                 "strict_social_answer_seek_override": false,
                 "same_interlocutor_followup": false,
                 "answer_pressure_suppressed_because": [
-                  "empty_player_input"
+                  "no_active_interlocutor",
+                  "no_prior_log_exchange",
+                  "not_question_or_answer_pressure"
                 ],
                 "answer_pressure_family": null,
                 "answer_pressure_anchor_kind": null,
@@ -4106,7 +3641,7 @@
                 "correction_reask_followup_detected": false,
                 "answer_pressure_reasons": [],
                 "trigger_source": "none",
-                "resolution_kind": "scene_opening",
+                "resolution_kind": "investigate",
                 "uncertainty_suggests_partial": false,
                 "suppressed_because": [
                   "no_follow_up_pressure",
@@ -4120,17 +3655,17 @@
             "anti_railroading": null,
             "context_separation": null,
             "response_type": {
-              "required_response_type": "scene_opening",
+              "required_response_type": "action_outcome",
               "source_route": "exploration",
               "allow_escalation": false,
               "escalation_block_reason": "non_hostile_world_action_guard",
               "strict_target_id": null,
               "strict_answer_expected": false,
               "strict_dialogue_expected": false,
-              "action_must_preserve_agency": false,
+              "action_must_preserve_agency": true,
               "debug_reasons": [
                 "phrase_heuristics_suppressed_for_ctir_planner_seam",
-                "scene_opening_requires_opening_response",
+                "resolved_world_action_requires_action_outcome",
                 "non_hostile_world_action_guard"
               ]
             }
@@ -4160,166 +3695,62 @@
           "referent_tracking_compact": {
             "referent_artifact_version": 1,
             "active_interaction_target": null,
-            "referential_ambiguity_class": "ambiguous_plural",
-            "ambiguity_risk": 58
+            "referential_ambiguity_class": "ambiguous_singular",
+            "ambiguity_risk": 0
           }
         },
         "referent_tracking": {
           "version": 1,
           "active_entities": [
             {
-              "entity_id": "gate_guard",
-              "display_name": "gate guard",
+              "entity_id": "loft_clerk",
+              "display_name": "loft clerk",
               "entity_kind": "npc",
               "roles": []
-            },
-            {
-              "entity_id": "gate_serjeant",
-              "display_name": "gate serjeant",
-              "entity_kind": "npc",
-              "roles": []
-            },
-            {
-              "entity_id": "guard_captain",
-              "display_name": "guard captain",
-              "entity_kind": "npc",
-              "roles": [
-                "captain",
-                "guard",
-                "guardsman",
-                "sentry",
-                "watchman"
-              ]
-            },
-            {
-              "entity_id": "refugee",
-              "display_name": "ragged stranger",
-              "entity_kind": "scene_actor",
-              "roles": [
-                "refugee",
-                "stranger"
-              ]
-            },
-            {
-              "entity_id": "tavern_runner",
-              "display_name": "tavern runner",
-              "entity_kind": "npc",
-              "roles": [
-                "informant",
-                "runner"
-              ]
-            },
-            {
-              "entity_id": "threadbare_watcher",
-              "display_name": "threadbare watcher",
-              "entity_kind": "scene_actor",
-              "roles": [
-                "watcher"
-              ]
             }
           ],
           "active_entity_order": [
-            "gate_guard",
-            "gate_serjeant",
-            "guard_captain",
-            "refugee",
-            "tavern_runner",
-            "threadbare_watcher"
+            "loft_clerk"
           ],
           "active_interaction_target": null,
           "active_speaker_candidates": [],
           "continuity_subject": null,
           "continuity_object": null,
           "pronoun_resolution": {
-            "strategy": "unresolved",
+            "strategy": "neutral_buckets",
             "buckets_by_entity": {
-              "gate_guard": [
-                "they_them"
-              ],
-              "gate_serjeant": [
-                "they_them"
-              ],
-              "guard_captain": [
-                "they_them"
-              ],
-              "refugee": [
-                "they_them"
-              ],
-              "tavern_runner": [
-                "they_them"
-              ],
-              "threadbare_watcher": [
+              "loft_clerk": [
                 "they_them"
               ]
             },
             "explicit_sources": [],
-            "notes": "elevated_to_unresolved_multi_person_like_without_explicit_buckets"
+            "notes": "conservative_default_they_them_without_explicit_engine_buckets"
           },
-          "ambiguity_risk": 58,
+          "ambiguity_risk": 0,
           "allowed_named_references": [
             {
-              "entity_id": "gate_guard",
-              "display_name": "gate guard"
-            },
-            {
-              "entity_id": "gate_serjeant",
-              "display_name": "gate serjeant"
-            },
-            {
-              "entity_id": "guard_captain",
-              "display_name": "guard captain"
-            },
-            {
-              "entity_id": "refugee",
-              "display_name": "ragged stranger"
-            },
-            {
-              "entity_id": "tavern_runner",
-              "display_name": "tavern runner"
-            },
-            {
-              "entity_id": "threadbare_watcher",
-              "display_name": "threadbare watcher"
+              "entity_id": "loft_clerk",
+              "display_name": "loft clerk"
             }
           ],
           "forbidden_or_unresolved_patterns": [
             {
-              "kind": "gendered_pronoun_uncertainty",
-              "detail": "multiple_person_like_visible_without_explicit_pronoun_buckets"
-            },
-            {
               "kind": "pronoun_anchor_conservative",
-              "referential_ambiguity_class": "ambiguous_plural"
+              "referential_ambiguity_class": "ambiguous_singular"
             }
           ],
           "safe_explicit_fallback_labels": [
             {
-              "entity_id": "gate_guard",
-              "safe_explicit_label": "gate guard"
-            },
-            {
-              "entity_id": "gate_serjeant",
-              "safe_explicit_label": "gate serjeant"
-            },
-            {
-              "entity_id": "guard_captain",
-              "safe_explicit_label": "guard captain"
-            },
-            {
-              "entity_id": "refugee",
-              "safe_explicit_label": "ragged stranger"
-            },
-            {
-              "entity_id": "tavern_runner",
-              "safe_explicit_label": "tavern runner"
-            },
-            {
-              "entity_id": "threadbare_watcher",
-              "safe_explicit_label": "threadbare watcher"
+              "entity_id": "loft_clerk",
+              "safe_explicit_label": "loft clerk"
             }
           ],
-          "single_unambiguous_entity": null,
-          "referential_ambiguity_class": "ambiguous_plural",
+          "single_unambiguous_entity": {
+            "entity_id": "loft_clerk",
+            "label": "loft clerk",
+            "case": "single_visible_person_like"
+          },
+          "referential_ambiguity_class": "ambiguous_singular",
           "interaction_target_continuity": {
             "prior_target_id": null,
             "current_target_id": null,
@@ -4343,8 +3774,8 @@
               "turn_packet"
             ],
             "target_resolution_trace": [],
-            "visible_entity_count": 6,
-            "person_like_visible_count": 6,
+            "visible_entity_count": 1,
+            "person_like_visible_count": 1,
             "memory_window_entity_ids": [],
             "conflicting_target_signals": false
           }
@@ -4473,12 +3904,12 @@
         }
       }
     },
-    "_runtime_narration_plan_bundle_stamp_v1": "1:1ac9775e600:0",
+    "_runtime_narration_plan_bundle_stamp_v1": "1:216f7b57380:aff405dc",
     "last_turn_response_policy": {
       "rule_priority_order": [
         "ANSWER THE PLAYER",
         "DO NOT CONTRADICT AUTHORITATIVE STATE",
-        "DO NOT LEAK HIDDEN FACTS / SECRETS",
+        "DO NOT LEAK HIDDEN FACTS",
         "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
         "PRESERVE PLAYER AGENCY \u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS",
         "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
@@ -4522,7 +3953,9 @@
           "strict_social_answer_seek_override": false,
           "same_interlocutor_followup": false,
           "answer_pressure_suppressed_because": [
-            "empty_player_input"
+            "no_active_interlocutor",
+            "no_prior_log_exchange",
+            "not_question_or_answer_pressure"
           ],
           "answer_pressure_family": null,
           "answer_pressure_anchor_kind": null,
@@ -4541,7 +3974,7 @@
           "correction_reask_followup_detected": false,
           "answer_pressure_reasons": [],
           "trigger_source": "none",
-          "resolution_kind": "scene_opening",
+          "resolution_kind": "investigate",
           "uncertainty_suggests_partial": false,
           "suppressed_because": [
             "no_follow_up_pressure",
@@ -4608,7 +4041,9 @@
           "strict_social_answer_seek_override": false,
           "same_interlocutor_followup": false,
           "answer_pressure_suppressed_because": [
-            "empty_player_input"
+            "no_active_interlocutor",
+            "no_prior_log_exchange",
+            "not_question_or_answer_pressure"
           ],
           "answer_pressure_family": null,
           "answer_pressure_anchor_kind": null,
@@ -4685,22 +4120,22 @@
         }
       },
       "response_type_contract": {
-        "required_response_type": "scene_opening",
+        "required_response_type": "action_outcome",
         "source_route": "exploration",
         "allow_escalation": false,
         "debug_reasons": [
-          "scene_opening_requires_opening_response",
+          "resolved_world_action_requires_action_outcome",
           "non_hostile_world_action_guard"
         ]
       },
       "tone_escalation": {
         "enabled": true,
-        "scene_id": "frontier_gate",
+        "scene_id": "mill_loft",
         "active_speaker_id": null,
-        "base_tone": "guarded",
-        "max_allowed_tone": "tense",
+        "base_tone": "neutral",
+        "max_allowed_tone": "guarded",
         "allow_guarded_refusal": true,
-        "allow_verbal_pressure": true,
+        "allow_verbal_pressure": false,
         "allow_explicit_threat": false,
         "allow_physical_hostility": false,
         "allow_combat_initiation": false,
@@ -4708,24 +4143,23 @@
           "player_used_aggressive_action": false,
           "player_used_coercive_social_action": false,
           "player_persisted_after_refusal": false,
-          "scene_has_active_tension": true,
-          "scene_has_authority_pressure": true,
+          "scene_has_active_tension": false,
+          "scene_has_authority_pressure": false,
           "scene_has_visible_hostile_actor": false,
           "combat_active": false,
-          "resolution_is_risky": false,
+          "resolution_is_risky": true,
           "npc_already_hostile_in_state": false
         },
         "justification_reasons": [
-          "visible_facts_engagement_or_moderate_topic_pressure",
-          "visible_entity_roles_include_authority_guardship"
+          "resolution_kind_or_mechanical_payload_is_risky"
         ],
         "preferred_deescalations": [
-          "Tighten diction and body language without 'or else' phrasing.",
-          "Use deadlines, policy, or reputation risk as leverage."
+          "Default to observational tone; keep interpersonal heat optional.",
+          "Prefer curiosity and clarification over suspicion-as-accusation."
         ],
-        "debug_reason": "tone_escalation: base_rank=1 max_rank=2 combat_active=False hostile_npc=False",
+        "debug_reason": "tone_escalation: base_rank=0 max_rank=1 combat_active=False hostile_npc=False",
         "debug_inputs": {
-          "scene_id": "frontier_gate",
+          "scene_id": "mill_loft",
           "has_session": true,
           "has_world": true,
           "has_resolution": true,
@@ -4735,10 +4169,10 @@
           "recent_log_len": 0
         },
         "debug_flags": {
-          "base_rank": 1,
-          "max_rank": 2,
+          "base_rank": 0,
+          "max_rank": 1,
           "recent_player_text_latest_len": 0,
-          "resolution_kind": "scene_opening",
+          "resolution_kind": "investigate",
           "normalized_action_type": null,
           "prior_refusal_seen_in_log": false,
           "topic_pressure": 0,
@@ -4748,19 +4182,16 @@
       "narrative_authority": {
         "enabled": true,
         "authoritative_outcome_available": false,
-        "resolution_kind": "scene_opening",
+        "resolution_kind": "investigate",
         "success_state_available": false,
         "mechanical_result_available": false,
         "active_speaker_id": null,
         "active_target_id": null,
         "visible_fact_strings": [
-          "the notice board lists taxes, curfew rules, and a warning about a missing patrol",
-          "a gate serjeant manages the crowd and keeps one eye on the roster board",
-          "a tavern runner trades hot stew and rumors near the rain barrel",
-          "threadbare watchers and refugees cluster along the muddy gate line",
-          "ash compact census delays have tightened the eastern caravan choke point"
+          "a soot-stained skylight leaks pale noon light onto the loft floor",
+          "sacks of cracked maize lean against the hopper braces",
+          "a tariff slate hangs from a nail by the loft stair"
         ],
-        "hidden_fact_strings_present": true,
         "discoverable_hinting_allowed": true,
         "forbid_unresolved_outcome_assertions": true,
         "forbid_hidden_fact_assertions": true,
@@ -4772,11 +4203,11 @@
           "branch_outcome"
         ],
         "preferred_deferral_order": [
-          "bounded_uncertainty",
+          "ask_for_roll",
           "branch_outcome",
-          "ask_for_roll"
+          "bounded_uncertainty"
         ],
-        "debug_reason": "narrative_authority: authoritative_outcome=False kind='scene_opening' mechanical_risky=False",
+        "debug_reason": "narrative_authority: authoritative_outcome=False kind='investigate' mechanical_risky=True",
         "debug_inputs": {
           "has_resolution": true,
           "has_narration_visibility": true,
@@ -4785,7 +4216,7 @@
           "has_session_view": true
         },
         "debug_flags": {
-          "mechanical_risky": false,
+          "mechanical_risky": true,
           "pending_player_roll": false,
           "anchor_contract_enabled": true
         }
@@ -4827,9 +4258,9 @@
           "has_prompt_leads": true,
           "has_active_pending_leads": true,
           "has_follow_surface": false,
-          "player_text_nonempty": false,
+          "player_text_nonempty": true,
           "obligation_hints": {
-            "must_advance_scene": true,
+            "must_advance_scene": false,
             "scene_momentum_due": false,
             "is_opening_scene": true
           }
@@ -4846,43 +4277,31 @@
       },
       "context_separation": {
         "enabled": true,
-        "scene_focus_summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. scene opening scene_opening Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
-        "interaction_kind": "scene_opening",
-        "player_intent_summary": "(no player text)",
+        "scene_focus_summary": "A dry loft, a grain hopper, and a tariff slate. investigate investigate A dry loft, a grain hopper, and a tariff slate.",
+        "interaction_kind": "investigate",
+        "player_intent_summary": "I inspect the brass token.",
         "primary_topics": [
-          "frontier_gate",
-          "frontier gate",
-          "cinderwatch gate district",
-          "cinderwatch gate",
-          "gate district",
-          "notice",
-          "board",
-          "lists",
-          "taxes",
-          "curfew",
-          "rules",
-          "warning",
-          "missing",
-          "patrol",
-          "gate guard",
-          "gate serjeant",
-          "guard captain",
-          "ragged stranger",
-          "tavern runner",
-          "threadbare watcher",
-          "guard",
-          "serjeant",
-          "runner",
-          "scene_opening",
-          "campaign_start_opening_scene",
-          "campaign start opening scene"
+          "inspect",
+          "brass",
+          "token",
+          "mill_loft",
+          "mill loft",
+          "soot",
+          "stained",
+          "skylight",
+          "leaks",
+          "pale",
+          "noon",
+          "light",
+          "onto",
+          "loft",
+          "floor",
+          "loft clerk",
+          "investigate",
+          "i_inspect_the_brass_token",
+          "i inspect the brass token"
         ],
         "allowed_contextual_topics": [],
-        "ambient_pressure_topics": [
-          "Rival noble houses competing for territory and influence.",
-          "Religious orders attempting to control or suppress dangerous magic.",
-          "Criminal syndicates dominating trade, smuggling, and urban power."
-        ],
         "forbid_topic_hijack": true,
         "forbid_pressure_answer_substitution": true,
         "forbid_unearned_tone_shift_from_background_pressure": true,
@@ -4891,12 +4310,12 @@
         "max_pressure_sentences_without_player_prompt": 2,
         "tone_escalation_contract": {
           "enabled": true,
-          "scene_id": "frontier_gate",
+          "scene_id": "mill_loft",
           "active_speaker_id": null,
-          "base_tone": "guarded",
-          "max_allowed_tone": "tense",
+          "base_tone": "neutral",
+          "max_allowed_tone": "guarded",
           "allow_guarded_refusal": true,
-          "allow_verbal_pressure": true,
+          "allow_verbal_pressure": false,
           "allow_explicit_threat": false,
           "allow_physical_hostility": false,
           "allow_combat_initiation": false,
@@ -4904,24 +4323,23 @@
             "player_used_aggressive_action": false,
             "player_used_coercive_social_action": false,
             "player_persisted_after_refusal": false,
-            "scene_has_active_tension": true,
-            "scene_has_authority_pressure": true,
+            "scene_has_active_tension": false,
+            "scene_has_authority_pressure": false,
             "scene_has_visible_hostile_actor": false,
             "combat_active": false,
-            "resolution_is_risky": false,
+            "resolution_is_risky": true,
             "npc_already_hostile_in_state": false
           },
           "justification_reasons": [
-            "visible_facts_engagement_or_moderate_topic_pressure",
-            "visible_entity_roles_include_authority_guardship"
+            "resolution_kind_or_mechanical_payload_is_risky"
           ],
           "preferred_deescalations": [
-            "Tighten diction and body language without 'or else' phrasing.",
-            "Use deadlines, policy, or reputation risk as leverage."
+            "Default to observational tone; keep interpersonal heat optional.",
+            "Prefer curiosity and clarification over suspicion-as-accusation."
           ],
-          "debug_reason": "tone_escalation: base_rank=1 max_rank=2 combat_active=False hostile_npc=False",
+          "debug_reason": "tone_escalation: base_rank=0 max_rank=1 combat_active=False hostile_npc=False",
           "debug_inputs": {
-            "scene_id": "frontier_gate",
+            "scene_id": "mill_loft",
             "has_session": true,
             "has_world": true,
             "has_resolution": true,
@@ -4931,10 +4349,10 @@
             "recent_log_len": 0
           },
           "debug_flags": {
-            "base_rank": 1,
-            "max_rank": 2,
+            "base_rank": 0,
+            "max_rank": 1,
             "recent_player_text_latest_len": 0,
-            "resolution_kind": "scene_opening",
+            "resolution_kind": "investigate",
             "normalized_action_type": null,
             "prior_refusal_seen_in_log": false,
             "topic_pressure": 0,
@@ -4955,20 +4373,20 @@
           "has_prompt_leads": true,
           "has_active_pending_leads": true,
           "has_follow_surface": false,
-          "player_text_nonempty": false,
-          "primary_topic_count": 26,
+          "player_text_nonempty": true,
+          "primary_topic_count": 19,
           "ambient_pressure_topic_count": 3
         },
         "debug_flags": {
           "player_seeks_world_danger_info": false,
           "scene_summary_crisis": false,
-          "interaction_kind_worldish": false,
+          "interaction_kind_worldish": true,
           "authoritative_or_consequence_relevant": false,
-          "pressure_focus_allowed": false,
-          "tone_allow_verbal_pressure": true,
+          "pressure_focus_allowed": true,
+          "tone_allow_verbal_pressure": false,
           "tone_allow_explicit_threat": false
         },
-        "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=26 ambient=3"
+        "debug_reason": "context_separation: pressure_focus_allowed=True primary_topics=19 ambient=3"
       },
       "player_facing_narration_purity": {
         "enabled": true,
@@ -4995,10 +4413,10 @@
         "max_dialogue_paragraphs_before_break": null,
         "prefer_single_speaker_turn": false,
         "forbid_bulleted_or_list_like_dialogue": false,
-        "required_response_type": "scene_opening",
-        "debug_reason": "response_type_not_dialogue:scene_opening",
+        "required_response_type": "action_outcome",
+        "debug_reason": "response_type_not_dialogue:action_outcome",
         "debug_inputs": {
-          "scene_id": "frontier_gate",
+          "scene_id": "mill_loft",
           "response_type_contract_source": "response_policy"
         }
       },
@@ -5062,7 +4480,7 @@
         "debug": {
           "source_of_anchor": "none",
           "scene_scope_validated": true,
-          "response_type_required": "scene_opening"
+          "response_type_required": "action_outcome"
         }
       },
       "fallback_behavior": {
@@ -5171,7 +4589,7 @@
           "answer_completeness_required": false,
           "dialogue_shape_expected": false,
           "prior_turn_gm_snippet_for_overlap": null,
-          "player_text_len": 0,
+          "player_text_len": 26,
           "rumor_turn_active": false,
           "rumor_turn_reason_codes": [],
           "rumor_trigger_spans": []
@@ -5188,12 +4606,7 @@
         "soft_memory_limit": 12,
         "stale_after_turns": 18,
         "active_scene_entity_ids": [
-          "gate_guard",
-          "gate_serjeant",
-          "guard_captain",
-          "refugee",
-          "tavern_runner",
-          "threadbare_watcher"
+          "loft_clerk"
         ],
         "anchored_interlocutor_id": "",
         "active_interaction_target_id": "",
@@ -5204,7 +4617,6 @@
           "matched_topics": [],
           "matched_grounded_ids": [],
           "callback_marker_hit": null,
-          "reason": "empty_player_text",
           "source_of_activity_anchor": "none",
           "source_of_recentness": "session.turn_counter",
           "source_of_reintroductions": "player_text+visibility_aliases"
@@ -5221,35 +4633,21 @@
     },
     "discourse_focus": {
       "version": 1,
-      "scene_id": "frontier_gate",
+      "scene_id": "mill_loft",
       "active_interlocutor": null,
       "active_claim": null,
       "active_actionable_lead": null,
       "active_inspected": null,
       "last_attempted_action": null,
       "last_committed_turn": 1,
-      "last_committed_contract_id": "rc_dd89a2b89c62"
+      "last_committed_contract_id": "rc_9efeac7e7298"
     },
     "narration_temporal_provenance": {
       "version": 1,
       "gm_inferences": [],
       "player_hypotheses": [],
       "accepted_incidentals": [],
-      "rejected_consequential": [
-        {
-          "semantic_identity": {},
-          "text": "Prominently posted on a weathered notice board are new taxes, strict curfew rules, and a stark warning about a missing patrol that has unsettled the district.",
-          "authority": "unauthorized",
-          "provenance": "generated_proposal",
-          "epistemic_status": "unresolved",
-          "relation_kind": "ordinary_predicate",
-          "scene_id": "frontier_gate",
-          "source_turn": 1,
-          "reason_codes": [
-            "notice_roster_history"
-          ]
-        }
-      ]
+      "rejected_consequential": []
     },
     "bounded_improvisation": {
       "version": 1,
@@ -5267,114 +4665,27 @@
       "accepted_count": 0,
       "promoted_ids": []
     },
-    "conversational_context": {
-      "delivered_exchanges": [
-        {
-          "speaker_id": "",
-          "speaker_name": "",
-          "addressee": "player",
-          "ownership": "gm",
-          "player_text": "",
-          "delivered_text": "No one here can answer that from what is settled here.",
-          "subject": "",
-          "topic_id": "",
-          "requested_information": "",
-          "supplied_text": "",
-          "uncertain": false,
-          "commitment": false,
-          "scene_id": "frontier_gate",
-          "turn": 1,
-          "active": false,
-          "authorized_proposition": "",
-          "answer_sufficiency": "",
-          "proposition_id": "",
-          "response_integrity_digest": "23a43f6dde9af8ca1a5cb1042d7c65ada1da9b0bec16f21b87bc16381a404584",
-          "authorization_source": "safe_nonresolution",
-          "adoption_turn_identity": "rc_dd89a2b89c62"
-        },
-        {
-          "speaker_id": "",
-          "speaker_name": "",
-          "addressee": "player",
-          "ownership": "gm",
-          "player_text": "Would you please begin the campaign?",
-          "delivered_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
-          "subject": "",
-          "topic_id": "",
-          "requested_information": "",
-          "supplied_text": "",
-          "uncertain": false,
-          "commitment": false,
-          "scene_id": "frontier_gate",
-          "turn": 1,
-          "active": false,
-          "authorized_proposition": "",
-          "answer_sufficiency": "",
-          "proposition_id": "",
-          "response_integrity_digest": "93482c54d70dcc7672bfe736f93cbae9ea5a282d44bcbde52ae59bfeb2213422",
-          "authorization_source": "conversational_decision:communication_before_execution",
-          "adoption_turn_identity": ""
-        },
-        {
-          "speaker_id": "",
-          "speaker_name": "",
-          "addressee": "player",
-          "ownership": "gm",
-          "player_text": "Does it look like more people are trying to enter or leave?",
-          "delivered_text": "I don't have an established route to enter or leave from here. You have not moved.",
-          "subject": "",
-          "topic_id": "",
-          "requested_information": "",
-          "supplied_text": "",
-          "uncertain": false,
-          "commitment": false,
-          "scene_id": "frontier_gate",
-          "turn": 1,
-          "active": false,
-          "authorized_proposition": "",
-          "answer_sufficiency": "",
-          "proposition_id": "",
-          "response_integrity_digest": "8ba95dcd52c270006da2ec06cf5beb4ae9d103980367662eb176a10a8abbaa81",
-          "authorization_source": "conversational_decision:movement_question",
-          "adoption_turn_identity": ""
-        },
-        {
-          "speaker_id": "",
-          "speaker_name": "",
-          "addressee": "player",
-          "ownership": "gm",
-          "player_text": "I approach the gate.",
-          "delivered_text": "That target does not fit the action as stated. What are you trying to accomplish?",
-          "subject": "",
-          "topic_id": "",
-          "requested_information": "",
-          "supplied_text": "",
-          "uncertain": false,
-          "commitment": false,
-          "scene_id": "frontier_gate",
-          "turn": 1,
-          "active": true,
-          "authorized_proposition": "",
-          "answer_sufficiency": "",
-          "proposition_id": "",
-          "response_integrity_digest": "37dfa8bee680a5ee6c7ccb07910b6a69727eaff669ddac3f3dcab1145005e537",
-          "authorization_source": "conversational_decision:operation_incompatible_with_entity_kind",
-          "adoption_turn_identity": ""
-        }
-      ],
-      "last_gm_exchange": {
-        "category": "CLARIFY",
-        "owner": "GM",
-        "purpose": "CLARIFICATION",
-        "subject": "I approach the gate.",
-        "response": "That target does not fit the action as stated. What are you trying to accomplish?",
-        "refusal_reason": null,
-        "scene_id": "frontier_gate"
-      }
+    "last_publication": {
+      "owner": "completed_runtime_response",
+      "contract": "FINAL_ENGINE_RESPONSE",
+      "final": true,
+      "dialogue_generated": false,
+      "dialogue_accepted": false,
+      "dialogue_composed": false,
+      "dialogue_published": false,
+      "narration_requested": false,
+      "narration_accepted": false,
+      "narration_published": false,
+      "visible": "You pry up the hopper and pocket the brass token.",
+      "validation_outcome": "engine_or_grounded_fallback",
+      "fallback": true,
+      "expression_decision": "none",
+      "turn": 1,
+      "campaign_run_id": "ce8400b2fc9bd9e16e7b840e"
     }
   },
   "integrity": {
-    "payload_sha256": "93769ec66824abe19fe0b37d9bf345f457b596262b1679de87a4ca47dc2a6a0a",
+    "payload_sha256": "50afea8606fed4eac1286d2f26d523e371b18339da12c508924ab30dc0927572",
     "canonicalization": "json/sort_keys,separators",
     "hash": "sha256"
   }

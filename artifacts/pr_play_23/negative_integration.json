@@ -1,0 +1,1082 @@
+{
+  "response": {
+    "ok": true,
+    "gm_output": {
+      "player_facing_text": "I cannot carry out Steal the purse, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+      "tags": [
+        "conversational_orchestration",
+        "clarify",
+        "non_mutating"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "metadata": {
+        "accepted_response": {
+          "addressee": "player",
+          "adoption_status": "candidate_accepted",
+          "attempt": 0,
+          "authority_result": "accepted",
+          "authorization_provenance": {
+            "addressee": "player",
+            "authority_category": "host_operation",
+            "authorized_proposition": "",
+            "epistemic_status": "none",
+            "operation": "ask",
+            "policy_version": "pr-eg-r6-r1-r1",
+            "provenance_id": "2608602d877553f8",
+            "source_id": "",
+            "speaker_id": "",
+            "validation": "host_operation"
+          },
+          "authorization_source": "conversational_decision:proposal_not_eligible",
+          "candidate_disposition": "host_selected",
+          "canonical": false,
+          "contract": {
+            "contract_id": "",
+            "expected_resolution": "",
+            "interlocutor_id": "",
+            "operation": ""
+          },
+          "contract_satisfying": true,
+          "generation_attempts": 0,
+          "grounding_result": "not_a_replacement_trigger",
+          "hard_validation": {
+            "authority": [
+              "conversational_decision:proposal_not_eligible"
+            ],
+            "gm_resolution_decision_audit": null,
+            "hard_valid": true,
+            "reasons": [],
+            "soft_flags": []
+          },
+          "immutable": true,
+          "interaction_completion": true,
+          "operation": "ask",
+          "player_input": "I steal the runner's purse and ask about prices.",
+          "provenance": "authorized_host_speech",
+          "resolution_kind": "conversational_clarify",
+          "speaker": "GM",
+          "speaker_id": "",
+          "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+          "subject": "",
+          "target": "",
+          "text": "I cannot carry out Steal the purse, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+          "turn_identity": "",
+          "integrity_digest": "8cb09526845ac615735c50fec6bd0602ab1876a4e8dfc8aa9d39eb9088751c59"
+        }
+      }
+    },
+    "resolution": {
+      "kind": "conversational_clarify",
+      "action_id": "conversational_clarify",
+      "label": "I steal the runner's purse and ask about prices.",
+      "prompt": "I steal the runner's purse and ask about prices.",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "conversational_clarify",
+        "conversational_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "Approach the tavern runner and ask what they are offering",
+          "intent_family": "unsupported_world_operation",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "proposal_not_eligible",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "I cannot carry out Steal the purse, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+          "context_update": {
+            "conversational_context": {
+              "pending_clarification": null
+            }
+          },
+          "intent_modality": "committed",
+          "secondary_intentions": [
+            {
+              "text": "Steal the purse",
+              "label": "Steal the purse",
+              "operation": "ATTACK",
+              "target_id": "tavern_runner",
+              "supported": false,
+              "consequential": true,
+              "dependency": "sequence",
+              "status": "pending"
+            },
+            {
+              "text": "Ask the tavern runner what they are offering",
+              "label": "Ask the tavern runner what they are offering",
+              "operation": "ASK",
+              "target_id": "tavern_runner",
+              "supported": true,
+              "consequential": true,
+              "dependency": "sequence",
+              "status": "pending"
+            }
+          ],
+          "execution_policy": "",
+          "communication_owner": "GM",
+          "communication_purpose": "CLARIFICATION",
+          "authorization": null
+        },
+        "live_chat_interpretation": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+          "model_communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication\": {\"recipient\": \"NPC\", \"purpose\": \"QUESTION\", \"subject\": \"offerings of the tavern runner\", \"evidence_refs\": [\"visible:2\"]}, \"communication_mode\": \"IN_WORLD_ACTION\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Approach the tavern runner and ask what they are offering\"}, \"asserted_premises\": [{\"text\": \"The tavern runner is trading hot stew and rumors near the rain barrel.\"}], \"requested_outcomes\": [{\"text\": \"Learn what the tavern runner is offering\"}], \"action_components\": [{\"order\": 1, \"description\": \"Steal the purse\", \"target_ref\": \"tavern_runner\", \"operation_class\": \"ATTACK\"}, {\"order\": 2, \"description\": \"Ask the tavern runner what they are offering\", \"target_ref\": \"tavern_runner\", \"operation_class\": \"ASK\"}], \"references\": {\"permitted_entity_ids\": [\"tavern_runner\"], \"unresolved_references\": []}, \"clarification_question\": \"\", \"correction\": {\"subject\": \"NONE\", \"note\": \"\"}}",
+          "provider_requests": [
+            {
+              "purpose": "interpretation",
+              "sent": true,
+              "model": "gpt-4.1-mini",
+              "input_tokens": 12,
+              "output_tokens": 8,
+              "total_tokens": 20
+            }
+          ],
+          "record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Approach the tavern runner and ask what they are offering"
+            },
+            "asserted_premises": [
+              {
+                "text": "The tavern runner is trading hot stew and rumors near the rain barrel.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "Learn what the tavern runner is offering",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [
+              {
+                "order": 1,
+                "description": "Steal the purse",
+                "target_ref": "tavern_runner",
+                "operation_class": "ATTACK"
+              },
+              {
+                "order": 2,
+                "description": "Ask the tavern runner what they are offering",
+                "target_ref": "tavern_runner",
+                "operation_class": "ASK"
+              }
+            ],
+            "references": {
+              "permitted_entity_ids": [
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            },
+            "communication": {
+              "recipient": "NPC",
+              "purpose": "QUESTION",
+              "subject": "offerings of the tavern runner",
+              "evidence_refs": [
+                "visible:2"
+              ]
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": ""
+            },
+            "public_evidence": {
+              "visible:2": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+            }
+          }
+        },
+        "stored_interpretation_bridge": null,
+        "provider_calls": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 9,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 1,
+          "input_tokens": 12,
+          "output_tokens": 8,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "conversational_clarify",
+          "successful": false,
+          "provider_narration_skipped": false
+        }
+      }
+    }
+  },
+  "before": {
+    "world": {
+      "settlements": [
+        {
+          "id": "cinderwatch",
+          "name": "Cinderwatch",
+          "type": "frontier_city",
+          "tags": [
+            "frontier",
+            "trade",
+            "unstable"
+          ],
+          "status": "strained",
+          "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 2,
+          "goal": "Expand territory",
+          "current_plan": "Gathering influence",
+          "agenda_progress": 0,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 2,
+          "goal": "Control black market",
+          "current_plan": "Establishing smuggling routes",
+          "agenda_progress": 0,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 1,
+          "goal": "Suppress dangerous magic",
+          "current_plan": "Watching newcomers",
+          "agenda_progress": 0,
+          "assets": []
+        }
+      ],
+      "assets": [],
+      "projects": [],
+      "world_flags": [],
+      "event_log": [],
+      "inference_rules": [],
+      "clues": {},
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "role": "guard",
+          "affiliation": "cinderwatch",
+          "disposition": "neutral",
+          "current_agenda": "patrol_gate",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "patrol",
+              "text": "A patrol went missing near the old milestone."
+            }
+          ],
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "role": "informant",
+          "affiliation": "ash_cowl",
+          "disposition": "friendly",
+          "current_agenda": "sell_rumors",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "stew",
+              "text": "Hot stew and rumors for coin."
+            }
+          ],
+          "stance_toward_player": "favorable",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        }
+      ],
+      "world_state": {
+        "flags": {},
+        "counters": {},
+        "clocks": {}
+      }
+    },
+    "session": {
+      "active_scene_id": "frontier_gate",
+      "visited_scene_ids": [
+        "frontier_gate"
+      ],
+      "current_date": "Day 1",
+      "turn_counter": 0,
+      "response_mode": "standard",
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "interaction_context": {
+        "active_interaction_target_id": null,
+        "active_interaction_kind": null,
+        "interaction_mode": "none",
+        "engagement_level": "none",
+        "conversation_privacy": null,
+        "player_position_context": null
+      },
+      "scene_state": {
+        "active_scene_id": "frontier_gate",
+        "active_entities": [],
+        "entity_presence": {},
+        "current_interlocutor": null,
+        "emergent_addressables": [],
+        "promoted_actor_npc_map": {}
+      },
+      "runtime_scene_overlays": {},
+      "scene_runtime": {},
+      "clue_knowledge": {},
+      "lead_registry": {},
+      "npc_runtime": {},
+      "last_action_debug": null,
+      "debug_traces": [],
+      "flags": {},
+      "chat_history": [],
+      "character_name": null,
+      "campaign_run_id": "043731abedc3bd236eae9151",
+      "session_id": "043731abedc3bd236eae9151",
+      "campaign_started": false,
+      "last_saved_at": "2026-11-01T18:50:08.803321Z"
+    },
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "class": "Wizard",
+      "level": 1,
+      "ancestry": "Human",
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "ac": {
+        "normal": 12,
+        "touch": 12,
+        "flat_footed": 10
+      },
+      "initiative_bonus": 2,
+      "speed": 30,
+      "ability_scores": {
+        "str": 10,
+        "dex": 14,
+        "con": 12,
+        "int": 18,
+        "wis": 12,
+        "cha": 10
+      },
+      "saves": {
+        "fort": 1,
+        "ref": 2,
+        "will": 3
+      },
+      "bab": 0,
+      "cmb": 0,
+      "cmd": 12,
+      "skills": {
+        "knowledge_arcana": 8,
+        "spellcraft": 8,
+        "perception": 4,
+        "sense_motive": 4,
+        "stealth": 4,
+        "diplomacy": 4,
+        "intimidate": 2,
+        "bluff": 2
+      },
+      "attacks": [
+        {
+          "id": "quarterstaff",
+          "name": "Quarterstaff",
+          "attack_bonus": 0,
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 6,
+            "bonus": 0,
+            "type": "bludgeoning"
+          },
+          "type": "melee"
+        },
+        {
+          "id": "crossbow",
+          "name": "Light Crossbow",
+          "attack_bonus": 2,
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 8,
+            "bonus": 0,
+            "type": "piercing"
+          },
+          "type": "ranged"
+        }
+      ],
+      "conditions": [],
+      "inventory": [
+        {
+          "id": "spellbook",
+          "name": "Spellbook",
+          "quantity": 1,
+          "usable": false
+        }
+      ],
+      "spells": {
+        "prepared": [
+          {
+            "id": "daze",
+            "name": "Daze",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "detect_magic",
+            "name": "Detect Magic",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "magic_missile",
+            "name": "Magic Missile",
+            "cast": false,
+            "level": 1
+          },
+          {
+            "id": "shield",
+            "name": "Shield",
+            "cast": false,
+            "level": 1
+          }
+        ],
+        "slots": {
+          "0": 3,
+          "1": 1
+        }
+      },
+      "notes": "Default template character. Import a custom sheet for campaign play."
+    },
+    "campaign": {
+      "title": "Ashen Thrones",
+      "premise": "A grimdark political sandbox where fractured powers, ancient mysteries, and ruthless factions compete for dominance in a dangerous world. Survival, intrigue, and warfare shape the rise or destruction of new rulers.",
+      "tone": "grimdark political intrigue with survival and horror elements",
+      "player_character": "Galinor",
+      "character_role": "A wandering wizard seeking to establish a stronghold of power in a fractured and hostile world.",
+      "starting_context": "Galinor arrives in a struggling frontier city at the edge of rival territories, where noble houses scheme, criminal syndicates rule the shadows, and whispers spread of an abandoned fortress nearby\u2014one said to rest atop ancient and dangerous magical foundations.",
+      "character_secret": {
+        "title": "The Betrayed Loyalist",
+        "description": "Galinor once served faithfully as a trusted court mage. When he uncovered evidence of a conspiracy and brought it to his ruler, he discovered the conspiracy was orchestrated by the throne itself.",
+        "implications": [
+          "The ruler cannot allow Galinor to live if his identity becomes known.",
+          "Agents of the throne may hunt surviving witnesses of the purge.",
+          "Galinor holds knowledge capable of destabilizing an entire realm."
+        ],
+        "hidden_truth": "The conspiracy may have involved forbidden magic or darker powers influencing the throne."
+      },
+      "world_pressures": [
+        "Rival noble houses competing for territory and influence.",
+        "Religious orders attempting to control or suppress dangerous magic.",
+        "Criminal syndicates dominating trade, smuggling, and urban power.",
+        "Invading armies exploiting political instability.",
+        "Eldritch cults pursuing forgotten rituals and ancient powers."
+      ],
+      "environmental_threats": [
+        "harsh seasons and famine",
+        "disease and plague",
+        "dangerous wilderness and monsters",
+        "war-torn lands and refugee movements",
+        "cursed ruins and unstable magical sites"
+      ],
+      "magic_style": "rare, mysterious, feared, and poorly understood. Magical knowledge is fragmented and often tied to ancient relics, ruins, or forbidden traditions.",
+      "campaign_structure": "A sandbox political world where the player gradually establishes a locus of power through alliances, conquest, intrigue, and exploration.",
+      "long_term_goals": [
+        "Establish a fortified stronghold",
+        "Build a network of agents and allies",
+        "Acquire rare magical knowledge",
+        "Manipulate regional politics"
+      ],
+      "gm_guidance": [
+        "Emphasize faction intrigue, shifting alliances, and fragile political balance.",
+        "Make survival and logistics meaningful pressures.",
+        "Allow the player to acquire land, followers, and influence gradually.",
+        "Let the world react dynamically as the player's influence grows."
+      ]
+    },
+    "combat": {
+      "in_combat": false,
+      "round": 0,
+      "initiative_order": [],
+      "turn_index": 0,
+      "active_actor_id": null,
+      "player_turn_used": false
+    },
+    "conditions": {
+      "dazed": {
+        "name": "Dazed",
+        "kind": "condition",
+        "default_effects": {
+          "no_actions": true
+        }
+      },
+      "shaken": {
+        "name": "Shaken",
+        "kind": "condition",
+        "default_effects": {
+          "attack_penalty": 2,
+          "save_penalty": 2,
+          "skill_penalty": 2
+        }
+      },
+      "sickened": {
+        "name": "Sickened",
+        "kind": "condition",
+        "default_effects": {
+          "attack_penalty": 2,
+          "damage_penalty": 2,
+          "save_penalty": 2,
+          "skill_penalty": 2
+        }
+      },
+      "blinded": {
+        "name": "Blinded",
+        "kind": "condition",
+        "default_effects": {
+          "ac_penalty": 2,
+          "lose_dex_to_ac": true
+        }
+      },
+      "stunned": {
+        "name": "Stunned",
+        "kind": "condition",
+        "default_effects": {
+          "no_actions": true,
+          "ac_penalty": 2,
+          "lose_dex_to_ac": true
+        }
+      },
+      "risky_strike": {
+        "name": "Risky Strike",
+        "kind": "combat_toggle",
+        "default_effects": {}
+      },
+      "defensive_stance": {
+        "name": "Defensive Stance",
+        "kind": "combat_toggle",
+        "default_effects": {}
+      },
+      "shield": {
+        "name": "Shield",
+        "kind": "spell_effect",
+        "default_effects": {
+          "ac_bonus": 4
+        }
+      }
+    }
+  },
+  "after": {
+    "world": {
+      "settlements": [
+        {
+          "id": "cinderwatch",
+          "name": "Cinderwatch",
+          "type": "frontier_city",
+          "tags": [
+            "frontier",
+            "trade",
+            "unstable"
+          ],
+          "status": "strained",
+          "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 2,
+          "goal": "Expand territory",
+          "current_plan": "Gathering influence",
+          "agenda_progress": 0,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 2,
+          "goal": "Control black market",
+          "current_plan": "Establishing smuggling routes",
+          "agenda_progress": 0,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 1,
+          "goal": "Suppress dangerous magic",
+          "current_plan": "Watching newcomers",
+          "agenda_progress": 0,
+          "assets": []
+        }
+      ],
+      "assets": [],
+      "projects": [],
+      "world_flags": [],
+      "event_log": [],
+      "inference_rules": [],
+      "clues": {},
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "role": "guard",
+          "affiliation": "cinderwatch",
+          "disposition": "neutral",
+          "current_agenda": "patrol_gate",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "patrol",
+              "text": "A patrol went missing near the old milestone."
+            }
+          ],
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "role": "informant",
+          "affiliation": "ash_cowl",
+          "disposition": "friendly",
+          "current_agenda": "sell_rumors",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "stew",
+              "text": "Hot stew and rumors for coin."
+            }
+          ],
+          "stance_toward_player": "favorable",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        }
+      ],
+      "world_state": {
+        "flags": {},
+        "counters": {},
+        "clocks": {}
+      }
+    },
+    "session": {
+      "active_scene_id": "frontier_gate",
+      "visited_scene_ids": [
+        "frontier_gate"
+      ],
+      "current_date": "Day 1",
+      "turn_counter": 0,
+      "response_mode": "standard",
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "interaction_context": {
+        "active_interaction_target_id": null,
+        "active_interaction_kind": null,
+        "interaction_mode": "none",
+        "engagement_level": "none",
+        "conversation_privacy": null,
+        "player_position_context": null
+      },
+      "scene_state": {
+        "active_scene_id": "frontier_gate",
+        "active_entities": [],
+        "entity_presence": {},
+        "current_interlocutor": null,
+        "emergent_addressables": [],
+        "promoted_actor_npc_map": {}
+      },
+      "runtime_scene_overlays": {},
+      "scene_runtime": {},
+      "clue_knowledge": {},
+      "lead_registry": {},
+      "npc_runtime": {},
+      "last_action_debug": null,
+      "debug_traces": [],
+      "flags": {},
+      "chat_history": [],
+      "character_name": null,
+      "campaign_run_id": "043731abedc3bd236eae9151",
+      "session_id": "043731abedc3bd236eae9151",
+      "campaign_started": false,
+      "last_saved_at": "2026-11-01T18:50:08.866584Z",
+      "conversational_context": {
+        "pending_clarification": null,
+        "delivered_exchanges": [
+          {
+            "speaker_id": "",
+            "speaker_name": "",
+            "addressee": "player",
+            "ownership": "gm",
+            "player_text": "I steal the runner's purse and ask about prices.",
+            "delivered_text": "I cannot carry out Steal the purse, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "",
+            "uncertain": true,
+            "commitment": false,
+            "scene_id": "frontier_gate",
+            "turn": 0,
+            "active": true,
+            "authorized_proposition": "",
+            "answer_sufficiency": "",
+            "proposition_id": "",
+            "response_integrity_digest": "8cb09526845ac615735c50fec6bd0602ab1876a4e8dfc8aa9d39eb9088751c59",
+            "authorization_source": "conversational_decision:proposal_not_eligible",
+            "adoption_turn_identity": ""
+          }
+        ],
+        "last_gm_exchange": {
+          "category": "CLARIFY",
+          "owner": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Approach the tavern runner and ask what they are offering",
+          "response": "I cannot carry out Steal the purse, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+          "refusal_reason": null,
+          "scene_id": "frontier_gate"
+        }
+      }
+    },
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "class": "Wizard",
+      "level": 1,
+      "ancestry": "Human",
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "ac": {
+        "normal": 12,
+        "touch": 12,
+        "flat_footed": 10
+      },
+      "initiative_bonus": 2,
+      "speed": 30,
+      "ability_scores": {
+        "str": 10,
+        "dex": 14,
+        "con": 12,
+        "int": 18,
+        "wis": 12,
+        "cha": 10
+      },
+      "saves": {
+        "fort": 1,
+        "ref": 2,
+        "will": 3
+      },
+      "bab": 0,
+      "cmb": 0,
+      "cmd": 12,
+      "skills": {
+        "knowledge_arcana": 8,
+        "spellcraft": 8,
+        "perception": 4,
+        "sense_motive": 4,
+        "stealth": 4,
+        "diplomacy": 4,
+        "intimidate": 2,
+        "bluff": 2
+      },
+      "attacks": [
+        {
+          "id": "quarterstaff",
+          "name": "Quarterstaff",
+          "attack_bonus": 0,
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 6,
+            "bonus": 0,
+            "type": "bludgeoning"
+          },
+          "type": "melee"
+        },
+        {
+          "id": "crossbow",
+          "name": "Light Crossbow",
+          "attack_bonus": 2,
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 8,
+            "bonus": 0,
+            "type": "piercing"
+          },
+          "type": "ranged"
+        }
+      ],
+      "conditions": [],
+      "inventory": [
+        {
+          "id": "spellbook",
+          "name": "Spellbook",
+          "quantity": 1,
+          "usable": false
+        }
+      ],
+      "spells": {
+        "prepared": [
+          {
+            "id": "daze",
+            "name": "Daze",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "detect_magic",
+            "name": "Detect Magic",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "magic_missile",
+            "name": "Magic Missile",
+            "cast": false,
+            "level": 1
+          },
+          {
+            "id": "shield",
+            "name": "Shield",
+            "cast": false,
+            "level": 1
+          }
+        ],
+        "slots": {
+          "0": 3,
+          "1": 1
+        }
+      },
+      "notes": "Default template character. Import a custom sheet for campaign play."
+    },
+    "campaign": {
+      "title": "Ashen Thrones",
+      "premise": "A grimdark political sandbox where fractured powers, ancient mysteries, and ruthless factions compete for dominance in a dangerous world. Survival, intrigue, and warfare shape the rise or destruction of new rulers.",
+      "tone": "grimdark political intrigue with survival and horror elements",
+      "player_character": "Galinor",
+      "character_role": "A wandering wizard seeking to establish a stronghold of power in a fractured and hostile world.",
+      "starting_context": "Galinor arrives in a struggling frontier city at the edge of rival territories, where noble houses scheme, criminal syndicates rule the shadows, and whispers spread of an abandoned fortress nearby\u2014one said to rest atop ancient and dangerous magical foundations.",
+      "character_secret": {
+        "title": "The Betrayed Loyalist",
+        "description": "Galinor once served faithfully as a trusted court mage. When he uncovered evidence of a conspiracy and brought it to his ruler, he discovered the conspiracy was orchestrated by the throne itself.",
+        "implications": [
+          "The ruler cannot allow Galinor to live if his identity becomes known.",
+          "Agents of the throne may hunt surviving witnesses of the purge.",
+          "Galinor holds knowledge capable of destabilizing an entire realm."
+        ],
+        "hidden_truth": "The conspiracy may have involved forbidden magic or darker powers influencing the throne."
+      },
+      "world_pressures": [
+        "Rival noble houses competing for territory and influence.",
+        "Religious orders attempting to control or suppress dangerous magic.",
+        "Criminal syndicates dominating trade, smuggling, and urban power.",
+        "Invading armies exploiting political instability.",
+        "Eldritch cults pursuing forgotten rituals and ancient powers."
+      ],
+      "environmental_threats": [
+        "harsh seasons and famine",
+        "disease and plague",
+        "dangerous wilderness and monsters",
+        "war-torn lands and refugee movements",
+        "cursed ruins and unstable magical sites"
+      ],
+      "magic_style": "rare, mysterious, feared, and poorly understood. Magical knowledge is fragmented and often tied to ancient relics, ruins, or forbidden traditions.",
+      "campaign_structure": "A sandbox political world where the player gradually establishes a locus of power through alliances, conquest, intrigue, and exploration.",
+      "long_term_goals": [
+        "Establish a fortified stronghold",
+        "Build a network of agents and allies",
+        "Acquire rare magical knowledge",
+        "Manipulate regional politics"
+      ],
+      "gm_guidance": [
+        "Emphasize faction intrigue, shifting alliances, and fragile political balance.",
+        "Make survival and logistics meaningful pressures.",
+        "Allow the player to acquire land, followers, and influence gradually.",
+        "Let the world react dynamically as the player's influence grows."
+      ]
+    },
+    "combat": {
+      "in_combat": false,
+      "round": 0,
+      "initiative_order": [],
+      "turn_index": 0,
+      "active_actor_id": null,
+      "player_turn_used": false
+    },
+    "conditions": {
+      "dazed": {
+        "name": "Dazed",
+        "kind": "condition",
+        "default_effects": {
+          "no_actions": true
+        }
+      },
+      "shaken": {
+        "name": "Shaken",
+        "kind": "condition",
+        "default_effects": {
+          "attack_penalty": 2,
+          "save_penalty": 2,
+          "skill_penalty": 2
+        }
+      },
+      "sickened": {
+        "name": "Sickened",
+        "kind": "condition",
+        "default_effects": {
+          "attack_penalty": 2,
+          "damage_penalty": 2,
+          "save_penalty": 2,
+          "skill_penalty": 2
+        }
+      },
+      "blinded": {
+        "name": "Blinded",
+        "kind": "condition",
+        "default_effects": {
+          "ac_penalty": 2,
+          "lose_dex_to_ac": true
+        }
+      },
+      "stunned": {
+        "name": "Stunned",
+        "kind": "condition",
+        "default_effects": {
+          "no_actions": true,
+          "ac_penalty": 2,
+          "lose_dex_to_ac": true
+        }
+      },
+      "risky_strike": {
+        "name": "Risky Strike",
+        "kind": "combat_toggle",
+        "default_effects": {}
+      },
+      "defensive_stance": {
+        "name": "Defensive Stance",
+        "kind": "combat_toggle",
+        "default_effects": {}
+      },
+      "shield": {
+        "name": "Shield",
+        "kind": "spell_effect",
+        "default_effects": {
+          "ac_bonus": 4
+        }
+      }
+    }
+  },
+  "classification": {
+    "transport_completed": true,
+    "pipeline_completed": false,
+    "action_executed": false,
+    "gameplay_completed": false,
+    "interaction_outcome": "rejected",
+    "semantic_dead_end": true,
+    "stop": true,
+    "reasons": [
+      "action_or_compound_rejection",
+      "interpretation_rejection"
+    ]
+  }
+}

@@ -26,6 +26,7 @@ from pathlib import Path
 import copy
 import inspect
 import json
+import os
 import re
 import time
 from contextvars import ContextVar
@@ -33,6 +34,8 @@ from fastapi import FastAPI, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
+from game.player_http_boundary import PlayerHTTPRoute
+from game.player_http_projection import project_player_state, project_player_response
 
 from game.models import (
     ActionRequest,
@@ -46,6 +49,7 @@ from game.models import (
 )
 from game.storage import (
     BASE_DIR,
+    DATA_DIR,
     create_snapshot,
     ensure_data_files_exist,
     get_save_summary,
@@ -72,6 +76,7 @@ from game.storage import (
     load_log,
     append_log,
     clear_log,
+    runtime_commit_scope,
     assert_canon_immutable,
     build_effective_scene,
     get_runtime_scene_overlay,
@@ -303,6 +308,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title='Ashen Thrones AI GM', lifespan=lifespan)  # noqa: E302
+app.router.route_class = PlayerHTTPRoute
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=False, allow_methods=['*'], allow_headers=['*'])
 
 STATIC_DIR = BASE_DIR / 'static'
@@ -724,6 +730,14 @@ def _live_interpretation_block_response(
         "request_upper_bound": accounting["request_upper_bound"],
         "status": "recorded" if accounting["request_upper_bound"] is not None else "unavailable",
     }
+    from game.publication_contract import classify_operational_refusal
+
+    sent = outcome.get("provider_request_sent") is True or any(
+        isinstance(row, dict) and row.get("sent") is True for row in (public.get("provider_requests") or [])
+    )
+    refusal = classify_operational_refusal(str(outcome.get("reason") or ""), provider_request_sent=sent)
+    if refusal:
+        resolution["metadata"].update(refusal)
     append_log(
         {
             "timestamp": utc_iso_now(),
@@ -739,6 +753,92 @@ def _live_interpretation_block_response(
                 "processing_outcome": str(outcome.get("reason") or "interpretation_rejected"),
                 "authoritative_mutation": False,
                 "resolver_invoked": False,
+                "response_class": resolution["metadata"].get("response_class"),
+            },
+        }
+    )
+    return {"ok": True, "gm_output": gm, "resolution": resolution}
+
+
+def _unadjudicated_retreat_response(req: ChatRequest, mode_decision: _CommunicationModeDecision) -> dict:
+    """Visible refusal for a simple retreat that physical adjudication did not take.
+
+    No turn increment, no position write, and no completed gameplay publication.
+    """
+    from game.physical_adjudication import UNADJUDICATED_RETREAT_SENTENCE
+    from game.publication_contract import (
+        UNADJUDICATED_RETREAT_REASON,
+        UNSUPPORTED_ACTION,
+        classify_operational_refusal,
+        stamp,
+    )
+
+    original_text = mode_decision.original_text or req.text or ""
+    sentence = UNADJUDICATED_RETREAT_SENTENCE
+    gm = {
+        "player_facing_text": sentence,
+        "tags": ["deterministic_narration", "provider_narration_skipped", UNADJUDICATED_RETREAT_REASON, "non_mutating"],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": f"provider_narration_skipped:{UNADJUDICATED_RETREAT_REASON}",
+        "metadata": {
+            "provider_narration_skipped": True,
+            "provider_narration_skip_reason": UNADJUDICATED_RETREAT_REASON,
+            "narration_provider_calls": 0,
+            "narration_retry_count": 0,
+        },
+    }
+    meta = {
+        "communication_mode": mode_decision.mode,
+        "mode_source": mode_decision.source,
+        "authoritative_mutation": False,
+        "resolver_invoked": False,
+        "gameplay_parser_invoked": False,
+        "narration_invoked": False,
+        "processing_outcome": UNADJUDICATED_RETREAT_REASON,
+        "provider_calls": {
+            "interpretation_requests": 0,
+            "narration_requests": 0,
+            "ooc_assistance_requests": 0,
+            "retries": 0,
+        },
+    }
+    classified = classify_operational_refusal(UNADJUDICATED_RETREAT_REASON, provider_request_sent=False)
+    if classified:
+        meta.update(classified)
+    stamp(meta, UNSUPPORTED_ACTION, publication=sentence)
+    resolution = {
+        "kind": "interact",
+        "action_id": "unadjudicated_retreat",
+        "label": original_text,
+        "prompt": original_text,
+        "success": False,
+        "resolved_transition": False,
+        "target_scene_id": None,
+        "discovered_clues": [],
+        "world_updates": None,
+        "state_changes": {},
+        "metadata": meta,
+    }
+    append_log(
+        {
+            "timestamp": utc_iso_now(),
+            "player_input": original_text,
+            "player_facing_text": sentence,
+            "request": {"chat": original_text},
+            "resolution": resolution,
+            "gm_output": gm,
+            "log_meta": {
+                "player_input": original_text,
+                "communication_mode": mode_decision.mode,
+                "mode_source": mode_decision.source,
+                "processing_outcome": UNADJUDICATED_RETREAT_REASON,
+                "authoritative_mutation": False,
+                "resolver_invoked": False,
+                "response_class": meta.get("response_class"),
             },
         }
     )
@@ -836,7 +936,7 @@ def _nonmutating_conversational_decision_response(
     }
     session = load_session()
     context_changed = _apply_conversational_context_update(session, decision)
-    if decision.intent_family != "ooc_help":
+    if decision.intent_family not in {"ooc_help", "player_initiative"}:
         from game.expressive_dialogue import attach_expression_audit, maybe_reword_continuity_line
         from game.immutable_valid_response import seal_host_speech
 
@@ -853,6 +953,27 @@ def _nonmutating_conversational_decision_response(
             world=load_world(),
         )
         attach_expression_audit(gm, expression_audit)
+    transient = decision.authorization.get("transient_local_action") if isinstance(decision.authorization, dict) else None
+    if (
+        isinstance(transient, dict)
+        and transient.get("status") == "completed"
+        and transient.get("narration_authorized") is True
+        and transient.get("scene_transition") is False
+        and transient.get("persistent_state_changed") is False
+        and gm.get("player_facing_text") == transient.get("player_facing_text")
+    ):
+        from game.publication_contract import FINAL_ENGINE_RESPONSE, note_completed_publication, stamp
+
+        resolution["success"] = True
+        resolution["resolved_transition"] = False
+        resolution["state_changes"] = {}
+        resolution["metadata"]["action_owner"] = "local_interaction"
+        resolution["metadata"]["transient_local_action"] = transient
+        stamp(resolution["metadata"], FINAL_ENGINE_RESPONSE, publication=str(gm.get("player_facing_text") or ""))
+        note_completed_publication(
+            session, text=str(gm.get("player_facing_text") or ""), resolution=resolution, gm=gm,
+        )
+        context_changed = True
     if decision.reason == "npc_request_declined" and decision.proposed_target:
         from game.dialogue_authority import remember_dialogue_commitment
 
@@ -874,7 +995,7 @@ def _nonmutating_conversational_decision_response(
         context_changed = context_changed or remembered is not None
     from game.conversational_continuity import record_delivered_exchange
 
-    if decision.intent_family != "ooc_help" and record_delivered_exchange(
+    if decision.intent_family not in {"ooc_help", "player_initiative"} and record_delivered_exchange(
         session,
         player_text=original_text,
         delivered_text=gm["player_facing_text"],
@@ -885,7 +1006,7 @@ def _nonmutating_conversational_decision_response(
         social=_semantic_decision_social(decision),
     ):
         context_changed = True
-    if decision.intent_family != "ooc_help":
+    if decision.intent_family not in {"ooc_help", "player_initiative"}:
         context = session.setdefault("conversational_context", {})
         context["last_gm_exchange"] = {
             "category": category, "owner": decision.communication_owner,
@@ -1070,6 +1191,18 @@ def deterministic_provider_skip_line(
     """
     if not isinstance(resolution, dict):
         return None
+    # The publication contract decides ownership. A nonempty sentence is not
+    # enough. Completed investigation and adjudication results do not pay for
+    # the large primary narration prompt after their sentence exists.
+    from game.publication_contract import narration_skip
+
+    owned = narration_skip(
+        resolution,
+        scene=scene if isinstance(scene, dict) else None,
+        session=session if isinstance(session, dict) else None,
+    )
+    if owned is not None:
+        return owned
     kind = str(resolution.get("kind") or "").strip().lower()
     meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
@@ -1117,6 +1250,25 @@ def deterministic_provider_skip_line(
         line, source = _authoritative_resolution_fact_text(resolution=resolution, scene=scene, world=world)
         if str(line or "").strip() and isinstance(source, dict) and source.get("source") == "scene_transition":
             return str(line).strip(), "resolved_scene_transition"
+    from game.physical_adjudication import disabled_retreat_skip
+    from game.publication_contract import (
+        UNADJUDICATED_RETREAT_REASON,
+        UNSUPPORTED_ACTION,
+        classify_operational_refusal,
+        stamp,
+    )
+
+    refused = disabled_retreat_skip(str(player_text or ""), session if isinstance(session, dict) else None)
+    if refused and isinstance(resolution, dict):
+        meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+        resolution["metadata"] = meta
+        classified = classify_operational_refusal(UNADJUDICATED_RETREAT_REASON, provider_request_sent=False)
+        if classified:
+            meta.update(classified)
+        stamp(meta, UNSUPPORTED_ACTION, publication=refused)
+        meta["narration_invoked"] = False
+        meta["authoritative_mutation"] = False
+        return refused, UNADJUDICATED_RETREAT_REASON
     return None
 
 
@@ -2617,6 +2769,10 @@ def _apply_authoritative_resolution_state_mutation(
         inter_id = resolution.get('interactable_id')
         if isinstance(inter_id, str) and inter_id.strip():
             mark_interactable_resolved(session, scene['scene']['id'], inter_id.strip())
+            known = (session.get('clue_knowledge') or {}).get(resolution.get('clue_id'))
+            if (isinstance(known, dict) and known.get('source_scene') == scene['scene']['id']
+                    and known.get('text') == resolution.get('clue_text')):
+                known.setdefault('source_interactable', inter_id.strip())
         # Also mark action_id so affordances keyed by it get relabeled.
         action_id = resolution.get('action_id') or (normalized_action.get('id') if normalized_action else None)
         if action_id:
@@ -4415,6 +4571,192 @@ def _build_gpt_narration_from_authoritative_state(
     return gm
 
 
+def _publish_experimental_integrated_narration(
+    gm,
+    canonical_gm,
+    response_payload,
+    resolution,
+    session,
+    player_text: str,
+    publication=None,
+) -> None:
+    """Copy a passed investigation sentence into the response after state is saved.
+
+    The flag is off unless it is exactly ``1``. Rejected narration is not read
+    into the response. A miss leaves the deterministic sentence in place.
+    """
+    if os.environ.get("ASHEN_EXPERIMENTAL_INTEGRATED_NARRATION", "").strip() != "1":
+        return
+    if publication is not None:
+        for target in (gm, canonical_gm, response_payload.get('gm_output')):
+            if isinstance(target, dict):
+                target['player_facing_text'] = publication['text']
+        return
+    try:
+        from game.quarantined_investigation_narration import (
+            deterministic_fallback_text,
+            note_player_facing_publication,
+            validated_player_text,
+        )
+
+        kind = resolution.get("kind") if isinstance(resolution, dict) else None
+        session_id = ""
+        if isinstance(session, dict):
+            session_id = str(session.get("campaign_run_id") or session.get("session_id") or "")
+        player_text = str(player_text or "")
+        text = validated_player_text(player_text, session_id=session_id, kind=kind)
+        mode = "published" if text else ""
+        targets = []
+        if isinstance(gm, dict):
+            targets.append(gm)
+        if isinstance(canonical_gm, dict) and canonical_gm is not gm:
+            targets.append(canonical_gm)
+        payload_gm = response_payload.get("gm_output") if isinstance(response_payload, dict) else None
+        if isinstance(payload_gm, dict) and all(payload_gm is not item for item in targets):
+            targets.append(payload_gm)
+        if not text:
+            # A disabled provider leaves an infrastructure sentence. The engine
+            # fallback is the player-facing recovery; rejected prose stays out.
+            stub = "Provider calls are disabled for this run, so no live narration was generated."
+            fallback = deterministic_fallback_text(player_text, session_id=session_id, kind=kind)
+            if not fallback or not any(str(item.get("player_facing_text") or "") == stub for item in targets):
+                return
+            text = fallback
+            mode = "fallback"
+        for target in targets:
+            if mode == "fallback" and str(target.get("player_facing_text") or "") != (
+                "Provider calls are disabled for this run, so no live narration was generated."
+            ):
+                continue
+            target["player_facing_text"] = text
+            metadata = target.get("metadata")
+            if isinstance(metadata, dict):
+                metadata["experimental_integrated_narration"] = mode
+        if mode == "published":
+            note_player_facing_publication()
+    except Exception:
+        return
+
+
+def _quarantine_investigation_narration_enabled() -> bool:
+    """Explicit opt-in. The string is the gate documented on the quarantine module."""
+    return os.environ.get("ASHEN_QUARANTINE_INVESTIGATION_NARRATION", "").strip() == "1"
+
+
+def _reject_foreign_scene_narration(gm, canonical_gm, response_payload, resolution, session) -> None:
+    """Keep player-facing scene prose on the scene the engine actually committed."""
+    from game.authored_action_language import scene_publication_replacement
+    targets = []
+    for item in (gm, canonical_gm, response_payload.get("gm_output") if isinstance(response_payload, dict) else None):
+        if isinstance(item, dict) and item not in targets:
+            targets.append(item)
+    if not targets:
+        return
+    current = str(targets[0].get("player_facing_text") or "")
+    replacement = scene_publication_replacement(current, session=session if isinstance(session, dict) else {}, resolution=resolution)
+    if not replacement or replacement == current:
+        return
+    for item in targets:
+        item["player_facing_text"] = replacement
+    if isinstance(resolution, dict):
+        meta = resolution.setdefault("metadata", {})
+        if isinstance(meta, dict):
+            meta["scene_publication_rejected"] = True
+
+
+def _finalize_investigation_publication(gm, canonical_gm, response_payload, resolution, session, player_text):
+    """Shared post-persistence PR66 boundary for chat and structured actions."""
+    engine_text = ""
+    if isinstance(resolution, dict):
+        meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+        engine_text = str(meta.get("engine_publication") or "").strip()
+    if engine_text:
+        # Resolver-authored text is the committed outcome. A later narration
+        # pass still has to clear the same consistency boundary.
+        for item in (gm, canonical_gm, response_payload.get("gm_output") if isinstance(response_payload, dict) else None):
+            if isinstance(item, dict):
+                item["player_facing_text"] = engine_text
+        from game.quarantined_investigation_narration import verify_engine_publication
+        verify_engine_publication(resolution, session, player_text, engine_text)
+        return
+    from game.authored_consequences import trusted_text, enabled_for_session
+    text = trusted_text(resolution)
+    from game.quarantined_investigation_narration import experimental_publication_enabled
+    optional_publication = (os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1'
+                            and experimental_publication_enabled(
+                                str(session.get('campaign_run_id') or session.get('session_id') or '')))
+    if not text and enabled_for_session(session) and not optional_publication:
+        # The enrolled branch lifecycle requires its prerequisite discovery to
+        # reach the player even when optional AI presentation is disabled.
+        # Reuse the existing current-resolver-only disclosure contract.
+        from game.quarantined_investigation_narration import current_lifecycle_disclosure
+        text = current_lifecycle_disclosure(resolution, player_text)
+    if not text and enabled_for_session(session) and os.environ.get('ASHEN_EXPERIMENTAL_PLAYER_INITIATIVE') == '1':
+        # A newly revealed social clue is also a mandatory current outcome.
+        # Optional presentation cannot replace it with unrelated scene prose.
+        social = (resolution or {}).get('social') or {}
+        topic = social.get('topic_revealed')
+        fact = str(topic.get('text') or '').strip() if isinstance(topic, dict) else ''
+        if (social.get('target_resolved') is True and (resolution or {}).get('success') is True
+                and fact and fact in ((resolution or {}).get('discovered_clues') or [])):
+            from game.social import format_authored_knowledge_realization_line
+            text = format_authored_knowledge_realization_line(resolution, fact)
+    if text:
+        for item in (gm, canonical_gm, response_payload.get('gm_output')):
+            if isinstance(item, dict):
+                item['player_facing_text'] = text
+        _reject_foreign_scene_narration(gm, canonical_gm, response_payload, resolution, session)
+        return
+    publication = None
+    if os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1':
+        from game.quarantined_investigation_narration import prepare_authoritative_publication
+        publication = prepare_authoritative_publication(
+            resolution, str(session.get('campaign_run_id') or session.get('session_id') or ''), player_text)
+    publication_failure = None
+    try:
+        args = (gm, canonical_gm, response_payload, resolution, session, player_text)
+        if publication is None:
+            _publish_experimental_integrated_narration(*args)
+        else:
+            _publish_experimental_integrated_narration(*args, publication=publication)
+    except Exception as exc:
+        if publication is None:
+            raise
+        publication_failure = 'publication_helper_' + type(exc).__name__
+    if publication is not None:
+        from game.quarantined_investigation_narration import verify_authoritative_publication
+        verify_authoritative_publication(
+            publication, [item for item in (gm, canonical_gm, response_payload.get('gm_output'))
+                          if isinstance(item, dict)], failure=publication_failure)
+    _reject_foreign_scene_narration(gm, canonical_gm, response_payload, resolution, session)
+
+
+def _observe_quarantined_investigation_narration(resolution, scene, session, player_text: str) -> None:
+    """After the player-facing narration object exists. Never replaces it.
+
+    The disabled path does not import the quarantine module. Every failure is
+    swallowed so a narration experiment cannot roll back a committed action.
+    """
+    if not _quarantine_investigation_narration_enabled():
+        return
+    try:
+        from game.quarantined_investigation_narration import (
+            observe_completed_investigation, bind_authoritative_publication,
+        )
+
+        known = tuple(sorted(get_all_known_clue_texts(session))) if isinstance(session, dict) else ()
+        evidence = observe_completed_investigation(
+            resolution=resolution if isinstance(resolution, dict) else None,
+            scene=scene if isinstance(scene, dict) else None,
+            known_clue_texts=known,
+            player_text=str(player_text or ""),
+        )
+        session_id = str(session.get('campaign_run_id') or session.get('session_id') or '')
+        bind_authoritative_publication(evidence, resolution, session_id)
+    except Exception:
+        return
+
+
 def _run_resolved_turn_pipeline(
     *,
     campaign: dict,
@@ -4499,6 +4841,13 @@ def _run_resolved_turn_pipeline(
         route_choice=route_choice,
         directed_social_entry=directed_social_entry,
     )
+    from game.authored_consequences import trusted_text
+    consequence_text = trusted_text(resolution)
+    if consequence_text:
+        gm = {'player_facing_text': consequence_text, 'tags': [], 'scene_update': None,
+              'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None,
+              'suggested_action': None, 'debug_notes': 'engine_authored_consequence'}
+        return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
     gm = _build_gpt_narration_from_authoritative_state(
         campaign=campaign,
         world=world,
@@ -4517,6 +4866,9 @@ def _run_resolved_turn_pipeline(
         latency_sink=latency_sink,
         normalized_action=normalized_action,
     )
+    # Quarantine sits after authoritative mutation and after the deterministic
+    # player-facing object is built. It is not consulted by finalization.
+    _observe_quarantined_investigation_narration(resolution, scene, session, user_text)
     return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
 
 
@@ -4842,7 +5194,7 @@ def _opening_response_rejection(
     return None
 
 
-def _opening_failure_response(reason: str) -> JSONResponse:
+def _opening_failure_response(reason: str, recovery: dict | None = None) -> JSONResponse:
     if reason == "provider_budget_refused":
         from game.provider_budget import PLAYTEST_STOP_MESSAGE
 
@@ -4853,17 +5205,28 @@ def _opening_failure_response(reason: str) -> JSONResponse:
         message = _OPENING_FAILURE_MESSAGE
         status_code = 422
         status = "opening_failed"
-    return JSONResponse(
-        status_code=status_code,
-        content={
-            "ok": False,
-            "status": status,
-            "error": message,
-            "opening_failure_reason": reason,
-            "campaign_started": False,
-            "gameplay_committed": False,
-        },
-    )
+    content = {
+        "ok": False,
+        "status": status,
+        "error": message,
+        "opening_failure_reason": reason,
+        "campaign_started": False,
+        "gameplay_committed": False,
+    }
+    if (
+        isinstance(recovery, dict)
+        and recovery.get("fallback_attempted")
+        and not recovery.get("fallback_succeeded")
+    ):
+        content["opening_recovery_error"] = _stable_opening_reason(
+            recovery.get("fallback_error"),
+            "opening_recovery_failed",
+        )
+        content["opening_recovery_class"] = _stable_opening_reason(
+            recovery.get("recovery_eligibility"),
+            "uncertain_rejection",
+        )
+    return JSONResponse(status_code=status_code, content=content)
 
 
 def _capture_opening_baseline(session: dict, world: dict, combat: dict) -> dict:
@@ -5023,13 +5386,29 @@ def _ui_mode_error_response(err: UiModePolicyError) -> JSONResponse:
 
 def _project_state_for_ui_mode(full_state: dict, ui_mode: str) -> dict:
     # Always compute projections from the single internal snapshot.
-    public_state = deep_project_public_payload(full_state)
+    public_state = project_player_state(full_state)
     out: dict = {"ui_mode": ui_mode, "public_state": public_state}
     if ui_mode == "author":
         out["author_state"] = deep_project_author_payload(full_state)
     elif ui_mode == "debug":
         out["debug_state"] = deep_project_debug_payload(full_state)
     return out
+
+
+def _project_player_runtime_response(response):
+    """Project the complete runtime result after all internal response enrichment.
+
+    Runtime endpoints admit only player mode. Keep their flat client contract,
+    applying the same recursive visibility rules as /api/state to every field,
+    including GM output, resolution and rejected-response state. Internal turn
+    helpers and persisted engine documents retain their full representations.
+    """
+    if isinstance(response, JSONResponse):
+        content = project_player_response(json.loads(response.body))
+        headers = {k: v for k, v in response.headers.items() if k != "content-length"}
+        return JSONResponse(content=content, status_code=response.status_code,
+                            headers=headers, background=response.background)
+    return project_player_response(response)
 
 
 def _extract_log_player_input(entry: dict | None) -> str:
@@ -5091,10 +5470,12 @@ def _project_log_entry_for_ui_mode(entry: dict, ui_mode: str) -> dict:
 
 @app.get('/api/state')
 def get_state(request: Request):
+    from game.integrated_play import ordered_turn
     try:
         ui_mode = resolve_requested_ui_mode(request)
-        st = compose_state()
-        return _project_state_for_ui_mode(st, ui_mode)
+        with ordered_turn(str(DATA_DIR), mutating=False):
+            st = compose_state()
+            return _project_state_for_ui_mode(st, ui_mode)
     except UiModePolicyError as e:
         return _ui_mode_error_response(e)
 
@@ -5180,7 +5561,16 @@ def update_character(request: Request, payload: dict):
         assert_mode_allows_runtime_action(ui_mode)
     except UiModePolicyError as e:
         return _ui_mode_error_response(e)
-    save_character(payload)
+    # Whole-character editing is not a classification authority. Preserve the
+    # established object-ID -> metadata binding, including across reordering.
+    from game.object_marking import _client_visibility_unchanged
+    from game.integrated_play import ordered_turn
+    from game import storage
+    with ordered_turn(str(DATA_DIR), mutating=True):
+        with storage._runtime_persistence_guard('update_character_visibility_guard'):
+            if not _client_visibility_unchanged(load_character(), payload):
+                return {'ok': False, 'ui_mode': ui_mode, 'error': 'trusted_visibility_operation_required'}
+            save_character(payload)
     return {'ok': True, 'ui_mode': ui_mode, 'character': payload}
 
 
@@ -5299,6 +5689,136 @@ def api_reset_session(request: Request):
     return {'ok': True, **_project_state_for_ui_mode(st, ui_mode)}
 
 
+def migrate_inventory_object_identity(inventory_index: int, *, expected_item: dict,
+                                      campaign_run_id: str, operation_id: str):
+    """Internal explicit migration entry; never called by reads or gameplay.
+
+    Standalone callers enter this existing lane here, not from inside a turn.
+    The full prior row is a selection precondition, never an identity seed.
+    """
+    from game import storage
+    from game.integrated_play import ordered_turn
+    from game.object_instances import IdentityResult, ensure_object_instance_identity
+
+    def rejected(reason):
+        return IdentityResult('rejected', error=reason)
+
+    with ordered_turn(str(DATA_DIR), mutating=True):
+        if not storage.CHARACTER_PATH.is_file() or not storage.SESSION_PATH.is_file():
+            return rejected('missing_runtime_state')
+        session = storage.load_session()
+        if session.get('campaign_run_id') != campaign_run_id:
+            return rejected('campaign_mismatch')
+        character = storage.load_character()
+        inventory = character.get('inventory') if isinstance(character, dict) else None
+        if (not isinstance(inventory, list) or type(inventory_index) is not int or
+                not 0 <= inventory_index < len(inventory)):
+            return rejected('invalid_selection')
+        if not isinstance(expected_item, dict) or inventory[inventory_index] != expected_item:
+            return rejected('stale_selection')
+        result = ensure_object_instance_identity(character, inventory_index,
+            campaign_run_id=campaign_run_id, operation_id=operation_id)
+        if result.status == 'assigned':
+            original = storage.CHARACTER_PATH.read_bytes()
+            try:
+                with storage.runtime_commit_scope():
+                    storage.save_character(result.character)
+            except Exception as exc:
+                if storage.CHARACTER_PATH.read_bytes() != original:
+                    raise storage.RuntimePersistenceCoherencyError('Identity migration rollback failed') from exc
+                raise
+        return result
+
+
+def inspect_inventory_object_markings(request: dict) -> dict:
+    """Internal authoritative read only. No player endpoint or observation grant."""
+    from game import storage
+    from game.integrated_play import ordered_turn
+    from game.object_marking import inspect_markings, _inspection_request_error
+    from copy import deepcopy
+
+    request = deepcopy(request)
+    error = _inspection_request_error(request)
+    if error:
+        return {'status':'rejected', 'error':error}
+    with ordered_turn(str(DATA_DIR), mutating=False):
+        with storage._runtime_persistence_guard('inspect_inventory_markings'):
+            # Existing loaders bootstrap absent files. Reads must never do so.
+            if not storage.CHARACTER_PATH.is_file() or not storage.SESSION_PATH.is_file():
+                return {'status':'rejected', 'error':'missing_runtime_state'}
+            try:
+                if storage.load_session().get('campaign_run_id') != request['campaign_run_id']:
+                    return {'status':'rejected', 'error':'campaign_mismatch'}
+                return inspect_markings(storage.load_character(), request)
+            except (ValueError, TypeError):
+                return {'status':'rejected', 'error':'invalid_runtime_state'}
+
+
+def add_inventory_object_marking(request: dict) -> dict:
+    """Commit a trusted structured addition through existing state authority."""
+    return _mutate_inventory_object_marking(request)
+
+
+def remove_inventory_object_marking(request: dict) -> dict:
+    """Commit a trusted structured ID-specific removal; never a gameplay route."""
+    return _mutate_inventory_object_marking(request, remove=True)
+
+
+def set_marking_visibility(request: dict, *, authorization=None) -> dict:
+    """Internal trusted classification only; no HTTP or natural-language route."""
+    return _mutate_inventory_object_marking(request, visibility=True, authorization=authorization)
+
+
+def _mutate_inventory_object_marking(request: dict, *, remove: bool = False,
+                                     visibility: bool = False, authorization=None) -> dict:
+    """Internal trusted structured entry. Never called by HTTP/gameplay routing.
+
+    Same lane as character identity and turns; durable dedupe is checked afresh,
+    without the turn lane's optional in-memory response cache.
+    """
+    from game import storage
+    from game.integrated_play import ordered_turn
+    from game.object_marking import prepare_marking, _request_error, prepare_removal, _removal_request_error
+    from game.object_marking import prepare_visibility, _visibility_request_error, _visibility_authorized
+    from copy import deepcopy
+
+    request = deepcopy(request)
+    validate = _removal_request_error if remove else _request_error
+    prepare = prepare_removal if remove else prepare_marking
+    operation = 'remove_inventory_marking' if remove else 'add_inventory_marking'
+    if visibility:
+        validate, prepare, operation = _visibility_request_error, prepare_visibility, 'set_marking_visibility'
+    error = validate(request)
+    if error:
+        return {'status':'rejected', 'error':error}
+    if visibility and not _visibility_authorized(request, authorization):
+        return {'status':'rejected', 'error':'untrusted_visibility_authorization'}
+    with ordered_turn(str(DATA_DIR), mutating=True):
+        # Hold the existing persistence guard across read/validate/save so an
+        # in-process snapshot restore cannot interleave this character operation.
+        with storage._runtime_persistence_guard(operation):
+            if not storage.CHARACTER_PATH.is_file() or not storage.SESSION_PATH.is_file():
+                return {'status':'rejected','error':'missing_runtime_state'}
+            if storage.load_session().get('campaign_run_id') != request['campaign_run_id']:
+                return {'status':'rejected','error':'campaign_mismatch'}
+            proposal = prepare(storage.load_character(), request,
+                **({'authorization': authorization} if visibility else {}))
+            if proposal['status'] == 'rejected':
+                return proposal
+            if proposal['status'] == 'replay':
+                return proposal['result']
+            assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=operation)
+            original = storage.CHARACTER_PATH.read_bytes()
+            try:
+                with storage.runtime_commit_scope():
+                    storage.save_character(proposal['character'])
+            except Exception as exc:
+                if storage.CHARACTER_PATH.read_bytes() != original:
+                    raise storage.RuntimePersistenceCoherencyError('Marking rollback failed; reconcile original request ID') from exc
+                raise
+            return proposal['result']
+
+
 @app.get('/api/snapshots')
 def api_list_snapshots(request: Request):
     """List all save snapshots (id, created_at, label)."""
@@ -5313,14 +5833,16 @@ def api_list_snapshots(request: Request):
 @app.post('/api/snapshots')
 def api_create_snapshot(request: Request, req: SnapshotCreateRequest):
     """Create a snapshot of current runtime state. Optional label for playtesting."""
+    from game.integrated_play import ordered_turn
     try:
         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
         assert_mode_allows_runtime_action(ui_mode)
     except UiModePolicyError as e:
         return _ui_mode_error_response(e)
-    meta = create_snapshot(label=req.label)
-    st = compose_state()
-    return {'ok': True, 'ui_mode': ui_mode, 'snapshot': meta, **_project_state_for_ui_mode(st, ui_mode)}
+    with ordered_turn(str(DATA_DIR), mutating=True):
+        meta = create_snapshot(label=req.label)
+        st = compose_state()
+        return {'ok': True, 'ui_mode': ui_mode, 'snapshot': meta, **_project_state_for_ui_mode(st, ui_mode)}
 
 
 @app.post('/api/snapshots/load')
@@ -5334,6 +5856,12 @@ def api_load_snapshot(request: Request, payload: dict):
     snapshot_id = (payload.get('snapshot_id') or payload.get('id') or '').strip()
     if not snapshot_id:
         return {'ok': False, 'error': 'snapshot_id required'}
+    from game.integrated_play import ordered_turn
+    with ordered_turn(str(DATA_DIR), mutating=True):
+        return _load_snapshot_body(snapshot_id, ui_mode)
+
+
+def _load_snapshot_body(snapshot_id, ui_mode):
     meta = load_snapshot(snapshot_id)
     if meta is None:
         return {'ok': False, 'error': 'Snapshot not found'}
@@ -5346,9 +5874,32 @@ def api_load_snapshot(request: Request, payload: dict):
 
 @app.post('/api/action')
 def api_action(request: Request, req: ActionRequest):
+    from game.integrated_play import ordered_turn, presentation_usage
+    from game.provider_budget import snapshot as provider_snapshot
     try:
         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
-        return action(req, ui_mode=ui_mode)
+        with ordered_turn(str(DATA_DIR), mutating=True, text=str(getattr(req, "intent", "") or req.action_type or "action")) as turn:
+            if turn.duplicate:
+                request.state.skip_publication_trace = True
+                return turn.result
+            usage_start = len(presentation_usage()['log'])
+            provider_start = len(provider_snapshot()['records'])
+            with runtime_commit_scope():
+                raw_result = action(req, ui_mode=ui_mode)
+                result = _project_player_runtime_response(raw_result)
+            from game.publication_contract import OPERATIONAL_REFUSAL, response_is_operational_refusal
+            operational = response_is_operational_refusal(raw_result)
+            if operational:
+                request.state.skip_publication_trace = True
+            request.state.publication_provenance = dict(source_handler='api_action',
+                presentation_rows=presentation_usage()['log'][usage_start:],
+                provider_rows=provider_snapshot()['records'][provider_start:],
+                publication_context=load_session().get('last_publication'),
+                publication_contract=(((raw_result.get('resolution') or {}).get('metadata') or {}).get('publication_contract')
+                                      if isinstance(raw_result, dict) else None),
+                response_class=OPERATIONAL_REFUSAL if operational else None)
+            turn.result = result
+            return result
     except UiModePolicyError as e:
         return _ui_mode_error_response(e)
 
@@ -5588,7 +6139,11 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             resolution=resolution,
             raw_player_text=fallback_user_text,
         )
+        from game.general_purpose_actions import resolve_social_check_publication
+        social_text = resolve_social_check_publication(resolution, character, session)
         gm = _build_check_prompt_gm_output(resolution)
+        if social_text:
+            gm["player_facing_text"] = social_text
         annotate_narration_path_kind(
             gm,
             path_kind="engine_check_required_prompt",
@@ -5862,6 +6417,19 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             'scene_transition_occurred': bool(resolution.get('resolved_transition')),
         }
 
+    response_payload = _build_turn_response_payload(gm=gm, resolution=resolution, include_resolution=True)
+    _finalize_investigation_publication(gm, gm, response_payload, resolution, session, fallback_user_text)
+    from game.publication_contract import note_completed_publication, stamp_budget_refusal
+
+    if isinstance(resolution, dict):
+        stamp_budget_refusal(resolution, gm if isinstance(gm, dict) else None)
+    note_completed_publication(
+        session,
+        text=str((gm or {}).get("player_facing_text") or ""),
+        resolution=resolution if isinstance(resolution, dict) else None,
+        gm=gm if isinstance(gm, dict) else None,
+    )
+    save_session(session)
     append_log(
         {
             'timestamp': utc_iso_now(),
@@ -5884,10 +6452,17 @@ def action(req: ActionRequest, ui_mode: str = "player"):
                 'surfaced_clues_in_narration_non_authoritative': surfaced_clue_telemetry,
                 'clocks_changed': {},
                 'response_type_contract': compact_response_type_contract(response_type_contract),
+                **(
+                    {"response_class": (resolution.get("metadata") or {}).get("response_class")}
+                    if isinstance(resolution, dict)
+                    and isinstance(resolution.get("metadata"), dict)
+                    and (resolution.get("metadata") or {}).get("response_class")
+                    else {}
+                ),
             },
         }
     )
-    return _build_turn_response_payload(gm=gm, resolution=resolution, include_resolution=True)
+    return response_payload
 
 
 def _complete_opening_turn_persistence_like_chat(
@@ -5990,6 +6565,41 @@ def _complete_opening_turn_persistence_like_chat(
             directed_social_entry=canonical_entry,
             attach_to_resolution=bool(isinstance(resolution, dict)),
         )
+    opening_recovery_record = None
+    if mark_campaign_started:
+        from game.opening_initialization_recovery import (
+            apply_opening_initialization_recovery,
+            diagnostic_opening_recovery,
+        )
+        from game.provider_budget import observe_opening_validation
+
+        gm, opening_recovery_record = apply_opening_initialization_recovery(
+            gm if isinstance(gm, dict) else None,
+            resolution if isinstance(resolution, dict) else None,
+            response_type_contract if isinstance(response_type_contract, dict) else None,
+            scene=scene if isinstance(scene, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            session=session if isinstance(session, dict) else None,
+        )
+        if opening_recovery_record.get("initialization_outcome") == "failed":
+            observe_opening_validation(
+                rejection=_stable_opening_reason(
+                    opening_recovery_record.get("original_rejection_code"),
+                    "opening_recovery_failed",
+                ),
+                recovery=_stable_opening_reason(
+                    opening_recovery_record.get("recovery_eligibility"),
+                    "uncertain_rejection",
+                ),
+                opening_recovery=diagnostic_opening_recovery(opening_recovery_record),
+            )
+            return _opening_failure_response(
+                _stable_opening_reason(
+                    opening_recovery_record.get("original_rejection_code"),
+                    "opening_recovery_failed",
+                ),
+                opening_recovery_record,
+            )
     remember_recent_contextual_leads(
         session,
         scene["scene"]["id"],
@@ -6121,17 +6731,50 @@ def _complete_opening_turn_persistence_like_chat(
     synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
     if mark_campaign_started:
+        from game.opening_presentation_renderer import enforce_rendered_publication
+
+        gm = enforce_rendered_publication(gm)
+        canonical_gm = gm
         opening_rejection = _opening_response_rejection(gm, resolution, response_type_contract)
+        from game.opening_initialization_recovery import (
+            diagnostic_opening_recovery,
+            stamp_opening_recovery_debug,
+        )
         from game.provider_budget import observe_opening_validation
-        observe_opening_validation(
-            rejection=opening_rejection,
-            recovery=_stable_opening_reason(
+
+        if opening_rejection and isinstance(opening_recovery_record, dict) and opening_recovery_record.get("fallback_succeeded"):
+            opening_recovery_record["initialization_outcome"] = "failed"
+            opening_recovery_record["fallback_succeeded"] = False
+            opening_recovery_record["fallback_error"] = opening_rejection
+            opening_recovery_record["state_integrity"] = "not_committed"
+        elif opening_rejection is None and isinstance(opening_recovery_record, dict):
+            opening_recovery_record["initialization_outcome"] = "started"
+            if opening_recovery_record.get("opening_source") == "deterministic_fallback":
+                opening_recovery_record["state_integrity"] = "authorized_initialization_only"
+            stamp_opening_recovery_debug(gm, opening_recovery_record)
+            canonical_gm = gm
+        if (
+            isinstance(opening_recovery_record, dict)
+            and opening_recovery_record.get("opening_source") == "deterministic_fallback"
+            and opening_recovery_record.get("fallback_succeeded")
+            and opening_rejection is None
+        ):
+            recovery_name = "deterministic_opening_recovery"
+        else:
+            recovery_name = _stable_opening_reason(
                 ((gm.get("metadata") or {}).get("accepted_response") or {}).get("provenance"),
                 "rejected_without_recovery" if opening_rejection else "unavailable",
-            ),
+            )
+        observe_opening_validation(
+            rejection=opening_rejection,
+            recovery=recovery_name,
+            opening_recovery=diagnostic_opening_recovery(opening_recovery_record),
         )
         if opening_rejection:
-            return _opening_failure_response(opening_rejection)
+            return _opening_failure_response(
+                opening_rejection,
+                opening_recovery_record if isinstance(opening_recovery_record, dict) and opening_recovery_record.get("fallback_attempted") else None,
+            )
     save_world(world)
 
     leads_inspection = _lead_debug_trace_around_authoritative_reconcile(session)
@@ -6295,7 +6938,24 @@ def _complete_opening_turn_persistence_like_chat(
         resolution=resolution if _include_res_chat else None,
         include_resolution=_include_res_chat,
     )
+    # State, clues, and clocks are already saved. This only selects response text.
+    _finalize_investigation_publication(
+        gm, canonical_gm, response_payload, resolution, session, player_text_for_eval)
     final_text = str(canonical_gm.get("player_facing_text") or "")
+    from game.publication_contract import note_completed_publication, stamp_budget_refusal
+
+    if isinstance(resolution, dict):
+        stamp_budget_refusal(resolution, canonical_gm if isinstance(canonical_gm, dict) else None)
+        response_class = (resolution.get("metadata") or {}).get("response_class") if isinstance(resolution.get("metadata"), dict) else None
+        if response_class:
+            log_meta["response_class"] = response_class
+    note_completed_publication(
+        session,
+        text=final_text,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        gm=canonical_gm if isinstance(canonical_gm, dict) else None,
+    )
+    save_session(session)
     payload_gm = response_payload.get("gm_output") if isinstance(response_payload, dict) else None
     if mark_campaign_started and isinstance(response_payload, dict):
         response_payload["gm_output"] = canonical_gm
@@ -6340,6 +7000,11 @@ def _complete_opening_turn_persistence_like_chat(
 
 @app.post('/api/start_campaign')
 def start_campaign(request: Request):
+    with runtime_commit_scope():
+        return _project_player_runtime_response(_start_campaign_response(request))
+
+
+def _start_campaign_response(request: Request):
     """First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path)."""
     from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
     if playtest_stop_reason():
@@ -6598,11 +7263,406 @@ def _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope:
 
 @app.post('/api/chat')
 def api_chat(request: Request, req: ChatRequest):
+    from game.integrated_play import ordered_turn, presentation_usage
+    from game.provider_budget import snapshot as provider_snapshot
     try:
         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
-        return chat(req, ui_mode=ui_mode)
+        key = (req.client_request_id or "").strip() or None
+        with ordered_turn(str(DATA_DIR), mutating=True, request_key=key, text=req.text or "") as turn:
+            if turn.duplicate:
+                request.state.skip_publication_trace = True
+                return turn.result
+            usage_start = len(presentation_usage()['log'])
+            provider_start = len(provider_snapshot()['records'])
+            with runtime_commit_scope():
+                raw_result = chat(req, ui_mode=ui_mode)
+                result = _project_player_runtime_response(raw_result)
+            from game.publication_contract import OPERATIONAL_REFUSAL, response_is_operational_refusal
+            operational = response_is_operational_refusal(raw_result)
+            if operational:
+                request.state.skip_publication_trace = True
+            request.state.publication_provenance = dict(source_handler='api_chat',
+                presentation_rows=presentation_usage()['log'][usage_start:],
+                provider_rows=provider_snapshot()['records'][provider_start:],
+                publication_context=load_session().get('last_publication'),
+                publication_contract=(((raw_result.get('resolution') or {}).get('metadata') or {}).get('publication_contract')
+                                      if isinstance(raw_result, dict) else None),
+                response_class=OPERATIONAL_REFUSAL if operational else None)
+            turn.result = result
+            return result
     except UiModePolicyError as e:
         return _ui_mode_error_response(e)
+
+
+def _marking_summary(proposal: dict, resolution: dict, outcome: str) -> dict:
+    return {
+        "outcome": outcome,
+        "operation": proposal.get("operation"),
+        "target_phrase": proposal.get("target_phrase") or "",
+        "content_phrase": proposal.get("content_phrase") or "",
+        "medium_phrase": proposal.get("medium_phrase") or "",
+        "missing": list(resolution.get("missing") or []),
+    }
+
+
+def _publish_committed_marking(req, mode_decision, *, text: str, outcome: str, summary: dict,
+                               evidence: dict, instance_id: str) -> dict:
+    """Seal narration only after the character save has returned.
+
+    A sealer that contradicts the committed marking is not published. The
+    character save stays in place, and the player receives the committed
+    outcome sentence instead.
+    """
+    from game.marking_observation import marking_commit_compatible, undisclosed_marking_contents
+
+    forbidden = undisclosed_marking_contents(load_character(), instance_id, [str(evidence.get("content") or "")])
+
+    def compatible(published: str) -> bool:
+        return marking_commit_compatible(evidence, published, forbidden=forbidden)
+
+    return _publish_reconciled_narration(
+        req, mode_decision, text=text, outcome=outcome, summary=summary,
+        source="grounded_marking:" + outcome, summary_key="marking_action",
+        compatible=compatible, success=True, mutated=True,
+    )
+
+
+def _publish_reconciled_narration(req, mode_decision, *, text: str, outcome: str, summary: dict,
+                                  source: str, summary_key: str, compatible, success, mutated: bool,
+                                  tag: str = "grounded_marking", mutation_label: str = "applied") -> dict:
+    """Publish one grounded sentence, rejecting a contradictory seal."""
+    from game.immutable_valid_response import restore_accepted_text, seal_host_speech
+    from game.marking_observation import install_published_line, reconcile_publication
+    from game.publication_contract import note_completed_publication
+
+    original_text = mode_decision.original_text or req.text or ""
+    gm = {
+        "player_facing_text": text,
+        "tags": [tag, outcome],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": tag + ":" + outcome,
+    }
+    action_ids = {
+        "marking_observation": "marking_observation",
+        "marking_removal": "marking_removal",
+    }
+    resolution = {
+        "kind": "custom",
+        "action_id": action_ids.get(summary_key, "grounded_marking"),
+        "label": original_text,
+        "prompt": original_text,
+        "success": success,
+        "resolved_transition": False,
+        "target_scene_id": None,
+        "discovered_clues": [],
+        "world_updates": None,
+        "state_changes": {"inventory_object_marking": mutation_label} if mutated else {},
+        "metadata": {
+            "authoritative_mutation": mutated,
+            "resolver_invoked": False,
+            "gameplay_parser_invoked": False,
+            "narration_invoked": False,
+            "processing_outcome": source,
+            summary_key: summary,
+            "provider_calls": {
+                "interpretation_requests": 0,
+                "narration_requests": 0,
+                "ooc_assistance_requests": 0,
+                "retries": 0,
+            },
+        },
+    }
+    sealed = None
+    try:
+        seal_host_speech(
+            gm, text=text, source=source, speaker_id="",
+            speaker_name="GM", resolution=resolution, player_text=original_text, world=load_world(),
+        )
+        sealed = str(gm.get("player_facing_text") or "")
+    except Exception:
+        sealed = None
+    decision = reconcile_publication(proposed=text, sealed=sealed, compatible=compatible)
+    if sealed != decision["text"]:
+        install_published_line(
+            gm, text=decision["text"], resolution=resolution, player_text=original_text, source=source,
+        )
+    published_text = decision["text"]
+    published = dict(summary)
+    published["publication_matches_commit"] = True
+    published["publication_disposition"] = decision["disposition"]
+    published["publication_persisted"] = False
+    resolution["metadata"][summary_key] = published
+    resolution["metadata"]["publication_failure"] = decision["disposition"] not in {"unchanged", "paraphrase"}
+    session = load_session()
+    from game.conversational_continuity import record_delivered_exchange
+
+    try:
+        record_delivered_exchange(
+            session, player_text=original_text, delivered_text=published_text,
+            scene_id=str(session.get("active_scene_id") or ""),
+            turn=int(session.get("turn_counter") or 0), ownership="gm",
+        )
+        context = session.setdefault("conversational_context", {})
+        if isinstance(context, dict):
+            context["last_gm_exchange"] = {
+                "category": "EXECUTE", "owner": "GM", "purpose": "ACTION",
+                "subject": original_text[:240], "response": published_text[:1200],
+                "refusal_reason": None, "scene_id": session.get("active_scene_id"),
+            }
+        note_completed_publication(session, text=published_text, resolution=resolution, gm=gm)
+        save_session(session)
+        append_log({
+            "timestamp": utc_iso_now(),
+            "player_input": original_text,
+            "player_facing_text": published_text,
+            "request": {"chat": original_text},
+            "resolution": resolution,
+            "gm_output": gm,
+            "log_meta": {
+                "player_input": original_text,
+                "communication_mode": mode_decision.mode,
+                "mode_source": mode_decision.source,
+                "processing_outcome": source,
+                "authoritative_mutation": mutated,
+                "resolver_invoked": False,
+            },
+        })
+        published["publication_persisted"] = True
+        resolution["metadata"][summary_key] = published
+    except Exception:
+        resolution["metadata"]["publication_failure"] = True
+        published["publication_persisted"] = False
+        resolution["metadata"][summary_key] = published
+    restore_accepted_text(gm)
+    return {"ok": True, "gm_output": _strip_internal_gm_keys(gm), "resolution": resolution}
+
+
+def _finish_grounded_marking(req, mode_decision, proposal, character, session, *, operation_id: str):
+    """Resolve, commit, then publish. Unresolved attempts do not write objects."""
+    from uuid import uuid4
+
+    from game.marking_action import (
+        player_outcome_text,
+        resolve_marking,
+        stage_grounded_marking,
+        technical_player_text,
+    )
+
+    resolution = resolve_marking(proposal, character, session)
+    if resolution.get("outcome") != "ready":
+        reason = "grounded_marking_rejected" if "destructive" in (resolution.get("missing") or []) else "grounded_marking_unresolved"
+        decision = ConversationalDecision(
+            category=ConversationalDecisionCategory.DECLINE,
+            primary_intention=req.text or "",
+            intent_family="physical_action",
+            missing_information=list(resolution.get("missing") or []),
+            reason=reason,
+            confidence=0.9,
+            player_facing_text=resolution.get("player_text") or technical_player_text(None),
+            intent_modality="committed",
+            execution_policy="decline_unresolved_marking",
+        )
+        return _nonmutating_conversational_decision_response(req, mode_decision, decision)
+    operation_id = operation_id or str(uuid4())
+    staged = stage_grounded_marking(character, resolution, operation_id)
+    summary = _marking_summary(proposal, resolution, staged.get("outcome") or "technical_failure")
+    if staged.get("outcome") not in {"staged", "replay"}:
+        decision = ConversationalDecision(
+            category=ConversationalDecisionCategory.DECLINE,
+            primary_intention=req.text or "",
+            intent_family="physical_action",
+            reason="grounded_marking_not_committed",
+            confidence=0.9,
+            player_facing_text=technical_player_text(staged.get("error")),
+            intent_modality="committed",
+            execution_policy="decline_uncommitted_marking",
+        )
+        return _nonmutating_conversational_decision_response(req, mode_decision, decision)
+    if staged.get("outcome") == "staged":
+        from game import storage as storage_module
+
+        assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="grounded_marking_action")
+        original = storage_module.CHARACTER_PATH.read_bytes() if storage_module.CHARACTER_PATH.is_file() else None
+        try:
+            save_character(staged["character"])
+            storage_module.preserve_committed_runtime("CHARACTER_PATH")
+        except Exception as exc:
+            current = storage_module.CHARACTER_PATH.read_bytes() if storage_module.CHARACTER_PATH.is_file() else None
+            if current != original:
+                raise storage_module.RuntimePersistenceCoherencyError(
+                    "Marking rollback failed; reconcile the original request"
+                ) from exc
+            raise
+    text = player_outcome_text(resolution, content=str(staged.get("content") or ""))
+    evidence = {
+        "content": str(staged.get("content") or ""),
+        "surface": str(resolution.get("surface_name") or ""),
+        "medium": str(resolution.get("medium_name") or ""),
+        "visibility": (resolution.get("visibility") or {}).get("classification") or "visible",
+        "consumption": False,
+    }
+    return _publish_committed_marking(
+        req, mode_decision, text=text, outcome="replay" if staged.get("outcome") == "replay" else "committed",
+        summary=summary, evidence=evidence, instance_id=str(resolution.get("instance_id") or ""),
+    )
+
+
+def _finish_marking_observation(req, mode_decision, proposal, character, session, scene):
+    """Read current visible markings. This path does not write the character."""
+    from game.marking_observation import (
+        observation_compatible,
+        project_observation,
+        resolve_observation,
+        undisclosed_marking_contents,
+    )
+
+    resolved = resolve_observation(proposal, character, session, scene)
+    if resolved.get("outcome") == "defer":
+        return None
+    if resolved.get("outcome") != "ready":
+        text = str(resolved.get("player_text") or "The writing could not be read.")
+        summary = {"outcome": resolved.get("outcome"), "target_phrase": proposal.get("target_phrase") or ""}
+
+        def compatible(published: str) -> bool:
+            return published.strip() == text.strip()
+
+        return _publish_reconciled_narration(
+            req, mode_decision, text=text, outcome=str(resolved.get("outcome") or "unresolved"),
+            summary=summary, source="marking_observation:" + str(resolved.get("outcome") or "unresolved"),
+            summary_key="marking_observation", compatible=compatible, success=None, mutated=False,
+        )
+    projected = project_observation(character, session, resolved)
+    text = str(projected.get("player_text") or "The writing could not be read.")
+    projection = projected.get("projection") if isinstance(projected.get("projection"), dict) else {}
+    permitted = []
+    properties = projection.get("properties") if isinstance(projection.get("properties"), list) else []
+    if properties and isinstance(properties[0], dict):
+        for value in properties[0].get("values") or []:
+            if isinstance(value, dict) and isinstance(value.get("content"), str):
+                permitted.append(value["content"])
+    forbidden = undisclosed_marking_contents(character, str(projected.get("instance_id") or ""), permitted)
+    summary = {
+        "outcome": "observed",
+        "target_phrase": proposal.get("target_phrase") or "",
+        "surface_name": projected.get("surface_name") or "",
+        "knowledge": properties[0].get("knowledge") if properties and isinstance(properties[0], dict) else "unknown",
+    }
+
+    def compatible(published: str) -> bool:
+        return observation_compatible(
+            str(projected.get("surface_name") or ""), projection, published, forbidden=forbidden,
+        )
+
+    return _publish_reconciled_narration(
+        req, mode_decision, text=text, outcome="observed", summary=summary,
+        source="marking_observation:observed", summary_key="marking_observation",
+        compatible=compatible, success=True, mutated=False,
+    )
+
+
+def _removal_summary(proposal, resolution, outcome) -> dict:
+    missing = [] if outcome in {"committed", "replay"} else list(resolution.get("missing") or [])
+    return {
+        "outcome": outcome,
+        "operation": "remove_marking",
+        "target_phrase": proposal.get("target_phrase") or "",
+        "marking_phrase": proposal.get("marking_phrase") or "",
+        "method": proposal.get("method") or "",
+        "resource_phrase": proposal.get("resource_phrase") or "",
+        "missing": missing,
+    }
+
+
+def _finish_grounded_removal(req, mode_decision, proposal, character, session, *, operation_id: str):
+    """Resolve one visible marking, commit through prepare_removal, then publish."""
+    from uuid import uuid4
+
+    from game.marking_observation import undisclosed_marking_contents
+    from game.marking_removal import (
+        committed_removal_text,
+        removal_commit_compatible,
+        removal_failure_compatible,
+        resolve_removal,
+        stage_grounded_removal,
+        technical_removal_text,
+    )
+
+    resolution = resolve_removal(proposal, character, session)
+    operation_id = operation_id or str(uuid4())
+    staged = stage_grounded_removal(character, resolution, operation_id)
+    if staged.get("outcome") == "rejected":
+        text = str(resolution.get("player_text") or technical_removal_text(None))
+        summary = _removal_summary(proposal, resolution, "unresolved")
+        instance_id = str(resolution.get("instance_id") or "")
+        forbidden = undisclosed_marking_contents(character, instance_id, []) if instance_id else []
+
+        def compatible(published: str) -> bool:
+            return removal_failure_compatible(published, forbidden=forbidden)
+
+        return _publish_reconciled_narration(
+            req, mode_decision, text=text, outcome="unresolved", summary=summary,
+            source="marking_removal:unresolved", summary_key="marking_removal",
+            compatible=compatible, success=False, mutated=False, tag="marking_removal",
+        )
+    if staged.get("outcome") not in {"staged", "replay"}:
+        text = technical_removal_text(staged.get("error"))
+        summary = _removal_summary(proposal, resolution, "technical_failure")
+        summary["error"] = staged.get("error") or ""
+
+        def compatible(published: str) -> bool:
+            return removal_failure_compatible(published, forbidden=[])
+
+        return _publish_reconciled_narration(
+            req, mode_decision, text=text, outcome="technical_failure", summary=summary,
+            source="marking_removal:technical_failure", summary_key="marking_removal",
+            compatible=compatible, success=False, mutated=False, tag="marking_removal",
+        )
+    if staged.get("outcome") == "staged":
+        from game import storage as storage_module
+
+        assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="grounded_marking_removal")
+        original = storage_module.CHARACTER_PATH.read_bytes() if storage_module.CHARACTER_PATH.is_file() else None
+        try:
+            save_character(staged["character"])
+            storage_module.preserve_committed_runtime("CHARACTER_PATH")
+        except Exception as exc:
+            current = storage_module.CHARACTER_PATH.read_bytes() if storage_module.CHARACTER_PATH.is_file() else None
+            if current != original:
+                raise storage_module.RuntimePersistenceCoherencyError(
+                    "Removal rollback failed; reconcile the original request"
+                ) from exc
+            raise
+    text = committed_removal_text(
+        method=str(staged.get("method") or ""),
+        surface=str(staged.get("surface_name") or "surface"),
+        content=str(staged.get("content") or ""),
+    )
+    evidence = {
+        "content": str(staged.get("content") or ""),
+        "surface": str(staged.get("surface_name") or ""),
+        "method": str(staged.get("method") or ""),
+        "consumption": False,
+    }
+    instance_id = str(staged.get("instance_id") or "")
+    forbidden = undisclosed_marking_contents(load_character(), instance_id, [evidence["content"]])
+    summary = _removal_summary(
+        proposal, resolution, "replay" if staged.get("outcome") == "replay" else "committed",
+    )
+
+    def compatible(published: str) -> bool:
+        return removal_commit_compatible(evidence, published, forbidden=forbidden)
+
+    return _publish_reconciled_narration(
+        req, mode_decision, text=text,
+        outcome="replay" if staged.get("outcome") == "replay" else "committed",
+        summary=summary, source="marking_removal:" + ("replay" if staged.get("outcome") == "replay" else "committed"),
+        summary_key="marking_removal", compatible=compatible, success=True,
+        mutated=staged.get("outcome") == "staged", tag="marking_removal", mutation_label="removed",
+    )
 
 
 def chat(req: ChatRequest, ui_mode: str = "player"):
@@ -6629,6 +7689,7 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             "tags": ["provider_budget_refused", "non_mutating"], "provider_requests": [],
         })
     original_player_text = mode_decision.original_text
+    marking_operation_id = str(getattr(req, "client_request_id", "") or "").strip()
     if mode_decision.conflict:
         return _communication_mode_conflict_response(req, mode_decision)
     if mode_decision.mode == "OOC":
@@ -6671,11 +7732,52 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             session=session,
             log=recent_log,
         )
+    if stored_interpretation is None and not campaign_start:
+        from game.marking_action import recognize_marking
+
+        proposal = recognize_marking(req.text or "")
+        claimed = proposal is not None and (
+            deterministic_decision is None
+            or deterministic_decision.reason == "unsupported_physical_manipulation"
+        )
+        if claimed:
+            return _finish_grounded_marking(
+                req, mode_decision, proposal, character, session,
+                operation_id=marking_operation_id,
+            )
+    if stored_interpretation is None and not campaign_start:
+        from game.marking_removal import recognize_removal
+
+        removal = recognize_removal(req.text or "")
+        claimed_removal = removal is not None and (
+            deterministic_decision is None
+            or deterministic_decision.category != ConversationalDecisionCategory.EXECUTE
+        )
+        if claimed_removal:
+            return _finish_grounded_removal(
+                req, mode_decision, removal, character, session,
+                operation_id=marking_operation_id,
+            )
+    if stored_interpretation is None and not campaign_start:
+        from game.marking_observation import claim_observation, recognize_observation
+
+        observation = recognize_observation(req.text or "")
+        reason = deterministic_decision.reason if deterministic_decision is not None else None
+        if claim_observation(reason, observation):
+            observed = _finish_marking_observation(
+                req, mode_decision, observation, character, session, scene,
+            )
+            if observed is not None:
+                return observed
     if (
         deterministic_decision is not None
         and deterministic_decision.category != ConversationalDecisionCategory.EXECUTE
     ):
         return _nonmutating_conversational_decision_response(req, mode_decision, deterministic_decision)
+    from game.physical_adjudication import disabled_retreat_skip
+
+    if not campaign_start and disabled_retreat_skip(req.text or "", session):
+        return _unadjudicated_retreat_response(req, mode_decision)
     bridged_from_stored_interpretation = None
     stored_bridge_meta: dict | None = None
     if (
@@ -6858,34 +7960,91 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             context["pending_intention"] = None
 
     from game.ordinary_semantic_ownership import (
+        _NON_ADDRESSEE_OPERATIONS,
+        addressee_authority_applies,
         assess_addressee_grounding,
         conversational_authorization_record,
         pending_addressee_clarification,
+        player_text_addresses_someone,
     )
 
-    if _confirmed_addressee_target(execution_decision) is None:
+    bridged_operation = ""
+    if isinstance(stored_bridge_meta, dict):
+        bridged_operation = str(stored_bridge_meta.get("operation") or "")
+    if not bridged_operation and isinstance(bridged_from_stored_interpretation, dict):
+        bridged_operation = str(
+            (
+                (bridged_from_stored_interpretation.get("metadata") or {}).get("stored_interpretation") or {}
+            ).get("operation")
+            or ""
+        )
+    # Movement replaces req.text with an internal route summary. Addressee
+    # authority stays on the original player line and on the accepted operation.
+    gate_text = original_player_text or req.text or ""
+    if bridged_operation.upper() != "MOVE":
+        gate_text = req.text or gate_text
+    grounded_authored_choice = bool(
+        isinstance(stored_bridge_meta, dict) and stored_bridge_meta.get("accepted") is True
+        and stored_bridge_meta.get("reason") == "grounded_authored_choice"
+        and bridged_operation == "CUSTOM"
+    )
+    # A general-purpose persuasion already names one visible NPC. The social
+    # resolver still has to accept that target; this only skips a second
+    # clarification of a target the bridge already checked.
+    grounded_general_social = bool(
+        isinstance(stored_bridge_meta, dict) and stored_bridge_meta.get("accepted") is True
+        and stored_bridge_meta.get("operation") == "PERSUADE"
+    )
+    # ELABORATE background speech already crossed the read-only planner and
+    # bridge. Revalidate that exact NPC target before skipping duplicate authored
+    # roster grounding; an arbitrary provider target cannot set this condition.
+    from game.bounded_improvisation import controlled_request as _npc_target_plan
+    _npc_plan = _npc_target_plan(gate_text, session=session, scene=scene, world=world)
+    grounded_background_social = bool(
+        isinstance(stored_bridge_meta, dict) and stored_bridge_meta.get('accepted') is True
+        and stored_bridge_meta.get('reason') == 'controlled_detail'
+        and _npc_plan and _npc_plan.get('npc_mode') == 'conversation'
+        and isinstance(bridged_from_stored_interpretation, dict)
+        and _npc_plan.get('id') == bridged_from_stored_interpretation.get('target_id')
+    )
+    if not grounded_authored_choice and not grounded_general_social and not grounded_background_social and _confirmed_addressee_target(execution_decision) is None and addressee_authority_applies(
+        operation=bridged_operation,
+        player_text=gate_text,
+    ):
         proposed_target = None
         if isinstance(bridged_from_stored_interpretation, dict):
             proposed_target = (
                 (bridged_from_stored_interpretation.get("metadata") or {}).get("stored_interpretation") or {}
             ).get("target_ref")
         addressee = assess_addressee_grounding(
-            req.text or "",
+            gate_text,
             scene=scene,
             world=world,
             session=session,
             proposed_target_id=str(proposed_target or "") or None,
         )
-        if addressee.get("direct_address") and addressee.get("operation_eligibility") == "requires_clarification":
-            pending = pending_addressee_clarification(addressee, req.text or "", scene)
+        speech_on_noncommunication = (
+            bridged_operation.upper() in _NON_ADDRESSEE_OPERATIONS
+            and player_text_addresses_someone(gate_text)
+        )
+        unresolved = addressee.get("direct_address") and addressee.get("operation_eligibility") == "requires_clarification"
+        if unresolved or speech_on_noncommunication:
+            pending = pending_addressee_clarification(addressee, gate_text, scene)
             blocked = ConversationalDecision(
                 category=ConversationalDecisionCategory.CLARIFY,
-                primary_intention=req.text or "",
+                primary_intention=gate_text,
                 intent_family="clarification",
                 communication_owner="GM",
                 communication_purpose="CLARIFICATION",
-                reason="unresolved_addressee",
-                player_facing_text=str(addressee.get("clarification") or "Which person do you mean? Nothing has been attempted."),
+                reason="unresolved_addressee" if unresolved and not speech_on_noncommunication else "communication_act_not_object_or_route",
+                player_facing_text=str(
+                    addressee.get("clarification")
+                    or (
+                        "Which person do you mean? Nothing has been attempted."
+                        if unresolved
+                        else "That request addresses someone. Nothing has been attempted."
+                    )
+                ),
                 context_update={
                     "conversational_context": {
                         "pending_clarification": pending,
@@ -6894,11 +8053,11 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                 },
                 execution_policy="answer_only",
                 proposed_operation="ASK",
-                proposed_target=str(proposed_target or "") or None,
+                proposed_target=None if speech_on_noncommunication else (str(proposed_target or "") or None),
                 missing_information=["interlocutor"],
                 authorization=conversational_authorization_record(
                     addressee,
-                    player_text=req.text or "",
+                    player_text=gate_text,
                     authority_provenance="pre_tick_addressee_gate",
                 ),
             )
@@ -6974,13 +8133,22 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
     committed["pending_intention"] = None
     session['turn_counter'] += 1
 
-    tick = advance_world_tick(world, campaign)
-    if not campaign_start:
+    # A revalidated background exchange or routine posture change consumes a
+    # transcript turn, but does not advance factions or pressure clocks.
+    from game.bounded_improvisation import controlled_request as _controlled_plan
+    _routine_plan = _controlled_plan(req.text or '', session=session, scene=scene, world=world)
+    _routine_turn = bool(
+        bridged_from_stored_interpretation is not None
+        and (bridged_from_stored_interpretation.get('metadata') or {}).get('controlled_world_fact')
+        and _routine_plan and _routine_plan.get('id') == bridged_from_stored_interpretation.get('target_id')
+        and (_routine_plan.get('npc_mode') in {'creation', 'conversation'} or _routine_plan.get('routine') in {'sit', 'stand', 'open', 'close', 'move', 'push', 'pull', 'lift', 'place', 'approach', 'retreat', 'establish', 'inspect_result'} or _routine_plan.get('physical') is True)
+    )
+    tick = {'events': []} if _routine_turn else advance_world_tick(world, campaign)
+    if not campaign_start and not _routine_turn:
         save_world(world)
 
-    # Advance a simple time pressure clock each chat turn.
     clocks_before = dict(get_or_init_clocks(session))
-    time_pressure_after = advance_clock(session, "time_pressure", 1)
+    time_pressure_after = clocks_before.get('time_pressure', 0) if _routine_turn else advance_clock(session, "time_pressure", 1)
 
     scene_rt = get_scene_runtime(session, scene['scene']['id'])
 
@@ -7493,7 +8661,11 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                 route_choice=route_choice,
                 directed_social_entry=canonical_entry,
             )
+            from game.general_purpose_actions import resolve_social_check_publication
+            social_text = resolve_social_check_publication(resolution, character, session)
             gm = _build_check_prompt_gm_output(resolution)
+            if social_text:
+                gm["player_facing_text"] = social_text
             gm = stamp_downstream_provenance(gm, resolution, kind="pending_check")
             annotate_narration_path_kind(
                 gm,
@@ -7749,6 +8921,11 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             "mode_source": mode_decision.source,
         },
     }
+    # A travel purpose is explanation-only; it never runs a second resolver.
+    deferred = (session.get("conversational_context") or {}).get("pending_clarification") or {}
+    if (execution_decision is not None and execution_decision.proposed_operation == "MOVE"
+            and deferred.get("kind") == "deferred_intentions" and isinstance(gm, dict)):
+        resolution.setdefault("metadata", {})["deferred_intentions"] = deferred.get("steps") or []
     result = _complete_opening_turn_persistence_like_chat(
         turn_started=turn_started,
         campaign=campaign,

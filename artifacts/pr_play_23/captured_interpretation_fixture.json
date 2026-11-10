@@ -1,0 +1,162 @@
+{
+  "player_text": "I approach the tavern runner and ask what they're offering.",
+  "raw_provider_envelope": {
+    "communication": {
+      "recipient": "NPC",
+      "purpose": "QUESTION",
+      "subject": "offerings of the tavern runner",
+      "evidence_refs": [
+        "visible:2"
+      ]
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "interpretation_status": "INTERPRETED",
+    "player_intent": {
+      "summary": "Approach the tavern runner and ask what they are offering"
+    },
+    "asserted_premises": [
+      {
+        "text": "The tavern runner is trading hot stew and rumors near the rain barrel."
+      }
+    ],
+    "requested_outcomes": [
+      {
+        "text": "Learn what the tavern runner is offering"
+      }
+    ],
+    "action_components": [
+      {
+        "order": 1,
+        "description": "Approach the tavern runner",
+        "target_ref": "tavern_runner",
+        "operation_class": "MOVE"
+      },
+      {
+        "order": 2,
+        "description": "Ask the tavern runner what they are offering",
+        "target_ref": "tavern_runner",
+        "operation_class": "ASK"
+      }
+    ],
+    "references": {
+      "permitted_entity_ids": [
+        "tavern_runner"
+      ],
+      "unresolved_references": []
+    },
+    "clarification_question": "",
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    }
+  },
+  "parsed_record": {
+    "communication_mode": "IN_WORLD_ACTION",
+    "interpretation_status": "INTERPRETED",
+    "player_intent": {
+      "summary": "Approach the tavern runner and ask what they are offering"
+    },
+    "asserted_premises": [
+      {
+        "text": "The tavern runner is trading hot stew and rumors near the rain barrel.",
+        "canon_status": "PLAYER_CLAIM"
+      }
+    ],
+    "requested_outcomes": [
+      {
+        "text": "Learn what the tavern runner is offering",
+        "adjudication_status": "UNADJUDICATED"
+      }
+    ],
+    "action_components": [
+      {
+        "order": 1,
+        "description": "Approach the tavern runner",
+        "target_ref": "tavern_runner",
+        "operation_class": "MOVE"
+      },
+      {
+        "order": 2,
+        "description": "Ask the tavern runner what they are offering",
+        "target_ref": "tavern_runner",
+        "operation_class": "ASK"
+      }
+    ],
+    "references": {
+      "permitted_entity_ids": [
+        "tavern_runner"
+      ],
+      "unresolved_references": []
+    },
+    "clarification_question": "",
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "communication": {
+      "recipient": "NPC",
+      "purpose": "QUESTION",
+      "subject": "offerings of the tavern runner",
+      "evidence_refs": [
+        "visible:2"
+      ]
+    },
+    "incidental_context": [],
+    "reference_reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": ""
+    },
+    "public_evidence": {
+      "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel."
+    }
+  },
+  "original_orchestration": {
+    "category": "CLARIFY",
+    "primary_intention": "Approach the tavern runner and ask what they are offering",
+    "intent_family": "unsupported_world_operation",
+    "incidental_context": [],
+    "proposed_operation": null,
+    "proposed_target": null,
+    "proposed_record": null,
+    "missing_information": [],
+    "context_references": [],
+    "requires_authoritative_execution": false,
+    "reason": "proposal_not_eligible",
+    "confidence": null,
+    "ambiguity": null,
+    "player_facing_text": "I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+    "context_update": {
+      "conversational_context": {
+        "pending_clarification": null
+      }
+    },
+    "intent_modality": "committed",
+    "secondary_intentions": [
+      {
+        "text": "Approach the tavern runner",
+        "label": "Approach the tavern runner",
+        "operation": "MOVE",
+        "target_id": "tavern_runner",
+        "supported": false,
+        "consequential": true,
+        "dependency": "sequence",
+        "status": "pending"
+      },
+      {
+        "text": "Ask the tavern runner what they are offering",
+        "label": "Ask the tavern runner what they are offering",
+        "operation": "ASK",
+        "target_id": "tavern_runner",
+        "supported": true,
+        "consequential": true,
+        "dependency": "sequence",
+        "status": "pending"
+      }
+    ],
+    "execution_policy": "",
+    "communication_owner": "GM",
+    "communication_purpose": "CLARIFICATION",
+    "authorization": null
+  }
+}

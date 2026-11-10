@@ -1,0 +1,31 @@
+{
+  "stop": true,
+  "overlay_comparison": {
+    "integrity": false,
+    "changes": [
+      {
+        "path": "session.json:/runtime_scene_overlays/frontier_gate/discovered_clues",
+        "change": "modified",
+        "before": [],
+        "after": [
+          "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "Ask around the old trading crossroads"
+        ],
+        "scene_id": "frontier_gate",
+        "overlay_id": "frontier_gate",
+        "classification": "uncertain_or_unauthorized_mutation",
+        "reason": "opening_not_accepted_or_ordinary_turn_authority_unavailable",
+        "authority_evidence": null
+      }
+    ],
+    "omitted_entries": 0,
+    "total_changes": 1,
+    "snapshots_preserved": true
+  },
+  "finding_categories": [
+    "unauthorized_overlay_mutation",
+    "invalid_progression",
+    "possibly_irrelevant_response"
+  ],
+  "note": "The saved state helper excludes session log; invalid_progression from this replay is not used as evidence. Overlay authority comparison is identical to the final full transcript."
+}

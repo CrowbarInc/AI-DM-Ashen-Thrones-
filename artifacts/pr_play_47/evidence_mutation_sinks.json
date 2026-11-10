@@ -1,0 +1,35 @@
+{
+  "calls": [],
+  "state_unchanged": true,
+  "accepted": {
+    "preview_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The missing patrol was last seen taking the northwest mud track past the crates.",
+    "plan": {
+      "structure": "setting_first",
+      "pace": "flowing",
+      "tone": "reflective",
+      "sensory_focus": "visual",
+      "detail": "extended",
+      "perspective": "close_observation",
+      "transition": "pause",
+      "information_order": "new_first"
+    },
+    "diagnostic": "accepted",
+    "used_fallback": false
+  },
+  "rejected": {
+    "preview_text": "You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+    "plan": {
+      "structure": "action_first",
+      "pace": "clipped",
+      "tone": "spare",
+      "sensory_focus": "none",
+      "detail": "lean",
+      "perspective": "second_person",
+      "transition": "direct",
+      "information_order": "new_first"
+    },
+    "diagnostic": "invalid_plan",
+    "used_fallback": true
+  },
+  "scope": "No preview is wired into the API; legacy sinks instrumented to fail if called."
+}

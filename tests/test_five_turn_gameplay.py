@@ -31,6 +31,7 @@ def state():
 
 def response(text='Rain falls over the gate district.', *, hard_valid=True):
     return {'ok': True, 'gm_output': {'player_facing_text': text, 'metadata': {'accepted_response': {
+        'speaker_id': 'fixture_speaker', 'interaction_completion': True,
         'provenance': 'initial_generation', 'hard_validation': {'hard_valid': hard_valid, 'reasons': []}}}}}
 
 
@@ -82,7 +83,9 @@ def test_G4_invalid_structure_turn3():
 
 
 @pytest.mark.parametrize('case,turn,category', [('turn2_exception', 'T2', 'provider_transport_failure'),
-                                             ('turn3_invalid_json', 'T3', 'invalid_interpretation_response')])
+                                             # Current fixture's T2 addressee binding fails;
+                                             # semantic stop must precede the T3 injection.
+                                             ('turn3_invalid_json', 'T2', 'action_binding_failure')])
 def test_real_http_turn_failures(case, turn, category):
     _, result = runner.run_playtest(scenario='FiveTurnGameplay', case=case, capture_response=True)
     assert result['verdict'] == 'FAIL'
@@ -154,11 +157,11 @@ def sequence():
     return runner.run_playtest(scenario='FiveTurnGameplay', capture_response=True)
 
 
-def test_G12_budget_exhaustion(sequence):
+def test_G12_semantic_stop_precedes_budget_exhaustion(sequence):
     _, result = sequence
-    assert result['provider_usage']['dispatched_requests'] == 6
-    assert result['stop_reason'] == 'provider_budget_exhaustion'
-    assert result['attempted_turns'] == 4 and result['skipped_turns'][0]['step_id'] == 'T5'
+    assert result['provider_usage']['dispatched_requests'] == 3
+    assert result['stop_reason'] == 'action_binding_failure'
+    assert result['attempted_turns'] == 2 and result['skipped_turns'][0]['step_id'] == 'T3'
     assert result['process_cleanup']['stopped']
 
 
@@ -178,7 +181,8 @@ def test_G13_turn_timeout(monkeypatch):
 def test_G14_missing_response_evidence():
     row = evaluate(body={'ok': True})
     assert row['mechanical']['status'] == 'INCONCLUSIVE'
-    assert row['semantic']['status'] == 'UNKNOWN'
+    assert row['semantic']['status'] == 'FAIL'
+    assert row['stop'] and not row['mechanical']['completed_interaction']
     assert 'insufficient_response_evidence' in categories(row)
 
 
@@ -228,10 +232,10 @@ def test_G22_exact_accounting(sequence):
     run, result = sequence
     events = g.read_events(run)
     usage = g.accounting(events)
-    assert usage['request_count'] == result['provider_usage']['dispatched_requests'] == 6
-    assert usage['input_tokens'] == 120 and usage['output_tokens'] == 60
-    assert usage['total_tokens'] == 180
-    assert sum(t['provider_usage']['request_count'] for t in result['gameplay_turns']) == 5  # opening is separate
+    assert usage['request_count'] == result['provider_usage']['dispatched_requests'] == 3
+    assert usage['input_tokens'] == 60 and usage['output_tokens'] == 30
+    assert usage['total_tokens'] == 90
+    assert sum(t['provider_usage']['request_count'] for t in result['gameplay_turns']) == 2  # opening is separate
 
 
 def test_G23_zero_live(sequence):

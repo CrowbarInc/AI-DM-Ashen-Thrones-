@@ -1,0 +1,21 @@
+# PR-PLAY-28 topic discovery
+
+Knowledge lives in NPC-owned `topics` (fallback `knowledge`) rows: id/text, aliases, clue_id/reveals_clue, clue_text, leads_to_scene/npc/rumor, disclosure, knowledge_status/known, hidden/secret, epistemic fields. Missing IDs derive from slugified text. There are no general dynamic relationship/quest prerequisite evaluators on this source path: nonpublic/unknown disclosure policies fail closed. This pass does not claim to implement staged disclosure or unlock logic.
+
+`game/social.py::_question_subject_tokens` removes generic and speaker-identity words. `authored_topic_relevant_to_question` then tests remaining token substrings against `_authored_topic_hay` (id/text/clue/aliases). The original plural “rumors” is not in the singular id patrol_rumor or its text; “sort” also does not match. Explicit “patrol” does. Answer sufficiency (`authored_answer_sufficient_for_question`, `dialogue_authority.topic_supports_requested_information`) is a separate check, not a matching synonym problem alone.
+
+Repair: a bounded, full-question recognizer `broad_topic_discovery_category` identifies category-only rumor/gossip asks. Explicit `discovery_categories: ["rumor"]` metadata and existing `npc_source_permitted` are required. No category is inferred from identifiers or arbitrary prose. Only the existing patrol_rumor row in data/world.json and its maintained data/validation/atgb/baselines/frontier-gate-v1/world.json fixture copy receive this metadata; no text/clue/lore changes or historical fixture migration. The integration applies that same targeted metadata to the captured preexisting topic. Other NPC fixtures exercise the general mechanism.
+
+Specific inquiries retain the existing relevance and sufficiency logic. Category inquiries use the metadata predicate in the common relevance function and `_next_topic_to_reveal`; candidates still pass answer sufficiency. “News”, local events, and specific “rumors about the merchant” are not collapsed into the category-only intent. The repair makes no additional provider call.
+
+`_next_topic_to_reveal` filters speaker ownership/disclosure, revealed-topic rules, optional explicit hint, relevance, and sufficiency. Category candidates are sorted by stable topic id, score zero, selecting one. Specific-question positive-score ties still request clarification via the existing ambiguous selection. Candidate_sources and selected_source preserve traceability. Discovery does not enumerate all topic texts.
+
+Existing session active_interaction_target_id / interaction context, npc_runtime revealed_topics, conversational_context, and persisted session log retain interlocutor and conversation evidence. No memory subsystem is added. The broad question is sufficient by itself; it does not rely on prior narration to grant permission. Existing clarification/history machinery remains in place. Repeated category inquiries follow existing allow_revealed behavior; topic rotation is not introduced.
+
+The selected row flows through `resolve_social_action` source reauthorization, topic_revealed, and `attach_dialogue_authority` into authorized NPC speech. No match retains existing uncertainty. No discovery-only protected-detail teaser system is added: currently discoverable category rows must already be disclosable.
+
+Modified production paths: game/social.py, data/world.json, and data/validation/atgb/baselines/frontier-gate-v1/world.json. Authority work is separate in tools/playtest; public_fact_dialogue and expression validation are unchanged. Metadata is opt-in; legacy rows without it continue to support specific inquiries but do not gain category discovery. Persisted campaigns must obtain this explicit author classification to support the broad intent.
+
+Fixture integrity: the one-row discovery metadata update in the maintained benchmark world is accompanied by its world.json digest in manifest.json and MANIFEST_SHA256 in tools/atgb/baseline.py. The manifest source note records this transformation; all other frozen fixture files are unchanged. Integrity verification remains strict.
+
+The baseline fixture retains its version name; its new manifest digest uniquely records the one-row classification change. Historical evidence snapshots and archives are not migrated or rewritten. Existing clone/reset and anti-tamper checks pass (fixture_integrity.xml).

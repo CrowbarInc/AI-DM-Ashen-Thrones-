@@ -1,0 +1,759 @@
+[
+  {
+    "case": "arrival",
+    "candidate": "The observatory is now behind you; you stand inside the vault.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The observatory is now behind you; you stand inside the vault.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "contradiction",
+    "candidate": "The missing patrol was last seen heading southeast.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The missing patrol was last seen heading southeast.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "count",
+    "candidate": "Exactly three travelers left these prints.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "Exactly three travelers left these prints.\n\nFaint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "culprit",
+    "candidate": "You recognize the culprit immediately.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "You recognize the culprit immediately.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "destination",
+    "candidate": "The prints lead straight to the salt fortress.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The prints lead straight to the salt fortress.\n\nFaint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "dust_pack",
+    "candidate": "A little dust lies in your pack.",
+    "expected_safe": true,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:items_added"
+      ],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": false,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [
+          {
+            "category": "items_added",
+            "claim": "A little dust",
+            "supported": false
+          }
+        ],
+        "reasons": [
+          "unsupported_mechanical_claim:items_added"
+        ]
+      }
+    },
+    "output": {
+      "preview_text": "You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "semantic_rejection",
+      "used_fallback": true,
+      "validation_json": "{\"hard_valid\": false, \"reasons\": [\"unsupported_mechanical_claim:items_added\"], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": false, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [{\"category\": \"items_added\", \"claim\": \"A little dust\", \"supported\": false}], \"reasons\": [\"unsupported_mechanical_claim:items_added\"]}}",
+      "review_required": true
+    },
+    "false_accept": false,
+    "false_reject": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "healing",
+    "candidate": "Your wounds knit shut as you read.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "Your wounds knit shut as you read.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "hidden_destination",
+    "candidate": "The patrol is hiding in the buried salt fortress.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The patrol is hiding in the buried salt fortress.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "hidden_identifier",
+    "candidate": "UNSEEN_CLUE_K42 identifies the chamber release.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "UNSEEN_CLUE_K42 identifies the chamber release.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "hidden_natural",
+    "candidate": "The ferryman secretly serves the Queen of Cinders.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The ferryman secretly serves the Queen of Cinders.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "key",
+    "candidate": "You find a silver key beneath the board.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "You find a silver key beneath the board.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "link",
+    "candidate": "The footprints belong to the missing patrol.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The footprints belong to the missing patrol.\n\nFaint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "npc_motive",
+    "candidate": "The ferryman hopes to betray you to his patron.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The ferryman hopes to betray you to his patron.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "poison",
+    "candidate": "The poison has worn off.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [
+        {
+          "text": "The poison has worn off.",
+          "kind": "incidental_fact",
+          "epistemic_status": "world_truth",
+          "grounded": false,
+          "consequential": false,
+          "family": "incidental"
+        }
+      ],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The poison has worn off.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [{\"text\": \"The poison has worn off.\", \"kind\": \"incidental_fact\", \"epistemic_status\": \"world_truth\", \"grounded\": false, \"consequential\": false, \"family\": \"incidental\"}], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "quest",
+    "candidate": "The investigation completes your quest.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The investigation completes your quest.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "quest_twist",
+    "candidate": "The missing courier is the employer in disguise.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The missing courier is the employer in disguise.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "wealth",
+    "candidate": "You are fifty crowns richer.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "You are fifty crowns richer.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  },
+  {
+    "case": "world_private",
+    "candidate": "The northern council has already ordered the gates sealed.",
+    "expected_safe": false,
+    "expected_basis": "authored semantic label; cup compatible only in separate inn scene",
+    "raw_existing_validator": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      }
+    },
+    "output": {
+      "preview_text": "The northern council has already ordered the gates sealed.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "false_accept": true,
+    "false_reject": false,
+    "state_unchanged": true
+  }
+]

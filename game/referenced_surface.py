@@ -108,6 +108,10 @@ _CONTENT_QUESTION_TARGET_RES = (
         r"\bwhat does\s+(?:the\s+|this\s+|that\s+)?(?P<target>.+?)\s+say\b",
         re.IGNORECASE,
     ),
+    re.compile(
+        r"\bwhat did\s+(?:the\s+|this\s+|that\s+)?(?P<target>.+?)\s+say\b",
+        re.IGNORECASE,
+    ),
 )
 
 
@@ -376,7 +380,11 @@ def classify_referenced_surface(
         break
 
     full_tokens = content_tokens(target)
-    if hit is not None and full_tokens:
+    # A multi-word interactable phrase is the inspection target. A longer visible
+    # fact that merely shares extra words must not replace it. A one-word alias
+    # can still lose to a more specific visible feature.
+    keep_phrase = str((hit or {}).get("kind") or "") == "interactable" and len(matched_prefix) >= 2
+    if hit is not None and full_tokens and not keep_phrase:
         hit_overlap = len(set(content_tokens(str(hit.get("text") or ""))) & set(full_tokens))
         better: Optional[Dict[str, Any]] = None
         better_overlap = hit_overlap
@@ -532,9 +540,9 @@ def render_referenced_surface_inspection_line(
             "That remains something spoken of, not a surface you can inspect here. "
             f"What you can actually see is {surroundings}."
         )
-    if authority == AUTHORITY_AUTHORED_HIDDEN:
-        return f"You find no such thing among what is actually present. {surroundings[0].upper() + surroundings[1:]}."
-    if authority == AUTHORITY_UNSUPPORTED:
+    # Nonconfirmation does not assert absence or expose the hidden target.
+    # Keep the classified authority intact; only its public rendering is shared.
+    if authority in {AUTHORITY_AUTHORED_HIDDEN, AUTHORITY_UNSUPPORTED}:
         return f"Nothing here matches that. What you can actually see is {surroundings}."
     if authority == AUTHORITY_UNTARGETED:
         return (

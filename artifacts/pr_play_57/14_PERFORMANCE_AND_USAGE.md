@@ -1,0 +1,37 @@
+# Performance and usage
+
+{
+  "provider": "openai",
+  "models": [
+    "gpt-4.1-mini-2025-04-14"
+  ],
+  "usage": {
+    "requests": 8,
+    "input_tokens": 3228,
+    "output_tokens": 478,
+    "total_tokens": 3706
+  },
+  "successful_requests": 8,
+  "automatic_retries": 0,
+  "provider_latency_ms_average": 1891.979625,
+  "provider_latency_ms_max": 4223.289,
+  "adapter_latency_ms_average": 4067.1378750000003,
+  "validation_ms_average": 23.873125,
+  "validation_ms_max": 92.664,
+  "total_integrated_ms_average": 4099.67075,
+  "total_integrated_ms_max": 15031.126,
+  "provider_failure_rate": 0.0,
+  "comparison_pr56": {
+    "requests": 6,
+    "total_tokens": 2858,
+    "mean_provider_ms": 1958,
+    "max_provider_ms": 3222
+  },
+  "provider_latency_change_percent": -3.371827119509707,
+  "per_request_token_change_percent": -2.7466759972008314,
+  "cost": "not estimated; no configured price table",
+  "adapter_latency_ms_max": 14924.933,
+  "timing_note": "SDK capture wall time used for historical provider comparison; adapter and total hook measured separately."
+}
+
+All three provider usage ledgers are included. Input/output/total SDK usage exactly matches the aggregate ledgers. Per-request token comparison is more meaningful than eight-versus-six aggregate totals. Latency is a small-sample observation, not a causal attribution to the prompt. No cost estimate without a price table. Validation adds no provider calls.

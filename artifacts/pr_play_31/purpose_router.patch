@@ -1,0 +1,216 @@
+--- before/game/conversational_orchestration.py
++++ after/game/conversational_orchestration.py
+@@ -7,7 +7,7 @@
+ 
+ from __future__ import annotations
+ 
+-from dataclasses import asdict, dataclass, field
++from dataclasses import asdict, dataclass, field, replace
+ from enum import Enum
+ import re
+ from typing import Any, Mapping
+@@ -999,6 +999,8 @@
+         return "That way is closed. There is no established passage, and you stay where you are.", ["destination"]
+     if reason == "unknown_destination_scene":
+         return "That destination is not an established place you can enter from here. You stay where you are.", ["destination"]
++    if reason == "route_requires_prerequisite":
++        return "That route cannot be used right now. You stay where you are.", ["available_route"]
+     return "What are you trying to accomplish?", ["intention"]
+ 
+ 
+@@ -1057,7 +1059,7 @@
+     r"\bam\s+i\s+able\s+to\b",
+     re.IGNORECASE,
+ )
+-_INSPECT_CUE_RE = re.compile(r"\b(?:inspect|examine|look\s+at|check|study|read)\b", re.IGNORECASE)
++_INSPECT_CUE_RE = re.compile(r"\b(?:investigate|inspect|examine|look\s+(?:at|for)|search\s+for|check|study|read)\b", re.IGNORECASE)
+ _ASK_CUE_RE = re.compile(r"\b(?:ask|question)\b", re.IGNORECASE)
+ _OTHER_CUE_RE = re.compile(
+     r"\b(?:open|pick|unlock|attack|draw|sheath|sheathe|unsheathe|put\s+away)\b",
+@@ -1083,7 +1085,7 @@
+ _VISITING_RE = re.compile(r"\b(?:visiting|visit)\s+(?:the\s+)?(.+)$", re.IGNORECASE)
+ _LEAVE_OBJECT_RE = re.compile(r"\b(?:leave|leaves|leaving)\s+(?:the\s+|a\s+)?(.+)$", re.IGNORECASE)
+ _OBJECT_RE = re.compile(
+-    r"\b(?:inspect|examine|look\s+at|check|study|read|open|pick|unlock|ask|watch|watching)\s+(?:the\s+|a\s+)?(.+)$",
++    r"\b(?:investigate|inspect|examine|look\s+(?:at|for)|search\s+for|check|study|read|open|pick|unlock|ask|watch|watching)\s+(?:the\s+|a\s+)?(.+)$",
+     re.IGNORECASE,
+ )
+ 
+@@ -1115,9 +1117,12 @@
+ 
+ 
+ def _exit_rows(scene: Mapping[str, Any] | None) -> list[dict[str, Any]]:
++    from game.route_authority import authored_exit_rows
+     rows: list[dict[str, Any]] = []
+-    for item in _scene_obj(scene).get("exits") or []:
+-        if isinstance(item, Mapping) and _clean_text(item.get("id")):
++    for item in authored_exit_rows(dict(scene or {})):
++        if (isinstance(item, Mapping) and _clean_text(item.get("id"))
++                and not item.get("hidden") and item.get("visible") is not False
++                and item.get("source_scene_id", _scene_id(scene)) == _scene_id(scene)):
+             rows.append(dict(item))
+     return rows
+ 
+@@ -1159,15 +1164,37 @@
+     return _unique_exit_rows(hits)
+ 
+ 
++_PURPOSE_RE = re.compile(
++    r"\s+(?:in\s+order\s+to|so\s+as\s+to|to)\s+"
++    r"(?=(?:investigate|examine|inspect|look|search|check|study|read|buy|sell|ask|"
++    r"speak|talk|meet|find|learn|help|rest|wait|open|take|attack)\b)", re.IGNORECASE,
++)
++_BARE_MOVE_RE = re.compile(
++    r"^\s*(?:(?:i|we)\s+)?(?:head|go|walk|travel|move|approach|follow|proceed)\s+(.+)$",
++    re.IGNORECASE,
++)
++
++
++def _movement_and_purpose(text: str) -> tuple[str, str]:
++    """Split a bounded infinitive purpose; recognizing it grants no effects."""
++    match = _PURPOSE_RE.search(text)
++    if match:
++        return text[:match.start()].strip(), text[match.end():].strip(" .?!")
++    return text, ""
++
++
+ def _destination_phrase(text: str) -> str:
+     cleaned = re.sub(r"\s+(?:from here|right now|instead)\b.*$", "", _clean_text(text), flags=re.IGNORECASE)
+-    match = None
+-    for item in _DEST_PREP_RE.finditer(cleaned):
+-        match = item
++    cleaned, _ = _movement_and_purpose(cleaned)
++    match = _DEST_PREP_RE.search(cleaned)
+     if match is None:
+-        return ""
++        match = _BARE_MOVE_RE.search(cleaned)
++        if match is None:
++            return ""
+     dest = re.split(r"\s+(?:and|then|while|but)\s+", match.group(1), maxsplit=1, flags=re.IGNORECASE)[0]
+     dest = dest.strip(" .?!")
++    if dest.casefold() in {"out", "off", "away"}:
++        return ""
+     if _DEICTIC_DEST_RE.match(_norm_place(dest)) or _DEICTIC_DEST_RE.match(_clean_text(dest)):
+         return ""
+     return dest
+@@ -1297,6 +1324,9 @@
+ 
+ def _analyze_clause(clause: str, exits: list[dict[str, Any]]) -> dict[str, Any]:
+     text = _clean_text(clause)
++    movement, purpose = _movement_and_purpose(text)
++    if purpose and (_MOVE_CUE_RE.search(movement) or _BARE_MOVE_RE.search(movement)):
++        return {**_analyze_clause(movement, exits), "text": text, "purpose": purpose}
+     destination = _destination_phrase(text)
+     if _ASK_CUE_RE.search(text) and _MOVE_CUE_RE.search(text):
+         # Travel vocabulary can be the content of speech. The deterministic
+@@ -1783,6 +1813,66 @@
+     return step
+ 
+ 
++def _purpose_movement_decision(
++    text: str, movement: str, purpose: str, *, exits: list[dict[str, Any]],
++    scene: Mapping[str, Any] | None, world: Mapping[str, Any] | None,
++    session: Mapping[str, Any] | None,
++) -> ConversationalDecision:
++    from game.route_authority import route_status
++    destination = _destination_phrase(movement)
++    inspection = bool(_INSPECT_CUE_RE.match(purpose))
++    step = {"text": purpose, "operation": "INSPECT" if inspection else "OTHER",
++            "status": "pending", "dependency": "after_travel", "supported": False,
++            "target_id": "", "consequential": True}
++    deferred = {"kind": "deferred_intentions", "original_text": text,
++                "scene_id": _scene_id(scene), "steps": [step]}
++    available = [r for r in exits if route_status(r, _scene_id(scene), dict(session or {}), dict(world or {})) == "available"]
++    matches = _matching_exits(destination, exits) if destination else []
++    references = []
++    target = _norm_place(_object_phrase(purpose)) if inspection else ""
++    # A literal reference to known information is only explanation context.
++    # It is never an alias for a physical target or an exit.
++    for clue_id, entry in ((session or {}).get("clue_knowledge") or {}).items():
++        if (target and isinstance(entry, Mapping) and entry.get("state") in {"discovered", "inferred"}
++                and re.search(rf"\b{re.escape(target)}\b", _norm_place(str(entry.get("text") or "")))):
++            references.append(str(clue_id))
++    clear = _should_clear_interlocutor(session, [], "MOVE")
++    if len(matches) == 1 and matches[0] in available:
++        decision = _move_decision_for_row(
++            matches[0], player_text=text, summary=f"Go to {_label(matches[0], '')}.",
++            incidental=[], session=session, secondary=[step], pending=deferred,
++        )
++        outcome = "UNIQUE_AUTHORIZED_ROUTE"
++    elif matches and not any(r in available for r in matches):
++        decision = ConversationalDecision(
++            category=ConversationalDecisionCategory.DECLINE, primary_intention=text,
++            intent_family="movement", reason="route_requires_prerequisite",
++            player_facing_text="That route cannot be used right now. You stay where you are; your intended follow-up has not been attempted.",
++            context_update=_context_update(pending=deferred, pending_set=True),
++        )
++        outcome = "ROUTE_REQUIRES_PREREQUISITE"
++    else:
++        choices = [r for r in matches if r in available] if matches else (available if references else [])
++        if choices:
++            decision = _ambiguous_destination(text, choices, scene=scene, clear=clear)
++            pending = decision.context_update["conversational_context"]["pending_clarification"]
++            pending["deferred_steps"] = [step]
++            message = ("I cannot establish which route reaches the place you mean. Available routes: "
++                       + "; ".join(_label(r, "") for r in choices[:4])
++                       + f". Which route do you want to take? Your intention to {purpose} is still pending; nothing has been attempted.")
++            decision = replace(decision, reason="clue_route_clarification" if not matches else "ambiguous_movement_destination",
++                               player_facing_text=message)
++            outcome = "MULTIPLE_AUTHORIZED_ROUTES" if matches else "NO_AUTHORIZED_ROUTE"
++        else:
++            decision = replace(_unknown_destination(text, destination, clear=clear),
++                               context_update=_context_update(pending=deferred, pending_set=True, clear_interlocutor=clear))
++            outcome = "UNSUPPORTED_REFERENCE" if not references else "NO_AUTHORIZED_ROUTE"
++    return replace(decision, secondary_intentions=[step], context_references=references,
++                   authorization={"route_decision": outcome, "requested_destination": destination,
++                                  "purpose": purpose, "referenced_clues": references,
++                                  "selection_evidence": "explicit_destination" if matches else "no_authored_clue_route_link"})
++
++
+ def _committed_movement_or_compound_decision(
+     *,
+     player_text: str,
+@@ -1796,6 +1886,16 @@
+     if "?" in text or _QUESTION_START_RE.search(text):
+         return None
+     exits = _exit_rows(scene)
++    from game.route_authority import route_status
++    exits = [row for row in exits if route_status(row, _scene_id(scene), dict(session or {}), dict(world or {})) != "hidden"]
++    movement, purpose = _movement_and_purpose(text)
++    if purpose and (_MOVE_CUE_RE.search(movement) or _BARE_MOVE_RE.search(movement)):
++        # Same-scene approach binding remains owned by PR-PLAY-23's bridge.
++        if _ground_catalog_target(_destination_phrase(movement), _catalog(scene, world), {"npc", "inspect_target", "perceive_target"}):
++            return None
++        return _purpose_movement_decision(
++            text, movement, purpose, exits=exits, scene=scene, world=world, session=session,
++        )
+     clauses = [_analyze_clause(clause, exits) for clause in _split_clauses(text)]
+     consequential = [clause for clause in clauses if clause.get("consequential")]
+     incidental = [str(clause.get("text") or "") for clause in clauses if clause.get("incidental")]
+@@ -1891,6 +1991,8 @@
+     restored = _clean_text(summary)
+     if not restored:
+         return text
++    if _movement_and_purpose(text)[1]:
++        return restored
+     if (_MOVE_CUE_RE.search(text) or _BACK_RE.search(text)) and _destination_phrase(text):
+         return text
+     return restored
+@@ -1982,12 +2084,17 @@
+         pool = choices
+     matches = _matching_exits(player_text, pool)
+     if len(matches) == 1:
++        remaining = list(pending.get("deferred_steps") or [])
++        remainder = {"kind": "deferred_intentions", "steps": remaining,
++                     "original_text": pending.get("original_text"), "scene_id": _scene_id(scene)} if remaining else None
+         return _move_decision_for_row(
+             matches[0],
+             player_text=_clean_text(pending.get("original_text")) or player_text,
+             summary=f"Go to {_label(matches[0], _clean_text(matches[0].get('id')))}.",
+             incidental=[],
+             session=session,
++            secondary=remaining,
++            pending=remainder,
+         )
+     if len(matches) > 1:
+         return _ambiguous_destination(player_text, matches, scene=scene, clear=False)

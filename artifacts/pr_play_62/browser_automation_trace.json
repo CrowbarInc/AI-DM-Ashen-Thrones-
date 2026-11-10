@@ -1,0 +1,25 @@
+{
+  "status": "BLOCKED",
+  "attempts": [
+    {
+      "tool": "cua.createBrowserTab",
+      "url": "http://127.0.0.1:8762/",
+      "visible": true,
+      "result": "Timed out waiting for the Browser webview to attach for this browser-use page"
+    },
+    {
+      "tool": "cua.listTabs",
+      "result": []
+    },
+    {
+      "tool": "cua.createBrowserTab",
+      "url": "http://127.0.0.1:8762/",
+      "visible": false,
+      "result": "Timed out waiting for the Browser webview to attach for this browser-use page"
+    }
+  ],
+  "ui_submissions": 0,
+  "screenshots": [],
+  "smallest_missing_capability": "A working in-app browser webview attachment to the localhost application.",
+  "fallback_execution": "Five actions via urllib over real localhost HTTP, explicitly not browser-originated."
+}

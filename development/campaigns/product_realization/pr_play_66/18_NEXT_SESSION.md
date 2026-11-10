@@ -1,0 +1,4 @@
+# NEXT SESSION
+Verdict: C — FAIL / CRITICAL DEFECT. Exactly one primary next step: **Repair hidden-information leakage in the final gameplay HTTP payload projection before resuming experimental publication.**. Stop affected experimental execution. Preserve the mandatory-text repair, frozen holdout and critical incident evidence. Diagnose the existing full-state response projection offline, then repair its hidden-information boundary in a separately scoped cycle. Do not expand gameplay or start PR67 presentation work.
+
+Read reports 01/04/06/09/13/16/17, historical_after.json, holdout_results.json plus holdout_evaluation_audit.json, state_integrity.json, protected_integrity.json and implementation.diff. Source is frozen after repair; holdout was executed once and must not be rerun/tuned. Experimental flags remain off outside isolated test subprocesses. No commit/push. Review archive pointer is artifacts/pr_play_66/archive_path.txt.

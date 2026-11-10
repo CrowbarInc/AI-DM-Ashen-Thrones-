@@ -1,0 +1,5 @@
+# ORIGINAL LEAK REPRODUCTION
+
+original_leak_reproduction.json captures GET /api/state and POST /api/chat {"text":"I examine the notice board."} over actual localhost TCP, flags disabled and enabled; all return 200. The complete JSON schemas and redacted values are retained. All five original paths reproduce: session.gm_notes[0], world.gm_only.motivation, scene.scene.discoverable_clues[].text, scene.scene.gm_notes[0], scene.scene.private_notes. Representative synthetic values: CANARY_GM_NOTE, CANARY_NPC_MOTIVE, CANARY_UNDISCOVERED_CLUE. They are unauthorized. The frontend does not require these fields.
+
+Other exposed structures include the internal quest journal, unrelated world state, undiscovered clue identifiers, faction plans, NPC topics, internal resolver objects and future scene IDs. Existing authored fixtures were used; no new defect was invented. Prior incident evidence remains at artifacts/pr_play_66/critical_incident.json and was not rewritten. Redacted complete parsed JSON bodies preserve schema; serialized_http_payloads.json explicitly labels reserialized JSON rather than claiming original wire formatting.

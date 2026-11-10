@@ -39,21 +39,40 @@ def apply_new_campaign_hard_reset() -> Dict[str, Any]:
     from game.storage import _runtime_persistence_guard
 
     with _runtime_persistence_guard("new_campaign_hard_reset"):
-        session = load_session()
-        # Root replacement: stale keys from older engines cannot survive.
-        reset_session_state(session)
-        save_session(session)
+        from game import storage
+        targets = (storage.SESSION_PATH, storage.WORLD_PATH, storage.COMBAT_PATH, storage.SESSION_LOG_PATH)
+        originals = {path: storage._read_bytes_if_exists(path) for path in targets}
+        try:
+            session = load_session()
+            # Root replacement: stale keys from older engines cannot survive.
+            reset_session_state(session)
+            # Explicit opt-in binds only this newly created identity.
+            import os
+            from game.authored_consequences import GATE, NEW_CAMPAIGNS, ENROLLMENT
+            if os.environ.get(GATE) == '1' and os.environ.get(NEW_CAMPAIGNS) == '1':
+                session[ENROLLMENT] = session['campaign_run_id']
+            save_session(session)
 
-        world = load_world()
-        reset_world_playthrough_state(world)
-        save_world(world)
+            world = load_world()
+            reset_world_playthrough_state(world)
+            save_world(world)
 
-        combat = load_combat()
-        combat.clear()
-        combat.update(create_fresh_combat_state())
-        save_combat(combat)
-
-        clear_log()
+            combat = load_combat()
+            combat.clear()
+            combat.update(create_fresh_combat_state())
+            save_combat(combat)
+            clear_log()
+        except Exception:
+            # Match snapshot restore's validate/commit recovery convention. Do
+            # not replace an unchanged locked file while restoring prior state.
+            for path, raw in reversed(list(originals.items())):
+                if storage._read_bytes_if_exists(path) == raw:
+                    continue
+                if raw is None:
+                    path.unlink(missing_ok=True)
+                else:
+                    storage._atomic_write_bytes(path, raw)
+            raise
     # Invariant (NC2): New Campaign is a silent reset — no persisted transcript rows until a turn runs.
     tail = load_log()
     if tail:

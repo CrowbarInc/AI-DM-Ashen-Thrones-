@@ -1,0 +1,676 @@
+{
+  "campaign_id": "pr_play_59",
+  "campaign_name": "PR-PLAY-59 — Persistent Consequence Authority Repair",
+  "campaign_date": "2026-11-03",
+  "purpose": "Block unauthorized persistent narration while preserving deterministic authority and quarantine.",
+  "objective_status": "B — PARTIAL / FURTHER INVESTIGATION REQUIRED",
+  "executive_summary": "# EXECUTIVE SUMMARY\n\n**B — PARTIAL / FURTHER INVESTIGATION REQUIRED.** H41 changes PASS → FAIL. Its stative/permanence assertion was not extracted by the old access/environment frames; combined precedence was correct. The repair adds entity/property/result/duration comparisons before existing heuristic early exits.\n\nConsequence validator: development 46/46 expected decisions (20/20 unauthorized blocked, 6/6 authorized accepted, 10/10 harmless accepted, 6/6 negated/hypothetical/attempted accepted, 1/1 supported existing state accepted, 3/3 ambiguous reviewed). Frozen same-session holdout: 50/50 expected decisions (15/15 unauthorized blocked, 10/10 authorized accepted, 10/10 harmless accepted, 10/10 nonactual changes accepted, 5/5 ambiguous reviewed). Zero critical false acceptances, zero false rejections and zero validation errors in these two consequence corpora.\n\nCombined development: 45/46 expected; authorized acceptance 5/6, harmless 10/10, unauthorized blocking 20/20. D25 authorized key acquisition still fails legacy items_added validation: anchored._resolution drops effect deltas. The entry implementation reproduces the same rejection. The new frozen holdout tested the consequence validator, not the full integrated pipeline. Those boundaries prevent an A verdict. No implementation changes or holdout reruns followed the freeze.\n\nPR58 regression: original eight retain 8/8 coverage and 7/8 combined PASS; all 43 development decisions unchanged; previous 50-case holdout changes only H41, bringing unauthorized expansions to 10/10 blocked. Its legitimate acceptance remains 14/15. Focused tests 686/689 pass; 3 known failures. PR55 wrapper 1/1 pass. Broader 0/9 pass, all known hard_validation_attempt_1 failures. Zero new test regressions.\n\nPersistent validation 0.064 ms average / 1.254 ms max; combined 2.316 / 85.567 ms. Zero provider requests/tokens. Campaign data, quarantine and fallback source hashes unchanged. No commits or pushes.\n\nPrimary next step: PR-PLAY-60: bounded repair of resolved inventory-consequence projection into the existing combined narration validator, with a fresh frozen end-to-end corpus. Preserve quarantine and deterministic fallback; do not enable player-facing narration.\n",
+  "primary_report": "development/campaigns/product_realization/pr_play_59/01_EXECUTIVE_SUMMARY.md",
+  "evidence_packets": [
+    "artifacts/pr_play_59"
+  ],
+  "max_file_bytes": 33554432,
+  "changes": {
+    "production": [
+      "No gameplay, publication or state mutation change."
+    ],
+    "validation": [
+      "Persistent-state frames and entity/property/result/duration authority matching in existing consequential gate."
+    ],
+    "tooling": [
+      "Frozen corpora, local replay, measurements, integrity and export."
+    ],
+    "documentation": [
+      "18 reports and session handoff."
+    ],
+    "generated_artifacts": [
+      "All layer traces, matrices, original H41 and regression evidence."
+    ]
+  },
+  "testing": {
+    "focused": "686 passed / 3 known failures of 689; zero errors or skips.",
+    "broader": "PR55 wrapper passed; 9 known authority metadata failures reproduced.",
+    "full_suite": "Not executed.",
+    "runtime_validation": "Original H41 and eight PR57 samples replayed; 46 development and one frozen 50-case consequence holdout; combined development 45/46.",
+    "model_runtime_boundary": "No provider requests; narration remains quarantined.",
+    "new_regressions": "No new final-source test regressions; one pre-existing combined positive rejection limits verdict.",
+    "pre_existing_failures": "3 focused and 9 hard_validation_attempt_1 metadata failures; combined D25 projection rejection."
+  },
+  "decisions_requiring_human_review": [
+    "Review bounded repair and B verdict; no player-facing enablement requested."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "End-to-end holdout not run; combined D25 authorized acquisition is rejected."
+    ],
+    "pre_existing": [
+      "Three focused, nine broader metadata failures; PR58 D15/H12 rejections."
+    ]
+  },
+  "missing_concepts": [
+    "General semantic entailment and complete resolved-effect authority projection."
+  ],
+  "does_not_prove": [
+    "Universal paraphrase detection, independent blind generalization, live gameplay quality, ATGB score or player-facing safety."
+  ],
+  "recommended_next_step": "PR-PLAY-60 bounded resolved-inventory authority projection repair with a fresh end-to-end corpus; retain quarantine.",
+  "self_contained_review_test": "18 reports, exact H41, before/after traces, frozen corpora/hashes, matrices, source/diff, regression logs and limitations included.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_59/authoritative_consequence_contracts.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/broader_hard_validation_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/broader_hard_validation_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/combined_controls.py",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/combined_development_results.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/combined_positive_preexisting.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/confusion_matrices.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/consequential_narration_validation_before.py",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/development_corpus.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/development_error_examples.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/development_results.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/entry_hashes.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/entry_status.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/evaluate.py",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/evidence_manifest.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/evidence_summary.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/export_scan.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/final_status.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/focused_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/h41_after.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/h41_before.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/h41_original.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/holdout.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/holdout_error_examples.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/holdout_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/holdout_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/holdout_manifest.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/holdout_results.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/holdout_started.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/implementation.diff",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/implementation_frozen.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/initial_broader_hard_validation_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/initial_broader_hard_validation_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/initial_focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/initial_focused_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/initial_holdout_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/initial_holdout_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/initial_regression_summary_final.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/integrated_investigation_narration_before.py",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/integrity.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/latency_samples.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/measure.py",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/metrics.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/package_review.py",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/performance.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/pr55_regression.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/pr58_regression.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/pre_freeze_broader_hard_validation_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/pre_freeze_broader_hard_validation_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/pre_freeze_focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/pre_freeze_focused_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/pre_freeze_holdout_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/pre_freeze_holdout_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/pre_freeze_regression_summary_final.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/prepare.py",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/regress_corpora.py",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/regression_summary_final.json",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/report.py",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_59/run_regression.py",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/01_EXECUTIVE_SUMMARY.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/02_BASELINE_AND_SCOPE.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/03_H41_ROOT_CAUSE.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/04_PERSISTENT_CONSEQUENCE_CONTRACT.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/05_IMPLEMENTATION_CHANGES.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/06_H41_REPRODUCTION_AND_REPAIR.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/07_ADVERSARIAL_DEVELOPMENT_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/08_AUTHORIZED_CONSEQUENCE_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/09_HARMLESS_NARRATION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/10_HOLDOUT_MANIFEST.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/11_HOLDOUT_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/12_PR_PLAY_58_REGRESSION.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/13_COMBINED_VALIDATION_INTEGRITY.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/14_STATE_AND_QUARANTINE_INTEGRITY.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/15_PERFORMANCE_AND_USAGE.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/16_REGRESSION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/17_LIMITATIONS_AND_OPEN_RISKS.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_59/18_NEXT_SESSION.md",
+      "role": "campaign_evidence",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "source",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/anchored_investigation_narration.py",
+      "role": "source",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/consequential_narration_validation.py",
+      "role": "source",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/integrated_investigation_narration.py",
+      "role": "source",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/mandatory_outcome_coverage.py",
+      "role": "source",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/offline_investigation_projection.py",
+      "role": "source",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/persistent_consequence_claims.py",
+      "role": "source",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/quarantined_investigation_narration.py",
+      "role": "source",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/pr_play_59_development.py",
+      "role": "source",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_59_persistent_consequences.py",
+      "role": "source",
+      "why": "PR59 implementation, provenance or evaluation evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    }
+  ]
+}

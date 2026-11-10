@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 17 DEVELOPMENT TESTS
+
+Final NPC lane: 70/70. Final broader safety slice: 234/234 (overlapping coverage, not additive). Inherited PR73/authority lane: 105/105, comprising a 100-case run and the five existing bounded-authority checks. NPC fault lane: 3/3 before the added alias test, with all four persistence/reference checks included in final 70. Initial 46/55 exposed nine memory ownership failures; initial 60/61 exposed routine world ticking. Retain these development logs. Tests assert hostile schema, scene support, deduplication, authored preservation, hidden boundaries, unsafe dialogue, polarity, idempotent memory, read-only inquiry, stale scene, routine accessibility and normal lifecycle.

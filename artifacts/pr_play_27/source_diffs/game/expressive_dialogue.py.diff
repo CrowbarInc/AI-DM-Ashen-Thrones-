@@ -1,0 +1,85 @@
+--- before/game/expressive_dialogue.py
++++ after/game/expressive_dialogue.py
+@@ -523,7 +523,7 @@
+         if frame == "word_is":
+             guidance += " A leading 'Word is' is only a delivery frame and may be omitted."
+         if (contract.get("permitted_meaning") or {}).get("relation") == "own_offerings":
+-            guidance += " For your own offerings, offer/sell/serve/I've got are also allowed. Keep every item description."
++            guidance += " For your own offerings, use I offer, I can offer you, I serve, or I've got. You may start with Well or end with to share, and reorder whole items. Use for sale only if the authority explicitly says sell. Keep every item description."
+         if any(_REAL_HEDGE.search(item) for item in facts):
+             guidance += " Keep the uncertainty (heard, rumor, may, or not sure). Do not make it certain."
+     elif operation == "incidental_characterization":
+@@ -661,6 +661,56 @@
+     reasons.extend(_name_reasons(body, cand_body, identities))
+     reasons.extend(_introduced_name_reasons(spoken, identities))
+     return reasons
++
++
++def _offering_reasons(spoken: str, proposition: str, contract: Mapping[str, Any]) -> list[str]:
++    """Closed offering grammar, licensed only by the host's own_offerings relation.
++
++    Compare whole item phrases (including adjectives), not a bag of words.
++    Offering does not license ownership, gifts, prices or a sale commitment.
++    """
++    source = _plain(proposition).strip().rstrip(".").lower()
++    speaker = re.escape(str(contract.get("speaker_name") or "").lower())
++    match = re.fullmatch(rf"(?:i|(?:the )?{speaker}) (offer[s]?|sell[s]?|serve[s]?) (.+)", source)
++    if not match:
++        return ["offering_structure_unsupported"]
++    verb, items = match.groups()
++    sale = verb in {"sell", "sells"}
++
++    def item_phrases(text: str) -> list[str]:
++        parts = re.split(r"\s+and\s+|,\s*", text)
++        # Singular room is a grammatical service unit, not a stock quantity.
++        return sorted("room" if part.strip() in {"rooms", "a room"} else part.strip()
++                      for part in parts if part.strip())
++
++    text = _plain(spoken).strip().rstrip(".!?").lower()
++    text = re.sub(r"^well,?\s+", "", text)
++    # These are complete sentence frames. No globally ignored content words.
++    prefix = r"(?:i offer(?: you)?|i can offer(?: you)?|i serve|i(?:'ve| have) got) "
++    if sale:
++        prefix = r"(?:i sell|i(?:'ve| have) got) "
++    candidate = re.fullmatch(prefix + r"(.+)", text)
++    if candidate:
++        candidate_items = candidate.group(1)
++        if sale:
++            if text.startswith("i sell "):
++                pass
++            elif candidate_items.endswith(" for sale"):
++                candidate_items = candidate_items[:-9]
++            else:
++                return ["offering_relation_changed"]
++        elif candidate_items.endswith(" to share"):
++            candidate_items = candidate_items[:-9]
++    else:
++        reverse = re.fullmatch(r"(.+?)[—–-]\s*that's what i(?:'ve| have) got", text)
++        if not reverse or sale:
++            return ["unsupported_offering_expression"]
++        candidate_items = reverse.group(1)
++    if item_phrases(candidate_items) != item_phrases(items):
++        return ["offering_items_changed"]
++    if _norm(spoken) == _norm(proposition):
++        return ["verbatim_repetition"]
++    return []
+ 
+ 
+ def _characterization_reasons(spoken: str, proposition: str, contract: Mapping[str, Any] | None = None) -> list[str]:
+@@ -769,15 +819,7 @@
+     identities = contract.get("entity_identities") if isinstance(contract.get("entity_identities"), list) else None
+     if operation in {"faithful_paraphrase", "simple_explanation"}:
+         if (contract.get("permitted_meaning") or {}).get("relation") == "own_offerings":
+-            # Only this source projection licenses first-person offering verbs.
+-            # All item anchors and the existing closed-content check still apply.
+-            normalize = lambda s: re.sub(r"\b(?:offers?|sell|serve|got)\b", "offer", s, flags=re.I)
+-            scoped_reasons = _faithful_reasons(normalize(spoken), normalize(proposition), identities)
+-            if _norm(spoken) != _norm(proposition):
+-                scoped_reasons = [r for r in scoped_reasons if r != "verbatim_repetition"]
+-            if re.search(r"\b(?:not|no|never|don't|cannot|can't|won't)\b", spoken, re.I):
+-                scoped_reasons.append("contradicts_authorized_offering")
+-            reasons.extend(scoped_reasons)
++            reasons.extend(_offering_reasons(spoken, proposition, contract))
+         else:
+             reasons.extend(_faithful_reasons(spoken, proposition, identities))
+     elif operation == "incidental_characterization":

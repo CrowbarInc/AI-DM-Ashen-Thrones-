@@ -1,0 +1,111 @@
+{
+  "fault": "save",
+  "unchanged_after_failure": true,
+  "retry_result": {
+    "version": 1,
+    "status": "applied",
+    "persistence": "committed",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "1b556ab6-7f48-4093-9675-96eeaf5a5011",
+    "request_id": "remove-1",
+    "request_digest": "765a2de9c9b8ce9d28d94864f130f3dfcc37c25ae41e0bf4e8796d4f59161a5d",
+    "modification_id": "10779c70-431a-4f3e-baf5-624e7831983e",
+    "previous_revision": 2,
+    "resulting_revision": 3,
+    "operation": "remove_marking",
+    "request": {
+      "version": 1,
+      "operation": "remove_marking",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "1b556ab6-7f48-4093-9675-96eeaf5a5011",
+      "modification_id": "10779c70-431a-4f3e-baf5-624e7831983e",
+      "request_id": "remove-1",
+      "expected_revision": 2,
+      "authorization": {
+        "caller_id": "internal-test",
+        "decision_id": "remove-approved",
+        "mechanics": "not_applicable",
+        "preconditions": {
+          "accessible": "evidence:accessible",
+          "removable": "evidence:removable",
+          "rights": "evidence:rights",
+          "marking_exists": "evidence:marking_exists",
+          "capability": "evidence:capability",
+          "target_exists": "evidence:target_exists"
+        }
+      },
+      "request_digest": "765a2de9c9b8ce9d28d94864f130f3dfcc37c25ae41e0bf4e8796d4f59161a5d"
+    },
+    "removed_marking": {
+      "version": 1,
+      "type": "add_marking",
+      "modification_id": "10779c70-431a-4f3e-baf5-624e7831983e",
+      "content": "Northwest track",
+      "source": {
+        "kind": "explicit_literal",
+        "reference": "controlled-fixture"
+      },
+      "authorization": {
+        "caller_id": "internal-test",
+        "decision_id": "approval-1",
+        "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+        "preconditions": {
+          "medium_compatible": "fixture-evidence:medium_compatible",
+          "rights": "fixture-evidence:rights",
+          "capability": "fixture-evidence:capability",
+          "accessible": "fixture-evidence:accessible",
+          "writable_surface": "fixture-evidence:writable_surface",
+          "medium_available": "fixture-evidence:medium_available",
+          "source_disclosed": "fixture-evidence:source_disclosed",
+          "target_exists": "fixture-evidence:target_exists"
+        },
+        "mechanics": "not_applicable"
+      },
+      "request_id": "mark-request-1",
+      "request_digest": "4200e46d8bb2e5e9155ad91eb4ddd5926965d04b751db47c4358a8973685cc48",
+      "applied_revision": 1
+    }
+  },
+  "inspection": {
+    "version": 1,
+    "status": "inspected",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "1b556ab6-7f48-4093-9675-96eeaf5a5011",
+    "revision": 3,
+    "markings": [
+      {
+        "version": 1,
+        "type": "add_marking",
+        "modification_id": "f776c7f0-cec8-4633-a79c-13021ebc25db",
+        "content": "Northwest track",
+        "source": {
+          "kind": "explicit_literal",
+          "reference": "controlled-fixture"
+        },
+        "authorization": {
+          "caller_id": "internal-test",
+          "decision_id": "approval-1",
+          "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+          "preconditions": {
+            "medium_compatible": "fixture-evidence:medium_compatible",
+            "rights": "fixture-evidence:rights",
+            "capability": "fixture-evidence:capability",
+            "accessible": "fixture-evidence:accessible",
+            "writable_surface": "fixture-evidence:writable_surface",
+            "medium_available": "fixture-evidence:medium_available",
+            "source_disclosed": "fixture-evidence:source_disclosed",
+            "target_exists": "fixture-evidence:target_exists"
+          },
+          "mechanics": "not_applicable"
+        },
+        "request_id": "add-2",
+        "request_digest": "13e306c162b3b04bb3df69c699ecef82fb7709d516511451ed3e384fa96bc8e2",
+        "applied_revision": 2
+      }
+    ]
+  },
+  "temporary_files": []
+}

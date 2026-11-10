@@ -1,0 +1,333 @@
+{
+  "latency_seconds": 2.0405669000028865,
+  "response": {
+    "id": "resp_016f3641f5e5b18e006ae780398ac487d283fce852cbd63cce",
+    "created_at": 1793556537.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-4.1-mini-2025-04-14",
+    "object": "response",
+    "output": [
+      {
+        "id": "msg_016f3641f5e5b18e006ae7803a1d2887d280b4bd5ed25473af",
+        "content": [
+          {
+            "annotations": [],
+            "text": "{\"communication\":{\"recipient\":\"NPC\",\"purpose\":\"QUESTION\",\"subject\":\"offerings of the tavern runner\",\"evidence_refs\":[\"visible:2\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Approach the tavern runner and ask what they are offering\"},\"asserted_premises\":[{\"text\":\"The tavern runner is trading hot stew and rumors near the rain barrel.\"}],\"requested_outcomes\":[{\"text\":\"Learn what the tavern runner is offering\"}],\"action_components\":[{\"order\":1,\"description\":\"Approach the tavern runner\",\"target_ref\":\"tavern_runner\",\"operation_class\":\"MOVE\"},{\"order\":2,\"description\":\"Ask the tavern runner what they are offering\",\"target_ref\":\"tavern_runner\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 0.0,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 1.0,
+    "background": false,
+    "completed_at": 1793556539.0,
+    "conversation": null,
+    "max_output_tokens": 320,
+    "max_tool_calls": null,
+    "moderation": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "context": null,
+      "effort": null,
+      "generate_summary": null,
+      "mode": null,
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "name": "pr_dr_interpretation",
+        "schema_": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "communication": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "recipient": {
+                  "type": "string",
+                  "enum": [
+                    "GM",
+                    "NPC",
+                    "CHARACTER",
+                    "SESSION",
+                    "MIXED",
+                    "AMBIGUOUS"
+                  ],
+                  "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+                },
+                "purpose": {
+                  "type": "string",
+                  "enum": [
+                    "QUESTION",
+                    "DESCRIPTION",
+                    "EXPLANATION",
+                    "RECALL",
+                    "RULES",
+                    "ACTION",
+                    "OBSERVATION",
+                    "CORRECTION",
+                    "WITHDRAWAL",
+                    "CONFIRMATION",
+                    "TENTATIVE",
+                    "CLARIFICATION"
+                  ],
+                  "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects conversational meaning, subject, referent or description, or revises an actual unexecuted intention. Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's request for explanation; it does not by itself mean the AI-DM needs more information. WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+                },
+                "subject": {
+                  "type": "string"
+                },
+                "evidence_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "recipient",
+                "purpose",
+                "subject",
+                "evidence_refs"
+              ]
+            },
+            "communication_mode": {
+              "enum": [
+                "CLARIFICATION",
+                "IN_WORLD_ACTION",
+                "OTHER",
+                "OUT_OF_CHARACTER_CORRECTION",
+                "RULES_QUESTION"
+              ]
+            },
+            "interpretation_status": {
+              "enum": [
+                "ABSTAIN",
+                "CLARIFICATION_REQUIRED",
+                "INTERPRETED",
+                "UNSUPPORTED_REQUEST"
+              ]
+            },
+            "player_intent": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "summary": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "summary"
+              ]
+            },
+            "asserted_premises": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            },
+            "requested_outcomes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            },
+            "action_components": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "order": {
+                    "type": "integer"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "target_ref": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "operation_class": {
+                    "enum": [
+                      "ASK",
+                      "ATTACK",
+                      "CANON_DECLARATION",
+                      "DICE_OVERRIDE",
+                      "FOLLOW",
+                      "HIDDEN_INFORMATION_REQUEST",
+                      "HP_ASSIGNMENT",
+                      "INSPECT",
+                      "INVENTORY_GRANT",
+                      "MOVE",
+                      "NPC_COMMITMENT",
+                      "PERCEIVE",
+                      "RETCON",
+                      "SOCIAL_SIGNAL",
+                      "STEALTH_MODE_TOGGLE",
+                      "TIME_CONTROL",
+                      "UNSUPPORTED_MECHANIC",
+                      "USE_VISIBLE_OBJECT"
+                    ]
+                  }
+                },
+                "required": [
+                  "order",
+                  "description",
+                  "target_ref",
+                  "operation_class"
+                ]
+              }
+            },
+            "references": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "permitted_entity_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "unresolved_references": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "permitted_entity_ids",
+                "unresolved_references"
+              ]
+            },
+            "clarification_question": {
+              "type": "string"
+            },
+            "correction": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "enum": [
+                    "COMMITTED_ACTION",
+                    "INTENTION",
+                    "NONE",
+                    "REFERENT"
+                  ]
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "subject",
+                "note"
+              ]
+            }
+          },
+          "required": [
+            "action_components",
+            "asserted_premises",
+            "clarification_question",
+            "communication_mode",
+            "correction",
+            "interpretation_status",
+            "player_intent",
+            "references",
+            "requested_outcomes",
+            "communication"
+          ]
+        },
+        "type": "json_schema",
+        "description": null,
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 2306,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 203,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 2509
+    },
+    "user": null,
+    "access_programs": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "presence_penalty": 0.0,
+    "store": true,
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    }
+  },
+  "sdk_request_id": "req_6563e3a6f1454265b1b475772c98e69e"
+}

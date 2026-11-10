@@ -1,0 +1,3 @@
+# FAILURE INJECTION
+
+See failure_injection.json and development.xml. Provider absence/timeout/empty/malformed/nonpass validation, legacy refusal, helper error/noop and unsafe content all preserve trusted immediate disclosure without a second resolver/provider call. Unsupported actions reject; deterministic resolution raises a safe HTTP 500. Disabled publication and other session prevent experiment publication. Existing PR66 regression covers fast path, repeated actions, publication interruption/invariant recovery, stale evidence, and serialization errors; PR67 checks complete-body projection/errors. Frontend parsing failure and deliberate browser schema mismatch were not injected. No claim of exhaustive A–T fault coverage.

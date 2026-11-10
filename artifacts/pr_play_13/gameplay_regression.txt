@@ -1,0 +1,15 @@
+.............F.........F..F......                                        [100%]
+================================== FAILURES ===================================
+E   assert 0 == 6
+---------------------------- Captured stdout setup ----------------------------
+Configured ceilings: 6 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_five_turn_gameplay.py:159: assert 0 == 6
+E   assert 1 == 0
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_five_turn_gameplay.py:231: assert 1 == 0
+E   AssertionError: assert 'opening/documents.json' in {'after/documents.json', 'after/persistent/campaign.json', 'after/persistent/character.json', 'after/persistent/combat.json', 'after/persistent/conditions.json', 'after/persistent/scenes/frontier_gate.json', ...}
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_five_turn_gameplay.py:258: AssertionError: assert 'opening/documents.json' in {'after/documents.json', 'after/persistent/campaign.json', 'after/persistent/character.json', 'after/persistent/combat.json', 'after/persistent/conditions.json', 'after/persistent/scenes/frontier_gate.json', ...}
+=========================== short test summary info ===========================
+FAILED tests/test_five_turn_gameplay.py::test_G12_budget_exhaustion - assert ...
+FAILED tests/test_five_turn_gameplay.py::test_G22_exact_accounting - assert 1...
+FAILED tests/test_five_turn_gameplay.py::test_G25_complete_export - Assertion...
+

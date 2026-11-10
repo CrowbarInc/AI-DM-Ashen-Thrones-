@@ -1,0 +1,31 @@
+{
+  "selected": "B",
+  "envelope_used_within_B": "shared validated mutation envelope (C mechanism)",
+  "options": [
+    {
+      "id": "A",
+      "description": "extend inventory only",
+      "ruleset_independence": "conditional",
+      "migration": "low initially; high fixtures",
+      "authority_risk": "pseudo-inventory for world objects",
+      "decision": "reject as generic foundation"
+    },
+    {
+      "id": "B",
+      "description": "lightweight shared instance contract; existing hosts",
+      "ruleset_independence": "strong",
+      "migration": "bounded explicit promotion",
+      "authority_risk": "requires single-host/delegation invariant",
+      "decision": "recommend"
+    },
+    {
+      "id": "C",
+      "description": "shared event/mutation envelope without common identity",
+      "ruleset_independence": "good envelope",
+      "migration": "low initially",
+      "authority_risk": "duplicate IDs and cross-host reconciliation unresolved",
+      "decision": "reject alone"
+    }
+  ],
+  "full_criteria_matrix": "development/campaigns/product_realization/pr_play_object_identity_architecture/ARCHITECTURE_OPTIONS.md"
+}

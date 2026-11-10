@@ -1,0 +1,751 @@
+{
+  "campaign_id": "pr_play_57",
+  "campaign_name": "PR-PLAY-57 — Integrated Authoritative Outcome Narration",
+  "campaign_date": "2026-11-03",
+  "purpose": "Evaluate completed-outcome narration inside quarantine.",
+  "objective_status": "B — PARTIAL / FURTHER INVESTIGATION REQUIRED",
+  "executive_summary": "# PR-PLAY-57 — B — PARTIAL / FURTHER INVESTIGATION REQUIRED\n\nEight real integrated candidates were generated across four existing investigation scenarios. Default gameplay remains deterministic. Provisional reading shows better action responsiveness and more coherent outcomes than the captured prelude-plus-anchor responses. The gates still reject legitimate paraphrases, so this is not ready for promotion.\n\n- Provider: OpenAI; model(s): gpt-4.1-mini-2025-04-14. Successful calls: 8/8. Tokens: 3228 input + 478 output = 3706. Retries: 0.\n- Provider latency: 1.892s average, 4.223s maximum. Exact per-call measurements are in performance_and_usage.json and raw_provider_responses.json.\n- Combined gates: {'FAIL': 1, 'PASS': 4, 'REVIEW_REQUIRED': 3}. PR55 alone: {'FAIL': 1, 'PASS': 7}. Mandatory coverage: {'REVIEW_REQUIRED': 4, 'PASS': 4}.\n- Provisional review: no identified new positive consequential fabrication or hidden disclosure. Omission/uncertainty concerns: []. Human/external review remains pending.\n- State, quarantine and deterministic response checks pass on all eight. All raw state stops are preserved and explained; no gameplay assertions were relaxed.\n- Regression: 557 passed / 3 known focused failures, no errors/skips; holdout wrapper passed; all nine known broader metadata failures reproduced. New module: 28/28.\n- No commit or push. No ordinary player narration enabled. No ATGB benchmark score claimed.\n\nPrimary next cycle: improve integrated outcome coverage with a bounded, reviewed paraphrase mechanism. Preserve quarantine and demonstrate the same gameplay value; do not expand into general validator hardening.\n\n## Changes made\n\nNew game/integrated_investigation_narration.py; small changes to game/quarantined_investigation_narration.py; new tests/test_pr_play_57_integrated_narration.py; extended architecture allowlist and persistence-import checks in tests/test_pr_play_49_anchored_narration.py. All other output is scoped evidence under artifacts/pr_play_57 and generated handoff exports.\n\n## Human review and known limits\n\nReview exact prose, especially “urgent update,” qualified negative search wording, and footprint uncertainty. Automated scores and this separate raw-text reading are provisional, not independent ground truth. Scenario B is a mundane no-clue examination, not a failed skill check. This four-scenario experiment does not establish general gameplay or validator completeness. Existing gold-gain wording is missed by PR55 but rejected by the preserved legacy mechanical check.\n\n## Bundle contents\n\nSeventeen reports, raw SDK captures, contracts, fact IDs, validation/coverage reasons, worksheets, individual quality scores, complete state comparisons, three durably accounted budget shards, regression logs, and incremental source diffs. No secrets or environment file is included.\n",
+  "primary_report": "artifacts/pr_play_57/01_EXECUTIVE_SUMMARY.md",
+  "evidence_packets": [
+    "artifacts/pr_play_57"
+  ],
+  "max_file_bytes": 33554432,
+  "changes": {
+    "production": [
+      "Opt-in integrated narration adapter and small quarantine transport extension. Default deterministic behavior preserved."
+    ],
+    "validation": [
+      "Narrow conservative mandatory-outcome check; PR55 unchanged. 28 integrated tests and updated quarantine architecture assertion."
+    ],
+    "tooling": [
+      "Three decreasing-budget durable accounting shards; state-stop diagnostics preserved."
+    ],
+    "documentation": [
+      "Seventeen requested campaign reports and provisional review worksheets."
+    ],
+    "generated_artifacts": [
+      "Explicit evidence export with raw provider captures and source diffs."
+    ]
+  },
+  "testing": {
+    "focused": "557 passed, 3 known failures; final 28-case module counted once.",
+    "broader": "Nine known hard_validation_attempt_1 failures reproduced; holdout wrapper passed.",
+    "full_suite": "Not executed.",
+    "runtime_validation": "8/8 successful real requests; all state/quarantine/fallback checks pass.",
+    "model_runtime_boundary": "Engine resolves first; prose never reaches ordinary player response or authoritative storage.",
+    "new_regressions": "None after updating architecture assertion for the new quarantined module.",
+    "pre_existing_failures": "Same three focused and nine broader metadata failures."
+  },
+  "decisions_requiring_human_review": [
+    "Review the eight provisional semantic worksheets; no human confirmation claimed. No player-facing promotion authorized."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Four candidates conservatively flagged for coverage, including faithful cross-sentence/wording paraphrases. A1 also rejected by PR55."
+    ],
+    "pre_existing": [
+      "Known gold-gain phrase missed by PR55 and rejected by the preserved legacy gate; three focused and nine broader test failures."
+    ]
+  },
+  "missing_concepts": [
+    "Deterministic failed skill-check fixture; consequences outside disclosure-only investigations."
+  ],
+  "does_not_prove": [
+    "Human-confirmed quality, semantic completeness, broad gameplay, or safe player-facing narration."
+  ],
+  "recommended_next_step": "Improve integrated outcome coverage using a bounded reviewed paraphrase set while preserving quarantine.",
+  "self_contained_review_test": "ZIP CRC, included-file SHA-256 and secret scan verified by package_review.py.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_57/01_EXECUTIVE_SUMMARY.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/02_BASELINE_AND_SCOPE.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/03_INTEGRATED_NARRATION_ARCHITECTURE.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/04_STRUCTURED_OUTCOME_CONTRACT.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/05_SCENARIO_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/06_RAW_INTEGRATED_NARRATION.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/07_BASELINE_COMPARISON.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/08_VALIDATION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/09_MANDATORY_OUTCOME_COVERAGE.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/10_INDEPENDENT_SEMANTIC_REVIEW.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/11_NARRATION_QUALITY.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/12_STATE_AND_QUARANTINE_INTEGRITY.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/13_FAILURE_HANDLING.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/14_PERFORMANCE_AND_USAGE.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/15_REGRESSION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/16_LIMITATIONS_AND_OPEN_RISKS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/17_NEXT_SESSION.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/authorized_outcome_contracts.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/baseline_comparison.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/broader_hard_validation.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/broader_hard_validation.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/broader_hard_validation_final.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/broader_hard_validation_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/campaign_hashes_before.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/closeout_metrics.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/closeout_metrics.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/combined_results.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/continuation_integrity.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/continue_experiment.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/coverage_decisions.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/deterministic_baselines.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/entry/commit.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/entry/quarantined_investigation_narration.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/entry/status.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/entry/test_pr_play_49_anchored_narration.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/evidence_manifest.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/evidence_summary.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/export_scan.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/failure_handling.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/final_integrity.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/final_results.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/finish_experiment.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/focused.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/focused.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/focused_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/generation_parameters.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/holdout.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/holdout.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/holdout_final.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/holdout_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/hook_evidence/A1_t1-001.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/hook_evidence/A2_t1-001.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/hook_evidence/B1_t1-001.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/hook_evidence/B2_t1-002.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/hook_evidence/C1_t2-003.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/hook_evidence/C2_t2-004.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/hook_evidence/D1_t1-005.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/hook_evidence/D2_t1-006.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/implementation.diff",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/independent_review_worksheets.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/initial_stop_analysis.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/integrated_candidates.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/mandatory_fact_identifiers.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/new_tests.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/new_tests_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/package_review.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/performance_and_usage.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/preflight.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/prepare_review.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/provider_usage.jsonl",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/provider_usage_final.jsonl",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/provider_usage_remaining.jsonl",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/provisional_assessments.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/quality_scores.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/raw_provider_responses.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/regression_summary.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/regression_summary_final.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/run_experiment.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/run_regression.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/run_regression_final.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/scenario_manifest.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/scenario_results.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/second_stop_analysis.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/state_and_quarantine_audit.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/state_integrity.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/test_summary.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_57/validation_decisions.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "game/anchored_investigation_narration.py",
+      "role": "source",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/consequential_narration_validation.py",
+      "role": "source",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/expressive_dialogue.py",
+      "role": "source",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "source",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/integrated_investigation_narration.py",
+      "role": "source",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/offline_investigation_projection.py",
+      "role": "source",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/provider_budget.py",
+      "role": "source",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/quarantined_investigation_narration.py",
+      "role": "source",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_49_anchored_narration.py",
+      "role": "source",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_57_integrated_narration.py",
+      "role": "source",
+      "why": "Explicit PR-PLAY-57 implementation or execution evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_57/review_config.json",
+      "role": "export_configuration",
+      "why": "Reproduce the exact repository handoff selection."
+    }
+  ]
+}

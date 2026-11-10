@@ -1,0 +1,370 @@
+{
+  "scope": "Ephemeral read-side frames derived only from trusted outcome text or existing SemanticAuthority effect fields. Not a second gameplay state store.",
+  "fields": [
+    "entity",
+    "property",
+    "result",
+    "permanent",
+    "kind",
+    "text"
+  ],
+  "previous_state": "Only when supplied in scene/outcome text; not inferred. Contradictions compare same entity/property.",
+  "disclosure": "Existing restricted-fact validator runs independently. Caller must only supply engine-approved player-visible outcome text. No new disclosure authorization.",
+  "contracts": [
+    {
+      "id": "D01",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D02",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D03",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D04",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D05",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D06",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D07",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D08",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D09",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D10",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D11",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D12",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D13",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D14",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D15",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D16",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D17",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate is temporarily open."
+        ]
+      },
+      "outcome_frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The gate is temporarily open."
+        }
+      ]
+    },
+    {
+      "id": "D18",
+      "authority": {
+        "authorized_outcomes": [
+          "The south hatch opens."
+        ]
+      },
+      "outcome_frames": [
+        {
+          "entity": "south hatch",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The south hatch opens."
+        }
+      ]
+    },
+    {
+      "id": "D19",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate opens."
+        ]
+      },
+      "outcome_frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The gate opens."
+        }
+      ]
+    },
+    {
+      "id": "D20",
+      "authority": {
+        "observable_scene": [
+          "The gate is open."
+        ]
+      },
+      "outcome_frames": []
+    },
+    {
+      "id": "D21",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate opens."
+        ]
+      },
+      "outcome_frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The gate opens."
+        }
+      ]
+    },
+    {
+      "id": "D22",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate opens."
+        ]
+      },
+      "outcome_frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The gate opens."
+        }
+      ]
+    },
+    {
+      "id": "D23",
+      "authority": {
+        "authorized_outcomes": [
+          "The door is unlocked."
+        ]
+      },
+      "outcome_frames": [
+        {
+          "entity": "door",
+          "property": "lock",
+          "result": "unlocked",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The door is unlocked."
+        }
+      ]
+    },
+    {
+      "id": "D24",
+      "authority": {
+        "authorized_outcomes": [
+          "The bridge collapses."
+        ]
+      },
+      "outcome_frames": [
+        {
+          "entity": "bridge",
+          "property": "integrity",
+          "result": "collapsed",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The bridge collapses."
+        }
+      ]
+    },
+    {
+      "id": "D25",
+      "authority": {
+        "authorized_outcomes": [
+          "You pick up the key."
+        ]
+      },
+      "outcome_frames": [
+        {
+          "entity": "key",
+          "property": "inventory",
+          "result": "acquired",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "You pick up the key."
+        }
+      ]
+    },
+    {
+      "id": "D26",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate is permanently open."
+        ]
+      },
+      "outcome_frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": true,
+          "kind": "persistent_change",
+          "text": "The gate is permanently open."
+        }
+      ]
+    },
+    {
+      "id": "D27",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D28",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D29",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D30",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D31",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D32",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D33",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D34",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D35",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D36",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D37",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D38",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D39",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D40",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D41",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D42",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D43",
+      "authority": {
+        "observable_scene": [
+          "The gate is open."
+        ]
+      },
+      "outcome_frames": []
+    },
+    {
+      "id": "D44",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D45",
+      "authority": {},
+      "outcome_frames": []
+    },
+    {
+      "id": "D46",
+      "authority": {},
+      "outcome_frames": []
+    }
+  ]
+}

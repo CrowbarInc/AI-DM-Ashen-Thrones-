@@ -1,0 +1,307 @@
+[
+  {
+    "scenario_id": "A",
+    "generation": 1,
+    "label": "A1",
+    "raw_narration": "The notice board stands weathered and crowded, its surface plastered with official decrees and urgent warnings. Nearby, the murmur of the gate serjeant and the clatter of the tavern runner’s footsteps mingle with the restless shifting of watchers and refugees. The board’s messages draw a steady stream of glances from those waiting in the muddy queue.",
+    "authorized_facts": {
+      "observable_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "authorized_discoveries": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "authorized_outcomes": [],
+      "restricted": [],
+      "success": true
+    },
+    "mechanical": [
+      {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_id": "notice_patrol_route",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "skill_check_failed": null,
+          "interactable_id": "notice_board"
+        }
+      }
+    ],
+    "pipeline_diagnostic": "heuristic_pass_pending_review",
+    "validator_decision": "PASS",
+    "validator_reasons": [],
+    "candidate_claims_from_validator": [],
+    "proposed_semantic_classification": "EVALUATION_INCOMPLETE",
+    "classification_status": "awaiting_independent_review",
+    "supporting_evidence": "Not filled by the validator. A later review compares the raw sentence with the authorized facts.",
+    "uncertainty_notes": "",
+    "human_confirmed": false
+  },
+  {
+    "scenario_id": "A",
+    "generation": 2,
+    "label": "A2",
+    "raw_narration": "The notice board stands weathered and worn, its surface crowded with official decrees and hastily scrawled warnings. Nearby, the murmur of the crowd blends with the occasional clatter of boots on mud, while a gate serjeant watches over the gathering with a wary eye.",
+    "authorized_facts": {
+      "observable_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "authorized_discoveries": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "authorized_outcomes": [],
+      "restricted": [],
+      "success": true
+    },
+    "mechanical": [
+      {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_id": "notice_patrol_route",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "skill_check_failed": null,
+          "interactable_id": "notice_board"
+        }
+      }
+    ],
+    "pipeline_diagnostic": "heuristic_pass_pending_review",
+    "validator_decision": "PASS",
+    "validator_reasons": [],
+    "candidate_claims_from_validator": [],
+    "proposed_semantic_classification": "EVALUATION_INCOMPLETE",
+    "classification_status": "awaiting_independent_review",
+    "supporting_evidence": "Not filled by the validator. A later review compares the raw sentence with the authorized facts.",
+    "uncertainty_notes": "",
+    "human_confirmed": false
+  },
+  {
+    "scenario_id": "B",
+    "generation": 1,
+    "label": "B1",
+    "raw_narration": "The notice board stands weathered and crowded, its wooden frame mottled by rain and age. Faded papers flutter weakly in the breeze, their ink smudged and difficult to decipher. Nearby, the murmur of the gate serjeant and the clatter of the tavern runner’s footsteps fill the damp air.",
+    "authorized_facts": {
+      "observable_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "authorized_discoveries": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "authorized_outcomes": [
+        "The examination adds nothing new to what you already know."
+      ],
+      "restricted": [],
+      "success": false
+    },
+    "mechanical": [
+      {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_id": "notice_patrol_route",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "skill_check_failed": null,
+          "interactable_id": "notice_board"
+        }
+      },
+      {
+        "kind": "already_searched",
+        "success": false,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_id": null,
+        "clue_text": null,
+        "discovered_clues": [],
+        "state_changes": {
+          "clue_revealed": null,
+          "already_searched": true,
+          "skill_check_failed": null,
+          "interactable_id": "notice_board"
+        }
+      }
+    ],
+    "pipeline_diagnostic": "heuristic_pass_pending_review",
+    "validator_decision": "PASS",
+    "validator_reasons": [],
+    "candidate_claims_from_validator": [],
+    "proposed_semantic_classification": "EVALUATION_INCOMPLETE",
+    "classification_status": "awaiting_independent_review",
+    "supporting_evidence": "Not filled by the validator. A later review compares the raw sentence with the authorized facts.",
+    "uncertainty_notes": "",
+    "human_confirmed": false
+  },
+  {
+    "scenario_id": "C",
+    "generation": 1,
+    "label": "C1",
+    "raw_narration": "The rain barrel stands near the bustling gate, its surface slick with recent drizzle. The air carries the mingled scents of damp earth and simmering stew, while murmurs of the crowd ebb and flow around it. Shadows shift as watchers and travelers pass by, leaving the barrel’s purpose quietly unspoken.",
+    "authorized_facts": {
+      "observable_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "authorized_discoveries": [],
+      "authorized_outcomes": [
+        "No new clue is established by this examination."
+      ],
+      "restricted": [],
+      "success": true
+    },
+    "mechanical": [
+      {
+        "kind": "investigate",
+        "success": true,
+        "action_id": "i_examine_the_rain_barrel",
+        "interactable_id": null,
+        "clue_id": null,
+        "clue_text": null,
+        "discovered_clues": [],
+        "state_changes": {
+          "clue_revealed": null,
+          "already_searched": null,
+          "skill_check_failed": null,
+          "interactable_id": null
+        }
+      }
+    ],
+    "pipeline_diagnostic": "heuristic_pass_pending_review",
+    "validator_decision": "PASS",
+    "validator_reasons": [],
+    "candidate_claims_from_validator": [],
+    "proposed_semantic_classification": "EVALUATION_INCOMPLETE",
+    "classification_status": "awaiting_independent_review",
+    "supporting_evidence": "Not filled by the validator. A later review compares the raw sentence with the authorized facts.",
+    "uncertainty_notes": "",
+    "human_confirmed": false
+  },
+  {
+    "scenario_id": "C",
+    "generation": 2,
+    "label": "C2",
+    "raw_narration": "The rain barrel stands near the bustling gate, its dark surface mottled by the steady drizzle. Steam rises faintly from the nearby stew, mingling with the damp air as murmurs and footsteps echo around the muddy line of watchers. The barrel’s quiet presence invites a closer look.",
+    "authorized_facts": {
+      "observable_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "authorized_discoveries": [],
+      "authorized_outcomes": [
+        "No new clue is established by this examination."
+      ],
+      "restricted": [],
+      "success": true
+    },
+    "mechanical": [
+      {
+        "kind": "investigate",
+        "success": true,
+        "action_id": "i_examine_the_rain_barrel",
+        "interactable_id": null,
+        "clue_id": null,
+        "clue_text": null,
+        "discovered_clues": [],
+        "state_changes": {
+          "clue_revealed": null,
+          "already_searched": null,
+          "skill_check_failed": null,
+          "interactable_id": null
+        }
+      }
+    ],
+    "pipeline_diagnostic": "heuristic_pass_pending_review",
+    "validator_decision": "PASS",
+    "validator_reasons": [],
+    "candidate_claims_from_validator": [],
+    "proposed_semantic_classification": "EVALUATION_INCOMPLETE",
+    "classification_status": "awaiting_independent_review",
+    "supporting_evidence": "Not filled by the validator. A later review compares the raw sentence with the authorized facts.",
+    "uncertainty_notes": "",
+    "human_confirmed": false
+  },
+  {
+    "scenario_id": "D",
+    "generation": 1,
+    "label": "D1",
+    "raw_narration": "The ground near the weathered milestone is soft and disturbed, marked by a tangle of faint footprints that overlap and blur together. The muddied earth bears the subtle impressions of passage, but the details remain elusive beneath the shifting layers of soil and moisture.",
+    "authorized_facts": {
+      "observable_scene": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+        "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      ],
+      "authorized_discoveries": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "authorized_outcomes": [],
+      "restricted": [],
+      "success": true
+    },
+    "mechanical": [
+      {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "prints",
+        "interactable_id": "prints",
+        "clue_id": "milestone_mud_prints",
+        "clue_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "discovered_clues": [
+          "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "skill_check_failed": null,
+          "interactable_id": "prints"
+        }
+      }
+    ],
+    "pipeline_diagnostic": "heuristic_pass_pending_review",
+    "validator_decision": "PASS",
+    "validator_reasons": [],
+    "candidate_claims_from_validator": [],
+    "proposed_semantic_classification": "EVALUATION_INCOMPLETE",
+    "classification_status": "awaiting_independent_review",
+    "supporting_evidence": "Not filled by the validator. A later review compares the raw sentence with the authorized facts.",
+    "uncertainty_notes": "",
+    "human_confirmed": false
+  }
+]

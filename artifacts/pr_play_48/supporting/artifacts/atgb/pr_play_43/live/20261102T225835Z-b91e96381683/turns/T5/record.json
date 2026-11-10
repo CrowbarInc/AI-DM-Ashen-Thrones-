@@ -1,0 +1,1082 @@
+{
+  "step_id": "T5",
+  "intent": "footprint investigation",
+  "player_input": "I examine the footprints.",
+  "submitted": true,
+  "retried": false,
+  "current_scene_before": "old_milestone",
+  "http_status": 200,
+  "api_latency_seconds": 4.999,
+  "player_facing_text": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+  "engine": {
+    "ok": true,
+    "status": null,
+    "error": null,
+    "resolution_keys": [
+      "action_id",
+      "clue_id",
+      "clue_text",
+      "discovered_clues",
+      "hint",
+      "interactable_id",
+      "kind",
+      "label",
+      "metadata",
+      "prompt",
+      "resolved_transition",
+      "state_changes",
+      "success",
+      "target_scene_id",
+      "world_tick_events",
+      "world_updates"
+    ],
+    "action_type": null,
+    "intent": null,
+    "kind": "discover_clue",
+    "action_id": "prints",
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "originating_scene_id": null,
+    "prompt": "I examine the footprints.",
+    "discovered_clues": [
+      "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    ],
+    "state_changes": {
+      "clue_revealed": true,
+      "interactable_id": "prints"
+    },
+    "noncombat_resolution": null,
+    "authoritative_mutation": null,
+    "processing_outcome": null,
+    "resolver_invoked": null,
+    "narration_invoked": null,
+    "gameplay_parser_invoked": null,
+    "provider_calls": null,
+    "resolution_metadata_keys": [
+      "communication_mode",
+      "contract_before_resolver",
+      "contract_construction_source",
+      "gm_resolution_decision",
+      "interaction_obligation",
+      "live_chat_interpretation",
+      "ordinary_contract_established",
+      "performance",
+      "referenced_surface_authority",
+      "referenced_surface_existence",
+      "referenced_surface_inspectability",
+      "referenced_surface_inspectable_text",
+      "referenced_surface_interactable_id",
+      "referenced_surface_target",
+      "referenced_surface_visibility",
+      "referenced_surface_visible_fact",
+      "resolution_contract",
+      "response_type_contract",
+      "selected_resolver",
+      "semantic_owner",
+      "skip_unrelated_clue_discovery",
+      "turn_segmentation",
+      "unknown_legacy_keys"
+    ],
+    "conversational_decision": null,
+    "stored_interpretation_bridge": null,
+    "live_interpretation": {
+      "status": "accepted",
+      "reason": "eligible_for_bridge",
+      "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+      "model_communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"ACTION\",\"subject\":\"examine footprints\",\"evidence_refs\":[\"visible:1\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player intends to examine the footprints in the mud track near the Old Milestone.\"},\"asserted_premises\":[{\"text\":\"The footprints are faint overlapping prints in the mud around the weathered milestone.\"}],\"requested_outcomes\":[{\"text\":\"Gain detailed information about the footprints to potentially aid in following the missing patrol trail.\"}],\"action_components\":[{\"order\":1,\"description\":\"Examine the mud prints near the weathered milestone on the northwest track.\",\"target_ref\":\"prints\",\"operation_class\":\"INSPECT\"}],\"references\":{\"permitted_entity_ids\":[\"prints\",\"milestone\",\"leave_for_return_to_cinderwatch_gate\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "provider_requests": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "e76d09f5c1b94f1a8c3025e133d9643a",
+          "attempt_id": "c472349802b84966ae92f6910609ca1c",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-02T22:59:09.020952+00:00",
+          "time": "2026-11-02T22:59:13.062614+00:00",
+          "sequence": 5,
+          "admission": "admitted",
+          "budget_remaining": 5,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "sent": true,
+          "request_id": "resp_05ec4ddac95016cb006ae915bec3f087d29914bc106a635c11",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2586,
+          "output_tokens": 197,
+          "total_tokens": 2783,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2611.732
+        }
+      ],
+      "bridge": {
+        "source": "stored_interpretation",
+        "accepted": true,
+        "operation": "INSPECT",
+        "target_ref": "prints",
+        "engine_type": "investigate",
+        "visible_surface_inspection": false
+      },
+      "record": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player intends to examine the footprints in the mud track near the Old Milestone."
+        },
+        "asserted_premises": [
+          {
+            "text": "The footprints are faint overlapping prints in the mud around the weathered milestone.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Gain detailed information about the footprints to potentially aid in following the missing patrol trail.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Examine the mud prints near the weathered milestone on the northwest track.",
+            "target_ref": "prints",
+            "operation_class": "INSPECT"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "prints",
+            "milestone",
+            "leave_for_return_to_cinderwatch_gate"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        },
+        "communication": {
+          "recipient": "CHARACTER",
+          "purpose": "ACTION",
+          "subject": "examine footprints",
+          "evidence_refs": [
+            "visible:1"
+          ]
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "INSPECT"
+        },
+        "public_evidence": {
+          "visible:1": "The mud around the marker is churned with faint overlapping prints that fade into the scrub."
+        }
+      }
+    },
+    "tags": [
+      "deterministic_narration",
+      "provider_narration_skipped",
+      "resolved_clue_discovery",
+      "final_emission_gate_replaced",
+      "visibility_enforcement_replaced",
+      "visibility_violation:undiscovered_fact_assertion",
+      "authoritative_resolution_fact_preserved"
+    ],
+    "provenance": "initial_generation",
+    "hard_valid": true,
+    "expression_decision": null,
+    "gm_metadata_keys": [
+      "accepted_response",
+      "decision_review",
+      "hard_validation_attempt_1",
+      "live_resolution_mode",
+      "narration_provider_calls",
+      "narration_retry_count",
+      "narration_seam",
+      "provider_narration_skip_reason",
+      "provider_narration_skipped",
+      "response_policy_enforcement_applied",
+      "skipped_semantic_mutators"
+    ],
+    "missing_observability": []
+  },
+  "persisted_engine": {
+    "log_index": 5,
+    "player_input": "I examine the footprints.",
+    "player_facing_text": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "intent_classification": {
+      "raw_text": "I examine the footprints.",
+      "labels": [
+        "investigation"
+      ],
+      "allow_discoverable_clues": true,
+      "confidence": "rule_based"
+    },
+    "resolution_kind": "discover_clue",
+    "action_id": "prints",
+    "action_type": null,
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "originating_scene_id": null,
+    "prompt": "I examine the footprints.",
+    "discovered_clues": [
+      "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    ],
+    "state_changes": {
+      "clue_revealed": true,
+      "interactable_id": "prints"
+    },
+    "clocks_changed": {
+      "time_pressure": 5
+    },
+    "discovered_clues_added": [
+      "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    ],
+    "approved_state_updates": {
+      "scene_update": null,
+      "world_updates": null,
+      "new_scene_draft": null
+    },
+    "rejected_state_updates": [],
+    "log_meta_keys": [
+      "approved_state_updates",
+      "clocks_changed",
+      "communication_mode",
+      "discovered_clues_added",
+      "gm_prompt_context_summary",
+      "gm_raw_output_meta",
+      "intent_classification",
+      "mode_source",
+      "player_input",
+      "processing_input",
+      "rejected_state_updates",
+      "response_type_contract",
+      "surfaced_clues_in_narration_non_authoritative"
+    ],
+    "resolution_metadata_keys": [
+      "communication_mode",
+      "contract_before_resolver",
+      "contract_construction_source",
+      "emission_debug",
+      "gm_resolution_decision",
+      "interaction_obligation",
+      "live_chat_interpretation",
+      "ordinary_contract_established",
+      "performance",
+      "referenced_surface_authority",
+      "referenced_surface_existence",
+      "referenced_surface_inspectability",
+      "referenced_surface_inspectable_text",
+      "referenced_surface_interactable_id",
+      "referenced_surface_target",
+      "referenced_surface_visibility",
+      "referenced_surface_visible_fact",
+      "resolution_contract",
+      "response_type_contract",
+      "selected_resolver",
+      "semantic_owner",
+      "skip_unrelated_clue_discovery",
+      "turn_segmentation",
+      "unknown_legacy_keys"
+    ],
+    "processing_outcome": null,
+    "resolver_invoked": null,
+    "narration_invoked": null,
+    "gameplay_parser_invoked": null,
+    "conversational_decision": null,
+    "stored_interpretation_bridge": null,
+    "opening_recovery_debug": null,
+    "provenance": "initial_generation",
+    "hard_valid": true,
+    "response_type_contract": {
+      "required_response_type": "action_outcome",
+      "source_route": "exploration",
+      "allow_escalation": false,
+      "debug_reasons": [
+        "resolved_world_action_requires_action_outcome",
+        "non_hostile_world_action_guard"
+      ]
+    }
+  },
+  "provider": [
+    {
+      "event": "admitted",
+      "stage": null,
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null,
+      "sequence": 5,
+      "budget_remaining": 5,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "dispatch_attempted",
+      "stage": null,
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null,
+      "sequence": 5,
+      "budget_remaining": 5,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "completed",
+      "stage": null,
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 2586,
+      "output_tokens": 197,
+      "total_tokens": 2783,
+      "latency_ms": 2611.732,
+      "completion_status": "completed",
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null,
+      "sequence": 5,
+      "budget_remaining": 5,
+      "fallback": null,
+      "retry_count": null
+    }
+  ],
+  "provider_completed_count": 1,
+  "state_before": {
+    "campaign_title": "Ashen Thrones",
+    "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+    "session_id": "5d7040aa8eb9b4e6f6b7c933",
+    "campaign_started": true,
+    "active_scene_id": "old_milestone",
+    "visited_scene_ids": [
+      "frontier_gate",
+      "old_milestone"
+    ],
+    "current_date": "Day 1",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 4
+    },
+    "turn_counter": 4,
+    "chat_history_len": 0,
+    "log_entries": 5,
+    "discovered_clues_by_scene": {
+      "frontier_gate": [
+        "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+        "Follow the missing patrol rumor",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ]
+    },
+    "clue_knowledge": {
+      "muddy_footprints_northwest": "discovered",
+      "minlead_exit_frontier_gate_old_milestone": "discovered",
+      "notice_patrol_route": "discovered"
+    },
+    "known_clue_ids": null,
+    "deferred_intentions": null,
+    "deferred_steps": null,
+    "time_pressure": 4,
+    "active_quests": null,
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "hp_current": 8,
+      "hp_max": 8,
+      "gold": null,
+      "resources": null,
+      "inventory_count": 1,
+      "inventory_ids": [
+        "spellbook"
+      ]
+    },
+    "world_clue_ids": [],
+    "authority_catalog": {
+      "npc_ids": [
+        "gate_guard",
+        "gate_serjeant",
+        "tavern_runner"
+      ],
+      "npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "watch_command"
+          ]
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "route_change"
+          ]
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "patrol_rumor"
+          ]
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "pressure": 6,
+          "influence": 3,
+          "agenda_progress": 4
+        },
+        {
+          "id": "ash_cowl",
+          "pressure": 6,
+          "influence": 3,
+          "agenda_progress": 4
+        },
+        {
+          "id": "ordo_pyric",
+          "pressure": 5,
+          "influence": 2,
+          "agenda_progress": 4
+        }
+      ],
+      "world_event_log_len": 5,
+      "scenes": {
+        "frontier_gate": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Enter Cinderwatch",
+              "target_scene_id": "market_quarter"
+            },
+            {
+              "id": null,
+              "label": "Follow the missing patrol rumor",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [
+            "notice_board"
+          ],
+          "addressable_ids": [
+            "guard_captain",
+            "tavern_runner",
+            "refugee",
+            "threadbare_watcher"
+          ]
+        },
+        "market_quarter": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to the Gate",
+              "target_scene_id": "frontier_gate"
+            },
+            {
+              "id": null,
+              "label": "Seek the fortress trail",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [],
+          "addressable_ids": []
+        },
+        "old_milestone": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to Cinderwatch Gate",
+              "target_scene_id": "frontier_gate"
+            }
+          ],
+          "interactable_ids": [
+            "milestone",
+            "prints"
+          ],
+          "addressable_ids": []
+        }
+      }
+    },
+    "documents_present": [
+      "campaign.json",
+      "character.json",
+      "combat.json",
+      "conditions.json",
+      "scenes/frontier_gate.json",
+      "scenes/market_quarter.json",
+      "scenes/old_milestone.json",
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "observability_gaps": [
+      "active_quests",
+      "known_clues",
+      "character_resources"
+    ]
+  },
+  "state_after": {
+    "campaign_title": "Ashen Thrones",
+    "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+    "session_id": "5d7040aa8eb9b4e6f6b7c933",
+    "campaign_started": true,
+    "active_scene_id": "old_milestone",
+    "visited_scene_ids": [
+      "frontier_gate",
+      "old_milestone"
+    ],
+    "current_date": "Day 1",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 5
+    },
+    "turn_counter": 5,
+    "chat_history_len": 0,
+    "log_entries": 6,
+    "discovered_clues_by_scene": {
+      "frontier_gate": [
+        "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+        "Follow the missing patrol rumor",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "old_milestone": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ]
+    },
+    "clue_knowledge": {
+      "muddy_footprints_northwest": "discovered",
+      "minlead_exit_frontier_gate_old_milestone": "discovered",
+      "notice_patrol_route": "discovered",
+      "milestone_mud_prints": "discovered"
+    },
+    "known_clue_ids": null,
+    "deferred_intentions": null,
+    "deferred_steps": null,
+    "time_pressure": 5,
+    "active_quests": null,
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "hp_current": 8,
+      "hp_max": 8,
+      "gold": null,
+      "resources": null,
+      "inventory_count": 1,
+      "inventory_ids": [
+        "spellbook"
+      ]
+    },
+    "world_clue_ids": [],
+    "authority_catalog": {
+      "npc_ids": [
+        "gate_guard",
+        "gate_serjeant",
+        "tavern_runner"
+      ],
+      "npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "watch_command"
+          ]
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "route_change"
+          ]
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "patrol_rumor"
+          ]
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "pressure": 7,
+          "influence": 3,
+          "agenda_progress": 5
+        },
+        {
+          "id": "ash_cowl",
+          "pressure": 7,
+          "influence": 3,
+          "agenda_progress": 5
+        },
+        {
+          "id": "ordo_pyric",
+          "pressure": 6,
+          "influence": 2,
+          "agenda_progress": 5
+        }
+      ],
+      "world_event_log_len": 8,
+      "scenes": {
+        "frontier_gate": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Enter Cinderwatch",
+              "target_scene_id": "market_quarter"
+            },
+            {
+              "id": null,
+              "label": "Follow the missing patrol rumor",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [
+            "notice_board"
+          ],
+          "addressable_ids": [
+            "guard_captain",
+            "tavern_runner",
+            "refugee",
+            "threadbare_watcher"
+          ]
+        },
+        "market_quarter": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to the Gate",
+              "target_scene_id": "frontier_gate"
+            },
+            {
+              "id": null,
+              "label": "Seek the fortress trail",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [],
+          "addressable_ids": []
+        },
+        "old_milestone": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to Cinderwatch Gate",
+              "target_scene_id": "frontier_gate"
+            }
+          ],
+          "interactable_ids": [
+            "milestone",
+            "prints"
+          ],
+          "addressable_ids": []
+        }
+      }
+    },
+    "documents_present": [
+      "campaign.json",
+      "character.json",
+      "combat.json",
+      "conditions.json",
+      "scenes/frontier_gate.json",
+      "scenes/market_quarter.json",
+      "scenes/old_milestone.json",
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "observability_gaps": [
+      "active_quests",
+      "known_clues",
+      "character_resources"
+    ]
+  },
+  "state_delta": {
+    "authority_catalog": {
+      "before": {
+        "npc_ids": [
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "watch_command"
+            ]
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "route_change"
+            ]
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "patrol_rumor"
+            ]
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 6,
+            "influence": 3,
+            "agenda_progress": 4
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 6,
+            "influence": 3,
+            "agenda_progress": 4
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 5,
+            "influence": 2,
+            "agenda_progress": 4
+          }
+        ],
+        "world_event_log_len": 5,
+        "scenes": {
+          "frontier_gate": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Enter Cinderwatch",
+                "target_scene_id": "market_quarter"
+              },
+              {
+                "id": null,
+                "label": "Follow the missing patrol rumor",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [
+              "notice_board"
+            ],
+            "addressable_ids": [
+              "guard_captain",
+              "tavern_runner",
+              "refugee",
+              "threadbare_watcher"
+            ]
+          },
+          "market_quarter": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to the Gate",
+                "target_scene_id": "frontier_gate"
+              },
+              {
+                "id": null,
+                "label": "Seek the fortress trail",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [],
+            "addressable_ids": []
+          },
+          "old_milestone": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to Cinderwatch Gate",
+                "target_scene_id": "frontier_gate"
+              }
+            ],
+            "interactable_ids": [
+              "milestone",
+              "prints"
+            ],
+            "addressable_ids": []
+          }
+        }
+      },
+      "after": {
+        "npc_ids": [
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "watch_command"
+            ]
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "route_change"
+            ]
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "patrol_rumor"
+            ]
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 7,
+            "influence": 3,
+            "agenda_progress": 5
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 7,
+            "influence": 3,
+            "agenda_progress": 5
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 6,
+            "influence": 2,
+            "agenda_progress": 5
+          }
+        ],
+        "world_event_log_len": 8,
+        "scenes": {
+          "frontier_gate": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Enter Cinderwatch",
+                "target_scene_id": "market_quarter"
+              },
+              {
+                "id": null,
+                "label": "Follow the missing patrol rumor",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [
+              "notice_board"
+            ],
+            "addressable_ids": [
+              "guard_captain",
+              "tavern_runner",
+              "refugee",
+              "threadbare_watcher"
+            ]
+          },
+          "market_quarter": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to the Gate",
+                "target_scene_id": "frontier_gate"
+              },
+              {
+                "id": null,
+                "label": "Seek the fortress trail",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [],
+            "addressable_ids": []
+          },
+          "old_milestone": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to Cinderwatch Gate",
+                "target_scene_id": "frontier_gate"
+              }
+            ],
+            "interactable_ids": [
+              "milestone",
+              "prints"
+            ],
+            "addressable_ids": []
+          }
+        }
+      }
+    },
+    "clocks": {
+      "before": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 4
+      },
+      "after": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 5
+      }
+    },
+    "clue_knowledge": {
+      "before": {
+        "muddy_footprints_northwest": "discovered",
+        "minlead_exit_frontier_gate_old_milestone": "discovered",
+        "notice_patrol_route": "discovered"
+      },
+      "after": {
+        "muddy_footprints_northwest": "discovered",
+        "minlead_exit_frontier_gate_old_milestone": "discovered",
+        "notice_patrol_route": "discovered",
+        "milestone_mud_prints": "discovered"
+      }
+    },
+    "discovered_clues_by_scene": {
+      "before": {
+        "frontier_gate": [
+          "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "Follow the missing patrol rumor",
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ]
+      },
+      "after": {
+        "frontier_gate": [
+          "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "Follow the missing patrol rumor",
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "old_milestone": [
+          "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        ]
+      }
+    },
+    "log_entries": {
+      "before": 5,
+      "after": 6
+    },
+    "time_pressure": {
+      "before": 4,
+      "after": 5
+    },
+    "turn_counter": {
+      "before": 4,
+      "after": 5
+    }
+  },
+  "changed_documents": [
+    "combat.json",
+    "session.json",
+    "session_log.jsonl",
+    "world.json"
+  ],
+  "usage_after": {
+    "dispatched_requests": 5,
+    "input_tokens": 37326,
+    "output_tokens": 2478,
+    "total_tokens": 39804,
+    "stopped": false,
+    "stop_reason": "",
+    "pending_requests": 0
+  }
+}

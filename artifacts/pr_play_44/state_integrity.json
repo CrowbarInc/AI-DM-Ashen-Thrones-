@@ -1,0 +1,440 @@
+{
+  "resolver_core_before_repair": {
+    "kind": "discover_clue",
+    "action_id": "notice_board",
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": "notice_patrol_route",
+    "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "discovered_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "state_changes": {
+      "clue_revealed": true,
+      "interactable_id": "notice_board"
+    },
+    "skill_check": null,
+    "world_updates": null
+  },
+  "resolver_core_after_repair": {
+    "kind": "discover_clue",
+    "action_id": "notice_board",
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": "notice_patrol_route",
+    "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "discovered_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "state_changes": {
+      "clue_revealed": true,
+      "interactable_id": "notice_board"
+    },
+    "skill_check": null,
+    "world_updates": null
+  },
+  "session_comparison": {
+    "active_scene_id": {
+      "baseline": "frontier_gate",
+      "repaired": "frontier_gate"
+    },
+    "visited_scene_ids": {
+      "baseline": [
+        "frontier_gate"
+      ],
+      "repaired": [
+        "frontier_gate"
+      ]
+    },
+    "turn_counter": {
+      "baseline": 3,
+      "repaired": 3
+    },
+    "clocks": {
+      "baseline": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 3
+      },
+      "repaired": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 3
+      }
+    },
+    "scene_runtime": {
+      "baseline": {
+        "frontier_gate": {
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "discovered_clue_ids": [
+            "muddy_footprints_northwest",
+            "minlead_exit_frontier_gate_old_milestone",
+            "notice_patrol_route"
+          ],
+          "pending_leads": [
+            {
+              "clue_id": "minlead_exit_frontier_gate_old_milestone",
+              "text": "Follow the missing patrol rumor",
+              "authoritative_lead_id": "minlead_exit_frontier_gate_old_milestone",
+              "leads_to_scene": "old_milestone"
+            }
+          ],
+          "revealed_hidden_facts": [],
+          "suspicion_flags": [],
+          "searched_targets": [
+            "notice_board"
+          ],
+          "resolved_interactables": [
+            "notice_board"
+          ],
+          "last_exploration_action_key": "notice_board",
+          "repeated_action_count": 1,
+          "last_resolution_kind": "discover_clue",
+          "last_description_hash": "2cfc94d6e089ad89fc008a5dd6939dc8",
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "consumed_action_ids": [],
+          "momentum_exchanges_since": 1,
+          "momentum_next_due_in": 3,
+          "momentum_last_kind": "environmental_change",
+          "passive_action_streak": 0,
+          "recent_player_actions": [
+            {
+              "text": "",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "Have you heard any interesting rumors lately?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I examine the notice board.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            }
+          ],
+          "last_player_action_text": "I examine the notice board.",
+          "last_player_action_passive": false,
+          "recent_contextual_leads": [
+            {
+              "key": "active_event_tavern_runner_loudly_trades_hot_stew_and_whispered_rumors_near_a_rain_barrel",
+              "kind": "active_event",
+              "subject": "tavern runner loudly trades hot stew and whispered rumors",
+              "position": "near a rain barrel",
+              "named": false,
+              "positioned": true,
+              "mentions": 1,
+              "last_turn": 1
+            },
+            {
+              "key": "active_event_overlooking_the_square_a_well_appointed_townhouse_flies_noble_colors_standing_in_quiet_contrast_to_the_clamorous_muddy_scene_below",
+              "kind": "active_event",
+              "subject": "overlooking the square, a well-appointed townhouse flies noble colors, standing in quiet contrast to the clamorous, muddy scene below",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            },
+            {
+              "key": "visible_suspicious_figure_one_figure_in_threadbare_clothes_stands_unnervingly_still_watching_faces_and",
+              "kind": "visible_suspicious_figure",
+              "subject": "one figure in threadbare clothes stands unnervingly still, watching faces and",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            },
+            {
+              "key": "active_event_tavern_runner_mutters_word_is_the_runner_heard_the_patrol_vanished_near_muddy_footprints_northwest_of_the_crates",
+              "kind": "active_event",
+              "subject": "tavern runner mutters, \"word is, the runner heard the patrol vanished",
+              "position": "near muddy footprints northwest of the crates.\"",
+              "named": false,
+              "positioned": true,
+              "mentions": 1,
+              "last_turn": 2
+            },
+            {
+              "key": "scene_npc_tavern_runner",
+              "kind": "scene_npc",
+              "subject": "Tavern Runner",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 2
+            },
+            {
+              "key": "notice_board_notice_board",
+              "kind": "notice_board",
+              "subject": "notice board",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 3
+            }
+          ],
+          "npc_lead_discussions": {
+            "tavern_runner": {
+              "muddy_footprints_northwest": {
+                "npc_id": "tavern_runner",
+                "lead_id": "muddy_footprints_northwest",
+                "first_discussed_turn": 2,
+                "last_discussed_turn": 2,
+                "disclosure_level": "explicit",
+                "player_acknowledged": false,
+                "player_acknowledged_turn": null,
+                "mention_count": 1,
+                "last_scene_id": "frontier_gate"
+              }
+            }
+          },
+          "topic_pressure": {
+            "topic:interest_lately_rumor": {
+              "repeat_count": 1,
+              "low_progress_streak": 0,
+              "progress_score_total": 1.5,
+              "last_answer": "You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+              "last_turn": 2,
+              "speaker_targets": {
+                "tavern_runner": {
+                  "repeat_count": 1,
+                  "low_progress_streak": 0,
+                  "patience": 3,
+                  "last_turn": 2
+                }
+              },
+              "previous_probe_dimension": "",
+              "last_probe_dimension": "general",
+              "last_player_input": "Have you heard any interesting rumors lately?",
+              "last_answer_provenance": "topic_revealed",
+              "last_answer_authoritative_text": "The missing patrol was last seen taking the northwest mud track past the crates."
+            }
+          },
+          "topic_pressure_last_topic_key": "topic:interest_lately_rumor",
+          "topic_pressure_current": {
+            "topic_key": "topic:interest_lately_rumor",
+            "speaker_key": "tavern_runner",
+            "turn": 2,
+            "player_text": "Have you heard any interesting rumors lately?",
+            "interaction_kind": "social",
+            "interaction_mode": "social",
+            "social_intent_class": "social_exchange",
+            "npc_name": "Tavern Runner"
+          }
+        }
+      },
+      "repaired": {
+        "frontier_gate": {
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "discovered_clue_ids": [
+            "muddy_footprints_northwest",
+            "minlead_exit_frontier_gate_old_milestone",
+            "notice_patrol_route"
+          ],
+          "pending_leads": [
+            {
+              "clue_id": "minlead_exit_frontier_gate_old_milestone",
+              "text": "Follow the missing patrol rumor",
+              "authoritative_lead_id": "minlead_exit_frontier_gate_old_milestone",
+              "leads_to_scene": "old_milestone"
+            }
+          ],
+          "revealed_hidden_facts": [],
+          "suspicion_flags": [],
+          "searched_targets": [
+            "notice_board"
+          ],
+          "resolved_interactables": [
+            "notice_board"
+          ],
+          "last_exploration_action_key": "notice_board",
+          "repeated_action_count": 1,
+          "last_resolution_kind": "discover_clue",
+          "last_description_hash": "2cfc94d6e089ad89fc008a5dd6939dc8",
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "consumed_action_ids": [],
+          "momentum_exchanges_since": 1,
+          "momentum_next_due_in": 3,
+          "momentum_last_kind": "environmental_change",
+          "passive_action_streak": 0,
+          "recent_player_actions": [
+            {
+              "text": "",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "Have you heard any interesting rumors lately?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I examine the notice board.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            }
+          ],
+          "last_player_action_text": "I examine the notice board.",
+          "last_player_action_passive": false,
+          "recent_contextual_leads": [
+            {
+              "key": "active_event_tavern_runner_loudly_trades_hot_stew_and_whispered_rumors_near_a_rain_barrel",
+              "kind": "active_event",
+              "subject": "tavern runner loudly trades hot stew and whispered rumors",
+              "position": "near a rain barrel",
+              "named": false,
+              "positioned": true,
+              "mentions": 1,
+              "last_turn": 1
+            },
+            {
+              "key": "active_event_overlooking_the_square_a_well_appointed_townhouse_flies_noble_colors_standing_in_quiet_contrast_to_the_clamorous_muddy_scene_below",
+              "kind": "active_event",
+              "subject": "overlooking the square, a well-appointed townhouse flies noble colors, standing in quiet contrast to the clamorous, muddy scene below",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            },
+            {
+              "key": "visible_suspicious_figure_one_figure_in_threadbare_clothes_stands_unnervingly_still_watching_faces_and",
+              "kind": "visible_suspicious_figure",
+              "subject": "one figure in threadbare clothes stands unnervingly still, watching faces and",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            },
+            {
+              "key": "active_event_tavern_runner_mutters_word_is_the_runner_heard_the_patrol_vanished_near_muddy_footprints_northwest_of_the_crates",
+              "kind": "active_event",
+              "subject": "tavern runner mutters, \"word is, the runner heard the patrol vanished",
+              "position": "near muddy footprints northwest of the crates.\"",
+              "named": false,
+              "positioned": true,
+              "mentions": 1,
+              "last_turn": 2
+            },
+            {
+              "key": "scene_npc_tavern_runner",
+              "kind": "scene_npc",
+              "subject": "Tavern Runner",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 2
+            },
+            {
+              "key": "notice_board_notice_board",
+              "kind": "notice_board",
+              "subject": "notice board",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 3
+            }
+          ],
+          "npc_lead_discussions": {
+            "tavern_runner": {
+              "muddy_footprints_northwest": {
+                "npc_id": "tavern_runner",
+                "lead_id": "muddy_footprints_northwest",
+                "first_discussed_turn": 2,
+                "last_discussed_turn": 2,
+                "disclosure_level": "explicit",
+                "player_acknowledged": false,
+                "player_acknowledged_turn": null,
+                "mention_count": 1,
+                "last_scene_id": "frontier_gate"
+              }
+            }
+          },
+          "topic_pressure": {
+            "topic:interest_lately_rumor": {
+              "repeat_count": 1,
+              "low_progress_streak": 0,
+              "progress_score_total": 1.5,
+              "last_answer": "You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+              "last_turn": 2,
+              "speaker_targets": {
+                "tavern_runner": {
+                  "repeat_count": 1,
+                  "low_progress_streak": 0,
+                  "patience": 3,
+                  "last_turn": 2
+                }
+              },
+              "previous_probe_dimension": "",
+              "last_probe_dimension": "general",
+              "last_player_input": "Have you heard any interesting rumors lately?",
+              "last_answer_provenance": "topic_revealed",
+              "last_answer_authoritative_text": "The missing patrol was last seen taking the northwest mud track past the crates."
+            }
+          },
+          "topic_pressure_last_topic_key": "topic:interest_lately_rumor",
+          "topic_pressure_current": {
+            "topic_key": "topic:interest_lately_rumor",
+            "speaker_key": "tavern_runner",
+            "turn": 2,
+            "player_text": "Have you heard any interesting rumors lately?",
+            "interaction_kind": "social",
+            "interaction_mode": "social",
+            "social_intent_class": "social_exchange",
+            "npc_name": "Tavern Runner"
+          }
+        }
+      }
+    },
+    "inventory": {
+      "baseline": null,
+      "repaired": null
+    },
+    "hp": {
+      "baseline": null,
+      "repaired": null
+    }
+  },
+  "original_response": "You examine the notice board, and you turn up a concrete clue.",
+  "corrected_response": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+  "resolver_core_identical": true,
+  "mechanical_session_fields_identical": true
+}

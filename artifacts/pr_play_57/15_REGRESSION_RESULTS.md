@@ -1,0 +1,109 @@
+# Regression results
+
+{
+  "focused_collected": 560,
+  "focused_passed": 557,
+  "focused_failed": 3,
+  "focused_errors": 0,
+  "focused_skipped": 0,
+  "new_module": {
+    "collected": 28,
+    "passed": 28
+  },
+  "holdout_wrapper": {
+    "label": "holdout",
+    "collected": 1,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 1,
+    "exit_code": 0,
+    "failed_nodeids": [],
+    "failure_messages": [],
+    "command": [
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_55_holdout.py",
+      "--tb=line",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_57\\holdout_final.xml",
+      "--basetemp",
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_57_holdout_13756"
+    ],
+    "provider_calls": "disabled"
+  },
+  "broader_authority": {
+    "label": "broader_hard_validation",
+    "collected": 9,
+    "failed": 9,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 0,
+    "exit_code": 1,
+    "failed_nodeids": [
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]"
+    ],
+    "failure_messages": [
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    ],
+    "command": [
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pr_cx_authority_assurance.py",
+      "--tb=line",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_57\\broader_hard_validation_final.xml",
+      "--basetemp",
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_57_broader_hard_validation_13756"
+    ],
+    "provider_calls": "disabled"
+  },
+  "new_failures": [],
+  "full_suite": "not executed",
+  "method": "Final focused run plus final expanded module; 22 overlapping module cases counted once."
+}
+
+Initial focused run found one architecture allowlist failure for the new quarantined adapter. The architecture test now explicitly recognizes that adapter and adds checks against API/persistence/world/OpenAI imports and direct player-facing wiring. No existing gameplay, effect or output assertion was removed. Final focused run returned to the same three known failures. The final expanded module reran separately; overlapping cases are counted once. Both holdout wrappers passed (including the frozen 70-case holdout and 49-line fabrication checks internally). All nine broader failures are KeyError hard_validation_attempt_1, unchanged and unrepaired. Existing focused test artifacts overwritten by established tests were restored from snapshots. Full repository suite and PR-BR continuation suites were not executed.

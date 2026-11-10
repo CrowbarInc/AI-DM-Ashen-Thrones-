@@ -1,0 +1,54 @@
+{
+  "campaigns": [
+    {
+      "branch": "survey",
+      "result": "BLOCKED",
+      "reason": "live proposal not accepted",
+      "response": "No additional person could be established here. You can still speak to the people already present.",
+      "proposal": {
+        "proposal": null,
+        "validation": {
+          "accepted": false,
+          "reason": "RuntimeError"
+        },
+        "latency_ms": 0.1094999024644494,
+        "retries": 0
+      }
+    },
+    {
+      "branch": "report",
+      "result": "BLOCKED",
+      "reason": "live proposal not accepted",
+      "response": "No additional person could be established here. You can still speak to the people already present.",
+      "proposal": {
+        "proposal": null,
+        "validation": {
+          "accepted": false,
+          "reason": "RuntimeError"
+        },
+        "latency_ms": 0.11989998165518045,
+        "retries": 0
+      }
+    }
+  ],
+  "requests": 19,
+  "mean_http_ms": 338.28337371079743,
+  "median_http_ms": 309.31290006265044,
+  "max_http_ms": 846.105600008741,
+  "provider_usage": {
+    "version": "ATGB-03B-1",
+    "run_id": "3f67ade9cc02475a970c41c5ced116d1",
+    "requests": 0,
+    "request_upper_bound": null,
+    "dispatched_requests": 0,
+    "pending_requests": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [],
+    "events": []
+  },
+  "hidden_exposures": 0
+}

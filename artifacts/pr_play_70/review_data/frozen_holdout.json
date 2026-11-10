@@ -1,0 +1,605 @@
+{
+  "contract": "Both clues required at milestone; immutable boolean outcome flags patrol_survey/patrol_report; branch-specific once-only followup at milestone/gate; trusted deterministic publication, client effects ignored.",
+  "cases": [
+    {
+      "id": "H01",
+      "group": "availability",
+      "branch": "survey",
+      "variant": 0,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H02",
+      "group": "availability",
+      "branch": "report",
+      "variant": 1,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H03",
+      "group": "availability",
+      "branch": "survey",
+      "variant": 2,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H04",
+      "group": "availability",
+      "branch": "report",
+      "variant": 3,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H05",
+      "group": "availability",
+      "branch": "survey",
+      "variant": 4,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H06",
+      "group": "availability",
+      "branch": "report",
+      "variant": 5,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H07",
+      "group": "availability",
+      "branch": "survey",
+      "variant": 6,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H08",
+      "group": "availability",
+      "branch": "report",
+      "variant": 7,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H09",
+      "group": "availability",
+      "branch": "survey",
+      "variant": 8,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H10",
+      "group": "availability",
+      "branch": "report",
+      "variant": 9,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H11",
+      "group": "resolution",
+      "branch": "survey",
+      "variant": 0,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H12",
+      "group": "resolution",
+      "branch": "report",
+      "variant": 1,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H13",
+      "group": "resolution",
+      "branch": "survey",
+      "variant": 2,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H14",
+      "group": "resolution",
+      "branch": "report",
+      "variant": 3,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H15",
+      "group": "resolution",
+      "branch": "survey",
+      "variant": 4,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H16",
+      "group": "resolution",
+      "branch": "report",
+      "variant": 5,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H17",
+      "group": "resolution",
+      "branch": "survey",
+      "variant": 6,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H18",
+      "group": "resolution",
+      "branch": "report",
+      "variant": 7,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H19",
+      "group": "resolution",
+      "branch": "survey",
+      "variant": 8,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H20",
+      "group": "resolution",
+      "branch": "report",
+      "variant": 9,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H21",
+      "group": "persistence",
+      "branch": "survey",
+      "variant": 0,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H22",
+      "group": "persistence",
+      "branch": "report",
+      "variant": 1,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H23",
+      "group": "persistence",
+      "branch": "survey",
+      "variant": 2,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H24",
+      "group": "persistence",
+      "branch": "report",
+      "variant": 3,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H25",
+      "group": "persistence",
+      "branch": "survey",
+      "variant": 4,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H26",
+      "group": "persistence",
+      "branch": "report",
+      "variant": 5,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H27",
+      "group": "persistence",
+      "branch": "survey",
+      "variant": 6,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H28",
+      "group": "persistence",
+      "branch": "report",
+      "variant": 7,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H29",
+      "group": "persistence",
+      "branch": "survey",
+      "variant": 8,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H30",
+      "group": "persistence",
+      "branch": "report",
+      "variant": 9,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H31",
+      "group": "followup",
+      "branch": "survey",
+      "variant": 0,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H32",
+      "group": "followup",
+      "branch": "report",
+      "variant": 1,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H33",
+      "group": "followup",
+      "branch": "survey",
+      "variant": 2,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H34",
+      "group": "followup",
+      "branch": "report",
+      "variant": 3,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H35",
+      "group": "followup",
+      "branch": "survey",
+      "variant": 4,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H36",
+      "group": "followup",
+      "branch": "report",
+      "variant": 5,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H37",
+      "group": "followup",
+      "branch": "survey",
+      "variant": 6,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H38",
+      "group": "followup",
+      "branch": "report",
+      "variant": 7,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H39",
+      "group": "followup",
+      "branch": "survey",
+      "variant": 8,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H40",
+      "group": "followup",
+      "branch": "report",
+      "variant": 9,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H41",
+      "group": "publication",
+      "branch": "survey",
+      "variant": 0,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H42",
+      "group": "publication",
+      "branch": "report",
+      "variant": 1,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H43",
+      "group": "publication",
+      "branch": "survey",
+      "variant": 2,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H44",
+      "group": "publication",
+      "branch": "report",
+      "variant": 3,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H45",
+      "group": "publication",
+      "branch": "survey",
+      "variant": 4,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H46",
+      "group": "isolation",
+      "branch": "survey",
+      "variant": 0,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H47",
+      "group": "isolation",
+      "branch": "report",
+      "variant": 1,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H48",
+      "group": "isolation",
+      "branch": "survey",
+      "variant": 2,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    },
+    {
+      "id": "H49",
+      "group": "isolation",
+      "branch": "report",
+      "variant": 3,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_guards_warned"
+      }
+    },
+    {
+      "id": "H50",
+      "group": "isolation",
+      "branch": "survey",
+      "variant": 4,
+      "expected": {
+        "exclusive": true,
+        "persisted": true,
+        "no_hidden": true,
+        "followup_flag": "patrol_survey_recorded"
+      }
+    }
+  ]
+}

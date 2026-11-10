@@ -1,0 +1,1022 @@
+{
+  "campaign_id": "pr_play_preseal_authority",
+  "campaign_name": "PR-PLAY Pre-Seal Closed-Surface Authority Repair",
+  "campaign_date": "2026-11-08",
+  "purpose": "Enforce existing closed inspection authority before immutable acceptance.",
+  "objective_status": "A/PASS",
+  "executive_summary": "All three unchanged HTTP publication defects corrected before normal validation and sealing. Existing 381 tests: 361 passed / 20 known failures (before 358/23); 17 added tests pass, no new failure. Twelve-turn publication/scene outcomes unchanged. Hidden authority and precedence preserved; zero live provider calls.",
+  "changes": {
+    "production": [
+      "game/immutable_valid_response.py",
+      "game/referenced_surface.py"
+    ],
+    "validation": [
+      "17 new provider-free tests and unchanged historical regression selections"
+    ],
+    "tooling": [
+      "Cycle-owned guarded runners and trace comparison/seal scripts"
+    ],
+    "documentation": [
+      "Nine reports and prepended NEXT_SESSION, preserving historical bytes"
+    ],
+    "generated_artifacts": [
+      "Before/after source and test/publication evidence; fresh review export"
+    ]
+  },
+  "testing": {
+    "focused": "17/17 added; all three unchanged HTTP reproductions pass.",
+    "broader": "356: 333/23 to 336/20; 381: 358/23 to 361/20; with additions 398: 378/20.",
+    "full_suite": "Not run",
+    "runtime_validation": "Seven conversational HTTP controls pass; twelve-turn strings/scenes identical.",
+    "model_runtime_boundary": "0 live provider calls; external network blocked; isolated storage.",
+    "new_regressions": "None; twenty unchanged assertion identities and normalized failures verified.",
+    "pre_existing_failures": "Twelve obsolete public-resolution assertions, stew mismatch, four refusal/publication nodes including portal exception, three KeyErrors."
+  },
+  "decisions_requiring_human_review": [],
+  "known_problems": {
+    "campaign_specific": [
+      "Guarantee limited to explicitly classified closed inspection; unmapped authority preserved."
+    ],
+    "pre_existing": [
+      "T05 stock jab, physical completion, generic responses, trading, mixed refusal/publication controls and unrelated failures remain."
+    ]
+  },
+  "missing_concepts": [
+    "No general English fact checker or new gameplay system introduced."
+  ],
+  "does_not_prove": [
+    "Broad playability, full-suite acceptance, held-out generalization, live-model frequency or end-to-end loot persistence."
+  ],
+  "recommended_next_step": "Exactly one proposed next action: remove the unrelated stock jab after authorized notice-board clue publication; do not begin automatically.",
+  "self_contained_review_test": "Reopen dated and stable archive; verify milestone, nine reports, comparison, regressions, source/evidence hashes, NEXT_SESSION/historical suffix, frozen inputs and old dated archives.",
+  "primary_report": "development/campaigns/product_realization/pr_play_preseal_authority/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/authority/collected_nodes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/authority/command.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/authority/entry_git_status.txt",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/authority/entry_hashes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/authority/execution_integrity.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/authority/failures.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/authority/http_capture.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/authority/recovery_junit.xml",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/baseline_junit.xml",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/collected_nodes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/command.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/entry_git_status.txt",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/entry_hashes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/execution_integrity.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/failures.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/http_capture.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/stage_events.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/twelve_turn/preflight.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/twelve_turn/publication_events.jsonl",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/twelve_turn/sequence_summary.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after/twelve_turn/turns.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after_controls.log",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after_main.log",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after_sequence.log",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/after_source_manifest.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/analyze_results.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/assertion_comparison.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/baseline_verification.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/authority/collected_nodes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/authority/command.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/authority/entry_git_status.txt",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/authority/entry_hashes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/authority/execution_integrity.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/authority/failures.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/authority/http_capture.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/authority/recovery_junit.xml",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/baseline_junit.xml",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/collected_nodes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/command.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/docs/NEXT_SESSION.md",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/entry_git_status.txt",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/entry_hashes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/entry_review.md",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/execution_integrity.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/failures.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/game/immutable_valid_response.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/game/perception_grounding.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/game/referenced_surface.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/http_capture.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/stage_events.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/twelve_turn/preflight.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/twelve_turn/publication_events.jsonl",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/twelve_turn/sequence_summary.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before/twelve_turn/turns.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before_controls.log",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before_main.log",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before_sequence.log",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/before_source_manifest.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/build_reports.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/compare_assertions.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/entry_git_status.txt",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/evidence_manifest.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_after.log",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_after/baseline_junit.xml",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_after/collected_nodes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_after/command.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_after/entry_git_status.txt",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_after/entry_hashes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_after/execution_integrity.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_after/failures.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_after/http_capture.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_after/stage_events.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_before.log",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_before/baseline_junit.xml",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_before/collected_nodes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_before/command.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_before/entry_git_status.txt",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_before/entry_hashes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_before/execution_integrity.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_before/failures.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_before/http_capture.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_before/stage_events.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_final.log",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_final/baseline_junit.xml",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_final/collected_nodes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_final/command.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_final/entry_git_status.txt",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_final/entry_hashes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_final/execution_integrity.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_final/failures.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_final/http_capture.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_final/stage_events.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_tests.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_verified.log",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_verified/baseline_junit.xml",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_verified/collected_nodes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_verified/command.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_verified/entry_git_status.txt",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_verified/entry_hashes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_verified/execution_integrity.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_verified/failures.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_verified/http_capture.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/focused_verified/stage_events.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/frozen_integrity.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/performance.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/precedence_results.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/prior_dated_archives.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/production.diff",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/review_handoff.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/run_audit.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/run_controls.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/run_focused.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/run_sequence.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/seal_review.py",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/source_hashes.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/test_results.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/three_case_comparison.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_preseal_authority/twelve_turn_comparison.json",
+      "role": "repair_evidence",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_claim_acceptance_audit/IMPLEMENTATION_OPTIONS.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_claim_acceptance_audit/NEXT_STEP_DECISION.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_claim_acceptance_audit/SUMMARY.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_preseal_authority/IMPLEMENTATION.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_preseal_authority/INTEGRITY.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_preseal_authority/NEXT_STEP_DECISION.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_preseal_authority/PERFORMANCE.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_preseal_authority/PRECEDENCE_VERIFICATION.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_preseal_authority/REGRESSION_RESULTS.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_preseal_authority/THREE_CASE_COMPARISON.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_preseal_authority/TWELVE_TURN_COMPARISON.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/perception_grounding.py",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/referenced_surface.py",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_play_post_npc_handoff.py",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_play_preseal_authority.py",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_referenced_surface_grounding_inspection_resolution.py",
+      "role": "source_or_authority",
+      "why": "Supports the bounded repair, regression comparison, authority precedence or integrity.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "max_file_bytes": 52428800
+}

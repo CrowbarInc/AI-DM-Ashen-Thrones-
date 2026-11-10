@@ -1,0 +1,27 @@
+{
+  "collected": 316,
+  "passed": 313,
+  "failed": 3,
+  "errors": 0,
+  "skipped": 0,
+  "new_failures_caused_by_this_experiment": [],
+  "preexisting_failures": [
+    {
+      "nodeid": "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+      "classification": "Listed in the PR-PLAY-49 regression comparison. Not introduced here."
+    },
+    {
+      "nodeid": "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+      "classification": "Listed in the PR-PLAY-49 regression comparison. Not introduced here."
+    },
+    {
+      "nodeid": "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+      "classification": "Pre-existing manifest drift. live_accounting_readiness fails because the checked game-package hashes do not match tools/atgb/provider_accounting_integrity.json. The drift includes PR-PLAY-49 modules and many other game files this pass did not edit. This experiment changed no file under game/. The test was outside the PR-PLAY-49 suite, so it was not one of those 23 recorded failures. It was not suppressed and the manifest was not regenerated."
+    }
+  ],
+  "campaign_data_after_tests": "unchanged against the post-provider snapshot",
+  "predecessor_evidence_restored": [
+    "artifacts/pr_play_49/evidence_performance.json",
+    "artifacts/pr_play_47/evidence_performance.json"
+  ]
+}

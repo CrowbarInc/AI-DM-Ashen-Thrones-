@@ -1,0 +1,73 @@
+{
+  "requests": [
+    {
+      "sequence": 1,
+      "turn": "opening",
+      "purpose": "primary_turn",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 1378,
+      "output_tokens": 120,
+      "total_tokens": 1498,
+      "cached_tokens": 0,
+      "provider_seconds": 2.755784199995105,
+      "ledger_seconds": 2.757844,
+      "api_seconds": 3.811999999990803,
+      "provider_status": "completed",
+      "retry_count": 0
+    },
+    {
+      "sequence": 2,
+      "turn": "T1",
+      "purpose": "interpretation",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 2306,
+      "output_tokens": 203,
+      "total_tokens": 2509,
+      "cached_tokens": 0,
+      "provider_seconds": 2.0405669000028865,
+      "ledger_seconds": 2.042379,
+      "api_seconds": 2.625,
+      "provider_status": "completed",
+      "retry_count": 0
+    },
+    {
+      "sequence": 3,
+      "turn": "T2",
+      "purpose": "interpretation",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 2456,
+      "output_tokens": 233,
+      "total_tokens": 2689,
+      "cached_tokens": 0,
+      "provider_seconds": 2.461336799999117,
+      "ledger_seconds": 2.463257,
+      "api_seconds": 3.3589999999967404,
+      "provider_status": "completed",
+      "retry_count": 0
+    },
+    {
+      "sequence": 4,
+      "turn": "T3",
+      "purpose": "interpretation",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 2615,
+      "output_tokens": 184,
+      "total_tokens": 2799,
+      "cached_tokens": 0,
+      "provider_seconds": 2.629635799996322,
+      "ledger_seconds": 2.631724,
+      "api_seconds": 3.6719999999913853,
+      "provider_status": "completed",
+      "retry_count": 0
+    }
+  ],
+  "total_input": 8755,
+  "total_output": 740,
+  "total_tokens": 9495,
+  "ordinary_api_average_seconds": 2.4764999999970314,
+  "ordinary_api_max_seconds": 3.6719999999913853,
+  "ordinary_tokens_per_attempt": 1999.25,
+  "ordinary_tokens_per_provider_request": 2665.6666666666665,
+  "live_duration_seconds": 20.562000000005355,
+  "preflight_duration_seconds": 2.452999999994063
+}

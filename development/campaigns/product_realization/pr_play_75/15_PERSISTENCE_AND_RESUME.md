@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 15 PERSISTENCE AND RESUME
+
+Normal storage and snapshots persist identity, knowledge scope, memory and social receipts together. Final HTTP A/B and browser A/B save, reload/load and append a fresh response from the same ID. Browser cross-loads preserve distinct campaigns and branches. The frozen developer holdout exercised 20 real snapshot lifecycles, but its resumed-conversation assertion was weaker than the repaired final development checks. Two NPC-specific commit fault tests force creation/dialogue writes to fail; all prior session/world/combat/transcript bytes remain unchanged and no NPC speech is published. Existing Windows transient/permanent rename tests remain green.

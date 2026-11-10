@@ -1,0 +1,13 @@
+...................F.................F..................                 [100%]
+================================== FAILURES ===================================
+E   AssertionError: assert 'The controll...this session.' == 'Provider cal...as generated.'
+      
+      - Provider calls are disabled for this run, so no live narration was generated.
+      + The controlled playtest request limit has been reached. Stop and export diagnostics; do not restart to continue this session.
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_atgb_infrastructure.py:263: AssertionError: assert 'The controll...this session.' == 'Provider cal...as generated.'
+E   assert False
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_atgb_accounting.py:134: assert False
+=========================== short test summary info ===========================
+FAILED tests/test_atgb_infrastructure.py::test_provider_disabled_host_uses_chat_and_isolates_state
+FAILED tests/test_atgb_accounting.py::test_readiness_verifies_repaired_dispatch_coverage
+

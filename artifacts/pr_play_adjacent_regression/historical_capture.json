@@ -1,0 +1,1323 @@
+{
+  "label": "historical",
+  "orchestration": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Temp\\pr_play_adj_audit\\overlay\\game\\conversational_orchestration.py",
+  "api": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Temp\\pr_play_adj_audit\\overlay\\game\\api.py",
+  "projection": "__main__",
+  "decisions": [
+    {
+      "text": "I inspect the ivory metronome.",
+      "decision": null
+    },
+    {
+      "text": "I look around.",
+      "decision": null
+    },
+    {
+      "text": "I inspect the shipping ledger.",
+      "decision": null
+    },
+    {
+      "text": "I read the tariff slate.",
+      "decision": null
+    },
+    {
+      "text": "I inspect the brass token.",
+      "decision": null
+    },
+    {
+      "text": "I examine the feed chute.",
+      "decision": null
+    },
+    {
+      "text": "I inspect the glass kiln schedule.",
+      "decision": null
+    },
+    {
+      "text": "I read the notice board.",
+      "decision": null
+    }
+  ],
+  "records": [
+    {
+      "test": "test_general_unknown_player_named_object_is_not_instantiated",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": true,
+            "authority": "unsupported",
+            "interactable_id": null,
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "apply_response_policy_enforcement",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "apply_repeated_description_guard",
+              "apply_final_emission_gate",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "_preserve_physical_action_resolution_after_gate",
+              "preserve_interaction_obligation_after_gate",
+              "_preserve_resolution_contract_after_gate",
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "active_scene_id": "mill_loft",
+            "turn_counter": 1,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I inspect the ivory metronome.",
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": "unsupported",
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I inspect the ivory metronome.",
+          "stub": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "facing_helper": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board."
+        }
+      ]
+    },
+    {
+      "test": "test_general_narration_only_object_does_not_gain_authority",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "I cannot provide a validated response to that request.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "observe",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": null,
+            "authority": null,
+            "interactable_id": null,
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "apply_response_policy_enforcement",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "apply_repeated_description_guard",
+              "apply_final_emission_gate",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "_preserve_physical_action_resolution_after_gate",
+              "preserve_interaction_obligation_after_gate",
+              "_preserve_resolution_contract_after_gate",
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "I cannot provide a validated response to that request.",
+            "active_scene_id": "mill_loft",
+            "turn_counter": 1,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I look around.",
+            "kind": "observe",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": null,
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I look around.",
+          "stub": "A silver bell hangs nearby, catching the loft light.",
+          "facing_helper": "I cannot provide a validated response to that request."
+        },
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "I cannot provide a validated response to that request.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": true,
+            "authority": "unsupported",
+            "interactable_id": null,
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "apply_response_policy_enforcement",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "apply_repeated_description_guard",
+              "apply_final_emission_gate",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "_preserve_physical_action_resolution_after_gate",
+              "preserve_interaction_obligation_after_gate",
+              "_preserve_resolution_contract_after_gate",
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "I cannot provide a validated response to that request.",
+            "active_scene_id": "mill_loft",
+            "turn_counter": 2,
+            "last_publication_visible": "I cannot provide a validated response to that request.",
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I inspect the silver bell.",
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": "unsupported",
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I inspect the silver bell.",
+          "stub": "The silver bell is engraved with Captain Marrow and a sailing date.",
+          "facing_helper": "I cannot provide a validated response to that request."
+        }
+      ]
+    },
+    {
+      "test": "test_general_abstract_reference_does_not_become_physical",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "The ledger lists eight named crews bound for Glassport.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": true,
+            "authority": "authored_abstract_reference",
+            "interactable_id": null,
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "apply_response_policy_enforcement",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "apply_repeated_description_guard",
+              "apply_final_emission_gate",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "_preserve_physical_action_resolution_after_gate",
+              "preserve_interaction_obligation_after_gate",
+              "_preserve_resolution_contract_after_gate",
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "The ledger lists eight named crews bound for Glassport.",
+            "active_scene_id": "mill_loft",
+            "turn_counter": 1,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I inspect the shipping ledger.",
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": "authored_abstract_reference",
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I inspect the shipping ledger.",
+          "stub": "The ledger lists eight named crews bound for Glassport.",
+          "facing_helper": "The ledger lists eight named crews bound for Glassport."
+        }
+      ]
+    },
+    {
+      "test": "test_general_readable_surface_communicates_contents",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "In Mill Loft, a dry loft, a grain hopper, and a tariff slate Dock fees rise after the second horn.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "discover_clue",
+            "clue_id": "tariff_slate_fees",
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": true,
+            "authority": "authored_interactable",
+            "interactable_id": "tariff_slate",
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "In Mill Loft, a dry loft, a grain hopper, and a tariff slate Dock fees rise after the second horn.",
+            "active_scene_id": "mill_loft",
+            "turn_counter": 1,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "clue_text",
+              "discovered_clues",
+              "hint",
+              "interactable_id",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I read the tariff slate.",
+            "kind": "discover_clue",
+            "clue_id": "tariff_slate_fees",
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": "authored_interactable",
+            "reason": null,
+            "state_change_keys": [
+              "clue_revealed",
+              "interactable_id"
+            ]
+          },
+          "utterance": "I read the tariff slate.",
+          "stub": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "facing_helper": "In Mill Loft, a dry loft, a grain hopper, and a tariff slate Dock fees rise after the second horn."
+        }
+      ]
+    },
+    {
+      "test": "test_general_hidden_object_is_not_revealed_by_naming",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "You pry up the hopper and pocket the brass token.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": true,
+            "authority": "authored_hidden",
+            "interactable_id": null,
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "apply_response_policy_enforcement",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "apply_repeated_description_guard",
+              "apply_final_emission_gate",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "_preserve_physical_action_resolution_after_gate",
+              "preserve_interaction_obligation_after_gate",
+              "_preserve_resolution_contract_after_gate",
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "You pry up the hopper and pocket the brass token.",
+            "active_scene_id": "mill_loft",
+            "turn_counter": 1,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I inspect the brass token.",
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": "authored_hidden",
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I inspect the brass token.",
+          "stub": "You pry up the hopper and pocket the brass token.",
+          "facing_helper": "You pry up the hopper and pocket the brass token."
+        }
+      ]
+    },
+    {
+      "test": "test_general_failed_inspection_then_observe_uses_current_scene",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": true,
+            "authority": "unsupported",
+            "interactable_id": null,
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "apply_response_policy_enforcement",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "apply_repeated_description_guard",
+              "apply_final_emission_gate",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "_preserve_physical_action_resolution_after_gate",
+              "preserve_interaction_obligation_after_gate",
+              "_preserve_resolution_contract_after_gate",
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "active_scene_id": "mill_loft",
+            "turn_counter": 1,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I inspect the ivory metronome.",
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": "unsupported",
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I inspect the ivory metronome.",
+          "stub": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "facing_helper": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board."
+        },
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "Sacks of cracked maize lean against the hopper braces.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "observe",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": null,
+            "authority": null,
+            "interactable_id": null,
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "apply_response_policy_enforcement",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "apply_repeated_description_guard",
+              "apply_final_emission_gate",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "_preserve_physical_action_resolution_after_gate",
+              "preserve_interaction_obligation_after_gate",
+              "_preserve_resolution_contract_after_gate",
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "Sacks of cracked maize lean against the hopper braces.",
+            "active_scene_id": "mill_loft",
+            "turn_counter": 2,
+            "last_publication_visible": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I look around.",
+            "kind": "observe",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": null,
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I look around.",
+          "stub": "Sacks of cracked maize lean against the hopper braces.",
+          "facing_helper": "Sacks of cracked maize lean against the hopper braces."
+        }
+      ]
+    },
+    {
+      "test": "test_general_authored_alias_binds",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": true,
+            "authority": "authored_interactable",
+            "interactable_id": "grain_hopper",
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "apply_response_policy_enforcement",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "apply_repeated_description_guard",
+              "apply_final_emission_gate",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "_preserve_physical_action_resolution_after_gate",
+              "preserve_interaction_obligation_after_gate",
+              "_preserve_resolution_contract_after_gate",
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "active_scene_id": "mill_loft",
+            "turn_counter": 1,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I examine the feed chute.",
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": "authored_interactable",
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I examine the feed chute.",
+          "stub": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "facing_helper": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board."
+        }
+      ]
+    },
+    {
+      "test": "test_general_failed_inspection_creates_no_world_facts",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "The kiln schedule names four new overseers.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": true,
+            "authority": "unsupported",
+            "interactable_id": null,
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "apply_response_policy_enforcement",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "apply_repeated_description_guard",
+              "apply_final_emission_gate",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "_preserve_physical_action_resolution_after_gate",
+              "preserve_interaction_obligation_after_gate",
+              "_preserve_resolution_contract_after_gate",
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "The kiln schedule names four new overseers.",
+            "active_scene_id": "mill_loft",
+            "turn_counter": 1,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I inspect the glass kiln schedule.",
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": "unsupported",
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I inspect the glass kiln schedule.",
+          "stub": "The kiln schedule names four new overseers.",
+          "facing_helper": "The kiln schedule names four new overseers."
+        }
+      ]
+    },
+    {
+      "test": "test_frontier_gate_roster_http_does_not_use_observe_stock",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": true,
+            "authority": "authored_visible_feature",
+            "interactable_id": null,
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "apply_response_policy_enforcement",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "apply_repeated_description_guard",
+              "apply_final_emission_gate",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "_preserve_physical_action_resolution_after_gate",
+              "preserve_interaction_obligation_after_gate",
+              "_preserve_resolution_contract_after_gate",
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "active_scene_id": "frontier_gate",
+            "turn_counter": 1,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "If the watch already has a commander on this, I'll check the roster board the serjeant is watching.",
+            "kind": "investigate",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": "authored_visible_feature",
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "If the watch already has a commander on this, I'll check the roster board the serjeant is watching.",
+          "stub": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board."
+        }
+      ]
+    },
+    {
+      "test": "test_observe_stock_replacement_keeps_notice_board_working",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "You read the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "discover_clue",
+            "clue_id": "notice_patrol_route",
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": true,
+            "authority": "authored_interactable",
+            "interactable_id": "notice_board",
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "enforce_emitted_contract_monotonicity",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "You read the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+            "active_scene_id": "frontier_gate",
+            "turn_counter": 1,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "clue_text",
+              "discovered_clues",
+              "hint",
+              "interactable_id",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I read the notice board.",
+            "kind": "discover_clue",
+            "clue_id": "notice_patrol_route",
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": "authored_interactable",
+            "reason": null,
+            "state_change_keys": [
+              "clue_revealed",
+              "interactable_id"
+            ]
+          },
+          "utterance": "I read the notice board.",
+          "stub": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board."
+        }
+      ]
+    },
+    {
+      "test": "test_sequence_patrol_travel_reaches_the_movement_resolver",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "You arrive at Old Milestone.",
+          "projected_keys_sample": [
+            "campaign",
+            "campaign_run_id",
+            "character",
+            "combat",
+            "gm_output",
+            "journal",
+            "ok",
+            "player_name",
+            "resolution",
+            "save_summary",
+            "scene",
+            "session",
+            "snapshots",
+            "ui",
+            "world"
+          ],
+          "raw": {
+            "kind": "scene_transition",
+            "clue_id": null,
+            "resolved_transition": true,
+            "target_scene_id": "old_milestone",
+            "success": true,
+            "authority": null,
+            "interactable_id": null,
+            "decision_reason": null,
+            "response_class": null,
+            "skipped_mutators": [
+              "_preserve_authoritative_resolution_facts_after_gate",
+              "apply_authored_knowledge_realization_to_gm",
+              "apply_stay_leave_narration_agreement_to_gm",
+              "apply_destination_arrival_realization_to_gm",
+              "apply_perception_non_invention_to_gm",
+              "enforce_emitted_contract_monotonicity",
+              "_preserve_accepted_bounded_resolution_after_gate",
+              "apply_spoken_state_refinement_cash_out"
+            ],
+            "text": "You arrive at Old Milestone.",
+            "active_scene_id": "old_milestone",
+            "turn_counter": 2,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "clue_id",
+              "discovered_clues",
+              "hint",
+              "kind",
+              "label",
+              "metadata",
+              "originating_scene_id",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_tick_events",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I want to follow the trail connected to the missing patrol.",
+            "kind": "scene_transition",
+            "clue_id": null,
+            "resolved_transition": true,
+            "target_scene_id": "old_milestone",
+            "authority": null,
+            "reason": null,
+            "state_change_keys": [
+              "arrived_at_scene",
+              "new_scene_context_available",
+              "scene_changed",
+              "scene_transition_occurred"
+            ]
+          },
+          "utterance": "I want to follow the trail connected to the missing patrol.",
+          "exploration_calls": [
+            true
+          ],
+          "scene_before": "frontier_gate",
+          "scene_after": "old_milestone",
+          "visited": [
+            "frontier_gate",
+            "old_milestone"
+          ]
+        }
+      ]
+    },
+    {
+      "test": "test_sequence_unsupported_actions_invent_nothing",
+      "turns": [
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+          "projected_keys_sample": [
+            "gm_output",
+            "ok",
+            "resolution"
+          ],
+          "raw": {
+            "kind": "conversational_clarify",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": null,
+            "authority": null,
+            "interactable_id": null,
+            "decision_reason": "unresolved_addressee",
+            "response_class": null,
+            "skipped_mutators": null,
+            "text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+            "active_scene_id": null,
+            "turn_counter": null,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "discovered_clues",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I ask Captain Voss what he knows about the gate.",
+            "kind": "conversational_clarify",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": null,
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I ask Captain Voss what he knows about the gate."
+        },
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "You want to reach follow the trail to the glass observatory, but that is not an established destination from here. You stay where you are.",
+          "projected_keys_sample": [
+            "gm_output",
+            "ok",
+            "resolution"
+          ],
+          "raw": {
+            "kind": "conversational_decline",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": false,
+            "authority": null,
+            "interactable_id": null,
+            "decision_reason": "destination_not_established",
+            "response_class": null,
+            "skipped_mutators": null,
+            "text": "You want to reach follow the trail to the glass observatory, but that is not an established destination from here. You stay where you are.",
+            "active_scene_id": null,
+            "turn_counter": null,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "discovered_clues",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I want to follow the trail to the glass observatory.",
+            "kind": "conversational_decline",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": null,
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I want to follow the trail to the glass observatory."
+        },
+        {
+          "http_status": 200,
+          "projected_resolution": {},
+          "projected_text": "Nothing here matches footprints. Nothing has been attempted.",
+          "projected_keys_sample": [
+            "gm_output",
+            "ok",
+            "resolution"
+          ],
+          "raw": {
+            "kind": "conversational_decline",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "success": false,
+            "authority": null,
+            "interactable_id": null,
+            "decision_reason": "referent_not_in_scene",
+            "response_class": null,
+            "skipped_mutators": null,
+            "text": "Nothing here matches footprints. Nothing has been attempted.",
+            "active_scene_id": null,
+            "turn_counter": null,
+            "last_publication_visible": null,
+            "resolution_keys": [
+              "action_id",
+              "discovered_clues",
+              "kind",
+              "label",
+              "metadata",
+              "prompt",
+              "resolved_transition",
+              "state_changes",
+              "success",
+              "target_scene_id",
+              "world_updates"
+            ]
+          },
+          "log": {
+            "player_input": "I want to investigate the footprints.",
+            "kind": "conversational_decline",
+            "clue_id": null,
+            "resolved_transition": false,
+            "target_scene_id": null,
+            "authority": null,
+            "reason": null,
+            "state_change_keys": []
+          },
+          "utterance": "I want to investigate the footprints."
+        }
+      ],
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "turn_before": 1,
+      "turn_after": 1
+    }
+  ]
+}

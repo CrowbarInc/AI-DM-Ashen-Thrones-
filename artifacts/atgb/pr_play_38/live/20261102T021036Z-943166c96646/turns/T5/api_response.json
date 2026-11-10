@@ -1,0 +1,248 @@
+{
+  "ok": true,
+  "gm_output": {
+    "player_facing_text": "How do you want to examine the footprints more carefully? With what means or assistance?",
+    "tags": [
+      "conversational_orchestration",
+      "clarify",
+      "non_mutating"
+    ],
+    "scene_update": null,
+    "activate_scene_id": null,
+    "new_scene_draft": null,
+    "world_updates": null,
+    "suggested_action": null,
+    "metadata": {
+      "accepted_response": {
+        "addressee": "player",
+        "adoption_status": "candidate_accepted",
+        "attempt": 0,
+        "authority_result": "accepted",
+        "authorization_provenance": {
+          "addressee": "player",
+          "authority_category": "host_operation",
+          "authorized_proposition": "",
+          "epistemic_status": "none",
+          "operation": "ask",
+          "policy_version": "pr-eg-r6-r1-r1",
+          "provenance_id": "2608602d877553f8",
+          "source_id": "",
+          "speaker_id": "",
+          "validation": "host_operation"
+        },
+        "authorization_source": "conversational_decision:interpretation_not_interpreted",
+        "candidate_disposition": "host_selected",
+        "canonical": false,
+        "contract": {
+          "contract_id": "",
+          "expected_resolution": "",
+          "interlocutor_id": "",
+          "operation": ""
+        },
+        "contract_satisfying": true,
+        "generation_attempts": 0,
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "authority": [
+            "conversational_decision:interpretation_not_interpreted"
+          ],
+          "gm_resolution_decision_audit": null,
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": []
+        },
+        "immutable": true,
+        "interaction_completion": true,
+        "operation": "ask",
+        "player_input": "I examine the footprints here more carefully.",
+        "provenance": "authorized_host_speech",
+        "resolution_kind": "conversational_clarify",
+        "speaker": "GM",
+        "speaker_id": "",
+        "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+        "subject": "",
+        "target": "",
+        "text": "How do you want to examine the footprints more carefully? With what means or assistance?",
+        "turn_identity": "",
+        "integrity_digest": "7e569017b2b5e5d9ba6ffe0fb12c9a0d646c521c5d6a7d344eb0416646e1144b"
+      }
+    }
+  },
+  "resolution": {
+    "kind": "conversational_clarify",
+    "action_id": "conversational_clarify",
+    "label": "I examine the footprints here more carefully.",
+    "prompt": "I examine the footprints here more carefully.",
+    "success": null,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "metadata": {
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "authoritative_mutation": false,
+      "resolver_invoked": false,
+      "gameplay_parser_invoked": false,
+      "narration_invoked": false,
+      "processing_outcome": "conversational_clarify",
+      "conversational_decision": {
+        "category": "CLARIFY",
+        "primary_intention": "Examine the footprints more carefully",
+        "intent_family": "clarification",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [
+          "interpretable_action"
+        ],
+        "context_references": [],
+        "requires_authoritative_execution": false,
+        "reason": "interpretation_not_interpreted",
+        "confidence": 0.5,
+        "ambiguity": null,
+        "player_facing_text": "How do you want to examine the footprints more carefully? With what means or assistance?",
+        "context_update": null,
+        "intent_modality": "committed",
+        "secondary_intentions": [],
+        "execution_policy": "",
+        "communication_owner": "GM",
+        "communication_purpose": "CLARIFICATION",
+        "authorization": null
+      },
+      "live_chat_interpretation": {
+        "status": "blocked",
+        "reason": "clarification_required",
+        "eligibility_disposition": "NEEDS_CLARIFICATION",
+        "model_communication_mode": "CLARIFICATION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Method or means of examining footprints more carefully\",\"evidence_refs\":[\"visible:3\"]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"CLARIFICATION_REQUIRED\",\"player_intent\":{\"summary\":\"Examine the footprints more carefully\"},\"asserted_premises\":[{\"text\":\"There are footprints to examine in the Cinderwatch Gate District.\"}],\"requested_outcomes\":[{\"text\":\"Gain more detailed information about the footprints by examining them carefully.\"}],\"action_components\":[{\"order\":1,\"description\":\"Examine the footprints more carefully\",\"target_ref\":null,\"operation_class\":\"INSPECT\"}],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"leave_for_enter_cinderwatch\",\"leave_for_follow_the_missing_patrol_rumor\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[\"footprints\"]},\"clarification_question\":\"How do you want to examine the footprints more carefully? With what means or assistance?\" ,\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+        "provider_requests": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "4d544ff8bccb445497610bd7bc3fe960",
+            "attempt_id": "edda694c9526408ea5e9106363c64e82",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-11-02T02:11:10.247316+00:00",
+            "time": "2026-11-02T02:11:17.033486+00:00",
+            "sequence": 6,
+            "admission": "admitted",
+            "budget_remaining": 4,
+            "sdk_retries": 0,
+            "host_retries": "disabled",
+            "sent": true,
+            "request_id": "resp_0a78a17ec6f93512006ae7f140123487d1907d22f68c447763",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2638,
+            "output_tokens": 222,
+            "total_tokens": 2860,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 6259.228
+          }
+        ],
+        "record": {
+          "communication_mode": "CLARIFICATION",
+          "interpretation_status": "CLARIFICATION_REQUIRED",
+          "player_intent": {
+            "summary": "Examine the footprints more carefully"
+          },
+          "asserted_premises": [
+            {
+              "text": "There are footprints to examine in the Cinderwatch Gate District.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Gain more detailed information about the footprints by examining them carefully.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Examine the footprints more carefully",
+              "target_ref": null,
+              "operation_class": "INSPECT"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "leave_for_enter_cinderwatch",
+              "leave_for_follow_the_missing_patrol_rumor",
+              "notice_board",
+              "tavern_runner"
+            ],
+            "unresolved_references": [
+              "footprints"
+            ]
+          },
+          "clarification_question": "How do you want to examine the footprints more carefully? With what means or assistance?",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "CLARIFICATION",
+            "subject": "Method or means of examining footprints more carefully",
+            "evidence_refs": [
+              "visible:3"
+            ]
+          },
+          "incidental_context": [],
+          "reference_reconciliation": {
+            "annotations": [
+              {
+                "annotation": "footprints",
+                "role": "target",
+                "status": "MISSING",
+                "explicit": true,
+                "candidates": [],
+                "source": null
+              }
+            ],
+            "addressee": null,
+            "operation": "INSPECT"
+          },
+          "public_evidence": {
+            "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line."
+          }
+        }
+      },
+      "stored_interpretation_bridge": null,
+      "provider_calls": {
+        "interpretation_requests": 1,
+        "narration_requests": 0,
+        "ooc_assistance_requests": 0,
+        "retries": 0
+      },
+      "performance": {
+        "elapsed_ms": 6812,
+        "interpretation_ms": null,
+        "resolution_ms": null,
+        "narration_ms": null,
+        "validation_ms": null,
+        "retry_ms": null,
+        "provider_call_count": 1,
+        "input_tokens": 2638,
+        "output_tokens": 222,
+        "retry_count": 0,
+        "retry_reason": null,
+        "disposition": "conversational_clarify",
+        "successful": false,
+        "provider_narration_skipped": false
+      }
+    }
+  }
+}

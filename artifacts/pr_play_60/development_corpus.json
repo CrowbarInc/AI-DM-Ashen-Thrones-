@@ -1,0 +1,587 @@
+[
+  {
+    "id": "D01",
+    "group": "authorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You pick up the key and place it in your pack.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D02",
+    "group": "authorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You retrieve the iron key and place it in your pack.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D03",
+    "group": "authorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. The iron key is yours now.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D04",
+    "group": "authorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You take possession of the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D05",
+    "group": "authorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You acquire the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D06",
+    "group": "authorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You receive the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D07",
+    "group": "authorized_quantity",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You receive three iron keys.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          {
+            "id": "iron_key",
+            "name": "iron key",
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D08",
+    "group": "authorized_removal",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You lose the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_removed": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D09",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You receive a silver key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D10",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You acquire two iron keys.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D11",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. Mira receives the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D12",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You receive the iron key from the guard.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D13",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. The guard gives you the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D14",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You receive the iron key and a ruby.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D15",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You drink the healing potion.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D16",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You hand over the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D17",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You equip the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {
+        "items_added": [
+          "iron key"
+        ]
+      }
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D18",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You find a silver key in your pack.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D19",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You acquire a healing potion.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D20",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. The guard gives you a sword.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D21",
+    "group": "unauthorized_inventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You now possess three gold coins.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D22",
+    "group": "nonactual",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You might acquire the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D23",
+    "group": "nonactual",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You try to pick up the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D24",
+    "group": "nonactual",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. You do not acquire the iron key.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D25",
+    "group": "unauthorized_persistent",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. The gate is now permanently open.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D26",
+    "group": "unauthorized_persistent",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. The guard is now incapacitated.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D27",
+    "group": "unauthorized_persistent",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. The quest is now complete.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D28",
+    "group": "harmless",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. The lantern flickers.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D29",
+    "group": "harmless",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. Dust settles on the board.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D30",
+    "group": "harmless",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. The guard shifts his weight.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "PASS"
+  },
+  {
+    "id": "D31",
+    "group": "missing",
+    "text": "Rain falls.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "REVIEW_REQUIRED"
+  },
+  {
+    "id": "D32",
+    "group": "contradiction",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. Your investigation fails.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "FAIL"
+  },
+  {
+    "id": "D33",
+    "group": "ambiguous",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. Something about the mechanism has changed.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "REVIEW_REQUIRED"
+  },
+  {
+    "id": "D34",
+    "group": "authorized_noninventory",
+    "text": "The missing patrol was last seen taking the northwest mud track past the crates. The gate swings open.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_changes": {}
+    },
+    "mandatory": true,
+    "expected": "PASS",
+    "outcomes": [
+      "The gate opens."
+    ]
+  }
+]

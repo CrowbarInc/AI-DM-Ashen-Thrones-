@@ -1,0 +1,574 @@
+{
+  "campaign_id": "PR-PLAY-71V",
+  "campaign_name": "Final Persistence and Lifecycle Verification",
+  "campaign_date": "2026-11-05",
+  "purpose": "Verify the final PR-PLAY-71 persistence and two-campaign lifecycle on the source that was actually executed.",
+  "objective_status": "A",
+  "executive_summary": "Verdict A. Both HTTP and browser lifecycles passed. Frozen holdout 59/60 with W12 left as a harness KeyError. No live provider calls. No commit or push.",
+  "primary_report": "development/campaigns/product_realization/pr_play_71v/01_EXECUTIVE_SUMMARY.md",
+  "evidence_packets": [],
+  "max_file_bytes": 60000000,
+  "changes": {
+    "production": [
+      "No product edit after the frozen holdout. The tested source already contained the Windows rename retry and runtime_commit_scope."
+    ],
+    "validation": [
+      "60-case developer holdout once: 59 passed, W12 retained.",
+      "Isolated lifecycle and persistence tests: 39 passed.",
+      "Both HTTP campaigns and both browser campaigns completed."
+    ],
+    "tooling": [
+      "Isolated browser host and selected sanitized review export."
+    ],
+    "documentation": [
+      "20 cycle reports and NEXT_SESSION orientation."
+    ],
+    "generated_artifacts": [
+      "Holdout, HTTP traces, browser network log, screenshots, regression XML, and the session-log truncation record."
+    ]
+  },
+  "testing": {
+    "focused": "Combined 1065 passed / 20 failed; 17 were suite-order HTTP 503s. Isolated rerun 39 passed / 0 failed.",
+    "broader": "Nine historical authority failures.",
+    "full_suite": "Not run. No official ATGB or external independence.",
+    "runtime_validation": "Two real HTTP campaigns and two normal browser campaigns, including cross-load.",
+    "model_runtime_boundary": "0 live requests and 0 tokens. Offline fixture only.",
+    "new_regressions": "0 product regressions. Protected session log hash was not recovered after a test truncated it.",
+    "pre_existing_failures": "Three historical focused, six historical boundary, nine historical broader."
+  },
+  "decisions_requiring_human_review": [
+    "No approval requested. No commit or push."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "W12 misses expect_delays. Publication HTTP 500 was not reproduced and is unexplained.",
+      "Browser-visible paint time was not instrumented.",
+      "data/session_log.jsonl no longer matches the protected working-tree hash."
+    ],
+    "pre_existing": [
+      "Six startup/opening failures and nine authority failures remain."
+    ]
+  },
+  "missing_concepts": [
+    "Separate browser paint timings.",
+    "A reproduced trace of the historical publication HTTP 500."
+  ],
+  "does_not_prove": [
+    "Full suite, official ATGB, external independent validation, live narration quality, or crash durability beyond the atomic replace."
+  ],
+  "recommended_next_step": "PR-PLAY-72: CONSEQUENCE-AWARE PLAYER INITIATIVE",
+  "self_contained_review_test": "20 requested reports, player-facing sentences, one-shot holdout, HTTP and browser traces, and explicit limits.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_71v/baseline.py",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/boundary_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/boundary_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/broader_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/broader_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/focused_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/freeze_holdout.py",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/holdout.py",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/host.py",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/http_lifecycle.py",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/package_review.py",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/publication_500.py",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/publication_500_attempt_1.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/publication_500_attempt_2.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/publication_500_attempt_3.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/publication_500_attempt_4.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/publication_500_attempt_5.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/publication_500_attempt_6.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/publication_500_attempt_7.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/publication_500_attempt_8.txt",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/regression.py",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/baseline.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/browser_lifecycle_network.jsonl",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/browser_network.jsonl",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/browser_results.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/final_source.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/frozen_holdout.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/frozen_holdout_manifest.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/holdout_results.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/holdout_started.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/holdout_summary.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/http_summary.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/http_traces.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/metrics.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/protected_integrity.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/provenance.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/publication_500_diagnostics.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/regression_summary.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/session_log_truncation.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/review_data/verdict.json",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/screenshots/pr71v-a-opening.png",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/screenshots/pr71v-a-survey.png",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_71v/screenshots/pr71v-b-report.png",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/01_EXECUTIVE_SUMMARY.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/02_FINAL_SOURCE_BASELINE.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/03_PERSISTENCE_ARCHITECTURE.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/04_WINDOWS_ATOMIC_WRITE.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/05_PERMANENT_FAILURE_BEHAVIOR.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/06_NEW_CAMPAIGN_ROLLBACK.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/07_CHAT_IDEMPOTENCY.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/08_DISCLOSURE_INTEGRITY.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/09_PLAYER_SAFE_PROJECTION.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/10_TRANSCRIPT_RESTORATION.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/11_FROZEN_HOLDOUT.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/12_DEVELOPMENT_TESTS.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/13_REAL_HTTP_LIFECYCLE.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/14_BROWSER_LIFECYCLE.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/15_PUBLICATION_HTTP_500.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/16_REGRESSION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/17_PROVIDER_AND_LATENCY.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/18_STATE_INTEGRITY.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/19_LIMITATIONS_AND_OPEN_RISKS.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_71v/20_NEXT_SESSION.md",
+      "role": "campaign_evidence",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "source",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "source",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/authored_consequences.py",
+      "role": "source",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/campaign_reset.py",
+      "role": "source",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/player_http_boundary.py",
+      "role": "source",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/player_http_projection.py",
+      "role": "source",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/storage.py",
+      "role": "source",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "static/app.js",
+      "role": "source",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_71v_verification.py",
+      "role": "source",
+      "why": "PR-PLAY-71V source or verification evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    }
+  ]
+}

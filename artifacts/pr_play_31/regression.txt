@@ -1,0 +1,293 @@
+..................................................E..................... [ 24%]
+........................................................................ [ 49%]
+........................................................................ [ 73%]
+.........................F........FF.FF.......F........F................ [ 98%]
+....                                                                     [100%]
+=================================== ERRORS ====================================
+__ ERROR at setup of test_consequential_or_uncertain_steps_preserved[travel] __
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_finalregression/test_consequential_or_uncertai11')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000019671D603E0>
+
+    @pytest.fixture
+    def opening_world(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        monkeypatch.setenv("ASHEN_DISABLE_PROVIDER_RETRIES", "1")
+        monkeypatch.setenv("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES", "1")
+        monkeypatch.delenv("ASHEN_PROVIDER_REQUEST_LIMIT", raising=False)
+        monkeypatch.delenv("ASHEN_PROVIDER_USAGE_PATH", raising=False)
+        _seed_campaign_start_storage(tmp_path, monkeypatch)
+        monkeypatch.setattr(api, "_compute_upstream_gate_for_live_gameplay", lambda: ({"manual_testing_blocked": False}, {}))
+        monkeypatch.setattr(gm, "get_openai_api_key", lambda: "offline-placeholder")
+        calls: list[dict] = []
+        state = {"text": _envelope(VALID_NARRATION), "raise": False}
+    
+        def create(**kwargs):
+            calls.append({"max_seen": True})
+            if state["raise"]:
+                raise RuntimeError("synthetic SDK operation failure")
+            return SimpleNamespace(
+                output_text=state["text"],
+                model="offline-stub",
+                id="synthetic-response",
+                usage=SimpleNamespace(input_tokens=20, output_tokens=10, total_tokens=30),
+                status="completed",
+            )
+    
+        def ctor(**kwargs):
+            assert kwargs.get("max_retries") == 0
+            return SimpleNamespace(responses=SimpleNamespace(create=create))
+    
+        monkeypatch.setattr(openai, "OpenAI", ctor)
+        real_call = production_call_gpt()
+        monkeypatch.setattr(gm, "call_gpt", real_call)
+        monkeypatch.setattr(api, "call_gpt", real_call)
+>       api.new_campaign(_request())
+
+tests\test_pr_play_04_opening_integrity.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+game\api.py:5284: in new_campaign
+    meta = apply_new_campaign_hard_reset()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\campaign_reset.py:54: in apply_new_campaign_hard_reset
+    save_combat(combat)
+game\storage.py:305: in save_combat
+    _atomic_save_json(COMBAT_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_finalregression/test_consequential_or_uncertai11/data/combat.json')
+content = b'{\n  "persistence_version": 1,\n  "kind": "combat",\n  "saved_at": "2026-11-02T00:30:10.902068Z",\n  "payload": {\n ...e1a35973b2186a16c01e2d484a6bdbe0",\n    "canonicalization": "json/sort_keys,separators",\n    "hash": "sha256"\n  }\n}'
+
+    def _atomic_write_bytes(path: Path, content: bytes) -> None:
+        """Atomically replace a file's contents with bytes.
+    
+        Writes to a temp file in the same directory, fsyncs, then swaps with os.replace.
+        Cleans up temp files on failure.
+        """
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_name(f"{path.name}.tmp.{secrets.token_hex(8)}")
+        try:
+            with open(tmp, "wb") as f:
+                f.write(content)
+                f.flush()
+                os.fsync(f.fileno())
+>           os.replace(tmp, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr31_finalregression\\test_consequential_or_uncertai11\\data\\combat.json.tmp.f47ab81188c5af73' -> 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr31_finalregression\\test_consequential_or_uncertai11\\data\\combat.json'
+
+game\storage.py:139: PermissionError
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+================================== FAILURES ===================================
+_____ test_apply_socially_revealed_leads_twice_preserves_canonical_state ______
+
+    def test_apply_socially_revealed_leads_twice_preserves_canonical_state():
+        """Second pass through the social landing path must match first-pass session/world clue bookkeeping."""
+        session: dict = {}
+        world = default_world()
+        world.setdefault("event_log", [])
+        scene_id = "frontier_gate"
+        res = {
+            "kind": "question",
+            "action_id": "q",
+            "label": "Ask",
+            "prompt": "Ask",
+            "success": True,
+            "resolved_transition": False,
+            "target_scene_id": None,
+            "clue_id": "missing_patrol",
+            "discovered_clues": ["A patrol went missing near the old milestone."],
+            "world_updates": None,
+            "state_changes": {"topic_revealed": True},
+            "hint": "h",
+            "social": {
+                "npc_id": "guard_captain",
+                "npc_name": "Captain",
+                "target_resolved": True,
+                "topic_revealed": {
+                    "id": "patrol",
+                    "text": "A patrol went missing near the old milestone.",
+                    "clue_id": "missing_patrol",
+                },
+            },
+            "requires_check": False,
+        }
+        scene = {"scene": {"id": scene_id}}
+    
+        apply_socially_revealed_leads(session, scene_id, world, res, scene=scene)
+        snap1 = _canonical_clue_snapshot(session, scene_id, world)
+    
+        apply_socially_revealed_leads(session, scene_id, world, res, scene=scene)
+        snap2 = _canonical_clue_snapshot(session, scene_id, world)
+    
+        assert snap2 == snap1
+        social_events = [
+            e
+            for e in world.get("event_log") or []
+            if isinstance(e, dict) and e.get("type") == "social_lead_revealed"
+        ]
+>       assert len([e for e in social_events if e.get("clue_id") == "missing_patrol"]) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+tests\test_clue_idempotence.py:122: AssertionError
+________ test_general_written_surface_question_discovers_authored_clue ________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_finalregression/test_general_written_surface_q0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000196766991F0>
+
+    def test_general_written_surface_question_discovers_authored_clue(tmp_path, monkeypatch):
+        scene = _quay_scene(
+            discoverable_clues=[{"id": "bench_wax", "text": WAX_STAIN}],
+            interactables=[
+                {
+                    "id": "coopers_bench",
+                    "label": "Cooper's bench",
+                    "aliases": ["bench", "slate", "bench slate"],
+                    "type": "investigate",
+                    "reveals_clue": "bench_wax",
+                }
+            ],
+        )
+        _seed(tmp_path, monkeypatch, scene)
+        data = _chat(monkeypatch, "What is posted on the bench slate?", "A silver locket names the night buyer.")
+        session = data.get("session") or {}
+>       assert (data.get("resolution") or {}).get("kind") == "discover_clue"
+E       assert None == 'discover_clue'
+E        +  where None = <built-in method get of dict object at 0x000001967665B240>('kind')
+E        +    where <built-in method get of dict object at 0x000001967665B240> = ({'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_discourse_ref'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'What is posted on the bench slate?'}).get
+E        +      where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_discourse_ref'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'What is posted on the bench slate?'} = <built-in method get of dict object at 0x0000019671DB0FC0>('resolution')
+E        +        where <built-in method get of dict object at 0x0000019671DB0FC0> = {'ok': True, 'gm_output': {'player_facing_text': 'A silver locket names the night buyer.', 'tags': [], 'scene_update':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+
+tests\test_investigation_result_provenance_non_invention.py:259: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+________________ test_general_visible_evidence_may_be_reported ________________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_finalregression/test_general_visible_evidence_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000196765709E0>
+
+    def test_general_visible_evidence_may_be_reported(tmp_path, monkeypatch):
+        scene = _quay_scene()
+        _seed(tmp_path, monkeypatch, scene)
+        data = _chat(monkeypatch, "I examine the cooper's bench.", "A silver locket names the night buyer.")
+        text = _facing(data).lower()
+>       assert "cooper" in text or "bench" in text
+E       AssertionError: assert ('cooper' in 'a silver locket names the night buyer.' or 'bench' in 'a silver locket names the night buyer.')
+
+tests\test_investigation_result_provenance_non_invention.py:269: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__________ test_general_valid_target_no_evidence_is_grounded_absence __________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_finalregression/test_general_valid_target_no_e0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000019671D606B0>
+
+    def test_general_valid_target_no_evidence_is_grounded_absence(tmp_path, monkeypatch):
+        _seed(tmp_path, monkeypatch, _quay_scene())
+        before = _lead_ids()
+        data = _chat(monkeypatch, "I investigate the cooper's bench.", SUSPICIOUS_TITLE)
+        session = data.get("session") or {}
+        assert _lead_ids(session) == before
+        assert SUSPICIOUS_SLUG not in _lead_ids(session)
+        assert not any("timing" in t.lower() and "personnel" in t.lower() for t in _lead_titles(session))
+>       assert SUSPICIOUS_TITLE.lower() not in _facing(data).lower()
+E       AssertionError: assert 'details on ... assignment.' not in 'details on ... assignment.'
+E         
+E         'details on the exa... patrol assignment.' is contained here:
+E           details on the exact timing and personnel of the missing patrol assignment.
+
+tests\test_investigation_result_provenance_non_invention.py:304: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_general_requested_identity_absent_does_not_mint_person _________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_finalregression/test_general_requested_identit0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001967473D580>
+
+    def test_general_requested_identity_absent_does_not_mint_person(tmp_path, monkeypatch):
+        _seed(tmp_path, monkeypatch, _quay_scene())
+        data = _chat(
+            monkeypatch,
+            "I inspect the bench to see who used it last.",
+            "The last user was Cooper Hale, who left at dusk.",
+        )
+        session = data.get("session") or {}
+        blob = (_facing(data) + " " + json.dumps(_lead_titles(session))).lower()
+>       assert "cooper hale" not in blob
+E       AssertionError: assert 'cooper hale' not in 'the last us... at dusk. []'
+E         
+E         'cooper hale' is contained here:
+E           the last user was cooper hale, who left at dusk. []
+E         ?                   +++++++++++
+
+tests\test_investigation_result_provenance_non_invention.py:316: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______________ test_general_observe_empty_target_does_not_invent ______________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_finalregression/test_general_observe_empty_tar0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001967461BC80>
+
+    def test_general_observe_empty_target_does_not_invent(tmp_path, monkeypatch):
+        _seed(tmp_path, monkeypatch, _quay_scene())
+        data = _chat(monkeypatch, "I look toward the doorway.", "A sealed dossier names the duke's killer.")
+        session = data.get("session") or {}
+        assert "dossier" not in json.dumps(session.get(SESSION_LEAD_REGISTRY_KEY) or {}).lower()
+>       assert "duke" not in _facing(data).lower()
+E       assert 'duke' not in "a sealed do...ke's killer."
+E         
+E         'duke' is contained here:
+E           a sealed dossier names the duke's killer.
+E         ?                            ++++
+
+tests\test_investigation_result_provenance_non_invention.py:443: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing ______
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_finalregression/test_frontier_gate_t15_look_to0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000019674966E40>
+
+    def test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing(tmp_path, monkeypatch):
+        scene = json.loads(Path("data/scenes/frontier_gate.json").read_text(encoding="utf-8"))
+        _seed(tmp_path, monkeypatch, scene, world=default_world())
+        session = storage.load_session()
+        process_investigation_discovery(scene, session)
+        storage.save_session(session)
+        before = _lead_ids(session)
+        data = _chat(monkeypatch, T15_TEXT, SUSPICIOUS_TITLE)
+        after = data.get("session") or {}
+        assert SUSPICIOUS_SLUG not in _lead_ids(after)
+        assert SUSPICIOUS_TITLE not in _lead_titles(after)
+        assert _lead_ids(after) <= before | {"notice_patrol_route"}
+        facing = _facing(data).lower()
+>       assert "exact timing" not in facing
+E       AssertionError: assert 'exact timing' not in 'details on ... assignment.'
+E         
+E         'exact timing' is contained here:
+E           details on the exact timing and personnel of the missing patrol assignment.
+E         ?                ++++++++++++
+
+tests\test_investigation_result_provenance_non_invention.py:578: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] notice_patrol_route
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_clue_idempotence.py::test_apply_socially_revealed_leads_twice_preserves_canonical_state
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_written_surface_question_discovers_authored_clue
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_visible_evidence_may_be_reported
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_valid_target_no_evidence_is_grounded_absence
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_requested_identity_absent_does_not_mint_person
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_observe_empty_target_does_not_invent
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing
+ERROR tests/test_pr_play_23_local_interaction.py::test_consequential_or_uncertain_steps_preserved[travel]
+7 failed, 284 passed, 1 warning, 1 error in 32.77s

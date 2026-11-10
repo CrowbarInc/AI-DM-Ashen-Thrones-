@@ -1,0 +1,86 @@
+..............................................FFFFFFFFF                  [100%]
+================================== FAILURES ===================================
+_____________ test_unsafe_dialogue[I grant you a quest and gold.] _____________
+tests\test_pr_play_75_dynamic_npcs.py:82: in test_unsafe_dialogue
+    assert background_history(s,npc['id'])[-1]['text']==sc['scene']['visible_facts'][0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+____________ test_unsafe_dialogue[The secret passage leads north.] ____________
+tests\test_pr_play_75_dynamic_npcs.py:82: in test_unsafe_dialogue
+    assert background_history(s,npc['id'])[-1]['text']==sc['scene']['visible_facts'][0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+____________________ test_unsafe_dialogue[I am King Mara.] ____________________
+tests\test_pr_play_75_dynamic_npcs.py:82: in test_unsafe_dialogue
+    assert background_history(s,npc['id'])[-1]['text']==sc['scene']['visible_facts'][0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+__________ test_unsafe_dialogue[Workers gather here and I own them.] __________
+tests\test_pr_play_75_dynamic_npcs.py:82: in test_unsafe_dialogue
+    assert background_history(s,npc['id'])[-1]['text']==sc['scene']['visible_facts'][0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+___________________ test_unsafe_dialogue[SENTINEL_PRIVATE] ____________________
+tests\test_pr_play_75_dynamic_npcs.py:82: in test_unsafe_dialogue
+    assert background_history(s,npc['id'])[-1]['text']==sc['scene']['visible_facts'][0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+_________________ test_unsafe_dialogue[I will send soldiers.] _________________
+tests\test_pr_play_75_dynamic_npcs.py:82: in test_unsafe_dialogue
+    assert background_history(s,npc['id'])[-1]['text']==sc['scene']['visible_facts'][0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+___________ test_unsafe_dialogue[There are no workers by the quay.] ___________
+tests\test_pr_play_75_dynamic_npcs.py:82: in test_unsafe_dialogue
+    assert background_history(s,npc['id'])[-1]['text']==sc['scene']['visible_facts'][0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+_____________________ test_full_normal_lifecycle[survey] ______________________
+tests\test_pr_play_75_dynamic_npcs.py:99: in test_full_normal_lifecycle
+    s=storage.load_session();hist=background_history(s,npc['id']);assert len(hist)==5
+                                                                  ^^^^^^^^^^^^^^^^^^^
+E   assert 0 == 5
+E    +  where 0 = len([])
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 1e1cc06bd4f261fa3214b4cd
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+_____________________ test_full_normal_lifecycle[report] ______________________
+tests\test_pr_play_75_dynamic_npcs.py:99: in test_full_normal_lifecycle
+    s=storage.load_session();hist=background_history(s,npc['id']);assert len(hist)==5
+                                                                  ^^^^^^^^^^^^^^^^^^^
+E   assert 0 == 5
+E    +  where 0 = len([])
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started f4d7556602d8d6fb7d4124b6
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_75_dynamic_npcs.py::test_unsafe_dialogue[I grant you a quest and gold.]
+FAILED tests/test_pr_play_75_dynamic_npcs.py::test_unsafe_dialogue[The secret passage leads north.]
+FAILED tests/test_pr_play_75_dynamic_npcs.py::test_unsafe_dialogue[I am King Mara.]
+FAILED tests/test_pr_play_75_dynamic_npcs.py::test_unsafe_dialogue[Workers gather here and I own them.]
+FAILED tests/test_pr_play_75_dynamic_npcs.py::test_unsafe_dialogue[SENTINEL_PRIVATE]
+FAILED tests/test_pr_play_75_dynamic_npcs.py::test_unsafe_dialogue[I will send soldiers.]
+FAILED tests/test_pr_play_75_dynamic_npcs.py::test_unsafe_dialogue[There are no workers by the quay.]
+FAILED tests/test_pr_play_75_dynamic_npcs.py::test_full_normal_lifecycle[survey]
+FAILED tests/test_pr_play_75_dynamic_npcs.py::test_full_normal_lifecycle[report]
+9 failed, 46 passed, 1 warning in 16.67s

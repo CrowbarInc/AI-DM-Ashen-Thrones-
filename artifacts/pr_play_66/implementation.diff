@@ -1,0 +1,211 @@
+--- entry/game/api.py
++++ current/game/api.py
+@@ -4423,6 +4423,7 @@
+     resolution,
+     session,
+     player_text: str,
++    publication=None,
+ ) -> None:
+     """Copy a passed investigation sentence into the response after state is saved.
+ 
+@@ -4430,6 +4431,11 @@
+     into the response. A miss leaves the deterministic sentence in place.
+     """
+     if os.environ.get("ASHEN_EXPERIMENTAL_INTEGRATED_NARRATION", "").strip() != "1":
++        return
++    if publication is not None:
++        for target in (gm, canonical_gm, response_payload.get('gm_output')):
++            if isinstance(target, dict):
++                target['player_facing_text'] = publication['text']
+         return
+     try:
+         from game.quarantined_investigation_narration import (
+@@ -4491,15 +4497,19 @@
+     if not _quarantine_investigation_narration_enabled():
+         return
+     try:
+-        from game.quarantined_investigation_narration import observe_completed_investigation
++        from game.quarantined_investigation_narration import (
++            observe_completed_investigation, bind_authoritative_publication,
++        )
+ 
+         known = tuple(sorted(get_all_known_clue_texts(session))) if isinstance(session, dict) else ()
+-        observe_completed_investigation(
++        evidence = observe_completed_investigation(
+             resolution=resolution if isinstance(resolution, dict) else None,
+             scene=scene if isinstance(scene, dict) else None,
+             known_clue_texts=known,
+             player_text=str(player_text or ""),
+         )
++        session_id = str(session.get('campaign_run_id') or session.get('session_id') or '')
++        bind_authoritative_publication(evidence, resolution, session_id)
+     except Exception:
+         return
+ 
+@@ -6483,14 +6493,28 @@
+         include_resolution=_include_res_chat,
+     )
+     # State, clues, and clocks are already saved. This only selects response text.
+-    _publish_experimental_integrated_narration(
+-        gm,
+-        canonical_gm,
+-        response_payload if isinstance(response_payload, dict) else {},
+-        resolution if isinstance(resolution, dict) else None,
+-        session,
+-        player_text_for_eval,
+-    )
++    publication = None
++    if os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1':
++        from game.quarantined_investigation_narration import prepare_authoritative_publication
++        publication = prepare_authoritative_publication(
++            resolution, str(session.get('campaign_run_id') or session.get('session_id') or ''),
++            player_text_for_eval)
++    publication_failure = None
++    try:
++        publication_args = (gm, canonical_gm, response_payload, resolution, session, player_text_for_eval)
++        if publication is None:
++            _publish_experimental_integrated_narration(*publication_args)
++        else:
++            _publish_experimental_integrated_narration(*publication_args, publication=publication)
++    except Exception as exc:
++        if publication is None:
++            raise
++        publication_failure = 'publication_helper_' + type(exc).__name__
++    if publication is not None:
++        from game.quarantined_investigation_narration import verify_authoritative_publication
++        verify_authoritative_publication(
++            publication, [item for item in (gm, canonical_gm, response_payload.get('gm_output'))
++                          if isinstance(item, dict)], failure=publication_failure)
+     final_text = str(canonical_gm.get("player_facing_text") or "")
+     payload_gm = response_payload.get("gm_output") if isinstance(response_payload, dict) else None
+     if mark_campaign_started and isinstance(response_payload, dict):
+--- entry/game/quarantined_investigation_narration.py
++++ current/game/quarantined_investigation_narration.py
+@@ -58,6 +58,7 @@
+ 
+ _IN_HOOK: ContextVar[bool] = ContextVar("quarantine_investigation_hook", default=False)
+ _MEMORY: list[dict] = []
++_PUBLICATION: ContextVar[tuple | None] = ContextVar("investigation_publication", default=None)
+ _SAVED: list | None = None
+ _SEQUENCE = 0
+ _LIVE_SENT = 0
+@@ -674,6 +675,88 @@
+     return bool(allowed) and bool(bound) and allowed == bound
+ 
+ 
++def bind_authoritative_publication(evidence, resolution, session_id):
++    """Request-local provenance, never campaign state or the shared evidence tail."""
++    _PUBLICATION.set((evidence, resolution, session_id))
++
++
++def prepare_authoritative_publication(resolution, session_id, player_text):
++    """Consume the current resolved action once; select only trusted/validated text."""
++    from game import integrated_investigation_narration as integrated
++    binding = _PUBLICATION.get()
++    _PUBLICATION.set(None)
++    if not integrated.authoritative_disclosure_enabled() or not experimental_publication_enabled(session_id):
++        return None
++    if not binding:
++        return None
++    evidence, bound_resolution, bound_session = binding
++    if (resolution is not bound_resolution or session_id != bound_session
++            or evidence.get('player_text') != player_text
++            or not evidence.get('eligible')):
++        return None
++    hook = evidence['hook_input']
++    # Recheck the actual current resolver fields, not prose or accumulated clues.
++    current = build_hook_input(resolution=resolution, scene={}, known_clue_texts=(),
++                               player_text=player_text)
++    if current.get('resolution') != hook.get('resolution'):
++        raise ValueError('publication_authority_changed')
++    contract, request = integrated.outcome_contract(hook)
++    trusted = integrated.trusted_disclosure(request)
++    fallback = integrated.action_fallback(contract, hook)
++    if trusted and trusted not in fallback:
++        fallback = ' '.join(filter(None, (fallback, trusted)))
++    plan = dict(evidence=evidence, request=request, trusted=trusted, fallback=fallback,
++                text=fallback, mode='fallback', recovery_reason=None)
++    try:
++        validation = evidence.get('validation') or {}
++        raw = evidence.get('raw_provider_text')
++        text = evidence.get('assembled')
++        if (evidence.get('used_fallback') is False and validation.get('decision') == 'PASS'
++                and evidence.get('disclosure_mode') == 'authoritative'
++                and evidence.get('authorized_outcome_contract') == request
++                and evidence.get('trusted_disclosure') == trusted
++                and isinstance(raw, str) and bool(raw.strip())
++                and text == evidence.get('validated_composition')
++                and text == ' '.join(filter(None, (raw.strip(), trusted)))
++                and validation.get('provenance') == 'engine_current_action_plus_validated_ai'):
++            plan.update(text=text, mode='published')
++    except Exception as exc:
++        plan['recovery_reason'] = 'presentation_selection_' + type(exc).__name__
++    return plan
++
++
++def verify_authoritative_publication(plan, targets, *, failure=None):
++    """Final server-body invariant. One deterministic recovery, no provider/resolver calls."""
++    facts = [f['text'] for f in plan['request']['must_communicate']]
++    valid = bool(targets) and all(
++        item.get('player_facing_text') == plan['text']
++        and all(fact in item['player_facing_text'] for fact in facts) for item in targets)
++    if failure or not valid:
++        plan.update(text=plan['fallback'], mode='fallback',
++                    recovery_reason=failure or 'final_response_invariant')
++        for item in targets:
++            item['player_facing_text'] = plan['fallback']
++    if not targets or not all(all(f in item.get('player_facing_text', '') for f in facts)
++                              and item.get('player_facing_text') == plan['text'] for item in targets):
++        raise ValueError('mandatory_disclosure_publication_failed')
++    for item in targets:
++        metadata = item.setdefault('metadata', {})
++        if isinstance(metadata, dict):
++            metadata['experimental_integrated_narration'] = plan['mode']
++    evidence = plan['evidence']
++    evidence['publication'] = dict(decision=plan['mode'], trusted_disclosure=plan['trusted'],
++        mandatory_disclosures=facts, final_text=plan['text'], invariant='PASS',
++        recovery_reason=plan['recovery_reason'], server_constructed=True, client_received='unknown')
++    evidence['player_facing_published'] = plan['mode'] == 'published'
++    # Retain original validation/candidate even when publication needs recovery.
++    path = evidence.get('evidence_path')
++    if path and evidence.get('evidence_write') == 'ok':
++        try:
++            Path(path).write_text(json.dumps(evidence, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
++        except Exception as exc:
++            evidence['publication_evidence_write_error'] = type(exc).__name__
++
++
+ def validated_player_text(player_text: str, *, session_id: str | None, kind: str | None) -> str | None:
+     """Return one already-passed integrated sentence, or None to keep deterministic text.
+ 
+--- entry/tests/test_pr_play_49_anchored_narration.py
++++ current/tests/test_pr_play_49_anchored_narration.py
+@@ -340,7 +340,11 @@
+     api_source = (ROOT/'game'/'api.py').read_text(encoding='utf-8')
+     assert 'anchored_investigation_narration' not in api_source
+     assert 'ASHEN_QUARANTINE_INVESTIGATION_NARRATION' in api_source
+-    assert '= observe_completed_investigation' not in api_source
++    # PR66 consumes detached evidence at the session-gated final publisher only.
++    # The adapter still imports no gameplay/state owner and applies no effects.
++    assert 'bind_authoritative_publication(evidence, resolution, session_id)' in api_source
++    assert 'publication = prepare_authoritative_publication(' in api_source
++    assert 'verify_authoritative_publication(' in api_source
+     assert '= _observe_quarantined_investigation_narration' not in api_source
+     for field in ('items_added', 'currency_gained', 'damage_taken', 'health_recovered',
+                   'conditions_applied', 'objectives_completed', 'npc_changes'):
+--- entry/docs/NEXT_SESSION.md
++++ current/docs/NEXT_SESSION.md
+@@ -1,4 +1,13 @@
+ # NEXT_SESSION
++
++## Latest publication repair — PR-PLAY-66 (2026-11-04)
++
++**C — FAIL / CRITICAL DEFECT.** Critical stop: complete HTTP JSON exposes hidden canaries through existing session/world/scene fields, including entry-source and flag-disabled controls. Do not run the affected experimental pathway. The second regression run was interrupted; continue offline diagnosis only. See critical_incident.json. Exact PR65 mandatory-text HTTP defect reproduced and repaired at the existing publication seam. Request-local provenance plus final mandatory-disclosure verification recovers deterministic text once on presentation/helper failure, without provider or resolver replay. Flags remain default off and session-bound.
++
++45 HTTP development cases; 40/40 frozen publication decisions, zero mandatory-text omissions/unsafe AI presentations (full-body hidden integrity FAILS). Raw holdout 38/40: two state comparisons used different resolver operations; preserved unchanged, with separate matched-operation audit passing. Five consecutive real localhost TCP actions include existing movement, exact milestone disclosure and two follow-ups; all authority/resolution states equal disabled controls. One synthetic accepted/published presentation, three fallbacks; zero live requests/tokens. Initial aggregate 891 pass / 5 failures (3 known, obsolete static assertion, unexplained malformed HTTP 500); 20 targeted diagnostic checks pass. Final aggregate rerun interrupted, broader 9 known failures. Full-body hidden integrity FAILS in 41 matrix responses and five TCP actions. Protected entry hashes and implementation freeze intact. No commit/push; prior dirty work retained.
++
++Read development/campaigns/product_realization/pr_play_66 reports 01/04/06/09/13/16/17 and artifacts/pr_play_66/{historical_after,holdout_results,holdout_evaluation_audit,state_integrity,regression_summary_final}.json. Exact archive: artifacts/pr_play_66/archive_path.txt. Exactly one primary next cycle: Repair hidden-information leakage in the final gameplay HTTP payload projection before resuming experimental publication. No ACK protocol, semantic redesign or broad synonym repair. Older stop/next-cycle instructions below are historical and superseded by the explicit PR66 request.
++
+ 
+ ## Latest authoritative rendering experiment — PR-PLAY-65 (2026-11-04)
+ 

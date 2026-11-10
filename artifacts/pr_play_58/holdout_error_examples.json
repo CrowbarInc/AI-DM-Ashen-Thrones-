@@ -1,0 +1,2687 @@
+{
+  "critical_false_acceptances": [
+    {
+      "id": "H41",
+      "group": "expansion",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates. The gate is now permanently open.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "the missing patrol was last seen taking the northwest mud track past the crates.",
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.09089999366551638,
+      "combined_ms": 0.9435999672859907
+    }
+  ],
+  "false_rejections": [
+    {
+      "id": "H12",
+      "group": "legitimate",
+      "authority": "repeat",
+      "expected": "PASS",
+      "text": "The board offers nothing beyond what you already know: The missing patrol was last seen taking the northwest mud track past the crates.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "known",
+          "success": false
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "engine_status",
+            "status": "known",
+            "text": "The examination adds nothing new to what you already know."
+          },
+          {
+            "id": "outcome:1",
+            "source": "player_knowledge",
+            "status": "previously_known",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ]
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The board offers nothing beyond what you already know: The missing patrol was last seen taking the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "engine_status",
+              "status": "known",
+              "text": "The examination adds nothing new to what you already know.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "missing",
+              "evidence": null
+            },
+            {
+              "id": "outcome:1",
+              "source": "player_knowledge",
+              "status": "previously_known",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "the board offers nothing past what you already know: the missing patrol was last seen taking the northwest mud track past the crates.",
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.12769998284056783,
+      "combined_ms": 1.2550000101327896
+    }
+  ],
+  "review_required": [
+    {
+      "id": "H12",
+      "group": "legitimate",
+      "authority": "repeat",
+      "expected": "PASS",
+      "text": "The board offers nothing beyond what you already know: The missing patrol was last seen taking the northwest mud track past the crates.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "known",
+          "success": false
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "engine_status",
+            "status": "known",
+            "text": "The examination adds nothing new to what you already know."
+          },
+          {
+            "id": "outcome:1",
+            "source": "player_knowledge",
+            "status": "previously_known",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ]
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The board offers nothing beyond what you already know: The missing patrol was last seen taking the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "engine_status",
+              "status": "known",
+              "text": "The examination adds nothing new to what you already know.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "missing",
+              "evidence": null
+            },
+            {
+              "id": "outcome:1",
+              "source": "player_knowledge",
+              "status": "previously_known",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "the board offers nothing past what you already know: the missing patrol was last seen taking the northwest mud track past the crates.",
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.12769998284056783,
+      "combined_ms": 1.2550000101327896
+    },
+    {
+      "id": "H16",
+      "group": "missing",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "Only rain meets your gaze.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "Only rain meets your gaze.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "missing",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.05319999763742089,
+      "combined_ms": 0.29479997465386987
+    },
+    {
+      "id": "H17",
+      "group": "missing",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "You study the papers.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "missing",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.050099974032491446,
+      "combined_ms": 0.2690000110305846
+    },
+    {
+      "id": "H18",
+      "group": "missing",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The patrol was last seen.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "missing",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.04630000330507755,
+      "combined_ms": 0.2940000267699361
+    },
+    {
+      "id": "H19",
+      "group": "missing",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The missing patrol was last seen taking the northwest track.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "partial",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.06589997792616487,
+      "combined_ms": 0.5559999844990671
+    },
+    {
+      "id": "H20",
+      "group": "missing",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The missing patrol was last seen past the crates.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "partial",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.06049999501556158,
+      "combined_ms": 0.47580001410096884
+    },
+    {
+      "id": "H21",
+      "group": "missing",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "You see footprints.",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "ambiguous",
+              "evidence": null,
+              "uncertainty_facets": []
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.10169995948672295,
+      "combined_ms": 0.3570000408217311
+    },
+    {
+      "id": "H22",
+      "group": "missing",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "Faint overlapping prints mark the mud around the old milestone.",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "Faint overlapping prints mark the mud around the old milestone.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "partial",
+              "evidence": "faint overlapping prints mark the mud around the old milestone.",
+              "uncertainty_facets": []
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.1324999611824751,
+      "combined_ms": 0.6043000030331314
+    },
+    {
+      "id": "H23",
+      "group": "missing",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "Faint overlapping prints mark the mud around the old milestone, but their origin is unknown.",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their origin is unknown.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "partial",
+              "evidence": "faint overlapping prints mark the mud around the old milestone, but their origin is unknown.",
+              "uncertainty_facets": [
+                "origin"
+              ]
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.1474000164307654,
+      "combined_ms": 0.7894000154919922
+    },
+    {
+      "id": "H24",
+      "group": "missing",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The number, origin and direction remain unclear.",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "ambiguous",
+              "evidence": null,
+              "uncertainty_facets": []
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.10800000745803118,
+      "combined_ms": 0.46690000453963876
+    },
+    {
+      "id": "H25",
+      "group": "missing",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The mud around the old milestone is wet.",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The mud around the old milestone is wet.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "ambiguous",
+              "evidence": null,
+              "uncertainty_facets": []
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.10409997776150703,
+      "combined_ms": 0.4702000296674669
+    },
+    {
+      "id": "H26",
+      "group": "contradictory",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northeast mud track past the crates.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The missing patrol was last seen taking the northeast mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "contradicted",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.08069997420534492,
+      "combined_ms": 0.7016000454314053
+    },
+    {
+      "id": "H27",
+      "group": "contradictory",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing caravan was last seen taking the northwest mud track past the crates.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The missing caravan was last seen taking the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "missing",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.06699998630210757,
+      "combined_ms": 0.7151999743655324
+    },
+    {
+      "id": "H28",
+      "group": "contradictory",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track before the crates.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The missing patrol was last seen taking the northwest mud track before the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "contradicted",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.07270002970471978,
+      "combined_ms": 0.7170999888330698
+    },
+    {
+      "id": "H29",
+      "group": "contradictory",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol will be seen taking the northwest mud track past the crates.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The missing patrol will be seen taking the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "contradicted",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.06839999696239829,
+      "combined_ms": 0.6937000434845686
+    },
+    {
+      "id": "H30",
+      "group": "contradictory",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was not last seen taking the northwest mud track past the crates.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The missing patrol was not last seen taking the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "contradicted",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.07369997911155224,
+      "combined_ms": 0.7408999954350293
+    },
+    {
+      "id": "H31",
+      "group": "contradictory",
+      "authority": "prints",
+      "expected": "FAIL",
+      "text": "Three travelers left the prints heading east.",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "contradicted",
+              "evidence": null,
+              "uncertainty_facets": []
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.11650001397356391,
+      "combined_ms": 0.4789999802596867
+    },
+    {
+      "id": "H32",
+      "group": "contradictory",
+      "authority": "prints",
+      "expected": "FAIL",
+      "text": "The prints lead toward the northern gate.",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "contradicted",
+              "evidence": null,
+              "uncertainty_facets": []
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.10329997166991234,
+      "combined_ms": 0.45759999193251133
+    },
+    {
+      "id": "H33",
+      "group": "contradictory",
+      "authority": "prints",
+      "expected": "FAIL",
+      "text": "No footprints are visible near the milestone.",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "ambiguous",
+              "evidence": null,
+              "uncertainty_facets": []
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.1018000184558332,
+      "combined_ms": 0.4592000041157007
+    },
+    {
+      "id": "H34",
+      "group": "contradictory",
+      "authority": "prints",
+      "expected": "FAIL",
+      "text": "The prints came from the smugglers camp.",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "ambiguous",
+              "evidence": null,
+              "uncertainty_facets": []
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.10090001160278916,
+      "combined_ms": 0.4344999906606972
+    },
+    {
+      "id": "H46",
+      "group": "ambiguous",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "Perhaps the missing patrol took the northwest mud track past the crates.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "Perhaps the missing patrol took the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "uncertain",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "ambiguous",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.07070001447573304,
+      "combined_ms": 0.44679996790364385
+    },
+    {
+      "id": "H47",
+      "group": "ambiguous",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "Someone may have seen the missing patrol near the crates.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "ambiguous",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.06420002318918705,
+      "combined_ms": 0.5318999756127596
+    },
+    {
+      "id": "H48",
+      "group": "ambiguous",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The northwest mud track might explain the patrol.",
+      "request": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The northwest mud track might explain the patrol.",
+              "kind": "incidental_fact",
+              "epistemic_status": "uncertain",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "missing",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.054999953135848045,
+      "combined_ms": 0.3956000437028706
+    },
+    {
+      "id": "H49",
+      "group": "ambiguous",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The marks might be prints, but who can say?",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The marks might be prints, but who can say?",
+              "kind": "npc_claim",
+              "epistemic_status": "uncertain",
+              "grounded": false,
+              "consequential": false,
+              "family": "none"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "ambiguous",
+              "evidence": null,
+              "uncertainty_facets": []
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.11709996033459902,
+      "combined_ms": 0.47830003313720226
+    },
+    {
+      "id": "H50",
+      "group": "ambiguous",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The mud suggests a direction, though the signs resist interpretation.",
+      "request": {
+        "player_action": "I examine the footprints.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+        ]
+      },
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The mud suggests a direction, though the signs resist interpretation.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "ambiguous",
+              "evidence": null,
+              "uncertainty_facets": []
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "coverage_ms": 0.12079998850822449,
+      "combined_ms": 0.4983000108040869
+    }
+  ]
+}

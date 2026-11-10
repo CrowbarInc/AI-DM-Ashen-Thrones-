@@ -1,0 +1,3 @@
+# CHOICE AND CONSEQUENCE CONTRACT
+
+Server action consequence schema: {set_flags: {flag: true}, text: public_text}; custom actions only. Conditions reuse requires/excludes_flags/clues. All effect flags must occur in excludes_flags to ensure once-only application. Unknown condition keys and malformed effects fail closed. Client conditions/effects/text are ignored. Choices exclude both outcome flags. Follow-ups require the chosen flag and exclude the opposite plus their own completion flag. JSON world flags persist in the established runtime envelope and snapshots. No reversibility. Client receives labels/prompts/current trusted result and conditional actions, never effect definitions.

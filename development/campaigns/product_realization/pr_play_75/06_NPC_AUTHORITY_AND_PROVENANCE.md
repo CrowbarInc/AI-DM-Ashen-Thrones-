@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 06 NPC AUTHORITY AND PROVENANCE
+
+Accepted identities live in bounded_improvisation.entries with authority=accepted_background_npc, provenance=accepted_improvisation, source=validated_provider_proposal, public visibility, campaign/scene binding and stable hash ID. Existing authored names are preserved. Repeated descriptions reuse the existing identity. Raw/rejected proposals stay in private bounded diagnostics, with at most 24 rejection receipts. Temporary prose is not a record. Authored roster entries are not overwritten. `npc_identity_records.json` and `live_provider_proposals.json` preserve all six real committed identities.

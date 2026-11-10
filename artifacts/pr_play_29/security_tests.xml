@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="29" time="26.287" timestamp="2026-11-01T17:57:17.015841-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_20_response_confidentiality" name="test_successful_start_serialized_boundary" time="3.429"><failure message="assert 422 == 200&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">confidential_world = []
+
+    def test_successful_start_serialized_boundary(confidential_world):
+        before = _snap()
+        campaign_before = copy.deepcopy(st.load_campaign())
+        world_before = copy.deepcopy(st.load_world())
+        character_before = copy.deepcopy(st.load_character())
+        combat_before = copy.deepcopy(st.load_combat())
+        with TestClient(api.app) as client:
+            response = client.post("/api/start_campaign?ui_mode=player")
+            body = response.json()
+            public = client.get("/api/state").json()["public_state"]
+            repeated = client.post("/api/start_campaign")
+        summary = {"mode": "player", "endpoint": "/api/start_campaign", "status": response.status_code,
+                   "sentinel_in_http": SENTINEL in response.text, "sentinel_in_public_state": SENTINEL in json.dumps(public),
+                   "sentinel_in_authority": st.load_campaign()["character_secret"]["hidden_truth"] == SENTINEL,
+                   "mock_dispatches": len(confidential_world), "live_provider_requests": 0,
+                   "before": before, "after": _snap(), "repeat_status": repeated.status_code}
+        baseline = os.environ.get("ASHEN_PR_PLAY_20_BASELINE") == "1"
+        _record("baseline_summary.json" if baseline else "offline_summary.json", summary)
+        _record("baseline_response.json" if baseline else "repaired_response.json", body)
+        _record("public_state.json", public)
+        _record("rejected_repeat.json", repeated.json())
+&gt;       assert response.status_code == 200
+E       assert 422 == 200
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+tests\test_pr_play_20_response_confidentiality.py:84: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_20_response_confidentiality" name="test_ordinary_success_and_rejection[/api/action-payload0]" time="0.662" /><testcase classname="tests.test_pr_play_20_response_confidentiality" name="test_ordinary_success_and_rejection[/api/chat-payload1]" time="0.328" /><testcase classname="tests.test_pr_play_20_response_confidentiality" name="test_failed_opening_and_mode_policy" time="0.881" /><testcase classname="tests.test_pr_play_20_response_confidentiality" name="test_rejected_turn_with_composed_state" time="0.287" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_default_public_and_authority_preservation" time="0.453" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_privileged_http_denied_before_data_access[author-/api/state]" time="0.370" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_privileged_http_denied_before_data_access[author-/api/log]" time="0.413" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_privileged_http_denied_before_data_access[author-/api/debug_trace]" time="0.395" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_privileged_http_denied_before_data_access[author-/api/snapshots]" time="0.322" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_privileged_http_denied_before_data_access[debug-/api/state]" time="0.326" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_privileged_http_denied_before_data_access[debug-/api/log]" time="0.372" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_privileged_http_denied_before_data_access[debug-/api/debug_trace]" time="0.317" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_privileged_http_denied_before_data_access[debug-/api/snapshots]" time="0.314" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/campaign]" time="0.474" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/scene]" time="0.384" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/world]" time="0.401" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_supported_body_selectors_fail_closed_without_writes[uiMode-/api/campaign]" time="0.302" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_supported_body_selectors_fail_closed_without_writes[uiMode-/api/scene]" time="0.414" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_supported_body_selectors_fail_closed_without_writes[uiMode-/api/world]" time="0.498" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_selector_normalization_and_duplicate_queries[ui_mode=%20author%20-403]" time="0.320" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_selector_normalization_and_duplicate_queries[ui_mode=debug-403]" time="0.358" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_selector_normalization_and_duplicate_queries[ui_mode=player&amp;ui_mode=author-403]" time="0.411" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_selector_normalization_and_duplicate_queries[ui_mode=author&amp;ui_mode=player-200]" time="0.468" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_selector_normalization_and_duplicate_queries[ui_mode=unknown-400]" time="0.287" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_origin_and_loopback_do_not_grant_privilege" time="0.525" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_internal_projection_access_is_preserved" time="0.487" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_missing_request_is_not_an_authorization_context" time="0.011" /><testcase classname="tests.test_pr_play_21_privileged_reads" name="test_offline_initialization_and_ordinary_action" time="0.904"><failure message="assert 422 == 200&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code&#10; +  and   200 = &lt;Response [200 OK]&gt;.status_code">confidential_world = []
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000159EB300740&gt;
+
+    def test_offline_initialization_and_ordinary_action(confidential_world, monkeypatch):
+        # Reuse PR-PLAY-20's guarded, temporary opening fixture and SDK transport.
+        monkeypatch.setattr(st, "SNAPSHOTS_DIR", st.DATA_DIR / "snapshots")
+        seen = []
+        _transport(monkeypatch, seen, lambda kw: plan_selecting_required(kw["input"]))
+        authority = copy.deepcopy(st.load_campaign())
+        with TestClient(api.app) as client:
+            started = client.post("/api/start_campaign")
+            public = client.get("/api/state")
+            denied = client.get("/api/state?ui_mode=author")
+            action = client.post("/api/action", json={"action_type": "roll_initiative"})
+&gt;       assert started.status_code == public.status_code == action.status_code == 200
+E       assert 422 == 200
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+E        +  and   200 = &lt;Response [200 OK]&gt;.status_code
+
+tests\test_pr_play_21_privileged_reads.py:146: AssertionError</failure></testcase></testsuite></testsuites>

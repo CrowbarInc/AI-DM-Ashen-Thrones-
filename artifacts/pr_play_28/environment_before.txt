@@ -1,0 +1,82 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+______________________ test_by3_generate_repo_artifacts _______________________
+tests\test_by3_strict_social_semantic_mutation.py:152: in test_by3_generate_repo_artifacts
+    assert by3_report["before_after_coverage"]["gap_closed"] is True
+E   assert False is True
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_active_target_direct_command_routes_to_social_exchange _______
+tests\test_turn_pipeline_shared.py:1309: in test_chat_active_target_direct_command_routes_to_social_exchange
+    assert_dialogue_lock_social_route_smoke(
+tests\helpers\emission_smoke_assertions.py:377: in assert_dialogue_lock_social_route_smoke
+    assert kind in allowed, (
+E   AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_generate_repo_artifacts
+FAILED tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange

@@ -1,0 +1,3 @@
+# PR-PLAY-74 — 23 LIMITATIONS AND OPEN RISKS
+
+B/PARTIAL: only two narrow stone-supported families; no new NPCs, no free-text fact validation, no broad contradiction solver, no object movement/sitting mechanics, provider remains shadow-only. Holdout is repetitive structural evidence with no persistence execution; broader generalization and full provider scenario matrix deferred. Browser B is authored-NPC evidence only. Two branch development turn-fallthrough failures retained and repaired before final freeze; final executed paths observed zero critical unsafe publications. Historical regressions remain. Provider helper is explicitly shadow; no UI provider toggle added. Review feature remains default off.

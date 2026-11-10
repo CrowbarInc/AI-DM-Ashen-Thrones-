@@ -1,0 +1,7 @@
+# REGRESSION RESULTS
+
+Completed focused aggregate: 893 passed / 3 failed / 0 errors, 896 collected. Boundary/frontend/persistence: 82 passed / 0 failed. Broader: 0 passed / 9 failed. New focused failures: [].
+
+Historical known focused failures: provider accounting readiness not live execution; two narration-state-consistency clue-update cases. Broader nine hard_validation_attempt_1 authority-assurance failures are unchanged historical failures. PR66's obsolete PR49 static assertion and malformed-output aggregate failure are evaluated by this completed run, not assumed clean. Initial PR67 aggregate was 870 passed / 26 failed; 23 new assertions read deliberately private HTTP metadata, plus one boundary error-wording assertion. Contract-test migrations retain server assertions against persisted logs and explicitly check the safe HTTP shape.
+
+regression_summary_initial.json and initial logs preserve the first run. An intermediate rerun completed 891 passed / five failures: the three historical failures and two newly observed WinError 5 failures in atomic session-file replacement (before projection). Both affected tests pass in a separate diagnostic. The focused retry is recorded separately; neither Windows error is silently relabeled historical, and it does not conclusively explain PR66's older malformed-output 500. Final logs and XML preserve the rerun; no full repository suite or official ATGB was run. No interrupted run is reported as completed. Generated protected replay evidence is restored to entry bytes after each regression lane.

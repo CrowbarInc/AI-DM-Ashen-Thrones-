@@ -1,0 +1,556 @@
+{
+  "case": "E",
+  "run": "artifacts/atgb/pr_play_34/readiness/E/20261102T010519Z-a99ec2897600",
+  "observation": {
+    "live": {
+      "controller_pid": 26144,
+      "controller_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "controller_created_utc": "2026-11-02T01:05:11Z",
+      "popen_pid": 18696,
+      "parent_pid": 26144,
+      "reported_image": "python.exe",
+      "worker_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "worker_created_utc": "2026-11-02T01:05:20Z",
+      "worker_query_error": null,
+      "base_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "launch_command": [
+        "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_32\\worker_capture.py",
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\E\\20261102T010519Z-a99ec2897600"
+      ],
+      "children": [
+        {
+          "pid": 24508,
+          "parent_pid": 18696,
+          "image": "conhost.exe",
+          "executable": "C:\\Windows\\System32\\conhost.exe",
+          "created_utc": "2026-11-02T01:05:20Z"
+        }
+      ],
+      "parent_chain": [
+        {
+          "pid": 18696,
+          "parent_pid": 26144,
+          "image": "python.exe",
+          "executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "created_utc": "2026-11-02T01:05:20Z"
+        },
+        {
+          "pid": 26144,
+          "parent_pid": 31564,
+          "image": "python.exe",
+          "executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "created_utc": "2026-11-02T01:05:11Z"
+        },
+        {
+          "pid": 31564,
+          "parent_pid": 25876,
+          "image": "python.exe",
+          "executable": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+          "created_utc": "2026-11-02T01:05:11Z"
+        },
+        {
+          "pid": 25876,
+          "parent_pid": 17976,
+          "image": "powershell.exe",
+          "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+          "created_utc": "2026-11-02T01:05:11Z"
+        },
+        {
+          "pid": 17976,
+          "parent_pid": 20240,
+          "image": "Cursor.exe",
+          "executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\cursor\\Cursor.exe",
+          "created_utc": "2026-11-01T17:38:26Z"
+        },
+        {
+          "pid": 20240,
+          "parent_pid": 9844,
+          "image": "Cursor.exe",
+          "executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\cursor\\Cursor.exe",
+          "created_utc": "2026-11-01T17:38:23Z"
+        },
+        {
+          "pid": 9844,
+          "parent_pid": 9800,
+          "image": "explorer.exe",
+          "executable": "C:\\Windows\\explorer.exe",
+          "created_utc": "2026-10-31T15:51:42Z"
+        }
+      ],
+      "process_alive": true,
+      "exit_code": null,
+      "ready": {
+        "pid": 18696,
+        "port": 50262,
+        "isolation_verified": true,
+        "diagnostics_enabled": true,
+        "sdk_retries": 0,
+        "host_retries": 0,
+        "data_dir": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\E\\20261102T010519Z-a99ec2897600\\data"
+      },
+      "reported_pid": 18696,
+      "startup_event_pid": 18696
+    },
+    "session_before": {
+      "exists": false,
+      "path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\E\\20261102T010519Z-a99ec2897600\\data\\session.json",
+      "debug_traces": [],
+      "inside_isolated_store": null,
+      "log_entries": 0
+    },
+    "session_after": {
+      "exists": true,
+      "path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\E\\20261102T010519Z-a99ec2897600\\data\\session.json",
+      "debug_traces": [
+        {
+          "kind": "state_mutation",
+          "domain": "scene_state",
+          "owner_module": "game.interaction_context",
+          "operation": "rebuild_active_scene_entities",
+          "changed_area": "scene_state.active_entities"
+        }
+      ],
+      "inside_isolated_store": true,
+      "log_entries": 0,
+      "campaign_started": false,
+      "turn_counter": 0,
+      "chat_history_len": 0,
+      "last_action_debug": false,
+      "active_scene_id": "frontier_gate"
+    },
+    "provider_events": [
+      {
+        "event": "initialized",
+        "version": "ATGB-03B-1",
+        "run_id": "7e581d7fa42b4bc29223b29ad37e19c9",
+        "time": "2026-11-02T01:05:21.713130+00:00"
+      }
+    ],
+    "usage": {
+      "version": "ATGB-03B-1",
+      "run_id": "7e581d7fa42b4bc29223b29ad37e19c9",
+      "requests": 0,
+      "request_upper_bound": 0,
+      "dispatched_requests": 0,
+      "pending_requests": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "stopped": false,
+      "stop_reason": "",
+      "records": [],
+      "events": [
+        {
+          "event": "initialized",
+          "version": "ATGB-03B-1",
+          "run_id": "7e581d7fa42b4bc29223b29ad37e19c9",
+          "time": "2026-11-02T01:05:21.713130+00:00"
+        }
+      ]
+    },
+    "http_requests": [
+      {
+        "method": "GET",
+        "path": "/api/state"
+      }
+    ],
+    "http_status": 200,
+    "http_ready_exists": true,
+    "startup_seconds": 1.453,
+    "timeout_seconds": 30,
+    "verdict": "INCONCLUSIVE",
+    "failure": null,
+    "stop_reason": "interrupted_execution",
+    "steps": [],
+    "process_cleanup": {
+      "owned": true,
+      "pid": 18696,
+      "stopped": true,
+      "exit_code": 1,
+      "shutdown_seconds": 0.016
+    },
+    "orphans": [],
+    "port": 50262,
+    "port_released": true,
+    "poll_events": [
+      {
+        "event": "worker_spawned",
+        "time": "2026-11-02T01:05:20.584835+00:00",
+        "elapsed_seconds": 0.0,
+        "pid": 18696,
+        "deadline_seconds": 30
+      },
+      {
+        "event": "http_response",
+        "time": "2026-11-02T01:05:22.028146+00:00",
+        "elapsed_seconds": 1.453,
+        "url": "http://127.0.0.1:50262/api/state",
+        "status": 200
+      }
+    ],
+    "worker_failure": null,
+    "holder": null,
+    "elapsed_seconds": 3.61,
+    "cleanup_succeeded": true
+  },
+  "controls": [
+    {
+      "control": "E",
+      "result": "PASS",
+      "failed_ids": [],
+      "assertions": [
+        {
+          "id": "H1_ready_pid_equals_popen",
+          "expected": "ready.pid equals the Popen pid",
+          "observed": {
+            "ready_pid": 18696,
+            "popen_pid": 18696
+          },
+          "passed": true,
+          "evidence": {
+            "source": "ready.json pid compared with Popen.pid"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "H2_parent_is_controller",
+          "expected": "worker parent pid equals the controller pid",
+          "observed": {
+            "parent_pid": 26144,
+            "controller_pid": 26144
+          },
+          "passed": true,
+          "evidence": {
+            "source": "Toolhelp32 parent of the worker pid"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "H3_worker_has_no_children",
+          "expected": "worker has no child processes (original diagnostic assumption)",
+          "observed": {
+            "child_count": 1,
+            "children": [
+              {
+                "pid": 24508,
+                "parent_pid": 18696,
+                "image": "conhost.exe",
+                "executable": "C:\\Windows\\System32\\conhost.exe",
+                "created_utc": "2026-11-02T01:05:20Z"
+              }
+            ]
+          },
+          "passed": false,
+          "evidence": {
+            "source": "Toolhelp32 children of the worker pid"
+          },
+          "gating": false,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "H4_isolation_and_diagnostics",
+          "expected": "isolation_verified and diagnostics_enabled are true",
+          "observed": {
+            "isolation_verified": true,
+            "diagnostics_enabled": true
+          },
+          "passed": true,
+          "evidence": {
+            "source": "ready.json"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "H5_retries_zero",
+          "expected": "sdk_retries and host_retries are both 0",
+          "observed": {
+            "sdk_retries": 0,
+            "host_retries": 0
+          },
+          "passed": true,
+          "evidence": {
+            "source": "ready.json"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "A_reported_pid_matches_popen",
+          "expected": "worker-reported pid equals the Popen pid",
+          "observed": {
+            "reported_pid": 18696,
+            "popen_pid": 18696
+          },
+          "passed": true,
+          "evidence": {
+            "startup_events_pid": 18696
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "A_executable_is_base",
+          "expected": "worker image is the base interpreter, not a venv redirector",
+          "observed": {
+            "image": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+            "base": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+          },
+          "passed": true,
+          "evidence": {
+            "controller_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+            "launch_command": [
+              "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+              "-u",
+              "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_32\\worker_capture.py",
+              "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\E\\20261102T010519Z-a99ec2897600"
+            ]
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "A_no_interpreter_descendant",
+          "expected": "the worker has no Python interpreter child (console hosts may exist)",
+          "observed": {
+            "interpreter_children": []
+          },
+          "passed": true,
+          "evidence": {
+            "children": [
+              {
+                "pid": 24508,
+                "parent_pid": 18696,
+                "image": "conhost.exe",
+                "executable": "C:\\Windows\\System32\\conhost.exe",
+                "created_utc": "2026-11-02T01:05:20Z"
+              }
+            ]
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "A_http_ready",
+          "expected": "HTTP readiness file exists and status is 200",
+          "observed": {
+            "http_ready_exists": true,
+            "http_status": 200
+          },
+          "passed": true,
+          "evidence": {
+            "startup_seconds": 1.453,
+            "timeout_seconds": 30
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "A_controller_not_false_pass",
+          "expected": "controller stops before actions with verdict INCONCLUSIVE",
+          "observed": {
+            "verdict": "INCONCLUSIVE",
+            "steps": []
+          },
+          "passed": true,
+          "evidence": {
+            "failure": null,
+            "note": "KeyboardInterrupt unwind yields INCONCLUSIVE before any action"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_session_file_allowed",
+          "expected": "session.json may exist after GET /api/state; absence is not required",
+          "observed": {
+            "existed_before_request": false,
+            "exists_after_request": true
+          },
+          "passed": true,
+          "evidence": {
+            "note": "load_session creates a bootstrap document when the file is missing"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_isolated_store",
+          "expected": "session file, when present, is inside the isolated run store",
+          "observed": {
+            "inside_isolated_store": true,
+            "exists": true
+          },
+          "passed": true,
+          "evidence": {
+            "path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\E\\20261102T010519Z-a99ec2897600\\data\\session.json"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_campaign_not_started",
+          "expected": "campaign_started is false",
+          "observed": {
+            "campaign_started": false
+          },
+          "passed": true,
+          "evidence": {
+            "source": "session payload"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_turn_counter_zero",
+          "expected": "turn_counter remains 0",
+          "observed": {
+            "turn_counter": 0
+          },
+          "passed": true,
+          "evidence": {
+            "source": "session payload"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_no_gameplay_action",
+          "expected": "no chat history, session-log entries, last action, or scenario steps",
+          "observed": {
+            "chat_history_len": 0,
+            "log_entries": 0,
+            "last_action_debug": false,
+            "steps": 0
+          },
+          "passed": true,
+          "evidence": {
+            "debug_traces": [
+              {
+                "kind": "state_mutation",
+                "domain": "scene_state",
+                "owner_module": "game.interaction_context",
+                "operation": "rebuild_active_scene_entities",
+                "changed_area": "scene_state.active_entities"
+              }
+            ]
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_no_gameplay_traces",
+          "expected": "debug traces do not record campaign start, chat, narration, or provider dispatch",
+          "observed": {
+            "forbidden_operations": [],
+            "operations": [
+              "rebuild_active_scene_entities"
+            ]
+          },
+          "passed": true,
+          "evidence": {
+            "debug_traces": [
+              {
+                "kind": "state_mutation",
+                "domain": "scene_state",
+                "owner_module": "game.interaction_context",
+                "operation": "rebuild_active_scene_entities",
+                "changed_area": "scene_state.active_entities"
+              }
+            ]
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_no_provider_dispatch",
+          "expected": "no provider dispatch and zero tokens",
+          "observed": {
+            "dispatch_events": 0,
+            "dispatched_requests": 0,
+            "total_tokens": 0
+          },
+          "passed": true,
+          "evidence": {
+            "events": [
+              "initialized"
+            ]
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_no_campaign_http",
+          "expected": "HTTP activity is limited to GET /api/state",
+          "observed": {
+            "requests": [
+              {
+                "method": "GET",
+                "path": "/api/state"
+              }
+            ]
+          },
+          "passed": true,
+          "evidence": {
+            "forbidden": []
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "B_cleanup_stopped",
+          "expected": "owned worker process was stopped",
+          "observed": {
+            "owned": true,
+            "pid": 18696,
+            "stopped": true,
+            "exit_code": 1,
+            "shutdown_seconds": 0.016
+          },
+          "passed": true,
+          "evidence": {
+            "exit_code": 1
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "B_no_orphan",
+          "expected": "no remaining process whose parent or pid is the owned worker",
+          "observed": {
+            "orphans": []
+          },
+          "passed": true,
+          "evidence": {
+            "popen_pid": 18696
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "B_port_released",
+          "expected": "the worker loopback port is closed and bindable",
+          "observed": {
+            "port_released": true,
+            "port": 50262
+          },
+          "passed": true,
+          "evidence": {
+            "port": 50262
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        }
+      ],
+      "cleanup_succeeded": true,
+      "run": "artifacts/atgb/pr_play_34/readiness/E/20261102T010519Z-a99ec2897600",
+      "elapsed_seconds": 3.61
+    }
+  ],
+  "provider_dispatches": 0,
+  "gameplay_turns": 0
+}

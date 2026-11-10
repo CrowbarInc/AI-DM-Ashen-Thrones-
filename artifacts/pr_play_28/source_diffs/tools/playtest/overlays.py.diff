@@ -1,0 +1,49 @@
+--- before/tools/playtest/overlays.py
++++ after/tools/playtest/overlays.py
+@@ -1,8 +1,8 @@
+ """Conservative overlay evidence reconciliation; never grants new scene authority.
+ 
+ The legacy gateway is shape-only. Its receipt alone cannot authorize new facts.
+-Only an exact accepted-opening projection of already authored public facts is
+-recognized here. Other mutations remain explicit stop conditions.
++Exact accepted-opening and persisted authored-social projections are recognized.
++Other mutations remain explicit stop conditions.
+ """
+ import copy
+ import hashlib
+@@ -32,7 +32,7 @@
+             'sha256': hashlib.sha256(raw.encode()).hexdigest()}
+ 
+ 
+-def compare_overlays(before, after, *, accepted=False, opening_response=None):
++def compare_overlays(before, after, *, accepted=False, opening_response=None, ordinary_action=None, turn_response=None):
+     """Compare snapshots, not response session mirrors. Missing evidence fails closed.
+ 
+     Existing overlays must be preserved exactly except for the proven active-scene
+@@ -61,6 +61,12 @@
+         reason = 'malformed_overlay_root'
+     elif not accepted:
+         reason = 'opening_not_accepted_or_ordinary_turn_authority_unavailable'
++        if ordinary_action is not None and turn_response is not None:
++            from tools.playtest.social_overlay_authority import social_overlay_projection
++            projection = social_overlay_projection(before, after, ordinary_action, turn_response)
++            if projection is not None:
++                expected, receipt = projection
++                proven, reason = True, 'authored_social_clue_projection'
+     elif not (response.get('ok') is True and b.get('campaign_started') is True
+               and a.get('campaign_started') is not True
+               and sid == b.get('active_scene_id') == scene.get('id')
+@@ -133,9 +139,11 @@
+                         'before': _bounded(x), 'after': _bounded(y), 'scene_id': scene_id,
+                         'overlay_id': scene_id, 'classification': 'authorized_gameplay_mutation' if allowed else 'uncertain_or_unauthorized_mutation',
+                         'reason': reason if allowed or not proven else 'outside_exact_authorized_projection',
+-                        'authority_evidence': {'source': 'game.api._apply_post_gm_updates; game.storage',
++                        'authority_evidence': {'source': ('game.clues.apply_socially_revealed_leads; game.clues.ensure_scene_has_minimum_actionable_lead'
++                                                       if receipt and receipt.get('action_id') else 'game.api._apply_post_gm_updates; game.storage'),
+                                                'native_operation': receipt.get('operation') if receipt else None,
+-                                               'authored_scene': 'scenes/'+str(sid)+'.json'} if allowed else None})
++                                               'authored_scene': 'scenes/'+str(sid)+'.json',
++                                               'ordinary_turn': receipt if receipt and receipt.get('action_id') else None} if allowed else None})
+     walk(old, new, 'runtime_scene_overlays' in a, 'runtime_scene_overlays' in b,
+          'session.json:/runtime_scene_overlays')
+     return {'integrity': all(c['classification'] == 'authorized_gameplay_mutation' for c in changes),

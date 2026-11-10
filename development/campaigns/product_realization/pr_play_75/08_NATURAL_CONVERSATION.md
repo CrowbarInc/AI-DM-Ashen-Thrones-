@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 08 NATURAL CONVERSATION
+
+Reusable conversation accepts greetings, identity/local questions, uncertainty, thanks and contextual follow-ups using current focus or grounded references. Host meaning comes from accepted identity, one public population anchor or previous validated speech. No exact input phrase is required, and no per-NPC dialogue tree was authored. However semantic breadth is narrow and compound requests can be under-answered. All sampled provider rewordings failed validation and used grounded fallback lines, so broad provider-led conversation is unproven. This is a principal reason for B/PARTIAL.

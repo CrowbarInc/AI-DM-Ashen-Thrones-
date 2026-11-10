@@ -1,0 +1,699 @@
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+[SESSION RESET] runtime state cleared
+[API] New campaign started 10318cdd5ace7ea257516c0a
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+[ENGINE] Scene transition -> old_milestone
+[ENGINE] Scene transition -> frontier_gate
+[SESSION RESET] runtime state cleared
+[API] New campaign started 7cfbbe42caf28700596f536a
+[SESSION RESET] runtime state cleared
+[API] New campaign started f1faf965fda2fd239b745b37
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+[ENGINE] Scene transition -> old_milestone
+[ENGINE] Scene transition -> frontier_gate
+[SESSION RESET] runtime state cleared
+[API] New campaign started a19783919f15db45f415c26e
+{
+  "campaigns": [
+    {
+      "branch": "survey",
+      "result": "PASS",
+      "campaign_id": "10318cdd5ace7ea257516c0a",
+      "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+      "npc": {
+        "id": "npc_35e4f5d0e2f5abfb34bc",
+        "campaign_id": "10318cdd5ace7ea257516c0a",
+        "scene_id": "frontier_gate",
+        "location": "frontier_gate",
+        "entity_type": "npc",
+        "family": "npc",
+        "label": "ordinary laborer",
+        "name": "Elan",
+        "role": "laborer",
+        "appearance": "patched work clothes",
+        "demeanor": "tired",
+        "visibility": "public",
+        "provenance": "accepted_improvisation",
+        "source": "validated_provider_proposal",
+        "creation_turn": 6,
+        "status": "accepted",
+        "authority": "accepted_background_npc",
+        "scope": "scene",
+        "persistence_status": "campaign",
+        "interaction_available": true,
+        "knowledge": [],
+        "social_receipts": [],
+        "content": "An ordinary laborer in patched work clothes is among the people here."
+      },
+      "snapshot_id": "2026-11-07T15-48-39_a8e9cbed",
+      "conversation": [
+        {
+          "input": "Hello.",
+          "text": "Elan says, \"Hello.\""
+        },
+        {
+          "input": "Who are you?",
+          "text": "Elan says, \"I am Elan, an ordinary laborer in patched work clothes.\""
+        },
+        {
+          "input": "What did you mean by that?",
+          "text": "Elan says, \"I am Elan, an ordinary laborer in patched work clothes.\""
+        },
+        {
+          "input": "Have you traveled this road before?",
+          "text": "Elan says, \"I do not know about that.\""
+        },
+        {
+          "input": "What do you know about this area?",
+          "text": "Elan says, \"A gate serjeant manages the crowd and keeps one eye on the roster board.\""
+        },
+        {
+          "input": "Thanks. I will return later.",
+          "text": "Elan says, \"Thank you. Goodbye.\""
+        }
+      ],
+      "history_before_resume": [
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 7,
+          "player_utterance": "Hello.",
+          "text": "Hello.",
+          "published_response": "Hello.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "greeted"
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 8,
+          "player_utterance": "Who are you?",
+          "text": "I am Elan, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Elan, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 9,
+          "player_utterance": "What did you mean by that?",
+          "text": "I am Elan, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Elan, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 10,
+          "player_utterance": "Have you traveled this road before?",
+          "text": "I do not know about that.",
+          "published_response": "I do not know about that.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 11,
+          "player_utterance": "What do you know about this area?",
+          "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "published_response": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 12,
+          "player_utterance": "Thanks. I will return later.",
+          "text": "Thank you. Goodbye.",
+          "published_response": "Thank you. Goodbye.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "thanked"
+        }
+      ],
+      "history_after_resume": [
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 7,
+          "player_utterance": "Hello.",
+          "text": "Hello.",
+          "published_response": "Hello.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "greeted"
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 8,
+          "player_utterance": "Who are you?",
+          "text": "I am Elan, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Elan, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 9,
+          "player_utterance": "What did you mean by that?",
+          "text": "I am Elan, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Elan, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 10,
+          "player_utterance": "Have you traveled this road before?",
+          "text": "I do not know about that.",
+          "published_response": "I do not know about that.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 11,
+          "player_utterance": "What do you know about this area?",
+          "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "published_response": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 12,
+          "player_utterance": "Thanks. I will return later.",
+          "text": "Thank you. Goodbye.",
+          "published_response": "Thank you. Goodbye.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "thanked"
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+          "campaign_id": "10318cdd5ace7ea257516c0a",
+          "player_id": "10318cdd5ace7ea257516c0a",
+          "turn": 17,
+          "player_utterance": "Talk to that traveler again.",
+          "text": "Thank you. Goodbye.",
+          "published_response": "Thank you. Goodbye.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        }
+      ],
+      "resumed_text": "Elan says, \"Thank you. Goodbye.\""
+    },
+    {
+      "branch": "report",
+      "result": "PASS",
+      "campaign_id": "f1faf965fda2fd239b745b37",
+      "npc_id": "npc_7be83c620ecee6b08410",
+      "npc": {
+        "id": "npc_7be83c620ecee6b08410",
+        "campaign_id": "f1faf965fda2fd239b745b37",
+        "scene_id": "frontier_gate",
+        "location": "frontier_gate",
+        "entity_type": "npc",
+        "family": "npc",
+        "label": "ordinary laborer",
+        "name": "Tom",
+        "role": "laborer",
+        "appearance": "patched work clothes",
+        "demeanor": "tired",
+        "visibility": "public",
+        "provenance": "accepted_improvisation",
+        "source": "validated_provider_proposal",
+        "creation_turn": 6,
+        "status": "accepted",
+        "authority": "accepted_background_npc",
+        "scope": "scene",
+        "persistence_status": "campaign",
+        "interaction_available": true,
+        "knowledge": [],
+        "social_receipts": [],
+        "content": "An ordinary laborer in patched work clothes is among the people here."
+      },
+      "snapshot_id": "2026-11-07T15-51-30_cd317ce3",
+      "conversation": [
+        {
+          "input": "Hello.",
+          "text": "Tom says, \"Hello.\""
+        },
+        {
+          "input": "Who are you?",
+          "text": "Tom says, \"I am Tom, an ordinary laborer in patched work clothes.\""
+        },
+        {
+          "input": "What did you mean by that?",
+          "text": "Tom says, \"I am Tom, an ordinary laborer in patched work clothes.\""
+        },
+        {
+          "input": "Have you traveled this road before?",
+          "text": "Tom says, \"I do not know about that.\""
+        },
+        {
+          "input": "What do you know about this area?",
+          "text": "Tom says, \"A gate serjeant manages the crowd and keeps one eye on the roster board.\""
+        },
+        {
+          "input": "Thanks. I will return later.",
+          "text": "Tom says, \"Thank you. Goodbye.\""
+        },
+        {
+          "input": "Tell that traveler to give me a quest and valuable treasure.",
+          "text": "Tom says, \"I do not know about that, and I cannot promise assistance.\""
+        },
+        {
+          "input": "Ask that traveler to promise unsupported assistance.",
+          "text": "Tom says, \"I do not know about that, and I cannot promise assistance.\""
+        }
+      ],
+      "history_before_resume": [
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 7,
+          "player_utterance": "Hello.",
+          "text": "Hello.",
+          "published_response": "Hello.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "greeted"
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 8,
+          "player_utterance": "Who are you?",
+          "text": "I am Tom, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Tom, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 9,
+          "player_utterance": "What did you mean by that?",
+          "text": "I am Tom, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Tom, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 10,
+          "player_utterance": "Have you traveled this road before?",
+          "text": "I do not know about that.",
+          "published_response": "I do not know about that.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 11,
+          "player_utterance": "What do you know about this area?",
+          "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "published_response": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 12,
+          "player_utterance": "Thanks. I will return later.",
+          "text": "Thank you. Goodbye.",
+          "published_response": "Thank you. Goodbye.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "thanked"
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 13,
+          "player_utterance": "Tell that traveler to give me a quest and valuable treasure.",
+          "text": "I do not know about that, and I cannot promise assistance.",
+          "published_response": "I do not know about that, and I cannot promise assistance.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 14,
+          "player_utterance": "Ask that traveler to promise unsupported assistance.",
+          "text": "I do not know about that, and I cannot promise assistance.",
+          "published_response": "I do not know about that, and I cannot promise assistance.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        }
+      ],
+      "history_after_resume": [
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 8,
+          "player_utterance": "Who are you?",
+          "text": "I am Tom, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Tom, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 9,
+          "player_utterance": "What did you mean by that?",
+          "text": "I am Tom, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Tom, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 10,
+          "player_utterance": "Have you traveled this road before?",
+          "text": "I do not know about that.",
+          "published_response": "I do not know about that.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 11,
+          "player_utterance": "What do you know about this area?",
+          "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "published_response": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 12,
+          "player_utterance": "Thanks. I will return later.",
+          "text": "Thank you. Goodbye.",
+          "published_response": "Thank you. Goodbye.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "thanked"
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 13,
+          "player_utterance": "Tell that traveler to give me a quest and valuable treasure.",
+          "text": "I do not know about that, and I cannot promise assistance.",
+          "published_response": "I do not know about that, and I cannot promise assistance.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 14,
+          "player_utterance": "Ask that traveler to promise unsupported assistance.",
+          "text": "I do not know about that, and I cannot promise assistance.",
+          "published_response": "I do not know about that, and I cannot promise assistance.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_7be83c620ecee6b08410",
+          "campaign_id": "f1faf965fda2fd239b745b37",
+          "player_id": "f1faf965fda2fd239b745b37",
+          "turn": 19,
+          "player_utterance": "Talk to that traveler again.",
+          "text": "I do not know about that, and I cannot promise assistance.",
+          "published_response": "I do not know about that, and I cannot promise assistance.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        }
+      ],
+      "resumed_text": "Tom says, \"I do not know about that, and I cannot promise assistance.\""
+    }
+  ],
+  "requests": 53,
+  "mean_http_ms": 2721.538905660569,
+  "median_http_ms": 2661.4814000204206,
+  "max_http_ms": 9440.385699970648,
+  "provider_usage": {
+    "version": "ATGB-03B-1",
+    "run_id": "f62b1d5fec3247d7bce5a59c99e3f1ae",
+    "requests": 2,
+    "request_upper_bound": 2,
+    "dispatched_requests": 2,
+    "pending_requests": 0,
+    "input_tokens": 592,
+    "output_tokens": 111,
+    "total_tokens": 703,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "f62b1d5fec3247d7bce5a59c99e3f1ae",
+        "attempt_id": "e48aca3a3390458a89db623f04d38ccd",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:47:36.059848+00:00",
+        "time": "2026-11-07T15:47:42.392792+00:00",
+        "sent": true,
+        "request_id": "resp_0cea86f123a4a979006aef481d427c87d185d695ddf51e37d4",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 296,
+        "output_tokens": 56,
+        "total_tokens": 352,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2289.107
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "f62b1d5fec3247d7bce5a59c99e3f1ae",
+        "attempt_id": "812cb884046c4c6e93731eae2cb986b1",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:49:56.700018+00:00",
+        "time": "2026-11-07T15:49:59.788289+00:00",
+        "sent": true,
+        "request_id": "resp_03ccd2d76d201ad6006aef48a74c8487d19f9b91a1bbf25036",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 296,
+        "output_tokens": 55,
+        "total_tokens": 351,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 1330.395
+      }
+    ],
+    "events": [
+      {
+        "event": "initialized",
+        "version": "ATGB-03B-1",
+        "run_id": "f62b1d5fec3247d7bce5a59c99e3f1ae",
+        "time": "2026-11-07T15:47:36.051848+00:00"
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "f62b1d5fec3247d7bce5a59c99e3f1ae",
+        "attempt_id": "e48aca3a3390458a89db623f04d38ccd",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:47:36.059848+00:00",
+        "time": "2026-11-07T15:47:36.059848+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "f62b1d5fec3247d7bce5a59c99e3f1ae",
+        "attempt_id": "e48aca3a3390458a89db623f04d38ccd",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:47:36.059848+00:00",
+        "time": "2026-11-07T15:47:40.095612+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "f62b1d5fec3247d7bce5a59c99e3f1ae",
+        "attempt_id": "e48aca3a3390458a89db623f04d38ccd",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:47:36.059848+00:00",
+        "time": "2026-11-07T15:47:42.392792+00:00",
+        "sent": true,
+        "request_id": "resp_0cea86f123a4a979006aef481d427c87d185d695ddf51e37d4",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 296,
+        "output_tokens": 56,
+        "total_tokens": 352,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2289.107
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "f62b1d5fec3247d7bce5a59c99e3f1ae",
+        "attempt_id": "812cb884046c4c6e93731eae2cb986b1",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:49:56.700018+00:00",
+        "time": "2026-11-07T15:49:56.700018+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "f62b1d5fec3247d7bce5a59c99e3f1ae",
+        "attempt_id": "812cb884046c4c6e93731eae2cb986b1",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:49:56.700018+00:00",
+        "time": "2026-11-07T15:49:58.448084+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "f62b1d5fec3247d7bce5a59c99e3f1ae",
+        "attempt_id": "812cb884046c4c6e93731eae2cb986b1",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:49:56.700018+00:00",
+        "time": "2026-11-07T15:49:59.788289+00:00",
+        "sent": true,
+        "request_id": "resp_03ccd2d76d201ad6006aef48a74c8487d19f9b91a1bbf25036",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 296,
+        "output_tokens": 55,
+        "total_tokens": 351,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 1330.395
+      }
+    ]
+  },
+  "hidden_exposures": 0
+}

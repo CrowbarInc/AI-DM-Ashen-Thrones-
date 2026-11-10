@@ -1,0 +1,1 @@
+Deterministic HTTP: mean 287.88236969602156 ms, median 240.34669995307922 ms, maximum 1248.8325000740588 ms, n=33. Browser chat server time: {'count': 16, 'mean': 323.8128125, 'median': 334.488, 'maximum': 854.739}. Provider requests 0, tokens 0, retries 0, accepted proposals 0, rejected live proposals 0. No provider latency was measured because no live call was made.

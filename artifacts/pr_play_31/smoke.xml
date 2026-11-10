@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="54" time="6.320" timestamp="2026-11-01T19:21:42.721014-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[I go to the docks.]" time="0.033" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[I make for the harbor.]" time="0.028" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[Let's head down to the waterfront.]" time="0.018" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[I leave the guard and walk toward the docks.]" time="0.017" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[Can I get to the docks from here?]" time="0.016" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[I was thinking about visiting the docks.]" time="0.017" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_wording_is_not_hardcoded" time="0.001" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H01]" time="0.016" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H02]" time="0.016" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H03]" time="0.017" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H04]" time="0.016" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H05]" time="0.017" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H06]" time="0.019" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H07]" time="0.017" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H08]" time="0.017" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H09]" time="0.017" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H10]" time="0.017" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H11]" time="0.016" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H12]" time="0.018" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H13]" time="0.019" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H14]" time="0.018" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_direct_movement_uses_existing_resolver" time="0.146" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_movement_question_does_not_move_or_advance_time" time="0.025" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_tentative_movement_does_not_execute" time="0.026" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_incomplete_movement_clarifies_without_context_and_uses_focused_destination" time="0.024"><failure message="AssertionError: assert 'conversational_decline' == 'conversational_clarify'&#10;  &#10;  - conversational_clarify&#10;  ?                  -- ^^&#10;  + conversational_decline&#10;  ?                ++   ^^">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_smoke/test_pr_ec_incomplete_movement0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B7FBD32C30&gt;
+
+    def test_pr_ec_incomplete_movement_clarifies_without_context_and_uses_focused_destination(tmp_path, monkeypatch) -&gt; None:
+        _install_routes(tmp_path, monkeypatch)
+        _no_provider(monkeypatch)
+    
+        unclear = chat(ChatRequest(text="I head out.", ui_mode="player"))
+&gt;       assert unclear["resolution"]["kind"] == "conversational_clarify"
+E       AssertionError: assert 'conversational_decline' == 'conversational_clarify'
+E         
+E         - conversational_clarify
+E         ?                  -- ^^
+E         + conversational_decline
+E         ?                ++   ^^
+
+tests\test_pr_ec_movement_partial_intent.py:215: AssertionError</failure></testcase><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_impossible_wall_stays_with_existing_authority" time="0.048" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_dialogue_to_movement_clears_talk_and_moves" time="0.133" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_compound_actions_are_named_and_not_executed" time="0.028" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_dependent_sequence_does_not_narrate_the_second_step" time="0.170" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_hypothetical_action_does_not_mutate" time="0.043" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_ambiguous_destination_then_continuation" time="0.166" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_pending_destination_survives_save_and_load" time="0.119" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_ordinary_inspection_still_reaches_existing_resolver" time="0.097" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_return_uses_previous_visited_scene" time="0.118" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_unknown_destination_is_not_canonicalized" time="0.023" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_original_failure_boundary" time="0.003" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_general_local_targets[Tavern Runner-approach-ask what they're offering-ASK]" time="0.027" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_general_local_targets[Gate Guard-walk over to-ask about the missing patrol-ASK]" time="0.026" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_general_local_targets[Notice board-walk over to-examine the notices-INSPECT]" time="0.024" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[locked]" time="0.026" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[cross_scene]" time="0.029" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[unregistered]" time="0.031" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[unknown_access]" time="0.030" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[hostile]" time="0.027" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[extra]" time="0.029" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[raw_crossing]" time="0.028" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[target_mismatch]" time="0.028" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[theft]" time="0.030" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[player_barrier]" time="0.029" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[authored_access_false]" time="0.053" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_consequential_or_uncertain_steps_preserved[travel]" time="0.045" /><testcase classname="tests.test_pr_play_23_local_interaction" name="test_opening_to_interaction_publication[False]" time="0.105"><failure message="NameError: name 'execution_decision' is not defined">opening_world = {'calls': [], 'state': {'text': '{"declared_claims": [], "narration": "You stand at Cinderwatch\'s eastern gate. Rain ...', 'raise': False}, 'before': {'campaign_started': False, 'turn_counter': 0, 'time_pressure': 0, 'log_length': 0, ...}}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B7FBCE0290&gt;
+direct = False
+
+    @pytest.mark.parametrize('direct', [False, True])
+    def test_opening_to_interaction_publication(opening_world, monkeypatch, direct):
+        monkeypatch.setenv('ASHEN_OPENING_RENDERER', '1')
+        seen = []
+        _transport(monkeypatch, seen, lambda kw: plan_selecting_required(kw['input']))
+        secret = 'PR_PLAY_23_SYNTHETIC_HIDDEN_SENTINEL'
+        world = st.load_world()
+        world['internal_state'] = {'secret': secret}
+        st.save_world(world)
+        with TestClient(api.app) as client:
+&gt;           opening = client.post('/api/start_campaign?ui_mode=player')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_pr_play_23_local_interaction.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:555: in post
+    return super().post(
+.venv\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:454: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:356: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:353: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:88: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2692: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1274: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:276: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:156: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:142: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:698: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:352: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2641: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1033: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6363: in start_campaign
+    return _project_player_runtime_response(_start_campaign_response(request))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6401: in _start_campaign_response
+    return _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+ui_mode = 'player', gate = {'manual_testing_blocked': False}, gate_operator = {}
+opening_scope = &lt;game.api._OpeningScope object at 0x000002B7FBD33380&gt;
+
+    def _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope: _OpeningScope):
+        campaign = load_campaign()
+        character = load_character()
+        session = load_session()
+        recent_log = load_log()
+        if not _session_allows_structured_start_campaign(session, recent_log):
+            from game.provider_budget import observe_opening_validation
+            observe_opening_validation(rejection="already_started", recovery="not_attempted")
+            st = compose_state()
+            return JSONResponse(
+                status_code=409,
+                content={
+                    "ok": False,
+                    "status": "already_started",
+                    "error": "Campaign has already started, or the transcript is not empty.",
+                    "upstream_dependent_run_gate": gate,
+                    "upstream_dependent_run_gate_operator": gate_operator,
+                    **_project_state_for_ui_mode(st, ui_mode),
+                },
+            )
+    
+        turn_started = _now_perf()
+        snapshot_turn_start_interlocutor(session)
+        world = load_world()
+        combat = load_combat()
+        conditions = load_conditions()
+        scene = load_active_scene()
+        synchronize_scene_addressability(session, scene, world)
+        scene["scene_state"] = session.get("scene_state")
+        scene_before_id = scene["scene"]["id"]
+    
+        trace: dict = {
+            "timestamp": utc_iso_now(),
+            "source": "start_campaign",
+            "action_type": "start_campaign",
+            "raw_input": "",
+            "turn_stage_order": list(AUTHORITATIVE_TURN_STAGE_ORDER),
+            "incoming_payload": {"start_campaign": True},
+            "parsed_intent": None,
+            "segmented_turn": None,
+            "normalized_action": None,
+            "resolution": None,
+            "scene_before": scene["scene"]["id"],
+            "scene_after": None,
+            "clue_updates": [],
+            "world_flag_updates": [],
+            "turn_trace": None,
+            "gpt_called": True,
+            "response_ok": True,
+            "error": None,
+        }
+        latency_ms: dict[str, int] = {}
+        clue_presentation_before = _snapshot_known_clue_presentations(session)
+    
+        opening_scope.track(session, world, combat)
+        if session.get("turn_counter") is None:
+            session["turn_counter"] = 0
+        session["turn_counter"] += 1
+    
+        tick = advance_world_tick(world, campaign)
+    
+        clocks_before = dict(get_or_init_clocks(session))
+        time_pressure_after = advance_clock(session, "time_pressure", 1)
+    
+        recent_log = load_log()
+        scene_rt = get_scene_runtime(session, scene["scene"]["id"])
+    
+        routed_via_exploration = True
+        routed_via_adjudication = False
+        route_choice = "action"
+        authoritative_clue_updates: list[str] = []
+    
+        classify_started = _now_perf()
+        segmented_turn = segment_mixed_player_turn("")
+        trace["segmented_turn"] = _compact_segmented_turn(segmented_turn)
+        canonical_entry = resolve_directed_social_entry(
+            session=session,
+            scene=scene,
+            world=world,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text="",
+        )
+        declared_switch_meta = resolve_declared_actor_switch(
+            session=session,
+            scene=scene,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text="",
+        )
+        trace["canonical_entry"] = {
+            "should_route_social": bool(canonical_entry.get("should_route_social")),
+            "target_actor_id": canonical_entry.get("target_actor_id"),
+            "target_source": canonical_entry.get("target_source"),
+            "reason": canonical_entry.get("reason"),
+            "spoken_text": canonical_entry.get("spoken_text"),
+            "declared_switch_detected": bool(declared_switch_meta.get("has_declared_switch")),
+            "declared_switch_target_actor_id": (
+                declared_switch_meta.get("target_actor_id")
+                if declared_switch_meta.get("has_declared_switch")
+                else None
+            ),
+            "continuity_overridden_by_declared_switch": bool(
+                canonical_entry.get("continuity_overridden_by_declared_switch")
+            ),
+            "spoken_vocative_detected": bool(canonical_entry.get("spoken_vocative_detected")),
+            "spoken_vocative_target_actor_id": canonical_entry.get("spoken_vocative_target_actor_id"),
+            "continuity_overridden_by_spoken_vocative": bool(
+                canonical_entry.get("continuity_overridden_by_spoken_vocative")
+            ),
+        }
+        for _k in (
+            "open_social_solicitation",
+            "broad_address_bid",
+            "broadcast_social_open_call",
+            "candidate_addressable_ids",
+            "candidate_addressable_count",
+            "broad_address_reason",
+            "broad_address_phrase_matched",
+        ):
+            if _k in canonical_entry:
+                trace["canonical_entry"][_k] = canonical_entry.get(_k)
+        trace["canonical_entry_path"] = (
+            "social" if canonical_entry.get("should_route_social") else "undecided"
+        )
+        trace["canonical_entry_reason"] = canonical_entry.get("reason")
+        trace["canonical_entry_target_actor_id"] = canonical_entry.get("target_actor_id")
+        implied_context = _prepare_interaction_from_turn_input(session, world, scene_before_id, "", scene=scene)
+        compact_segmented = _compact_segmented_turn(segmented_turn)
+    
+        normalized_chat, resolution = _opening_scene_normalized_action_and_resolution(
+            scene=scene,
+            player_text=None,
+            internal_bootstrap=True,
+        )
+        parsed = normalized_chat
+        _accumulate_latency(latency_ms, "intent_classification", _elapsed_ms(classify_started))
+    
+        try:
+            scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
+                campaign=campaign,
+                character=character,
+                session=session,
+                world=world,
+                combat=combat,
+                scene=scene,
+                recent_log=recent_log,
+                resolution=resolution,
+                normalized_action=normalized_chat,
+                fallback_user_text="",
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                route_choice="action",
+                directed_social_entry=canonical_entry,
+                latency_sink=latency_ms,
+            )
+        except Exception:
+            raise
+    
+        authoritative_clue_updates.extend(turn_clue_updates)
+        if isinstance(resolution, dict):
+            resolution["world_tick_events"] = tick.get("events", [])
+    
+        _record_scene_pressure_input(
+            session,
+            scene_before_id,
+            "",
+            normalized_action=parsed if isinstance(parsed, dict) else None,
+            resolution=None,
+        )
+    
+        request_log = {
+            "request": {"start_campaign": True, "action_type": "start_campaign"},
+            "log_meta": {
+                "bootstrap_intent": "start_campaign",
+                "player_input": "",
+            },
+        }
+    
+        # A travel purpose is explanation-only; it never runs a second resolver.
+        deferred = (session.get("conversational_context") or {}).get("pending_clarification") or {}
+&gt;       if (execution_decision is not None and execution_decision.proposed_operation == "MOVE"
+            ^^^^^^^^^^^^^^^^^^
+                and deferred.get("kind") == "deferred_intentions" and isinstance(gm, dict)):
+E               NameError: name 'execution_decision' is not defined
+
+game\api.py:6584: NameError</failure></testcase><testcase classname="tests.test_pr_play_23_local_interaction" name="test_opening_to_interaction_publication[True]" time="0.095"><failure message="NameError: name 'execution_decision' is not defined">opening_world = {'calls': [], 'state': {'text': '{"declared_claims": [], "narration": "You stand at Cinderwatch\'s eastern gate. Rain ...', 'raise': False}, 'before': {'campaign_started': False, 'turn_counter': 0, 'time_pressure': 0, 'log_length': 0, ...}}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B7F8B788C0&gt;
+direct = True
+
+    @pytest.mark.parametrize('direct', [False, True])
+    def test_opening_to_interaction_publication(opening_world, monkeypatch, direct):
+        monkeypatch.setenv('ASHEN_OPENING_RENDERER', '1')
+        seen = []
+        _transport(monkeypatch, seen, lambda kw: plan_selecting_required(kw['input']))
+        secret = 'PR_PLAY_23_SYNTHETIC_HIDDEN_SENTINEL'
+        world = st.load_world()
+        world['internal_state'] = {'secret': secret}
+        st.save_world(world)
+        with TestClient(api.app) as client:
+&gt;           opening = client.post('/api/start_campaign?ui_mode=player')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_pr_play_23_local_interaction.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:555: in post
+    return super().post(
+.venv\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:454: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:356: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:353: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:88: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2692: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1274: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:276: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:156: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:142: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:698: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:352: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2641: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1033: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6363: in start_campaign
+    return _project_player_runtime_response(_start_campaign_response(request))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6401: in _start_campaign_response
+    return _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+ui_mode = 'player', gate = {'manual_testing_blocked': False}, gate_operator = {}
+opening_scope = &lt;game.api._OpeningScope object at 0x000002B7FBEA57F0&gt;
+
+    def _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope: _OpeningScope):
+        campaign = load_campaign()
+        character = load_character()
+        session = load_session()
+        recent_log = load_log()
+        if not _session_allows_structured_start_campaign(session, recent_log):
+            from game.provider_budget import observe_opening_validation
+            observe_opening_validation(rejection="already_started", recovery="not_attempted")
+            st = compose_state()
+            return JSONResponse(
+                status_code=409,
+                content={
+                    "ok": False,
+                    "status": "already_started",
+                    "error": "Campaign has already started, or the transcript is not empty.",
+                    "upstream_dependent_run_gate": gate,
+                    "upstream_dependent_run_gate_operator": gate_operator,
+                    **_project_state_for_ui_mode(st, ui_mode),
+                },
+            )
+    
+        turn_started = _now_perf()
+        snapshot_turn_start_interlocutor(session)
+        world = load_world()
+        combat = load_combat()
+        conditions = load_conditions()
+        scene = load_active_scene()
+        synchronize_scene_addressability(session, scene, world)
+        scene["scene_state"] = session.get("scene_state")
+        scene_before_id = scene["scene"]["id"]
+    
+        trace: dict = {
+            "timestamp": utc_iso_now(),
+            "source": "start_campaign",
+            "action_type": "start_campaign",
+            "raw_input": "",
+            "turn_stage_order": list(AUTHORITATIVE_TURN_STAGE_ORDER),
+            "incoming_payload": {"start_campaign": True},
+            "parsed_intent": None,
+            "segmented_turn": None,
+            "normalized_action": None,
+            "resolution": None,
+            "scene_before": scene["scene"]["id"],
+            "scene_after": None,
+            "clue_updates": [],
+            "world_flag_updates": [],
+            "turn_trace": None,
+            "gpt_called": True,
+            "response_ok": True,
+            "error": None,
+        }
+        latency_ms: dict[str, int] = {}
+        clue_presentation_before = _snapshot_known_clue_presentations(session)
+    
+        opening_scope.track(session, world, combat)
+        if session.get("turn_counter") is None:
+            session["turn_counter"] = 0
+        session["turn_counter"] += 1
+    
+        tick = advance_world_tick(world, campaign)
+    
+        clocks_before = dict(get_or_init_clocks(session))
+        time_pressure_after = advance_clock(session, "time_pressure", 1)
+    
+        recent_log = load_log()
+        scene_rt = get_scene_runtime(session, scene["scene"]["id"])
+    
+        routed_via_exploration = True
+        routed_via_adjudication = False
+        route_choice = "action"
+        authoritative_clue_updates: list[str] = []
+    
+        classify_started = _now_perf()
+        segmented_turn = segment_mixed_player_turn("")
+        trace["segmented_turn"] = _compact_segmented_turn(segmented_turn)
+        canonical_entry = resolve_directed_social_entry(
+            session=session,
+            scene=scene,
+            world=world,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text="",
+        )
+        declared_switch_meta = resolve_declared_actor_switch(
+            session=session,
+            scene=scene,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text="",
+        )
+        trace["canonical_entry"] = {
+            "should_route_social": bool(canonical_entry.get("should_route_social")),
+            "target_actor_id": canonical_entry.get("target_actor_id"),
+            "target_source": canonical_entry.get("target_source"),
+            "reason": canonical_entry.get("reason"),
+            "spoken_text": canonical_entry.get("spoken_text"),
+            "declared_switch_detected": bool(declared_switch_meta.get("has_declared_switch")),
+            "declared_switch_target_actor_id": (
+                declared_switch_meta.get("target_actor_id")
+                if declared_switch_meta.get("has_declared_switch")
+                else None
+            ),
+            "continuity_overridden_by_declared_switch": bool(
+                canonical_entry.get("continuity_overridden_by_declared_switch")
+            ),
+            "spoken_vocative_detected": bool(canonical_entry.get("spoken_vocative_detected")),
+            "spoken_vocative_target_actor_id": canonical_entry.get("spoken_vocative_target_actor_id"),
+            "continuity_overridden_by_spoken_vocative": bool(
+                canonical_entry.get("continuity_overridden_by_spoken_vocative")
+            ),
+        }
+        for _k in (
+            "open_social_solicitation",
+            "broad_address_bid",
+            "broadcast_social_open_call",
+            "candidate_addressable_ids",
+            "candidate_addressable_count",
+            "broad_address_reason",
+            "broad_address_phrase_matched",
+        ):
+            if _k in canonical_entry:
+                trace["canonical_entry"][_k] = canonical_entry.get(_k)
+        trace["canonical_entry_path"] = (
+            "social" if canonical_entry.get("should_route_social") else "undecided"
+        )
+        trace["canonical_entry_reason"] = canonical_entry.get("reason")
+        trace["canonical_entry_target_actor_id"] = canonical_entry.get("target_actor_id")
+        implied_context = _prepare_interaction_from_turn_input(session, world, scene_before_id, "", scene=scene)
+        compact_segmented = _compact_segmented_turn(segmented_turn)
+    
+        normalized_chat, resolution = _opening_scene_normalized_action_and_resolution(
+            scene=scene,
+            player_text=None,
+            internal_bootstrap=True,
+        )
+        parsed = normalized_chat
+        _accumulate_latency(latency_ms, "intent_classification", _elapsed_ms(classify_started))
+    
+        try:
+            scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
+                campaign=campaign,
+                character=character,
+                session=session,
+                world=world,
+                combat=combat,
+                scene=scene,
+                recent_log=recent_log,
+                resolution=resolution,
+                normalized_action=normalized_chat,
+                fallback_user_text="",
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                route_choice="action",
+                directed_social_entry=canonical_entry,
+                latency_sink=latency_ms,
+            )
+        except Exception:
+            raise
+    
+        authoritative_clue_updates.extend(turn_clue_updates)
+        if isinstance(resolution, dict):
+            resolution["world_tick_events"] = tick.get("events", [])
+    
+        _record_scene_pressure_input(
+            session,
+            scene_before_id,
+            "",
+            normalized_action=parsed if isinstance(parsed, dict) else None,
+            resolution=None,
+        )
+    
+        request_log = {
+            "request": {"start_campaign": True, "action_type": "start_campaign"},
+            "log_meta": {
+                "bootstrap_intent": "start_campaign",
+                "player_input": "",
+            },
+        }
+    
+        # A travel purpose is explanation-only; it never runs a second resolver.
+        deferred = (session.get("conversational_context") or {}).get("pending_clarification") or {}
+&gt;       if (execution_decision is not None and execution_decision.proposed_operation == "MOVE"
+            ^^^^^^^^^^^^^^^^^^
+                and deferred.get("kind") == "deferred_intentions" and isinstance(gm, dict)):
+E               NameError: name 'execution_decision' is not defined
+
+game\api.py:6584: NameError</failure></testcase><testcase classname="tests.test_pr_play_23_local_interaction" name="test_negative_http_no_later_action" time="0.078" /></testsuite></testsuites>

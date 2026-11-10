@@ -1,0 +1,40 @@
+{
+  "method": "untraced repeated calls after one warmup validation; no provider",
+  "development": {
+    "repeats": 40,
+    "validations": 1600,
+    "average_ms": 0.1662,
+    "median_ms": 0.1636,
+    "maximum_ms": 4.7721,
+    "p95_ms": 0.222,
+    "throughput_per_second": 6007.4
+  },
+  "previous_scored_corpus": {
+    "repeats": 40,
+    "validations": 3320,
+    "average_ms": 0.1833,
+    "median_ms": 0.1587,
+    "maximum_ms": 2.5002,
+    "p95_ms": 0.3743,
+    "throughput_per_second": 5448.9
+  },
+  "holdout_one_shot": {
+    "source": "evaluation.json holdout.latency",
+    "average_ms": 0.2129,
+    "median_ms": 0.1103,
+    "maximum_ms": 6.8801,
+    "note": "Maximum is the first call in that process. Median is the typical call."
+  },
+  "traced_development_loop": {
+    "source": "evaluation.json repeated_development_latency",
+    "average_ms": 0.5431,
+    "median_ms": 0.5081,
+    "maximum_ms": 11.5702,
+    "throughput_per_second": 1837.3,
+    "tracemalloc_peak_bytes": 3160442,
+    "note": "tracemalloc was enabled for this loop, so it is not the comparable latency."
+  },
+  "pr_play_54_reference_average_ms": 0.169,
+  "provider_requests": 0,
+  "additional_tokens": 0
+}

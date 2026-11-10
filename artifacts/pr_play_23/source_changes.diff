@@ -1,0 +1,730 @@
+--- before/game/local_interaction.py
++++ after/game/local_interaction.py
+@@ -0,0 +1,80 @@
++"""Conservative normalization of an approach preamble; never a movement grant."""
++from __future__ import annotations
++
++import copy
++import re
++
++from game.player_interpretation_bridge import visible_catalog, normalized_action_from_interpretation
++
++
++def normalize_local_approach(record, *, player_text, scene, world, session=None):
++    """Keep only the interaction when authored eligibility and literal wording agree.
++
++    Addressability is conversational eligibility, not physical reachability. We
++    require an explicitly authored addressable NPC and reject any access caveat;
++    no position, travel, or successful movement is asserted or persisted.
++    """
++    components = record.get("action_components") or []
++    if (record.get("communication_mode") != "IN_WORLD_ACTION"
++            or record.get("interpretation_status") != "INTERPRETED"
++            or (record.get("references") or {}).get("unresolved_references")
++            or len(components) != 2 or not all(isinstance(c, dict) for c in components)):
++        return record
++    move, interaction = components
++    if move.get("order") != 1 or interaction.get("order") != 2:
++        return record
++    target_id = move.get("target_ref")
++    operation = interaction.get("operation_class")
++    if (move.get("operation_class") != "MOVE" or operation not in {"ASK", "INSPECT"}
++            or not target_id or target_id != interaction.get("target_ref")):
++        return record
++    current = (scene or {}).get("scene", scene or {})
++    target = visible_catalog(scene, world).get(target_id)
++    if not target or target["kind"] == "exit":
++        return record
++    row = target["row"]
++    authored = []
++    if operation == "ASK":
++        from game.interaction_context import is_actor_addressable_in_current_scene
++        authored = [a for a in current.get("addressables", [])
++                    if isinstance(a, dict) and a.get("id") == target_id and a.get("addressable") is True
++                    and a.get("scene_id") == current.get("id")]
++        if (target["kind"] != "npc" or not authored
++                or not is_actor_addressable_in_current_scene(session or {}, scene, target_id, world=world)):
++            return record
++    elif target["kind"] not in {"inspect_target", "perceive_target"}:
++        return record
++    # There is no general local access solver. Unknown/caveated access remains
++    # unnormalized. Scan authored public context conservatively, not model prose.
++    context = " ".join(str(v) for v in [row, current.get("summary", ""),
++                                       current.get("visible_facts", []),
++                                       current.get("addressables", [])])
++    if (current.get("mode") == "combat" or (session or {}).get("in_combat")
++            or any(spec.get(k) is False for spec in [row, *authored]
++                   for k in ("addressable", "accessible", "reachable"))
++            or row.get("availability", "available") != "available"
++            or re.search(r"\b(?:locked|barred|blocked|inaccessible|unreachable|impassable|hostile|across|behind|another room|distant)\b", context, re.I)):
++        return record
++    labels = [row.get("name"), row.get("label"), *row.get("aliases", [])]
++    names = [re.escape(str(label).strip()) for label in labels if label]
++    if not names:
++        return record
++    preamble = (r"(?:I\s+)?(?:approach|walk\s+over\s+to|step\s+up\s+to|go\s+over\s+to)\s+"
++                r"(?:the\s+)?(?:" + "|".join(names) + r")")
++    if not re.fullmatch(preamble + r"[.]?", str(move.get("description", "")).strip(), re.I):
++        return record
++    match = re.match(r"^" + preamble + r"\s+and\s+((?:I\s+)?(?:ask|question|speak\s+to|talk\s+to|examine|inspect)\b.*)$",
++                     player_text.strip(), re.I)
++    if not match:
++        return record
++    proposed = copy.deepcopy(record)
++    proposed["action_components"] = [copy.deepcopy(interaction)]
++    action, meta = normalized_action_from_interpretation(
++        proposed, scene=scene, world=world, player_text=player_text, session=session)
++    if action is None or meta.get("target_ref") != target_id:
++        return record
++    proposed["local_approach_normalization"] = {
++        "rule": "authored_same_scene_interaction_preamble", "target_id": target_id,
++        "original_components": copy.deepcopy(components), "movement_executed": False,
++    }
++    return proposed
+--- before/game/conversational_orchestration.py
++++ after/game/conversational_orchestration.py
+@@ -2210,6 +2210,8 @@
+         return grounded
+     if isinstance(record, Mapping):
+         record = _reclassify_direct_npc_address(record, text, scene=scene, world=world, session=session)
++        from game.local_interaction import normalize_local_approach
++        record = normalize_local_approach(record, player_text=text, scene=scene, world=world, session=session)
+     if not isinstance(record, Mapping):
+         reason = _clean_text((bridge_meta or {}).get("reason") if isinstance(bridge_meta, Mapping) else "") or "missing_record"
+         message, missing = _focused_bridge_clarification(reason)
+--- before/game/player_interpretation_bridge.py
++++ after/game/player_interpretation_bridge.py
+@@ -328,6 +328,8 @@
+         },
+     }
+     semantic_plan = record.get("unified_semantic_plan")
++    if isinstance(record.get("local_approach_normalization"), dict):
++        normalized["metadata"]["stored_interpretation"]["local_approach_normalization"] = dict(record["local_approach_normalization"])
+     if isinstance(semantic_plan, dict) and semantic_plan.get("locked"):
+         normalized["metadata"]["unified_semantic_plan"] = dict(semantic_plan)
+     communication = record.get("communication")
+--- before/tools/playtest/gameplay.py
++++ after/tools/playtest/gameplay.py
+@@ -15,6 +15,72 @@
+ 
+ class QualityReviewer(Protocol):
+     def review(self, action: dict, text: str, prior: list[str]) -> dict: ...
++
++
++def classify_turn(status, body, events=()):
++    """Separate delivery, execution and host rejection using native diagnostics.
++
++    A valid in-world failure (e.g. an unsuccessful check) still counts as
++    adjudication. Narrative quality is deliberately outside this predicate.
++    """
++    gm = body.get('gm_output') or {}
++    resolution = body.get('resolution') or {}
++    meta = resolution.get('metadata') or {}
++    decision = meta.get('conversational_decision') or {}
++    bridge = meta.get('stored_interpretation_bridge') or {}
++    live = meta.get('live_chat_interpretation') or {}
++    accepted = (gm.get('metadata') or {}).get('accepted_response') or {}
++    reasons = []
++    if status != 200:
++        reasons.append('http_failure')
++    if body.get('ok') is False:
++        reasons.append('application_rejection')
++    if not str(gm.get('player_facing_text') or '').strip():
++        reasons.append('missing_player_response')
++    if (decision.get('reason') in {'proposal_not_eligible', 'unsupported_request',
++            'unsupported_single_intention', 'unsupported_compound_step', 'compound_intention_needs_confirmation'}
++            or decision.get('intent_family') == 'unsupported_world_operation'
++            or decision.get('category') == 'DECLINE'):
++        reasons.append('action_or_compound_rejection')
++    if bridge.get('accepted') is False:
++        reasons.append('action_binding_failure')
++    answered = (decision.get('category') == 'ANSWER'
++                and decision.get('reason') == 'communication_before_execution'
++                and accepted.get('interaction_completion') is True
++                and (accepted.get('hard_validation') or {}).get('hard_valid') is True)
++    if (live.get('status') == 'blocked' and meta.get('resolver_invoked') is not True
++            and not (answered and live.get('reason') == 'clarification_required')):
++        reasons.append('interpretation_rejection')
++    if any(e.get('classification') in {'provider_error', 'json_parse_failure', 'missing_structured_envelope',
++            'structured_validation_failure', 'empty_provider_content'}
++            or e.get('provider_status') in {'incomplete', 'failed', 'cancelled'}
++            or e.get('semantic_classification') == 'rejected' or e.get('event') == 'rejected'
++            or (e.get('event') == 'completed' and (e.get('error') or e.get('completion_status') in {'failed', 'interrupted'}))
++            for e in events):
++        reasons.append('provider_or_parser_failure')
++    if set(gm.get('tags') or []) & {'interpretation_rejected', 'provider_budget_refused'}:
++        reasons.append('provider_or_parser_failure')
++    if (accepted.get('hard_validation') or {}).get('hard_valid') is False:
++        reasons.append('validator_rejection')
++    # Player projection can omit internal resolution. Its canonical accepted
++    # response still identifies host refusals; never infer success from HTTP.
++    source = str(accepted.get('authorization_source') or '')
++    if source.startswith('conversational_decision:') and source.split(':', 1)[1] in {
++            'proposal_not_eligible', 'unsupported_request', 'unsupported_single_intention',
++            'unsupported_compound_step', 'compound_intention_needs_confirmation'}:
++        reasons.append('action_or_compound_rejection')
++    executed = bool(meta.get('resolver_invoked') is True or resolution.get('kind') in {
++        'social_probe', 'social_exchange', 'question', 'observe', 'investigate', 'scene_transition', 'travel'}
++        or accepted.get('speaker_id') and accepted.get('interaction_completion') is True)
++    partial = accepted.get('interaction_completion') is False and executed
++    completed = (executed or answered) and not reasons and not partial
++    pipeline_completed = (status == 200 and bool(str(gm.get('player_facing_text') or '').strip())
++                          and bool(resolution or accepted)
++                          and not set(reasons) & {'provider_or_parser_failure', 'interpretation_rejection', 'validator_rejection'})
++    return {'transport_completed': status == 200, 'pipeline_completed': pipeline_completed,
++            'action_executed': executed and not reasons, 'gameplay_completed': completed,
++            'interaction_outcome': 'rejected' if reasons else 'partial' if partial else 'completed' if completed else 'unknown',
++            'semantic_dead_end': bool(reasons), 'stop': bool(reasons), 'reasons': sorted(set(reasons))}
+ 
+ 
+ def document(docs, name):
+@@ -101,6 +167,7 @@
+     session_before, session_after = (document(d, 'session.json') for d in (before, after))
+     changes = diff({k: document(before, k) for k in before}, {k: document(after, k) for k in after})
+     resolution = body.get('resolution') or {}
++    completion_status = classify_turn(status, body, events)
+     findings = []
+     def finding(category, kind, evidence, source):
+         findings.append({'category': category, 'kind': kind, 'evidence': evidence, 'source': source,
+@@ -179,15 +246,32 @@
+             finding('nonmutating_contract_violation', 'confirmed_mechanical_failure', changes, 'resolution.metadata.authoritative_mutation=false')
+     if scene_after != scene_before and not resolution:
+         finding('movement_authority_unavailable', 'unknown', [scene_before, scene_after], 'resolution absent from response')
++    for reason in completion_status['reasons']:
++        finding(reason, 'confirmed_semantic_failure', completion_status, 'native turn diagnostics')
++    # An exact restricted authored value in the public reply is decisive.
++    # This bounded check cannot prove the absence of paraphrased disclosures.
++    from game.state_channels import is_author_key
++    def restricted_values(value, restricted=False):
++        if isinstance(value, dict):
++            for key, child in value.items():
++                yield from restricted_values(child, restricted or is_author_key(key))
++        elif isinstance(value, list):
++            for child in value:
++                yield from restricted_values(child, restricted)
++        elif restricted and isinstance(value, str) and len(value.strip()) >= 16:
++            yield value.strip()
++    if any(secret in text and secret not in action['player_input'] for secret in restricted_values(before)):
++        finding('hidden_information_disclosure', 'confirmed_semantic_failure',
++                'Exact restricted authored value present in public reply', 'authoritative snapshot/public reply comparison')
+     q = quality(action, text, list(prior))
+     for concern in q['concerns']:
+         finding(concern, 'unknown' if not text else 'heuristic_quality_concern', q['probes'], 'pr-play-09-quality-v1')
+     provider_records = [e for e in events if e.get('stage') == 'provider_response']
+     technical = [f for f in findings if f['kind'] == 'confirmed_mechanical_failure']
+     semantic = [f for f in findings if f['kind'] == 'confirmed_semantic_failure']
+-    completion = not technical and not any(f['category'] == 'provider_budget_exhaustion' for f in findings) and bool(text)
++    completion = completion_status['gameplay_completed'] and not technical and not semantic
+     return {'step_id': action['step_id'], 'player_input': action['player_input'], 'dm_response': text[:8192],
+-            'response_truncated': len(text) > 8192, 'http_status': status,
++            'response_truncated': len(text) > 8192, 'http_status': status, 'completion': completion_status,
+             'outcome_classification': {'kind': 'legitimate_gameplay_outcome' if hard_validation.get('hard_valid') is True and resolution.get('success') is False and not technical else 'unknown',
+                                        'evidence': 'native accepted response and resolution; no invented success condition'},
+             'state_diff': changes, 'overlay_comparison': overlays, 'state_before': f"turns/{action['step_id']}/before/documents.json",
+@@ -252,6 +336,11 @@
+     result.update(attempted_turns=len(turns), completed_turns=sum(t.get('mechanical', {}).get('status') == 'PASS' for t in turns),
+                   gameplay_turns=turns, state_integrity_findings=[f for f in findings if f['kind'] == 'confirmed_mechanical_failure'])
+     result['completed_turns'] = sum(t.get('mechanical', {}).get('completed_interaction', False) for t in turns)
++    result['http_requests_completed'] = sum(t.get('http_status') == 200 for t in turns)
++    result['ordinary_actions_attempted'] = len(turns)
++    result['ordinary_actions_executed'] = sum(t.get('completion', {}).get('action_executed', False) for t in turns)
++    result['meaningful_gameplay_turns_completed'] = result['completed_turns']
++    result['decisive_failures'] = sum(t.get('stop', False) for t in turns)
+     result['earliest'] = {name: next((f for f in findings if f['kind'] == kind), None)
+                           for name, kind in [('mechanical_failure', 'confirmed_mechanical_failure'),
+                                              ('semantic_failure', 'confirmed_semantic_failure'), ('quality_concern', 'heuristic_quality_concern')]}
+@@ -272,6 +361,10 @@
+             result['verdict'] = 'BLOCKED'
+         elif result.get('stop_reason') == 'scenario_divergence':
+             result['verdict'] = 'PARTIAL'
++        elif any(t.get('completion', {}).get('interaction_outcome') == 'partial' for t in turns):
++            result['verdict'] = 'PARTIAL'
++        elif any(t.get('completion', {}).get('interaction_outcome') == 'unknown' for t in turns):
++            result['verdict'] = 'INCONCLUSIVE'
+         elif len(turns) != 5 or any(t.get('semantic', {}).get('status') == 'UNKNOWN' for t in turns):
+             result['verdict'] = 'INCONCLUSIVE'
+     result['stop_reason'] = result.get('stop_reason') or ('completed' if len(turns) == 5 and all(t.get('ok') for t in turns) else (result.get('failure_classification') or {}).get('category') or 'opening_or_execution_stopped')
+--- before/tools/playtest/runner.py
++++ after/tools/playtest/runner.py
+@@ -239,7 +239,7 @@
+ 
+ def snapshot(run, label, base, timeout):
+     folder = run/label
+-    status, state = request(base, 'GET', '/api/state?ui_mode=debug', timeout)
++    status, state = request(base, 'GET', '/api/state?ui_mode=player', timeout)
+     if status != 200:
+         raise ValueError('State capture failed')
+     write(folder/'api_state.json', state)
+--- before/artifacts/pr_play_22/execute_validation.py
++++ after/artifacts/pr_play_22/execute_validation.py
+@@ -14,7 +14,7 @@
+ ROOT = Path(__file__).resolve().parents[2]
+ sys.path.insert(0, str(ROOT))
+ from tools.playtest import runner
+-from tools.playtest.gameplay import diff, read_events
++from tools.playtest.gameplay import diff, read_events, classify_turn, evaluate
+ from tools.atgb.isolation import prepare_isolated_store, player_campaign_dir_from_env
+ 
+ OUT = ROOT/'artifacts/pr_play_22'
+@@ -102,13 +102,20 @@
+     return runner.snapshot_files(run, label)
+ def text(row):
+     return (row['response'].get('gm_output') or {}).get('player_facing_text') or ''
+-def failed(row, offset):
++def failed(row, offset, before=None, after=None):
+     events = read_events(run)[offset:]
+     write(run/'reports'/f"events_{len(result['steps']):02}.json", events)
+     bad = [e for e in events if e.get('classification') in {'provider_error','json_parse_failure','missing_structured_envelope','structured_validation_failure','empty_provider_content'}
+            or e.get('provider_status') in {'incomplete','failed','cancelled'} or e.get('event') == 'rejected'
+            or e.get('semantic_classification') == 'rejected']
+-    return row['http_status'] != 200 or not text(row).strip() or row['response'].get('ok') is False or bool(bad)
++    row['completion'] = classify_turn(row['http_status'], row['response'], events)
++    if before is not None and after is not None:
++        action = dict(next(a for a in scenario['actions'] if a['kind'] == 'player_turn'))
++        action.update(step_id=f"T{result['ordinary_attempted']}", player_input=row['payload']['text'],
++                      interaction_category='interaction', allowed_destinations=[])
++        row['evaluation'] = evaluate(action, row['http_status'], row['response'], before, after, events)
++        return row['evaluation']['stop']
++    return row['completion']['stop'] or bool(bad)
+ 
+ try:
+     process = subprocess.Popen([exe, '-u', str(OUT/'worker_capture.py'), str(run)], cwd=ROOT, env=env,
+@@ -178,12 +185,12 @@
+                     after=capture(folder+'/after')
+                     write(run/folder/'api_response.json',row)
+                     write(run/folder/'state_diff.json',diff(before,after))
+-                    if failed(row,offset):
++                    if failed(row,offset,before,after):
+                         result['stop_reason']='ordinary_turn_decisive_failure'; break
+                     previous=text(row)
+-                    if previous == result['opening'] or 'No one here can answer that from what is settled here.' in previous:
++                    if previous == result['opening']:
+                         result['stop_reason']='meaningful_continuation_unavailable'; break
+-                    result['ordinary_completed']+=1
++                    result['ordinary_completed']+=int(row['completion']['gameplay_completed'])
+                 else:
+                     result['stop_reason']='five_ordinary_turns_complete'
+         capture('after')
+@@ -191,6 +198,13 @@
+     result['error_type']=type(exc).__name__
+     result['stop_reason']=result['stop_reason'] or 'environment_or_controller_failure'
+ finally:
++    ordinary = [row for row in result['steps'] if row.get('path', '').startswith('/api/chat')]
++    result['http_requests_completed'] = sum(row['http_status'] == 200 for row in ordinary)
++    result['ordinary_actions_attempted'] = result['ordinary_attempted']
++    result['ordinary_actions_executed'] = sum(row.get('completion', {}).get('action_executed', False) for row in ordinary)
++    result['meaningful_gameplay_turns_completed'] = sum(row.get('completion', {}).get('gameplay_completed', False) and not row.get('evaluation', {}).get('stop', False) for row in ordinary)
++    result['total_http_requests_completed'] = sum(row['http_status'] == 200 for row in result['steps'])
++    result['decisive_failures'] = sum(row.get('evaluation', {}).get('stop', row.get('completion', {}).get('semantic_dead_end', False)) for row in ordinary)
+     result['cleanup']=runner.stop_owned(process,5)
+     if process:
+         logger.join(timeout=3)
+--- before/tests/test_pr_play_23_local_interaction.py
++++ after/tests/test_pr_play_23_local_interaction.py
+@@ -0,0 +1,204 @@
++"""Offline production orchestration/HTTP regressions for PR-PLAY-23."""
++import copy
++import json
++import os
++from pathlib import Path
++
++import pytest
++from fastapi.testclient import TestClient
++
++import game.api as api
++from game import storage as st
++from game.conversational_orchestration import decision_from_interpretation_record, ConversationalDecisionCategory as Cat
++from game.player_interpretation_bridge import normalized_action_from_interpretation
++from game.local_interaction import normalize_local_approach
++from game.opening_presentation_renderer import plan_selecting_required
++from tests.test_pr_play_04_opening_integrity import opening_world
++from tests.test_pr_play_18_contract_alignment import _transport
++from tests.test_pr_dy_live_gameplay import _enable_live, _install_interpretation, _payload
++from tests.helpers.turn_pipeline_http_fixtures import _gm_response
++from tools.playtest.gameplay import classify_turn
++
++EVIDENCE = Path('artifacts/pr_play_23')
++ORIGINAL = Path('artifacts/atgb/pr_play_22/live/turns/T1')
++TEXT = "I approach the tavern runner and ask what they're offering."
++
++
++def captured():
++    diag = json.loads((ORIGINAL/'parser_validation_diagnostics.json').read_text())
++    return diag['resolution']['metadata']['live_chat_interpretation']['record']
++
++
++def raw_captured():
++    diag = json.loads((ORIGINAL/'parser_validation_diagnostics.json').read_text())
++    return json.loads(diag['resolution']['metadata']['live_chat_interpretation']['raw_interpretation'])
++
++
++def authored_scene():
++    return json.loads((ORIGINAL/'before/persistent/scenes/frontier_gate.json').read_text())
++
++
++def save(name, value):
++    if os.environ.get('ASHEN_PR_PLAY_23_EVIDENCE') == '1':
++        (EVIDENCE/name).write_text(json.dumps(value, indent=2, default=str), encoding='utf-8')
++
++
++def state():
++    return {name: getattr(st, 'load_'+name)() for name in ('world', 'session', 'character', 'campaign', 'combat', 'conditions')}
++
++
++def test_original_failure_boundary(monkeypatch):
++    record = captured()
++    scene = json.loads((ORIGINAL/'before/persistent/scenes/frontier_gate.json').read_text())
++    world = json.loads((ORIGINAL/'before/persistent/world.json').read_text())
++    # Disable only the new normalization to reproduce the unchanged old path.
++    monkeypatch.setattr('game.local_interaction.normalize_local_approach', lambda r, **kw: r)
++    before = copy.deepcopy((scene, world, record))
++    move = copy.deepcopy(record)
++    move['action_components'] = [record['action_components'][0]]
++    action, meta = normalized_action_from_interpretation(move, scene=scene, world=world, player_text=TEXT)
++    decision = decision_from_interpretation_record(record, player_text=TEXT, scene=scene, world=world)
++    save('original_reproduction.json', {'bridge': meta, 'decision': decision.to_dict() if hasattr(decision, 'to_dict') else vars(decision)})
++    assert action is None and meta['reason'] == 'operation_incompatible_with_entity_kind'
++    assert decision.reason == 'proposal_not_eligible'
++    assert 'I have not done any of them yet.' in decision.player_facing_text
++    assert (scene, world, record) == before
++
++
++@pytest.mark.parametrize('name,first,second,op', [
++    ('Tavern Runner', 'approach', "ask what they're offering", 'ASK'),
++    ('Gate Guard', 'walk over to', 'ask about the missing patrol', 'ASK'),
++    ('Notice board', 'walk over to', 'examine the notices', 'INSPECT'),
++])
++def test_general_local_targets(opening_world, name, first, second, op):
++    scene = authored_scene()
++    world = json.loads((ORIGINAL/'before/persistent/world.json').read_text())
++    target = {'Tavern Runner': 'tavern_runner', 'Gate Guard': 'gate_guard', 'Notice board': 'notice_board'}[name]
++    # Gate Guard is authored in the opening fixture, unlike data's captain.
++    if name == 'Gate Guard':
++        npc = next(n for n in world['npcs'] if n['id'] == target)
++        assert npc['location'] == scene['scene']['id']
++        # Explicit authored accessibility for this synthetic guard scenario.
++        scene['scene']['addressables'].append({'id': target, 'name': name, 'scene_id': scene['scene']['id'], 'addressable': True, 'kind': 'npc'})
++        world['npcs'] = [npc]
++    text = f'I {first} the {name} and {second}.'
++    record = _payload('IN_WORLD_ACTION', 'INTERPRETED', [('MOVE', target), (op, target)])
++    record['action_components'][0]['description'] = f'{first} the {name}'
++    result = normalize_local_approach(record, player_text=text, scene=scene, world=world, session=st.load_session())
++    assert len(result['action_components']) == 1
++    assert result['local_approach_normalization']['movement_executed'] is False
++
++
++@pytest.mark.parametrize('variant', ['locked', 'cross_scene', 'unregistered', 'unknown_access', 'hostile', 'extra', 'raw_crossing', 'target_mismatch', 'theft', 'player_barrier', 'authored_access_false', 'travel'])
++def test_consequential_or_uncertain_steps_preserved(opening_world, variant):
++    scene, world = st.load_active_scene(), st.load_world()
++    record = captured()
++    text = TEXT
++    npc = next(n for n in world['npcs'] if n['id'] == 'tavern_runner')
++    if variant == 'locked':
++        scene['scene']['visible_facts'].append('The runner is behind a locked gate.')
++    elif variant == 'cross_scene':
++        npc['location'] = 'market_quarter'
++    elif variant in {'unregistered', 'unknown_access'}:
++        scene['scene']['addressables'] = [a for a in scene['scene']['addressables'] if a['id'] != 'tavern_runner']
++        if variant == 'unregistered':
++            world['npcs'].remove(npc)
++    elif variant == 'hostile':
++        npc['stance_toward_player'] = 'hostile'
++    elif variant == 'extra':
++        record['action_components'].append({'order': 3, 'operation_class': 'ATTACK', 'target_ref': 'tavern_runner', 'description': 'attack'})
++    elif variant == 'raw_crossing':
++        text = 'I cross the ravine and approach the tavern runner and ask about prices.'
++    elif variant == 'target_mismatch':
++        record['action_components'][0]['target_ref'] = 'notice_board'
++    elif variant == 'player_barrier':
++        text = 'I approach the tavern runner behind the locked gate and ask a question.'
++    elif variant == 'authored_access_false':
++        next(a for a in scene['scene']['addressables'] if a['id'] == 'tavern_runner')['accessible'] = False
++    elif variant == 'travel':
++        text = 'I travel to the northern district and speak to the captain.'
++        record['action_components'][0]['description'] = 'Travel to the northern district'
++    else:
++        record['action_components'][0]['operation_class'] = 'USE_VISIBLE_OBJECT'
++        record['action_components'][0]['description'] = "Steal the runner's purse"
++    original = copy.deepcopy(record)
++    assert normalize_local_approach(record, player_text=text, scene=scene, world=world, session=st.load_session()) == original
++    decision = decision_from_interpretation_record(record, player_text=text, scene=scene, world=world)
++    assert decision.category != Cat.EXECUTE
++
++
++@pytest.mark.parametrize('direct', [False, True])
++def test_opening_to_interaction_publication(opening_world, monkeypatch, direct):
++    monkeypatch.setenv('ASHEN_OPENING_RENDERER', '1')
++    seen = []
++    _transport(monkeypatch, seen, lambda kw: plan_selecting_required(kw['input']))
++    secret = 'PR_PLAY_23_SYNTHETIC_HIDDEN_SENTINEL'
++    world = st.load_world()
++    world['internal_state'] = {'secret': secret}
++    st.save_world(world)
++    with TestClient(api.app) as client:
++        opening = client.post('/api/start_campaign?ui_mode=player')
++        assert opening.status_code == 200
++        assert 'tavern runner' in opening.json()['gm_output']['player_facing_text'].lower()
++        before = state()
++        record = raw_captured()
++        text = TEXT
++        if direct:
++            record['action_components'] = record['action_components'][1:]
++            text = "I ask the tavern runner what they're offering."
++        # Real interpretation request builder + parser; only transport is mocked.
++        _enable_live(monkeypatch)
++        calls = []
++        _install_interpretation(monkeypatch, record, calls)
++        narration = []
++        def narrate(messages, **kw):
++            narration.append(messages)
++            return _gm_response('Tavern Runner says, "Hot stew and paid rumor."')
++        monkeypatch.setattr(api, 'call_gpt', narrate)
++        response = client.post('/api/chat?ui_mode=player', json={'text': text})
++        body = response.json()
++        after = state()
++    internal = st.load_log()[-1]
++    save('direct_integration.json' if direct else 'local_integration.json', {
++        'status': response.status_code, 'response': body, 'resolution': internal.get('resolution'),
++        'before': before, 'after': after, 'interpretation_mock_calls': len(calls),
++        'narration_mock_calls': len(narration), 'classification': classify_turn(response.status_code, body), 'live_provider_requests': 0})
++    assert response.status_code == 200 and len(calls) == 1
++    # Existing knowledge authority may publish its deterministic NPC answer
++    # without a narration provider; both are real execution/publication paths.
++    assert narration or 'authorized_host_speech' in body['gm_output']['tags']
++    assert internal['resolution']['kind'] in {'social_probe', 'social_exchange', 'question'}
++    assert body['gm_output']['player_facing_text'] == internal['gm_output']['player_facing_text']
++    assert body['gm_output']['player_facing_text']
++    assert not internal['resolution'].get('resolved_transition')
++    assert after['session']['active_scene_id'] == before['session']['active_scene_id']
++    for name in ('character', 'campaign', 'combat', 'conditions'):
++        assert after[name] == before[name]
++    # Social runtime/log bookkeeping is permitted; authored world truth is not.
++    from game.world import advance_world_tick
++    expected_world = copy.deepcopy(before['world'])
++    advance_world_tick(expected_world, before['campaign'])
++    assert after['world'] == expected_world
++    from game.state_channels import deep_project_public_payload
++    assert body == deep_project_public_payload(body)
++    assert secret not in response.text and after['world']['internal_state']['secret'] == secret
++    assert classify_turn(200, body)['gameplay_completed']
++
++
++def test_negative_http_no_later_action(opening_world, monkeypatch):
++    _enable_live(monkeypatch)
++    record = raw_captured()
++    record['action_components'][0].update(operation_class='ATTACK', description='Steal the purse')
++    calls = []
++    _install_interpretation(monkeypatch, record, calls)
++    monkeypatch.setattr(api, 'call_gpt', lambda *a, **kw: pytest.fail('later ASK executed'))
++    before = state()
++    with TestClient(api.app) as client:
++        response = client.post('/api/chat', json={'text': "I steal the runner's purse and ask about prices."})
++    after = state()
++    body = response.json()
++    classification = classify_turn(response.status_code, body)
++    save('negative_integration.json', {'response': body, 'before': before, 'after': after, 'classification': classification})
++    assert classification['stop'] and not classification['gameplay_completed']
++    assert after['world'] == before['world'] and after['character'] == before['character']
++    assert 'not done any' in body['gm_output']['player_facing_text']
+--- before/tests/test_pr_play_23_harness.py
++++ after/tests/test_pr_play_23_harness.py
+@@ -0,0 +1,137 @@
++"""Semantic stop classifications and real offline controller termination."""
++import copy
++import ast
++import json
++from pathlib import Path
++
++import pytest
++
++from tools.playtest import gameplay as g, runner
++from tests.test_five_turn_gameplay import action, state
++
++
++def body(*, reason=None, partial=False, text='The guard declines to discuss that.'):
++    return {'ok': True, 'gm_output': {'player_facing_text': text, 'metadata': {'accepted_response': {
++        'speaker_id': 'guard', 'interaction_completion': not partial, 'hard_validation': {'hard_valid': True}}}},
++        'resolution': {'kind': 'conversational_clarify' if reason else 'question', 'metadata': {
++            'resolver_invoked': not bool(reason), 'conversational_decision': {'reason': reason} if reason else {}}}}
++
++
++@pytest.mark.parametrize('reason', ['proposal_not_eligible', 'unsupported_compound_step', 'compound_intention_needs_confirmation'])
++def test_http_200_refusal_stops(reason):
++    result = g.classify_turn(200, body(reason=reason))
++    assert result['transport_completed'] and result['pipeline_completed']
++    assert result['stop'] and not result['gameplay_completed'] and not result['action_executed']
++
++
++def test_exact_pr_play_22_response_stops():
++    row = json.loads(Path('artifacts/atgb/pr_play_22/live/turns/T1/api_response.json').read_text())
++    result = g.classify_turn(row['http_status'], row['response'])
++    assert result['transport_completed'] and result['stop']
++    assert not result['gameplay_completed']
++
++
++def test_valid_but_weak_answer_continues():
++    result = g.classify_turn(200, body(text='The guard says, "I do not know."'))
++    assert not result['stop'] and result['gameplay_completed']
++
++
++def test_recovered_host_description_is_completed():
++    value = body()
++    value['gm_output']['metadata']['accepted_response']['speaker_id'] = ''
++    value['resolution'] = {'kind': 'conversational_answer', 'metadata': {
++        'resolver_invoked': False, 'conversational_decision': {'category': 'ANSWER', 'reason': 'communication_before_execution'},
++        'live_chat_interpretation': {'status': 'blocked', 'reason': 'clarification_required'}}}
++    result = g.classify_turn(200, value)
++    assert not result['stop'] and result['gameplay_completed']
++    assert not result['action_executed']
++
++
++@pytest.mark.parametrize('event', [
++    {'classification': 'provider_error'}, {'classification': 'json_parse_failure'},
++    {'classification': 'structured_validation_failure'}, {'event': 'rejected'},
++])
++def test_provider_parser_validator_failure_stops(event):
++    assert g.classify_turn(200, body(), [event])['stop']
++
++
++def test_partial_usable_reported_separately():
++    result = g.classify_turn(200, body(partial=True))
++    assert not result['stop'] and result['action_executed'] and not result['gameplay_completed']
++    assert result['interaction_outcome'] == 'partial'
++
++
++def test_missing_response_stops():
++    assert g.classify_turn(200, {'ok': True})['stop']
++
++
++def test_unauthorized_mutation_and_disclosure_stop():
++    before = state()
++    after = copy.deepcopy(before)
++    after['character.json']['hp'] = 999
++    assert g.evaluate(action(), 200, body(), before, after, [])['stop']
++    before['world.json']['hidden_truth'] = 'SYNTHETIC_RESTRICTED_VALUE_23'
++    row = g.evaluate(action(), 200, body(text='SYNTHETIC_RESTRICTED_VALUE_23'), before, before, [])
++    assert row['stop'] and any(f['category'] == 'hidden_information_disclosure' for f in row['findings'])
++
++
++@pytest.mark.parametrize('failure', ['binding', 'mutation', 'disclosure'])
++def test_original_custom_controller_uses_shared_stop(failure, tmp_path):
++    # Extract only its actual predicate. Importing the historical command would
++    # run its top-level offline/live CLI, which this regression must never do.
++    path = Path('artifacts/pr_play_22/execute_validation.py')
++    module = ast.parse(path.read_text())
++    definition = next(n for n in module.body if isinstance(n, ast.FunctionDef) and n.name == 'failed')
++    namespace = {'read_events': lambda run: [], 'run': tmp_path, 'write': lambda *a: None,
++                 'result': {'steps': [], 'ordinary_attempted': 1},
++                 'scenario': runner.load_scenario('FiveTurnGameplay'),
++                 'classify_turn': g.classify_turn, 'evaluate': g.evaluate}
++    exec(compile(ast.Module(body=[definition], type_ignores=[]), str(path), 'exec'), namespace)
++    before = state()
++    after = copy.deepcopy(before)
++    value = body(reason='proposal_not_eligible' if failure == 'binding' else None)
++    if failure == 'mutation':
++        after['character.json']['hp'] = 1000
++    elif failure == 'disclosure':
++        before['world.json']['hidden_truth'] = 'SYNTHETIC_HIDDEN_CUSTOM_23'
++        after = copy.deepcopy(before)
++        value['gm_output']['player_facing_text'] = 'SYNTHETIC_HIDDEN_CUSTOM_23'
++    row = {'http_status': 200, 'response': value, 'payload': {'text': 'I ask about prices.'}}
++    assert namespace['failed'](row, 0, before, after)
++    assert row['evaluation']['stop']
++
++
++def test_controller_failure_stops_without_followup_or_restart(monkeypatch, tmp_path):
++    # Owned real worker, deterministic SDK transport, real snapshots and evaluator.
++    monkeypatch.setenv('ASHEN_DISABLE_LIVE_INTERPRETATION', '0')
++    monkeypatch.setenv('ASHEN_DISABLE_EXPRESSION_GENERATION', '0')
++    request = runner.request
++    submissions = []
++    def observed(base, method, path, timeout, payload=None):
++        if method == 'POST':
++            submissions.append(path)
++        if path == '/api/chat':
++            return 200, body(reason='proposal_not_eligible')
++        return request(base, method, path, timeout, payload)
++    monkeypatch.setattr(runner, 'request', observed)
++    run, result = runner.run_playtest(scenario='FiveTurnGameplay', mode='Deterministic', capture_response=True,
++                                      output_root=tmp_path/'runs')
++    (Path('artifacts/pr_play_23')/'harness_stop_integration.json').write_text(json.dumps({
++        'result': result, 'submissions': submissions, 'live_provider_requests': 0}, indent=2), encoding='utf-8')
++    assert submissions.count('/api/chat') == 1
++    assert submissions.count('/api/new_campaign') == 1 and submissions.count('/api/start_campaign') == 1
++    assert result['ordinary_actions_attempted'] == 1 and result['ordinary_actions_executed'] == 0
++    assert result['http_requests_completed'] == 1 and result['meaningful_gameplay_turns_completed'] == 0
++    assert result['decisive_failures'] == 1
++    assert result['provider_usage']['dispatched_requests'] <= 6
++    assert (run/'turns/T1/api_response.json').exists() and (run/'turns/T1/after/documents.json').exists()
++    assert result['process_cleanup']['stopped']
++
++
++def test_configured_request_ceiling_never_exceeded(monkeypatch, tmp_path):
++    monkeypatch.setenv('ASHEN_DISABLE_LIVE_INTERPRETATION', '0')
++    monkeypatch.setenv('ASHEN_DISABLE_EXPRESSION_GENERATION', '0')
++    monkeypatch.setenv('ASHEN_PROVIDER_REQUEST_LIMIT', '2')
++    _, result = runner.run_playtest(scenario='FiveTurnGameplay', mode='Deterministic', output_root=tmp_path/'runs')
++    assert result['provider_usage']['dispatched_requests'] <= 2
++    assert sum(row['action'] == 'start_campaign' for row in result['steps']) == 1
+--- before/tests/test_five_turn_gameplay.py
++++ after/tests/test_five_turn_gameplay.py
+@@ -31,6 +31,7 @@
+ 
+ def response(text='Rain falls over the gate district.', *, hard_valid=True):
+     return {'ok': True, 'gm_output': {'player_facing_text': text, 'metadata': {'accepted_response': {
++        'speaker_id': 'fixture_speaker', 'interaction_completion': True,
+         'provenance': 'initial_generation', 'hard_validation': {'hard_valid': hard_valid, 'reasons': []}}}}}
+ 
+ 
+@@ -82,7 +83,9 @@
+ 
+ 
+ @pytest.mark.parametrize('case,turn,category', [('turn2_exception', 'T2', 'provider_transport_failure'),
+-                                             ('turn3_invalid_json', 'T3', 'invalid_interpretation_response')])
++                                             # Current fixture's T2 addressee binding fails;
++                                             # semantic stop must precede the T3 injection.
++                                             ('turn3_invalid_json', 'T2', 'action_binding_failure')])
+ def test_real_http_turn_failures(case, turn, category):
+     _, result = runner.run_playtest(scenario='FiveTurnGameplay', case=case, capture_response=True)
+     assert result['verdict'] == 'FAIL'
+@@ -154,11 +157,11 @@
+     return runner.run_playtest(scenario='FiveTurnGameplay', capture_response=True)
+ 
+ 
+-def test_G12_budget_exhaustion(sequence):
++def test_G12_semantic_stop_precedes_budget_exhaustion(sequence):
+     _, result = sequence
+-    assert result['provider_usage']['dispatched_requests'] == 6
+-    assert result['stop_reason'] == 'provider_budget_exhaustion'
+-    assert result['attempted_turns'] == 4 and result['skipped_turns'][0]['step_id'] == 'T5'
++    assert result['provider_usage']['dispatched_requests'] == 3
++    assert result['stop_reason'] == 'action_binding_failure'
++    assert result['attempted_turns'] == 2 and result['skipped_turns'][0]['step_id'] == 'T3'
+     assert result['process_cleanup']['stopped']
+ 
+ 
+@@ -178,7 +181,8 @@
+ def test_G14_missing_response_evidence():
+     row = evaluate(body={'ok': True})
+     assert row['mechanical']['status'] == 'INCONCLUSIVE'
+-    assert row['semantic']['status'] == 'UNKNOWN'
++    assert row['semantic']['status'] == 'FAIL'
++    assert row['stop'] and not row['mechanical']['completed_interaction']
+     assert 'insufficient_response_evidence' in categories(row)
+ 
+ 
+@@ -228,10 +232,10 @@
+     run, result = sequence
+     events = g.read_events(run)
+     usage = g.accounting(events)
+-    assert usage['request_count'] == result['provider_usage']['dispatched_requests'] == 6
+-    assert usage['input_tokens'] == 120 and usage['output_tokens'] == 60
+-    assert usage['total_tokens'] == 180
+-    assert sum(t['provider_usage']['request_count'] for t in result['gameplay_turns']) == 5  # opening is separate
++    assert usage['request_count'] == result['provider_usage']['dispatched_requests'] == 3
++    assert usage['input_tokens'] == 60 and usage['output_tokens'] == 30
++    assert usage['total_tokens'] == 90
++    assert sum(t['provider_usage']['request_count'] for t in result['gameplay_turns']) == 2  # opening is separate
+ 
+ 
+ def test_G23_zero_live(sequence):

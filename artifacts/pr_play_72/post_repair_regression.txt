@@ -1,0 +1,362 @@
+....FFF....F.FFF....F.....F.F.F.F.....................                   [100%]
+================================== FAILURES ===================================
+____________ test_frozen_authorization_holdout[explicit_named_ask] ____________
+
+campaign = <starlette.testclient.TestClient object at 0x0000023744D6C6B0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023744A13980>
+case_id = 'explicit_named_ask'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+>           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = <built-in method get of dict object at 0x0000023746405200>('npc_id')
+E            +    where <built-in method get of dict object at 0x0000023746405200> = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError
+____________ test_frozen_authorization_holdout[explicit_role_ask] _____________
+
+campaign = <starlette.testclient.TestClient object at 0x0000023744E3EAB0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023741B56840>
+case_id = 'explicit_role_ask'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+>           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = <built-in method get of dict object at 0x0000023744D87B40>('npc_id')
+E            +    where <built-in method get of dict object at 0x0000023744D87B40> = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError
+______________ test_frozen_authorization_holdout[unique_pronoun] ______________
+
+campaign = <starlette.testclient.TestClient object at 0x0000023744C3E630>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023744A48C20>
+case_id = 'unique_pronoun'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+>           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = <built-in method get of dict object at 0x0000023746333A40>('npc_id')
+E            +    where <built-in method get of dict object at 0x0000023746333A40> = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] north_road
+___________ test_frozen_authorization_holdout[distinguishing_fact] ____________
+
+campaign = <starlette.testclient.TestClient object at 0x0000023744D67200>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023744A48320>
+case_id = 'distinguishing_fact'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+>           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'corporal_bren'
+E            +  where None = <built-in method get of dict object at 0x0000023744A185C0>('npc_id')
+E            +    where <built-in method get of dict object at 0x0000023744A185C0> = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError
+_______________ test_frozen_authorization_holdout[gm_about_npc] _______________
+
+campaign = <starlette.testclient.TestClient object at 0x0000023746376BA0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023746374C20>
+case_id = 'gm_about_npc'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+            assert social.get("npc_id") == case["target"]
+            assert social.get("target_resolved") is True
+            assert after["turn_counter"] == (before["turn_counter"] or 0) + 1
+            assert "cannot be identified" not in text.lower()
+        elif expect == "clarify_no_mutation":
+            assert not social
+            assert not _mutated(before, after)
+            lowered = text.lower()
+            assert (
+                "nothing has been attempted" in lowered
+                or "has been attempted" in lowered
+                or "which person" in lowered
+                or "who are you asking" in lowered
+                or "yes does not choose" in lowered
+                or "what are you trying" in lowered
+                or "does not confirm" in lowered
+            )
+        elif expect == "gm_no_social":
+            assert not social
+>           assert not _mutated(before, after)
+E           AssertionError: assert not True
+E            +  where True = _mutated({'turn_counter': 0, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...}, {'turn_counter': 1, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...})
+
+tests\test_pr_ef_r4_authorization.py:192: AssertionError
+_______ test_frozen_authorization_holdout[direct_ask_conflicting_owner] _______
+
+campaign = <starlette.testclient.TestClient object at 0x0000023746377410>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023744963740>
+case_id = 'direct_ask_conflicting_owner'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+>           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = <built-in method get of dict object at 0x0000023744E766C0>('npc_id')
+E            +    where <built-in method get of dict object at 0x0000023744E766C0> = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError
+_______________ test_frozen_authorization_holdout[npc_followup] _______________
+
+campaign = <starlette.testclient.TestClient object at 0x0000023744D6CB30>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000237449616A0>
+case_id = 'npc_followup'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+>           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = <built-in method get of dict object at 0x0000023746185B40>('npc_id')
+E            +    where <built-in method get of dict object at 0x0000023746185B40> = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError
+_________ test_frozen_authorization_holdout[confirm_single_candidate] _________
+
+campaign = <starlette.testclient.TestClient object at 0x0000023744D6C680>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023744D65820>
+case_id = 'confirm_single_candidate'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+>           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = <built-in method get of dict object at 0x00000237463C2240>('npc_id')
+E            +    where <built-in method get of dict object at 0x00000237463C2240> = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] north_road
+____________ test_frozen_authorization_holdout[incidental_glance] _____________
+
+campaign = <starlette.testclient.TestClient object at 0x0000023744D65D30>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023744CF75F0>
+case_id = 'incidental_glance'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+>           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = <built-in method get of dict object at 0x0000023744BC3BC0>('npc_id')
+E            +    where <built-in method get of dict object at 0x0000023744BC3BC0> = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError
+____________ test_frozen_authorization_holdout[save_load_pending] _____________
+
+campaign = <starlette.testclient.TestClient object at 0x00000237463776E0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023741B7F2F0>
+case_id = 'save_load_pending'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+            assert social.get("npc_id") == case["target"]
+            assert social.get("target_resolved") is True
+            assert after["turn_counter"] == (before["turn_counter"] or 0) + 1
+            assert "cannot be identified" not in text.lower()
+        elif expect == "clarify_no_mutation":
+            assert not social
+            assert not _mutated(before, after)
+            lowered = text.lower()
+            assert (
+                "nothing has been attempted" in lowered
+                or "has been attempted" in lowered
+                or "which person" in lowered
+                or "who are you asking" in lowered
+                or "yes does not choose" in lowered
+                or "what are you trying" in lowered
+                or "does not confirm" in lowered
+            )
+        elif expect == "gm_no_social":
+            assert not social
+            assert not _mutated(before, after)
+            assert "its cause has not been established" not in text.lower()
+            assert "says," not in text.lower()
+        elif expect == "revise_no_execution":
+            assert not social
+            assert not _mutated(before, after)
+            assert "revised" in text.lower()
+            pending = storage.load_session()["conversational_context"]["pending_intention"]
+            assert pending["status"] == "pending"
+            assert case["player"] in pending.get("revised_text", "")
+        elif expect == "cannot_undo":
+            assert not social
+            assert not _mutated(before, after)
+            assert "cannot undo" in text.lower()
+        elif expect == "ask_what_to_change":
+            assert not social
+            assert not _mutated(before, after)
+            assert "what do you want to change" in text.lower()
+            assert "lantern" not in text.lower()
+        elif expect == "withdraw_no_execution":
+            assert not social
+            assert not _mutated(before, after)
+            assert storage.load_session()["conversational_context"].get("pending_intention") in (None, {})
+        elif expect == "preserve_both_no_flatten":
+            assert not social
+            assert after["scene"] == before["scene"]
+            assert not _mutated(before, after)
+            lowered = text.lower()
+            assert "ask" in lowered and "leave" in lowered
+        elif expect == "execute_after_reload":
+>           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = <built-in method get of dict object at 0x0000023744E821C0>('npc_id')
+E            +    where <built-in method get of dict object at 0x0000023744E821C0> = {}.get
+
+tests\test_pr_ef_r4_authorization.py:222: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] north_road
+________ test_third_person_question_is_not_an_active_npc_continuation _________
+
+campaign = <starlette.testclient.TestClient object at 0x0000023744C3E6C0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023744CF5BB0>
+
+    def test_third_person_question_is_not_an_active_npc_continuation(campaign, monkeypatch):
+        session = storage.load_session()
+        session["interaction_context"] = {
+            "active_interaction_kind": "social",
+            "active_interaction_target_id": "sergeant_mara",
+            "interaction_mode": "dialogue",
+            "engagement_level": "engaged",
+        }
+        storage.save_session(session)
+        _wire(monkeypatch, raw_record("NPC", "QUESTION", components=[("ASK", "sergeant_mara")]))
+        before = _integrity(storage.load_session(), storage.load_world())
+        data = campaign.post("/api/chat", json={"text": "What did she mean by the road?"}).json()
+        after = _integrity(storage.load_session(), storage.load_world())
+        assert not (data.get("resolution") or {}).get("social")
+>       assert not _mutated(before, after)
+E       AssertionError: assert not True
+E        +  where True = _mutated({'turn_counter': 0, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...}, {'turn_counter': 1, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...})
+
+tests\test_pr_ef_r4_authorization.py:281: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] north_road
+______________________ test_production_ten_turn_sequence ______________________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr72_post_regression/test_production_ten_turn_seque0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023744D67C50>
+
+    def test_production_ten_turn_sequence(tmp_path, monkeypatch):
+        seed_scene(tmp_path, monkeypatch)
+        monkeypatch.setenv("ASHEN_DISABLE_PROVIDER_CALLS", "0")
+        monkeypatch.setenv("ASHEN_DISABLE_LIVE_INTERPRETATION", "0")
+        monkeypatch.setattr("game.live_chat_interpretation.request_interpretation", scripted_interpretation)
+        monkeypatch.setattr("game.api.call_gpt", _fake_gm_for_resolution)
+        rows = run_ten_turns()
+        assert len(storage.load_log()) == 10
+        for i in (0, 1, 2, 5, 7, 8):
+            row = rows[i]
+            assert row["http_status"] == 200
+            assert row["before_turn"] == row["after_turn"]
+            assert not row["world_changed"]
+            assert "who are you asking" not in row["response"].lower()
+            assert "should i start" not in row["response"].lower()
+        for i in (3, 4):
+>           assert rows[i]["resolution"]["social"]["npc_id"] == MARA_ID
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'social'
+
+tests\test_pr_ef_gm_authority.py:114: KeyError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] north_road
+[CLUE DUPLICATE IGNORED] north_road
+[CLUE DISCOVERED] lantern_mark
+[ENGINE] Scene transition -> waystation_street
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[explicit_named_ask]
+FAILED tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[explicit_role_ask]
+FAILED tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[unique_pronoun]
+FAILED tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[distinguishing_fact]
+FAILED tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[gm_about_npc]
+FAILED tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[direct_ask_conflicting_owner]
+FAILED tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[npc_followup]
+FAILED tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[confirm_single_candidate]
+FAILED tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[incidental_glance]
+FAILED tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[save_load_pending]
+FAILED tests/test_pr_ef_r4_authorization.py::test_third_person_question_is_not_an_active_npc_continuation
+FAILED tests/test_pr_ef_gm_authority.py::test_production_ten_turn_sequence - ...
+12 failed, 42 passed, 1 warning in 138.44s (0:02:18)

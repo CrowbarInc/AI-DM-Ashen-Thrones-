@@ -1,0 +1,1022 @@
+{
+  "campaign_id": "pr_play_object_marking_disclosure_policy",
+  "campaign_name": "PR-PLAY \u2014 System-Agnostic Object Observation and Disclosure Policy",
+  "campaign_date": "2026-11-09",
+  "purpose": "Bounded internal production projection and information-boundary verification",
+  "objective_status": "A/PASS \u2014 bounded trusted internal disclosure",
+  "executive_summary": "**A/PASS for bounded trusted internal object disclosure.**\n\n88 observation tests passed; supplemental visibility/confidentiality/publication: 238 passed / 2 failed / 0 errors / 0 skipped (240 tests), identical failure identities/pass count with the new module import-blocked in a feature-absent control.\n\nCombined before: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). After: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). New failures: []; newly passing: [].\n\ninspection: 72 before / 72 after; marking: 76 before / 76 after; identity: 52 before / 52 after; inventory_snapshot: 50 before / 50 after; preservation: 143 before / 143 after.\n\nOne new production module, no existing production changes. Current active markings project through a reusable category contract and a single concrete marking adapter. Visible/concealed/restricted permissions are consumed, never adjudicated. Unknown legacy classification fails closed; ordinary empty visual results mean unknown, not absence. Hidden, removed, unrelated and private lineage data do not escape. Real save/reload and snapshots preserve permitted results. All twelve HTTP turns unchanged. Live provider calls: **0**.\n\nTrusted internal Python entry only. No authenticated observation-decision issuer exists; the private typed grant is an upstream assertion, not cryptographic authentication or independent physical-feasibility verification. Caller must supply a coherent authoritative character snapshot under the existing read lane and reestablish grants when current visibility/access/scene evidence changes. Revision plus relevant-state fingerprint detect target changes, but the service does not independently load scene state, revoke rights or adjudicate reachability. Visibility metadata is consumed from authoritative object state; no classification authoring/migration API ships. Existing legacy markings therefore remain undisclosed until upstream establishes classification. No player route, natural-language observation, AI narration, T06 completion, mechanics, transfers or general-purpose property ontology. No full-suite, independent holdout, live-model or gameplay-improvement claim. Internal Python runtime is not a cryptographic constant-time boundary; no observer-facing timing, hidden counts, diagnostics, receipt traversal or public timing route is exposed.",
+  "changes": {
+    "production": [
+      "game/object_observation.py"
+    ],
+    "validation": [
+      "88 observation tests passed; supplemental visibility/confidentiality/publication: 238 passed / 2 failed / 0 errors / 0 skipped (240 tests), identical failure identities/pass count with the new module import-blocked in a feature-absent control."
+    ],
+    "tooling": [
+      "Cycle-local guarded runner and evidence/archive assembly"
+    ],
+    "documentation": [
+      "16 reports; historical NEXT_SESSION bytes retained"
+    ],
+    "generated_artifacts": [
+      "Bounded evidence and fresh standard review exports"
+    ]
+  },
+  "testing": {
+    "focused": "88 observation tests passed; supplemental visibility/confidentiality/publication: 238 passed / 2 failed / 0 errors / 0 skipped (240 tests), identical failure identities/pass count with the new module import-blocked in a feature-absent control.",
+    "broader": "Combined before: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). After: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). New failures: []; newly passing: [].",
+    "runtime_validation": "Real save/reload/snapshot timeline; twelve unchanged HTTP turns",
+    "full_suite": "Not run",
+    "model_runtime_boundary": "Zero live provider calls; disabled provider and network audit guard",
+    "new_regressions": "[]",
+    "pre_existing_failures": "- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_unknown_player_named_object_is_not_instantiated\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_narration_only_object_does_not_gain_authority\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_then_observe_uses_current_scene\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_alias_binds\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_observe_stock_replacement_keeps_notice_board_working\n- tests/test_pr_play_39_action_admission.py::test_sequence_patrol_travel_reaches_the_movement_resolver\n- tests/test_pr_play_39_action_admission.py::test_sequence_unsupported_actions_invent_nothing\n- tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid\n- tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_whisper_does_not_create_one\n- tests/test_perception_narration_authority_audible_non_invention.py::test_http_empty_listen_complete_and_grounded\n- tests/test_perception_narration_authority_audible_non_invention.py::test_http_authorized_speech_can_survive\n- tests/test_pr_play_79df3_classification.py::test_duplicate_refusal_does_not_publish\n- tests/test_pr_play_79df3_classification.py::test_two_refusals_then_gameplay_advances\n- tests/test_pr_play_79df3_classification.py::test_save_reload_keeps_the_preceding_publication\n- tests/test_pr_play_79df3_classification.py::test_http_fallback_is_not_an_operational_refusal\n- tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context\n- tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop\n- tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload"
+  },
+  "decisions_requiring_human_review": [
+    "No additional authorization required for this bounded internal capability."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Trusted internal Python entry only. No authenticated observation-decision issuer exists; the private typed grant is an upstream assertion, not cryptographic authentication or independent physical-feasibility verification. Caller must supply a coherent authoritative character snapshot under the existing read lane and reestablish grants when current visibility/access/scene evidence changes. Revision plus relevant-state fingerprint detect target changes, but the service does not independently load scene state, revoke rights or adjudicate reachability. Visibility metadata is consumed from authoritative object state; no classification authoring/migration API ships. Existing legacy markings therefore remain undisclosed until upstream establishes classification. No player route, natural-language observation, AI narration, T06 completion, mechanics, transfers or general-purpose property ontology. No full-suite, independent holdout, live-model or gameplay-improvement claim. Internal Python runtime is not a cryptographic constant-time boundary; no observer-facing timing, hidden counts, diagnostics, receipt traversal or public timing route is exposed."
+    ],
+    "pre_existing": [
+      "Twenty unchanged combined-selection failures; two supplemental confidentiality contract failures reproduced with feature import blocked."
+    ]
+  },
+  "missing_concepts": [
+    "Trusted classification authoring lifecycle and later player integration remain deferred."
+  ],
+  "does_not_prove": [
+    "Authenticated public observation, independent physical feasibility, AI observation narration, T06 completion, full suite or broad gameplay improvement."
+  ],
+  "recommended_next_step": "Exactly one recommended next milestone: `pr_play_object_visibility_authoring` \u2014 bounded trusted authoring and revision lifecycle for object marking visibility metadata, before any player observation integration. Do not begin automatically.",
+  "self_contained_review_test": "Reopened ZIP CRC, canonical/evidence hashes and bounded disclosure/persistence/regression/handoff claims.",
+  "primary_report": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/BASELINE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/DISCLOSURE_OWNERSHIP.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/IMPLEMENTATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/INFORMATION_BOUNDARY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/INTEGRITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/MARKING_VISIBILITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/NEGATIVE_CONTROLS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/NEXT_STEP_DECISION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/OBSERVATION_CONTRACT.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/PERFORMANCE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/PERSISTENCE_VERIFICATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/READ_ONLY_VERIFICATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/REGRESSION_RESULTS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/RULESET_PORTABILITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_disclosure_policy/TWELVE_TURN_COMPARISON.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "docs/state_authority_model.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/object_observation.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/object_instances.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/object_marking.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/authorized_information.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/narration_authorization.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/player_http_projection.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/publication_contract.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/state_authority.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "tests/test_object_observation.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_identity_architecture/CORE_RULESET_BOUNDARY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_identity_architecture/OBJECT_INSTANCE_CONTRACT.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_identity_architecture/MODIFICATION_CONTRACT.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_identity_architecture/ACTION_RESOLUTION_CONTRACT.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_identity_architecture/MUNDANE_AFFORDANCE_POLICY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_identity_architecture/IMPLEMENTATION_ROADMAP.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/api.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/storage.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/narration_visibility.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "game/scene_state_anchoring.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/absence_semantics.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/additional_visibility.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/additional_visibility_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/additional_visibility_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/additional_visibility_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_combined.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_combined_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_combined_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_identity.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_identity_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_identity_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_identity_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_inspection.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_inspection_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_inspection_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_inspection_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_inventory_snapshot.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_inventory_snapshot_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_inventory_snapshot_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_inventory_snapshot_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_marking.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_marking_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_marking_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_marking_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_preservation.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_preservation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_preservation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_preservation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_sequence.json.gz",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/after_sequence.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/atomic_failure_create.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/atomic_failure_flush.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/atomic_failure_partial_write.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/atomic_failure_replace.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/atomic_failure_serialization.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/atomic_failure_sync.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/atomic_postcommit_open_directory.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/atomic_postcommit_sync_directory.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/atomic_success.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_combined.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_combined_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_combined_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_identity.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_identity_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_identity_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_identity_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_inspection.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_inspection_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_inspection_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_inspection_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_inventory_snapshot.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_inventory_snapshot_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_inventory_snapshot_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_inventory_snapshot_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_marking.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_marking_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_marking_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_marking_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_preservation.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_preservation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_preservation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_preservation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_sequence.json.gz",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/before_sequence.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/cross_object.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/entry_current_review.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/entry_git_status.txt",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/entry_identity.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/entry_next_session.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/files_created.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/final_git_status.txt",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/final_observation.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/final_observation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/final_observation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/final_observation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/finalize.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/focused_observation.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/focused_observation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/focused_observation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/focused_observation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/idempotency_controls.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/information_leakage.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/inspection_removal_timeline.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/marking_round_trip.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/marking_snapshots.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/milestone_identity.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/noninterference.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/observation_performance.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/observation_portability_pf1e@1.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/observation_portability_rules_light@1.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/observation_portability_scifi@1.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/observation_timeline.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/performance.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/persistence_round_trip.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/portability_pf1e@1.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/portability_rules_light@1.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/portability_scifi@1.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/production.diff",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/read_only.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/reference_visibility.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/reference_visibility_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/reference_visibility_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/reference_visibility_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/regression_results.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/removal_failure_post_save.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/removal_failure_replace.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/removal_failure_save.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/removal_failure_sync.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/run_checks.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/seal_review.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/source_changes.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/twelve_turn_comparison.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/twelve_turn_state_evidence.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/verified_observation.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/verified_observation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/verified_observation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/verified_observation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_disclosure_policy/evidence_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded observation contract, source or measured verification evidence."
+    }
+  ]
+}

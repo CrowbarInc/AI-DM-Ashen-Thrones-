@@ -1,0 +1,69 @@
+{
+  "a": {
+    "version": 1,
+    "status": "observed",
+    "target": {
+      "campaign_run_id": "identity-test-campaign",
+      "instance_id": "6576ab15-acb7-4dcb-9ee2-b2b2e3e7262d"
+    },
+    "properties": [
+      {
+        "category": "markings",
+        "knowledge": "known_present",
+        "coverage": "subset",
+        "values": [
+          {
+            "content": "only A",
+            "presentation": "inscription",
+            "evidence_ref": "observation:markings:0",
+            "content_sha256": "b8197c7b532886f03626fdf9495b08e31658bbc9a74e2ded70d2c8cd4aece3b4"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      "partial_observation_scope"
+    ],
+    "evidence": [
+      {
+        "reference": "observation:markings:0",
+        "category": "markings",
+        "content_sha256": "b8197c7b532886f03626fdf9495b08e31658bbc9a74e2ded70d2c8cd4aece3b4"
+      }
+    ]
+  },
+  "b": {
+    "version": 1,
+    "status": "observed",
+    "target": {
+      "campaign_run_id": "identity-test-campaign",
+      "instance_id": "ecc87416-70ed-4565-807e-07d99d1e6d09"
+    },
+    "properties": [
+      {
+        "category": "markings",
+        "knowledge": "known_present",
+        "coverage": "subset",
+        "values": [
+          {
+            "content": "only B",
+            "presentation": "inscription",
+            "evidence_ref": "observation:markings:0",
+            "content_sha256": "94df997927c19b077c1887ee50b1920c2d065ec3152f1b33859666666aa19e49"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      "partial_observation_scope"
+    ],
+    "evidence": [
+      {
+        "reference": "observation:markings:0",
+        "category": "markings",
+        "content_sha256": "94df997927c19b077c1887ee50b1920c2d065ec3152f1b33859666666aa19e49"
+      }
+    ]
+  },
+  "inventory_reordered": true
+}

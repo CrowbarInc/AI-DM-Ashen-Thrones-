@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="54" time="137.465" timestamp="2026-11-06T18:00:49.894245-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_72_supplemental" name="test_http_boundary_handles_persistence_fault[What have I learned?]" time="55.736" /><testcase classname="tests.test_pr_play_72_supplemental" name="test_http_boundary_handles_persistence_fault[Look at the tracks again.]" time="5.227" /><testcase classname="tests.test_pr_play_72_supplemental" name="test_reinspection_may_authoritatively_add_nothing" time="8.317" /><testcase classname="tests.test_pr_play_72_supplemental" name="test_explicit_npc_interaction_resolves" time="4.613" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[explicit_named_ask]" time="1.548"><failure message="AssertionError: assert None == 'sergeant_mara'&#10; +  where None = &lt;built-in method get of dict object at 0x0000023746405200&gt;('npc_id')&#10; +    where &lt;built-in method get of dict object at 0x0000023746405200&gt; = {}.get">campaign = &lt;starlette.testclient.TestClient object at 0x0000023744D6C6B0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023744A13980&gt;
+case_id = 'explicit_named_ask'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+&gt;           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = &lt;built-in method get of dict object at 0x0000023746405200&gt;('npc_id')
+E            +    where &lt;built-in method get of dict object at 0x0000023746405200&gt; = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[explicit_role_ask]" time="1.460"><failure message="AssertionError: assert None == 'sergeant_mara'&#10; +  where None = &lt;built-in method get of dict object at 0x0000023744D87B40&gt;('npc_id')&#10; +    where &lt;built-in method get of dict object at 0x0000023744D87B40&gt; = {}.get">campaign = &lt;starlette.testclient.TestClient object at 0x0000023744E3EAB0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023741B56840&gt;
+case_id = 'explicit_role_ask'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+&gt;           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = &lt;built-in method get of dict object at 0x0000023744D87B40&gt;('npc_id')
+E            +    where &lt;built-in method get of dict object at 0x0000023744D87B40&gt; = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[unique_pronoun]" time="1.584"><failure message="AssertionError: assert None == 'sergeant_mara'&#10; +  where None = &lt;built-in method get of dict object at 0x0000023746333A40&gt;('npc_id')&#10; +    where &lt;built-in method get of dict object at 0x0000023746333A40&gt; = {}.get">campaign = &lt;starlette.testclient.TestClient object at 0x0000023744C3E630&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023744A48C20&gt;
+case_id = 'unique_pronoun'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+&gt;           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = &lt;built-in method get of dict object at 0x0000023746333A40&gt;('npc_id')
+E            +    where &lt;built-in method get of dict object at 0x0000023746333A40&gt; = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[ambiguous_one_of_them_two_npcs]" time="0.492" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[ambiguous_one_of_them_one_npc]" time="0.574" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[ambiguous_either_guard]" time="0.732" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[unresolved_someone]" time="0.534" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[distinguishing_fact]" time="1.657"><failure message="AssertionError: assert None == 'corporal_bren'&#10; +  where None = &lt;built-in method get of dict object at 0x0000023744A185C0&gt;('npc_id')&#10; +    where &lt;built-in method get of dict object at 0x0000023744A185C0&gt; = {}.get">campaign = &lt;starlette.testclient.TestClient object at 0x0000023744D67200&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023744A48320&gt;
+case_id = 'distinguishing_fact'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+&gt;           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'corporal_bren'
+E            +  where None = &lt;built-in method get of dict object at 0x0000023744A185C0&gt;('npc_id')
+E            +    where &lt;built-in method get of dict object at 0x0000023744A185C0&gt; = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[no_invented_distinction]" time="0.673" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[gm_about_npc]" time="1.620"><failure message="AssertionError: assert not True&#10; +  where True = _mutated({'turn_counter': 0, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...}, {'turn_counter': 1, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...})">campaign = &lt;starlette.testclient.TestClient object at 0x0000023746376BA0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023746374C20&gt;
+case_id = 'gm_about_npc'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+            assert social.get("npc_id") == case["target"]
+            assert social.get("target_resolved") is True
+            assert after["turn_counter"] == (before["turn_counter"] or 0) + 1
+            assert "cannot be identified" not in text.lower()
+        elif expect == "clarify_no_mutation":
+            assert not social
+            assert not _mutated(before, after)
+            lowered = text.lower()
+            assert (
+                "nothing has been attempted" in lowered
+                or "has been attempted" in lowered
+                or "which person" in lowered
+                or "who are you asking" in lowered
+                or "yes does not choose" in lowered
+                or "what are you trying" in lowered
+                or "does not confirm" in lowered
+            )
+        elif expect == "gm_no_social":
+            assert not social
+&gt;           assert not _mutated(before, after)
+E           AssertionError: assert not True
+E            +  where True = _mutated({'turn_counter': 0, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...}, {'turn_counter': 1, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...})
+
+tests\test_pr_ef_r4_authorization.py:192: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[direct_ask_conflicting_owner]" time="1.599"><failure message="AssertionError: assert None == 'sergeant_mara'&#10; +  where None = &lt;built-in method get of dict object at 0x0000023744E766C0&gt;('npc_id')&#10; +    where &lt;built-in method get of dict object at 0x0000023744E766C0&gt; = {}.get">campaign = &lt;starlette.testclient.TestClient object at 0x0000023746377410&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023744963740&gt;
+case_id = 'direct_ask_conflicting_owner'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+&gt;           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = &lt;built-in method get of dict object at 0x0000023744E766C0&gt;('npc_id')
+E            +    where &lt;built-in method get of dict object at 0x0000023744E766C0&gt; = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[npc_followup]" time="2.305"><failure message="AssertionError: assert None == 'sergeant_mara'&#10; +  where None = &lt;built-in method get of dict object at 0x0000023746185B40&gt;('npc_id')&#10; +    where &lt;built-in method get of dict object at 0x0000023746185B40&gt; = {}.get">campaign = &lt;starlette.testclient.TestClient object at 0x0000023744D6CB30&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000237449616A0&gt;
+case_id = 'npc_followup'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+&gt;           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = &lt;built-in method get of dict object at 0x0000023746185B40&gt;('npc_id')
+E            +    where &lt;built-in method get of dict object at 0x0000023746185B40&gt; = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[gm_clarification_of_npc]" time="0.778" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[correction_pending]" time="0.882" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[correction_already_executed]" time="0.576" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[correction_nothing_pending]" time="0.834" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[confirm_single_candidate]" time="1.814"><failure message="AssertionError: assert None == 'sergeant_mara'&#10; +  where None = &lt;built-in method get of dict object at 0x00000237463C2240&gt;('npc_id')&#10; +    where &lt;built-in method get of dict object at 0x00000237463C2240&gt; = {}.get">campaign = &lt;starlette.testclient.TestClient object at 0x0000023744D6C680&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023744D65820&gt;
+case_id = 'confirm_single_candidate'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+&gt;           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = &lt;built-in method get of dict object at 0x00000237463C2240&gt;('npc_id')
+E            +    where &lt;built-in method get of dict object at 0x00000237463C2240&gt; = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[confirm_without_proposal]" time="0.519" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[confirm_among_many]" time="0.613" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[withdrawal]" time="0.781" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[mixed_ask_then_leave]" time="0.505" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[conditional_gate]" time="0.637" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[incidental_glance]" time="1.496"><failure message="AssertionError: assert None == 'sergeant_mara'&#10; +  where None = &lt;built-in method get of dict object at 0x0000023744BC3BC0&gt;('npc_id')&#10; +    where &lt;built-in method get of dict object at 0x0000023744BC3BC0&gt; = {}.get">campaign = &lt;starlette.testclient.TestClient object at 0x0000023744D65D30&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023744CF75F0&gt;
+case_id = 'incidental_glance'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+&gt;           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = &lt;built-in method get of dict object at 0x0000023744BC3BC0&gt;('npc_id')
+E            +    where &lt;built-in method get of dict object at 0x0000023744BC3BC0&gt; = {}.get
+
+tests\test_pr_ef_r4_authorization.py:173: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[provider_no_target]" time="0.563" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[save_load_pending]" time="1.646"><failure message="AssertionError: assert None == 'sergeant_mara'&#10; +  where None = &lt;built-in method get of dict object at 0x0000023744E821C0&gt;('npc_id')&#10; +    where &lt;built-in method get of dict object at 0x0000023744E821C0&gt; = {}.get">campaign = &lt;starlette.testclient.TestClient object at 0x00000237463776E0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023741B7F2F0&gt;
+case_id = 'save_load_pending'
+
+    @pytest.mark.parametrize("case_id", [row["id"] for row in HOLDOUTS["cases"]])
+    def test_frozen_authorization_holdout(campaign, monkeypatch, case_id):
+        case = CASE_BY_ID[case_id]
+        data, before, after = _post(campaign, monkeypatch, case)
+        resolution = data.get("resolution") or {}
+        social = resolution.get("social") or {}
+        text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+        expect = case["expect"]
+        if expect == "execute_npc":
+            assert social.get("npc_id") == case["target"]
+            assert social.get("target_resolved") is True
+            assert after["turn_counter"] == (before["turn_counter"] or 0) + 1
+            assert "cannot be identified" not in text.lower()
+        elif expect == "clarify_no_mutation":
+            assert not social
+            assert not _mutated(before, after)
+            lowered = text.lower()
+            assert (
+                "nothing has been attempted" in lowered
+                or "has been attempted" in lowered
+                or "which person" in lowered
+                or "who are you asking" in lowered
+                or "yes does not choose" in lowered
+                or "what are you trying" in lowered
+                or "does not confirm" in lowered
+            )
+        elif expect == "gm_no_social":
+            assert not social
+            assert not _mutated(before, after)
+            assert "its cause has not been established" not in text.lower()
+            assert "says," not in text.lower()
+        elif expect == "revise_no_execution":
+            assert not social
+            assert not _mutated(before, after)
+            assert "revised" in text.lower()
+            pending = storage.load_session()["conversational_context"]["pending_intention"]
+            assert pending["status"] == "pending"
+            assert case["player"] in pending.get("revised_text", "")
+        elif expect == "cannot_undo":
+            assert not social
+            assert not _mutated(before, after)
+            assert "cannot undo" in text.lower()
+        elif expect == "ask_what_to_change":
+            assert not social
+            assert not _mutated(before, after)
+            assert "what do you want to change" in text.lower()
+            assert "lantern" not in text.lower()
+        elif expect == "withdraw_no_execution":
+            assert not social
+            assert not _mutated(before, after)
+            assert storage.load_session()["conversational_context"].get("pending_intention") in (None, {})
+        elif expect == "preserve_both_no_flatten":
+            assert not social
+            assert after["scene"] == before["scene"]
+            assert not _mutated(before, after)
+            lowered = text.lower()
+            assert "ask" in lowered and "leave" in lowered
+        elif expect == "execute_after_reload":
+&gt;           assert social.get("npc_id") == case["target"]
+E           AssertionError: assert None == 'sergeant_mara'
+E            +  where None = &lt;built-in method get of dict object at 0x0000023744E821C0&gt;('npc_id')
+E            +    where &lt;built-in method get of dict object at 0x0000023744E821C0&gt; = {}.get
+
+tests\test_pr_ef_r4_authorization.py:222: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_determined_nonresolution_skips_narration_and_characterization_does_not" time="0.001" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_third_person_question_is_not_an_active_npc_continuation" time="1.648"><failure message="AssertionError: assert not True&#10; +  where True = _mutated({'turn_counter': 0, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...}, {'turn_counter': 1, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...})">campaign = &lt;starlette.testclient.TestClient object at 0x0000023744C3E6C0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023744CF5BB0&gt;
+
+    def test_third_person_question_is_not_an_active_npc_continuation(campaign, monkeypatch):
+        session = storage.load_session()
+        session["interaction_context"] = {
+            "active_interaction_kind": "social",
+            "active_interaction_target_id": "sergeant_mara",
+            "interaction_mode": "dialogue",
+            "engagement_level": "engaged",
+        }
+        storage.save_session(session)
+        _wire(monkeypatch, raw_record("NPC", "QUESTION", components=[("ASK", "sergeant_mara")]))
+        before = _integrity(storage.load_session(), storage.load_world())
+        data = campaign.post("/api/chat", json={"text": "What did she mean by the road?"}).json()
+        after = _integrity(storage.load_session(), storage.load_world())
+        assert not (data.get("resolution") or {}).get("social")
+&gt;       assert not _mutated(before, after)
+E       AssertionError: assert not True
+E        +  where True = _mutated({'turn_counter': 0, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...}, {'turn_counter': 1, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, 'factions': [{...'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}], 'scene': 'waystation_courtyard', ...})
+
+tests\test_pr_ef_r4_authorization.py:281: AssertionError</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_provider_id_does_not_override_unresolved_lexical_addressee" time="0.765" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_production_ten_turn_sequence" time="7.503"><failure message="KeyError: 'social'">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr72_post_regression/test_production_ten_turn_seque0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023744D67C50&gt;
+
+    def test_production_ten_turn_sequence(tmp_path, monkeypatch):
+        seed_scene(tmp_path, monkeypatch)
+        monkeypatch.setenv("ASHEN_DISABLE_PROVIDER_CALLS", "0")
+        monkeypatch.setenv("ASHEN_DISABLE_LIVE_INTERPRETATION", "0")
+        monkeypatch.setattr("game.live_chat_interpretation.request_interpretation", scripted_interpretation)
+        monkeypatch.setattr("game.api.call_gpt", _fake_gm_for_resolution)
+        rows = run_ten_turns()
+        assert len(storage.load_log()) == 10
+        for i in (0, 1, 2, 5, 7, 8):
+            row = rows[i]
+            assert row["http_status"] == 200
+            assert row["before_turn"] == row["after_turn"]
+            assert not row["world_changed"]
+            assert "who are you asking" not in row["response"].lower()
+            assert "should i start" not in row["response"].lower()
+        for i in (3, 4):
+&gt;           assert rows[i]["resolution"]["social"]["npc_id"] == MARA_ID
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'social'
+
+tests\test_pr_ef_gm_authority.py:114: KeyError</failure></testcase><testcase classname="tests.test_pr_ef_gm_authority" name="test_schema_owns_communication_without_execution_fields" time="0.002" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unsupported_singletons_never_offer_confirmation[SOCIAL_SIGNAL]" time="0.001" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unsupported_singletons_never_offer_confirmation[INVENTORY_GRANT]" time="0.011" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unsupported_singletons_never_offer_confirmation[ATTACK]" time="0.008" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unsupported_singletons_never_offer_confirmation[TIME_CONTROL]" time="0.012" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unknown_and_mixed_communication_cannot_execute" time="0.012" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_public_evidence_excludes_undiscovered_clues_and_npc_topics" time="0.278" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_bad_compound_target_is_not_offered" time="0.505" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_withdrawal_after_reload_cannot_execute_pending" time="0.832" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unsupported_first_step_cannot_be_reordered_into_confirmation" time="0.475" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_gm_question_cannot_swallow_conditional_action" time="0.012" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_conditional_turn_keeps_action_before_movement_question_shortcut" time="0.407" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_gm_why_after_refusal_keeps_reason_and_does_not_ask_for_npc" time="0.526" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_new_explicit_action_supersedes_old_pending_intention" time="1.622" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_contract_distinguishes_incidental_context_from_primary_execute" time="0.009" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_deterministic_incomplete_movement_clarifies_without_context" time="0.009" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_incomplete_movement_does_not_advance_turn_or_clock" time="0.373" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_unmarked_ooc_help_question_is_nonmutating_without_provider" time="0.314" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_stored_incidental_plus_move_executes_existing_authoritative_resolver" time="1.594" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_live_missing_move_target_uses_focused_clarification" time="0.388" /><testcase classname="tests.test_pr_play_54_consequential_validation" name="test_corpus_validation_stays_fast_and_local" time="1.873" /></testsuite></testsuites>

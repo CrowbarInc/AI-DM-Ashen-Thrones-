@@ -1,0 +1,34 @@
+{
+  "development_tests": 53,
+  "matrix": "tests/test_pr_play_68_structured_publication.py",
+  "covered": [
+    "unavailable",
+    "timeout",
+    "empty",
+    "malformed",
+    "FAIL",
+    "REVIEW_REQUIRED",
+    "VALIDATION_ERROR",
+    "legacy refusal",
+    "missing narration",
+    "helper exception",
+    "helper missing output",
+    "duplicate",
+    "persistent consequence",
+    "inventory",
+    "NPC death",
+    "route",
+    "hidden info",
+    "contradiction",
+    "unsupported action",
+    "resolution error",
+    "disabled publication",
+    "wrong session"
+  ],
+  "inherited": "PR66/67 regression covers interruption, serialization, projection, repeat fast path, stale evidence, cross-campaign/session, HTTP errors.",
+  "not_injected": [
+    "Frontend JavaScript response parsing failure",
+    "deliberate structured response schema mismatch in the browser"
+  ],
+  "result": "All 53 new development checks pass. No resolver replay; narration state snapshots unchanged."
+}

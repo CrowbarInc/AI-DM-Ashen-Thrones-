@@ -1,0 +1,351 @@
+{
+  "verdict": "B — PARTIAL / DYNAMIC NPC PATHWAY DEMONSTRATED",
+  "baseline": "d40f1ed198236c604085f1c842ead267a8104ce2",
+  "protected": {
+    "entries": 150,
+    "preserved": 150,
+    "changed": []
+  },
+  "development_final_safety": {
+    "passed": 234,
+    "failed": 0
+  },
+  "inherited_safety": {
+    "passed": 105,
+    "failed": 0
+  },
+  "npc_final": {
+    "passed": 70,
+    "failed": 0
+  },
+  "npc_commit_faults": {
+    "passed": 3,
+    "failed": 0
+  },
+  "frozen_holdout": {
+    "passed": 85,
+    "failed": [
+      "H66",
+      "H68",
+      "H70",
+      "H72",
+      "H74"
+    ],
+    "multi_turn_executed": 30,
+    "persistence_executed": 20,
+    "manifest": {
+      "count": 90,
+      "sha256": "61173fbd9a629c59f38b6a37404c1f68421a10204af886112452920679729113",
+      "multi_turn": 30,
+      "persistence": 20,
+      "authorship": "developer, not external independent validation"
+    }
+  },
+  "http_campaigns": [
+    {
+      "branch": "survey",
+      "result": "PASS",
+      "npc_id": "npc_35e4f5d0e2f5abfb34bc"
+    },
+    {
+      "branch": "report",
+      "result": "PASS",
+      "npc_id": "npc_7be83c620ecee6b08410"
+    }
+  ],
+  "browser": {
+    "final_source_cross_resume": true,
+    "read_only_inquiry_unchanged": true,
+    "campaigns": [
+      {
+        "branch": "survey",
+        "result": "PASS",
+        "campaign_id": "2051784b2f4bada9db1ea336",
+        "npc_id": "npc_ee97a3a4b21fbae0da91",
+        "name": "Mira",
+        "history_before": [
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_ee97a3a4b21fbae0da91",
+            "campaign_id": "2051784b2f4bada9db1ea336",
+            "player_id": "2051784b2f4bada9db1ea336",
+            "turn": 7,
+            "player_utterance": "Hello.",
+            "text": "Hello.",
+            "published_response": "Hello.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": "greeted"
+          },
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_ee97a3a4b21fbae0da91",
+            "campaign_id": "2051784b2f4bada9db1ea336",
+            "player_id": "2051784b2f4bada9db1ea336",
+            "turn": 8,
+            "player_utterance": "Who are you?",
+            "text": "I am Mira, an ordinary traveler in patched work clothes.",
+            "published_response": "I am Mira, an ordinary traveler in patched work clothes.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": null
+          },
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_ee97a3a4b21fbae0da91",
+            "campaign_id": "2051784b2f4bada9db1ea336",
+            "player_id": "2051784b2f4bada9db1ea336",
+            "turn": 9,
+            "player_utterance": "What did you mean by that?",
+            "text": "I am Mira, an ordinary traveler in patched work clothes.",
+            "published_response": "I am Mira, an ordinary traveler in patched work clothes.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": null
+          }
+        ],
+        "history_after": [
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_ee97a3a4b21fbae0da91",
+            "campaign_id": "2051784b2f4bada9db1ea336",
+            "player_id": "2051784b2f4bada9db1ea336",
+            "turn": 7,
+            "player_utterance": "Hello.",
+            "text": "Hello.",
+            "published_response": "Hello.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": "greeted"
+          },
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_ee97a3a4b21fbae0da91",
+            "campaign_id": "2051784b2f4bada9db1ea336",
+            "player_id": "2051784b2f4bada9db1ea336",
+            "turn": 8,
+            "player_utterance": "Who are you?",
+            "text": "I am Mira, an ordinary traveler in patched work clothes.",
+            "published_response": "I am Mira, an ordinary traveler in patched work clothes.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": null
+          },
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_ee97a3a4b21fbae0da91",
+            "campaign_id": "2051784b2f4bada9db1ea336",
+            "player_id": "2051784b2f4bada9db1ea336",
+            "turn": 9,
+            "player_utterance": "What did you mean by that?",
+            "text": "I am Mira, an ordinary traveler in patched work clothes.",
+            "published_response": "I am Mira, an ordinary traveler in patched work clothes.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": null
+          },
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_ee97a3a4b21fbae0da91",
+            "campaign_id": "2051784b2f4bada9db1ea336",
+            "player_id": "2051784b2f4bada9db1ea336",
+            "turn": 10,
+            "player_utterance": "Talk to that traveler again.",
+            "text": "I am Mira, an ordinary traveler in patched work clothes.",
+            "published_response": "I am Mira, an ordinary traveler in patched work clothes.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": null
+          }
+        ],
+        "published": "Mira says, \"I am Mira, an ordinary traveler in patched work clothes.\""
+      },
+      {
+        "branch": "report",
+        "result": "PASS",
+        "campaign_id": "adb31f4a86ed3f3a5f630d61",
+        "npc_id": "npc_69b20b7bf0113eae9c12",
+        "name": "Eli",
+        "history_before": [
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_69b20b7bf0113eae9c12",
+            "campaign_id": "adb31f4a86ed3f3a5f630d61",
+            "player_id": "adb31f4a86ed3f3a5f630d61",
+            "turn": 7,
+            "player_utterance": "Hello. Who are you?",
+            "text": "Hello.",
+            "published_response": "Hello.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": "greeted"
+          },
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_69b20b7bf0113eae9c12",
+            "campaign_id": "adb31f4a86ed3f3a5f630d61",
+            "player_id": "adb31f4a86ed3f3a5f630d61",
+            "turn": 8,
+            "player_utterance": "Have you traveled this road before?",
+            "text": "I do not know about that.",
+            "published_response": "I do not know about that.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": null
+          },
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_69b20b7bf0113eae9c12",
+            "campaign_id": "adb31f4a86ed3f3a5f630d61",
+            "player_id": "adb31f4a86ed3f3a5f630d61",
+            "turn": 9,
+            "player_utterance": "Tell that traveler where the secret passage is and give me a quest.",
+            "text": "I do not know about that, and I cannot promise assistance.",
+            "published_response": "I do not know about that, and I cannot promise assistance.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": null
+          }
+        ],
+        "history_after": [
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_69b20b7bf0113eae9c12",
+            "campaign_id": "adb31f4a86ed3f3a5f630d61",
+            "player_id": "adb31f4a86ed3f3a5f630d61",
+            "turn": 7,
+            "player_utterance": "Hello. Who are you?",
+            "text": "Hello.",
+            "published_response": "Hello.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": "greeted"
+          },
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_69b20b7bf0113eae9c12",
+            "campaign_id": "adb31f4a86ed3f3a5f630d61",
+            "player_id": "adb31f4a86ed3f3a5f630d61",
+            "turn": 8,
+            "player_utterance": "Have you traveled this road before?",
+            "text": "I do not know about that.",
+            "published_response": "I do not know about that.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": null
+          },
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_69b20b7bf0113eae9c12",
+            "campaign_id": "adb31f4a86ed3f3a5f630d61",
+            "player_id": "adb31f4a86ed3f3a5f630d61",
+            "turn": 9,
+            "player_utterance": "Tell that traveler where the secret passage is and give me a quest.",
+            "text": "I do not know about that, and I cannot promise assistance.",
+            "published_response": "I do not know about that, and I cannot promise assistance.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": null
+          },
+          {
+            "kind": "background_exchange",
+            "npc_id": "npc_69b20b7bf0113eae9c12",
+            "campaign_id": "adb31f4a86ed3f3a5f630d61",
+            "player_id": "adb31f4a86ed3f3a5f630d61",
+            "turn": 10,
+            "player_utterance": "Talk to that traveler again.",
+            "text": "I do not know about that, and I cannot promise assistance.",
+            "published_response": "I do not know about that, and I cannot promise assistance.",
+            "status": "active",
+            "canonical": false,
+            "social_receipt": null
+          }
+        ],
+        "published": "Eli says, \"I do not know about that, and I cannot promise assistance.\""
+      }
+    ],
+    "typed_submissions": 21,
+    "reload_load_verified": true,
+    "server_chat_ms": {
+      "count": 21,
+      "mean": 2866.9087142857143,
+      "median": 2229.085,
+      "maximum": 14765.969
+    },
+    "browser_visible_latency": null,
+    "paint_timing": "not instrumented",
+    "bounded_recovery": "one pressSequentially timeout and locator/wait deadlines; inspected state before continuing"
+  },
+  "provider_requests": 12,
+  "provider_tokens": 3398,
+  "accepted_live_npcs": 6,
+  "rejected_live_proposals": 0,
+  "committed_live_proposals": 6,
+  "final_verified_live_npcs": 4,
+  "regression": {
+    "focused": {
+      "passed": 1065,
+      "failed": 20,
+      "new_failures": [],
+      "resolved": []
+    },
+    "boundary": {
+      "passed": 101,
+      "failed": 6,
+      "new_failures": [],
+      "resolved": []
+    },
+    "broader": {
+      "passed": 0,
+      "failed": 9,
+      "new_failures": [],
+      "resolved": []
+    },
+    "lifecycle_isolated": {
+      "passed": 39,
+      "failed": 0,
+      "new_failures": [],
+      "resolved": []
+    }
+  },
+  "latency": {
+    "final_http_conversation_ms": {
+      "count": 16,
+      "mean": 3829.6151062459103,
+      "median": 3934.937899990473,
+      "maximum": 5239.369199960493
+    },
+    "browser_server_chat_ms": {
+      "count": 21,
+      "mean": 2866.9087142857143,
+      "median": 2229.085,
+      "maximum": 14765.969
+    },
+    "provider_ms": {
+      "count": 12,
+      "mean": 1750.3003333333334,
+      "median": 1368.958,
+      "maximum": 3210.035
+    },
+    "save_resume_ms": {
+      "count": 4,
+      "mean": 2491.8861000041943,
+      "median": 2417.23149997415,
+      "maximum": 3208.732300088741
+    },
+    "browser_visible_ms": null,
+    "commit_only_ms": null
+  },
+  "hidden_exposures": 0,
+  "mandatory_omissions": 0,
+  "critical_unsafe_publications": 0,
+  "new_regressions": 0,
+  "limitations": [
+    "One ordinary background identity per populated scene; six roles and four ordinary appearance choices.",
+    "Host chooses bounded meaning; all sampled live conversational rewordings rejected and fell back. Broad provider-driven dialogue competence is unproven.",
+    "Only greeting/thanks social receipts; no compliance, promises or dynamic-NPC skill adjudication.",
+    "Original holdout retains five checker KeyErrors and ran before target-gate/player-inquiry refinements; it does not establish final-source conversational generalization.",
+    "Both browser campaigns were additionally cross-loaded and continued on a hash-recorded final-source host; live requests were disabled for those continuations.",
+    "Browser paint latency and separate commit-only timing not measured."
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "decision": "PASS",
+  "semantic": {
+    "decision": "PASS",
+    "reasons": [],
+    "claims": [],
+    "provider_requests": 0,
+    "coverage": "deterministic_frames_not_semantic_proof"
+  },
+  "legacy": {
+    "hard_valid": true,
+    "reasons": [],
+    "soft_flags": [],
+    "speaker": "",
+    "addressee": "",
+    "operation": "",
+    "interaction_complete": true,
+    "contract_satisfying": true,
+    "authority": [
+      {
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "kind": "incidental_fact",
+        "epistemic_status": "world_truth",
+        "grounded": false,
+        "consequential": false,
+        "family": "incidental"
+      }
+    ],
+    "gm_resolution_decision_audit": null,
+    "mechanical_claim_audit": {
+      "coverage": "bounded_assertion_frames_not_semantic_proof",
+      "claims": [],
+      "reasons": []
+    },
+    "consequential_validation": {
+      "decision": "PASS",
+      "reasons": [],
+      "claims": [],
+      "provider_requests": 0,
+      "coverage": "deterministic_frames_not_semantic_proof"
+    }
+  },
+  "coverage": {
+    "decision": "PASS",
+    "facts": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "decision": "PASS",
+        "classification": "covered",
+        "evidence": "the missing patrol was last seen taking the northwest mud track past the crates.",
+        "relation": {
+          "subject": "missing patrol",
+          "path": "northwest mud track",
+          "landmark": "crates"
+        }
+      }
+    ],
+    "scope": "bounded_deterministic_coverage_not_semantic_proof"
+  }
+}

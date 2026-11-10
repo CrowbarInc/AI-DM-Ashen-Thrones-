@@ -1,0 +1,1150 @@
+{
+  "http_status": 200,
+  "api_latency_seconds": 16.996,
+  "player_facing_text": "Rain spatters soot-dark stone as frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach, pressing against the guards holding the choke point tight. Nearby, a gate serjeant keeps a sharp eye on the roster board while managing the anxious crowd. A notice board lists new taxes, imposed curfew rules, and a warning about a missing patrol, drawing furtive glances from passersby. Threadbare watchers and ragged strangers cluster along the muddy gate line, their eyes shifting uneasily. A tavern runner loudly trades hot stew and whispered rumors near a rain barrel, cutting through the damp air. Overlooking the square, a well-appointed townhouse flies noble colors, standing in quiet contrast to the clamorous, muddy scene below. Just beyond, Ash Compact census delays have tightened the eastern caravan choke point, worsening the crowd's congestion. One figure in threadbare clothes stands unnervingly still, watching faces and pack animals more than the gate line itself.",
+  "opening_failure_reason": null,
+  "opening_recovery_class": null,
+  "opening_recovery_error": null,
+  "opening_recovery": {
+    "opening_source": "ai",
+    "original_rejection_code": null,
+    "recovery_eligibility": "ai_accepted",
+    "fallback_attempted": false,
+    "fallback_succeeded": false,
+    "fallback_error": null,
+    "provider_requests_consumed": 1,
+    "initialization_outcome": "started",
+    "state_integrity": "ai_opening_accepted"
+  },
+  "opening_source_classification": "A_ai_accepted",
+  "engine": {
+    "ok": true,
+    "status": null,
+    "error": null,
+    "resolution_keys": [
+      "action_id",
+      "clue_id",
+      "discovered_clues",
+      "hint",
+      "kind",
+      "label",
+      "metadata",
+      "prompt",
+      "resolved_transition",
+      "state_changes",
+      "success",
+      "target_scene_id",
+      "world_tick_events",
+      "world_updates"
+    ],
+    "action_type": null,
+    "intent": null,
+    "kind": "scene_opening",
+    "action_id": "campaign_start_opening_scene",
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": "frontier_gate",
+    "originating_scene_id": null,
+    "prompt": "",
+    "discovered_clues": [],
+    "state_changes": {
+      "opening_scene_turn": true,
+      "arrived_at_scene": true,
+      "new_scene_context_available": true
+    },
+    "noncombat_resolution": null,
+    "authoritative_mutation": null,
+    "processing_outcome": null,
+    "resolver_invoked": null,
+    "narration_invoked": null,
+    "gameplay_parser_invoked": null,
+    "provider_calls": null,
+    "resolution_metadata_keys": [
+      "gm_resolution_decision",
+      "interaction_obligation",
+      "narration_state_consistency",
+      "performance",
+      "resolution_contract",
+      "response_type_contract"
+    ],
+    "conversational_decision": null,
+    "stored_interpretation_bridge": null,
+    "live_interpretation": null,
+    "tags": [
+      "scene_momentum:environmental_change"
+    ],
+    "provenance": "initial_generation",
+    "hard_valid": true,
+    "expression_decision": null,
+    "gm_metadata_keys": [
+      "accepted_response",
+      "decision_review",
+      "hard_validation_attempt_1",
+      "live_resolution_mode",
+      "model_escalated",
+      "model_escalation_trigger",
+      "model_retry_attempt",
+      "model_route_family",
+      "model_route_purpose",
+      "model_route_reason",
+      "narration_provider_calls",
+      "narration_retry_count",
+      "narration_seam",
+      "output_form",
+      "provider_call",
+      "provider_response_contract",
+      "realization_envelope",
+      "selected_model",
+      "skipped_semantic_mutators"
+    ],
+    "missing_observability": [
+      "recognized_intent"
+    ]
+  },
+  "persisted_engine": {
+    "log_index": 0,
+    "player_input": "",
+    "player_facing_text": "Rain spatters soot-dark stone as frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach, pressing against the guards holding the choke point tight. Nearby, a gate serjeant keeps a sharp eye on the roster board while managing the anxious crowd. A notice board lists new taxes, imposed curfew rules, and a warning about a missing patrol, drawing furtive glances from passersby. Threadbare watchers and ragged strangers cluster along the muddy gate line, their eyes shifting uneasily. A tavern runner loudly trades hot stew and whispered rumors near a rain barrel, cutting through the damp air. Overlooking the square, a well-appointed townhouse flies noble colors, standing in quiet contrast to the clamorous, muddy scene below. Just beyond, Ash Compact census delays have tightened the eastern caravan choke point, worsening the crowd's congestion. One figure in threadbare clothes stands unnervingly still, watching faces and pack animals more than the gate line itself.",
+    "intent_classification": {
+      "raw_text": "",
+      "labels": [
+        "general"
+      ],
+      "allow_discoverable_clues": false,
+      "confidence": "rule_based"
+    },
+    "resolution_kind": "scene_opening",
+    "action_id": "campaign_start_opening_scene",
+    "action_type": null,
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": "frontier_gate",
+    "originating_scene_id": null,
+    "prompt": "",
+    "discovered_clues": [],
+    "state_changes": {
+      "opening_scene_turn": true,
+      "arrived_at_scene": true,
+      "new_scene_context_available": true
+    },
+    "clocks_changed": {
+      "time_pressure": 1
+    },
+    "discovered_clues_added": [],
+    "approved_state_updates": {
+      "scene_update": null,
+      "world_updates": null,
+      "new_scene_draft": null
+    },
+    "rejected_state_updates": [],
+    "log_meta_keys": [
+      "approved_state_updates",
+      "bootstrap_intent",
+      "clocks_changed",
+      "discovered_clues_added",
+      "gm_prompt_context_summary",
+      "gm_raw_output_meta",
+      "intent_classification",
+      "player_input",
+      "rejected_state_updates",
+      "response_type_contract",
+      "surfaced_clues_in_narration_non_authoritative"
+    ],
+    "resolution_metadata_keys": [
+      "emission_debug",
+      "gm_resolution_decision",
+      "interaction_obligation",
+      "narration_state_consistency",
+      "performance",
+      "resolution_contract",
+      "response_type_contract"
+    ],
+    "processing_outcome": null,
+    "resolver_invoked": null,
+    "narration_invoked": null,
+    "gameplay_parser_invoked": null,
+    "conversational_decision": null,
+    "stored_interpretation_bridge": null,
+    "opening_recovery_debug": {
+      "opening_source": "ai",
+      "original_rejection_code": null,
+      "recovery_eligibility": "ai_accepted",
+      "fallback_attempted": false,
+      "fallback_succeeded": false,
+      "fallback_error": null,
+      "provider_requests_consumed": 1,
+      "initialization_outcome": "started",
+      "state_integrity": "ai_opening_accepted"
+    },
+    "provenance": "initial_generation",
+    "hard_valid": true,
+    "response_type_contract": {
+      "required_response_type": "scene_opening",
+      "source_route": "exploration",
+      "allow_escalation": false,
+      "debug_reasons": [
+        "scene_opening_requires_opening_response",
+        "non_hostile_world_action_guard"
+      ]
+    }
+  },
+  "provider": [
+    {
+      "event": "admitted",
+      "stage": null,
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null,
+      "sequence": 1,
+      "budget_remaining": 9,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "dispatch_attempted",
+      "stage": null,
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null,
+      "sequence": 1,
+      "budget_remaining": 9,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "completed",
+      "stage": null,
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 26714,
+      "output_tokens": 1649,
+      "total_tokens": 28363,
+      "latency_ms": 15751.705,
+      "completion_status": "completed",
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null,
+      "sequence": 1,
+      "budget_remaining": 9,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "generation_diagnostic",
+      "stage": "provider_response",
+      "purpose": null,
+      "owner": null,
+      "configured_model": null,
+      "model": null,
+      "input_tokens": 26714,
+      "output_tokens": 1649,
+      "total_tokens": 28363,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": "accepted_structured_response",
+      "provider_status": "completed",
+      "sdk_retries": null,
+      "host_retries": null,
+      "refusal": null,
+      "admission": null,
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": true,
+      "narration_length": 1028,
+      "declaration_count": 9,
+      "logical_operation": "scene_opening",
+      "opening_recovery": null,
+      "sequence": null,
+      "budget_remaining": null,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "generation_diagnostic",
+      "stage": "opening_response_capture",
+      "purpose": null,
+      "owner": null,
+      "configured_model": null,
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": "captured",
+      "provider_status": null,
+      "sdk_retries": null,
+      "host_retries": null,
+      "refusal": null,
+      "admission": null,
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": "scene_opening",
+      "opening_recovery": null,
+      "sequence": null,
+      "budget_remaining": null,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "generation_diagnostic",
+      "stage": "opening_semantics",
+      "purpose": null,
+      "owner": null,
+      "configured_model": null,
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": null,
+      "host_retries": null,
+      "refusal": null,
+      "admission": null,
+      "semantic_classification": "candidate_valid",
+      "semantic_reasons": [],
+      "classification_reason": "hard_validation_passed",
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": 1028,
+      "declaration_count": 9,
+      "logical_operation": "scene_opening",
+      "opening_recovery": null,
+      "sequence": null,
+      "budget_remaining": null,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "generation_diagnostic",
+      "stage": "opening_semantics",
+      "purpose": null,
+      "owner": null,
+      "configured_model": null,
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": null,
+      "host_retries": null,
+      "refusal": null,
+      "admission": null,
+      "semantic_classification": "initial_generation",
+      "semantic_reasons": null,
+      "classification_reason": "initial_hard_valid",
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": "scene_opening",
+      "opening_recovery": null,
+      "sequence": null,
+      "budget_remaining": null,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "generation_diagnostic",
+      "stage": "opening_validation",
+      "purpose": null,
+      "owner": null,
+      "configured_model": null,
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": null,
+      "host_retries": null,
+      "refusal": null,
+      "admission": null,
+      "semantic_classification": "accepted",
+      "semantic_reasons": null,
+      "classification_reason": "opening_contract_passed",
+      "opening_accepted": true,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": "scene_opening",
+      "opening_recovery": {
+        "opening_source": "ai",
+        "original_rejection_code": null,
+        "recovery_eligibility": "ai_accepted",
+        "fallback_attempted": false,
+        "fallback_succeeded": false,
+        "fallback_error": null,
+        "provider_requests_consumed": 1,
+        "initialization_outcome": "started",
+        "state_integrity": "ai_opening_accepted"
+      },
+      "sequence": null,
+      "budget_remaining": null,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "generation_diagnostic",
+      "stage": "opening_outcome",
+      "purpose": null,
+      "owner": null,
+      "configured_model": null,
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": "accepted_structured_opening",
+      "provider_status": "completed",
+      "sdk_retries": null,
+      "host_retries": null,
+      "refusal": null,
+      "admission": null,
+      "semantic_classification": "initial_generation",
+      "semantic_reasons": [],
+      "classification_reason": "initial_hard_valid",
+      "opening_accepted": true,
+      "gameplay_committed": true,
+      "recovery_classification": "initial_generation",
+      "rejection_reason": null,
+      "final_validation_passed": true,
+      "structured_validation_result": true,
+      "narration_length": 1028,
+      "declaration_count": 9,
+      "logical_operation": "scene_opening",
+      "opening_recovery": {
+        "opening_source": "ai",
+        "original_rejection_code": null,
+        "recovery_eligibility": "ai_accepted",
+        "fallback_attempted": false,
+        "fallback_succeeded": false,
+        "fallback_error": null,
+        "provider_requests_consumed": 1,
+        "initialization_outcome": "started",
+        "state_integrity": "ai_opening_accepted"
+      },
+      "sequence": null,
+      "budget_remaining": null,
+      "fallback": null,
+      "retry_count": null
+    }
+  ],
+  "provider_completed_count": 1,
+  "state_before": {
+    "campaign_title": "Ashen Thrones",
+    "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+    "session_id": "5d7040aa8eb9b4e6f6b7c933",
+    "campaign_started": false,
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "turn_counter": 0,
+    "chat_history_len": 0,
+    "log_entries": 0,
+    "discovered_clues_by_scene": {},
+    "clue_knowledge": {},
+    "known_clue_ids": null,
+    "deferred_intentions": null,
+    "deferred_steps": null,
+    "time_pressure": 0,
+    "active_quests": null,
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "hp_current": 8,
+      "hp_max": 8,
+      "gold": null,
+      "resources": null,
+      "inventory_count": 1,
+      "inventory_ids": [
+        "spellbook"
+      ]
+    },
+    "world_clue_ids": [],
+    "authority_catalog": {
+      "npc_ids": [
+        "gate_guard",
+        "gate_serjeant",
+        "tavern_runner"
+      ],
+      "npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "watch_command"
+          ]
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "route_change"
+          ]
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "patrol_rumor"
+          ]
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "pressure": 2,
+          "influence": 3,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ash_cowl",
+          "pressure": 2,
+          "influence": 3,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ordo_pyric",
+          "pressure": 1,
+          "influence": 2,
+          "agenda_progress": 0
+        }
+      ],
+      "world_event_log_len": 0,
+      "scenes": {
+        "frontier_gate": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Enter Cinderwatch",
+              "target_scene_id": "market_quarter"
+            },
+            {
+              "id": null,
+              "label": "Follow the missing patrol rumor",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [
+            "notice_board"
+          ],
+          "addressable_ids": [
+            "guard_captain",
+            "tavern_runner",
+            "refugee",
+            "threadbare_watcher"
+          ]
+        },
+        "market_quarter": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to the Gate",
+              "target_scene_id": "frontier_gate"
+            },
+            {
+              "id": null,
+              "label": "Seek the fortress trail",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [],
+          "addressable_ids": []
+        },
+        "old_milestone": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to Cinderwatch Gate",
+              "target_scene_id": "frontier_gate"
+            }
+          ],
+          "interactable_ids": [
+            "milestone",
+            "prints"
+          ],
+          "addressable_ids": []
+        }
+      }
+    },
+    "documents_present": [
+      "campaign.json",
+      "character.json",
+      "combat.json",
+      "conditions.json",
+      "scenes/frontier_gate.json",
+      "scenes/market_quarter.json",
+      "scenes/old_milestone.json",
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "observability_gaps": [
+      "active_quests",
+      "known_clues",
+      "character_resources"
+    ]
+  },
+  "state_after": {
+    "campaign_title": "Ashen Thrones",
+    "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+    "session_id": "5d7040aa8eb9b4e6f6b7c933",
+    "campaign_started": true,
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 1
+    },
+    "turn_counter": 1,
+    "chat_history_len": 0,
+    "log_entries": 1,
+    "discovered_clues_by_scene": {},
+    "clue_knowledge": {},
+    "known_clue_ids": null,
+    "deferred_intentions": null,
+    "deferred_steps": null,
+    "time_pressure": 1,
+    "active_quests": null,
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "hp_current": 8,
+      "hp_max": 8,
+      "gold": null,
+      "resources": null,
+      "inventory_count": 1,
+      "inventory_ids": [
+        "spellbook"
+      ]
+    },
+    "world_clue_ids": [],
+    "authority_catalog": {
+      "npc_ids": [
+        "gate_guard",
+        "gate_serjeant",
+        "tavern_runner"
+      ],
+      "npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "watch_command"
+          ]
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "route_change"
+          ]
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "patrol_rumor"
+          ]
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "pressure": 3,
+          "influence": 3,
+          "agenda_progress": 1
+        },
+        {
+          "id": "ash_cowl",
+          "pressure": 3,
+          "influence": 3,
+          "agenda_progress": 1
+        },
+        {
+          "id": "ordo_pyric",
+          "pressure": 2,
+          "influence": 2,
+          "agenda_progress": 1
+        }
+      ],
+      "world_event_log_len": 2,
+      "scenes": {
+        "frontier_gate": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Enter Cinderwatch",
+              "target_scene_id": "market_quarter"
+            },
+            {
+              "id": null,
+              "label": "Follow the missing patrol rumor",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [
+            "notice_board"
+          ],
+          "addressable_ids": [
+            "guard_captain",
+            "tavern_runner",
+            "refugee",
+            "threadbare_watcher"
+          ]
+        },
+        "market_quarter": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to the Gate",
+              "target_scene_id": "frontier_gate"
+            },
+            {
+              "id": null,
+              "label": "Seek the fortress trail",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [],
+          "addressable_ids": []
+        },
+        "old_milestone": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to Cinderwatch Gate",
+              "target_scene_id": "frontier_gate"
+            }
+          ],
+          "interactable_ids": [
+            "milestone",
+            "prints"
+          ],
+          "addressable_ids": []
+        }
+      }
+    },
+    "documents_present": [
+      "campaign.json",
+      "character.json",
+      "combat.json",
+      "conditions.json",
+      "scenes/frontier_gate.json",
+      "scenes/market_quarter.json",
+      "scenes/old_milestone.json",
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "observability_gaps": [
+      "active_quests",
+      "known_clues",
+      "character_resources"
+    ]
+  },
+  "state_delta": {
+    "authority_catalog": {
+      "before": {
+        "npc_ids": [
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "watch_command"
+            ]
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "route_change"
+            ]
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "patrol_rumor"
+            ]
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "influence": 3,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "influence": 3,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "influence": 2,
+            "agenda_progress": 0
+          }
+        ],
+        "world_event_log_len": 0,
+        "scenes": {
+          "frontier_gate": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Enter Cinderwatch",
+                "target_scene_id": "market_quarter"
+              },
+              {
+                "id": null,
+                "label": "Follow the missing patrol rumor",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [
+              "notice_board"
+            ],
+            "addressable_ids": [
+              "guard_captain",
+              "tavern_runner",
+              "refugee",
+              "threadbare_watcher"
+            ]
+          },
+          "market_quarter": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to the Gate",
+                "target_scene_id": "frontier_gate"
+              },
+              {
+                "id": null,
+                "label": "Seek the fortress trail",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [],
+            "addressable_ids": []
+          },
+          "old_milestone": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to Cinderwatch Gate",
+                "target_scene_id": "frontier_gate"
+              }
+            ],
+            "interactable_ids": [
+              "milestone",
+              "prints"
+            ],
+            "addressable_ids": []
+          }
+        }
+      },
+      "after": {
+        "npc_ids": [
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "watch_command"
+            ]
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "route_change"
+            ]
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "patrol_rumor"
+            ]
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 3,
+            "influence": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 3,
+            "influence": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 2,
+            "influence": 2,
+            "agenda_progress": 1
+          }
+        ],
+        "world_event_log_len": 2,
+        "scenes": {
+          "frontier_gate": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Enter Cinderwatch",
+                "target_scene_id": "market_quarter"
+              },
+              {
+                "id": null,
+                "label": "Follow the missing patrol rumor",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [
+              "notice_board"
+            ],
+            "addressable_ids": [
+              "guard_captain",
+              "tavern_runner",
+              "refugee",
+              "threadbare_watcher"
+            ]
+          },
+          "market_quarter": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to the Gate",
+                "target_scene_id": "frontier_gate"
+              },
+              {
+                "id": null,
+                "label": "Seek the fortress trail",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [],
+            "addressable_ids": []
+          },
+          "old_milestone": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to Cinderwatch Gate",
+                "target_scene_id": "frontier_gate"
+              }
+            ],
+            "interactable_ids": [
+              "milestone",
+              "prints"
+            ],
+            "addressable_ids": []
+          }
+        }
+      }
+    },
+    "campaign_started": {
+      "before": false,
+      "after": true
+    },
+    "clocks": {
+      "before": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "after": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 1
+      }
+    },
+    "log_entries": {
+      "before": 0,
+      "after": 1
+    },
+    "time_pressure": {
+      "before": 0,
+      "after": 1
+    },
+    "turn_counter": {
+      "before": 0,
+      "after": 1
+    }
+  },
+  "changed_documents": [
+    "combat.json",
+    "session.json",
+    "session_log.jsonl",
+    "world.json"
+  ],
+  "usage_after": {
+    "dispatched_requests": 1,
+    "input_tokens": 26714,
+    "output_tokens": 1649,
+    "total_tokens": 28363,
+    "stopped": false,
+    "stop_reason": "",
+    "pending_requests": 0
+  }
+}

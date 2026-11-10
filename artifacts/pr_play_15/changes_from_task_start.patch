@@ -1,0 +1,412 @@
+--- a/tools/playtest/runner.py
++++ b/tools/playtest/runner.py
+@@ -152,6 +152,7 @@
+ 
+ 
+ def stop_owned(process, timeout):
++    started = time.monotonic()
+     if process is None:
+         return {'owned': False, 'stopped': True}
+     if process.poll() is None:
+@@ -162,7 +163,63 @@
+             process.kill()
+             process.wait(timeout=timeout)
+     return {'owned': True, 'pid': process.pid, 'stopped': process.poll() is not None,
+-            'exit_code': process.returncode}
++            'exit_code': process.returncode, 'shutdown_seconds': round(time.monotonic()-started, 6)}
++
++
++def wait_for_http_ready(process, run, timeout):
++    """Configuration attestation is separate from a successful endpoint response.
++
++    Persist safe transport metadata only: no response bodies or exception strings.
++    The deadline includes configuration loading and server initialization.
++    """
++    started = time.monotonic()
++    deadline = started + timeout
++    path = run/'diagnostics/ready.json'
++    with (run/'diagnostics/readiness_poll.jsonl').open('w', encoding='utf-8') as log:
++        def record(event, **details):
++            row = {'event': event, 'time': datetime.now(timezone.utc).isoformat(),
++                   'elapsed_seconds': round(time.monotonic()-started, 6), **details}
++            log.write(json.dumps(row)+'\n')
++            log.flush()
++        record('worker_spawned', pid=process.pid, deadline_seconds=timeout)
++        while time.monotonic() < deadline:
++            if process.poll() is not None:
++                record('worker_exited', exit_code=process.returncode)
++                raise RuntimeError('Owned server exited during startup')
++            if path.exists():
++                try:
++                    ready = json.loads(path.read_text(encoding='utf-8'))
++                except (OSError, json.JSONDecodeError) as exc:
++                    record('attestation_unavailable', error_type=type(exc).__name__)
++                else:
++                    if ready['pid'] != process.pid or Path(ready['data_dir']).resolve() != run/'data' or not ready['isolation_verified']:
++                        record('attestation_mismatch')
++                        raise RuntimeError('Isolation attestation mismatch')
++                    base = f"http://127.0.0.1:{ready['port']}"
++                    try:
++                        status, _ = request(base, 'GET', '/api/state', min(1, max(.001, deadline-time.monotonic())))
++                        record('http_response', url=base+'/api/state', status=status)
++                        if status == 200:
++                            if time.monotonic() >= deadline:
++                                break
++                            write(run/'diagnostics/http_ready.json', {
++                                'pid': process.pid, 'url': base+'/api/state', 'status': status,
++                                'time': datetime.now(timezone.utc).isoformat(),
++                                'startup_seconds': round(time.monotonic()-started, 6)})
++                            return ready, base
++                    except (OSError, URLError, ValueError) as exc:
++                        reason = getattr(exc, 'reason', exc)
++                        code = getattr(reason, 'winerror', None) or getattr(reason, 'errno', None)
++                        category = ('access_denied' if code in {13, 10013} else
++                                    'connection_refused' if code in {61, 111, 10061} else
++                                    'request_timeout' if isinstance(reason, TimeoutError) else
++                                    'invalid_response' if isinstance(exc, ValueError) else 'connection_error')
++                        record(category, error_type=type(exc).__name__, os_error=code)
++                        if category == 'access_denied':
++                            raise PermissionError('Local HTTP access denied') from exc
++            time.sleep(min(.05, max(0, deadline-time.monotonic())))
++        record('readiness_deadline_expired')
++        raise TimeoutError('Application startup deadline')
+ 
+ 
+ def request(base, method, path, timeout, body=None):
+@@ -324,29 +381,7 @@
+         secrets = [v for k, v in env.items() if v and len(v)>6 and any(part in k.lower() for part in ('key', 'secret', 'password', 'credential', 'token'))]
+         logger = threading.Thread(target=bounded_log, args=(process.stdout, run/'diagnostics/application.log', secrets), daemon=True)
+         logger.start()
+-        deadline = time.monotonic()+min(startup_timeout or s['timeouts']['startup'], s['timeouts']['startup'])
+-        ready = None
+-        while time.monotonic() < deadline:
+-            if process.poll() is not None:
+-                raise RuntimeError('Owned server exited during startup')
+-            path = run/'diagnostics/ready.json'
+-            if path.exists():
+-                try:
+-                    ready = json.loads(path.read_text(encoding='utf-8'))
+-                except (OSError, json.JSONDecodeError):
+-                    time.sleep(.05)
+-                    continue
+-                if ready['pid'] != process.pid or Path(ready['data_dir']).resolve() != run/'data' or not ready['isolation_verified']:
+-                    raise RuntimeError('Isolation attestation mismatch')
+-                base = f"http://127.0.0.1:{ready['port']}"
+-                try:
+-                    if request(base, 'GET', '/api/state', min(1, max(.01, deadline-time.monotonic())))[0] == 200:
+-                        break
+-                except (OSError, URLError, ValueError):
+-                    pass
+-            time.sleep(.05)
+-        else:
+-            raise TimeoutError('Application startup deadline')
++        ready, base = wait_for_http_ready(process, run, min(startup_timeout or s['timeouts']['startup'], s['timeouts']['startup']))
+         result['environment_verification']['application'] = ready
+         if not ready['diagnostics_enabled'] or ready['sdk_retries'] or ready['host_retries']:
+             raise RuntimeError('Worker safety attestation invalid')
+--- a/tools/playtest/worker.py
++++ b/tools/playtest/worker.py
+@@ -5,6 +5,8 @@
+ import os
+ import socket
+ import sys
++import time
++from datetime import datetime, timezone
+ from pathlib import Path
+ from types import SimpleNamespace as NS
+ 
+@@ -120,10 +122,20 @@
+     run = Path(sys.argv[1]).resolve()
+     cfg = json.loads((run/'configuration/run.json').read_text(encoding='utf-8'))
+     diagnostics = run/'diagnostics'
++    def stage(name):
++        with (diagnostics/'startup_events.jsonl').open('a', encoding='utf-8') as stream:
++            stream.write(json.dumps({'event': name, 'time': datetime.now(timezone.utc).isoformat(),
++                                     'monotonic': time.monotonic(), 'pid': os.getpid()})+'\n')
++    import faulthandler
++    stack_log = (diagnostics/'startup_stack.log').open('w', encoding='utf-8')
++    faulthandler.dump_traceback_later(8, file=stack_log)
++    stage('worker_started')
+     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+     # Bind before readiness; an occupied port is never reused or terminated.
++    stage('socket_binding')
+     sock.bind(('127.0.0.1', cfg['port']))
+     sock.listen(128)
++    stage('socket_listening')
+     from game import storage as st
+     from tools.atgb.isolation import assert_imported_data_dir
+     assert_imported_data_dir(st.DATA_DIR, run/'data', player_campaign_dir=Path(cfg['player_data']))
+@@ -150,6 +162,7 @@
+     if api._compute_upstream_gate_for_live_gameplay()[0].get('manual_testing_blocked'):
+         raise RuntimeError('Existing upstream gate blocked this run')
+     write(diagnostics/'ready.json', {'pid': os.getpid(), 'port': sock.getsockname()[1],
++          'phase': 'configuration_initialized', 'time': datetime.now(timezone.utc).isoformat(),
+           'data_dir': str(st.DATA_DIR), 'isolation_verified': True,
+           'model': DEFAULT_MODEL_NAME, 'opening_output_allowance': gm._opening_max_output_tokens(),
+           'opening_renderer': opening_renderer_diagnostics(),
+@@ -159,18 +172,31 @@
+ 
+     async def application(scope, receive, send):
+         global CURRENT_TURN
++        async def observed_send(message):
++            if message['type'] in {'lifespan.startup.complete', 'lifespan.startup.failed'}:
++                stage(message['type'])
++            await send(message)
++        if scope['type'] == 'lifespan':
++            stage('application_initializing')
+         if scope['type'] == 'http' and scope.get('path') == '/api/chat':
+             CURRENT_TURN += 1
++        if scope['type'] == 'http':
++            faulthandler.cancel_dump_traceback_later()
+         try:
+-            await api.app(scope, receive, send)
++            await api.app(scope, receive, observed_send)
+         finally:
+             if scope['type'] == 'http':
+                 write(diagnostics/'budget_snapshot.json', budget.snapshot())
+ 
++    stage('configuration_initialized')
+     import uvicorn
++    stage('uvicorn_imported')
+     try:
++        stage('server_run_entered')
+         uvicorn.Server(uvicorn.Config(application, log_level='info', access_log=False)).run(sockets=[sock])
+     finally:
++        faulthandler.cancel_dump_traceback_later()
++        stack_log.close()
+         write(diagnostics/'budget_snapshot.json', budget.snapshot())
+         sock.close()
+ 
+@@ -181,5 +207,8 @@
+     except Exception as exc:
+         # Exception messages can contain provider/private text. Record the type only.
+         run = Path(sys.argv[1])
+-        write(run/'diagnostics/worker_failure.json', {'type': type(exc).__name__, 'stage': 'worker_bootstrap'})
++        events = run/'diagnostics/startup_events.jsonl'
++        last_stage = json.loads(events.read_text(encoding='utf-8').splitlines()[-1])['event'] if events.exists() else 'worker_bootstrap'
++        write(run/'diagnostics/worker_failure.json', {'type': type(exc).__name__, 'stage': last_stage,
++              'os_error': getattr(exc, 'winerror', None) or getattr(exc, 'errno', None)})
+         raise SystemExit(2)
+--- /dev/null
++++ b/tools/playtest/validate_startup.py
+@@ -0,0 +1,110 @@
++"""Five bounded offline startup-only cycles and one occupied-port control.
++
++Uses the existing controller/worker. Stops immediately after HTTP readiness;
++no campaign requests are sent. Synthetic transport, external socket denial,
++placeholder credentials and the provider admission prohibition all remain on.
++"""
++from __future__ import annotations
++
++import json
++import os
++import socket
++from pathlib import Path
++
++from tools.playtest import runner
++
++
++def main():
++    output = runner.ROOT/'artifacts/pr_play_15'
++    output.mkdir(exist_ok=True)
++    original_wait = runner.wait_for_http_ready
++    original_environment = runner.child_environment
++    starts = {}
++
++    def offline_environment(*args, **kwargs):
++        env = original_environment(*args, **kwargs)
++        env['ASHEN_DISABLE_PROVIDER_CALLS'] = '1'
++        return env
++
++    def record_creation(process):
++        # Popen returns the actual listener-owning interpreter in this harness.
++        if os.name == 'nt':
++            import ctypes
++            from ctypes import wintypes
++            creation, exit_time, kernel, user = (wintypes.FILETIME() for _ in range(4))
++            if not ctypes.windll.kernel32.GetProcessTimes(wintypes.HANDLE(int(process._handle)),
++                    ctypes.byref(creation), ctypes.byref(exit_time), ctypes.byref(kernel), ctypes.byref(user)):
++                raise ctypes.WinError()
++            timestamp = ((creation.dwHighDateTime << 32) + creation.dwLowDateTime)/10000000-11644473600
++            starts[process.pid] = runner.datetime.fromtimestamp(timestamp, runner.timezone.utc).isoformat()
++
++    ready_result = {}
++
++    def stop_at_readiness(*args):
++        record_creation(args[0])
++        ready, base = original_wait(*args)
++        ready_result.update(ready=ready, base=base)
++        # Controlled unwind invokes the controller's normal cleanup/export path.
++        raise KeyboardInterrupt
++
++    def check(run, result, expected_ready):
++        journal = run/'diagnostics/provider_usage.jsonl'
++        entries = [json.loads(line) for line in journal.read_text().splitlines()] if journal.exists() else []
++        dispatches = sum(e.get('event') == 'dispatch_attempted' for e in entries)
++        assert dispatches == 0 and not result['steps'], result
++        assert result['process_cleanup']['stopped']
++        if expected_ready:
++            assert entries and all(e['event'] == 'initialized' for e in entries)
++            usage = json.loads((run/'diagnostics/budget_snapshot.json').read_text())
++            assert usage['dispatched_requests'] == 0
++            ready = ready_result['ready']
++            with socket.socket() as probe:
++                probe.settimeout(1)
++                assert probe.connect_ex(('127.0.0.1', ready['port'])) != 0
++            with socket.socket() as released:
++                released.bind(('127.0.0.1', ready['port']))
++            http = json.loads((run/'diagnostics/http_ready.json').read_text())
++            assert http['startup_seconds'] < 30
++            assert ready['opening_renderer']['selected']
++            with runner.zipfile.ZipFile(result['evidence_zip']) as archive:
++                assert archive.testzip() is None
++            return {'run': str(run), 'pid': ready['pid'], 'process_created_utc': starts.get(ready['pid']),
++                    'port': ready['port'], 'http': http, 'cleanup': result['process_cleanup'],
++                    'port_released': True, 'no_orphan': True, 'provider_dispatches': dispatches,
++                    'renderer': ready['opening_renderer'], 'limits': ready['limits']}
++        failure = json.loads((run/'diagnostics/worker_failure.json').read_text())
++        assert failure['stage'] == 'socket_binding' and failure['os_error'] in {48, 98, 10048}
++        polls = [json.loads(line) for line in (run/'diagnostics/readiness_poll.jsonl').read_text().splitlines()]
++        assert polls[-1]['event'] == 'worker_exited'
++        assert result['elapsed_seconds'] < 30
++        return {'run': str(run), 'failure': failure, 'cleanup': result['process_cleanup'],
++                'elapsed_seconds': result['elapsed_seconds'], 'provider_dispatches': dispatches}
++
++    runner.child_environment = offline_environment
++    runner.wait_for_http_ready = stop_at_readiness
++    measurements = {'cycles': [], 'failure_control': None}
++    try:
++        for index in range(5):
++            ready_result.clear()
++            run, result = runner.run_playtest(scenario='FiveTurnGameplay', mode='Deterministic',
++                output_root=runner.ROOT/'artifacts/atgb/pr_play_15/cycles')
++            measurements['cycles'].append(check(run, result, True))
++            runner.write(output/'startup_cycles.json', measurements)
++            print('Cycle', index+1, 'passed', flush=True)
++        with socket.socket() as occupied:
++            occupied.bind(('127.0.0.1', 0))
++            occupied.listen()
++            run, result = runner.run_playtest(scenario='FiveTurnGameplay', mode='Deterministic',
++                port=occupied.getsockname()[1], output_root=runner.ROOT/'artifacts/atgb/pr_play_15/failure')
++            measurements['failure_control'] = check(run, result, False)
++            assert occupied.fileno() != -1
++            measurements['failure_control']['original_listener_preserved'] = True
++        runner.write(output/'startup_cycles.json', measurements)
++        print('Occupied-port control passed', flush=True)
++    finally:
++        runner.child_environment = original_environment
++        runner.wait_for_http_ready = original_wait
++
++
++if __name__ == '__main__':
++    main()
+--- /dev/null
++++ b/tests/test_playtest_startup_readiness.py
+@@ -0,0 +1,107 @@
++"""Offline regressions for the observed startup visibility boundary."""
++import errno
++import json
++from types import SimpleNamespace
++from urllib.error import URLError
++
++import pytest
++
++from tools.playtest import runner
++
++
++@pytest.fixture
++def startup(tmp_path, monkeypatch):
++    (tmp_path/'diagnostics').mkdir()
++    process = SimpleNamespace(pid=42, returncode=None, poll=lambda: None)
++    runner.write(tmp_path/'diagnostics/ready.json', {
++        'pid': 42, 'port': 12345, 'data_dir': str(tmp_path/'data'), 'isolation_verified': True})
++    clock = [0.0]
++    monkeypatch.setattr(runner.time, 'monotonic', lambda: clock[0])
++    monkeypatch.setattr(runner.time, 'sleep', lambda seconds: clock.__setitem__(0, clock[0]+seconds))
++    return tmp_path, process
++
++
++def events(run):
++    return [json.loads(line) for line in (run/'diagnostics/readiness_poll.jsonl').read_text().splitlines()]
++
++
++def test_configuration_is_not_http_ready(startup, monkeypatch):
++    run, process = startup
++    responses = iter([(503, {}), (200, {})])
++    monkeypatch.setattr(runner, 'request', lambda *args: next(responses))
++    ready, base = runner.wait_for_http_ready(process, run, 1)
++    assert ready['pid'] == process.pid and base == 'http://127.0.0.1:12345'
++    assert [e['status'] for e in events(run) if 'status' in e] == [503, 200]
++    assert json.loads((run/'diagnostics/http_ready.json').read_text())['status'] == 200
++
++
++@pytest.mark.parametrize('exception,event', [
++    (URLError(PermissionError(errno.EACCES, 'private text')), 'access_denied'),
++    (URLError(ConnectionRefusedError(errno.ECONNREFUSED, 'private text')), 'connection_refused'),
++    (URLError(TimeoutError('private text')), 'request_timeout'),
++    (ValueError('private text'), 'invalid_response'),
++])
++def test_transport_failure_is_preserved_safely(startup, monkeypatch, exception, event):
++    run, process = startup
++    def fail(*args):
++        raise exception
++    monkeypatch.setattr(runner, 'request', fail)
++    with pytest.raises(PermissionError if event == 'access_denied' else TimeoutError):
++        runner.wait_for_http_ready(process, run, .1)
++    assert event in [e['event'] for e in events(run)]
++    assert 'private text' not in (run/'diagnostics/readiness_poll.jsonl').read_text()
++    assert not (run/'diagnostics/http_ready.json').exists()
++    if event == 'access_denied':
++        assert events(run)[-1]['elapsed_seconds'] == 0
++
++
++def test_exit_is_detected_before_poll(startup, monkeypatch):
++    run, process = startup
++    process.returncode = 2
++    process.poll = lambda: 2
++    monkeypatch.setattr(runner, 'request', lambda *args: pytest.fail('HTTP after exit'))
++    with pytest.raises(RuntimeError, match='exited'):
++        runner.wait_for_http_ready(process, run, 1)
++    assert events(run)[-1]['exit_code'] == 2
++
++
++def test_stale_attestation_rejected(startup, monkeypatch):
++    run, process = startup
++    process.pid = 43
++    monkeypatch.setattr(runner, 'request', lambda *args: pytest.fail('HTTP with stale PID'))
++    with pytest.raises(RuntimeError, match='attestation mismatch'):
++        runner.wait_for_http_ready(process, run, 1)
++    assert events(run)[-1]['event'] == 'attestation_mismatch'
++
++
++def test_no_attestation_deadline(startup):
++    run, process = startup
++    (run/'diagnostics/ready.json').unlink()
++    with pytest.raises(TimeoutError):
++        runner.wait_for_http_ready(process, run, .1)
++    assert events(run)[-1]['event'] == 'readiness_deadline_expired'
++
++
++def test_late_http_success_does_not_beat_deadline(startup, monkeypatch):
++    run, process = startup
++    def late(*args):
++        runner.time.sleep(.2)
++        return 200, {}
++    monkeypatch.setattr(runner, 'request', late)
++    with pytest.raises(TimeoutError):
++        runner.wait_for_http_ready(process, run, .1)
++    assert not (run/'diagnostics/http_ready.json').exists()
++
++
++def test_transient_attestation_read_retried(startup, monkeypatch):
++    run, process = startup
++    (run/'diagnostics/ready.json').write_text('{')
++    original_sleep = runner.time.sleep
++    def repair(seconds):
++        original_sleep(seconds)
++        runner.write(run/'diagnostics/ready.json', {
++            'pid': 42, 'port': 12345, 'data_dir': str(run/'data'), 'isolation_verified': True})
++    monkeypatch.setattr(runner.time, 'sleep', repair)
++    monkeypatch.setattr(runner, 'request', lambda *args: (200, {}))
++    runner.wait_for_http_ready(process, run, 1)
++    assert events(run)[1]['event'] == 'attestation_unavailable'

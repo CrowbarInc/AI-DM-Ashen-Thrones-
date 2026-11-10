@@ -1,0 +1,7 @@
+# EXECUTIVE SUMMARY
+
+**C — FAIL / CRITICAL DEFECT**. The bounded hook experiment delivers mandatory facts offline, but a real HTTP milestone investigation committed a discovery while publishing “I cannot provide a validated response to that request.” The existing publication seam only replaces one provider-disabled stub. This is an implementation defect and a critical mandatory-disclosure omission. Experimental HTTP/provider execution stopped. Defaults remain off; no commit or push.
+
+Forty development tests pass. Frozen holdout executed once: 32/40 expected publications, eight conservative false rejections, zero critical false acceptances, zero offline mandatory omissions, zero state mutations. These are hook-level results, not proof of the HTTP publication guarantee. Five consecutive supported HTTP actions ran with four real provider requests (1746 tokens), zero validated AI presentations, zero AI publications, four hook fallbacks (two explicitly substituted in HTTP). The authored exit reaches old_milestone and a subsequent investigation changes clue state; its presentation fails.
+
+Focused regression: 848 passed, 3 known failures; broader: 9 known failures. Authority matches disabled controls in all five actions. Protected hashes unchanged: True. Exactly one next step: Repair the existing publication seam so every current-action mandatory disclosure survives legacy rejection/failure, with publication-failure and interruption controls before any new live run.

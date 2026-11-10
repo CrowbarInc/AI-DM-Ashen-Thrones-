@@ -1,0 +1,46 @@
+{
+  "stage": "replace",
+  "unchanged": true,
+  "before_sha256": "7e9188ec08d6d6db80c7b249fd36a95acb58b9b78c60dd9db62b3ff4a6de9a23",
+  "retry": {
+    "version": 1,
+    "status": "applied",
+    "persistence": "committed",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "f697648b-09af-428f-a0be-95579e9cd82e",
+    "request_id": "classify-1",
+    "request_digest": "ceeb4a4e1e2e94097026e31f9a57ae80f390abfe4c37699bff8b5ce683247859",
+    "modification_id": "c2be2024-3684-4cc7-9710-802015431b77",
+    "previous_revision": 1,
+    "resulting_revision": 2,
+    "operation": "set_marking_visibility",
+    "request": {
+      "version": 1,
+      "operation": "set_marking_visibility",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "f697648b-09af-428f-a0be-95579e9cd82e",
+      "modification_id": "c2be2024-3684-4cc7-9710-802015431b77",
+      "visibility": {
+        "classification": "visible"
+      },
+      "expected_revision": 1,
+      "request_id": "classify-1",
+      "authorization": {
+        "caller_id": "trusted-fixture",
+        "decision_id": "PRIVATE-CLASSIFICATION",
+        "mechanics": "not_applicable",
+        "preconditions": {
+          "capability": "PRIVATE:capability",
+          "rights": "PRIVATE:rights",
+          "classification_basis": "PRIVATE:classification_basis",
+          "target_exists": "PRIVATE:target_exists",
+          "marking_exists": "PRIVATE:marking_exists"
+        }
+      },
+      "request_digest": "ceeb4a4e1e2e94097026e31f9a57ae80f390abfe4c37699bff8b5ce683247859"
+    }
+  },
+  "receipt_atomic": true
+}

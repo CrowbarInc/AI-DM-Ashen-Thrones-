@@ -1,0 +1,73 @@
+[
+  {
+    "event": "initialized"
+  },
+  {
+    "event": "admitted",
+    "attempt_id": "29e26f32d5ff4466aa01427354d96bbe",
+    "purpose": "primary_turn",
+    "configured_model": "gpt-4.1-mini"
+  },
+  {
+    "event": "dispatch_attempted",
+    "attempt_id": "29e26f32d5ff4466aa01427354d96bbe",
+    "purpose": "primary_turn",
+    "configured_model": "gpt-4.1-mini"
+  },
+  {
+    "event": "completed",
+    "attempt_id": "29e26f32d5ff4466aa01427354d96bbe",
+    "purpose": "primary_turn",
+    "configured_model": "gpt-4.1-mini",
+    "model": "gpt-4.1-mini-2025-04-14",
+    "input_tokens": 26986,
+    "output_tokens": 2050,
+    "total_tokens": 29036,
+    "completion_status": "completed",
+    "latency_ms": 14189.359
+  },
+  {
+    "event": "generation_diagnostic",
+    "attempt_id": "29e26f32d5ff4466aa01427354d96bbe",
+    "stage": "provider_response",
+    "provider_model": "gpt-4.1-mini",
+    "input_tokens": 26986,
+    "output_tokens": 2050,
+    "total_tokens": 29036,
+    "provider_finish_reason": null,
+    "rejection_reason": "arbitrary_narration_field",
+    "classification": "missing_structured_envelope",
+    "provider_response_contract": "opening_presentation"
+  },
+  {
+    "event": "generation_diagnostic",
+    "attempt_id": "29e26f32d5ff4466aa01427354d96bbe",
+    "stage": "opening_response_capture",
+    "classification": "captured"
+  },
+  {
+    "event": "generation_diagnostic",
+    "attempt_id": null,
+    "stage": "opening_semantics"
+  },
+  {
+    "event": "generation_diagnostic",
+    "attempt_id": null,
+    "stage": "opening_semantics"
+  },
+  {
+    "event": "generation_diagnostic",
+    "attempt_id": null,
+    "stage": "opening_validation",
+    "opening_accepted": false
+  },
+  {
+    "event": "generation_diagnostic",
+    "attempt_id": null,
+    "stage": "opening_outcome",
+    "opening_accepted": false,
+    "gameplay_committed": false,
+    "classification": "opening_rejected",
+    "rejection_reason": "arbitrary_narration_field"
+  }
+]

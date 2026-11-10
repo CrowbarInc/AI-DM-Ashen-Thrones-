@@ -1,0 +1,20 @@
+{
+  "entry_files_checked": 486,
+  "changed": [
+    "game/consequential_narration_validation.py"
+  ],
+  "unexpected_changes": [],
+  "campaign_data_unchanged": true,
+  "quarantine_source_unchanged": true,
+  "fallback_source_unchanged": true,
+  "frozen_implementation_matches": true,
+  "state_test": "test_state_and_quarantine_failure_preserves_fallback checks input deep equality, coverage PASS + semantic FAIL, fallback and promoted=False; direct state-owner suite included.",
+  "test_side_effect_restoration": [
+    "artifacts/pr_play_49/evidence_corpus_condition.json",
+    "artifacts/pr_play_49/evidence_corpus_passage.json",
+    "artifacts/pr_play_49/evidence_performance.json",
+    "artifacts/pr_play_47/evidence_performance.json",
+    "artifacts/pr_play_52/integration_results.json",
+    "artifacts/pr_play_55/evaluation.json"
+  ]
+}

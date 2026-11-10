@@ -1,0 +1,47 @@
+........................................................................ [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 20%]
+........................................................................ [ 27%]
+........................................................................ [ 34%]
+........................................................................ [ 41%]
+........................................................................ [ 48%]
+........................................................................ [ 55%]
+....................................................F................... [ 61%]
+........................................................................ [ 68%]
+........................................................................ [ 75%]
+........................................................................ [ 82%]
+.....F.................F...F............................................ [ 89%]
+........................................................................ [ 96%]
+......................................                                   [100%]
+================================== FAILURES ===================================
+E   assert 'integrated_...on_narration' not in '"""HTTP and...pdates,\n)\n'
+      
+      'integrated_investigation_narration' is contained here:
+        from game.integrated_investigation_narration import outcome_contract, trusted_disclosure
+      ?           ++++++++++++++++++++++++++++++++++
+                hook = build_hook_input(resolution=resolution, scene={}, known_clue_texts=(), player_text=player_text)
+                if hook.get('eligible'):
+                    _contract, disclosure = outcome_contract(hook)...
+      
+      ...Full output truncated (3607 lines hidden), use '-vv' to show
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_49_anchored_narration.py:336: assert 'integrated_...on_narration' not in '"""HTTP and...pdates,\n)\n'
+E   assert False
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py:308: assert False
+E   assert set()
+     +  where set() = get_all_known_clue_ids({})
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_narration_state_consistency.py:75: assert set()
+E   assert set()
+     +  where set() = get_all_known_clue_ids({})
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_narration_state_consistency.py:172: assert set()
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_49_anchored_narration.py::test_no_gameplay_wiring_or_effects
+FAILED tests/test_provider_accounting_integrity.py::test_readiness_acceptance_is_not_live_execution
+FAILED tests/test_narration_state_consistency.py::test_refusal_text_with_location_repair_updates_state_and_clues
+FAILED tests/test_narration_state_consistency.py::test_usable_location_in_text_updates_structured_topic_and_clues
+4 failed, 1042 passed, 1 warning in 1047.03s (0:17:27)

@@ -1,0 +1,72 @@
+{
+  "result": "ACCEPTED",
+  "utterance": "The watch ought to hear about those uncertain marks.",
+  "deterministic_without_provider": null,
+  "before": {
+    "faction_house_verevin_agenda_advanced": true,
+    "faction_ash_cowl_agenda_advanced": true,
+    "faction_ordo_pyric_agenda_advanced": true
+  },
+  "after": {
+    "faction_house_verevin_agenda_advanced": true,
+    "faction_ash_cowl_agenda_advanced": true,
+    "faction_ordo_pyric_agenda_advanced": true,
+    "patrol_report": true
+  },
+  "resume_preserved_report": true,
+  "player_facing_text": "You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report.",
+  "elapsed_ms": 3828.4,
+  "usage": {
+    "requests": 1,
+    "tokens": 158,
+    "accepted": 2,
+    "rejected": 0,
+    "traces": [
+      {
+        "text": "The watch ought to hear about those uncertain marks.",
+        "kind": "execute",
+        "id": "patrol_report",
+        "reason": "provider_match",
+        "provider": true,
+        "accepted": true,
+        "candidates": [
+          {
+            "id": "patrol_survey",
+            "status": "available"
+          },
+          {
+            "id": "patrol_report",
+            "status": "available"
+          },
+          {
+            "id": "patrol_record_survey",
+            "status": "unavailable"
+          }
+        ]
+      },
+      {
+        "text": "The watch ought to hear about those uncertain marks.",
+        "kind": "execute",
+        "id": "patrol_report",
+        "reason": "provider_match",
+        "provider": true,
+        "accepted": true,
+        "candidates": [
+          {
+            "id": "patrol_survey",
+            "status": "available"
+          },
+          {
+            "id": "patrol_report",
+            "status": "available"
+          },
+          {
+            "id": "patrol_record_survey",
+            "status": "unavailable"
+          }
+        ]
+      }
+    ]
+  },
+  "scene": "old_milestone"
+}

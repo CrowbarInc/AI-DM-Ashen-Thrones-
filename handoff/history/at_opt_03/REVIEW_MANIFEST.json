@@ -1,0 +1,188 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "at_opt_03",
+  "campaign_name": "AT-OPT-03 Primary Narration Context Attribution and Compression Feasibility",
+  "generated_at": "2026-11-08T18:20:42Z",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 8533,
+      "sha256": "f2897e2c25d5851ace00e60952ccf136f8ef6c6946bc071d7e1942601f0cfed8"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "development/campaigns/product_realization/at_opt_03/SUMMARY.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "development/campaigns/product_realization/at_opt_03/SUMMARY.md",
+      "bundle_path": "support/development/campaigns/product_realization/at_opt_03/SUMMARY.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 3549,
+      "sha256": "a9ad45e430a7e0cbe834ddee81bc445c43f631e8fdf2a4d3995db256c29d1ab3"
+    },
+    {
+      "path": "development/campaigns/product_realization/at_opt_03/CONTEXT_ASSEMBLY_MAP.md",
+      "role": "audit_report",
+      "why": "Assembly flow, conditional inclusion, and duplication points.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "development/campaigns/product_realization/at_opt_03/CONTEXT_ASSEMBLY_MAP.md",
+      "bundle_path": "support/development/campaigns/product_realization/at_opt_03/CONTEXT_ASSEMBLY_MAP.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 5277,
+      "sha256": "d22011ad989f0083c0802be62882a6b3a8f4ec0b9b8f084d130ce281515fe6cc"
+    },
+    {
+      "path": "development/campaigns/product_realization/at_opt_03/INPUT_SIZE_ATTRIBUTION.md",
+      "role": "audit_report",
+      "why": "Review copy of the attribution report. The TOKEN_ filename is omitted by the handoff safeguard.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "development/campaigns/product_realization/at_opt_03/INPUT_SIZE_ATTRIBUTION.md",
+      "bundle_path": "support/development/campaigns/product_realization/at_opt_03/INPUT_SIZE_ATTRIBUTION.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 5660,
+      "sha256": "d7a55961d84736979d5c2dc6dc9cf0bb8e6956bcd2fb978b6961345229c0adf3"
+    },
+    {
+      "path": "development/campaigns/product_realization/at_opt_03/COMPRESSION_FEASIBILITY.md",
+      "role": "audit_report",
+      "why": "Provider-free before and after sizes and what each cut removes.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "development/campaigns/product_realization/at_opt_03/COMPRESSION_FEASIBILITY.md",
+      "bundle_path": "support/development/campaigns/product_realization/at_opt_03/COMPRESSION_FEASIBILITY.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 3878,
+      "sha256": "178f2493cc0834eaa86af67e6df9cd80cb347631b8ed2b3bd0b12eda382f789b"
+    },
+    {
+      "path": "development/campaigns/product_realization/at_opt_03/OPTIMIZATION_CANDIDATES.md",
+      "role": "audit_report",
+      "why": "Ranked candidates with risks and confidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "development/campaigns/product_realization/at_opt_03/OPTIMIZATION_CANDIDATES.md",
+      "bundle_path": "support/development/campaigns/product_realization/at_opt_03/OPTIMIZATION_CANDIDATES.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 4113,
+      "sha256": "8c0266d9a1da7cb46edb8301881085a0e82b6f4e5dbd7a21ecce3be77724fb3c"
+    },
+    {
+      "path": "development/campaigns/product_realization/at_opt_03/AT_OPT_04_PROPOSAL.md",
+      "role": "audit_report",
+      "why": "The single next experiment, its fixtures, and its non-goals.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "development/campaigns/product_realization/at_opt_03/AT_OPT_04_PROPOSAL.md",
+      "bundle_path": "support/development/campaigns/product_realization/at_opt_03/AT_OPT_04_PROPOSAL.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 3150,
+      "sha256": "103d73b1b82e97854b0b6eb35366f3d2a22058db1bdf2fcc7cfc60c56a08918c"
+    },
+    {
+      "path": "development/campaigns/product_realization/at_opt_03/INTEGRITY.md",
+      "role": "integrity",
+      "why": "Branch, dirty-tree preservation, test counts, and the zero-provider confirmation.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "development/campaigns/product_realization/at_opt_03/INTEGRITY.md",
+      "bundle_path": "support/development/campaigns/product_realization/at_opt_03/INTEGRITY.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 2486,
+      "sha256": "b111c9573c395d68e687e7fef675e75f614452179ef573a8709c83afed0f97d0"
+    },
+    {
+      "path": "artifacts/at_opt_03/measurements.json",
+      "role": "analysis_table",
+      "why": "Machine-readable reconstruction, experiments, and ledger rows.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/at_opt_03/measurements.json",
+      "bundle_path": "support/artifacts/at_opt_03/measurements.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 47473,
+      "sha256": "1f84aeef21dfeeee9daddbb4910345e4a468dcdb616ef63223afc0cc337dfcc3"
+    },
+    {
+      "path": "artifacts/at_opt_03/reconstruct_context.py",
+      "role": "tooling",
+      "why": "Reproducible provider-free measurement script.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "artifacts/at_opt_03/reconstruct_context.py",
+      "bundle_path": "support/artifacts/at_opt_03/reconstruct_context.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 33666,
+      "sha256": "cb60d4ab56b6a12b2a21bbc8c5e12dfe24e358584b9f2a793320082d0283055b"
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "session_handoff",
+      "why": "Authoritative orientation after this cycle. Prior sections are preserved.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/NEXT_SESSION.md",
+      "bundle_path": "support/docs/NEXT_SESSION.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 106740,
+      "sha256": "67bd770355663dfce557a463ec0387a4a33ddd36f0a31c250fee5035e970b655"
+    }
+  ],
+  "omitted_artifacts": [
+    {
+      "path": "development/campaigns/product_realization/at_opt_03/TOKEN_ATTRIBUTION.md",
+      "role": "audit_report",
+      "why": "Recorded usage, reconstructed section sizes, and the eleven high-cost requests.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "reason": "sensitive filename pattern: TOKEN_ATTRIBUTION.md"
+    }
+  ],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 12,
+    "zip_size_bytes": "000000083729",
+    "uncompressed_payload_bytes": 224525,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": "artifacts/at_opt_03/review_handoff.json",
+    "canonical_repository_root": "."
+  }
+}

@@ -1,0 +1,5 @@
+# BASELINE AND SCOPE
+
+Entry HEAD d40f1ed198236c604085f1c842ead267a8104ce2; branch feature/product-realization. Substantial pre-existing dirty tracked/untracked work retained. baseline.json records complete entry status and source hashes. entry_source_provenance.json verifies reconstructed originals against those exact hashes. implementation.diff isolates this cycle; working_tree.diff additionally contains pre-existing work and is labelled accordingly. Protected runtime data was never used for demonstrations; copied bootstrap content was used in isolated ASHEN_DATA_DIR.
+
+Scope: lifecycle and persistence; no new branch content, campaign generation design, validator weakening, broad narration tuning, commit, or push. Branch access remains default off: ASHEN_EXPERIMENTAL_BRANCHING=1 plus exact existing session binding, or explicit ASHEN_EXPERIMENTAL_BRANCHING_NEW_CAMPAIGNS=1 and a private identity-bound enrollment created by normal New Campaign. Previously unmarked campaigns remain excluded. Disabling either enrollment gate removes that pathway. All prior publication gates remain unchanged.

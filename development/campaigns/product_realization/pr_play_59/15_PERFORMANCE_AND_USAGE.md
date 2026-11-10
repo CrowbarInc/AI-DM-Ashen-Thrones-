@@ -1,0 +1,29 @@
+# PERFORMANCE AND USAGE
+
+{
+  "latency": {
+    "persistent": {
+      "calls": 460,
+      "average_ms": 0.06369261195093555,
+      "maximum_ms": 1.2540000025182962
+    },
+    "consequence_pipeline": {
+      "calls": 460,
+      "average_ms": 0.26489173811253,
+      "maximum_ms": 14.364900009240955
+    },
+    "combined_integrated": {
+      "calls": 460,
+      "average_ms": 2.3155593486634367,
+      "maximum_ms": 85.56729997508228
+    }
+  },
+  "persistent_transient_peak_bytes": 5536,
+  "persistent_retained_bytes": 658,
+  "memory_scope": "tracemalloc Python allocations during one development pass; excludes interpreter, imports and RSS",
+  "provider_requests": 0,
+  "provider_tokens": 0,
+  "method": "10 development corpus repetitions; combined timing adds complete route fact to exercise unchanged integrated validator; holdout never repeated."
+}
+
+Individual samples in latency_samples.json. Measurements are local wall-clock, include OS noise and cold-path outliers; no controlled machine or comparative speedup claim. PR58 0.214 ms reference measured coverage only and is not directly comparable to persistent or combined cost.

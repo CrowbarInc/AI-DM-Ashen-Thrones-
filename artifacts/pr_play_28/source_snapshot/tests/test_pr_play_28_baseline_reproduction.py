@@ -1,0 +1,79 @@
+"""PR-PLAY-27 bounded expression and recovery controls. All transport is mocked."""
+import copy
+import json
+from pathlib import Path
+import pytest
+from fastapi.testclient import TestClient
+from game import api, storage as st
+from game.expressive_dialogue import validate_expression, _attempt
+from tools.playtest import gameplay as g
+from tests.test_pr_play_23_harness import body
+from tests.test_five_turn_gameplay import action, state as harness_state
+from tests.test_pr_play_04_opening_integrity import opening_world
+from tests.test_pr_play_25_public_fact_dialogue import _transport, plan_selecting_required, _enable_live, _install_interpretation, raw_captured, TEXT, state
+
+E = Path('artifacts/pr_play_28')
+@pytest.mark.parametrize('followup', ['What sort of rumors have you heard?', 'What have you heard about the patrol?'])
+@pytest.mark.parametrize('candidate', ["I've got hot stew and rumors to share."])
+def test_baseline_two_turn_http(opening_world,monkeypatch,candidate,followup):
+    monkeypatch.setenv('ASHEN_OPENING_RENDERER','1')
+    _transport(monkeypatch,[],lambda kw: plan_selecting_required(kw['input']))
+    # Restore the established PR-PLAY-26 campaign fact/topic fixtures.
+    root=Path('artifacts/pr_play_26/live/baseline/persistent')
+    scene=st.load_active_scene(); captured=json.loads((root/'scenes/frontier_gate.json').read_text())
+    scene['scene']['visible_facts']=captured['scene']['visible_facts']; st._save_json(st.scene_path(scene['scene']['id']),scene)
+    world=st.load_world(); original=json.loads((root/'world.json').read_text())
+    runner=next(n for n in world['npcs'] if n['id']=='tavern_runner')
+    runner['topics']=next(n for n in original['npcs'] if n['id']=='tavern_runner')['topics']; st.save_world(world)
+    rows=[]; expressions=[]; calls=[]
+    with TestClient(api.app) as client:
+        opening=client.post('/api/start_campaign?ui_mode=player')
+        assert opening.status_code==200
+        _enable_live(monkeypatch); monkeypatch.setenv('ASHEN_DISABLE_EXPRESSION_GENERATION','0')
+        monkeypatch.setattr(api,'call_gpt',lambda *a,**kw: pytest.fail('unexpected narration call'))
+        monkeypatch.setattr('game.expressive_dialogue.request_expression',lambda c: expressions.append(c) or dict(ok=True,sent=True,text=candidate,usage={},latency_ms=0))
+        record=raw_captured(); _install_interpretation(monkeypatch,record,calls)
+        for index,text in enumerate([TEXT,followup]):
+            if index:
+                record=raw_captured(); record['action_components']=record['action_components'][1:]
+                record['action_components'][0]['description']=text
+                record['communication']['subject']='rumors'; record['communication']['evidence_refs']=[]
+                record['player_intent']['summary']=text; record['requested_outcomes']=[{'text':text}]
+                _install_interpretation(monkeypatch,record,calls)
+            before=state(); before_logs=st.load_log(); reply=client.post('/api/chat?ui_mode=player',json={'text':text}); after=state(); after_logs=st.load_log(); internal=after_logs[-1]
+            classification=g.classify_turn(reply.status_code,internal)
+            a=action(); a['requires_substantive_answer']=True
+            a['player_input']=text; a['subject_terms']=['rumors','stew','patrol']
+            def docs(snapshot): return {'scenes/frontier_gate.json':copy.deepcopy(scene), **{key+'.json':value for key,value in snapshot.items()}, 'session_log.jsonl':before_logs if snapshot is before else after_logs}
+            evaluation=g.evaluate(a,reply.status_code,internal,docs(before),docs(after),[])
+            classification=evaluation['completion']
+            rows.append(dict(authored_scene=copy.deepcopy(scene),player=text,response=reply.json(),internal=internal,before=before,after=after,classification=classification,evaluation=evaluation))
+            for key in ('character','campaign','combat','conditions'): assert before[key]==after[key]
+            from game.world import advance_world_tick
+            expected=copy.deepcopy(before['world']); advance_world_tick(expected,before['campaign'])
+            if index and 'patrol' in followup:
+                # Authored disclosure records clue events; the expression cannot
+                # alter any other world field or invent an extra clue.
+                actual=copy.deepcopy(after['world'])
+                events=actual.pop('event_log'); prior_events=expected.pop('event_log')
+                assert events[:len(prior_events)]==prior_events
+                additions=events[len(prior_events):]
+                assert len(additions)==2 and {e.get('type') for e in additions}=={'social_lead_revealed','social_extracted_lead'}
+                assert {e.get('clue_id') for e in additions}=={'muddy_footprints_northwest','lead_frontier_gate_old_trading_crossroads'}
+                assert actual==expected
+            else:
+                assert after['world']==expected
+        path=E/(('two_turn_accepted' if 'share' in candidate else 'two_turn_recovered')+('_explicit' if 'patrol' in followup else '')+'.json')
+        path.write_text(json.dumps(dict(opening=opening.json(),turns=rows,interpretation_mock_count=len(calls),expression_mock_count=len(expressions),live_provider_requests=0),indent=2,default=str))
+    assert len(calls)==2 and len(expressions)==(1 if 'patrol' in followup else 2)
+    assert rows[0]['classification']['gameplay_completed'] and not rows[0]['evaluation']['stop']
+    assert rows[0]['internal']['resolution']['social']['dialogue_authority']['public_fact_source']
+    if 'patrol' in followup:
+        assert rows[1]['internal']['resolution']['social']['topic_revealed']['id']=='patrol_rumor'
+        assert rows[1]['classification']['gameplay_completed'] and not rows[1]['classification']['stop']
+    else:
+        # Record the existing selection limitation; never fabricate an answer.
+        assert rows[1]['internal']['resolution']['social']['topic_revealed'] is None
+        assert "couldn't tell you" in rows[1]['response']['gm_output']['player_facing_text']
+        assert rows[1]['classification']['stop'] and not rows[1]['classification']['gameplay_completed']
+    assert all(r['internal']['resolution']['social']['npc_id']=='tavern_runner' for r in rows)

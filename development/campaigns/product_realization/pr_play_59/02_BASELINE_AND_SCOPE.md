@@ -1,0 +1,5 @@
+# BASELINE AND SCOPE
+
+Commit d40f1ed198236c604085f1c842ead267a8104ce2. Extensively dirty entry tree preserved in entry_status.json; hashes in entry_hashes.json. No applicable AGENTS.md discovered. Read DEVELOPMENT_CONSTITUTION, NEXT_SESSION, state_authority_model, validation_evidence_standard (ATGB governance), review_handoff_standard and Product Realization portfolio. The user's PR59 request authorizes this narrow repair despite stale session orientation. Protected baselines, canonical campaign fixtures and provider configuration are unchanged.
+
+Architecture: trusted resolution → authorized investigation → anchored contract → generated prose → PR55 consequence gate + legacy immutable gate + mandatory coverage → quarantined response/fallback. Existing effects use SemanticAuthority items/routes/objectives/conditions; ordinary integrated requests explicitly grant no persistent consequences. Known baselines: 3 focused failures and 9 authority metadata failures; prior H41 false acceptance, D15/H12 false rejections.

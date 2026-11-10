@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 16 PLAYER SAFE PUBLICATION
+
+Existing resolver-owned engine_publication and allowlisted player HTTP DTOs publish committed appearance and validated speech only. NPC diagnostics, raw proposals, prompt contracts, flags and relationship metadata remain private. Complete exercised serialized HTTP/browser responses were scanned for sentinels and internal keys. Known mandatory notice and milestone discoveries were checked. Zero observed hidden exposures, disclosure omissions or critical unsafe publications in that scope. This is not a proof of unrestricted prose safety. Package authority snapshots redact campaign GM-only fields; original player inputs and player-facing responses remain intact.

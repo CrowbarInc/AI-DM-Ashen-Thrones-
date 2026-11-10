@@ -3,19 +3,19 @@
 - schema version: 1
 - corpus: protected_replay
 - total turns: 8
-- mutated turns: 1
-- attributable first mutations: 1
+- mutated turns: 0
+- attributable first mutations: 0
 - first-source coverage rate: 100.00%
 - unknown first-source count: 0
-- semantic mutation risk (mean / max): 10.0 / 10
+- semantic mutation risk (mean / max): 0.0 / 0
 
 ## Bucket distribution
 
-- sanitizer: 1
+- (none)
 
 ## Top mutation sources
 
-- game.output_sanitizer.sanitize_player_facing_output: 1
+- (none)
 
 ## Representative high-risk turns
 

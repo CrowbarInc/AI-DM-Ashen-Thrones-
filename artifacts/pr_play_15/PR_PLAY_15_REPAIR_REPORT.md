@@ -1,0 +1,16 @@
+# Repair report
+
+Files modified by this pass:
+
+- tools/playtest/runner.py: extracted bounded readiness polling; persists UTC/elapsed events, worker PID, URL/status, safe error type and OS code. Distinguishes refused connection, timeout, access denial, invalid response, endpoint status, worker exit, stale attestation and deadline expiration. Access denial fails immediately. Records a separate http_ready.json only after timely HTTP 200. Adds shutdown duration to cleanup metadata.
+- tools/playtest/worker.py: phase events for binding, configuration, uvicorn and ASGI startup; additive phase/time on ready.json; one bounded stack watchdog (eight seconds), canceled on an HTTP request or server exit; failure diagnostic retains safe stage and OS code. ASGI response schemas are unchanged.
+- tests/test_playtest_startup_readiness.py: ten offline regressions for these observed diagnostics and readiness boundaries.
+- tools/playtest/validate_startup.py: reusable five-cycle offline startup-only validator and occupied-port control, using existing controller/worker and isolated stores. Provider admission is explicitly prohibited in addition to the existing synthetic SDK and external socket denial. It unwinds with a controlled KeyboardInterrupt immediately after readiness to exercise normal cleanup/export without sending campaign requests.
+
+Before: sandbox loopback denial looked like an unexplained 30-second startup timeout; configuration attestation was the last useful evidence. After: denial is immediately observable as access_denied/os_error 10013, server progress and bounded stacks are preserved, and successful HTTP readiness is independently attested. No application architecture repair was justified. The environmental correction for successful validation was running with authorized local loopback access outside the restricted sandbox, not modifying asyncio or bypassing provider safeguards.
+
+Compatibility: PowerShell CLI, scenario modes, old ready.json keys, isolation checks, retry/request/token ceilings and default 30-second timeout remain. New artifacts and cleanup metadata are additive. Full preexisting user modifications are retained; runner_before.py and worker_before.py capture the dirty sources at task entry, and changes_from_task_start.patch excludes prior work. No commits/pushes.
+
+Preservation verification: configuration_preservation.json confirms byte-for-byte equality with PR-PLAY-14 snapshots for game/api.py, game/gm.py, game/config.py, provider budget/model routing, opening renderer, FiveTurnGameplay scenario and PowerShell entry point. No gameplay/narration changes, provider model/budget changes, schema changes, semantic-validator relaxation or provider calls were introduced.
+
+Limitations: local-loopback permissions must be available for the future run. The old historical trace remains incomplete. Existing Windows cleanup forcibly terminates the owned worker (normal observed exit code 1), not a graceful ASGI shutdown; process exit, port release and collected per-request budget snapshots are verified. Cleanup owns a single direct interpreter and is not a general process-tree supervisor. Invalid non-JSON HTTP responses are distinguishable as invalid_response, but their status is not retained by the shared JSON request parser. No speculative changes address these separate limitations.

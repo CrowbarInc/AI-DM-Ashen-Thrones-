@@ -1,0 +1,575 @@
+--- game/api.py (session baseline)
++++ game/api.py (PR-PLAY-20)
+@@ -5032,6 +5032,22 @@
+     return out
+ 
+ 
++def _project_player_runtime_response(response):
++    """Project the complete runtime result after all internal response enrichment.
++
++    Runtime endpoints admit only player mode. Keep their flat client contract,
++    applying the same recursive visibility rules as /api/state to every field,
++    including GM output, resolution and rejected-response state. Internal turn
++    helpers and persisted engine documents retain their full representations.
++    """
++    if isinstance(response, JSONResponse):
++        content = deep_project_public_payload(json.loads(response.body))
++        headers = {k: v for k, v in response.headers.items() if k != "content-length"}
++        return JSONResponse(content=content, status_code=response.status_code,
++                            headers=headers, background=response.background)
++    return deep_project_public_payload(response)
++
++
+ def _extract_log_player_input(entry: dict | None) -> str:
+     if not isinstance(entry, dict):
+         return ""
+@@ -5348,7 +5364,7 @@
+ def api_action(request: Request, req: ActionRequest):
+     try:
+         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+-        return action(req, ui_mode=ui_mode)
++        return _project_player_runtime_response(action(req, ui_mode=ui_mode))
+     except UiModePolicyError as e:
+         return _ui_mode_error_response(e)
+ 
+@@ -6344,6 +6360,10 @@
+ 
+ @app.post('/api/start_campaign')
+ def start_campaign(request: Request):
++    return _project_player_runtime_response(_start_campaign_response(request))
++
++
++def _start_campaign_response(request: Request):
+     """First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path)."""
+     from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
+     if playtest_stop_reason():
+@@ -6604,7 +6624,7 @@
+ def api_chat(request: Request, req: ChatRequest):
+     try:
+         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+-        return chat(req, ui_mode=ui_mode)
++        return _project_player_runtime_response(chat(req, ui_mode=ui_mode))
+     except UiModePolicyError as e:
+         return _ui_mode_error_response(e)
+ 
+--- tests/test_turn_pipeline_shared.py (session baseline)
++++ tests/test_turn_pipeline_shared.py (PR-PLAY-20)
+@@ -87,6 +87,30 @@
+ _SOCIAL_RESOLUTION_KINDS = {"question", "social", "social_probe", "dialogue"}
+ 
+ 
++def _with_operator_diagnostics(data: dict) -> dict:
++    """Read diagnostic assertions from storage, separately from the player HTTP payload.
++
++    Player response confidentiality is asserted against raw HTTP bytes in
++    test_pr_play_20_response_confidentiality; these pipeline tests also inspect
++    the engine's persisted diagnostic lane.
++    """
++    from game.state_channels import deep_project_debug_payload
++
++    def merge(left, right):
++        out = dict(left)
++        for key, value in right.items():
++            out[key] = merge(out[key], value) if isinstance(out.get(key), dict) and isinstance(value, dict) else value
++        return out
++
++    session = storage.load_session()
++    result = merge(data, {"debug": session.get("last_action_debug") or {},
++                          "debug_traces": session.get("debug_traces") or []})
++    log = storage.load_log()
++    if log and isinstance(result.get("gm_output"), dict):
++        result["gm_output"] = merge(result["gm_output"], deep_project_debug_payload(log[-1].get("gm_output") or {}))
++    return result
++
++
+ def _player_facing_text(data: dict) -> str:
+     return str((data.get("gm_output") or {}).get("player_facing_text") or "")
+ 
+@@ -197,7 +221,7 @@
+             json={"action_type": "social", "intent": "I talk to Tavern Runner.", "social_action": social_action},
+         )
+     assert action_resp.status_code == 200
+-    action_data = action_resp.json()
++    action_data = _with_operator_diagnostics(action_resp.json())
+ 
+     _seed_and_add_runner()
+     with monkeypatch.context() as m:
+@@ -208,7 +232,7 @@
+         client = TestClient(app)
+         chat_resp = client.post("/api/chat", json={"text": "I talk to Tavern Runner."})
+     assert chat_resp.status_code == 200
+-    chat_data = chat_resp.json()
++    chat_data = _with_operator_diagnostics(chat_resp.json())
+ 
+     assert action_data["ok"] is True
+     assert chat_data["ok"] is True
+@@ -251,7 +275,7 @@
+             json={"action_type": "exploration", "intent": "I investigate the desk.", "exploration_action": explore_action},
+         )
+     assert action_resp.status_code == 200
+-    action_data = action_resp.json()
++    action_data = _with_operator_diagnostics(action_resp.json())
+     action_rt = action_data.get("session", {}).get("scene_runtime", {}).get("scene_investigate", {})
+ 
+     _seed_shared_world(tmp_path, monkeypatch)
+@@ -263,7 +287,7 @@
+         client = TestClient(app)
+         chat_resp = client.post("/api/chat", json={"text": "I investigate the desk."})
+     assert chat_resp.status_code == 200
+-    chat_data = chat_resp.json()
++    chat_data = _with_operator_diagnostics(chat_resp.json())
+     chat_rt = chat_data.get("session", {}).get("scene_runtime", {}).get("scene_investigate", {})
+ 
+     assert action_data["resolution"]["kind"] == "discover_clue"
+@@ -288,7 +312,7 @@
+         resp = client.post("/api/chat", json={"text": "hello there"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert data["ok"] is True
+     assert data.get("resolution") is None
+     assert "gm_output" in data
+@@ -314,7 +338,7 @@
+         resp = client.post("/api/chat", json={"text": "Describe the gate."})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert len(captured_inputs) == 2
+     retry_messages = captured_inputs[1]
+     retry_tail = retry_messages[-1]["content"]
+@@ -368,7 +392,7 @@
+         resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert not captured_inputs  # R2C: host-owned uncertainty needs no restatement.
+     accepted = data["gm_output"]["metadata"]["accepted_response"]
+     assert accepted["speech_adoption"] == "AUTHORIZED_HOST_SPEECH"
+@@ -411,7 +435,7 @@
+         resp = client.post("/api/chat", json={"text": "Runner, who attacked them?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     resolution = data.get("resolution") or {}
+     text = assert_http_chat_response_smoke(data)
+     low = text.lower()
+@@ -466,7 +490,7 @@
+         resp = client.post("/api/chat", json={"text": "Runner, who attacked the patrol?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert captured_inputs
+ 
+     payload = json.loads(captured_inputs[0][1]["content"])
+@@ -532,7 +556,7 @@
+         resp = client.post("/api/chat", json={"text": "Who should I watch here?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     rt = data.get("session", {}).get("scene_runtime", {}).get("scene_investigate", {})
+     recent = rt.get("recent_contextual_leads") or []
+     assert any(entry.get("subject") == "Lady Misia" and entry.get("position") == "near the tavern entrance" for entry in recent)
+@@ -570,7 +594,7 @@
+         resp = client.post("/api/chat", json={"text": "Where do I find that person?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     gm_output = data.get("gm_output") or {}
+     assert_no_uncertainty_fallback_stock_smoke(gm_output.get("player_facing_text") or "")
+     assert not any(str(tag).startswith("uncertainty:") for tag in (gm_output.get("tags") or []))
+@@ -602,7 +626,7 @@
+         resp = client.post("/api/chat", json={"text": "Where is the missing patrol report?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert len(captured_inputs) == 2
+     retry_tail = captured_inputs[1][-1]["content"]
+     assert "Retry target: unresolved_question." in retry_tail
+@@ -642,7 +666,7 @@
+         resp = client.post("/api/chat", json={"text": "Where is the missing patrol report?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert len(captured_inputs) == 2
+     retry_tail = captured_inputs[1][-1]["content"]
+     assert "Retry target: unresolved_question." in retry_tail
+@@ -672,7 +696,7 @@
+         resp = client.post("/api/chat", json={"text": "Where are we?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert len(captured_inputs) == 2
+     gm_output = data.get("gm_output") or {}
+     text = (gm_output.get("player_facing_text") or "").lower()
+@@ -710,7 +734,7 @@
+         resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert len(captured_inputs) == 2
+     gm_output = data.get("gm_output") or {}
+     text = gm_output.get("player_facing_text") or ""
+@@ -755,7 +779,7 @@
+         resp = client.post("/api/chat", json={"text": "I wait."})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert len(captured_inputs) == 2
+     retry_tail = captured_inputs[1][-1]["content"]
+     assert "Retry target: scene_stall." in retry_tail
+@@ -791,7 +815,7 @@
+         resp = client.post("/api/chat", json={"text": "I wait."})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     text = _player_facing_text(data)
+     gm_output = data.get("gm_output") or {}
+     _assert_not_social_dialogue(data)
+@@ -855,8 +879,8 @@
+ 
+     assert first.status_code == 200
+     assert second.status_code == 200
+-    first_data = first.json()
+-    second_data = second.json()
++    first_data = _with_operator_diagnostics(first.json())
++    second_data = _with_operator_diagnostics(second.json())
+     assert _player_facing_text(first_data) == provider_line
+     assert "passive_scene_pressure" not in ((first_data.get("gm_output") or {}).get("tags") or [])
+     _assert_not_social_dialogue(first_data)
+@@ -932,7 +956,7 @@
+         resp = client.post("/api/chat", json={"text": "I remain silent and observe."})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+     # A hard-valid atmosphere line is accepted and is not rewritten into the lead.
+     assert text == "The square stays hushed except for the scrape of boots on wet stone."
+@@ -966,7 +990,7 @@
+         resp = client.post("/api/chat", json={"text": "I wait."})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+     assert text == "The square stays hushed except for the scrape of boots on wet stone."
+     assert "the tattered man" not in text.lower()
+@@ -986,7 +1010,7 @@
+         resp = client.post("/api/chat", json={"text": "Is Sleight of Hand needed?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert data["ok"] is True
+     assert (data.get("resolution") or {}).get("kind") == "adjudication_query"
+     adjudication = (data.get("resolution") or {}).get("adjudication") or {}
+@@ -1015,7 +1039,7 @@
+         resp = client.post("/api/chat", json={"text": "OOC: does this need a roll?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     resolution = data.get("resolution") or {}
+     gm_output = data.get("gm_output") or {}
+     text = str(gm_output.get("player_facing_text") or "")
+@@ -1043,7 +1067,7 @@
+         resp = client.post("/api/chat", json={"text": "Where can I find them?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert_dialogue_lock_social_route_smoke(
+         data.get("resolution") or {},
+         allowed_kinds=("question",),
+@@ -1076,7 +1100,7 @@
+         client = TestClient(app)
+         resp = client.post("/api/chat", json={"text": user_text})
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert_dialogue_lock_social_route_smoke(
+         data.get("resolution") or {},
+         allowed_kinds=("question",),
+@@ -1108,7 +1132,7 @@
+         client = TestClient(app)
+         resp = client.post("/api/chat", json={"text": user_text})
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert_dialogue_lock_social_route_smoke(data.get("resolution") or {})
+     assert_http_chat_response_smoke(data)
+ 
+@@ -1127,7 +1151,7 @@
+         for prompt in prompts:
+             resp = client.post("/api/chat", json={"text": prompt})
+             assert resp.status_code == 200
+-            data = resp.json()
++            data = _with_operator_diagnostics(resp.json())
+             text = ((data.get("gm_output") or {}).get("player_facing_text") or "")
+             low = text.lower()
+             assert "tavern runner" in low
+@@ -1182,7 +1206,7 @@
+         for idx, prompt in enumerate(prompts, start=1):
+             resp = client.post("/api/chat", json={"text": prompt})
+             assert resp.status_code == 200
+-            data = resp.json()
++            data = _with_operator_diagnostics(resp.json())
+             gm_output = data.get("gm_output") or {}
+             tags = gm_output.get("tags") or []
+             if idx >= 4:
+@@ -1210,7 +1234,7 @@
+         client = TestClient(app)
+         resp = client.post("/api/chat", json={"text": user_text})
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert_dialogue_lock_social_route_smoke(data.get("resolution") or {})
+     assert_http_chat_response_smoke(data)
+ 
+@@ -1225,7 +1249,7 @@
+         resp = client.post("/api/chat", json={"text": "I follow the runner."})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert_dialogue_lock_non_dialogue_route_smoke(data.get("resolution") or {})
+     assert_http_chat_response_smoke(data)
+ 
+@@ -1243,7 +1267,7 @@
+         resp = client.post("/api/chat", json={"text": "Footman? I require an audience."})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     gm_out = data.get("gm_output") or {}
+     assert data.get("resolution") is None
+     assert "adjudication_query" not in (gm_out.get("tags") or [])
+@@ -1281,7 +1305,7 @@
+         resp = client.post("/api/chat", json={"text": "Tell me plainly."})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert_dialogue_lock_social_route_smoke(
+         data.get("resolution") or {},
+         allowed_kinds=("social_probe",),
+@@ -1312,7 +1336,7 @@
+         resp = client.post("/api/chat", json={"text": user_text})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     expected_kind = "adjudication_query" if expected_category is None else "ooc_message"
+     assert (data.get("resolution") or {}).get("kind") == expected_kind
+     if expected_category is not None:
+@@ -1360,7 +1384,7 @@
+         resp = client.post("/api/chat?ui_mode=player", json={"text": user_text})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert data["ok"] is True
+     resolution = data.get("resolution") or {}
+     meta = resolution.get("metadata") or {}
+@@ -1405,7 +1429,7 @@
+         )
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     resolution = data.get("resolution") or {}
+     assert resolution.get("kind") == "communication_mode_conflict"
+     assert (resolution.get("metadata") or {}).get("authoritative_mutation") is False
+@@ -1431,7 +1455,7 @@
+         resp = client.post("/api/chat?ui_mode=player", json={"text": "IC: I wait."})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     assert data["ok"] is True
+     assert storage.load_session().get("turn_counter") == 1
+     assert captured_payloads
+@@ -1464,7 +1488,7 @@
+         resp = client.post("/api/chat", json={"text": "Is anyone else in earshot?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     adjudication = (data.get("resolution") or {}).get("adjudication") or {}
+     assert (data.get("resolution") or {}).get("kind") == "adjudication_query"
+     assert adjudication.get("category") == "perception_query"
+@@ -1485,7 +1509,7 @@
+         resp = client.post("/api/chat", json={"text": "How far away is he?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     adjudication = (data.get("resolution") or {}).get("adjudication") or {}
+     assert (data.get("resolution") or {}).get("kind") == "adjudication_query"
+     assert adjudication.get("answer_type") == "needs_concrete_action"
+@@ -1506,7 +1530,7 @@
+             json={"text": "I investigate the desk (Is Perception needed?)"},
+         )
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     resolution = data.get("resolution") or {}
+     assert resolution.get("kind") in {"discover_clue", "investigate"}
+     metadata = resolution.get("metadata") or {}
+@@ -1588,7 +1612,7 @@
+         resp = client.post("/api/chat", json={"text": player_text})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     resolution = data.get("resolution") or {}
+     metadata = resolution.get("metadata") or {}
+     debug = data.get("debug") or {}
+@@ -1636,7 +1660,7 @@
+         )
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     resolution = data.get("resolution") or {}
+     gm_output = data.get("gm_output") or {}
+     text = str(gm_output.get("player_facing_text") or "")
+@@ -1686,7 +1710,7 @@
+         )
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     resolution = data.get("resolution") or {}
+     assert resolution.get("kind") == "question"
+     assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
+@@ -1722,7 +1746,7 @@
+         resp = client.post("/api/chat", json={"text": "I persuade the gate guard to let me pass."})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     resolution = data.get("resolution") or {}
+     assert resolution.get("kind") == "persuade"
+     assert resolution.get("requires_check") is True
+@@ -1754,7 +1778,7 @@
+         resp = client.post("/api/chat", json={"text": "Is a roll needed if I conceal the letter while the guard is watching?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     resolution = data.get("resolution") or {}
+     assert resolution.get("kind") == "adjudication_query"
+     assert resolution.get("requires_check") is True
+@@ -1783,7 +1807,7 @@
+         resp = client.post("/api/chat", json={"text": "Where should I start?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     text = assert_player_text_present(data)
+     assert_no_internal_scaffold_labels(text)
+ 
+@@ -1806,7 +1830,7 @@
+         )
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     traces = data.get("debug_traces") or []
+     assert traces
+     latest = latest_compact_debug_trace_entry(traces)
+@@ -1908,7 +1932,7 @@
+         )
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     affordances = data.get("ui", {}).get("affordances") or []
+     affordance_ids = {a.get("id") for a in affordances if isinstance(a, dict)}
+     assert "push-red-button" not in affordance_ids
+@@ -1997,7 +2021,7 @@
+         resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     gm_out = data.get("gm_output") or {}
+     text = str(gm_out.get("player_facing_text") or "")
+     low = text.lower()
+@@ -2027,7 +2051,7 @@
+         resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+     low = text.lower()
+     assert_no_advisory_prose(text)
+@@ -2056,7 +2080,7 @@
+         resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+     low = text.lower()
+     assert_no_advisory_prose(text)
+@@ -2099,7 +2123,7 @@
+     assert second.status_code == 200
+ 
+     first_text = str((first.json().get("gm_output") or {}).get("player_facing_text") or "")
+-    second_data = second.json()
++    second_data = _with_operator_diagnostics(second.json())
+     second_output = second_data.get("gm_output") or {}
+     second_text = str(second_output.get("player_facing_text") or "")
+     low1 = first_text.lower()
+@@ -2145,7 +2169,7 @@
+         third = client.post("/api/chat", json={"text": "Who ordered it?"})
+ 
+     assert third.status_code == 200
+-    data = third.json()
++    data = _with_operator_diagnostics(third.json())
+     text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+     low = text.lower()
+     assert any(
+@@ -2184,7 +2208,7 @@
+         resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     gm_out = data.get("gm_output") or {}
+     text = str(gm_out.get("player_facing_text") or "")
+     low = text.lower()
+@@ -2215,7 +2239,7 @@
+         resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     gm_out = data.get("gm_output") or {}
+     text = str(gm_out.get("player_facing_text") or "")
+     low = text.lower()
+@@ -2248,7 +2272,7 @@
+         resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+ 
+     assert resp.status_code == 200
+-    data = resp.json()
++    data = _with_operator_diagnostics(resp.json())
+     gm_out = data.get("gm_output") or {}
+     text = str(gm_out.get("player_facing_text") or "")
+     low = text.lower()

@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 14 CONTRADICTION AND ESCALATION
+
+Strict proposal shape rejects hidden, authority, effects, inventories and biography fields. Dialogue reuses existing expression validation plus ordered predicate/polarity preservation for factual paraphrases. Hostile negations, subject reversals, secret/quest/treasure/authority claims and unsupported promises are rejected. Unknown provider failures use grounded fallback, without raw internal errors. The frozen holdout was not tuned or rerun. Development repairs address memory bucket ownership, ordinary-turn ticks, duplicate target grounding, player-information ownership and name boundaries.

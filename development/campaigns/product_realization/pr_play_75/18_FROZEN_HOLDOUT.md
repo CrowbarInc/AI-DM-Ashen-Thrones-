@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 18 FROZEN HOLDOUT
+
+Frozen before implementation: 90 cases, hash `61173fbd9a629c59f38b6a37404c1f68421a10204af886112452920679729113`. Single run: 85 passed / 5 failed; 30 multi-turn sequences and 20 actual save/resume cases. H66/H68/H70/H72/H74 raise KeyError(skill_check) after routine resolution succeeds because to_dict omits null optional fields. These failures are preserved, not reclassified as PASS or tuned away. The manifest uses broad developer-authored assertions; resumed dialogue checks proved too weak and were strengthened only in development/HTTP/browser verification. The run source predates later target/inquiry/name refinements. No final-source holdout or external independent validation is claimed.

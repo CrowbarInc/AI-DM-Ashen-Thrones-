@@ -1,0 +1,23 @@
+{
+  "original_PR72_holdout": "Preserved at 52/60; not rerun",
+  "new_PR72V_holdout": "Preserved at 46/50; one execution; not rerun or rescored",
+  "critical_cases": [
+    "V38: Have the guards searched?",
+    "V39: Did I record the survey?"
+  ],
+  "critical_root_cause": "Retrospective auxiliary questions were not recognized by the bounded memory grammar; None fell through into normal gameplay tick/clock/persistence and unrelated offline fixture narration.",
+  "repairs": [
+    "Classify auxiliary questions about current/past public actors/state as read-only before action fallback.",
+    "Use existing journal/committed branch disclosures only; never infer guard deployments or hidden patrol location.",
+    "Keep demonstrative noun phrases in named-target grounding rather than treating every that/this as a bare pronoun.",
+    "Preserve unsupported concealed-location and unavailable onward-pursuit limitations."
+  ],
+  "development": "Separate post-holdout development: exact failures plus unseen auxiliary forms on both branches, resolver prohibition and exact authority equality. final_safety.xml: 78 passed.",
+  "V49": "No product change to force clarification: the one inspectable gate board is a valid referent. Frozen failure preserved.",
+  "final_runtime": "48-request normal HTTP campaigns; seven post-repair typed browser continuations on the two resumed branches; raw traces retained.",
+  "fresh_final_holdout": false,
+  "critical_readonly_mutations_observed_in_frozen_run": 2,
+  "unsafe_fixture_publications_observed_in_frozen_run": 2,
+  "final_observed_readonly_mutations": 0,
+  "final_observed_unsafe_publications": 0
+}

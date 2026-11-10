@@ -1,0 +1,360 @@
+...................................................................FF.F. [ 30%]
+FF...FF................FF............................................... [ 61%]
+.................................................F.............F........ [ 91%]
+.........FF........                                                      [100%]
+================================== FAILURES ===================================
+________ test_general_unknown_player_named_object_is_not_instantiated _________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_general_unknown_player_na0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD728A3110>
+
+    def test_general_unknown_player_named_object_is_not_instantiated(tmp_path, monkeypatch):
+        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())
+        data = _chat(monkeypatch, "I inspect the ivory metronome.", OBSERVE_STOCK)
+        text = _facing(data).lower()
+        res = data.get("resolution") or {}
+>       assert res.get("kind") == "investigate"
+E       AssertionError: assert None == 'investigate'
+E        +  where None = <built-in method get of dict object at 0x000001DD729BD500>('kind')
+E        +    where <built-in method get of dict object at 0x000001DD729BD500> = {}.get
+
+tests\test_referenced_surface_grounding_inspection_resolution.py:211: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_general_narration_only_object_does_not_gain_authority __________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_general_narration_only_ob0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD729C85F0>
+
+    def test_general_narration_only_object_does_not_gain_authority(tmp_path, monkeypatch):
+        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())
+        first = _chat(monkeypatch, "I look around.", NARRATION_BELL)
+>       assert (first.get("resolution") or {}).get("kind") == "observe"
+E       AssertionError: assert None == 'observe'
+E        +  where None = <built-in method get of dict object at 0x000001DD72A7FB40>('kind')
+E        +    where <built-in method get of dict object at 0x000001DD72A7FB40> = ({} or {}).get
+E        +      where {} = <built-in method get of dict object at 0x000001DD72B0FE40>('resolution')
+E        +        where <built-in method get of dict object at 0x000001DD72B0FE40> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get
+
+tests\test_referenced_surface_grounding_inspection_resolution.py:222: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_____________ test_general_readable_surface_communicates_contents _____________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_general_readable_surface_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD729C8230>
+
+    def test_general_readable_surface_communicates_contents(tmp_path, monkeypatch):
+        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())
+        data = _chat(monkeypatch, "I read the tariff slate.", OBSERVE_STOCK)
+        text = _facing(data).lower()
+        res = data.get("resolution") or {}
+>       assert res.get("kind") in {"investigate", "discover_clue"}
+E       AssertionError: assert None in {'discover_clue', 'investigate'}
+E        +  where None = <built-in method get of dict object at 0x000001DD72D9E600>('kind')
+E        +    where <built-in method get of dict object at 0x000001DD72D9E600> = {}.get
+
+tests\test_referenced_surface_grounding_inspection_resolution.py:255: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] tariff_slate_fees
+[PROMPT] fresh campaign prompt constructed
+_______ test_general_failed_inspection_then_observe_uses_current_scene ________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_general_failed_inspection0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD72DE4860>
+
+    def test_general_failed_inspection_then_observe_uses_current_scene(tmp_path, monkeypatch):
+        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())
+        first = _chat(monkeypatch, "I inspect the ivory metronome.", OBSERVE_STOCK)
+>       assert (first.get("resolution") or {}).get("kind") == "investigate"
+E       AssertionError: assert None == 'investigate'
+E        +  where None = <built-in method get of dict object at 0x000001DD72F17A80>('kind')
+E        +    where <built-in method get of dict object at 0x000001DD72F17A80> = ({} or {}).get
+E        +      where {} = <built-in method get of dict object at 0x000001DD7317C440>('resolution')
+E        +        where <built-in method get of dict object at 0x000001DD7317C440> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get
+
+tests\test_referenced_surface_grounding_inspection_resolution.py:279: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______________________ test_general_authored_alias_binds ______________________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_general_authored_alias_bi0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD72FA02F0>
+
+    def test_general_authored_alias_binds(tmp_path, monkeypatch):
+        scene = _mill_scene()
+        classified = classify_referenced_surface("I examine the feed chute.", scene)
+        assert classified["authority"] == AUTHORITY_AUTHORED_INTERACTABLE
+        assert classified["interactable_id"] == "grain_hopper"
+        _seed_scene_runtime(tmp_path, monkeypatch, scene, world=_mill_world())
+        data = _chat(monkeypatch, "I examine the feed chute.", OBSERVE_STOCK)
+        res = data.get("resolution") or {}
+>       assert res.get("kind") in {"investigate", "discover_clue"}
+E       AssertionError: assert None in {'discover_clue', 'investigate'}
+E        +  where None = <built-in method get of dict object at 0x000001DD73101D40>('kind')
+E        +    where <built-in method get of dict object at 0x000001DD73101D40> = {}.get
+
+tests\test_referenced_surface_grounding_inspection_resolution.py:295: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__________ test_frontier_gate_roster_http_does_not_use_observe_stock __________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_frontier_gate_roster_http0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD72B6D040>
+
+    def test_frontier_gate_roster_http_does_not_use_observe_stock(tmp_path, monkeypatch):
+        scene = json.loads(Path("data/scenes/frontier_gate.json").read_text(encoding="utf-8"))
+        _seed_scene_runtime(tmp_path, monkeypatch, scene)
+        data = _chat(
+            monkeypatch,
+            "If the watch already has a commander on this, I'll check the roster board the serjeant is watching.",
+            OBSERVE_STOCK,
+        )
+        text = _facing(data)
+        low = text.lower()
+>       assert (data.get("resolution") or {}).get("kind") == "investigate"
+E       AssertionError: assert None == 'investigate'
+E        +  where None = <built-in method get of dict object at 0x000001DD73389D40>('kind')
+E        +    where <built-in method get of dict object at 0x000001DD73389D40> = ({} or {}).get
+E        +      where {} = <built-in method get of dict object at 0x000001DD733C0480>('resolution')
+E        +        where <built-in method get of dict object at 0x000001DD733C0480> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...hoke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.', 'mode': 'social', ...}}, ...}.get
+
+tests\test_referenced_surface_grounding_inspection_resolution.py:384: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__________ test_observe_stock_replacement_keeps_notice_board_working __________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_observe_stock_replacement0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD72B6CE00>
+
+    def test_observe_stock_replacement_keeps_notice_board_working(tmp_path, monkeypatch):
+        scene = json.loads(Path("data/scenes/frontier_gate.json").read_text(encoding="utf-8"))
+        _seed_scene_runtime(tmp_path, monkeypatch, scene)
+        data = _chat(monkeypatch, "I read the notice board.", OBSERVE_STOCK)
+        text = _facing(data).lower()
+        res = data.get("resolution") or {}
+>       assert res.get("kind") in {"investigate", "discover_clue"}
+E       AssertionError: assert None in {'discover_clue', 'investigate'}
+E        +  where None = <built-in method get of dict object at 0x000001DD73529700>('kind')
+E        +    where <built-in method get of dict object at 0x000001DD73529700> = {}.get
+
+tests\test_referenced_surface_grounding_inspection_resolution.py:398: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] notice_patrol_route
+[PROMPT] fresh campaign prompt constructed
+__________ test_sequence_patrol_travel_reaches_the_movement_resolver __________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_sequence_patrol_travel_re0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD734F7F50>
+
+    def test_sequence_patrol_travel_reaches_the_movement_resolver(tmp_path, monkeypatch):
+        _install_frontier(tmp_path, monkeypatch)
+        calls = _quiet_models(monkeypatch, {
+            PATROL: {
+                "status": "blocked",
+                "reason": "clarification_required",
+                "record": _record("T4"),
+                "player_facing_text": _turn("T4")["player_facing_text"],
+                "provider_requests": [],
+            },
+        })
+        before = storage.load_session()
+        with TestClient(api.app) as client:
+            body = _post(client, PATROL)
+        after = storage.load_session()
+        assert calls["exploration"] == [True]
+        assert calls["interpretation"] == []
+        assert after["active_scene_id"] == "old_milestone"
+        assert "old_milestone" in after["visited_scene_ids"]
+        assert after["clocks"]["time_pressure"] == before["clocks"]["time_pressure"] + 1
+>       assert body["resolution"]["resolved_transition"] is True
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'resolved_transition'
+
+tests\test_pr_play_39_action_admission.py:383: KeyError
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[ENGINE] Scene transition -> old_milestone
+[PROMPT] fresh campaign prompt constructed
+______________ test_sequence_unsupported_actions_invent_nothing _______________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_sequence_unsupported_acti0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD73774230>
+
+    def test_sequence_unsupported_actions_invent_nothing(tmp_path, monkeypatch):
+        _install_frontier(tmp_path, monkeypatch)
+        unknown = "I ask Captain Voss what he knows about the gate."
+        observatory = "I want to follow the trail to the glass observatory."
+        calls = _quiet_models(monkeypatch, {
+            unknown: {
+                "status": "accepted",
+                "reason": "captured_style",
+                "record": _ask("captain_voss", unknown),
+                "provider_requests": [],
+            },
+            FOOTPRINTS: {
+                "status": "blocked",
+                "reason": "clarification_required",
+                "record": _record("T3"),
+                "player_facing_text": _turn("T3")["player_facing_text"],
+                "provider_requests": [],
+            },
+        })
+        before_world = storage.load_world()
+        before_session = storage.load_session()
+        with TestClient(api.app) as client:
+            npc_body = _post(client, unknown)
+            route_body = _post(client, observatory)
+            print_body = _post(client, FOOTPRINTS)
+        after_world = storage.load_world()
+        after_session = storage.load_session()
+        assert calls["social"] == []
+        assert calls["exploration"] == []
+        assert "captain_voss" not in json.dumps(after_world)
+        assert "glass observatory" in route_body["gm_output"]["player_facing_text"].casefold()
+        assert "footprints" in print_body["gm_output"]["player_facing_text"].casefold()
+        assert "with whom" not in print_body["gm_output"]["player_facing_text"].casefold()
+>       assert npc_body["resolution"]["resolved_transition"] is False
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'resolved_transition'
+
+tests\test_pr_play_39_action_admission.py:422: KeyError
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+___________ test_raw_chat_stub_preserves_valid_and_contains_invalid ___________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_raw_chat_stub_preserves_v0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD73C546E0>
+
+    def test_raw_chat_stub_preserves_valid_and_contains_invalid(tmp_path, monkeypatch):
+        _seed_campaign_start_storage(tmp_path, monkeypatch)
+        session = default_session()
+        session["active_scene_id"] = "frontier_gate"
+        session["visited_scene_ids"] = ["frontier_gate"]
+        session["turn_counter"] = 1
+        storage.save_session(session)
+        storage._save_json(storage.WORLD_PATH, default_world())
+        storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
+        storage._save_json(storage.CHARACTER_PATH, default_character())
+        storage._save_json(storage.COMBAT_PATH, default_combat())
+        storage._save_json(storage.CONDITIONS_PATH, default_conditions())
+        calls = {"n": 0}
+        valid = "The tavern runner says, \"I can't say what the stew costs tonight.\""
+        invalid = "The tavern runner says, \"I will answer for the guard.\""
+        retry_valid = "The gate guard says, \"You need a reason the watch will accept.\""
+    
+        def fake_gpt(messages, **kwargs):
+            calls["n"] += 1
+            reason = str(kwargs.get("retry_reason") or "")
+            if reason == "hard_invalid" or int(kwargs.get("retry_attempt") or 0) >= 1:
+                return _gm_response(retry_valid)
+            user = ""
+            for message in reversed(messages):
+                if isinstance(message, dict) and message.get("role") == "user":
+                    user = str(message.get("content") or "")
+                    break
+            if "nearest guard" in user.lower() or "pass this gate" in user.lower():
+                return _gm_response(invalid)
+            return _gm_response(valid)
+    
+        monkeypatch.setattr("game.api.call_gpt", fake_gpt)
+        client = TestClient(app)
+        first = client.post(
+            "/api/chat",
+            json={"text": "I catch the tavern runner's eye and ask what one bowl of stew costs tonight."},
+        ).json()
+        assert first.get("ok") is not False
+        visible = first["gm_output"]["player_facing_text"]
+>       assert "can't say what the stew costs" in visible
+E       assert "can't say what the stew costs" in 'Tavern Runner mutters, "Word is, hot stew and rumors for coin."'
+
+tests\test_pr_br_continuation18_immutable_boundary.py:561: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] social_frontier_gate_tavern_runner_stew
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] lead_frontier_gate_old_trading_crossroads
+________________ test_player_seeks_whisper_does_not_create_one ________________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_player_seeks_whisper_does0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD73AE1520>
+
+    def test_player_seeks_whisper_does_not_create_one(tmp_path, monkeypatch):
+        _seed(tmp_path, monkeypatch, KILN, world_npcs=[])
+        data = _chat(monkeypatch, "I listen for whispers.", T16_INVENTION)
+        text = _facing(data).lower()
+>       assert (data.get("resolution") or {}).get("kind") == "observe"
+E       AssertionError: assert None == 'observe'
+E        +  where None = <built-in method get of dict object at 0x000001DD73A8DA80>('kind')
+E        +    where <built-in method get of dict object at 0x000001DD73A8DA80> = ({} or {}).get
+E        +      where {} = <built-in method get of dict object at 0x000001DD734C8480>('resolution')
+E        +        where <built-in method get of dict object at 0x000001DD734C8480> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get
+
+tests\test_perception_narration_authority_audible_non_invention.py:344: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+________________ test_http_empty_listen_complete_and_grounded _________________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_http_empty_listen_complet0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD73CEF950>
+
+    def test_http_empty_listen_complete_and_grounded(tmp_path, monkeypatch):
+        _seed(tmp_path, monkeypatch, KILN, world_npcs=[])
+        data = _chat(monkeypatch, "I listen.", T16_INVENTION)
+>       assert (data.get("resolution") or {}).get("kind") == "observe"
+E       AssertionError: assert None == 'observe'
+E        +  where None = <built-in method get of dict object at 0x000001DD73BF7000>('kind')
+E        +    where <built-in method get of dict object at 0x000001DD73BF7000> = ({} or {}).get
+E        +      where {} = <built-in method get of dict object at 0x000001DD73628C00>('resolution')
+E        +        where <built-in method get of dict object at 0x000001DD73628C00> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get
+
+tests\test_perception_narration_authority_audible_non_invention.py:561: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+___________________ test_http_authorized_speech_can_survive ___________________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t05_composition_main_pytest/test_http_authorized_speech_ca0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DD73BA0E00>
+
+    def test_http_authorized_speech_can_survive(tmp_path, monkeypatch):
+        _seed(
+            tmp_path,
+            monkeypatch,
+            QUAY_SPEECH,
+            world_npcs=[{"id": "quay_clerk", "name": "Quay Clerk", "location": "brass_quay"}],
+        )
+        data = _chat(monkeypatch, "I listen.", "A dock clerk calls the next berth number over the water.")
+>       assert (data.get("resolution") or {}).get("kind") == "observe"
+E       AssertionError: assert None == 'observe'
+E        +  where None = <built-in method get of dict object at 0x000001DD7374D200>('kind')
+E        +    where <built-in method get of dict object at 0x000001DD7374D200> = ({} or {}).get
+E        +      where {} = <built-in method get of dict object at 0x000001DD731C03C0>('resolution')
+E        +        where <built-in method get of dict object at 0x000001DD731C03C0> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...rass_quay', 'location': 'Brass Quay', 'summary': 'A clerk works the deserted quay.', 'mode': 'exploration', ...}}, ...}.get
+
+tests\test_perception_narration_authority_audible_non_invention.py:576: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_unknown_player_named_object_is_not_instantiated
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_narration_only_object_does_not_gain_authority
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_then_observe_uses_current_scene
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_alias_binds
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_observe_stock_replacement_keeps_notice_board_working
+FAILED tests/test_pr_play_39_action_admission.py::test_sequence_patrol_travel_reaches_the_movement_resolver
+FAILED tests/test_pr_play_39_action_admission.py::test_sequence_unsupported_actions_invent_nothing
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid
+FAILED tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_whisper_does_not_create_one
+FAILED tests/test_perception_narration_authority_audible_non_invention.py::test_http_empty_listen_complete_and_grounded
+FAILED tests/test_perception_narration_authority_audible_non_invention.py::test_http_authorized_speech_can_survive
+{"protected_files": 1294, "changed": [], "added": [], "network_attempts_blocked": [], "live_provider_calls": 0, "pytest_exit_code": 1}

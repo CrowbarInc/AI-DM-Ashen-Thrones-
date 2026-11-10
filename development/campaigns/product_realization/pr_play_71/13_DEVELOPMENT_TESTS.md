@@ -1,0 +1,5 @@
+# DEVELOPMENT TESTS
+
+Focused final post-holdout repair tests: 102 passed; 0 failed. Includes normal lifecycle/enrollment, new persistence fault tests, PR49 no-direct-import isolation, PR66 publication matrix and PR70 branch tests. Supplemental final optional-publication gate checks: 2 passed, covering disclosure off/on with branch enrollment. These preserve the validated optional AI pathway and the deterministic prerequisite fallback. Earlier development_disclosure.txt: six normal lifecycle checks passed. Initial two development attempts had harness shape errors (chat action response does not carry public_state; /state wraps public_state); corrected in tests, with original outputs retained.
+
+Existing startup and boundary suites were also run. No fake provider result is claimed as live AI quality. Offline tests explicitly replace call_gpt and disable live providers; live application browser uses configured provider. New test files are tests/test_pr_play_71_lifecycle.py and tests/test_pr_play_71_persistence_recovery.py.

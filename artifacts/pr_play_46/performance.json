@@ -1,0 +1,28 @@
+{
+  "messages_before_utf8_bytes": 58335,
+  "messages_after_utf8_bytes": 58699,
+  "additional_utf8_bytes": 364,
+  "existing_envelope_utf8_bytes": 16,
+  "additional_envelope_bytes": 0,
+  "audit": {
+    "iterations": 300,
+    "median_us": 157.6,
+    "p95_us": 10904.8
+  },
+  "full_validation": {
+    "iterations": 300,
+    "median_us": 520.85,
+    "p95_us": 14636.0
+  },
+  "rejection_and_fallback": {
+    "iterations": 100,
+    "median_us": 11494.55,
+    "p95_us": 18240.5
+  },
+  "traced_fallback_current_bytes": 5449,
+  "traced_fallback_peak_bytes": 13854,
+  "serialization": "Same existing payload serialization; one fixed instruction, no new envelope or roundtrip.",
+  "cost_estimate": "Additional prompt text only; token count and live cost unmeasured. No budget changes.",
+  "provider_requests": 0,
+  "provider_tokens": 0
+}

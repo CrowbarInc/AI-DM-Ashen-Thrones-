@@ -7,7 +7,7 @@ world outcomes and it does not create canonical facts.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from enum import Enum
 import re
 from typing import Any, Mapping
@@ -480,11 +480,25 @@ def _communication_decision(record: Mapping[str, Any], text: str, *, session=Non
         if isinstance(component, Mapping) and component.get("operation_class") == "ASK" and component.get("target_ref")
     ]
     from game.ordinary_semantic_ownership import (
+        _NON_ADDRESSEE_OPERATIONS,
+        addressee_authority_applies,
         assess_addressee_grounding,
         conversational_authorization_record,
         pending_addressee_clarification,
+        player_text_addresses_someone,
     )
 
+    operations = [
+        str(component.get("operation_class") or "").strip().upper()
+        for component in components
+        if isinstance(component, Mapping) and str(component.get("operation_class") or "").strip()
+    ]
+    if "ASK" in operations:
+        authority_operation = "ASK"
+    elif len(operations) == 1:
+        authority_operation = operations[0]
+    else:
+        authority_operation = None
     grounding = assess_addressee_grounding(
         text,
         scene=scene,
@@ -492,7 +506,18 @@ def _communication_decision(record: Mapping[str, Any], text: str, *, session=Non
         session=session,
         proposed_target_id=ask_targets[0] if len(ask_targets) == 1 else None,
     )
-    if grounding.get("direct_address") and grounding.get("operation_eligibility") == "requires_clarification":
+    addresses_someone = player_text_addresses_someone(text)
+    mislabeled_noncommunication = bool(
+        addresses_someone
+        and operations
+        and "ASK" not in operations
+        and all(operation in _NON_ADDRESSEE_OPERATIONS for operation in operations)
+    )
+    if (
+        addressee_authority_applies(operation=authority_operation, player_text=text)
+        and grounding.get("direct_address")
+        and grounding.get("operation_eligibility") == "requires_clarification"
+    ):
         pending = pending_addressee_clarification(grounding, text, scene)
         return ConversationalDecision(
             category=ConversationalDecisionCategory.CLARIFY,
@@ -507,6 +532,66 @@ def _communication_decision(record: Mapping[str, Any], text: str, *, session=Non
             intent_modality="informational",
             proposed_operation="ASK",
             proposed_target=ask_targets[0] if ask_targets else None,
+            missing_information=["interlocutor"],
+            authorization=conversational_authorization_record(
+                grounding,
+                player_text=text,
+                authority_provenance="communication_decision",
+            ),
+        )
+    if mislabeled_noncommunication and grounding.get("operation_eligibility") == "executable" and grounding.get("target_id"):
+        # The utterance addresses someone. Inspection or travel language in
+        # that sentence does not authorize the object or the route.
+        target_id = str(grounding.get("target_id") or "")
+        label = next(
+            (
+                str(choice.get("label") or "")
+                for choice in (grounding.get("choices") or [])
+                if isinstance(choice, Mapping) and str(choice.get("entity_id") or "") == target_id
+            ),
+            target_id,
+        )
+        return ConversationalDecision(
+            category=ConversationalDecisionCategory.EXECUTE,
+            primary_intention=text,
+            intent_family="world_operation",
+            proposed_operation="ASK",
+            proposed_target=target_id,
+            proposed_record=_operation_record(
+                operation="ASK",
+                target_id=target_id,
+                player_text=text,
+                summary=f"Ask {label}.",
+                references={
+                    "resolved_references": [{"text": label, "entity_id": target_id}],
+                    "unresolved_references": [],
+                },
+            ),
+            requires_authoritative_execution=True,
+            reason="communication_act_not_object_or_route",
+            player_facing_text="",
+            execution_policy="execute_primary",
+            authorization=conversational_authorization_record(
+                grounding,
+                player_text=text,
+                authority_provenance="communication_decision",
+            ),
+        )
+    if mislabeled_noncommunication:
+        return ConversationalDecision(
+            category=ConversationalDecisionCategory.CLARIFY,
+            primary_intention=text,
+            intent_family="clarification",
+            communication_owner="GM",
+            communication_purpose="CLARIFICATION",
+            reason="communication_act_not_object_or_route",
+            player_facing_text=str(
+                grounding.get("clarification")
+                or "That request addresses someone. Nothing has been attempted."
+            ),
+            execution_policy="answer_only",
+            intent_modality="informational",
+            proposed_operation="ASK",
             missing_information=["interlocutor"],
             authorization=conversational_authorization_record(
                 grounding,
@@ -665,12 +750,39 @@ def _interaction_context(session: Mapping[str, Any] | None) -> Mapping[str, Any]
     return ctx if isinstance(ctx, Mapping) else session
 
 
+def _npc_directed_followup(text: str) -> bool:
+    if re.search(
+        r"\b(?:notice board|where am i|where are we|what do i see|what can i see|what is here|"
+        r"what (?:do|did|have) (?:i|we) know|remind me|my (?:inventory|journal))\b",
+        text,
+        re.I,
+    ):
+        return False
+    if re.search(r"\b(?:attack|follow|move|go|head|walk|travel|inspect|examine|open|take|steal|cast)\b", text, re.I):
+        return False
+    return bool(
+        _QUESTION_START_RE.search(text)
+        or "?" in text
+        or _FOLLOWUP_FRAGMENT_RE.search(text)
+        or _PRONOUN_REFERENCE_RE.search(text)
+    )
+
+
 def _active_interlocutor(session: Mapping[str, Any] | None, catalog: Mapping[str, Any]) -> str:
     ctx = _interaction_context(session)
     kind = _clean_text(ctx.get("active_interaction_kind")).casefold()
     target = _clean_text(ctx.get("active_interaction_target_id"))
     if kind == "social" and target in catalog and catalog[target].get("kind") == "npc":
         return target
+    conv = _conversation_context(session).get("active_interlocutor")
+    if not isinstance(conv, Mapping) or conv.get("status") != "active":
+        return ""
+    campaign = _clean_text(conv.get("campaign_id"))
+    if campaign and isinstance(session, Mapping) and campaign != _clean_text(session.get("campaign_run_id")):
+        return ""
+    npc_id = _clean_text(conv.get("npc_id"))
+    if npc_id in catalog and catalog[npc_id].get("kind") == "npc":
+        return npc_id
     return ""
 
 
@@ -910,6 +1022,11 @@ def _active_dialogue_followup_decision(
     active_id = _active_interlocutor(session, catalog)
     if not active_id:
         return None
+    from game.intent_parser import looks_like_explicit_leave_or_pursuit_intent
+
+    # A pronoun such as "them" must not turn an explicit departure into dialogue.
+    if looks_like_explicit_leave_or_pursuit_intent(text):
+        return None
     if _CONVERSATION_EXIT_RE.match(text):
         npc_label = _label(catalog[active_id].get("row"), active_id)
         return ConversationalDecision(
@@ -922,11 +1039,18 @@ def _active_dialogue_followup_decision(
             player_facing_text=f"You end the conversation with {npc_label}.",
             context_update=_context_update_clear_pending(clear_interlocutor=True),
         )
-    # The existing live call classifies recipient as well as action. Do not let
-    # an NPC slot capture every question before that boundary can see it.
+    from game.conversational_continuity import established_scene_object_ids
+
+    # A named scene object is not a follow-up to the person who spoke last.
+    if established_scene_object_ids(text, scene):
+        return None
+    # Live interpretation still classifies genuinely open turns. An ordinary
+    # follow-up to the person already speaking does not need that call.
     from game.live_chat_interpretation import production_live_interpretation_enabled
     if production_live_interpretation_enabled():
-        return None
+        from game.interaction_completion import addressed_person_nominal
+        if addressed_person_nominal(text) or not _npc_directed_followup(text):
+            return None
     is_question = bool(_QUESTION_START_RE.search(text) or "?" in text)
     is_followup = bool(_FOLLOWUP_FRAGMENT_RE.search(text) or _PRONOUN_REFERENCE_RE.search(text))
     if not (is_question or is_followup):
@@ -999,6 +1123,8 @@ def _focused_bridge_clarification(reason: str, operation: str | None = None) -> 
         return "That way is closed. There is no established passage, and you stay where you are.", ["destination"]
     if reason == "unknown_destination_scene":
         return "That destination is not an established place you can enter from here. You stay where you are.", ["destination"]
+    if reason == "route_requires_prerequisite":
+        return "That route cannot be used right now. You stay where you are.", ["available_route"]
     return "What are you trying to accomplish?", ["intention"]
 
 
@@ -1057,7 +1183,7 @@ _CAPABILITY_RE = re.compile(
     r"\bam\s+i\s+able\s+to\b",
     re.IGNORECASE,
 )
-_INSPECT_CUE_RE = re.compile(r"\b(?:inspect|examine|look\s+at|check|study|read)\b", re.IGNORECASE)
+_INSPECT_CUE_RE = re.compile(r"\b(?:investigate|inspect|examine|look\s+(?:at|for)|search\s+for|check|study|read)\b", re.IGNORECASE)
 _ASK_CUE_RE = re.compile(r"\b(?:ask|question)\b", re.IGNORECASE)
 _OTHER_CUE_RE = re.compile(
     r"\b(?:open|pick|unlock|attack|draw|sheath|sheathe|unsheathe|put\s+away)\b",
@@ -1083,7 +1209,7 @@ _STATIVE_RE = re.compile(r"\b(?:is|are|was|were|seems|seem|looks)\b", re.IGNOREC
 _VISITING_RE = re.compile(r"\b(?:visiting|visit)\s+(?:the\s+)?(.+)$", re.IGNORECASE)
 _LEAVE_OBJECT_RE = re.compile(r"\b(?:leave|leaves|leaving)\s+(?:the\s+|a\s+)?(.+)$", re.IGNORECASE)
 _OBJECT_RE = re.compile(
-    r"\b(?:inspect|examine|look\s+at|check|study|read|open|pick|unlock|ask|watch|watching)\s+(?:the\s+|a\s+)?(.+)$",
+    r"\b(?:investigate|inspect|examine|look\s+(?:at|for)|search\s+for|check|study|read|open|pick|unlock|ask|watch|watching)\s+(?:the\s+|a\s+)?(.+)$",
     re.IGNORECASE,
 )
 
@@ -1115,9 +1241,12 @@ def _place_match(phrase: str, name: str) -> bool:
 
 
 def _exit_rows(scene: Mapping[str, Any] | None) -> list[dict[str, Any]]:
+    from game.route_authority import authored_exit_rows
     rows: list[dict[str, Any]] = []
-    for item in _scene_obj(scene).get("exits") or []:
-        if isinstance(item, Mapping) and _clean_text(item.get("id")):
+    for item in authored_exit_rows(dict(scene or {})):
+        if (isinstance(item, Mapping) and _clean_text(item.get("id"))
+                and not item.get("hidden") and item.get("visible") is not False
+                and item.get("source_scene_id", _scene_id(scene)) == _scene_id(scene)):
             rows.append(dict(item))
     return rows
 
@@ -1159,15 +1288,37 @@ def _mentioned_exits(text: str, exits: list[dict[str, Any]]) -> list[dict[str, A
     return _unique_exit_rows(hits)
 
 
+_PURPOSE_RE = re.compile(
+    r"\s+(?:in\s+order\s+to|so\s+as\s+to|to)\s+"
+    r"(?=(?:investigate|examine|inspect|look|search|check|study|read|buy|sell|ask|"
+    r"speak|talk|meet|find|learn|help|rest|wait|open|take|attack)\b)", re.IGNORECASE,
+)
+_BARE_MOVE_RE = re.compile(
+    r"^\s*(?:(?:i|we)\s+)?(?:head|go|walk|travel|move|approach|follow|proceed)\s+(.+)$",
+    re.IGNORECASE,
+)
+
+
+def _movement_and_purpose(text: str) -> tuple[str, str]:
+    """Split a bounded infinitive purpose; recognizing it grants no effects."""
+    match = _PURPOSE_RE.search(text)
+    if match:
+        return text[:match.start()].strip(), text[match.end():].strip(" .?!")
+    return text, ""
+
+
 def _destination_phrase(text: str) -> str:
     cleaned = re.sub(r"\s+(?:from here|right now|instead)\b.*$", "", _clean_text(text), flags=re.IGNORECASE)
-    match = None
-    for item in _DEST_PREP_RE.finditer(cleaned):
-        match = item
+    cleaned, _ = _movement_and_purpose(cleaned)
+    match = _DEST_PREP_RE.search(cleaned)
     if match is None:
-        return ""
+        match = _BARE_MOVE_RE.search(cleaned)
+        if match is None:
+            return ""
     dest = re.split(r"\s+(?:and|then|while|but)\s+", match.group(1), maxsplit=1, flags=re.IGNORECASE)[0]
     dest = dest.strip(" .?!")
+    if dest.casefold() in {"out", "off", "away"}:
+        return ""
     if _DEICTIC_DEST_RE.match(_norm_place(dest)) or _DEICTIC_DEST_RE.match(_clean_text(dest)):
         return ""
     return dest
@@ -1297,6 +1448,9 @@ def _ground_catalog_target(phrase: str, catalog: Mapping[str, Any], kinds: set[s
 
 def _analyze_clause(clause: str, exits: list[dict[str, Any]]) -> dict[str, Any]:
     text = _clean_text(clause)
+    movement, purpose = _movement_and_purpose(text)
+    if purpose and (_MOVE_CUE_RE.search(movement) or _BARE_MOVE_RE.search(movement)):
+        return {**_analyze_clause(movement, exits), "text": text, "purpose": purpose}
     destination = _destination_phrase(text)
     if _ASK_CUE_RE.search(text) and _MOVE_CUE_RE.search(text):
         # Travel vocabulary can be the content of speech. The deterministic
@@ -1484,6 +1638,101 @@ def _ambiguous_destination(
     )
 
 
+def _transient_local_decision(player_text: str, outcome: Mapping[str, Any]) -> ConversationalDecision:
+    """Publish an already authorized transient approach or contact."""
+    status = str(outcome.get("status") or "")
+    if status == "completed":
+        return ConversationalDecision(
+            category=ConversationalDecisionCategory.ANSWER,
+            primary_intention=player_text,
+            intent_family="local_interaction",
+            context_references=[str(outcome.get("target_id") or "")],
+            proposed_target=str(outcome.get("target_id") or "") or None,
+            reason="transient_local_action_completed",
+            confidence=0.9,
+            player_facing_text=str(outcome.get("player_facing_text") or ""),
+            intent_modality="committed",
+            execution_policy="record_transient_outcome",
+            authorization={"transient_local_action": dict(outcome)},
+        )
+    category = (
+        ConversationalDecisionCategory.CLARIFY
+        if outcome.get("category") == "clarify"
+        else ConversationalDecisionCategory.DECLINE
+    )
+    return ConversationalDecision(
+        category=category,
+        primary_intention=player_text,
+        intent_family="local_interaction",
+        reason=str(outcome.get("reason") or "local_action_refused"),
+        confidence=0.84,
+        player_facing_text=str(outcome.get("player_facing_text") or ""),
+        intent_modality="committed",
+        execution_policy="decline_unadjudicated_contact" if category == ConversationalDecisionCategory.DECLINE else "clarify_before_execution",
+        authorization={"transient_local_action": dict(outcome)},
+    )
+
+
+def _local_presence_decision(
+    player_text: str,
+    hits: list[tuple[str, Mapping[str, Any]]],
+    *,
+    scene: Mapping[str, Any] | None = None,
+    world: Mapping[str, Any] | None = None,
+    session: Mapping[str, Any] | None = None,
+) -> ConversationalDecision:
+    """A current-scene object is not an unestablished journey.
+
+    Eligible approach or contact is a transient outcome from the local
+    interaction owner. Anything outside that class stays unadjudicated.
+    The scene, position, and inventory are left unchanged, and no clue is
+    revealed by the approach.
+    """
+    if len(hits) == 1:
+        from game.local_interaction import resolve_transient_local_action
+
+        outcome = resolve_transient_local_action(
+            player_text, scene=scene, world=world, session=session,
+        )
+        if isinstance(outcome, dict):
+            return _transient_local_decision(player_text, outcome)
+        entity_id, info = hits[0]
+        row = info.get("row") if isinstance(info.get("row"), Mapping) else None
+        label = _label(row, entity_id)
+        return ConversationalDecision(
+            category=ConversationalDecisionCategory.DECLINE,
+            primary_intention=player_text,
+            intent_family="local_interaction",
+            context_references=[entity_id],
+            reason="local_object_not_a_destination",
+            confidence=0.86,
+            player_facing_text=(
+                f"{label} is here. Approaching or touching it is not a supported action, "
+                "and you have not moved."
+            ),
+            intent_modality="committed",
+            execution_policy="decline_unadjudicated_contact",
+        )
+    labels = []
+    for entity_id, info in hits[:4]:
+        row = info.get("row") if isinstance(info.get("row"), Mapping) else None
+        labels.append(_label(row, entity_id))
+    return ConversationalDecision(
+        category=ConversationalDecisionCategory.CLARIFY,
+        primary_intention=player_text,
+        intent_family="local_interaction",
+        reason="ambiguous_local_object",
+        confidence=0.8,
+        player_facing_text=(
+            "More than one thing here could match. Do you mean "
+            + " or ".join(labels)
+            + "? You have not moved."
+        ),
+        intent_modality="committed",
+        execution_policy="clarify_before_execution",
+    )
+
+
 def _unknown_destination(player_text: str, phrase: str, *, clear: bool) -> ConversationalDecision:
     shown = _clean_text(phrase) or "that place"
     return ConversationalDecision(
@@ -1502,6 +1751,51 @@ def _unknown_destination(player_text: str, phrase: str, *, clear: bool) -> Conve
     )
 
 
+def _authored_pursuit_row(
+    player_text: str,
+    exits: list[dict[str, Any]],
+    scene: Mapping[str, Any] | None,
+    session: Mapping[str, Any] | None,
+) -> dict[str, Any] | None:
+    """One authored exit from the existing pursuit matcher. No new route."""
+    from game.intent_parser import _match_follow_pursuit_exit, looks_like_explicit_leave_or_pursuit_intent
+
+    if not looks_like_explicit_leave_or_pursuit_intent(player_text):
+        return None
+    inner = scene.get("scene") if isinstance(scene, Mapping) and isinstance(scene.get("scene"), Mapping) else scene
+    target = _match_follow_pursuit_exit(
+        player_text,
+        exits,
+        scene=inner if isinstance(inner, dict) else None,
+        session=session if isinstance(session, dict) else None,
+    )
+    if not target:
+        return None
+    hits = [
+        row for row in exits
+        if str(row.get("target_scene_id") or row.get("targetSceneId") or "").strip() == target
+    ]
+    return hits[0] if len(hits) == 1 else None
+
+
+def _move_along_pursuit(
+    row: dict[str, Any],
+    *,
+    player_text: str,
+    summary: str,
+    incidental: list[str],
+    session: Mapping[str, Any] | None,
+) -> ConversationalDecision:
+    label = _label(row, _clean_text(row.get("id")))
+    return _move_decision_for_row(
+        row,
+        player_text=player_text,
+        summary=summary or f"Go to {label}.",
+        incidental=incidental,
+        session=session,
+    )
+
+
 def _resolve_move_target(
     *,
     player_text: str,
@@ -1509,11 +1803,13 @@ def _resolve_move_target(
     back: bool,
     exits: list[dict[str, Any]],
     scene: Mapping[str, Any] | None,
+    world: Mapping[str, Any] | None = None,
     session: Mapping[str, Any] | None,
     incidental: list[str],
     summary: str,
 ) -> ConversationalDecision | None:
     clear = _should_clear_interlocutor(session, incidental, "MOVE")
+    pursuit_row = _authored_pursuit_row(player_text, exits, scene, session)
     if destination:
         matches = _matching_exits(destination, exits)
         if len(matches) == 1:
@@ -1527,7 +1823,26 @@ def _resolve_move_target(
             )
         if len(matches) > 1:
             return _ambiguous_destination(player_text, matches, scene=scene, clear=clear)
+        if pursuit_row is not None:
+            return _move_along_pursuit(
+                pursuit_row, player_text=player_text, summary=summary,
+                incidental=incidental, session=session,
+            )
+        local = _ground_catalog_target(
+            destination,
+            _catalog(scene, world),
+            {"npc", "inspect_target", "perceive_target"},
+        )
+        if local:
+            return _local_presence_decision(
+                player_text, local, scene=scene, world=world, session=session,
+            )
         return _unknown_destination(player_text, destination, clear=clear)
+    if pursuit_row is not None:
+        return _move_along_pursuit(
+            pursuit_row, player_text=player_text, summary=summary,
+            incidental=incidental, session=session,
+        )
     if back:
         prior = _prior_exit_rows(session, scene, exits)
         if len(prior) == 1:
@@ -1783,6 +2098,212 @@ def _step_from_clause(
     return step
 
 
+def _purpose_movement_decision(
+    text: str, movement: str, purpose: str, *, exits: list[dict[str, Any]],
+    scene: Mapping[str, Any] | None, world: Mapping[str, Any] | None,
+    session: Mapping[str, Any] | None,
+) -> ConversationalDecision:
+    from game.route_authority import route_status
+    destination = _destination_phrase(movement)
+    inspection = bool(_INSPECT_CUE_RE.match(purpose))
+    step = {"text": purpose, "operation": "INSPECT" if inspection else "OTHER",
+            "status": "pending", "dependency": "after_travel", "supported": False,
+            "target_id": "", "consequential": True}
+    deferred = {"kind": "deferred_intentions", "original_text": text,
+                "scene_id": _scene_id(scene), "steps": [step]}
+    available = [r for r in exits if route_status(r, _scene_id(scene), dict(session or {}), dict(world or {})) == "available"]
+    matches = _matching_exits(destination, exits) if destination else []
+    references = []
+    target = _norm_place(_object_phrase(purpose)) if inspection else ""
+    # A literal reference to known information is only explanation context.
+    # It is never an alias for a physical target or an exit.
+    for clue_id, entry in ((session or {}).get("clue_knowledge") or {}).items():
+        if (target and isinstance(entry, Mapping) and entry.get("state") in {"discovered", "inferred"}
+                and re.search(rf"\b{re.escape(target)}\b", _norm_place(str(entry.get("text") or "")))):
+            references.append(str(clue_id))
+    clear = _should_clear_interlocutor(session, [], "MOVE")
+    if len(matches) == 1 and matches[0] in available:
+        decision = _move_decision_for_row(
+            matches[0], player_text=text, summary=f"Go to {_label(matches[0], '')}.",
+            incidental=[], session=session, secondary=[step], pending=deferred,
+        )
+        outcome = "UNIQUE_AUTHORIZED_ROUTE"
+    elif matches and not any(r in available for r in matches):
+        decision = ConversationalDecision(
+            category=ConversationalDecisionCategory.DECLINE, primary_intention=text,
+            intent_family="movement", reason="route_requires_prerequisite",
+            player_facing_text="That route cannot be used right now. You stay where you are; your intended follow-up has not been attempted.",
+            context_update=_context_update(pending=deferred, pending_set=True),
+        )
+        outcome = "ROUTE_REQUIRES_PREREQUISITE"
+    else:
+        choices = [r for r in matches if r in available] if matches else (available if references else [])
+        if choices:
+            decision = _ambiguous_destination(text, choices, scene=scene, clear=clear)
+            pending = decision.context_update["conversational_context"]["pending_clarification"]
+            pending["deferred_steps"] = [step]
+            message = ("I cannot establish which route reaches the place you mean. Available routes: "
+                       + "; ".join(_label(r, "") for r in choices[:4])
+                       + f". Which route do you want to take? Your intention to {purpose} is still pending; nothing has been attempted.")
+            decision = replace(decision, reason="clue_route_clarification" if not matches else "ambiguous_movement_destination",
+                               player_facing_text=message)
+            outcome = "MULTIPLE_AUTHORIZED_ROUTES" if matches else "NO_AUTHORIZED_ROUTE"
+        else:
+            decision = replace(_unknown_destination(text, destination, clear=clear),
+                               context_update=_context_update(pending=deferred, pending_set=True, clear_interlocutor=clear))
+            outcome = "UNSUPPORTED_REFERENCE" if not references else "NO_AUTHORIZED_ROUTE"
+    return replace(decision, secondary_intentions=[step], context_references=references,
+                   authorization={"route_decision": outcome, "requested_destination": destination,
+                                  "purpose": purpose, "referenced_clues": references,
+                                  "selection_evidence": "explicit_destination" if matches else "no_authored_clue_route_link"})
+
+
+_TRAVEL_FILLER = frozenset({
+    "want", "wants", "wanted", "like", "need", "needs", "going", "gonna",
+    "connected", "connection", "trail", "path", "route", "road", "track",
+    "lead", "follow", "follows", "following", "pursue", "pursues", "pursuing",
+    "way", "toward", "towards", "missing",
+})
+
+
+def _follow_overlap_rows(text: str, exits: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Rows whose authored label is contained, or shares two distinctive tokens.
+
+    This is the existing pursuit overlap rule. It does not create labels.
+    """
+    from game.intent_parser import (
+        _PURSUIT_OBJECT_HINTS,
+        _RE_FOLLOW_UP_PHRASAL,
+        _content_tokens,
+        _explicit_stay_or_travel_negation,
+    )
+
+    raw = _clean_text(text)
+    if not raw or not exits or _RE_FOLLOW_UP_PHRASAL.search(raw) or _explicit_stay_or_travel_negation(raw):
+        return []
+    if "?" in raw or _QUESTION_START_RE.search(raw):
+        return []
+    player_tokens = set(_content_tokens(raw))
+    pursuit = bool(player_tokens & _PURSUIT_OBJECT_HINTS or re.search(r"\b(?:follow|pursue)\b", raw, re.IGNORECASE))
+    lowered = raw.casefold()
+    contained: list[dict[str, Any]] = []
+    overlapped: list[dict[str, Any]] = []
+    for row in exits:
+        label = _clean_text(row.get("label"))
+        if not label or not _clean_text(row.get("target_scene_id") or row.get("targetSceneId")):
+            continue
+        if label.casefold() in lowered:
+            contained.append(row)
+            continue
+        overlap = (player_tokens & set(_content_tokens(label))) - {"follow", "pursue", "go", "head"}
+        if pursuit and len(overlap) >= 2:
+            overlapped.append(row)
+    # A fully contained label is the existing explicit match. A weaker overlap
+    # on a different exit does not make that explicit label ambiguous.
+    if contained:
+        return _unique_exit_rows(contained)
+    return _unique_exit_rows(overlapped)
+
+
+def authored_travel_admission(
+    player_text: str,
+    *,
+    scene: Mapping[str, Any] | None,
+    world: Mapping[str, Any] | None,
+    session: Mapping[str, Any] | None,
+) -> ConversationalDecision | None:
+    """Select one authored exit, or refuse an unsupported destination.
+
+    A method, companion, or walking style is not required. A blocked row is
+    still selected so route authority can explain the block. No new exit is made.
+    """
+    text = _clean_text(player_text)
+    if not text or not _AGENT_RE.search(text) or "?" in text or _QUESTION_START_RE.search(text):
+        return None
+    if _movement_and_purpose(text)[1]:
+        return None
+    from game.intent_parser import _PURSUIT_OBJECT_HINTS, _content_tokens
+    from game.route_authority import route_status
+
+    exits = [
+        row for row in _exit_rows(scene)
+        if route_status(row, _scene_id(scene), dict(session or {}), dict(world or {})) != "hidden"
+    ]
+    rows = _follow_overlap_rows(text, exits)
+    clear = _should_clear_interlocutor(session, [], "MOVE")
+    if len(rows) > 1:
+        return _ambiguous_destination(text, rows, scene=scene, clear=clear)
+    if len(rows) == 1:
+        label = _label(rows[0], _clean_text(rows[0].get("id")))
+        return _move_decision_for_row(
+            rows[0],
+            player_text=text,
+            summary=f"Go to {label}.",
+            incidental=[],
+            session=session,
+        )
+    if not re.search(r"\b(?:follow|pursue)\b", text, re.IGNORECASE):
+        return None
+    tokens = set(_content_tokens(text))
+    if not (tokens & _PURSUIT_OBJECT_HINTS):
+        return None
+    destination = _destination_phrase(text)
+    if destination and _ground_catalog_target(
+        destination, _catalog(scene, world), {"npc", "inspect_target", "perceive_target"}
+    ):
+        return None
+    label_tokens: set[str] = set()
+    for row in exits:
+        label_tokens.update(_content_tokens(_clean_text(row.get("label"))))
+    unmatched = tokens - _TRAVEL_FILLER - label_tokens - {"follow", "pursue", "go", "head", "want"}
+    if not unmatched:
+        return None
+    return _unknown_destination(text, destination or text, clear=clear)
+
+
+def unavailable_referent_decision(
+    player_text: str,
+    record: Mapping[str, Any] | None,
+    *,
+    scene: Mapping[str, Any] | None,
+    world: Mapping[str, Any] | None,
+) -> ConversationalDecision | None:
+    """Say when an inspection names nothing in the scene. Do not invent it."""
+    text = _clean_text(player_text)
+    if not text or not isinstance(record, Mapping) or not _INSPECT_CUE_RE.search(text):
+        return None
+    references = record.get("references") if isinstance(record.get("references"), Mapping) else {}
+    phrases = []
+    for item in references.get("unresolved_references") or []:
+        phrase = _clean_text(item)
+        if phrase and phrase.casefold() in text.casefold():
+            phrases.append(phrase)
+    if not phrases:
+        extracted = _object_phrase(text)
+        if extracted:
+            phrases.append(extracted)
+    if not phrases:
+        return None
+    catalog = _catalog(scene, world)
+    exits = _exit_rows(scene)
+    for phrase in phrases:
+        if _ground_catalog_target(phrase, catalog, {"npc", "inspect_target", "perceive_target"}):
+            return None
+        if _matching_exits(phrase, exits):
+            return None
+    shown = phrases[0]
+    return ConversationalDecision(
+        category=ConversationalDecisionCategory.DECLINE,
+        primary_intention=text,
+        intent_family="investigation",
+        reason="referent_not_in_scene",
+        confidence=0.84,
+        player_facing_text=f"Nothing here matches {shown}. Nothing has been attempted.",
+        intent_modality="committed",
+        execution_policy="decline_unauthorized_referent",
+    )
+
+
 def _committed_movement_or_compound_decision(
     *,
     player_text: str,
@@ -1796,6 +2317,22 @@ def _committed_movement_or_compound_decision(
     if "?" in text or _QUESTION_START_RE.search(text):
         return None
     exits = _exit_rows(scene)
+    from game.route_authority import route_status
+    exits = [row for row in exits if route_status(row, _scene_id(scene), dict(session or {}), dict(world or {})) != "hidden"]
+    movement, purpose = _movement_and_purpose(text)
+    if not purpose:
+        admitted = authored_travel_admission(
+            text, scene=scene, world=world, session=session,
+        )
+        if admitted is not None:
+            return admitted
+    if purpose and (_MOVE_CUE_RE.search(movement) or _BARE_MOVE_RE.search(movement)):
+        # Same-scene approach binding remains owned by PR-PLAY-23's bridge.
+        if _ground_catalog_target(_destination_phrase(movement), _catalog(scene, world), {"npc", "inspect_target", "perceive_target"}):
+            return None
+        return _purpose_movement_decision(
+            text, movement, purpose, exits=exits, scene=scene, world=world, session=session,
+        )
     clauses = [_analyze_clause(clause, exits) for clause in _split_clauses(text)]
     consequential = [clause for clause in clauses if clause.get("consequential")]
     incidental = [str(clause.get("text") or "") for clause in clauses if clause.get("incidental")]
@@ -1821,6 +2358,7 @@ def _committed_movement_or_compound_decision(
             back=True,
             exits=exits,
             scene=scene,
+            world=world,
             session=session,
             incidental=incidental,
             summary="",
@@ -1879,6 +2417,7 @@ def _committed_movement_or_compound_decision(
         back=bool(clause.get("back")),
         exits=exits,
         scene=scene,
+        world=world,
         session=session,
         incidental=incidental,
         summary=grounded_summary,
@@ -1891,6 +2430,8 @@ def grounded_move_processing_text(player_text: str, summary: str) -> str:
     restored = _clean_text(summary)
     if not restored:
         return text
+    if _movement_and_purpose(text)[1]:
+        return restored
     if (_MOVE_CUE_RE.search(text) or _BACK_RE.search(text)) and _destination_phrase(text):
         return text
     return restored
@@ -1982,12 +2523,17 @@ def _resume_bounded_pending(
         pool = choices
     matches = _matching_exits(player_text, pool)
     if len(matches) == 1:
+        remaining = list(pending.get("deferred_steps") or [])
+        remainder = {"kind": "deferred_intentions", "steps": remaining,
+                     "original_text": pending.get("original_text"), "scene_id": _scene_id(scene)} if remaining else None
         return _move_decision_for_row(
             matches[0],
             player_text=_clean_text(pending.get("original_text")) or player_text,
             summary=f"Go to {_label(matches[0], _clean_text(matches[0].get('id')))}.",
             incidental=[],
             session=session,
+            secondary=remaining,
+            pending=remainder,
         )
     if len(matches) > 1:
         return _ambiguous_destination(player_text, matches, scene=scene, clear=False)
@@ -2051,6 +2597,14 @@ def deterministic_conversational_decision(
     """Return a no-provider decision for obvious non-mutating cases."""
     from game.live_chat_interpretation import production_live_interpretation_enabled
     text = _clean_text(player_text)
+    from game.authored_action_language import decision_for
+    authored = decision_for(text, scene=scene, world=world, session=session)
+    if authored is not None:
+        return authored
+    from game.player_initiative import decide as initiative_decision
+    initiative = initiative_decision(text, scene=scene, world=world, session=session)
+    if initiative is not None:
+        return initiative
     if text:
         from game.unified_semantic_planning import planning_decision
 
@@ -2104,6 +2658,11 @@ def deterministic_conversational_decision(
     )
     if followup is not None:
         return followup
+    grounded_object = _grounded_object_question(
+        text, scene=scene, session=session,
+    )
+    if grounded_object is not None:
+        return grounded_object
     contextual_reference = _pending_clarification_decision(player_text=text, scene=scene, world=world)
     if contextual_reference is not None:
         return contextual_reference
@@ -2134,6 +2693,13 @@ def deterministic_conversational_decision(
     )
     if committed is not None:
         return committed
+    from game.local_interaction import resolve_transient_local_action
+
+    transient = resolve_transient_local_action(
+        text, scene=scene, world=world, session=session,
+    )
+    if isinstance(transient, dict):
+        return _transient_local_decision(text, transient)
     if (
         _QUESTION_START_RE.search(text)
         and _OOC_HELP_RE.search(text)
@@ -2153,8 +2719,39 @@ def deterministic_conversational_decision(
                 "I will answer without advancing game time unless you mark it as an in-character action."
             ),
         )
+    named_objects = None
+    from game.conversational_continuity import established_scene_object_ids
+    from game.interaction_completion import addressed_person_nominal
+    from game.intent_parser import looks_like_explicit_leave_or_pursuit_intent
+
+    named_objects = established_scene_object_ids(text, scene)
+    if (
+        len(named_objects) > 1
+        and not addressed_person_nominal(text)
+        and not looks_like_explicit_leave_or_pursuit_intent(text)
+    ):
+        inner = scene.get("scene") if isinstance(scene, Mapping) and isinstance(scene.get("scene"), Mapping) else scene
+        labels = []
+        for item in (inner.get("interactables") or []) if isinstance(inner, Mapping) else []:
+            if isinstance(item, Mapping) and str(item.get("id") or "") in named_objects:
+                labels.append(_label(item, str(item.get("id") or "")))
+        shown = " or ".join(labels[:4]) or "one of those"
+        return ConversationalDecision(
+            category=ConversationalDecisionCategory.CLARIFY,
+            primary_intention=text,
+            intent_family="local_interaction",
+            reason="ambiguous_scene_object",
+            confidence=0.8,
+            player_facing_text=f"More than one thing here is named. Do you mean {shown}? Nothing has been attempted.",
+            intent_modality="committed",
+            execution_policy="clarify_before_execution",
+        )
     recent = _recent_visible_answer(text, log)
-    if _QUESTION_START_RE.search(text) and recent is not None:
+    if (
+        _QUESTION_START_RE.search(text)
+        and recent is not None
+        and not named_objects
+    ):
         answer, source = recent
         return ConversationalDecision(
             category=ConversationalDecisionCategory.ANSWER,
@@ -2189,7 +2786,118 @@ def deterministic_conversational_decision(
                 "and I will help narrow it to a concrete next step."
             ),
         )
+    unbound = _unbound_physical_decline(text, scene=scene, world=world, session=session)
+    if unbound is not None:
+        return unbound
     return None
+
+
+def _grounded_object_question(
+    text: str,
+    *,
+    scene: Mapping[str, Any] | None,
+    session: Mapping[str, Any] | None,
+) -> ConversationalDecision | None:
+    """A question about an established object does not need an NPC addressee.
+
+    The existing content-question recovery supplies the target. This only
+    admits that target to the current inspection owner.
+    """
+    if not text or not isinstance(scene, Mapping):
+        return None
+    from game.intent_parser import recover_interactable_content_question
+
+    action = recover_interactable_content_question(text, dict(scene))
+    if not isinstance(action, dict) or str(action.get("type") or "").strip().lower() != "investigate":
+        return None
+    target_id = str(action.get("target_id") or "").strip()
+    if not target_id:
+        return None
+    from game.conversational_continuity import established_scene_object_ids
+    from game.intent_parser import _INTERACTABLE_CONTENT_QUESTION_RES
+
+    for pat in _INTERACTABLE_CONTENT_QUESTION_RES:
+        match = pat.search(text)
+        if not match:
+            continue
+        raw_target = str(match.group("target") or "")
+        if re.search(r"\band\b", raw_target, re.IGNORECASE):
+            left, right = re.split(r"\band\b", raw_target, maxsplit=1, flags=re.IGNORECASE)
+            left_ids = established_scene_object_ids(left, scene)
+            right_ids = established_scene_object_ids(right, scene)
+            if left_ids != right_ids or not right_ids:
+                return ConversationalDecision(
+                    category=ConversationalDecisionCategory.CLARIFY,
+                    primary_intention=text,
+                    intent_family="local_interaction",
+                    reason="ambiguous_scene_object",
+                    confidence=0.8,
+                    player_facing_text="More than one thing is named, and only one of them is established here. Nothing has been attempted.",
+                    intent_modality="committed",
+                    execution_policy="clarify_before_execution",
+                )
+        break
+    info = _catalog(scene, None).get(target_id)
+    if not isinstance(info, Mapping):
+        return None
+    if str(info.get("kind") or "") not in {"inspect_target", "perceive_target"}:
+        return None
+    row = info.get("row") if isinstance(info.get("row"), Mapping) else None
+    return _operation_execute_decision(
+        operation="INSPECT",
+        target_id=target_id,
+        label=_label(row, target_id),
+        player_text=text,
+        incidental=[],
+        session=session,
+    )
+
+
+def _unbound_physical_decline(
+    text: str,
+    *,
+    scene: Mapping[str, Any] | None,
+    world: Mapping[str, Any] | None,
+    session: Mapping[str, Any] | None,
+) -> ConversationalDecision | None:
+    """An improvised manipulation with no authored object is not narration.
+
+    The existing physical owner still runs when that experiment is on, and a
+    parser that already bound an action keeps that action.
+    """
+    if not text or "?" in text or _QUESTION_START_RE.search(text):
+        return None
+    from game.physical_adjudication import UNADJUDICATED_RETREAT_SENTENCE, enabled
+
+    if enabled(session):
+        return None
+    from game.intent_parser import parse_freeform_to_action, recover_actionable_explicit_world_action
+
+    scene_dict = dict(scene) if isinstance(scene, Mapping) else None
+    world_dict = dict(world) if isinstance(world, Mapping) else None
+    session_dict = dict(session) if isinstance(session, Mapping) else None
+    if parse_freeform_to_action(text, scene_dict, session=session_dict, world=world_dict) is not None:
+        return None
+    recovered = recover_actionable_explicit_world_action(
+        text, scene_dict, session=session_dict, world=world_dict,
+    )
+    if not isinstance(recovered, dict):
+        return None
+    meta = recovered.get("metadata") if isinstance(recovered.get("metadata"), dict) else {}
+    if str(meta.get("parser_lane") or "") != "physical_object_interaction":
+        return None
+    if meta.get("authored_interactable_id"):
+        return None
+    return ConversationalDecision(
+        category=ConversationalDecisionCategory.DECLINE,
+        primary_intention=text,
+        intent_family="physical_action",
+        reason="unsupported_physical_manipulation",
+        confidence=0.84,
+        player_facing_text=UNADJUDICATED_RETREAT_SENTENCE,
+        intent_modality="committed",
+        execution_policy="decline_unadjudicated_contact",
+    )
 
 
 def decision_from_interpretation_record(
@@ -2210,6 +2918,8 @@ def decision_from_interpretation_record(
         return grounded
     if isinstance(record, Mapping):
         record = _reclassify_direct_npc_address(record, text, scene=scene, world=world, session=session)
+        from game.local_interaction import normalize_local_approach
+        record = normalize_local_approach(record, player_text=text, scene=scene, world=world, session=session)
     if not isinstance(record, Mapping):
         reason = _clean_text((bridge_meta or {}).get("reason") if isinstance(bridge_meta, Mapping) else "") or "missing_record"
         message, missing = _focused_bridge_clarification(reason)
@@ -2251,6 +2961,16 @@ def decision_from_interpretation_record(
             context_update=_context_update_clear_pending(),
         )
     if status and status != "INTERPRETED":
+        travel = authored_travel_admission(
+            text, scene=scene, world=world, session=session,
+        )
+        if travel is not None:
+            return travel
+        missing = unavailable_referent_decision(
+            text, record, scene=scene, world=world,
+        )
+        if missing is not None:
+            return missing
         question = _clean_text(record.get("clarification_question"))
         return ConversationalDecision(
             category=ConversationalDecisionCategory.CLARIFY,

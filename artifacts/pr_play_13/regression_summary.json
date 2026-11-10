@@ -1,0 +1,387 @@
+{
+  "lanes": {
+    "harness": {
+      "exit": 0,
+      "seconds": 59.82,
+      "files": [
+        "tests/test_automated_playtest.py",
+        "tests/test_validation_coverage_registry.py"
+      ],
+      "failures": []
+    },
+    "gameplay": {
+      "exit": 1,
+      "seconds": 45.81,
+      "files": [
+        "tests/test_five_turn_gameplay.py"
+      ],
+      "failures": [
+        "tests.test_five_turn_gameplay::test_G12_budget_exhaustion",
+        "tests.test_five_turn_gameplay::test_G22_exact_accounting",
+        "tests.test_five_turn_gameplay::test_G25_complete_export"
+      ]
+    },
+    "rules_persistence": {
+      "exit": 0,
+      "seconds": 2.93,
+      "files": [
+        "tests/test_noncombat_resolution.py",
+        "tests/test_noncombat_runtime_integration.py",
+        "tests/test_state_authority.py",
+        "tests/test_activate_scene_validation_and_get_persistence.py"
+      ],
+      "failures": []
+    },
+    "conversation": {
+      "exit": 0,
+      "seconds": 5.26,
+      "files": [
+        "tests/test_social_interaction_authority.py",
+        "tests/test_atgb_r1_07_correction_contract.py"
+      ],
+      "failures": []
+    },
+    "provider": {
+      "exit": 1,
+      "seconds": 48.26,
+      "files": [
+        "tests/test_pr_play_02_controls.py",
+        "tests/test_provider_accounting_integrity.py"
+      ],
+      "failures": [
+        "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution"
+      ]
+    },
+    "diagnostics": {
+      "exit": 1,
+      "seconds": 55.83,
+      "files": [
+        "tests/test_pr_play_04_opening_integrity.py",
+        "tests/test_pr_play_05_diagnostics.py",
+        "tests/test_pr_play_06_opening_budget.py",
+        "tests/test_pr_play_07_semantic_acceptance.py"
+      ],
+      "failures": [
+        "tests.test_pr_play_05_diagnostics::test_production_diagnostic_matrix[D6-json_parse_failure-False]",
+        "tests.test_pr_play_06_opening_budget::test_opening_fixtures[over_600]",
+        "tests.test_pr_play_07_semantic_acceptance::test_semantic_matrix[S2-False]"
+      ]
+    },
+    "structured": {
+      "exit": 1,
+      "seconds": 5.91,
+      "files": [
+        "tests/test_pr_br_structured_realization_envelope.py",
+        "tests/test_pr_bw_narration_only_envelope.py",
+        "tests/test_pr_by_narration_only_retry_contract.py",
+        "tests/test_pr_br_continuation18_immutable_boundary.py"
+      ],
+      "failures": [
+        "tests.test_pr_br_continuation18_immutable_boundary::test_raw_chat_stub_preserves_valid_and_contains_invalid"
+      ]
+    },
+    "opening": {
+      "exit": 1,
+      "seconds": 24.3,
+      "files": [
+        "tests/test_start_campaign_api.py",
+        "tests/test_opening_start_seam_regressions.py",
+        "tests/test_scene_canon_hygiene.py"
+      ],
+      "failures": [
+        "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+        "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+        "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening"
+      ]
+    },
+    "world": {
+      "exit": 0,
+      "seconds": 6.04,
+      "files": [
+        "tests/test_world_progression_tick_integration.py",
+        "tests/test_world_state.py",
+        "tests/test_world_progression_backbone.py",
+        "tests/test_opening_scene_realization.py",
+        "tests/test_scene_opening_narrative_plan.py",
+        "tests/test_atgb_r2_04_question_evidence_contract.py",
+        "tests/test_atgb_r2_02_speech_participant_grounding.py"
+      ],
+      "failures": []
+    },
+    "export_atgb": {
+      "exit": 1,
+      "seconds": 45.84,
+      "files": [
+        "tests/test_review_handoff.py",
+        "tests/test_atgb_infrastructure.py",
+        "tests/test_atgb_accounting.py",
+        "tests/test_atgb_readiness.py"
+      ],
+      "failures": [
+        "tests.test_atgb_infrastructure::test_provider_disabled_host_uses_chat_and_isolates_state",
+        "tests.test_atgb_accounting::test_readiness_verifies_repaired_dispatch_coverage"
+      ]
+    },
+    "overlay": {
+      "exit": 0,
+      "seconds": 5.91,
+      "files": [
+        "tests/test_pr_play_10_overlays.py",
+        "tests/test_post_gm_adoption_gateway.py",
+        "tests/test_world_updates_and_clue_normalization.py",
+        "tests/test_save_load.py",
+        "tests/test_unparsed_movement_state_narration_integrity.py"
+      ],
+      "failures": []
+    },
+    "hidden_faction": {
+      "exit": 0,
+      "seconds": 2.9,
+      "files": [
+        "tests/test_narrative_authority_rules.py",
+        "tests/test_bounded_improvisation_authority.py",
+        "tests/test_validation_journal_affordances.py",
+        "tests/test_state_authority.py"
+      ],
+      "failures": []
+    },
+    "claim_authority": {
+      "exit": 1,
+      "seconds": 31.12,
+      "files": [
+        "tests/test_pr_play_11_claim_authority.py",
+        "tests/test_pr_bu_narration_claim_composition.py",
+        "tests/test_pr_br_claim_control_slice1.py",
+        "tests/test_pr_br_claim_control_slice2.py",
+        "tests/test_realization_provenance.py",
+        "tests/test_investigation_result_provenance_non_invention.py"
+      ],
+      "failures": [
+        "tests.test_pr_br_claim_control_slice2::test_false_positive_controls_remain_speakable",
+        "tests.test_realization_provenance::test_call_gpt_provider_failure_metadata_has_provider_family",
+        "tests.test_investigation_result_provenance_non_invention::test_general_written_surface_question_discovers_authored_clue",
+        "tests.test_investigation_result_provenance_non_invention::test_general_visible_evidence_may_be_reported",
+        "tests.test_investigation_result_provenance_non_invention::test_general_valid_target_no_evidence_is_grounded_absence",
+        "tests.test_investigation_result_provenance_non_invention::test_general_requested_identity_absent_does_not_mint_person",
+        "tests.test_investigation_result_provenance_non_invention::test_general_observe_empty_target_does_not_invent",
+        "tests.test_investigation_result_provenance_non_invention::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing"
+      ]
+    }
+  },
+  "failures": [
+    {
+      "lane": "gameplay",
+      "test": "tests.test_five_turn_gameplay::test_G12_budget_exhaustion",
+      "classification": "new regression"
+    },
+    {
+      "lane": "gameplay",
+      "test": "tests.test_five_turn_gameplay::test_G22_exact_accounting",
+      "classification": "new regression"
+    },
+    {
+      "lane": "gameplay",
+      "test": "tests.test_five_turn_gameplay::test_G25_complete_export",
+      "classification": "new regression"
+    },
+    {
+      "lane": "provider",
+      "test": "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "diagnostics",
+      "test": "tests.test_pr_play_05_diagnostics::test_production_diagnostic_matrix[D6-json_parse_failure-False]",
+      "classification": "new regression"
+    },
+    {
+      "lane": "diagnostics",
+      "test": "tests.test_pr_play_06_opening_budget::test_opening_fixtures[over_600]",
+      "classification": "new regression"
+    },
+    {
+      "lane": "diagnostics",
+      "test": "tests.test_pr_play_07_semantic_acceptance::test_semantic_matrix[S2-False]",
+      "classification": "new regression"
+    },
+    {
+      "lane": "structured",
+      "test": "tests.test_pr_br_continuation18_immutable_boundary::test_raw_chat_stub_preserves_valid_and_contains_invalid",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "export_atgb",
+      "test": "tests.test_atgb_infrastructure::test_provider_disabled_host_uses_chat_and_isolates_state",
+      "classification": "new regression"
+    },
+    {
+      "lane": "export_atgb",
+      "test": "tests.test_atgb_accounting::test_readiness_verifies_repaired_dispatch_coverage",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_pr_br_claim_control_slice2::test_false_positive_controls_remain_speakable",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_realization_provenance::test_call_gpt_provider_failure_metadata_has_provider_family",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_written_surface_question_discovers_authored_clue",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_visible_evidence_may_be_reported",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_valid_target_no_evidence_is_grounded_absence",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_requested_identity_absent_does_not_mint_person",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_observe_empty_target_does_not_invent",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing",
+      "classification": "preexisting"
+    }
+  ],
+  "new_regressions": [
+    {
+      "lane": "gameplay",
+      "test": "tests.test_five_turn_gameplay::test_G12_budget_exhaustion",
+      "classification": "new regression"
+    },
+    {
+      "lane": "gameplay",
+      "test": "tests.test_five_turn_gameplay::test_G22_exact_accounting",
+      "classification": "new regression"
+    },
+    {
+      "lane": "gameplay",
+      "test": "tests.test_five_turn_gameplay::test_G25_complete_export",
+      "classification": "new regression"
+    },
+    {
+      "lane": "diagnostics",
+      "test": "tests.test_pr_play_05_diagnostics::test_production_diagnostic_matrix[D6-json_parse_failure-False]",
+      "classification": "new regression"
+    },
+    {
+      "lane": "diagnostics",
+      "test": "tests.test_pr_play_06_opening_budget::test_opening_fixtures[over_600]",
+      "classification": "new regression"
+    },
+    {
+      "lane": "diagnostics",
+      "test": "tests.test_pr_play_07_semantic_acceptance::test_semantic_matrix[S2-False]",
+      "classification": "new regression"
+    },
+    {
+      "lane": "export_atgb",
+      "test": "tests.test_atgb_infrastructure::test_provider_disabled_host_uses_chat_and_isolates_state",
+      "classification": "new regression"
+    }
+  ],
+  "preexisting": [
+    {
+      "lane": "provider",
+      "test": "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "structured",
+      "test": "tests.test_pr_br_continuation18_immutable_boundary::test_raw_chat_stub_preserves_valid_and_contains_invalid",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "export_atgb",
+      "test": "tests.test_atgb_accounting::test_readiness_verifies_repaired_dispatch_coverage",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_pr_br_claim_control_slice2::test_false_positive_controls_remain_speakable",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_realization_provenance::test_call_gpt_provider_failure_metadata_has_provider_family",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_written_surface_question_discovers_authored_clue",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_visible_evidence_may_be_reported",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_valid_target_no_evidence_is_grounded_absence",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_requested_identity_absent_does_not_mint_person",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_observe_empty_target_does_not_invent",
+      "classification": "preexisting"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing",
+      "classification": "preexisting"
+    }
+  ]
+}

@@ -1,0 +1,422 @@
+{
+  "id": "frontier_gate",
+  "category": "canonical",
+  "scene": {
+    "scene": {
+      "id": "frontier_gate",
+      "location": "Cinderwatch Gate District",
+      "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+      "mode": "social",
+      "visible_facts": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "opening_seed_facts": [
+        "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+        "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+        "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+        "A tavern runner shouts offers of hot stew and paid rumor.",
+        "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+        "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+      ],
+      "journal_seed_facts": [
+        "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+        "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+        "A notice board announces new taxes and curfews, and names a missing patrol.",
+        "A tavern runner is hawking hot stew and rumor for coin.",
+        "A ragged stranger hangs back, watching the crowd more than the queue."
+      ],
+      "discoverable_clues": [
+        {
+          "id": "notice_patrol_route",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "hidden_facts": [
+        "An agent of a noble house is watching new arrivals from the square's edge.",
+        "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+        "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+        "A spotter above the lane is matching faces to a written list paid for in silver."
+      ],
+      "exits": [
+        {
+          "label": "Enter Cinderwatch",
+          "target_scene_id": "market_quarter"
+        },
+        {
+          "label": "Follow the missing patrol rumor",
+          "target_scene_id": "old_milestone"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "scene_id": "frontier_gate",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "guard",
+            "watchman",
+            "sentry",
+            "guardsman",
+            "captain"
+          ],
+          "aliases": []
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "scene_id": "frontier_gate",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 1,
+          "address_roles": [
+            "runner",
+            "informant"
+          ],
+          "aliases": []
+        },
+        {
+          "id": "refugee",
+          "name": "Ragged stranger",
+          "scene_id": "frontier_gate",
+          "kind": "scene_actor",
+          "addressable": true,
+          "address_priority": 2,
+          "address_roles": [
+            "stranger",
+            "refugee"
+          ],
+          "aliases": [
+            "ragged stranger"
+          ]
+        },
+        {
+          "id": "threadbare_watcher",
+          "name": "Threadbare watcher",
+          "scene_id": "frontier_gate",
+          "kind": "scene_actor",
+          "addressable": true,
+          "address_priority": 3,
+          "address_roles": [
+            "watcher"
+          ],
+          "aliases": []
+        }
+      ],
+      "interactables": [
+        {
+          "id": "notice_board",
+          "label": "Notice board",
+          "aliases": [
+            "notice",
+            "board",
+            "curfew notice",
+            "missing patrol warning"
+          ],
+          "type": "investigate",
+          "reveals_clue": "notice_patrol_route"
+        }
+      ]
+    }
+  },
+  "resolution": {
+    "kind": "discover_clue",
+    "action_id": "notice_board",
+    "label": "notice_board",
+    "prompt": "I examine the notice board.",
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": "notice_patrol_route",
+    "discovered_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "world_updates": null,
+    "state_changes": {
+      "clue_revealed": true,
+      "interactable_id": "notice_board"
+    },
+    "hint": "Player investigated [notice_board] and discovered clue [notice_patrol_route]. Narrate the discovery and its significance.",
+    "interactable_id": "notice_board",
+    "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "metadata": {
+      "referenced_surface_authority": "authored_interactable",
+      "referenced_surface_target": "notice board",
+      "referenced_surface_existence": true,
+      "referenced_surface_visibility": true,
+      "referenced_surface_inspectability": true,
+      "referenced_surface_interactable_id": "notice_board",
+      "referenced_surface_visible_fact": "",
+      "referenced_surface_inspectable_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "skip_unrelated_clue_discovery": false
+    }
+  },
+  "known": [],
+  "player": "I examine the notice board.",
+  "authorized_view": {
+    "status": "discovered",
+    "success": true,
+    "target_id": "notice_board",
+    "revealed": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "known": [],
+    "observations": [
+      "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "Ash Compact census delays have tightened the eastern caravan choke point."
+    ],
+    "consequences": "",
+    "inventory_effects_json": "{}"
+  },
+  "hidden_information": [
+    "An agent of a noble house is watching new arrivals from the square's edge.",
+    "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+    "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+    "A spotter above the lane is matching faces to a written list paid for in silver."
+  ],
+  "selection_payload": {
+    "authorized_investigation": {
+      "status": "discovered",
+      "success": true,
+      "target_id": "notice_board",
+      "revealed": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "known": [],
+      "observations": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "consequences": "",
+      "inventory_effects_json": "{}"
+    },
+    "available_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "structure",
+        "pace",
+        "tone",
+        "sensory_focus",
+        "detail",
+        "perspective",
+        "transition",
+        "information_order"
+      ],
+      "properties": {
+        "structure": {
+          "type": "string",
+          "enum": [
+            "action_first",
+            "evidence_first",
+            "setting_first"
+          ]
+        },
+        "pace": {
+          "type": "string",
+          "enum": [
+            "clipped",
+            "flowing",
+            "measured"
+          ]
+        },
+        "tone": {
+          "type": "string",
+          "enum": [
+            "spare",
+            "reflective",
+            "intent"
+          ]
+        },
+        "sensory_focus": {
+          "type": "string",
+          "enum": [
+            "none",
+            "visual",
+            "texture",
+            "listening"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "enum": [
+            "lean",
+            "standard",
+            "extended"
+          ]
+        },
+        "perspective": {
+          "type": "string",
+          "enum": [
+            "second_person",
+            "close_observation"
+          ]
+        },
+        "transition": {
+          "type": "string",
+          "enum": [
+            "direct",
+            "pause",
+            "question"
+          ]
+        },
+        "information_order": {
+          "type": "string",
+          "enum": [
+            "new_first",
+            "known_first"
+          ]
+        }
+      }
+    }
+  },
+  "host_speech": "You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+  "host_source": "resolved_clue_discovery",
+  "host_fact_emitter": {
+    "text": "You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+    "source": {
+      "kind": "discover_clue",
+      "source": "clue_text"
+    }
+  },
+  "variants": [
+    {
+      "style": "concise",
+      "plan": {
+        "structure": "action_first",
+        "pace": "clipped",
+        "tone": "spare",
+        "sensory_focus": "none",
+        "detail": "lean",
+        "perspective": "second_person",
+        "transition": "direct",
+        "information_order": "new_first"
+      },
+      "narration": "You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "mechanical_validator": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [
+          {
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "kind": "incidental_fact",
+            "epistemic_status": "world_truth",
+            "grounded": false,
+            "consequential": false,
+            "family": "incidental"
+          }
+        ],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        }
+      },
+      "information_complete": true
+    },
+    {
+      "style": "atmospheric",
+      "plan": {
+        "structure": "setting_first",
+        "pace": "flowing",
+        "tone": "reflective",
+        "sensory_focus": "visual",
+        "detail": "extended",
+        "perspective": "close_observation",
+        "transition": "pause",
+        "information_order": "new_first"
+      },
+      "narration": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "mechanical_validator": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [
+          {
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "kind": "incidental_fact",
+            "epistemic_status": "world_truth",
+            "grounded": false,
+            "consequential": false,
+            "family": "incidental"
+          }
+        ],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        }
+      },
+      "information_complete": true
+    },
+    {
+      "style": "investigative",
+      "plan": {
+        "structure": "evidence_first",
+        "pace": "measured",
+        "tone": "intent",
+        "sensory_focus": "texture",
+        "detail": "standard",
+        "perspective": "second_person",
+        "transition": "question",
+        "information_order": "known_first"
+      },
+      "narration": "What does the evidence actually establish? The missing patrol was last seen taking the northwest mud track past the crates.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nThe notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "mechanical_validator": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [
+          {
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "kind": "incidental_fact",
+            "epistemic_status": "world_truth",
+            "grounded": false,
+            "consequential": false,
+            "family": "incidental"
+          }
+        ],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        }
+      },
+      "information_complete": true
+    }
+  ],
+  "state_unchanged": true
+}

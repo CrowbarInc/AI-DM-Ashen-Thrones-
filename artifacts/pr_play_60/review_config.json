@@ -1,0 +1,838 @@
+{
+  "campaign_id": "pr_play_60",
+  "campaign_name": "PR-PLAY-60 \u2014 Authorized Inventory Projection and Gameplay Readiness",
+  "campaign_date": "2026-11-03",
+  "purpose": "Repair existing resolver-delta projection and assess complete validation without enabling player narration.",
+  "objective_status": "B \u2014 PARTIAL / FURTHER INVESTIGATION REQUIRED",
+  "executive_summary": "# 01 EXECUTIVE SUMMARY\n\n**B \u2014 PARTIAL / FURTHER INVESTIGATION REQUIRED.** The explicit resolver-delta projection is repaired. The exact D25 prose passes with a separately identified `items_added: [\"key\"]` control. The historical D25 fixture has only trusted outcome prose, no resolver record or structured delta: its exact replay remains FAIL. No item grant was inferred from narration or outcome text.\n\nComplete-pipeline development: 34/34 expected decisions. Frozen same-session end-to-end holdout, executed once after source freeze: 58/60, zero critical false acceptances, two false rejections (H03 sealed letter, H26 NPC death), ten REVIEW_REQUIRED. Inventory acquisition acceptance: development 6/6, holdout 9/10. Unauthorized inventory detection: development 13/13, holdout 10/10. H41 remains FAIL. No implementation edit followed holdout evaluation.\n\nFinal focused tests: 732/735 passed, 3 failures, 0 errors, 0 skipped. Broader authority suite: 0/9 passed, 9 known failures. PR55 wrapper passes. See report 18 for historical attempts and final-source distinctions.\n\nState/quarantine/fallback comparisons pass in local tests, including a two-action provider-disabled HTTP sequence. Ordinary players remain on deterministic publication; inventory-bearing runtime hooks still reject effects. Complete integrated validation averages 1.351 ms, maximum 2.127 ms in the one-pass holdout (layers measured in sequence, combined path warmed). Zero provider requests or tokens. No live quality, independent blind generalization, ATGB benchmark or production-rollout claim.\n\nGameplay readiness: READY WITH RESTRICTIONS for a separately authorized, disclosure-only investigation experiment using the established route/uncertain-observation path and deterministic fallback. Inventory gameplay and general consequential narration remain unready. Primary next step: PR-PLAY-61 controlled player-facing investigation, restricted to validated disclosure-only actions; this cycle does not enable it.\n",
+  "primary_report": "development/campaigns/product_realization/pr_play_60/01_EXECUTIVE_SUMMARY.md",
+  "evidence_packets": [
+    "artifacts/pr_play_60"
+  ],
+  "max_file_bytes": 33554432,
+  "changes": {
+    "production": [
+      "Six existing read-side projection/validation files; ordinary publication and inventory hooks remain isolated."
+    ],
+    "validation": [
+      "Explicit inventory deltas, quantity retention, bounded requested acquisition wording and mandatory effect coverage."
+    ],
+    "tooling": [
+      "34 development cases, one frozen 60-case end-to-end holdout, prior-corpus replays, state comparisons and measurements."
+    ],
+    "documentation": [
+      "21 numbered reports and session handoff."
+    ],
+    "generated_artifacts": [
+      "All validator traces, exact D25 historical/explicit distinction, H41, test logs, matrices, hashes and scoped diff."
+    ]
+  },
+  "testing": {
+    "focused": "732 passed / 3 known failures of 735; zero errors/skips/new failures.",
+    "broader": "PR55 wrapper 1/1; 9 known hard_validation_attempt_1 metadata failures.",
+    "full_suite": "Not executed.",
+    "runtime_validation": "Two-action provider-disabled HTTP off/on comparison; synthetic complete-pipeline development 34/34 and frozen holdout 58/60.",
+    "model_runtime_boundary": "Zero provider requests/tokens; local ordinary-GM and narration stubs; quarantine never promotes.",
+    "new_regressions": "No new final-source test regressions. Two frozen positive false rejections preserved.",
+    "pre_existing_failures": "3 focused/9 broader; historical text-only D25; existing PR58 positive rejections."
+  },
+  "decisions_requiring_human_review": [
+    "Review B verdict and separately authorize any PR-PLAY-61 restricted disclosure-only experiment; no enablement performed."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "H03 authorized sealed letter triggers legacy rule; H26 text-authorized NPC death lacks typed NPC change.",
+      "Historical exact D25 remains rejected because it contains no structured resolver delta; explicit-delta control passes."
+    ],
+    "pre_existing": [
+      "3 focused, 9 broader metadata failures; PR58 D15/H12 positive rejections."
+    ]
+  },
+  "missing_concepts": [
+    "Native investigation inventory mechanics, transfer/source/destination/post-state authority and independent blind evaluation."
+  ],
+  "does_not_prove": [
+    "Exact historical D25 recovery, general semantic completeness, live AI-GM quality/latency, ATGB score or ordinary-player rollout readiness."
+  ],
+  "recommended_next_step": "PR-PLAY-61 controlled player-facing investigation, separately authorized, disclosure-only and bounded by deterministic fallback.",
+  "self_contained_review_test": "21 reports, exact candidates, both D25 traces, all layer inputs/decisions, holdout hash and one-execution marker, regression evidence, state comparisons and source diff included.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_59/combined_positive_preexisting.json",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_59/h41_original.json",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/anchored_investigation_narration_before.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/authoritative_inventory_effect_contracts.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/broader_hard_validation_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/broader_hard_validation_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/confusion_matrices.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/consequential_narration_validation_before.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/d25_after.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/d25_before.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/d25_original.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/development_corpus.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/development_error_examples.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/development_final_summary.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/development_results.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/entry_hashes.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/entry_status.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/evaluate.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/evidence_manifest.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/evidence_summary.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/export_scan.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/fast_diagnostic.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/final_targeted.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/final_targeted.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/focused_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/gameplay_sequence.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/gameplay_test.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/gameplay_test.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/h41_after.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/holdout.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/holdout_error_examples.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/holdout_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/holdout_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/holdout_manifest.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/holdout_results.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/holdout_started.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/implementation.diff",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/implementation_frozen.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_broader_hard_validation_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_broader_hard_validation_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_final_targeted.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_final_targeted.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_focused_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_gameplay_test.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_gameplay_test.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_holdout_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_holdout_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/initial_regression_summary_final.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/integrated_investigation_narration_before.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/integrity.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/mandatory_outcome_coverage_before.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/mechanical_claims_before.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/metrics.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/offline_investigation_projection_before.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/package_review.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/pr55_regression.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/pr58_regression.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/pr59_regression.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/pre_freeze_broader_hard_validation_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/pre_freeze_broader_hard_validation_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/pre_freeze_final_targeted.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/pre_freeze_final_targeted.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/pre_freeze_focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/pre_freeze_focused_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/pre_freeze_holdout_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/pre_freeze_holdout_final.xml",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/pre_freeze_regression_summary_final.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/prepare.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/regress_corpora.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/regression_summary_final.json",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_60/report.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_60/run_regression.py",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/01_EXECUTIVE_SUMMARY.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/02_BASELINE_AND_SCOPE.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/03_D25_ROOT_CAUSE.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/04_INVENTORY_EFFECT_CONTRACT.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/05_PROJECTION_REPAIR.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/06_D25_BEFORE_AFTER.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/07_AUTHORIZED_INVENTORY_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/08_UNAUTHORIZED_INVENTORY_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/09_SUPPORTED_OPERATIONS.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/10_COMPLETE_PIPELINE_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/11_END_TO_END_CORPUS.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/12_HOLDOUT_MANIFEST.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/13_HOLDOUT_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/14_PR_PLAY_59_REGRESSION.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/15_STATE_AND_QUARANTINE_INTEGRITY.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/16_FAILURE_HANDLING.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/17_PERFORMANCE_AND_USAGE.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/18_REGRESSION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/19_GAMEPLAY_READINESS.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/20_LIMITATIONS_AND_OPEN_RISKS.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_60/21_NEXT_SESSION.md",
+      "role": "campaign_evidence",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/anchored_investigation_narration.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/consequential_narration_validation.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/integrated_investigation_narration.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/mandatory_outcome_coverage.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/mechanical_claims.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/narration_authorization.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/offline_investigation_projection.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/persistent_consequence_claims.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/quarantined_investigation_narration.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/pr_play_58_development.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/pr_play_59_development.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_57_integrated_narration.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_60_gameplay_readiness.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_60_inventory_projection.py",
+      "role": "source",
+      "why": "PR60 implementation, provenance, inspectable result or regression evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "A1": {
+    "scores": {
+      "action_responsiveness": 4,
+      "outcome_integration": 4,
+      "discovery_fidelity": 4,
+      "continuity": 3,
+      "naturalness": 3,
+      "player_clarity": 4,
+      "concision": 3,
+      "creative_quality": 3
+    },
+    "claims": [
+      "The missing patrol was last seen heading northwest along the muddy track past the crates."
+    ],
+    "potential_additions": [
+      "“new, urgent update” and “crucial lead” add unverified emphasis; no additional location, object or causal claim."
+    ],
+    "omissions": [],
+    "continuity": "No contradiction identified; limited multi-turn evidence.",
+    "classification": "FAITHFUL_OUTCOME_WITH_PROVISIONAL_EMPHASIS_REVIEW",
+    "evidence": "The authorized patrol/last-seen/northwest/mud-track/past-crates relation is present. Taking→heading and mud→muddy are natural paraphrases. PR55 nevertheless rejects an object phrase around “urgent update.”",
+    "uncertainty": "No human review. Whether “urgent” overstates priority requires judgment; no confirmed consequential fabrication."
+  },
+  "A2": {
+    "scores": {
+      "action_responsiveness": 4,
+      "outcome_integration": 4,
+      "discovery_fidelity": 4,
+      "continuity": 3,
+      "naturalness": 3,
+      "player_clarity": 4,
+      "concision": 3,
+      "creative_quality": 3
+    },
+    "claims": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "potential_additions": [
+      "“fresh lead” is generic emphasis rather than a new objective."
+    ],
+    "omissions": [],
+    "continuity": "No contradiction identified; limited multi-turn evidence.",
+    "classification": "FAITHFUL_AUTHORIZED_DISCOVERY",
+    "evidence": "The exact route relation is embedded in the action sentence, not appended as a separate engine statement.",
+    "uncertainty": "No human review; generic filler remains."
+  },
+  "B1": {
+    "scores": {
+      "action_responsiveness": 4,
+      "outcome_integration": 4,
+      "discovery_fidelity": 4,
+      "continuity": 3,
+      "naturalness": 4,
+      "player_clarity": 4,
+      "concision": 4,
+      "creative_quality": 3
+    },
+    "claims": [
+      "No fresh clues emerge from this inspection."
+    ],
+    "potential_additions": [
+      "Worn wood and damp-earth scent are incidental sensory texture."
+    ],
+    "omissions": [],
+    "continuity": "No contradiction identified; limited multi-turn evidence.",
+    "classification": "FAITHFUL_NO_NEW_DISCOVERY",
+    "evidence": "“nothing new or unusual” and “no fresh clues” communicate the no-clue result without implying hidden discoveries.",
+    "uncertainty": "This is mundane examination, not failed dice mechanics."
+  },
+  "B2": {
+    "scores": {
+      "action_responsiveness": 4,
+      "outcome_integration": 4,
+      "discovery_fidelity": 4,
+      "continuity": 3,
+      "naturalness": 3,
+      "player_clarity": 4,
+      "concision": 3,
+      "creative_quality": 3
+    },
+    "claims": [
+      "Nothing new stands out during inspection."
+    ],
+    "potential_additions": [
+      "“no hidden compartments or unusual markings catch your eye” is qualified negative-search wording; preserve for external judgment."
+    ],
+    "omissions": [],
+    "continuity": "No contradiction identified; limited multi-turn evidence.",
+    "classification": "PROVISIONALLY_FAITHFUL_NEGATIVE_SEARCH_REVIEW",
+    "evidence": "The sentence says no such detail catches the player’s eye, rather than establishing an authoritative exhaustive absence. It gives no object, reward or actionable lead.",
+    "uncertainty": "Negative compartment wording could be overread as an exhaustive search claim. Not treated as independently proven safe."
+  },
+  "C1": {
+    "scores": {
+      "action_responsiveness": 4,
+      "outcome_integration": 4,
+      "discovery_fidelity": 4,
+      "continuity": 4,
+      "naturalness": 4,
+      "player_clarity": 4,
+      "concision": 4,
+      "creative_quality": 3
+    },
+    "claims": [
+      "No new information beyond already-known patrol route."
+    ],
+    "potential_additions": [],
+    "omissions": [],
+    "continuity": "No new-discovery framing; repetition acknowledged.",
+    "classification": "FAITHFUL_CONTINUITY",
+    "evidence": "“beyond what you already know” frames the northwest route as established knowledge; “no fresh clues” prevents a new discovery reading.",
+    "uncertainty": "No human review. Same two-turn fixture only."
+  },
+  "C2": {
+    "scores": {
+      "action_responsiveness": 4,
+      "outcome_integration": 4,
+      "discovery_fidelity": 4,
+      "continuity": 4,
+      "naturalness": 4,
+      "player_clarity": 4,
+      "concision": 4,
+      "creative_quality": 3
+    },
+    "claims": [
+      "Nothing new; missing patrol previously spotted heading northwest past crates."
+    ],
+    "potential_additions": [],
+    "omissions": [],
+    "continuity": "No new-discovery framing; repetition acknowledged.",
+    "classification": "FAITHFUL_CONTINUITY_PARAPHRASE",
+    "evidence": "“once more” and “already know” acknowledge repetition. Spotted→seen is a natural paraphrase; the coverage heuristic reviews it.",
+    "uncertainty": "No human review; validator coverage is inconclusive despite a provisionally faithful reading."
+  },
+  "D1": {
+    "scores": {
+      "action_responsiveness": 4,
+      "outcome_integration": 4,
+      "discovery_fidelity": 4,
+      "continuity": 3,
+      "naturalness": 4,
+      "player_clarity": 4,
+      "concision": 4,
+      "creative_quality": 3
+    },
+    "claims": [
+      "Faint overlapping prints exist; exact number, origin and direction remain unclear."
+    ],
+    "potential_additions": [],
+    "omissions": [],
+    "continuity": "No contradiction identified; limited multi-turn evidence.",
+    "classification": "FAITHFUL_UNCERTAINTY",
+    "evidence": "Both existence of prints and all three uncertainty facets are explicit. Fading into scrub is already in the visible scene projection. Coverage fails to bind the fact across two sentences.",
+    "uncertainty": "No hidden direction, count or origin is asserted. Automated review is provisional."
+  },
+  "D2": {
+    "scores": {
+      "action_responsiveness": 4,
+      "outcome_integration": 4,
+      "discovery_fidelity": 4,
+      "continuity": 3,
+      "naturalness": 4,
+      "player_clarity": 4,
+      "concision": 4,
+      "creative_quality": 3
+    },
+    "claims": [
+      "Faint overlapping footprints exist; exact number, origin and direction are indistinct."
+    ],
+    "potential_additions": [],
+    "omissions": [],
+    "continuity": "No contradiction identified; limited multi-turn evidence.",
+    "classification": "FAITHFUL_UNCERTAINTY_PARAPHRASE",
+    "evidence": "“clear enough to see” affirms existence, while “number, origin, and direction ... indistinct” preserves interpretation uncertainty. Fading into scrub/track is authorized visible context.",
+    "uncertainty": "Indistinct is a paraphrase of unclear. No human review or general semantic-completeness claim."
+  }
+}

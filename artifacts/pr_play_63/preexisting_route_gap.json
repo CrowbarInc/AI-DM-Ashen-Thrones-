@@ -1,0 +1,116 @@
+{
+  "hook": {
+    "eligible": true,
+    "player_text": "I examine the notice board.",
+    "target_id": null,
+    "target_label": "notice board",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "action_id": null,
+      "interactable_id": null,
+      "discovered_clues": [],
+      "clue_text": "",
+      "state_changes": {}
+    },
+    "narration_payload": {
+      "scene": {
+        "public": {
+          "location": null,
+          "summary": null,
+          "visible_facts": [
+            "Rain falls around the notice board."
+          ]
+        },
+        "discovered_clues": []
+      }
+    }
+  },
+  "request": {
+    "player_action": "I examine the notice board.",
+    "resolved_outcome": {
+      "status": "observed",
+      "success": true
+    },
+    "must_communicate": [
+      {
+        "id": "outcome:0",
+        "source": "engine_status",
+        "status": "observed",
+        "text": "No new clue is established by this examination."
+      }
+    ],
+    "may_reference": {
+      "visible_scene": [
+        "Rain falls around the notice board."
+      ],
+      "continuity": []
+    },
+    "authorized_consequences": [],
+    "must_not_establish": [
+      "Only communicate completed engine outcomes; never establish additional facts or effects.",
+      "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+      "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+    ]
+  },
+  "validation": {
+    "decision": "PASS",
+    "semantic": {
+      "decision": "PASS",
+      "reasons": [],
+      "claims": [],
+      "provider_requests": 0,
+      "coverage": "deterministic_frames_not_semantic_proof"
+    },
+    "legacy": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [
+        {
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "kind": "incidental_fact",
+          "epistemic_status": "world_truth",
+          "grounded": false,
+          "consequential": false,
+          "family": "incidental"
+        }
+      ],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      },
+      "consequential_validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      }
+    },
+    "coverage": {
+      "decision": "PASS",
+      "facts": [
+        {
+          "id": "outcome:0",
+          "source": "engine_status",
+          "status": "observed",
+          "text": "No new clue is established by this examination.",
+          "decision": "PASS",
+          "classification": "covered",
+          "evidence": "No new clue is established. The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "scope": "bounded_deterministic_coverage_not_semantic_proof"
+    }
+  },
+  "published": false,
+  "scope": "offline synthetic negative control; no provider or publication"
+}

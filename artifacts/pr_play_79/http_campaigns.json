@@ -1,0 +1,324 @@
+{
+  "authored": {
+    "turns": [
+      {
+        "input": "I examine the notice board.",
+        "elapsed_ms": 284.2,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {}
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {}
+        },
+        "player_facing_text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      },
+      {
+        "input": "I follow the missing patrol rumor.",
+        "elapsed_ms": 240.3,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {}
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "player_facing_text": "You arrive at Old Milestone."
+      },
+      {
+        "input": "I examine the weathered milestone.",
+        "elapsed_ms": 416.6,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      },
+      {
+        "input": "I return to report the uncertain trail to the watch.",
+        "elapsed_ms": 295.7,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true
+          }
+        },
+        "player_facing_text": "You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report."
+      },
+      {
+        "input": "I return to Cinderwatch Gate.",
+        "elapsed_ms": 409.1,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true
+          }
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true
+          }
+        },
+        "player_facing_text": "You arrive at frontier gate."
+      },
+      {
+        "input": "I give the watch my patrol report.",
+        "elapsed_ms": 381.1,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true
+          }
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "player_facing_text": "The watch receives your report that the patrol trail becomes unclear at the milestone. The watch has now been warned; no private survey was conducted. You can continue your inquiry at the gate or return to the milestone."
+      }
+    ],
+    "resume": {
+      "scene": "frontier_gate",
+      "flags": {
+        "faction_house_verevin_agenda_advanced": true,
+        "faction_ash_cowl_agenda_advanced": true,
+        "faction_ordo_pyric_agenda_advanced": true,
+        "patrol_report": true,
+        "patrol_guards_warned": true
+      },
+      "matched": true
+    },
+    "latency_ms": [
+      284.2,
+      240.3,
+      416.6,
+      295.7,
+      409.1,
+      381.1
+    ]
+  },
+  "initiative": {
+    "turns": [
+      {
+        "input": "I examine the notice board.",
+        "elapsed_ms": 415.9,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {}
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {}
+        },
+        "player_facing_text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      },
+      {
+        "input": "I follow the missing patrol rumor.",
+        "elapsed_ms": 484.7,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {}
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "player_facing_text": "You arrive at Old Milestone."
+      },
+      {
+        "input": "I examine the weathered milestone.",
+        "elapsed_ms": 391.1,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      },
+      {
+        "input": "I want to follow the tracks farther.",
+        "elapsed_ms": 1099.3,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "player_facing_text": "You look around. A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      },
+      {
+        "input": "I wait to see whether anyone comes along.",
+        "elapsed_ms": 71.6,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "player_facing_text": "You wait. Nothing new approaches, and no encounter is created."
+      },
+      {
+        "input": "I leave a marker so I can find this place again.",
+        "elapsed_ms": 39.4,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "player_facing_text": "No lasting marker can be placed with the actions available here. Nothing was left behind."
+      },
+      {
+        "input": "I look around.",
+        "elapsed_ms": 806.7,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "player_facing_text": "You look around. A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      },
+      {
+        "input": "What do we know about the prints?",
+        "elapsed_ms": 51.4,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. The missing patrol was last seen taking the northwest mud track past the crates. The northwest mud track reaches an old milestone beyond the gate. The mud around the marker is churned; any trail beyond it is unclear."
+      }
+    ],
+    "resume": {
+      "scene": "old_milestone",
+      "flags": {
+        "faction_house_verevin_agenda_advanced": true,
+        "faction_ash_cowl_agenda_advanced": true,
+        "faction_ordo_pyric_agenda_advanced": true
+      },
+      "matched": true
+    },
+    "latency_ms": [
+      415.9,
+      484.7,
+      391.1,
+      1099.3,
+      71.6,
+      39.4,
+      806.7,
+      51.4
+    ]
+  }
+}

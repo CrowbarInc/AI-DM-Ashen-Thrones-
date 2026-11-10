@@ -1,0 +1,3050 @@
+[
+  {
+    "id": "H01",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_0",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 0."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_0",
+      "active_scene_id": "holdout_0",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 0."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_0",
+      "scene_id": "holdout_0",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H02",
+    "player_input": "Is there anything nearby I could sit on?",
+    "scene": {
+      "scene": {
+        "id": "holdout_1",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 1."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_1",
+      "active_scene_id": "holdout_1",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 1."
+    ],
+    "proposal": {
+      "family": "object",
+      "campaign_id": "campaign_1",
+      "scene_id": "holdout_1",
+      "anchor": 0,
+      "quality": "seat",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "C",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H03",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_2",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 2."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_2",
+      "active_scene_id": "holdout_2",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 2."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_2",
+      "scene_id": "elsewhere",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H04",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_3",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 3."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_3",
+      "active_scene_id": "holdout_3",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 3."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "other",
+      "scene_id": "holdout_3",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H05",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_4",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 4."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_4",
+      "active_scene_id": "holdout_4",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 4."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_4",
+      "scene_id": "holdout_4",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "hidden"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H06",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_5",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 5."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_5",
+      "active_scene_id": "holdout_5",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 5."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_5",
+      "scene_id": "holdout_5",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public",
+      "quest": "find the lost heir"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H07",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_6",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 6."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_6",
+      "active_scene_id": "holdout_6",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 6."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_6",
+      "scene_id": "holdout_6",
+      "anchor": 0,
+      "quality": "magical",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "unsupported",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H08",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_7",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 7."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_7",
+      "active_scene_id": "holdout_7",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 7."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_7",
+      "scene_id": "holdout_7",
+      "anchor": 99,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "anchor",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H09",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_8",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 8."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_8",
+      "active_scene_id": "holdout_8",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 8."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_8",
+      "scene_id": "holdout_8",
+      "anchor": true,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H10",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_9",
+        "visible_facts": [
+          "An empty featureless chamber."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_9",
+      "active_scene_id": "holdout_9",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "An empty featureless chamber."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_9",
+      "scene_id": "holdout_9",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "scene_support",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H11",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_10",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 10."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_10",
+      "active_scene_id": "holdout_10",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 10."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_10",
+      "scene_id": "holdout_10",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H12",
+    "player_input": "Is there anything nearby I could sit on?",
+    "scene": {
+      "scene": {
+        "id": "holdout_11",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 11."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_11",
+      "active_scene_id": "holdout_11",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 11."
+    ],
+    "proposal": {
+      "family": "object",
+      "campaign_id": "campaign_11",
+      "scene_id": "holdout_11",
+      "anchor": 0,
+      "quality": "seat",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "C",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H13",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_12",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 12."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_12",
+      "active_scene_id": "holdout_12",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 12."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_12",
+      "scene_id": "elsewhere",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H14",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_13",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 13."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_13",
+      "active_scene_id": "holdout_13",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 13."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "other",
+      "scene_id": "holdout_13",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H15",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_14",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 14."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_14",
+      "active_scene_id": "holdout_14",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 14."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_14",
+      "scene_id": "holdout_14",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "hidden"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H16",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_15",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 15."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_15",
+      "active_scene_id": "holdout_15",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 15."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_15",
+      "scene_id": "holdout_15",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public",
+      "quest": "find the lost heir"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H17",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_16",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 16."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_16",
+      "active_scene_id": "holdout_16",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 16."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_16",
+      "scene_id": "holdout_16",
+      "anchor": 0,
+      "quality": "magical",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "unsupported",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H18",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_17",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 17."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_17",
+      "active_scene_id": "holdout_17",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 17."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_17",
+      "scene_id": "holdout_17",
+      "anchor": 99,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "anchor",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H19",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_18",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 18."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_18",
+      "active_scene_id": "holdout_18",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 18."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_18",
+      "scene_id": "holdout_18",
+      "anchor": true,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H20",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_19",
+        "visible_facts": [
+          "An empty featureless chamber."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_19",
+      "active_scene_id": "holdout_19",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "An empty featureless chamber."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_19",
+      "scene_id": "holdout_19",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "scene_support",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H21",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_20",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 20."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_20",
+      "active_scene_id": "holdout_20",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 20."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_20",
+      "scene_id": "holdout_20",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H22",
+    "player_input": "Is there anything nearby I could sit on?",
+    "scene": {
+      "scene": {
+        "id": "holdout_21",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 21."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_21",
+      "active_scene_id": "holdout_21",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 21."
+    ],
+    "proposal": {
+      "family": "object",
+      "campaign_id": "campaign_21",
+      "scene_id": "holdout_21",
+      "anchor": 0,
+      "quality": "seat",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "C",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H23",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_22",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 22."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_22",
+      "active_scene_id": "holdout_22",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 22."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_22",
+      "scene_id": "elsewhere",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H24",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_23",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 23."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_23",
+      "active_scene_id": "holdout_23",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 23."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "other",
+      "scene_id": "holdout_23",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H25",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_24",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 24."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_24",
+      "active_scene_id": "holdout_24",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 24."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_24",
+      "scene_id": "holdout_24",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "hidden"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H26",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_25",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 25."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_25",
+      "active_scene_id": "holdout_25",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 25."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_25",
+      "scene_id": "holdout_25",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public",
+      "quest": "find the lost heir"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H27",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_26",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 26."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_26",
+      "active_scene_id": "holdout_26",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 26."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_26",
+      "scene_id": "holdout_26",
+      "anchor": 0,
+      "quality": "magical",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "unsupported",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H28",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_27",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 27."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_27",
+      "active_scene_id": "holdout_27",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 27."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_27",
+      "scene_id": "holdout_27",
+      "anchor": 99,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "anchor",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H29",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_28",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 28."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_28",
+      "active_scene_id": "holdout_28",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 28."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_28",
+      "scene_id": "holdout_28",
+      "anchor": true,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H30",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_29",
+        "visible_facts": [
+          "An empty featureless chamber."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_29",
+      "active_scene_id": "holdout_29",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "An empty featureless chamber."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_29",
+      "scene_id": "holdout_29",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "scene_support",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H31",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_30",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 30."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_30",
+      "active_scene_id": "holdout_30",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 30."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_30",
+      "scene_id": "holdout_30",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H32",
+    "player_input": "Is there anything nearby I could sit on?",
+    "scene": {
+      "scene": {
+        "id": "holdout_31",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 31."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_31",
+      "active_scene_id": "holdout_31",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 31."
+    ],
+    "proposal": {
+      "family": "object",
+      "campaign_id": "campaign_31",
+      "scene_id": "holdout_31",
+      "anchor": 0,
+      "quality": "seat",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "C",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H33",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_32",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 32."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_32",
+      "active_scene_id": "holdout_32",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 32."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_32",
+      "scene_id": "elsewhere",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H34",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_33",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 33."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_33",
+      "active_scene_id": "holdout_33",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 33."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "other",
+      "scene_id": "holdout_33",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H35",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_34",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 34."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_34",
+      "active_scene_id": "holdout_34",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 34."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_34",
+      "scene_id": "holdout_34",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "hidden"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H36",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_35",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 35."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_35",
+      "active_scene_id": "holdout_35",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 35."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_35",
+      "scene_id": "holdout_35",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public",
+      "quest": "find the lost heir"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H37",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_36",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 36."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_36",
+      "active_scene_id": "holdout_36",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 36."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_36",
+      "scene_id": "holdout_36",
+      "anchor": 0,
+      "quality": "magical",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "unsupported",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H38",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_37",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 37."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_37",
+      "active_scene_id": "holdout_37",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 37."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_37",
+      "scene_id": "holdout_37",
+      "anchor": 99,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "anchor",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H39",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_38",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 38."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_38",
+      "active_scene_id": "holdout_38",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 38."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_38",
+      "scene_id": "holdout_38",
+      "anchor": true,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H40",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_39",
+        "visible_facts": [
+          "An empty featureless chamber."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_39",
+      "active_scene_id": "holdout_39",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "An empty featureless chamber."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_39",
+      "scene_id": "holdout_39",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "scene_support",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H41",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_40",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 40."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_40",
+      "active_scene_id": "holdout_40",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 40."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_40",
+      "scene_id": "holdout_40",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H42",
+    "player_input": "Is there anything nearby I could sit on?",
+    "scene": {
+      "scene": {
+        "id": "holdout_41",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 41."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_41",
+      "active_scene_id": "holdout_41",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 41."
+    ],
+    "proposal": {
+      "family": "object",
+      "campaign_id": "campaign_41",
+      "scene_id": "holdout_41",
+      "anchor": 0,
+      "quality": "seat",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "C",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H43",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_42",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 42."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_42",
+      "active_scene_id": "holdout_42",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 42."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_42",
+      "scene_id": "elsewhere",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H44",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_43",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 43."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_43",
+      "active_scene_id": "holdout_43",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 43."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "other",
+      "scene_id": "holdout_43",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H45",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_44",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 44."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_44",
+      "active_scene_id": "holdout_44",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 44."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_44",
+      "scene_id": "holdout_44",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "hidden"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H46",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_45",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 45."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_45",
+      "active_scene_id": "holdout_45",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 45."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_45",
+      "scene_id": "holdout_45",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public",
+      "quest": "find the lost heir"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H47",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_46",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 46."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_46",
+      "active_scene_id": "holdout_46",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 46."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_46",
+      "scene_id": "holdout_46",
+      "anchor": 0,
+      "quality": "magical",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "unsupported",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H48",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_47",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 47."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_47",
+      "active_scene_id": "holdout_47",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 47."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_47",
+      "scene_id": "holdout_47",
+      "anchor": 99,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "anchor",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H49",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_48",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 48."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_48",
+      "active_scene_id": "holdout_48",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 48."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_48",
+      "scene_id": "holdout_48",
+      "anchor": true,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H50",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_49",
+        "visible_facts": [
+          "An empty featureless chamber."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_49",
+      "active_scene_id": "holdout_49",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "An empty featureless chamber."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_49",
+      "scene_id": "holdout_49",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "scene_support",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H51",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_50",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 50."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_50",
+      "active_scene_id": "holdout_50",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 50."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_50",
+      "scene_id": "holdout_50",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H52",
+    "player_input": "Is there anything nearby I could sit on?",
+    "scene": {
+      "scene": {
+        "id": "holdout_51",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 51."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_51",
+      "active_scene_id": "holdout_51",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 51."
+    ],
+    "proposal": {
+      "family": "object",
+      "campaign_id": "campaign_51",
+      "scene_id": "holdout_51",
+      "anchor": 0,
+      "quality": "seat",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "C",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H53",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_52",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 52."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_52",
+      "active_scene_id": "holdout_52",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 52."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_52",
+      "scene_id": "elsewhere",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H54",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_53",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 53."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_53",
+      "active_scene_id": "holdout_53",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 53."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "other",
+      "scene_id": "holdout_53",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H55",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_54",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 54."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_54",
+      "active_scene_id": "holdout_54",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 54."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_54",
+      "scene_id": "holdout_54",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "hidden"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H56",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_55",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 55."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_55",
+      "active_scene_id": "holdout_55",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 55."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_55",
+      "scene_id": "holdout_55",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public",
+      "quest": "find the lost heir"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H57",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_56",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 56."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_56",
+      "active_scene_id": "holdout_56",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 56."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_56",
+      "scene_id": "holdout_56",
+      "anchor": 0,
+      "quality": "magical",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "unsupported",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H58",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_57",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 57."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_57",
+      "active_scene_id": "holdout_57",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 57."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_57",
+      "scene_id": "holdout_57",
+      "anchor": 99,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "anchor",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H59",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_58",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 58."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_58",
+      "active_scene_id": "holdout_58",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 58."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_58",
+      "scene_id": "holdout_58",
+      "anchor": true,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H60",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_59",
+        "visible_facts": [
+          "An empty featureless chamber."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_59",
+      "active_scene_id": "holdout_59",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "An empty featureless chamber."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_59",
+      "scene_id": "holdout_59",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "scene_support",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H61",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_60",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 60."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_60",
+      "active_scene_id": "holdout_60",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 60."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_60",
+      "scene_id": "holdout_60",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H62",
+    "player_input": "Is there anything nearby I could sit on?",
+    "scene": {
+      "scene": {
+        "id": "holdout_61",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 61."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_61",
+      "active_scene_id": "holdout_61",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 61."
+    ],
+    "proposal": {
+      "family": "object",
+      "campaign_id": "campaign_61",
+      "scene_id": "holdout_61",
+      "anchor": 0,
+      "quality": "seat",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "C",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H63",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_62",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 62."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_62",
+      "active_scene_id": "holdout_62",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 62."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_62",
+      "scene_id": "elsewhere",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H64",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_63",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 63."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_63",
+      "active_scene_id": "holdout_63",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 63."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "other",
+      "scene_id": "holdout_63",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H65",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_64",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 64."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_64",
+      "active_scene_id": "holdout_64",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 64."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_64",
+      "scene_id": "holdout_64",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "hidden"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H66",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_65",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 65."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_65",
+      "active_scene_id": "holdout_65",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 65."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_65",
+      "scene_id": "holdout_65",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public",
+      "quest": "find the lost heir"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H67",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_66",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 66."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_66",
+      "active_scene_id": "holdout_66",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 66."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_66",
+      "scene_id": "holdout_66",
+      "anchor": 0,
+      "quality": "magical",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "unsupported",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H68",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_67",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 67."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_67",
+      "active_scene_id": "holdout_67",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 67."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_67",
+      "scene_id": "holdout_67",
+      "anchor": 99,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "anchor",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H69",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_68",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 68."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_68",
+      "active_scene_id": "holdout_68",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 68."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_68",
+      "scene_id": "holdout_68",
+      "anchor": true,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H70",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_69",
+        "visible_facts": [
+          "An empty featureless chamber."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_69",
+      "active_scene_id": "holdout_69",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "An empty featureless chamber."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_69",
+      "scene_id": "holdout_69",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "scene_support",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H71",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_70",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 70."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_70",
+      "active_scene_id": "holdout_70",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 70."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_70",
+      "scene_id": "holdout_70",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H72",
+    "player_input": "Is there anything nearby I could sit on?",
+    "scene": {
+      "scene": {
+        "id": "holdout_71",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 71."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_71",
+      "active_scene_id": "holdout_71",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 71."
+    ],
+    "proposal": {
+      "family": "object",
+      "campaign_id": "campaign_71",
+      "scene_id": "holdout_71",
+      "anchor": 0,
+      "quality": "seat",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": true,
+      "reason": "accepted",
+      "category": "C",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": true
+    }
+  },
+  {
+    "id": "H73",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_72",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 72."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_72",
+      "active_scene_id": "holdout_72",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 72."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_72",
+      "scene_id": "elsewhere",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H74",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_73",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 73."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_73",
+      "active_scene_id": "holdout_73",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 73."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "other",
+      "scene_id": "holdout_73",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "context",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H75",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_74",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 74."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_74",
+      "active_scene_id": "holdout_74",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 74."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_74",
+      "scene_id": "holdout_74",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "hidden"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H76",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_75",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 75."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_75",
+      "active_scene_id": "holdout_75",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 75."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_75",
+      "scene_id": "holdout_75",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public",
+      "quest": "find the lost heir"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H77",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_76",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 76."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_76",
+      "active_scene_id": "holdout_76",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 76."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_76",
+      "scene_id": "holdout_76",
+      "anchor": 0,
+      "quality": "magical",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "unsupported",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H78",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_77",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 77."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_77",
+      "active_scene_id": "holdout_77",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 77."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_77",
+      "scene_id": "holdout_77",
+      "anchor": 99,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "anchor",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H79",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_78",
+        "visible_facts": [
+          "A stone marker borders the gravel road in district 78."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_78",
+      "active_scene_id": "holdout_78",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "A stone marker borders the gravel road in district 78."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_78",
+      "scene_id": "holdout_78",
+      "anchor": true,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "schema",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  },
+  {
+    "id": "H80",
+    "player_input": "Describe an ordinary surface detail.",
+    "scene": {
+      "scene": {
+        "id": "holdout_79",
+        "visible_facts": [
+          "An empty featureless chamber."
+        ],
+        "interactables": []
+      }
+    },
+    "world": {},
+    "session": {
+      "campaign_run_id": "campaign_79",
+      "active_scene_id": "holdout_79",
+      "turn_counter": 3
+    },
+    "player_visible_context": [
+      "An empty featureless chamber."
+    ],
+    "proposal": {
+      "family": "environment",
+      "campaign_id": "campaign_79",
+      "scene_id": "holdout_79",
+      "anchor": 0,
+      "quality": "rough",
+      "visibility": "public"
+    },
+    "expected": {
+      "accepted": false,
+      "reason": "scene_support",
+      "category": "B",
+      "mutation": "one stable ledger entry if accepted, none otherwise",
+      "publication": "canonical public description only; no hidden facts",
+      "persistence": false
+    }
+  }
+]

@@ -1,0 +1,172 @@
+{
+  "provider_requests": 0,
+  "source": "saved raw provider text from experiment_results.json",
+  "session_dir": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_61\\replay_session\\data",
+  "actions": [
+    {
+      "input": "I examine the notice board.",
+      "facing": "You study the notice board more closely and uncover a crucial detail: the missing patrol was last spotted taking the northwest mud track past the crates. This new information sharpens your understanding of their last known movements amid the bustle of watchers, refugees, and the ever-watchful gate serjeant.",
+      "marker": "published",
+      "decision": "PASS",
+      "used_fallback": false,
+      "rejected_text_published": false
+    },
+    {
+      "input": "I examine the rain barrel.",
+      "facing": "You examine what is visible; no new clue is established. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "marker": "fallback",
+      "decision": "FAIL",
+      "used_fallback": true,
+      "rejected_text_published": false
+    },
+    {
+      "input": "I examine the notice board again.",
+      "facing": "You take another careful look at the notice board, but nothing new catches your eye beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The posted taxes, curfew rules, and warnings remain unchanged, offering no fresh clues.",
+      "marker": "published",
+      "decision": "PASS",
+      "used_fallback": false,
+      "rejected_text_published": false
+    },
+    {
+      "input": "I look around the gate.",
+      "facing": "You examine what is visible; no new clue is established. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "marker": "fallback",
+      "decision": "REVIEW_REQUIRED",
+      "used_fallback": true,
+      "rejected_text_published": false
+    }
+  ],
+  "authority": {
+    "campaign_run_id": "c47297cb044755809696f777",
+    "scene": "frontier_gate",
+    "visited": [
+      "frontier_gate"
+    ],
+    "player": "galinor",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "equipment": null,
+    "clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "state_flags": {},
+    "npcs": {
+      "guard_captain": {
+        "attitude": 0,
+        "trust": 0,
+        "fear": 0,
+        "suspicion": 0,
+        "known_topics": [],
+        "revealed_topics": [],
+        "last_interaction_turn": null
+      },
+      "tavern_runner": {
+        "attitude": 0,
+        "trust": 0,
+        "fear": 0,
+        "suspicion": 0,
+        "known_topics": [],
+        "revealed_topics": [],
+        "last_interaction_turn": null
+      }
+    },
+    "quests": [
+      {
+        "secret": "CANARY_QUEST_TWIST"
+      }
+    ],
+    "conditions": {
+      "dazed": {
+        "name": "Dazed",
+        "kind": "condition",
+        "default_effects": {
+          "no_actions": true
+        }
+      },
+      "shaken": {
+        "name": "Shaken",
+        "kind": "condition",
+        "default_effects": {
+          "attack_penalty": 2,
+          "save_penalty": 2,
+          "skill_penalty": 2
+        }
+      },
+      "sickened": {
+        "name": "Sickened",
+        "kind": "condition",
+        "default_effects": {
+          "attack_penalty": 2,
+          "damage_penalty": 2,
+          "save_penalty": 2,
+          "skill_penalty": 2
+        }
+      },
+      "blinded": {
+        "name": "Blinded",
+        "kind": "condition",
+        "default_effects": {
+          "ac_penalty": 2,
+          "lose_dex_to_ac": true
+        }
+      },
+      "stunned": {
+        "name": "Stunned",
+        "kind": "condition",
+        "default_effects": {
+          "no_actions": true,
+          "ac_penalty": 2,
+          "lose_dex_to_ac": true
+        }
+      },
+      "risky_strike": {
+        "name": "Risky Strike",
+        "kind": "combat_toggle",
+        "default_effects": {}
+      },
+      "defensive_stance": {
+        "name": "Defensive Stance",
+        "kind": "combat_toggle",
+        "default_effects": {}
+      },
+      "shield": {
+        "name": "Shield",
+        "kind": "spell_effect",
+        "default_effects": {
+          "ac_bonus": 4
+        }
+      }
+    },
+    "combat": {
+      "in_combat": false,
+      "round": 0,
+      "initiative_order": [],
+      "turn_index": 0,
+      "active_actor_id": null,
+      "player_turn_used": false
+    },
+    "world_flags": {
+      "faction_house_verevin_agenda_advanced": true,
+      "faction_ash_cowl_agenda_advanced": true,
+      "faction_ordo_pyric_agenda_advanced": true
+    },
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 4
+    }
+  }
+}

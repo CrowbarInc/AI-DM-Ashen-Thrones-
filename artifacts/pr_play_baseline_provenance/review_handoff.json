@@ -1,0 +1,564 @@
+{
+  "campaign_id": "pr_play_baseline_provenance",
+  "campaign_name": "PR-PLAY Baseline Provenance Closure & Current-State Freeze",
+  "campaign_date": "2026-11-08",
+  "purpose": "Close historical attribution and freeze a trustworthy provider-free current baseline without production changes.",
+  "objective_status": "A/PASS",
+  "executive_summary": "Historical snapshot unavailable; all three publication origins unresolved — closed. Current baseline established. 356 tests: 333 passed, 23 failed, zero errors/skips. Same original twelve failures retained; newly observed failures separately classified. No production/test changes; live provider calls 0.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "Unchanged provider-free focused/authority tests; exact failures preserved."
+    ],
+    "tooling": [],
+    "documentation": [
+      "Nine closure reports; NEXT_SESSION prepended."
+    ],
+    "generated_artifacts": [
+      "Current source/behavior baseline and independently sealed review bundle."
+    ]
+  },
+  "testing": {
+    "focused": "{'tests': 235, 'passed': 219, 'failed': 16, 'errors': 0, 'skipped': 0}",
+    "broader": "{'tests': 121, 'passed': 114, 'failed': 7, 'errors': 0, 'skipped': 0}",
+    "full_suite": "Not run",
+    "runtime_validation": "Provider-free synthetic already-started TestClient sessions. Seven repair controls pass.",
+    "model_runtime_boundary": "Live calls 0; nonlocal network blocked.",
+    "new_regressions": "None attributed; newly observed stew/authority mismatches, one initial portal exception and three additional obsolete assertions recorded. Four-test follow-up retained.",
+    "pre_existing_failures": "Nine original obsolete assertions, three publication defects of closed unresolved origin; three known unrelated KeyErrors."
+  },
+  "decisions_requiring_human_review": [
+    "No human decision required to close provenance. Option A is the sole recommended future action; no repair begun."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Historical source cannot be authenticated; attribution closed."
+    ],
+    "pre_existing": [
+      "Three consequential publication defects; T05 stock text; incomplete physical actions; unrelated KeyErrors; newly observed response mismatch."
+    ]
+  },
+  "missing_concepts": [
+    "Complete authenticated pre-repair dirty source capture unavailable; current baseline now recorded."
+  ],
+  "does_not_prove": [
+    "Historical causal origin; broad gameplay acceptance; live-model frequency; full suite; independent generalization."
+  ],
+  "recommended_next_step": "Option A — Publication-authority boundary investigation. Stop after baseline closure.",
+  "self_contained_review_test": "Reopen new archive; verify cycle, nine reports, source/evidence identities and all canonical bytes. External archive seal is retained after packaging.",
+  "primary_report": "development/campaigns/product_realization/pr_play_baseline_provenance/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_baseline_provenance/archive_validation_protocol.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority/collected_nodes.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority/command.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority/entry_git_status.txt",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority/entry_hashes.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority/execution_integrity.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority/failures.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority/http_capture.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority/recovery_junit.xml",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority_followup/collected_nodes.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority_followup/command.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority_followup/entry_git_status.txt",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority_followup/entry_hashes.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority_followup/execution_integrity.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority_followup/failures.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority_followup/http_capture.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority_followup/recovery_junit.xml",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority_followup_output.txt",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/authority_output.txt",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/baseline_junit.xml",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/build_reports.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/collected_nodes.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/command.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/conversational_controls.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/dependency_versions.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/entry_git_status.txt",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/entry_hashes.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/evaluate_git_candidates.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/execution_integrity.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/failures.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/git_candidate_assessment.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/git_provenance.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/historical_archives.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/historical_attribution.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/http_capture.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/local_snapshot_inventory.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/prepare_capture.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/publication_defects.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/pytest_output.txt",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/run_authority.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/run_authority_followup.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/run_baseline.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/seal_archive.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/source_manifest.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/test_results.json",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_67/05_PLAYER_SAFE_RESPONSE_CONTRACT.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_baseline_provenance/BASELINE_PROCEDURE.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_baseline_provenance/CURRENT_BASELINE.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_baseline_provenance/HISTORICAL_ATTRIBUTION.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_baseline_provenance/INTEGRITY.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_baseline_provenance/NEXT_STEP_DECISION.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_baseline_provenance/PROVENANCE_SEARCH.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_baseline_provenance/PUBLICATION_AUTHORITY_RISK.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_baseline_provenance/SOURCE_MANIFEST.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/state_authority_model.md",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/conversational_continuity.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/exploration.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/gm.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/intent_parser.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/narrative_planning.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/perception_grounding.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/player_http_projection.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/referenced_surface.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/state_authority.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_perception_narration_authority_audible_non_invention.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_br_continuation18_immutable_boundary.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_play_post_npc_handoff.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_referenced_surface_grounding_inspection_resolution.py",
+      "role": "baseline_evidence",
+      "why": "Supports source identity, exact baseline behavior or provenance closure.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_baseline_provenance/review_handoff.json",
+      "role": "configuration",
+      "why": "Exact packaging selection and cycle configuration.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "max_file_bytes": 41943040
+}

@@ -1,0 +1,90 @@
+............F.......                                                     [100%]
+================================== FAILURES ===================================
+______ test_intentions[report-Examine the mud prints here.-DECLINE-None] ______
+
+campaigns = (<starlette.testclient.TestClient object at 0x000002B48F3F3500>, {'survey': '2026-11-06T22-39-14_82e8cfba', 'report': '2026-11-06T22-39-19_1493cf9f'})
+branch = 'report', text = 'Examine the mud prints here.', category = 'DECLINE'
+target = None
+
+    @pytest.mark.parametrize("branch,text,category,target", [
+        ("survey", "Please examine those footprints closely.", "EXECUTE", "prints"),
+        ("survey", "I wish to scrutinize the mud prints.", "EXECUTE", "prints"),
+        ("survey", "Could I study the stone again?", "EXECUTE", "milestone"),
+        ("report", "I want to read the board.", "EXECUTE", "notice_board"),
+        ("survey", "What have we learned so far?", "ANSWER", None),
+        ("report", "Did I warn the watch already?", "ANSWER", None),
+        ("survey", "Please check it again.", "CLARIFY", None),
+        ("report", "Can I speak with the watch about the patrol?", "EXECUTE", "gate_guard"),
+        ("report", "I command the watch to send soldiers.", "DECLINE", None),
+        ("survey", "Pursue the footprints until we find their owner.", "DECLINE", None),
+        ("report", "Show the hidden clues.", "DECLINE", None),
+        ("survey", "I teleport to Cinderwatch.", "DECLINE", None),
+        ("report", "Examine the mud prints here.", "DECLINE", None),
+        ("survey", "Inspect the sapphire throne.", "CLARIFY", None),
+    ])
+    def test_intentions(campaigns, branch, text, category, target):
+>       cl = restore(campaigns, branch)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_pr_play_72_initiative.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_pr_play_72_initiative.py:35: in restore
+    safe(client.post("/api/snapshots/load", json={"snapshot_id": slots[branch]}))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = <Response [500 Internal Server Error]>
+
+    def safe(response):
+>       assert response.status_code==200,response.text
+E       AssertionError: {"ok":false,"error":"Unable to complete this request. Refresh your session and try again."}
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests\test_pr_play_71_lifecycle.py:28: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    game.player_http_boundary:player_http_boundary.py:35 Player HTTP request failed: /api/snapshots/load
+Traceback (most recent call last):
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\player_http_boundary.py", line 20, in handle
+    response = await original(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\routing.py", line 698, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 5524, in api_load_snapshot
+    save_session(_sess_resume)
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\storage.py", line 332, in save_session
+    _atomic_save_json(SESSION_PATH, env)
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\storage.py", line 237, in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+MemoryError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_72_initiative.py::test_intentions[report-Examine the mud prints here.-DECLINE-None]
+1 failed, 19 passed, 1 warning in 53.23s

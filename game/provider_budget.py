@@ -139,17 +139,25 @@ def capture_opening_response(text: str, attempt=None) -> None:
         "sensitive_game_content": True}, attempt)
 
 
-def observe_opening_validation(*, rejection: str | None, recovery: str | None) -> None:
+def observe_opening_validation(
+    *,
+    rejection: str | None,
+    recovery: str | None,
+    opening_recovery: dict | None = None,
+) -> None:
     scope = _OPENING_DIAGNOSTIC.get()
     if scope is not None:
         scope.update(rejection_reason=rejection, recovery_classification=recovery,
                      final_validation_passed=rejection is None)
+        if isinstance(opening_recovery, dict):
+            scope["opening_recovery"] = dict(opening_recovery)
         record_generation_diagnostic({"stage": "opening_validation",
             "logical_operation": "scene_opening", "requested_response_type": "scene_opening",
             "classification_source": "game.api._opening_response_rejection",
             "classification_reason": rejection or "opening_contract_passed",
             "opening_accepted": rejection is None,
-            "semantic_classification": "rejected" if rejection else "accepted"})
+            "semantic_classification": "rejected" if rejection else "accepted",
+            **({"opening_recovery": dict(opening_recovery)} if isinstance(opening_recovery, dict) else {})})
 
 
 def end_opening_diagnostic(token, *, committed: bool, tracked: bool) -> None:
@@ -174,6 +182,11 @@ def end_opening_diagnostic(token, *, committed: bool, tracked: bool) -> None:
                     and scope.get("recovery_classification") == "initial_generation" else None),
                 "rejection_reason": scope.get("rejection_reason") or (None if committed else "pipeline_exception"),
                 "recovery_classification": scope.get("recovery_classification"),
+                **(
+                    {"opening_recovery": dict(scope.get("opening_recovery"))}
+                    if isinstance(scope.get("opening_recovery"), dict)
+                    else {}
+                ),
             })
     finally:
         _OPENING_DIAGNOSTIC.reset(token)

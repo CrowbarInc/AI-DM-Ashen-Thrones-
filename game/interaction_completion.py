@@ -86,6 +86,11 @@ _MEAN_RE = re.compile(
 _VOCATIVE_RE = re.compile(
     r"^(?P<nominal>[A-Za-z]+(?:\s+[A-Za-z]+){0,2})\s*[,:]"
 )
+# "Hello, Gate Guard" names the person after the greeting. The greeting itself is not the name.
+_GREETING_ADDRESS_RE = re.compile(
+    r"^(?:hello|hi|hey|greetings|hail)\s*,\s*(?P<nominal>[A-Za-z]+(?:\s+[A-Za-z]+){0,3})",
+    re.IGNORECASE,
+)
 _NOT_A_VOCATIVE = frozenset({
     "instead", "actually", "well", "so", "then", "please", "wait", "now",
     "yes", "no", "okay", "ok", "never", "rather", "anyway", "still",
@@ -692,6 +697,11 @@ def addressed_person_nominal(text: str | None) -> str:
     raw = _clean(text)
     if not raw:
         return ""
+    greeting = _GREETING_ADDRESS_RE.match(raw)
+    if greeting:
+        nominal = speech_participant_head(_nominal_chunk(greeting.group("nominal") or ""))
+        if nominal and not _QUESTION_NOMINAL_RE.match(nominal) and not _INTERJECTION_RE.match(nominal):
+            return nominal
     for pattern in (_VOCATIVE_RE, _SPEECH_ADDRESS_RE, _TELL_RE):
         for match in pattern.finditer(raw):
             span = _complement_cut(match.group("nominal") or "")

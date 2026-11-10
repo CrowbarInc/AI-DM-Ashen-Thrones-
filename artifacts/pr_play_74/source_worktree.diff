@@ -1,0 +1,490 @@
+diff --git a/game/bounded_improvisation.py b/game/bounded_improvisation.py
+index 0d945066..99c37ad5 100644
+--- a/game/bounded_improvisation.py
++++ b/game/bounded_improvisation.py
+@@ -481,3 +481,217 @@ def prompt_projection_for_bounded_improvisation(
+             "Reject contradictions, mechanical outcomes, hidden information, and consequential world changes.",
+         ],
+     }
++
++# PR-PLAY-74: persistent public facts use the existing bounded ledger. The
++# constrained proposal vocabulary is intentional: arbitrary provider prose
++# cannot be made safe by a keyword blacklist.
++WORLD_FACT_GATE = 'ASHEN_EXPERIMENTAL_WORLD_IMPROVISATION'
++WORLD_FACT_FIELDS = frozenset({'family', 'campaign_id', 'scene_id', 'anchor', 'quality', 'visibility'})
++
++
++def controlled_enabled(session):
++    import os
++    from game.authored_consequences import enabled_for_session
++    return (os.environ.get(WORLD_FACT_GATE) == '1'
++            and os.environ.get('ASHEN_EXPERIMENTAL_PLAYER_INITIATIVE') == '1'
++            and enabled_for_session(session or {}))
++
++
++def controlled_facts(session, scene_id=None):
++    campaign = str((session or {}).get('campaign_run_id') or '')
++    return [e for e in _existing_entries(session)
++            if e.get('authority') == 'controlled_world_fact'
++            and e.get('campaign_id') == campaign and e.get('visibility') == 'public'
++            and e.get('status') == 'accepted'
++            and (scene_id is None or e.get('scene_id') == scene_id)]
++
++
++def validate_world_fact(raw, *, session, scene, world):
++    """Pure validation. Text/properties/identity come from engine policy only."""
++    def reject(reason, category='E'):
++        return {'accepted': False, 'reason': reason, 'category': category}
++    if not isinstance(raw, dict) or set(raw) != WORLD_FACT_FIELDS:
++        return reject('schema')
++    if (type(raw['anchor']) is not int or not all(isinstance(raw[k], str) for k in WORLD_FACT_FIELDS - {'anchor'})
++            or raw['visibility'] != 'public'):
++        return reject('schema')
++    inner = scene.get('scene', scene) if isinstance(scene, dict) else {}
++    campaign = str((session or {}).get('campaign_run_id') or '')
++    sid = str(inner.get('id') or '')
++    if not campaign or not sid or raw['campaign_id'] != campaign or raw['scene_id'] != sid or (session or {}).get('active_scene_id') != sid:
++        return reject('context')
++    family, quality = raw['family'], raw['quality']
++    if (family, quality) not in {('environment', 'rough'), ('object', 'seat')}:
++        return reject('unsupported', 'D')
++    facts = inner.get('visible_facts') or []
++    index = raw['anchor']
++    if not 0 <= index < len(facts) or not isinstance(facts[index], str):
++        return reject('anchor')
++    anchor = facts[index]
++    # Only public, affirmative stone/furniture support. Never infer from hidden
++    # state, journal history, a destination, or a negated scene feature.
++    if re.search(r'\b(no|not|without|empty|absent|imagined|painted|picture|dead)\b', anchor, re.I):
++        return reject('scene_support')
++    if not re.search(r'\b(stone|stonework|rock|rocks|boulder|boulders)\b', anchor, re.I):
++        return reject('scene_support')
++    category = 'B' if family == 'environment' else 'C'
++    label = 'rough stone surface' if family == 'environment' else 'ordinary stone seat'
++    description = ('The stone has a rough, uneven surface.' if family == 'environment'
++                   else 'An ordinary low stone beside the established stonework offers a place to sit.')
++    basis = f'{campaign}|{sid}|{family}|{anchor}'
++    eid = 'wf_' + hashlib.sha256(basis.encode()).hexdigest()[:20]
++    existing = controlled_facts(session)
++    for e in existing:
++        if e['id'] == eid:
++            return {'accepted': True, 'reason': 'established', 'category': 'A', 'entry': dict(e)}
++        if e.get('scene_id') == sid and e.get('family') == family:
++            return reject('duplicate_identity')
++    for item in inner.get('interactables') or []:
++        if isinstance(item, dict) and label.casefold() in {str(item.get('label', '')).casefold(), *[str(a).casefold() for a in item.get('aliases', [])]}:
++            return reject('authored_identity')
++    entry = {'id': eid, 'campaign_id': campaign, 'scene_id': sid, 'category': category,
++             'family': family, 'entity_type': 'surface' if family == 'environment' else 'object',
++             'label': label, 'content': description, 'canonical_description': description,
++             'properties': {'material': 'stone', 'texture': 'rough'} if family == 'environment' else {'material': 'stone', 'use': 'seat'},
++             'anchor': anchor, 'provenance': 'accepted_improvisation', 'source': 'validated_proposal',
++             'creation_turn': int((session or {}).get('turn_counter') or 0), 'visibility': 'public',
++             'status': 'accepted', 'authority': 'controlled_world_fact', 'truth_status': 'runtime_incidental',
++             'scope': 'scene', 'persistence_status': 'campaign', 'interactions': []}
++    return {'accepted': True, 'reason': 'accepted', 'category': category, 'entry': entry}
++
++
++def controlled_request(text, *, session, scene, world):
++    """Read-only planning for the existing initiative/bridge/exploration path."""
++    if not controlled_enabled(session):
++        return None
++    inner = scene.get('scene', scene)
++    sid = inner.get('id')
++    low = text.casefold()
++    entries = controlled_facts(session, sid)
++    if entries and re.search(r'\b(?:move|take|lift|sit on|climb|destroy|break)\s+(?:it|that|this)\b', low):
++        return {'mode': 'decline', 'message': 'That interaction has no configured mechanic or authority. Nothing has been attempted.'}
++    # A reference never grants authority, movement, treasure or NPC knowledge.
++    named = [e for e in entries if (('seat' in low and e['family'] == 'object')
++             or ('surface' in low and e['family'] == 'environment') or e['label'] in low)]
++    pronoun = bool(re.search(
++        r'\b(?:inspect|examine|check|search|study|look at|sit on|move|take|lift)\s+'
++        r'(?:it|that|this)(?:\s+again)?[.!?]*$', low
++    ) or re.fullmatch(r'\s*(?:is|was)\s+(?:it|that|this)\s+(?:still there|magical)[.!?]*', low))
++    if not named and pronoun:
++        focus = (session or {}).get('bounded_improvisation', {}).get('focus')
++        named = [e for e in entries if e['id'] == focus]
++    if named:
++        if len(named) != 1:
++            return {'mode': 'clarify', 'message': 'Which established detail do you mean?'}
++        e = named[0]
++        if re.search(r'\b(secret|treasure|quest|magic|magical|weapon|move|take|lift|sit|climb|destroy|break)\b', low):
++            return {'mode': 'decline', 'message': 'That interaction has no configured mechanic or authority. The established detail is unchanged.'}
++        if re.match(r'\s*(is|are|what|where|does|do|was|were)\b', low):
++            return {'mode': 'answer', 'message': e['content'], 'id': e['id']}
++        if re.search(r'\b(inspect|examine|check|search|look|study)\b', low):
++            if re.search(r'\b(if|unless|then|and|never|not)\b', low):
++                return {'mode': 'clarify', 'message': 'What single action do you want to attempt?'}
++            return {'mode': 'interact', 'id': e['id']}
++    family = None
++    if re.search(r'\b(anything|something|place|object)\b.*\b(sit|seat|rest)\b', low):
++        family = 'object'
++    elif re.search(r'\b(describe|texture|surface detail|environmental detail)\b', low):
++        family = 'environment'
++    if family is None:
++        return None
++    if re.search(r'\b(secret|hidden|treasure|quest|magic|weapon|passage|tunnel|if|unless|then)\b', low):
++        return {'mode': 'decline', 'message': 'That proposal exceeds the permitted ordinary detail policy.'}
++    if family == 'environment' and re.match(r'\s*(what|is|are|do|does)\b', low):
++        return {'mode': 'answer', 'message': ' '.join(e['content'] for e in entries) or 'No additional detail has been established.'}
++    existing = [e for e in entries if e['family'] == family]
++    if existing:
++        return {'mode': 'answer', 'message': existing[0]['content'], 'id': existing[0]['id']}
++    for index, _fact in enumerate(inner.get('visible_facts') or []):
++        raw = {'family': family, 'campaign_id': session.get('campaign_run_id'), 'scene_id': sid,
++               'anchor': index, 'quality': 'rough' if family == 'environment' else 'seat', 'visibility': 'public'}
++        verdict = validate_world_fact(raw, session=session, scene=scene, world=world)
++        if verdict['accepted']:
++            return {'mode': 'propose', 'id': verdict['entry']['id'], 'proposal': raw}
++    return {'mode': 'decline', 'message': 'The public scene does not support that ordinary detail. Nothing has been added.'}
++
++
++def resolve_controlled_fact(scene, session, world, action, *, prompt, action_id, label):
++    """Called only by the exploration resolver; session persists in its transaction."""
++    import copy
++    from game.models import ExplorationEngineResult
++    plan = controlled_request(prompt, session=session, scene=scene, world=world)
++    if not plan or plan.get('mode') not in {'propose', 'interact'} or plan.get('id') != action.get('target_id'):
++        return None
++    if plan['mode'] == 'propose':
++        verdict = validate_world_fact(plan['proposal'], session=session, scene=scene, world=world)
++        if not verdict['accepted']:
++            return None
++        entry = copy.deepcopy(verdict['entry'])
++        ledger = ensure_bounded_improvisation_ledger(session)
++        if not any(e.get('id') == entry['id'] for e in ledger['entries']):
++            ledger['entries'].append(entry)
++        ledger['focus'] = entry['id']
++        publication = entry['content']
++    else:
++        entry = next(e for e in session[LEDGER_KEY]['entries'] if e.get('id') == plan['id'])
++        # Reuse PR73 physical-search result; no discovery, loot, movement or DC.
++        from game.general_purpose_actions import exploration_outcome, FAMILY_SEARCH
++        projected = copy.deepcopy(scene)
++        inner = projected.get('scene', projected)
++        inner.setdefault('interactables', []).append({'id': entry['id'], 'label': entry['label']})
++        search = dict(action, metadata={'general_purpose_family': FAMILY_SEARCH})
++        result = exploration_outcome(projected, search, prompt=prompt, action_id=action_id, label=label)
++        event = {'turn': int(session.get('turn_counter') or 0), 'action': 'physical_search'}
++        if event not in entry['interactions']:
++            entry['interactions'].append(event)
++        session[LEDGER_KEY]['focus'] = entry['id']
++        result['metadata']['engine_publication'] = entry['content'] + ' ' + result['metadata']['engine_publication']
++        result['metadata']['controlled_entity_id'] = entry['id']
++        return result
++    return ExplorationEngineResult(kind='observe', action_id=action_id, label=label, prompt=prompt,
++        success=True, resolved_transition=False, target_scene_id=None, clue_id=None, discovered_clues=[], state_changes={'controlled_entity_id': entry['id']},
++        metadata={'engine_publication': publication, 'controlled_entity_id': entry['id'],
++                  'skip_unrelated_clue_discovery': True}).to_dict()
++
++
++def provider_world_fact_proposal(*, session, scene, world, family, invoke=None):
++    """Single bounded shadow proposal using the existing provider/accounting stack.
++
++    No retries, no state mutation, no automatic publication. Callers can pass a
++    deterministic transport for development. Normal gameplay uses local policy.
++    """
++    import json
++    import time
++    started = time.perf_counter()
++    inner = scene.get('scene', scene)
++    schema = {'type': 'object', 'additionalProperties': False, 'required': sorted(WORLD_FACT_FIELDS),
++              'properties': {'family': {'type': 'string', 'enum': [family]},
++                'campaign_id': {'type': 'string'}, 'scene_id': {'type': 'string'},
++                'anchor': {'type': 'integer'}, 'quality': {'type': 'string', 'enum': ['rough' if family == 'environment' else 'seat']},
++                'visibility': {'type': 'string', 'enum': ['public']}}}
++    messages = [{'role': 'system', 'content': 'Propose one ordinary detail using only public stone support. Return the constrained proposal. Do not invent effects.'},
++                {'role': 'user', 'content': json.dumps({'family': family, 'campaign_id': session.get('campaign_run_id'),
++                  'scene_id': inner.get('id'), 'visible_facts': inner.get('visible_facts', [])})}]
++    try:
++        if invoke is not None:
++            raw = invoke(messages, schema)
++        else:
++            from openai import OpenAI
++            from game.config import DEFAULT_MODEL_NAME, get_openai_api_key
++            from game.provider_budget import admit_request, sdk_retry_options
++            attempt = admit_request(purpose='controlled_improvisation', owner='bounded_improvisation',
++                        model=DEFAULT_MODEL_NAME, estimated_input=len(json.dumps(messages)) // 4 + 250, max_output=300)
++            if attempt.refusal:
++                raise RuntimeError('provider_admission_refused')
++            client = OpenAI(api_key=get_openai_api_key(), timeout=30, **sdk_retry_options())
++            response = attempt.dispatch(client.responses.create, model=DEFAULT_MODEL_NAME, input=messages,
++                       max_output_tokens=300, text={'format': {'type': 'json_schema', 'name': 'world_fact_proposal',
++                                                              'strict': True, 'schema': schema}})
++            raw = response.output_text
++        proposal = json.loads(raw) if isinstance(raw, str) else raw
++        verdict = validate_world_fact(proposal, session=session, scene=scene, world=world)
++        return {'proposal': proposal, 'validation': verdict, 'committed': False, 'published_text': '',
++                'latency_ms': (time.perf_counter()-started)*1000, 'retries': 0}
++    except Exception as exc:
++        return {'proposal': None, 'validation': {'accepted': False, 'reason': type(exc).__name__},
++                'committed': False, 'published_text': '', 'latency_ms': (time.perf_counter()-started)*1000, 'retries': 0}
+diff --git a/game/exploration.py b/game/exploration.py
+index 78e98b8f..c226776b 100644
+--- a/game/exploration.py
++++ b/game/exploration.py
+@@ -31,6 +31,21 @@ from game.scene_destination_binding import (
+ EXPLORATION_KINDS = ("scene_transition", "travel", "observe", "investigate", "interact", "custom", "discover_clue", "already_searched")
+ 
+ 
++def _accessible_repeat(scene, world, session, target_id):
++    """An enrolled, still-visible examination can complete without discovery.
++
++    Called only after the resolver has established an already-searched target.
++    Keep the legacy success contract outside the initiative experiment.
++    """
++    import os
++    from game.authored_consequences import enabled_for_session
++    from game.player_interpretation_bridge import visible_catalog
++    return (os.environ.get("ASHEN_EXPERIMENTAL_PLAYER_INITIATIVE") == "1"
++            and enabled_for_session(session)
++            and visible_catalog({"scene": scene}, world).get(target_id, {}).get("kind")
++            in {"inspect_target", "perceive_target"})
++
++
+ def _norm_hidden_fact_lines(values: Any) -> List[str]:
+     if not isinstance(values, list):
+         return []
+@@ -117,6 +132,7 @@ def _build_skill_check_context(
+     scene_id = str(scene.get("id") or "").strip()
+     scene_runtime = get_scene_runtime(session, scene_id) if scene_id else {}
+     action_id = str(normalized_action.get("id") or "").strip() or "action"
++
+     character_id = (character or {}).get("id", "")
+     turn_counter = session.get("turn_counter", 0)
+     return {
+@@ -222,6 +238,29 @@ def resolve_exploration_action(
+         target_scene_id = str(target_scene_id).strip() or None
+     action_id = str(normalized_action.get("id") or "").strip() or "action"
+ 
++    from game.authored_consequences import resolve as resolve_consequence
++    consequence = resolve_consequence(scene, session, world, normalized_action)
++    if consequence is not None:
++        return consequence
++
++    action_meta = normalized_action.get("metadata") if isinstance(normalized_action.get("metadata"), dict) else {}
++    if action_meta.get('controlled_world_fact'):
++        from game.bounded_improvisation import resolve_controlled_fact
++        controlled = resolve_controlled_fact(scene_envelope, session, world, normalized_action,
++                                             prompt=prompt, action_id=action_id, label=label)
++        if controlled is not None:
++            return controlled
++        return ExplorationEngineResult(kind='observe', action_id=action_id, label=label, prompt=prompt,
++            success=False, resolved_transition=False, target_scene_id=None, clue_id=None, discovered_clues=[], metadata={'engine_publication': 'That detail is not accessible. Nothing has been added.',
++            'skip_unrelated_clue_discovery': True}).to_dict()
++    if action_meta.get("general_purpose_family") in {"environmental_observation", "physical_search"}:
++        from game.general_purpose_actions import exploration_outcome
++        general = exploration_outcome(
++            scene_envelope, normalized_action, prompt=prompt, action_id=action_id, label=label,
++        )
++        if general is not None:
++            return general
++
+     known_ids: List[str] = []
+     if list_scene_ids is not None:
+         known_ids = list(list_scene_ids())
+@@ -353,12 +392,13 @@ def resolve_exploration_action(
+             if bound_by_classifier or (i_id_slug and i_id_slug in prompt_slug):
+                 scene_id = scene.get("id") or ""
+                 if scene_id and is_interactable_resolved(session, scene_id, i_id):
++                    valid_repeat = _accessible_repeat(scene, world, session, i_id)
+                     result = ExplorationEngineResult(
+                         kind="already_searched",
+                         action_id=action_id,
+                         label=label,
+                         prompt=prompt,
+-                        success=False,
++                        success=valid_repeat,
+                         resolved_transition=False,
+                         target_scene_id=None,
+                         clue_id=None,
+@@ -367,7 +407,7 @@ def resolve_exploration_action(
+                         state_changes={"already_searched": True, "interactable_id": i_id},
+                         hint=f"Player has already searched [{i_id}]. Narrate that they find nothing new.",
+                         interactable_id=i_id,
+-                        metadata=dict(classified_meta),
++                        metadata={**classified_meta, **({"action_outcome": "valid_no_new_information"} if valid_repeat else {})},
+                     )
+                     return result.to_dict()
+                 # Skill check authority: engine decides when to roll
+@@ -468,12 +508,13 @@ def resolve_exploration_action(
+         classified_authority = str(classified.get("authority") or "")
+         scene_id = scene.get("id") or ""
+         if scene_id and is_target_searched(session, scene_id, action_id):
++            valid_repeat = _accessible_repeat(scene, world, session, action_id)
+             result = ExplorationEngineResult(
+                 kind="already_searched",
+                 action_id=action_id,
+                 label=label,
+                 prompt=prompt,
+-                success=False,
++                success=valid_repeat,
+                 resolved_transition=False,
+                 target_scene_id=None,
+                 clue_id=None,
+@@ -481,7 +522,7 @@ def resolve_exploration_action(
+                 world_updates=None,
+                 state_changes={"already_searched": True},
+                 hint="Player has already searched this. Narrate that they find nothing new.",
+-                metadata=dict(classified_meta),
++                metadata={**classified_meta, **({"action_outcome": "valid_no_new_information"} if valid_repeat else {})},
+             )
+             return result.to_dict()
+         if classified_authority in {
+@@ -706,6 +747,10 @@ def resolve_exploration_action(
+         transition_candidate=transition_candidate,
+     )
+ 
++    # These keys belong exclusively to the server-authored consequence resolver.
++    # Transition metadata otherwise preserves legacy client fields.
++    res_metadata.pop('authored_consequence', None)
++    res_metadata.pop('trusted_text', None)
+     result = ExplorationEngineResult(
+         kind=action_type,
+         action_id=action_id,
+diff --git a/game/player_interpretation_bridge.py b/game/player_interpretation_bridge.py
+index c156488f..18fb7eb8 100644
+--- a/game/player_interpretation_bridge.py
++++ b/game/player_interpretation_bridge.py
+@@ -41,6 +41,8 @@ def visible_catalog(scene: dict | None, world: dict | None) -> dict[str, dict[st
+     for item in current_scene.get("interactables") or []:
+         if not isinstance(item, dict):
+             continue
++        if item.get("hidden") or item.get("visible") is False or item.get("accessible") is False:
++            continue
+         entity_id = str(item.get("id") or "").strip()
+         if not entity_id:
+             continue
+@@ -48,9 +50,13 @@ def visible_catalog(scene: dict | None, world: dict | None) -> dict[str, dict[st
+             "kind": "inspect_target" if item.get("reveals_clue") else "perceive_target",
+             "row": item,
+         }
+-    for item in current_scene.get("exits") or []:
++    from game.route_authority import authored_exit_rows
++    for item in authored_exit_rows(scene or {}):
+         if not isinstance(item, dict):
+             continue
++        from game.route_authority import route_status
++        if route_status(item, scene_id, {}, {}) == "hidden":
++            continue
+         entity_id = str(item.get("id") or "").strip()
+         if not entity_id:
+             continue
+@@ -58,6 +64,8 @@ def visible_catalog(scene: dict | None, world: dict | None) -> dict[str, dict[st
+     for npc in (world or {}).get("npcs") or []:
+         if not isinstance(npc, dict):
+             continue
++        if npc.get("hidden") or npc.get("visible") is False or npc.get("accessible") is False:
++            continue
+         entity_id = str(npc.get("id") or "").strip()
+         if not entity_id:
+             continue
+@@ -238,6 +246,87 @@ def normalized_action_from_interpretation(
+             "reference_reconciliation": reconciliation,
+         }
+     operation, target_ref = _single_component(record)
++    if operation == "ELABORATE":
++        from game.bounded_improvisation import controlled_request
++        plan = controlled_request(player_text, scene=scene, world=world, session=session)
++        allowed = bool(plan and plan.get('mode') in {'propose', 'interact'} and plan.get('id') == target_ref)
++        meta = {'source': 'stored_interpretation', 'accepted': allowed,
++                'reason': 'controlled_detail' if allowed else 'unsupported_operation'}
++        if not allowed:
++            return None, meta
++        return {'id': target_ref, 'target_id': target_ref, 'type': 'observe',
++                'label': 'Examine ordinary detail', 'prompt': player_text,
++                'metadata': {'controlled_world_fact': True, 'skip_unrelated_clue_discovery': True}}, meta
++    if operation == "CUSTOM":
++        # Experimental choices cannot gain authority from a provider proposal.
++        # Reinterpret the original player text against this current server scene.
++        from game.player_initiative import decide
++        proposal = decide(player_text, scene=scene, world=world, session=session)
++        allowed = bool(proposal and proposal.requires_authoritative_execution
++                       and proposal.proposed_operation == "CUSTOM"
++                       and proposal.proposed_target == target_ref)
++        meta = {"source": "stored_interpretation", "accepted": allowed,
++                "reason": "grounded_authored_choice" if allowed else "unsupported_operation",
++                "operation": operation, "target_ref": target_ref}
++        if not allowed:
++            return None, meta
++        row = next(a for a in _scene_obj(scene).get("actions", []) if a.get("id") == target_ref)
++        return {"id": target_ref, "type": "custom", "label": row["label"], "prompt": player_text,
++                "metadata": {"stored_interpretation": {"operation": operation, "target_ref": target_ref}}}, meta
++    if operation in {"OBSERVE_FACT", "SEARCH_ESTABLISHED", "PERSUADE"}:
++        from game.general_purpose_actions import fact_by_id, FAMILY_OBSERVATION, FAMILY_SEARCH, FAMILY_SOCIAL
++        import re as _re
++        if operation == "PERSUADE":
++            catalog = visible_catalog(scene, world)
++            target = catalog.get(str(target_ref or ""))
++            if not target or target.get("kind") != "npc":
++                return None, {"source": "stored_interpretation", "accepted": False,
++                              "reason": "target_not_visible", "operation": operation, "target_ref": target_ref}
++            row = target.get("row") if isinstance(target.get("row"), dict) else {}
++            return {
++                "id": str(target_ref),
++                "label": str(row.get("name") or target_ref),
++                "type": "persuade",
++                "prompt": player_text,
++                "target_id": str(target_ref),
++                "targetEntityId": str(target_ref),
++                "metadata": {
++                    "general_purpose_family": FAMILY_SOCIAL,
++                    "stored_interpretation": {"operation": operation, "target_ref": str(target_ref)},
++                },
++            }, {"source": "stored_interpretation", "accepted": True, "operation": operation,
++                "target_ref": str(target_ref), "engine_type": "persuade"}
++        fact = fact_by_id(scene, str(target_ref or ""))
++        surface_ok = bool(fact) or any(
++            isinstance(item, dict) and str(item.get("id") or "") == str(target_ref or "")
++            for item in _scene_obj(scene).get("interactables") or []
++        )
++        if not surface_ok:
++            return None, {"source": "stored_interpretation", "accepted": False,
++                          "reason": "target_not_visible", "operation": operation, "target_ref": target_ref}
++        family = FAMILY_OBSERVATION if operation == "OBSERVE_FACT" else FAMILY_SEARCH
++        engine_type = "observe" if operation == "OBSERVE_FACT" else "investigate"
++        elevated_claim = bool(_re.search(r"\b(?:from\s+up\s+here|from\s+above)\b", player_text or "", _re.I))
++        elevated = False
++        state = (session or {}).get("scene_state") if isinstance(session, dict) else None
++        if isinstance(state, dict):
++            elevated = bool(state.get("elevated_position"))
++        return {
++            "id": str(target_ref),
++            "label": fact or str(target_ref),
++            "type": engine_type,
++            "prompt": player_text,
++            "target_id": str(target_ref),
++            "targetEntityId": str(target_ref),
++            "metadata": {
++                "general_purpose_family": family,
++                "elevated_claim": elevated_claim,
++                "elevated_established": elevated,
++                "skip_unrelated_clue_discovery": True,
++                "stored_interpretation": {"operation": operation, "target_ref": str(target_ref)},
++            },
++        }, {"source": "stored_interpretation", "accepted": True, "operation": operation,
++            "target_ref": str(target_ref), "engine_type": engine_type}
+     if operation not in CONNECTED_OPERATIONS:
+         return None, {
+             "source": "stored_interpretation",
+@@ -328,6 +417,8 @@ def normalized_action_from_interpretation(
+         },
+     }
+     semantic_plan = record.get("unified_semantic_plan")
++    if isinstance(record.get("local_approach_normalization"), dict):
++        normalized["metadata"]["stored_interpretation"]["local_approach_normalization"] = dict(record["local_approach_normalization"])
+     if isinstance(semantic_plan, dict) and semantic_plan.get("locked"):
+         normalized["metadata"]["unified_semantic_plan"] = dict(semantic_plan)
+     communication = record.get("communication")
+@@ -338,6 +429,10 @@ def normalized_action_from_interpretation(
+         normalized["metadata"]["stored_interpretation"]["compatibility"] = "visible_surface_inspection"
+     if operation == "MOVE":
+         row = target.get("row") if isinstance(target.get("row"), dict) else {}
++        from game.route_authority import route_status
++        if route_status(row, str(_scene_obj(scene).get("id") or ""), session or {}, world or {}) != "available":
++            return None, {"source": "stored_interpretation", "accepted": False,
++                          "reason": "route_requires_prerequisite", "operation": operation, "target_ref": target_id}
+         destination = str(row.get("target_scene_id") or "").strip()
+         if not destination:
+             return None, {

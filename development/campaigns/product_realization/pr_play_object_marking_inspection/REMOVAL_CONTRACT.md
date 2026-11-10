@@ -1,0 +1,9 @@
+# Removal Contract
+
+Milestone: `pr_play_object_marking_inspection`. Date: 2026-11-09.
+
+Internal game.api.remove_inventory_object_marking(request) delegates to the same coordinator used by add_inventory_object_marking; pure staging is game.object_marking.prepare_removal. No new writer or state owner. Exact v1 request fields: version, operation=remove_marking, campaign_run_id, character_id, instance_id, modification_id, request_id, request_digest, expected_revision, authorization. Identity is canonical UUID4; revision is a nonnegative integer (bool/string/missing invalid). Canonical SHA-256 covers every semantic field including operation and authorization, excluding request_digest only.
+
+Authorization has exact fields caller_id, decision_id, mechanics=not_applicable, preconditions with bounded positive evidence references for target_exists, accessible, rights, marking_exists, removable, capability. These are trusted internal assertions. No physical cleaning or skill mechanics inferred.
+
+Validate request shape/evidence/digest and authoritative campaign; resolve one existing singleton; validate current/history consistency; look up durable receipt; exact replay returns original result before checking current revision or active marking presence. New request checks expected revision, then resolves exact active modification_id. Missing mark refuses missing_marking, stale revision refuses stale_revision; rejection does not mutate. Stage detached removal of this ID only, revision+1 and compact removal receipt together. Existing game.api WORLD_STATE guard, ordered_turn without cache key, persistence guard, runtime_commit_scope and save_character coordinate one atomic character replacement. Return committed/applied result only after successful save; errors raise and rollback is verified. Same text on other marking IDs survives.

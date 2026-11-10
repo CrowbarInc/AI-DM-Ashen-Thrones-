@@ -1330,14 +1330,19 @@ def _project_transition_node_for_prompt(
     if missing:
         return None, ["transition_node_missing_keys:" + ",".join(missing[:16])]
     # Shallow structural typing only; do not "fix" or add anchors/ids.
+    # A not-required node uses null anchors. A required node still needs mappings.
     if not isinstance(raw.get("transition_required"), bool):
         return None, ["transition_node_bad_type:transition_required"]
     if not isinstance(raw.get("transition_type"), str):
         return None, ["transition_node_bad_type:transition_type"]
-    if not isinstance(raw.get("before_anchor"), Mapping):
-        return None, ["transition_node_bad_type:before_anchor"]
-    if not isinstance(raw.get("after_anchor"), Mapping):
-        return None, ["transition_node_bad_type:after_anchor"]
+    required = bool(raw.get("transition_required"))
+    for anchor_key in ("before_anchor", "after_anchor"):
+        anchor = raw.get(anchor_key)
+        if required:
+            if not isinstance(anchor, Mapping):
+                return None, [f"transition_node_bad_type:{anchor_key}"]
+        elif anchor is not None and not isinstance(anchor, Mapping):
+            return None, [f"transition_node_bad_type:{anchor_key}"]
     if not isinstance(raw.get("continuity_anchor_ids"), list):
         return None, ["transition_node_bad_type:continuity_anchor_ids"]
     if not isinstance(raw.get("derivation_codes"), list):
@@ -1355,10 +1360,16 @@ def _should_use_manual_play_compact_prompt(
     uncertainty_hint: Mapping[str, Any] | None,
     follow_up_pressure: Mapping[str, Any] | None,
     active_topic_anchor: Mapping[str, Any] | None,
+    stamp_matched_narrative_plan: bool = False,
 ) -> bool:
     if prompt_profile == "manual_play_compact":
         return True
     if prompt_profile != "manual_play_auto":
+        return False
+    # A stamp-matched plan is plan-backed narration. Full instructions stay on
+    # that path even when the transition node is not required. Detached
+    # narration has no such plan and keeps the predicates below.
+    if stamp_matched_narrative_plan:
         return False
     obligations = narration_obligations if isinstance(narration_obligations, Mapping) else {}
     res = resolution if isinstance(resolution, Mapping) else {}
@@ -2648,6 +2659,7 @@ def build_narration_context(
         uncertainty_hint=eff_uncertainty_hint if isinstance(eff_uncertainty_hint, Mapping) else None,
         follow_up_pressure=follow_up_pressure if isinstance(follow_up_pressure, Mapping) else None,
         active_topic_anchor=active_topic_anchor if isinstance(active_topic_anchor, Mapping) else None,
+        stamp_matched_narrative_plan=bool(bundle_stamp_ok and isinstance(narrative_plan, dict) and narrative_plan),
     )
     public_scene_for_prompt = dict(public_scene) if isinstance(public_scene, dict) else {}
     if narration_obligations.get("is_opening_scene") and isinstance(public_scene_for_prompt, dict):
@@ -2993,6 +3005,9 @@ def build_narration_context(
     )
     if any(temporal_provenance.get("buckets", {}).values()):
         payload["narration_temporal_provenance"] = temporal_provenance
+    from game.narration_authorization import project_narration_payload
+
+    payload = project_narration_payload(payload, resolution)
     if include_non_public_prompt_keys:
         return payload
     shipped = project_public_payload(payload)

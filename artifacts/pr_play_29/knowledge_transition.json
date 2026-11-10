@@ -1,0 +1,42 @@
+{
+  "turn1": "PUBLIC_FACT",
+  "turn2": "AUTHORED_TOPIC",
+  "public_source": {
+    "source_id": "scene:frontier_gate:visible:2",
+    "source_text": "A tavern runner trades hot stew and rumors near the rain barrel.",
+    "npc_id": "tavern_runner",
+    "relation": "own_offerings",
+    "items": "hot stew and rumors",
+    "text": "I offer hot stew and rumors."
+  },
+  "topic": {
+    "id": "patrol_rumor",
+    "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+    "clue_id": "muddy_footprints_northwest",
+    "clue_text": null,
+    "disclosure_authorization": {
+      "speaker_id": "tavern_runner",
+      "addressee": "player",
+      "source_id": "npc:tavern_runner:patrol_rumor",
+      "classification": "public",
+      "knowledge_status": "known",
+      "permission": true,
+      "epistemic_status": "npc_knowledge",
+      "operation": "disclose",
+      "authorized_proposition": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+      "canonical": false,
+      "authorized_clue_text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+      "authorized_clue_id": "muddy_footprints_northwest",
+      "provenance": "authored_npc_source",
+      "validation": "authorized"
+    }
+  },
+  "topic_selection": {
+    "candidate_sources": [
+      "npc:tavern_runner:patrol_rumor"
+    ],
+    "selected_source": "npc:tavern_runner:patrol_rumor",
+    "ambiguous": false
+  },
+  "verdict": "PASS"
+}

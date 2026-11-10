@@ -1,0 +1,5 @@
+# LIMITATIONS AND OPEN RISKS
+
+B/PARTIAL is intentional. Frozen holdout is 46/50 on an earlier frozen source, with two evaluation-contract failures and two genuine filesystem failures; final persistence repair has no fresh holdout/live-browser rerun. Full per-operation startup and latency decomposition unavailable, particularly A startup. Browser upgrade cache required reopening; no automatic asset invalidation repair was added. Some screenshots are scaled or narrow; text/network evidence supplements them.
+
+Creation/start deadline/network interruptions and corrupted active-session recovery were not fully injected in browser. Multi-file persistence is not crash-atomic, multi-process-safe or a server-restart guarantee. Permanent filesystem outage can prevent rollback. No full suite, official ATGB, broad live AI experiment, external independence, multi-account authorization, campaign generation redesign or PR72 implementation. Actual Windows lock holder remains unknown. Existing six startup and nine broader failures remain.

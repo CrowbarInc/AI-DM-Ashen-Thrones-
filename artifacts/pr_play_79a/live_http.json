@@ -1,0 +1,1806 @@
+{
+  "budget": {
+    "requests": 30,
+    "tokens": 60000
+  },
+  "conversation": {
+    "opening_ms": 14229.0,
+    "stopped": null,
+    "resume": {
+      "scene": true,
+      "campaign": true,
+      "focus": true,
+      "interlocutor": true,
+      "flags": true
+    },
+    "saved": {
+      "campaign_run_id": "bbd6837be54a926408704285",
+      "scene": "frontier_gate",
+      "focus": "gate_guard",
+      "interlocutor": {
+        "npc_id": "gate_guard",
+        "scene_id": "frontier_gate",
+        "campaign_id": "bbd6837be54a926408704285",
+        "status": "active",
+        "last_player_utterance": "Who are you?",
+        "last_npc_response": "Gate Guard says, \"I\u2019m Gate Guard, just an ordinary person in plain clothes keeping an eye on things here at the muddy gate line.\""
+      },
+      "flags": {
+        "faction_house_verevin_agenda_advanced": true,
+        "faction_ash_cowl_agenda_advanced": true,
+        "faction_ordo_pyric_agenda_advanced": true
+      }
+    },
+    "transcript": [
+      {
+        "input": "[start_campaign]",
+        "provenance": "campaign start, not a gameplay utterance",
+        "elapsed_ms": 14229.0,
+        "player_facing_text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. Nearby, a tavern runner trades hot stew and rumors near a rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "after": {
+          "scene": "frontier_gate"
+        },
+        "usage": {
+          "requests": 1,
+          "tokens": 27218,
+          "input_tokens": 25294,
+          "output_tokens": 1924
+        }
+      },
+      {
+        "input": "Hello, Gate Guard.",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 3169.7,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {},
+          "focus": null
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {},
+          "focus": "gate_guard",
+          "interlocutor": {
+            "npc_id": "gate_guard",
+            "scene_id": "frontier_gate",
+            "campaign_id": "bbd6837be54a926408704285",
+            "status": "active",
+            "last_player_utterance": "Hello, Gate Guard.",
+            "last_npc_response": "Gate Guard says, \"Hello, I\u2019m just the Gate Guard here, keeping an eye on things in my ordinary clothes.\""
+          }
+        },
+        "player_facing_text": "The Gate Guard stands by, dressed in plain clothes, watching over the area quietly. He greets with a simple, \"Hello, I\u2019m just the Gate Guard here, keeping an eye on things in my ordinary clothes.\"",
+        "dialogue_adopted": true,
+        "dialogue_published": true,
+        "dialogue_text": "Hello, I\u2019m just the Gate Guard here, keeping an eye on things in my ordinary clothes.",
+        "dialogue_reasons": [],
+        "narration_adopted": true,
+        "narration_published": true,
+        "narration_text": "The Gate Guard stands by, dressed in plain clothes, watching over the area quietly. He greets with a simple, \"Hello, I\u2019m just the Gate Guard here, keeping an eye on things in my ordinary clothes.\"",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 3,
+          "tokens": 27600,
+          "input_tokens": 25609,
+          "output_tokens": 1991
+        }
+      },
+      {
+        "input": "Who are you?",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 2545.1,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {},
+          "focus": "gate_guard"
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard",
+          "interlocutor": {
+            "npc_id": "gate_guard",
+            "scene_id": "frontier_gate",
+            "campaign_id": "bbd6837be54a926408704285",
+            "status": "active",
+            "last_player_utterance": "Who are you?",
+            "last_npc_response": "Gate Guard says, \"Hello, I\u2019m just the Gate Guard here, keeping an eye on things in my ordinary clothes.\""
+          }
+        },
+        "player_facing_text": "The Gate Guard stands by, dressed in plain clothes, and says, \"Hello, I\u2019m just the Gate Guard here, keeping an eye on things.\"",
+        "dialogue_adopted": true,
+        "dialogue_published": false,
+        "dialogue_text": "Hello, I\u2019m just the Gate Guard here, keeping an eye on things in my ordinary clothes.",
+        "dialogue_reasons": [],
+        "narration_adopted": true,
+        "narration_published": true,
+        "narration_text": "The Gate Guard stands by, dressed in plain clothes, and says, \"Hello, I\u2019m just the Gate Guard here, keeping an eye on things.\"",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 5,
+          "tokens": 27998,
+          "input_tokens": 25954,
+          "output_tokens": 2044
+        }
+      },
+      {
+        "input": "What do you know about the missing patrol?",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 32.2,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard"
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard",
+          "interlocutor": {
+            "npc_id": "gate_guard",
+            "scene_id": "frontier_gate",
+            "campaign_id": "bbd6837be54a926408704285",
+            "status": "active",
+            "last_player_utterance": "Who are you?",
+            "last_npc_response": "Gate Guard says, \"Hello, I\u2019m just the Gate Guard here, keeping an eye on things in my ordinary clothes.\""
+          }
+        },
+        "player_facing_text": "Nothing was attempted. That is not available here yet.",
+        "dialogue_adopted": true,
+        "dialogue_published": false,
+        "dialogue_text": "Hello, I\u2019m just the Gate Guard here, keeping an eye on things in my ordinary clothes.",
+        "dialogue_reasons": [],
+        "narration_adopted": true,
+        "narration_published": false,
+        "narration_text": "The Gate Guard stands by, dressed in plain clothes, and says, \"Hello, I\u2019m just the Gate Guard here, keeping an eye on things.\"",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 5,
+          "tokens": 27998,
+          "input_tokens": 25954,
+          "output_tokens": 2044
+        }
+      },
+      {
+        "input": "When did you last hear about them?",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 5584.0,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard"
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard",
+          "interlocutor": {
+            "npc_id": "gate_guard",
+            "scene_id": "frontier_gate",
+            "campaign_id": "bbd6837be54a926408704285",
+            "status": "active",
+            "last_player_utterance": "When did you last hear about them?",
+            "last_npc_response": "Gate Guard says, \"I\u2019m not sure when I last heard about them; I\u2019m just here at the gate, watching the crowd and keeping an eye on the notice board.\""
+          }
+        },
+        "player_facing_text": "The Gate Guard stands by the gate, watching the crowd and keeping an eye on the notice board. He says he isn\u2019t sure when he last heard about them.",
+        "dialogue_adopted": true,
+        "dialogue_published": false,
+        "dialogue_text": "I\u2019m not sure when I last heard about them; I\u2019m just here at the gate, watching the crowd and keeping an eye on the notice board.",
+        "dialogue_reasons": [],
+        "narration_adopted": true,
+        "narration_published": true,
+        "narration_text": "The Gate Guard stands by the gate, watching the crowd and keeping an eye on the notice board. He says he isn\u2019t sure when he last heard about them.",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 8,
+          "tokens": 29573,
+          "input_tokens": 27349,
+          "output_tokens": 2224
+        }
+      },
+      {
+        "input": "Do you think something happened?",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 2905.9,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard"
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard",
+          "interlocutor": {
+            "npc_id": "gate_guard",
+            "scene_id": "frontier_gate",
+            "campaign_id": "bbd6837be54a926408704285",
+            "status": "active",
+            "last_player_utterance": "Do you think something happened?",
+            "last_npc_response": "Gate Guard says, \"I\u2019m not certain if anything happened; I\u2019ve just been here watching the crowd and checking the notice board.\""
+          }
+        },
+        "player_facing_text": "The Gate Guard stands by, eyes moving between the crowd and the notice board, unsure if anything has occurred.",
+        "dialogue_adopted": true,
+        "dialogue_published": false,
+        "dialogue_text": "I\u2019m not certain if anything happened; I\u2019ve just been here watching the crowd and checking the notice board.",
+        "dialogue_reasons": [],
+        "narration_adopted": true,
+        "narration_published": true,
+        "narration_text": "The Gate Guard stands by, eyes moving between the crowd and the notice board, unsure if anything has occurred.",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 10,
+          "tokens": 30028,
+          "input_tokens": 27758,
+          "output_tokens": 2270
+        }
+      },
+      {
+        "input": "What is this place like?",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 1977.4,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard"
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard",
+          "interlocutor": {
+            "npc_id": "gate_guard",
+            "scene_id": "frontier_gate",
+            "campaign_id": "bbd6837be54a926408704285",
+            "status": "active",
+            "last_player_utterance": "What is this place like?",
+            "last_npc_response": "Gate Guard says, \"This place is mostly just a muddy gate line where threadbare watchers and refugees gather, and the notice board shows taxes, curfew rules, and a warning about a missing patrol\u2014I\u2019ve been here watching the crowd but don\u2019t know much beyond that.\""
+          }
+        },
+        "player_facing_text": "Gate Guard says, \"This place is mostly just a muddy gate line where threadbare watchers and refugees gather, and the notice board shows taxes, curfew rules, and a warning about a missing patrol\u2014I\u2019ve been here watching the crowd but don\u2019t know much beyond that.\"",
+        "dialogue_adopted": true,
+        "dialogue_published": true,
+        "dialogue_text": "This place is mostly just a muddy gate line where threadbare watchers and refugees gather, and the notice board shows taxes, curfew rules, and a warning about a missing patrol\u2014I\u2019ve been here watching the crowd but don\u2019t know much beyond that.",
+        "dialogue_reasons": [],
+        "narration_adopted": true,
+        "narration_published": false,
+        "narration_text": "The Gate Guard stands by, eyes moving between the crowd and the notice board, unsure if anything has occurred.",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 11,
+          "tokens": 30389,
+          "input_tokens": 28068,
+          "output_tokens": 2321
+        }
+      },
+      {
+        "input": "What about the patrol again?",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 40.6,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard"
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard",
+          "interlocutor": {
+            "npc_id": "gate_guard",
+            "scene_id": "frontier_gate",
+            "campaign_id": "bbd6837be54a926408704285",
+            "status": "active",
+            "last_player_utterance": "What is this place like?",
+            "last_npc_response": "Gate Guard says, \"This place is mostly just a muddy gate line where threadbare watchers and refugees gather, and the notice board shows taxes, curfew rules, and a warning about a missing patrol\u2014I\u2019ve been here watching the crowd but don\u2019t know much beyond that.\""
+          }
+        },
+        "player_facing_text": "Nothing was attempted. That is not available here yet.",
+        "dialogue_adopted": true,
+        "dialogue_published": false,
+        "dialogue_text": "This place is mostly just a muddy gate line where threadbare watchers and refugees gather, and the notice board shows taxes, curfew rules, and a warning about a missing patrol\u2014I\u2019ve been here watching the crowd but don\u2019t know much beyond that.",
+        "dialogue_reasons": [],
+        "narration_adopted": true,
+        "narration_published": false,
+        "narration_text": "The Gate Guard stands by, eyes moving between the crowd and the notice board, unsure if anything has occurred.",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 11,
+          "tokens": 30389,
+          "input_tokens": 28068,
+          "output_tokens": 2321
+        }
+      },
+      {
+        "input": "Look around the gate.",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 97.8,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard"
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard",
+          "interlocutor": {
+            "npc_id": "gate_guard",
+            "scene_id": "frontier_gate",
+            "campaign_id": "bbd6837be54a926408704285",
+            "status": "active",
+            "last_player_utterance": "What is this place like?",
+            "last_npc_response": "Gate Guard says, \"This place is mostly just a muddy gate line where threadbare watchers and refugees gather, and the notice board shows taxes, curfew rules, and a warning about a missing patrol\u2014I\u2019ve been here watching the crowd but don\u2019t know much beyond that.\""
+          }
+        },
+        "player_facing_text": "Which person do you mean: Gate Guard or Gate Serjeant? Nothing has been attempted.",
+        "dialogue_adopted": true,
+        "dialogue_published": false,
+        "dialogue_text": "This place is mostly just a muddy gate line where threadbare watchers and refugees gather, and the notice board shows taxes, curfew rules, and a warning about a missing patrol\u2014I\u2019ve been here watching the crowd but don\u2019t know much beyond that.",
+        "dialogue_reasons": [],
+        "narration_adopted": true,
+        "narration_published": false,
+        "narration_text": "The Gate Guard stands by, eyes moving between the crowd and the notice board, unsure if anything has occurred.",
+        "narration_reasons": [],
+        "clarification": true,
+        "usage": {
+          "requests": 11,
+          "tokens": 30389,
+          "input_tokens": 28068,
+          "output_tokens": 2321
+        }
+      },
+      {
+        "input": "Who are you?",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 3750.2,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard"
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard",
+          "interlocutor": {
+            "npc_id": "gate_guard",
+            "scene_id": "frontier_gate",
+            "campaign_id": "bbd6837be54a926408704285",
+            "status": "active",
+            "last_player_utterance": "Who are you?",
+            "last_npc_response": "Gate Guard says, \"I\u2019m Gate Guard, just an ordinary person in plain clothes keeping an eye on things here at the muddy gate line.\""
+          }
+        },
+        "player_facing_text": "The Gate Guard stands by the muddy gate line, dressed in plain clothes. He says, \"I\u2019m Gate Guard, just an ordinary person keeping an eye on things here.\"",
+        "dialogue_adopted": true,
+        "dialogue_published": false,
+        "dialogue_text": "I\u2019m Gate Guard, just an ordinary person in plain clothes keeping an eye on things here at the muddy gate line.",
+        "dialogue_reasons": [],
+        "narration_adopted": true,
+        "narration_published": true,
+        "narration_text": "The Gate Guard stands by the muddy gate line, dressed in plain clothes. He says, \"I\u2019m Gate Guard, just an ordinary person keeping an eye on things here.\"",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 13,
+          "tokens": 30829,
+          "input_tokens": 28447,
+          "output_tokens": 2382
+        }
+      },
+      {
+        "input": "Who are you?",
+        "provenance": "resume continuation",
+        "elapsed_ms": 2757.5,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard"
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": "gate_guard",
+          "interlocutor": {
+            "npc_id": "gate_guard",
+            "scene_id": "frontier_gate",
+            "campaign_id": "bbd6837be54a926408704285",
+            "status": "active",
+            "last_player_utterance": "Who are you?",
+            "last_npc_response": "Gate Guard says, \"I\u2019m Gate Guard, just an ordinary person in plain clothes keeping an eye on things here at the muddy gate line.\""
+          }
+        },
+        "player_facing_text": "The Gate Guard introduces himself, saying he is just an ordinary person dressed in plain clothes who watches over the area at the muddy gate line.",
+        "dialogue_adopted": true,
+        "dialogue_published": false,
+        "dialogue_text": "I\u2019m Gate Guard, just an ordinary person in plain clothes keeping an eye on things here at the muddy gate line.",
+        "dialogue_reasons": [],
+        "narration_adopted": true,
+        "narration_published": true,
+        "narration_text": "The Gate Guard introduces himself, saying he is just an ordinary person dressed in plain clothes who watches over the area at the muddy gate line.",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 15,
+          "tokens": 31236,
+          "input_tokens": 28800,
+          "output_tokens": 2436
+        }
+      }
+    ]
+  },
+  "narration": {
+    "opening_ms": 12303.9,
+    "stopped": null,
+    "resume": {
+      "scene": true,
+      "campaign": true,
+      "focus": true,
+      "interlocutor": true,
+      "flags": true
+    },
+    "saved": {
+      "campaign_run_id": "e2246a37786d5356220dfef2",
+      "scene": "old_milestone",
+      "focus": null,
+      "interlocutor": null,
+      "flags": {
+        "faction_house_verevin_agenda_advanced": true,
+        "faction_ash_cowl_agenda_advanced": true,
+        "faction_ordo_pyric_agenda_advanced": true
+      }
+    },
+    "transcript": [
+      {
+        "input": "[start_campaign]",
+        "provenance": "campaign start, not a gameplay utterance",
+        "elapsed_ms": 12303.9,
+        "player_facing_text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. Nearby, a tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "after": {
+          "scene": "frontier_gate"
+        },
+        "usage": {
+          "requests": 16,
+          "tokens": 58474,
+          "input_tokens": 54094,
+          "output_tokens": 4380
+        }
+      },
+      {
+        "input": "I examine the notice board.",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 346.3,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {},
+          "focus": null
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "flags": {},
+          "focus": null,
+          "interlocutor": null
+        },
+        "player_facing_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "dialogue_adopted": false,
+        "dialogue_published": false,
+        "dialogue_text": "",
+        "dialogue_reasons": null,
+        "narration_adopted": false,
+        "narration_published": false,
+        "narration_text": "",
+        "narration_reasons": null,
+        "clarification": false,
+        "usage": {
+          "requests": 16,
+          "tokens": 58474,
+          "input_tokens": 54094,
+          "output_tokens": 4380
+        }
+      },
+      {
+        "input": "I follow the missing patrol rumor.",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 368.8,
+        "before": {
+          "scene": "frontier_gate",
+          "flags": {},
+          "focus": null
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null,
+          "interlocutor": null
+        },
+        "player_facing_text": "You arrive at Old Milestone.",
+        "dialogue_adopted": false,
+        "dialogue_published": false,
+        "dialogue_text": "",
+        "dialogue_reasons": null,
+        "narration_adopted": false,
+        "narration_published": false,
+        "narration_text": "",
+        "narration_reasons": null,
+        "clarification": false,
+        "usage": {
+          "requests": 16,
+          "tokens": 58474,
+          "input_tokens": 54094,
+          "output_tokens": 4380
+        }
+      },
+      {
+        "input": "I examine the weathered milestone.",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 1951.6,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null,
+          "interlocutor": null
+        },
+        "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "dialogue_adopted": false,
+        "dialogue_published": false,
+        "dialogue_text": "",
+        "dialogue_reasons": null,
+        "narration_adopted": false,
+        "narration_published": false,
+        "narration_text": "",
+        "narration_reasons": null,
+        "clarification": false,
+        "usage": {
+          "requests": 17,
+          "tokens": 59451,
+          "input_tokens": 54977,
+          "output_tokens": 4474
+        }
+      },
+      {
+        "input": "I look at the mud prints.",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 333.0,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null,
+          "interlocutor": null
+        },
+        "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "dialogue_adopted": false,
+        "dialogue_published": false,
+        "dialogue_text": "",
+        "dialogue_reasons": null,
+        "narration_adopted": false,
+        "narration_published": false,
+        "narration_text": "",
+        "narration_reasons": null,
+        "clarification": false,
+        "usage": {
+          "requests": 17,
+          "tokens": 59451,
+          "input_tokens": 54977,
+          "output_tokens": 4474
+        }
+      },
+      {
+        "input": "Look around.",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 1730.5,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null,
+          "interlocutor": null
+        },
+        "player_facing_text": "You glance around and see a weathered stone milestone leaning beside the northwest mud track. The mud near the marker is churned with faint overlapping footprints that gradually fade into the scrub. The track extends a short distance past the stone before rainwater and brush obscure the way forward.",
+        "dialogue_adopted": false,
+        "dialogue_published": false,
+        "dialogue_text": "",
+        "dialogue_reasons": null,
+        "narration_adopted": true,
+        "narration_published": true,
+        "narration_text": "You glance around and see a weathered stone milestone leaning beside the northwest mud track. The mud near the marker is churned with faint overlapping footprints that gradually fade into the scrub. The track extends a short distance past the stone before rainwater and brush obscure the way forward.",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 18,
+          "tokens": 59614,
+          "input_tokens": 55084,
+          "output_tokens": 4530
+        }
+      },
+      {
+        "input": "I step back from the milestone.",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 1416.1,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null,
+          "interlocutor": null
+        },
+        "player_facing_text": "There is nothing opposing you in this situation.",
+        "dialogue_adopted": false,
+        "dialogue_published": false,
+        "dialogue_text": "",
+        "dialogue_reasons": null,
+        "narration_adopted": true,
+        "narration_published": true,
+        "narration_text": "There is nothing opposing you in this situation.",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 19,
+          "tokens": 59684,
+          "input_tokens": 55144,
+          "output_tokens": 4540
+        }
+      },
+      {
+        "input": "What do we know about the prints?",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 48.9,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null,
+          "interlocutor": null
+        },
+        "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. The missing patrol was last seen taking the northwest mud track past the crates. The northwest mud track reaches an old milestone beyond the gate. The mud around the marker is churned; any trail beyond it is unclear.",
+        "dialogue_adopted": false,
+        "dialogue_published": false,
+        "dialogue_text": "",
+        "dialogue_reasons": null,
+        "narration_adopted": true,
+        "narration_published": false,
+        "narration_text": "There is nothing opposing you in this situation.",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 19,
+          "tokens": 59684,
+          "input_tokens": 55144,
+          "output_tokens": 4540
+        }
+      },
+      {
+        "input": "I look around the milestone.",
+        "provenance": "developer acceptance script",
+        "elapsed_ms": 7158.0,
+        "before": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null
+        },
+        "after": {
+          "scene": "old_milestone",
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "focus": null,
+          "interlocutor": null
+        },
+        "player_facing_text": "The examination adds nothing new to what you already know.",
+        "dialogue_adopted": false,
+        "dialogue_published": false,
+        "dialogue_text": "",
+        "dialogue_reasons": null,
+        "narration_adopted": true,
+        "narration_published": false,
+        "narration_text": "There is nothing opposing you in this situation.",
+        "narration_reasons": [],
+        "clarification": false,
+        "usage": {
+          "requests": 21,
+          "tokens": 86606,
+          "input_tokens": 81239,
+          "output_tokens": 5367
+        }
+      }
+    ]
+  },
+  "usage": {
+    "requests": 21,
+    "tokens": 86606,
+    "input_tokens": 81239,
+    "output_tokens": 5367
+  },
+  "completed_rows": 21,
+  "published_live_dialogue": 2,
+  "published_live_narration": 8,
+  "clarifications": 1,
+  "latency_ms": {
+    "mean": 1968.0,
+    "median": 1730.5,
+    "p95": 5584.0,
+    "max": 7158.0,
+    "n": 17
+  },
+  "provider_rows": [
+    {
+      "event": "initialized",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "time": "2026-11-08T02:51:06.536774+00:00"
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "e2a22ccee0f141f58c5ca5ba6f3e8f31",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:06.538911+00:00",
+      "time": "2026-11-08T02:51:06.538923+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "e2a22ccee0f141f58c5ca5ba6f3e8f31",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:06.538911+00:00",
+      "time": "2026-11-08T02:51:07.236371+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "e2a22ccee0f141f58c5ca5ba6f3e8f31",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:06.538911+00:00",
+      "time": "2026-11-08T02:51:20.346495+00:00",
+      "sent": true,
+      "request_id": "resp_0f294b3cdacbe162006aefe39cfeb087d28ea6c1159e8abce0",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 25294,
+      "output_tokens": 1924,
+      "total_tokens": 27218,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 13107.816
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "8217d1b8e00340cc8184a600398fa5c1",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:20.803749+00:00",
+      "time": "2026-11-08T02:51:20.803763+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "8217d1b8e00340cc8184a600398fa5c1",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:20.803749+00:00",
+      "time": "2026-11-08T02:51:21.175864+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "8217d1b8e00340cc8184a600398fa5c1",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:20.803749+00:00",
+      "time": "2026-11-08T02:51:21.926670+00:00",
+      "sent": true,
+      "request_id": "resp_0c74c601386bdf3e006aefe3aa463487d28a87271027ebbbcc",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 238,
+      "output_tokens": 21,
+      "total_tokens": 259,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 747.833
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "f8b7dff62de84803bffc0a8c86acf62c",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:21.931670+00:00",
+      "time": "2026-11-08T02:51:21.931683+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "f8b7dff62de84803bffc0a8c86acf62c",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:21.931670+00:00",
+      "time": "2026-11-08T02:51:22.322554+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "f8b7dff62de84803bffc0a8c86acf62c",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:21.931670+00:00",
+      "time": "2026-11-08T02:51:23.520027+00:00",
+      "sent": true,
+      "request_id": "resp_0b038da0163fc439006aefe3ab70c087d28b11552e452446bb",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 77,
+      "output_tokens": 46,
+      "total_tokens": 123,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 1194.543
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "3999dcabbd334786af1798b5cee76cf2",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:23.979152+00:00",
+      "time": "2026-11-08T02:51:23.979167+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "3999dcabbd334786af1798b5cee76cf2",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:23.979152+00:00",
+      "time": "2026-11-08T02:51:24.396452+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "3999dcabbd334786af1798b5cee76cf2",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:23.979152+00:00",
+      "time": "2026-11-08T02:51:25.031465+00:00",
+      "sent": true,
+      "request_id": "resp_04069127d1142e71006aefe3ad7dd887d2b8c1144b00f342c8",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 268,
+      "output_tokens": 21,
+      "total_tokens": 289,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 632.583
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "14c0aa4fbd7241b49c6364c89800a239",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:25.036782+00:00",
+      "time": "2026-11-08T02:51:25.036794+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "14c0aa4fbd7241b49c6364c89800a239",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:25.036782+00:00",
+      "time": "2026-11-08T02:51:25.415124+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "14c0aa4fbd7241b49c6364c89800a239",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:25.036782+00:00",
+      "time": "2026-11-08T02:51:26.147843+00:00",
+      "sent": true,
+      "request_id": "resp_0e31e541aa24a4fd006aefe3ae7fb087d29864c7d2f467f621",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 77,
+      "output_tokens": 32,
+      "total_tokens": 109,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 729.666
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "8e6709f7869c49e989337094cddadd44",
+      "purpose": "contract_interpretation",
+      "owner": "semantic_interpreter._invoke_interpretation_model",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:26.581349+00:00",
+      "time": "2026-11-08T02:51:26.581500+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "8e6709f7869c49e989337094cddadd44",
+      "purpose": "contract_interpretation",
+      "owner": "semantic_interpreter._invoke_interpretation_model",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:26.581349+00:00",
+      "time": "2026-11-08T02:51:26.975577+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "8e6709f7869c49e989337094cddadd44",
+      "purpose": "contract_interpretation",
+      "owner": "semantic_interpreter._invoke_interpretation_model",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:26.581349+00:00",
+      "time": "2026-11-08T02:51:28.481466+00:00",
+      "sent": true,
+      "request_id": "resp_098123eeee9f74eb006aefe3b0273087d2a32b33dd950fa387",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 997,
+      "output_tokens": 114,
+      "total_tokens": 1111,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 1503.275
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "9adefc7266c74ff7a963819be582e28e",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:28.490798+00:00",
+      "time": "2026-11-08T02:51:28.490811+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "9adefc7266c74ff7a963819be582e28e",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:28.490798+00:00",
+      "time": "2026-11-08T02:51:28.894331+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "9adefc7266c74ff7a963819be582e28e",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:28.490798+00:00",
+      "time": "2026-11-08T02:51:30.466046+00:00",
+      "sent": true,
+      "request_id": "resp_09e57005b49ed0d2006aefe3b2034c87d2a36902abe730e9be",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 310,
+      "output_tokens": 32,
+      "total_tokens": 342,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 1568.977
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "5ad03a5d427949c5bfb1bf441f117bdb",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:30.471106+00:00",
+      "time": "2026-11-08T02:51:30.471121+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "5ad03a5d427949c5bfb1bf441f117bdb",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:30.471106+00:00",
+      "time": "2026-11-08T02:51:30.845053+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "5ad03a5d427949c5bfb1bf441f117bdb",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:30.471106+00:00",
+      "time": "2026-11-08T02:51:31.761500+00:00",
+      "sent": true,
+      "request_id": "resp_0ff6e4e1a343ad96006aefe3b3eba887d2a678c2657f04f501",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 88,
+      "output_tokens": 34,
+      "total_tokens": 122,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 913.359
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "982a13d002254c15b12ec0bfe483e1e1",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:32.188701+00:00",
+      "time": "2026-11-08T02:51:32.188714+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "982a13d002254c15b12ec0bfe483e1e1",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:32.188701+00:00",
+      "time": "2026-11-08T02:51:32.563949+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "982a13d002254c15b12ec0bfe483e1e1",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:32.188701+00:00",
+      "time": "2026-11-08T02:51:33.525575+00:00",
+      "sent": true,
+      "request_id": "resp_03ad079640918a03006aefe3b5a85c87d2bea6cac9fe5839dc",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 330,
+      "output_tokens": 23,
+      "total_tokens": 353,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 959.479
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "415e05f89b1345a5a115b6b464485c6b",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:33.530088+00:00",
+      "time": "2026-11-08T02:51:33.530104+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "415e05f89b1345a5a115b6b464485c6b",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:33.530088+00:00",
+      "time": "2026-11-08T02:51:33.901288+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "415e05f89b1345a5a115b6b464485c6b",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:33.530088+00:00",
+      "time": "2026-11-08T02:51:34.665097+00:00",
+      "sent": true,
+      "request_id": "resp_056b8437a28cf21d006aefe3b702d087d28954c3039c9419de",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 79,
+      "output_tokens": 23,
+      "total_tokens": 102,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 725.071
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "fb2080e059dd472ea6276806e4bbdda4",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:35.108108+00:00",
+      "time": "2026-11-08T02:51:35.108122+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "fb2080e059dd472ea6276806e4bbdda4",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:35.108108+00:00",
+      "time": "2026-11-08T02:51:35.532291+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "fb2080e059dd472ea6276806e4bbdda4",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:35.108108+00:00",
+      "time": "2026-11-08T02:51:36.444299+00:00",
+      "sent": true,
+      "request_id": "resp_093d33300a30554f006aefe3b8a4e087d2850814cded2bd4d7",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 310,
+      "output_tokens": 51,
+      "total_tokens": 361,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 880.566
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "13b4f5ba1ab4436a8f9bc6657d942d1d",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:37.343609+00:00",
+      "time": "2026-11-08T02:51:37.343622+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "13b4f5ba1ab4436a8f9bc6657d942d1d",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:37.343609+00:00",
+      "time": "2026-11-08T02:51:37.743818+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "13b4f5ba1ab4436a8f9bc6657d942d1d",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:37.343609+00:00",
+      "time": "2026-11-08T02:51:38.905558+00:00",
+      "sent": true,
+      "request_id": "resp_0735bf86e20dcb09006aefe3bae78487d282cbd71276824e9d",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 298,
+      "output_tokens": 25,
+      "total_tokens": 323,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 1137.306
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "1c4fc1f13d26447ca13570d1a36d0848",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:38.919337+00:00",
+      "time": "2026-11-08T02:51:38.919351+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "1c4fc1f13d26447ca13570d1a36d0848",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:38.919337+00:00",
+      "time": "2026-11-08T02:51:39.612806+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "1c4fc1f13d26447ca13570d1a36d0848",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:38.919337+00:00",
+      "time": "2026-11-08T02:51:40.523758+00:00",
+      "sent": true,
+      "request_id": "resp_040026c53e5a4261006aefe3bcb21887d2aad83d72cf9a1170",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 81,
+      "output_tokens": 36,
+      "total_tokens": 117,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 899.526
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "9b9b0c46b76641fdb36fe4208dd83fba",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:41.884024+00:00",
+      "time": "2026-11-08T02:51:41.884038+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "9b9b0c46b76641fdb36fe4208dd83fba",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:41.884024+00:00",
+      "time": "2026-11-08T02:51:42.271702+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "9b9b0c46b76641fdb36fe4208dd83fba",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:41.884024+00:00",
+      "time": "2026-11-08T02:51:43.159629+00:00",
+      "sent": true,
+      "request_id": "resp_0488217b2ea8f361006aefe3bf590c87d2851ccc410f8aebc6",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 272,
+      "output_tokens": 25,
+      "total_tokens": 297,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 886.118
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "c94278e076f6422699c4e592ff681b53",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:43.161984+00:00",
+      "time": "2026-11-08T02:51:43.161991+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "c94278e076f6422699c4e592ff681b53",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:43.161984+00:00",
+      "time": "2026-11-08T02:51:43.538431+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "c94278e076f6422699c4e592ff681b53",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:43.161984+00:00",
+      "time": "2026-11-08T02:51:44.204970+00:00",
+      "sent": true,
+      "request_id": "resp_0ace76c8160c1e84006aefe3c09aac87d2917df8dd37493a3e",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 81,
+      "output_tokens": 29,
+      "total_tokens": 110,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 664.406
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "af601fdae7d7468e8bc38345eb411259",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:44.654097+00:00",
+      "time": "2026-11-08T02:51:44.654117+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "af601fdae7d7468e8bc38345eb411259",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:44.654097+00:00",
+      "time": "2026-11-08T02:51:45.034046+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "af601fdae7d7468e8bc38345eb411259",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:44.654097+00:00",
+      "time": "2026-11-08T02:51:56.616509+00:00",
+      "sent": true,
+      "request_id": "resp_0f1172266e52e3b9006aefe3c2295887d29cdb5a013a956b39",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 25294,
+      "output_tokens": 1944,
+      "total_tokens": 27238,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 11579.405
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "57d51c5fd9e049ed9ffc528c27e2d9ba",
+      "purpose": "contract_interpretation",
+      "owner": "semantic_interpreter._invoke_interpretation_model",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:57.693529+00:00",
+      "time": "2026-11-08T02:51:57.693543+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "57d51c5fd9e049ed9ffc528c27e2d9ba",
+      "purpose": "contract_interpretation",
+      "owner": "semantic_interpreter._invoke_interpretation_model",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:57.693529+00:00",
+      "time": "2026-11-08T02:51:58.126371+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "57d51c5fd9e049ed9ffc528c27e2d9ba",
+      "purpose": "contract_interpretation",
+      "owner": "semantic_interpreter._invoke_interpretation_model",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:51:57.693529+00:00",
+      "time": "2026-11-08T02:51:59.257546+00:00",
+      "sent": true,
+      "request_id": "resp_0de910cd72c3c8bd006aefe3cf36b087d2bcd51f4b51781ef3",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 883,
+      "output_tokens": 94,
+      "total_tokens": 977,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 1129.128
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "53ff768420824168869c404aea6f8006",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:00.014679+00:00",
+      "time": "2026-11-08T02:52:00.014694+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "53ff768420824168869c404aea6f8006",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:00.014679+00:00",
+      "time": "2026-11-08T02:52:00.404653+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "53ff768420824168869c404aea6f8006",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:00.014679+00:00",
+      "time": "2026-11-08T02:52:01.378807+00:00",
+      "sent": true,
+      "request_id": "resp_0d9b2a15bf3c0f5c006aefe3d17c2487d29358037b4f2cf4ea",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 107,
+      "output_tokens": 56,
+      "total_tokens": 163,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 969.97
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "d8d224017c984af9842901abf858ccf7",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:01.760646+00:00",
+      "time": "2026-11-08T02:52:01.760657+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "d8d224017c984af9842901abf858ccf7",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:01.760646+00:00",
+      "time": "2026-11-08T02:52:02.137425+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "d8d224017c984af9842901abf858ccf7",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:01.760646+00:00",
+      "time": "2026-11-08T02:52:02.811500+00:00",
+      "sent": true,
+      "request_id": "resp_0191f24a05de2196006aefe3d334d887d2b49313c465e4b24a",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 60,
+      "output_tokens": 10,
+      "total_tokens": 70,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 670.237
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "6c27c77c9e054095809f5e54e9769899",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:03.265020+00:00",
+      "time": "2026-11-08T02:52:03.265032+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "6c27c77c9e054095809f5e54e9769899",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:03.265020+00:00",
+      "time": "2026-11-08T02:52:03.630218+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "6c27c77c9e054095809f5e54e9769899",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:03.265020+00:00",
+      "time": "2026-11-08T02:52:05.538910+00:00",
+      "sent": true,
+      "request_id": "resp_00dbc668c8f1ce8c006aefe3d4b7e087d2bff4e05994579cfa",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 2426,
+      "output_tokens": 227,
+      "total_tokens": 2653,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 1906.221
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "fb0ee2b240324c62be515723bf17a649",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:05.625509+00:00",
+      "time": "2026-11-08T02:52:05.625524+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "fb0ee2b240324c62be515723bf17a649",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:05.625509+00:00",
+      "time": "2026-11-08T02:52:06.000087+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "df3b3f4791ae43ddafca2c807b3d5e62",
+      "attempt_id": "fb0ee2b240324c62be515723bf17a649",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-08T02:52:05.625509+00:00",
+      "time": "2026-11-08T02:52:10.155527+00:00",
+      "sent": true,
+      "request_id": "resp_0cd244285c594789006aefe3d724f887d28ccd3a0cbfad181c",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 23669,
+      "output_tokens": 600,
+      "total_tokens": 24269,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 4151.64
+    }
+  ]
+}

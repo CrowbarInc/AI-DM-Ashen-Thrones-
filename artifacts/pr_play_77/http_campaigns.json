@@ -1,0 +1,1176 @@
+[
+  {
+    "name": "A",
+    "branch": "survey",
+    "turns": [
+      {
+        "input": "Is there a small loose stone I could shift aside?",
+        "player_facing_text": "A small loose stone lies beside the established stonework. It is ordinary and light enough to shift. It has not been moved.",
+        "elapsed_ms": 585.3,
+        "physical": null,
+        "before": {
+          "scene": "old_milestone",
+          "turn": 4,
+          "posture": null,
+          "position": null,
+          "plans": [],
+          "consequences": [],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_survey": true,
+            "patrol_survey_recorded": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "turn": 5,
+          "posture": null,
+          "position": null,
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_c0e00fc2f8c8f3535420",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "establish",
+              "prior": {
+                "present": false
+              },
+              "result": {
+                "present": true,
+                "position": "beside the stonework"
+              },
+              "scene_id": "old_milestone"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_survey": true,
+            "patrol_survey_recorded": true
+          }
+        },
+        "sentinel": false
+      },
+      {
+        "input": "I push the loose stone aside and look where it was.",
+        "player_facing_text": "You push the ordinary loose stone. It is now aside from the stonework. The ordinary loose stone is aside from the stonework.",
+        "elapsed_ms": 306.8,
+        "physical": null,
+        "before": {
+          "scene": "old_milestone",
+          "turn": 5,
+          "posture": null,
+          "position": null,
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_c0e00fc2f8c8f3535420",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "establish",
+              "prior": {
+                "present": false
+              },
+              "result": {
+                "present": true,
+                "position": "beside the stonework"
+              },
+              "scene_id": "old_milestone"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_survey": true,
+            "patrol_survey_recorded": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "turn": 6,
+          "posture": null,
+          "position": null,
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_c0e00fc2f8c8f3535420",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "establish",
+              "prior": {
+                "present": false
+              },
+              "result": {
+                "present": true,
+                "position": "beside the stonework"
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_4cf4ef9e3e015352db75",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "beside the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_survey": true,
+            "patrol_survey_recorded": true
+          }
+        },
+        "sentinel": false
+      },
+      {
+        "input": "I push the loose stone farther, climb the milestone, and look down the road.",
+        "player_facing_text": "You push the ordinary loose stone. It is now farther aside from the stonework. The Weathered milestone is here, but no climbing check is configured, so the climb is not resolved and your position is unchanged. A later part was not attempted, because it depended on a step that did not succeed.",
+        "elapsed_ms": 792.0,
+        "physical": null,
+        "before": {
+          "scene": "old_milestone",
+          "turn": 6,
+          "posture": null,
+          "position": null,
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_c0e00fc2f8c8f3535420",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "establish",
+              "prior": {
+                "present": false
+              },
+              "result": {
+                "present": true,
+                "position": "beside the stonework"
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_4cf4ef9e3e015352db75",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "beside the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_survey": true,
+            "patrol_survey_recorded": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "turn": 7,
+          "posture": null,
+          "position": null,
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "UNSUPPORTED",
+                "BLOCKED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_c0e00fc2f8c8f3535420",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "establish",
+              "prior": {
+                "present": false
+              },
+              "result": {
+                "present": true,
+                "position": "beside the stonework"
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_4cf4ef9e3e015352db75",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "beside the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_26b93a132419b3c2f557",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "farther aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_survey": true,
+            "patrol_survey_recorded": true
+          }
+        },
+        "sentinel": false
+      },
+      {
+        "input": "Where is the loose stone?",
+        "player_facing_text": "The ordinary loose stone is farther aside from the stonework.",
+        "elapsed_ms": 40.7,
+        "physical": null,
+        "before": {
+          "scene": "old_milestone",
+          "turn": 7,
+          "posture": null,
+          "position": null,
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "UNSUPPORTED",
+                "BLOCKED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_c0e00fc2f8c8f3535420",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "establish",
+              "prior": {
+                "present": false
+              },
+              "result": {
+                "present": true,
+                "position": "beside the stonework"
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_4cf4ef9e3e015352db75",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "beside the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_26b93a132419b3c2f557",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "farther aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_survey": true,
+            "patrol_survey_recorded": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "turn": 7,
+          "posture": null,
+          "position": null,
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "UNSUPPORTED",
+                "BLOCKED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_c0e00fc2f8c8f3535420",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "establish",
+              "prior": {
+                "present": false
+              },
+              "result": {
+                "present": true,
+                "position": "beside the stonework"
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_4cf4ef9e3e015352db75",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "beside the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_26b93a132419b3c2f557",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "farther aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_survey": true,
+            "patrol_survey_recorded": true
+          }
+        },
+        "sentinel": false
+      },
+      {
+        "input": "continue",
+        "player_facing_text": "No unfinished sequence resumes on its own. Say the next action you want. Nothing further was attempted.",
+        "elapsed_ms": 42.7,
+        "physical": null,
+        "before": {
+          "scene": "old_milestone",
+          "turn": 7,
+          "posture": null,
+          "position": null,
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "UNSUPPORTED",
+                "BLOCKED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_c0e00fc2f8c8f3535420",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "establish",
+              "prior": {
+                "present": false
+              },
+              "result": {
+                "present": true,
+                "position": "beside the stonework"
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_4cf4ef9e3e015352db75",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "beside the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_26b93a132419b3c2f557",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "farther aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_survey": true,
+            "patrol_survey_recorded": true
+          }
+        },
+        "after": {
+          "scene": "old_milestone",
+          "turn": 7,
+          "posture": null,
+          "position": null,
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "UNSUPPORTED",
+                "BLOCKED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_c0e00fc2f8c8f3535420",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "establish",
+              "prior": {
+                "present": false
+              },
+              "result": {
+                "present": true,
+                "position": "beside the stonework"
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_4cf4ef9e3e015352db75",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "beside the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            },
+            {
+              "id": "pc_26b93a132419b3c2f557",
+              "target_id": "wf_786dd45ce808be5d923f",
+              "action": "push",
+              "prior": {
+                "position": "aside from the stonework",
+                "obstructs": null
+              },
+              "result": {
+                "position": "farther aside from the stonework",
+                "obstructs": null
+              },
+              "scene_id": "old_milestone"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_survey": true,
+            "patrol_survey_recorded": true
+          }
+        },
+        "sentinel": false
+      }
+    ],
+    "final": {
+      "scene": "old_milestone",
+      "turn": 7,
+      "posture": null,
+      "position": null,
+      "plans": [
+        {
+          "statuses": [
+            "SUCCEEDED"
+          ],
+          "automatic_resume": false
+        },
+        {
+          "statuses": [
+            "SUCCEEDED",
+            "SUCCEEDED"
+          ],
+          "automatic_resume": false
+        },
+        {
+          "statuses": [
+            "SUCCEEDED",
+            "UNSUPPORTED",
+            "BLOCKED"
+          ],
+          "automatic_resume": false
+        }
+      ],
+      "consequences": [
+        {
+          "id": "pc_c0e00fc2f8c8f3535420",
+          "target_id": "wf_786dd45ce808be5d923f",
+          "action": "establish",
+          "prior": {
+            "present": false
+          },
+          "result": {
+            "present": true,
+            "position": "beside the stonework"
+          },
+          "scene_id": "old_milestone"
+        },
+        {
+          "id": "pc_4cf4ef9e3e015352db75",
+          "target_id": "wf_786dd45ce808be5d923f",
+          "action": "push",
+          "prior": {
+            "position": "beside the stonework",
+            "obstructs": null
+          },
+          "result": {
+            "position": "aside from the stonework",
+            "obstructs": null
+          },
+          "scene_id": "old_milestone"
+        },
+        {
+          "id": "pc_26b93a132419b3c2f557",
+          "target_id": "wf_786dd45ce808be5d923f",
+          "action": "push",
+          "prior": {
+            "position": "aside from the stonework",
+            "obstructs": null
+          },
+          "result": {
+            "position": "farther aside from the stonework",
+            "obstructs": null
+          },
+          "scene_id": "old_milestone"
+        }
+      ],
+      "flags": {
+        "faction_house_verevin_agenda_advanced": true,
+        "faction_ash_cowl_agenda_advanced": true,
+        "faction_ordo_pyric_agenda_advanced": true,
+        "patrol_survey": true,
+        "patrol_survey_recorded": true
+      }
+    }
+  },
+  {
+    "name": "B",
+    "branch": "report",
+    "turns": [
+      {
+        "input": "If I am beside the notice board, step back from it.",
+        "player_facing_text": "That condition is not met, so the later action was skipped. Nothing was changed.",
+        "elapsed_ms": 42.9,
+        "physical": null,
+        "before": {
+          "scene": "frontier_gate",
+          "turn": 5,
+          "posture": null,
+          "position": null,
+          "plans": [],
+          "consequences": [],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "turn": 5,
+          "posture": null,
+          "position": null,
+          "plans": [],
+          "consequences": [],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "sentinel": false
+      },
+      {
+        "input": "I stand up and approach the notice board.",
+        "player_facing_text": "You are already standing. You move beside the Notice board.",
+        "elapsed_ms": 839.7,
+        "physical": null,
+        "before": {
+          "scene": "frontier_gate",
+          "turn": 5,
+          "posture": null,
+          "position": null,
+          "plans": [],
+          "consequences": [],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "turn": 6,
+          "posture": null,
+          "position": {
+            "kind": "beside",
+            "target_id": "notice_board",
+            "scene_id": "frontier_gate",
+            "label": "Notice board"
+          },
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_18a95b337d595beb339f",
+              "target_id": "notice_board",
+              "action": "approach",
+              "prior": {
+                "position": null
+              },
+              "result": {
+                "position": "beside",
+                "target_id": "notice_board"
+              },
+              "scene_id": "frontier_gate"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "sentinel": false
+      },
+      {
+        "input": "Is the notice board here, and what is on the hidden side?",
+        "player_facing_text": "That is not established. Nothing on the other side is established, and nothing was opened or moved.",
+        "elapsed_ms": 43.6,
+        "physical": null,
+        "before": {
+          "scene": "frontier_gate",
+          "turn": 6,
+          "posture": null,
+          "position": {
+            "kind": "beside",
+            "target_id": "notice_board",
+            "scene_id": "frontier_gate",
+            "label": "Notice board"
+          },
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_18a95b337d595beb339f",
+              "target_id": "notice_board",
+              "action": "approach",
+              "prior": {
+                "position": null
+              },
+              "result": {
+                "position": "beside",
+                "target_id": "notice_board"
+              },
+              "scene_id": "frontier_gate"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "turn": 6,
+          "posture": null,
+          "position": {
+            "kind": "beside",
+            "target_id": "notice_board",
+            "scene_id": "frontier_gate",
+            "label": "Notice board"
+          },
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_18a95b337d595beb339f",
+              "target_id": "notice_board",
+              "action": "approach",
+              "prior": {
+                "position": null
+              },
+              "result": {
+                "position": "beside",
+                "target_id": "notice_board"
+              },
+              "scene_id": "frontier_gate"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "sentinel": false
+      },
+      {
+        "input": "Am I beside the notice board?",
+        "player_facing_text": "You are beside the Notice board.",
+        "elapsed_ms": 40.7,
+        "physical": null,
+        "before": {
+          "scene": "frontier_gate",
+          "turn": 6,
+          "posture": null,
+          "position": {
+            "kind": "beside",
+            "target_id": "notice_board",
+            "scene_id": "frontier_gate",
+            "label": "Notice board"
+          },
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_18a95b337d595beb339f",
+              "target_id": "notice_board",
+              "action": "approach",
+              "prior": {
+                "position": null
+              },
+              "result": {
+                "position": "beside",
+                "target_id": "notice_board"
+              },
+              "scene_id": "frontier_gate"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "turn": 6,
+          "posture": null,
+          "position": {
+            "kind": "beside",
+            "target_id": "notice_board",
+            "scene_id": "frontier_gate",
+            "label": "Notice board"
+          },
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_18a95b337d595beb339f",
+              "target_id": "notice_board",
+              "action": "approach",
+              "prior": {
+                "position": null
+              },
+              "result": {
+                "position": "beside",
+                "target_id": "notice_board"
+              },
+              "scene_id": "frontier_gate"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "sentinel": false
+      },
+      {
+        "input": "If I am beside the notice board, step back from it.",
+        "player_facing_text": "You step back from the Notice board.",
+        "elapsed_ms": 908.1,
+        "physical": null,
+        "before": {
+          "scene": "frontier_gate",
+          "turn": 6,
+          "posture": null,
+          "position": {
+            "kind": "beside",
+            "target_id": "notice_board",
+            "scene_id": "frontier_gate",
+            "label": "Notice board"
+          },
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_18a95b337d595beb339f",
+              "target_id": "notice_board",
+              "action": "approach",
+              "prior": {
+                "position": null
+              },
+              "result": {
+                "position": "beside",
+                "target_id": "notice_board"
+              },
+              "scene_id": "frontier_gate"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "after": {
+          "scene": "frontier_gate",
+          "turn": 7,
+          "posture": null,
+          "position": {
+            "kind": "back",
+            "target_id": "notice_board",
+            "scene_id": "frontier_gate",
+            "label": "Notice board"
+          },
+          "plans": [
+            {
+              "statuses": [
+                "SUCCEEDED",
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            },
+            {
+              "statuses": [
+                "SUCCEEDED"
+              ],
+              "automatic_resume": false
+            }
+          ],
+          "consequences": [
+            {
+              "id": "pc_18a95b337d595beb339f",
+              "target_id": "notice_board",
+              "action": "approach",
+              "prior": {
+                "position": null
+              },
+              "result": {
+                "position": "beside",
+                "target_id": "notice_board"
+              },
+              "scene_id": "frontier_gate"
+            },
+            {
+              "id": "pc_02b91ca4530da691d3ad",
+              "target_id": "notice_board",
+              "action": "retreat",
+              "prior": {
+                "position": "beside"
+              },
+              "result": {
+                "position": "back"
+              },
+              "scene_id": "frontier_gate"
+            }
+          ],
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true,
+            "patrol_report": true,
+            "patrol_guards_warned": true
+          }
+        },
+        "sentinel": false
+      }
+    ],
+    "final": {
+      "scene": "frontier_gate",
+      "turn": 7,
+      "posture": null,
+      "position": {
+        "kind": "back",
+        "target_id": "notice_board",
+        "scene_id": "frontier_gate",
+        "label": "Notice board"
+      },
+      "plans": [
+        {
+          "statuses": [
+            "SUCCEEDED",
+            "SUCCEEDED"
+          ],
+          "automatic_resume": false
+        },
+        {
+          "statuses": [
+            "SUCCEEDED"
+          ],
+          "automatic_resume": false
+        }
+      ],
+      "consequences": [
+        {
+          "id": "pc_18a95b337d595beb339f",
+          "target_id": "notice_board",
+          "action": "approach",
+          "prior": {
+            "position": null
+          },
+          "result": {
+            "position": "beside",
+            "target_id": "notice_board"
+          },
+          "scene_id": "frontier_gate"
+        },
+        {
+          "id": "pc_02b91ca4530da691d3ad",
+          "target_id": "notice_board",
+          "action": "retreat",
+          "prior": {
+            "position": "beside"
+          },
+          "result": {
+            "position": "back"
+          },
+          "scene_id": "frontier_gate"
+        }
+      ],
+      "flags": {
+        "faction_house_verevin_agenda_advanced": true,
+        "faction_ash_cowl_agenda_advanced": true,
+        "faction_ordo_pyric_agenda_advanced": true,
+        "patrol_report": true,
+        "patrol_guards_warned": true
+      }
+    }
+  }
+]

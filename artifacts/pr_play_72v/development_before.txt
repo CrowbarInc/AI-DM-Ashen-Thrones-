@@ -1,0 +1,80 @@
+..........F.....FFFF.........FFF.............                            [100%]
+================================== FAILURES ===================================
+______________ test_paraphrases[Take another look at the trail.] ______________
+tests\test_pr_play_72v_resolution.py:30: in test_paraphrases
+    assert d.category.value=='EXECUTE'
+E   AssertionError: assert 'CLARIFY' == 'EXECUTE'
+E     
+E     - EXECUTE
+E     + CLARIFY
+_________________ test_paraphrases[Reexamine the milestone.] __________________
+tests\test_pr_play_72v_resolution.py:30: in test_paraphrases
+    assert d.category.value=='EXECUTE'
+E   AssertionError: assert 'DECLINE' == 'EXECUTE'
+E     
+E     - EXECUTE
+E     + DECLINE
+______________ test_paraphrases[I examine the milestone again.] _______________
+tests\test_pr_play_72v_resolution.py:30: in test_paraphrases
+    assert d.category.value=='EXECUTE'
+E   AssertionError: assert 'DECLINE' == 'EXECUTE'
+E     
+E     - EXECUTE
+E     + DECLINE
+____________________ test_paraphrases[Read the milestone.] ____________________
+tests\test_pr_play_72v_resolution.py:30: in test_paraphrases
+    assert d.category.value=='EXECUTE'
+E   AssertionError: assert 'DECLINE' == 'EXECUTE'
+E     
+E     - EXECUTE
+E     + DECLINE
+_________________ test_paraphrases[Scrutinize the milestone.] _________________
+tests\test_pr_play_72v_resolution.py:30: in test_paraphrases
+    assert d.category.value=='EXECUTE'
+E   AssertionError: assert 'DECLINE' == 'EXECUTE'
+E     
+E     - EXECUTE
+E     + DECLINE
+______________ test_readonly_boundaries[Check it again.-CLARIFY] ______________
+tests\test_pr_play_72v_resolution.py:41: in test_readonly_boundaries
+    assert authority()==before
+E   AssertionError: assert {'session': {...dex': 0, ...}} == {'session': {...dex': 0, ...}}
+E     
+E     Omitting 3 identical items, use -vv to show
+E     Differing items:
+E     {'session': {'active_scene_id': 'old_milestone', 'visited_scene_ids': ['frontier_gate', 'old_milestone'], 'current_date': 'Day 1', 'turn_counter': 4, ...}} != {'session': {'active_scene_id': 'old_milestone', 'visited_scene_ids': ['frontier_gate', 'old_milestone'], 'current_date': 'Day 1', 'turn_counter': 4, ...}}
+E     Use -v to get more diff
+__________ test_readonly_boundaries[Please check it again.-CLARIFY] ___________
+tests\test_pr_play_72v_resolution.py:41: in test_readonly_boundaries
+    assert authority()==before
+E   AssertionError: assert {'session': {...dex': 0, ...}} == {'session': {...dex': 0, ...}}
+E     
+E     Omitting 3 identical items, use -vv to show
+E     Differing items:
+E     {'session': {'active_scene_id': 'old_milestone', 'visited_scene_ids': ['frontier_gate', 'old_milestone'], 'current_date': 'Day 1', 'turn_counter': 4, ...}} != {'session': {'active_scene_id': 'old_milestone', 'visited_scene_ids': ['frontier_gate', 'old_milestone'], 'current_date': 'Day 1', 'turn_counter': 4, ...}}
+E     Use -v to get more diff
+____________ test_readonly_boundaries[Could I inspect it?-CLARIFY] ____________
+tests\test_pr_play_72v_resolution.py:41: in test_readonly_boundaries
+    assert authority()==before
+E   AssertionError: assert {'session': {...dex': 0, ...}} == {'session': {...dex': 0, ...}}
+E     
+E     Omitting 3 identical items, use -vv to show
+E     Differing items:
+E     {'session': {'active_scene_id': 'old_milestone', 'visited_scene_ids': ['frontier_gate', 'old_milestone'], 'current_date': 'Day 1', 'turn_counter': 4, ...}} != {'session': {'active_scene_id': 'old_milestone', 'visited_scene_ids': ['frontier_gate', 'old_milestone'], 'current_date': 'Day 1', 'turn_counter': 4, ...}}
+E     Use -v to get more diff
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_72v_resolution.py::test_paraphrases[Take another look at the trail.]
+FAILED tests/test_pr_play_72v_resolution.py::test_paraphrases[Reexamine the milestone.]
+FAILED tests/test_pr_play_72v_resolution.py::test_paraphrases[I examine the milestone again.]
+FAILED tests/test_pr_play_72v_resolution.py::test_paraphrases[Read the milestone.]
+FAILED tests/test_pr_play_72v_resolution.py::test_paraphrases[Scrutinize the milestone.]
+FAILED tests/test_pr_play_72v_resolution.py::test_readonly_boundaries[Check it again.-CLARIFY]
+FAILED tests/test_pr_play_72v_resolution.py::test_readonly_boundaries[Please check it again.-CLARIFY]
+FAILED tests/test_pr_play_72v_resolution.py::test_readonly_boundaries[Could I inspect it?-CLARIFY]
+8 failed, 37 passed, 1 warning in 189.75s (0:03:09)

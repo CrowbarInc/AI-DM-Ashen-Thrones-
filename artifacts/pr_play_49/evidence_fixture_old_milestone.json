@@ -1,0 +1,187 @@
+{
+  "id": "old_milestone",
+  "category": "canonical",
+  "scene": {
+    "scene": {
+      "id": "old_milestone",
+      "location": "Old Milestone",
+      "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+      "mode": "exploration",
+      "visible_facts": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+        "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      ],
+      "opening_seed_facts": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub."
+      ],
+      "journal_seed_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discoverable_clues": [
+        {
+          "id": "milestone_mud_prints",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "hidden_facts": [],
+      "exits": [
+        {
+          "label": "Return to Cinderwatch Gate",
+          "target_scene_id": "frontier_gate"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "interactables": [
+        {
+          "id": "milestone",
+          "label": "Weathered milestone",
+          "aliases": [
+            "old milestone",
+            "stone",
+            "marker",
+            "weathered stone"
+          ],
+          "type": "investigate",
+          "reveals_clue": "milestone_mud_prints"
+        },
+        {
+          "id": "prints",
+          "label": "Mud prints",
+          "aliases": [
+            "footprints",
+            "mud",
+            "track",
+            "mud track",
+            "northwest track"
+          ],
+          "type": "investigate",
+          "reveals_clue": "milestone_mud_prints"
+        }
+      ]
+    }
+  },
+  "resolution": {
+    "kind": "discover_clue",
+    "action_id": "prints",
+    "label": "prints",
+    "prompt": "I examine the footprints.",
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": "milestone_mud_prints",
+    "discovered_clues": [
+      "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    ],
+    "world_updates": null,
+    "state_changes": {
+      "clue_revealed": true,
+      "interactable_id": "prints"
+    },
+    "hint": "Player investigated [prints] and discovered clue [milestone_mud_prints]. Narrate the discovery and its significance.",
+    "interactable_id": "prints",
+    "clue_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "metadata": {
+      "referenced_surface_authority": "authored_interactable",
+      "referenced_surface_target": "footprint",
+      "referenced_surface_existence": true,
+      "referenced_surface_visibility": true,
+      "referenced_surface_inspectability": true,
+      "referenced_surface_interactable_id": "prints",
+      "referenced_surface_visible_fact": "",
+      "referenced_surface_inspectable_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "skip_unrelated_clue_discovery": false
+    }
+  },
+  "known": [],
+  "player": "I examine the footprints.",
+  "hidden_information": [
+    "UNSEEN_CLUE_K42",
+    "PRIVATE_GM_NOTE_K42",
+    "NPC_MOTIVE_K42",
+    "HIDDEN_DESTINATION_K42",
+    "PRIVATE_WORLD_K42",
+    "QUEST_TWIST_K42"
+  ],
+  "authoritative_projection": {
+    "outcome": {
+      "status": "discovered",
+      "success": true,
+      "target_id": "prints",
+      "revealed": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "known": [],
+      "observations": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+        "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      ],
+      "consequences": "",
+      "inventory_effects_json": "{}"
+    },
+    "anchors": [
+      {
+        "order": 0,
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      }
+    ]
+  },
+  "prelude_request": {
+    "authorized_investigation": {
+      "target": "prints",
+      "status": "discovered",
+      "success": true,
+      "newly_discovered": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "previously_known": []
+    },
+    "public_scene": {
+      "observations": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+        "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      ]
+    },
+    "descriptive_constraints": [
+      "Write only a descriptive prelude to the examination, ending a complete sentence.",
+      "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+      "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+      "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+      "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+    ],
+    "max_output_utf8_bytes": 1600
+  },
+  "candidate_prelude": "You look closely, taking time over the examination.",
+  "final_response": {
+    "preview_text": "You look closely, taking time over the examination.\n\nFaint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "anchors": [
+      {
+        "order": 0,
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      }
+    ],
+    "diagnostic": "heuristic_pass_pending_review",
+    "used_fallback": false,
+    "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}, \"consequential_validation\": {\"decision\": \"PASS\", \"reasons\": [], \"claims\": [], \"provider_requests\": 0, \"coverage\": \"deterministic_frames_not_semantic_proof\"}}",
+    "review_required": true
+  },
+  "fallback": "You examine the evidence. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+  "state_unchanged": true,
+  "host": {
+    "text": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "source": {
+      "kind": "discover_clue",
+      "source": "clue_text"
+    }
+  },
+  "controlled": "A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+}

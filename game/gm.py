@@ -4234,10 +4234,12 @@ def provider_timeout_seconds() -> float:
 
 
 def omit_duplicate_turn_packet_policy(payload: Dict[str, Any]) -> Dict[str, Any]:
-    """Drop provider-payload packet fields already present on the root policy.
+    """Drop packet policy keys whose complete JSON value equals the root policy.
 
     Gate and retry code keep their own packet. This projection is serialized
-    to the model only. Unequal policy is retained. The input mapping is not mutated.
+    to the model only. A nested key stays when its value differs or the root
+    lacks that key. If every nested key is removed, the empty nested policy
+    is omitted. The input mapping is not mutated.
     """
     if not isinstance(payload, dict):
         return payload
@@ -4247,9 +4249,16 @@ def omit_duplicate_turn_packet_policy(payload: Dict[str, Any]) -> Dict[str, Any]
         return payload
     nested = packet.get("response_policy")
     contracts = packet.get("contracts")
-    drop_policy = isinstance(nested, dict) and bool(nested) and all(
-        key in policy and _json_value_equal(nested.get(key), policy.get(key)) for key in nested
-    )
+    kept_policy = nested
+    policy_changed = False
+    if isinstance(nested, dict) and nested:
+        kept_items = []
+        for key, value in nested.items():
+            if key in policy and _json_value_equal(value, policy.get(key)):
+                policy_changed = True
+                continue
+            kept_items.append((key, value))
+        kept_policy = dict(kept_items)
     kept_contracts = contracts
     if isinstance(contracts, dict):
         kept_contracts = {
@@ -4258,12 +4267,15 @@ def omit_duplicate_turn_packet_policy(payload: Dict[str, Any]) -> Dict[str, Any]
             if not (key in policy and _json_value_equal(value, policy.get(key)))
         }
     contracts_changed = isinstance(contracts, dict) and kept_contracts != contracts
-    if not drop_policy and not contracts_changed:
+    if not policy_changed and not contracts_changed:
         return payload
     projected = dict(payload)
     packet_copy = dict(packet)
-    if drop_policy:
-        packet_copy.pop("response_policy", None)
+    if policy_changed:
+        if kept_policy:
+            packet_copy["response_policy"] = kept_policy
+        else:
+            packet_copy.pop("response_policy", None)
     if contracts_changed:
         packet_copy["contracts"] = kept_contracts
     projected["turn_packet"] = packet_copy
@@ -4821,8 +4833,8 @@ def build_messages(
                         'NEVER decide success or failure yourself. ONLY narrate the authoritative result given.',
                     ]
 
-    if not action_outcome_mode and resolution and isinstance(resolution, dict) and resolution.get('hint'):
-        payload['instructions'] = list(payload['instructions']) + [resolution['hint']]
+    # Resolver hints are mixed-authority internal guidance. Only the bounded
+    # authorized outcome projection may supply result content to narration.
     provider_response_contract = _provider_response_contract_from_payload(payload)
     system_prompt = NARRATION_ONLY_SYSTEM_PROMPT if provider_response_contract == "narration_only" else SYSTEM_PROMPT
     payload = _dedupe_provider_payload_instructions(payload, system_prompt)
@@ -4832,6 +4844,10 @@ def build_messages(
     )
     payload = omit_exact_duplicate_provider_contracts(payload)
     payload = omit_duplicate_turn_packet_policy(payload)
+    from game.narration_authorization import project_narration_payload
+
+    payload = project_narration_payload(payload, resolution)
+    system_prompt = system_prompt.replace('DO NOT LEAK HIDDEN FACTS / SECRETS', 'DO NOT LEAK HIDDEN FACTS')
     return [
         {'role': 'system', 'content': system_prompt},
         {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}
@@ -5116,9 +5132,16 @@ def _generation_response_diagnostic(response, text, extraction, parsed, *, maxim
         json_ok = True
     except (ValueError, TypeError):
         value, json_ok = None, False
-    envelope_present = (isinstance(value, dict) and
-                        (("narration" in value) if contract == "narration_only"
-                         else {"declared_claims", "narration"} <= value.keys()))
+    if contract == "opening_presentation":
+        envelope_present = (
+            isinstance(value, dict)
+            and isinstance(value.get("selected_entries"), list)
+            and not ({"narration", "player_facing_text", "declared_claims"} & set(value))
+        )
+    else:
+        envelope_present = (isinstance(value, dict) and
+                            (("narration" in value) if contract == "narration_only"
+                             else {"declared_claims", "narration"} <= value.keys()))
     meta = parsed.get("metadata") or {}
     reason = meta.get("structured_contract_reason")
     valid = not bool(meta.get("structured_output_rejected") or meta.get("structured_contract_failure"))
@@ -5161,7 +5184,12 @@ def _generation_response_diagnostic(response, text, extraction, parsed, *, maxim
             "requested_max_output_tokens": maximum, "output_limit_reached": reached,
             "possible_output_truncation": bool(reached and not valid),
             "json_parsing_succeeded": json_ok, "expected_envelope_present": envelope_present,
-            "recognized_envelope_keys": sorted(set(value) & {"narration", "declared_claims", "player_facing_text"}) if isinstance(value, dict) else [],
+            "recognized_envelope_keys": (
+                sorted(set(value) & {"selected_entries"})
+                if contract == "opening_presentation" and isinstance(value, dict)
+                else sorted(set(value) & {"narration", "declared_claims", "player_facing_text"}) if isinstance(value, dict)
+                else []
+            ),
             "parser_output_form": classified["form"], "structured_validation_result": valid,
             "rejection_reason": reason, "classification": category,
             "provider_response_contract": contract}
@@ -5208,6 +5236,32 @@ def call_gpt(
                 "debug_notes": "provider_retry_disabled",
                 "metadata": {"provider_retry_disabled": True},
             },
+            selected_model=route.selected_model,
+            route_reason=route.route_reason,
+            route_family=route.route_family,
+            purpose=purpose,
+            retry_attempt=retry_attempt,
+            retry_reason=retry_reason,
+            strict_social=strict_social,
+            force_high_precision=force_high_precision,
+        )
+    requested_response_type = _requested_response_type_from_messages(messages)
+    is_opening = requested_response_type == "scene_opening"
+    from game.opening_presentation_renderer import opening_renderer_mode
+
+    renderer_mode = opening_renderer_mode() if is_opening else "disabled"
+    opening_catalog = None
+    if is_opening and renderer_mode == "invalid":
+        failed = _structured_contract_failure(
+            "structured",
+            "opening_renderer_configuration_invalid",
+            provider_response_contract="opening_presentation",
+        )
+        failed["metadata"]["opening_renderer"] = {
+            "mode": "invalid", "selected": False, "flag": "ASHEN_OPENING_RENDERER",
+        }
+        return _attach_model_route_metadata(
+            failed,
             selected_model=route.selected_model,
             route_reason=route.route_reason,
             route_family=route.route_family,
@@ -5264,9 +5318,33 @@ def call_gpt(
     )
     pinned_model = os.environ.get("ASHEN_PIN_PROVIDER_MODEL", "").strip()
     selected_model = pinned_model or route.selected_model
-    requested_response_type = _requested_response_type_from_messages(messages)
-    is_opening = requested_response_type == "scene_opening"
-    if is_opening:
+    if is_opening and renderer_mode == "enabled":
+        from game.opening_presentation_renderer import prepare_opening_renderer
+
+        prepared = prepare_opening_renderer(messages)
+        if not prepared["ok"]:
+            failed = _structured_contract_failure(
+                "structured",
+                str(prepared["reason"] or "opening_catalog_empty"),
+                provider_response_contract="opening_presentation",
+            )
+            failed["metadata"]["opening_renderer"] = {
+                "mode": "enabled", "selected": False, "flag": "ASHEN_OPENING_RENDERER",
+            }
+            return _attach_model_route_metadata(
+                failed,
+                selected_model=route.selected_model,
+                route_reason=route.route_reason,
+                route_family=route.route_family,
+                purpose=purpose,
+                retry_attempt=retry_attempt,
+                retry_reason=retry_reason,
+                strict_social=strict_social,
+                force_high_precision=force_high_precision,
+            )
+        messages = prepared["messages"]
+        opening_catalog = prepared["catalog"]
+    elif is_opening:
         # Free-text authored claims are checked by lexical coverage, not a
         # synonym/entailment model. Supply that existing constraint at generation.
         messages = [*messages[:1], {"role": "system", "content": (
@@ -5353,6 +5431,8 @@ def call_gpt(
             force_high_precision=force_high_precision,
         )
         create_kwargs = {"model": selected_model, "input": messages}
+        if opening_catalog is not None:
+            create_kwargs["text"] = {"format": prepared["text_format"]}
         if accounting_active() or is_opening:
             create_kwargs["max_output_tokens"] = narration_cap
         request_sent = True
@@ -5388,10 +5468,27 @@ def call_gpt(
                 }
             )
         provider_response_contract = _provider_response_contract_from_messages(messages)
-        parsed_response = _safe_json(
-            text.strip(), require_structured_claims=True,
-            provider_response_contract=provider_response_contract,
-        )
+        if opening_catalog is not None:
+            from game.opening_presentation_renderer import gm_response_from_render, realize_opening_provider_text
+
+            rendered = realize_opening_provider_text(text.strip(), opening_catalog)
+            provider_response_contract = "opening_presentation"
+            if rendered["ok"]:
+                parsed_response = gm_response_from_render(rendered)
+            else:
+                parsed_response = _structured_contract_failure(
+                    "structured",
+                    str(rendered["reason"] or "plan_schema"),
+                    provider_response_contract="opening_presentation",
+                )
+                parsed_response["metadata"]["opening_renderer"] = {
+                    "mode": "enabled", "selected": True, "flag": "ASHEN_OPENING_RENDERER",
+                }
+        else:
+            parsed_response = _safe_json(
+                text.strip(), require_structured_claims=True,
+                provider_response_contract=provider_response_contract,
+            )
         # A complete JSON fragment cannot override an explicit incomplete opening.
         # Preserve the normal parser diagnostics, then fail through the existing
         # structured-contract rejection/rollback path without retrying.

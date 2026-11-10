@@ -1,0 +1,321 @@
+FFFF...F......FF....                                                     [100%]
+================================== FAILURES ===================================
+_ test_intentions[survey-Please examine those footprints closely.-EXECUTE-prints] _
+
+campaigns = (<starlette.testclient.TestClient object at 0x000002A524AB89B0>, {'survey': '2026-11-06T22-38-07_c36e17fe', 'report': '2026-11-06T22-38-12_716f5b74'})
+branch = 'survey', text = 'Please examine those footprints closely.'
+category = 'EXECUTE', target = 'prints'
+
+    @pytest.mark.parametrize("branch,text,category,target", [
+        ("survey", "Please examine those footprints closely.", "EXECUTE", "prints"),
+        ("survey", "I wish to scrutinize the mud prints.", "EXECUTE", "prints"),
+        ("survey", "Could I study the stone again?", "EXECUTE", "milestone"),
+        ("report", "I want to read the board.", "EXECUTE", "notice_board"),
+        ("survey", "What have we learned so far?", "ANSWER", None),
+        ("report", "Did I warn the watch already?", "ANSWER", None),
+        ("survey", "Please check it again.", "CLARIFY", None),
+        ("report", "Can I speak with the watch about the patrol?", "CLARIFY", None),
+        ("report", "I command the watch to send soldiers.", "DECLINE", None),
+        ("survey", "Pursue the footprints until we find their owner.", "DECLINE", None),
+        ("report", "Show the hidden clues.", "DECLINE", None),
+        ("survey", "I teleport to Cinderwatch.", "DECLINE", None),
+        ("report", "Examine the mud prints here.", "DECLINE", None),
+        ("survey", "Inspect the sapphire throne.", "CLARIFY", None),
+    ])
+    def test_intentions(campaigns, branch, text, category, target):
+        cl = restore(campaigns, branch)
+        before = authority()
+        scene = api.load_active_scene()
+        decision = deterministic_conversational_decision(player_text=text, scene=scene, world=before["world"], session=before["session"])
+        assert decision.category.value == category
+        assert decision.proposed_target == target
+        body = safe(cl.post("/api/chat", json={"text": text}))
+        assert body["gm_output"]["player_facing_text"]
+        after = authority()
+        if category != "EXECUTE":
+            assert before == after
+        else:
+            assert before["world"]["world_state"]["flags"] == after["world"]["world_state"]["flags"]
+        raw = json.dumps(body)
+        for forbidden in ("SENTINEL_", "gm_notes", "hidden_facts", '"initiative_', "proposed_record"):
+>           assert forbidden not in raw
+E           assert '"initiative_' not in '{"campaign"...lution": {}}'
+E             
+E             '"initiative_' is contained here:
+E               ed": 10}, "initiative_bonus": 2, "speed": 30, "bab": 0, "cmb": 0, "cmd": 12, "ability_scores": {"str": 10, "dex": 14, "con": 12, "int": 18, "wis": 12, "cha": 10}, "saves": {"fort": 1, "ref": 2, "will": 3}, "attacks": [{"id": "quarterstaff", "name": "Quarterstaff", "attack_bonus": 0, "type": "melee", "damage": {"dice_count": 1, "dice_sides": 6, "bonus": 0, "type": "bludgeoning"}}, {"id": "crossbow", "name": "Light Crossbow", "attack_bonus": 2, "type": "ranged", "damage": {"dice_count": 1, "dice_sides": 8, "bonus": 0, "type": "piercing"}}], "condition...
+E             
+E             ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\test_pr_play_72_initiative.py:75: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started bc0c185b078de451faac79c8
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[SESSION RESET] runtime state cleared
+[API] New campaign started 1e24923326822ef4a9dd37db
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+---------------------------- Captured stdout call -----------------------------
+[CLUE DUPLICATE IGNORED] milestone_mud_prints
+_ test_intentions[survey-I wish to scrutinize the mud prints.-EXECUTE-prints] _
+
+campaigns = (<starlette.testclient.TestClient object at 0x000002A524AB89B0>, {'survey': '2026-11-06T22-38-07_c36e17fe', 'report': '2026-11-06T22-38-12_716f5b74'})
+branch = 'survey', text = 'I wish to scrutinize the mud prints.'
+category = 'EXECUTE', target = 'prints'
+
+    @pytest.mark.parametrize("branch,text,category,target", [
+        ("survey", "Please examine those footprints closely.", "EXECUTE", "prints"),
+        ("survey", "I wish to scrutinize the mud prints.", "EXECUTE", "prints"),
+        ("survey", "Could I study the stone again?", "EXECUTE", "milestone"),
+        ("report", "I want to read the board.", "EXECUTE", "notice_board"),
+        ("survey", "What have we learned so far?", "ANSWER", None),
+        ("report", "Did I warn the watch already?", "ANSWER", None),
+        ("survey", "Please check it again.", "CLARIFY", None),
+        ("report", "Can I speak with the watch about the patrol?", "CLARIFY", None),
+        ("report", "I command the watch to send soldiers.", "DECLINE", None),
+        ("survey", "Pursue the footprints until we find their owner.", "DECLINE", None),
+        ("report", "Show the hidden clues.", "DECLINE", None),
+        ("survey", "I teleport to Cinderwatch.", "DECLINE", None),
+        ("report", "Examine the mud prints here.", "DECLINE", None),
+        ("survey", "Inspect the sapphire throne.", "CLARIFY", None),
+    ])
+    def test_intentions(campaigns, branch, text, category, target):
+        cl = restore(campaigns, branch)
+        before = authority()
+        scene = api.load_active_scene()
+        decision = deterministic_conversational_decision(player_text=text, scene=scene, world=before["world"], session=before["session"])
+        assert decision.category.value == category
+        assert decision.proposed_target == target
+        body = safe(cl.post("/api/chat", json={"text": text}))
+        assert body["gm_output"]["player_facing_text"]
+        after = authority()
+        if category != "EXECUTE":
+            assert before == after
+        else:
+            assert before["world"]["world_state"]["flags"] == after["world"]["world_state"]["flags"]
+        raw = json.dumps(body)
+        for forbidden in ("SENTINEL_", "gm_notes", "hidden_facts", '"initiative_', "proposed_record"):
+>           assert forbidden not in raw
+E           assert '"initiative_' not in '{"campaign"...lution": {}}'
+E             
+E             '"initiative_' is contained here:
+E               ed": 10}, "initiative_bonus": 2, "speed": 30, "bab": 0, "cmb": 0, "cmd": 12, "ability_scores": {"str": 10, "dex": 14, "con": 12, "int": 18, "wis": 12, "cha": 10}, "saves": {"fort": 1, "ref": 2, "will": 3}, "attacks": [{"id": "quarterstaff", "name": "Quarterstaff", "attack_bonus": 0, "type": "melee", "damage": {"dice_count": 1, "dice_sides": 6, "bonus": 0, "type": "bludgeoning"}}, {"id": "crossbow", "name": "Light Crossbow", "attack_bonus": 2, "type": "ranged", "damage": {"dice_count": 1, "dice_sides": 8, "bonus": 0, "type": "piercing"}}], "condition...
+E             
+E             ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\test_pr_play_72_initiative.py:75: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DUPLICATE IGNORED] milestone_mud_prints
+__ test_intentions[survey-Could I study the stone again?-EXECUTE-milestone] ___
+
+campaigns = (<starlette.testclient.TestClient object at 0x000002A524AB89B0>, {'survey': '2026-11-06T22-38-07_c36e17fe', 'report': '2026-11-06T22-38-12_716f5b74'})
+branch = 'survey', text = 'Could I study the stone again?', category = 'EXECUTE'
+target = 'milestone'
+
+    @pytest.mark.parametrize("branch,text,category,target", [
+        ("survey", "Please examine those footprints closely.", "EXECUTE", "prints"),
+        ("survey", "I wish to scrutinize the mud prints.", "EXECUTE", "prints"),
+        ("survey", "Could I study the stone again?", "EXECUTE", "milestone"),
+        ("report", "I want to read the board.", "EXECUTE", "notice_board"),
+        ("survey", "What have we learned so far?", "ANSWER", None),
+        ("report", "Did I warn the watch already?", "ANSWER", None),
+        ("survey", "Please check it again.", "CLARIFY", None),
+        ("report", "Can I speak with the watch about the patrol?", "CLARIFY", None),
+        ("report", "I command the watch to send soldiers.", "DECLINE", None),
+        ("survey", "Pursue the footprints until we find their owner.", "DECLINE", None),
+        ("report", "Show the hidden clues.", "DECLINE", None),
+        ("survey", "I teleport to Cinderwatch.", "DECLINE", None),
+        ("report", "Examine the mud prints here.", "DECLINE", None),
+        ("survey", "Inspect the sapphire throne.", "CLARIFY", None),
+    ])
+    def test_intentions(campaigns, branch, text, category, target):
+        cl = restore(campaigns, branch)
+        before = authority()
+        scene = api.load_active_scene()
+        decision = deterministic_conversational_decision(player_text=text, scene=scene, world=before["world"], session=before["session"])
+        assert decision.category.value == category
+        assert decision.proposed_target == target
+        body = safe(cl.post("/api/chat", json={"text": text}))
+        assert body["gm_output"]["player_facing_text"]
+        after = authority()
+        if category != "EXECUTE":
+            assert before == after
+        else:
+            assert before["world"]["world_state"]["flags"] == after["world"]["world_state"]["flags"]
+        raw = json.dumps(body)
+        for forbidden in ("SENTINEL_", "gm_notes", "hidden_facts", '"initiative_', "proposed_record"):
+>           assert forbidden not in raw
+E           assert '"initiative_' not in '{"campaign"...lution": {}}'
+E             
+E             '"initiative_' is contained here:
+E               ed": 10}, "initiative_bonus": 2, "speed": 30, "bab": 0, "cmb": 0, "cmd": 12, "ability_scores": {"str": 10, "dex": 14, "con": 12, "int": 18, "wis": 12, "cha": 10}, "saves": {"fort": 1, "ref": 2, "will": 3}, "attacks": [{"id": "quarterstaff", "name": "Quarterstaff", "attack_bonus": 0, "type": "melee", "damage": {"dice_count": 1, "dice_sides": 6, "bonus": 0, "type": "bludgeoning"}}, {"id": "crossbow", "name": "Light Crossbow", "attack_bonus": 2, "type": "ranged", "damage": {"dice_count": 1, "dice_sides": 8, "bonus": 0, "type": "piercing"}}], "condition...
+E             
+E             ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\test_pr_play_72_initiative.py:75: AssertionError
+___ test_intentions[report-I want to read the board.-EXECUTE-notice_board] ____
+
+campaigns = (<starlette.testclient.TestClient object at 0x000002A524AB89B0>, {'survey': '2026-11-06T22-38-07_c36e17fe', 'report': '2026-11-06T22-38-12_716f5b74'})
+branch = 'report', text = 'I want to read the board.', category = 'EXECUTE'
+target = 'notice_board'
+
+    @pytest.mark.parametrize("branch,text,category,target", [
+        ("survey", "Please examine those footprints closely.", "EXECUTE", "prints"),
+        ("survey", "I wish to scrutinize the mud prints.", "EXECUTE", "prints"),
+        ("survey", "Could I study the stone again?", "EXECUTE", "milestone"),
+        ("report", "I want to read the board.", "EXECUTE", "notice_board"),
+        ("survey", "What have we learned so far?", "ANSWER", None),
+        ("report", "Did I warn the watch already?", "ANSWER", None),
+        ("survey", "Please check it again.", "CLARIFY", None),
+        ("report", "Can I speak with the watch about the patrol?", "CLARIFY", None),
+        ("report", "I command the watch to send soldiers.", "DECLINE", None),
+        ("survey", "Pursue the footprints until we find their owner.", "DECLINE", None),
+        ("report", "Show the hidden clues.", "DECLINE", None),
+        ("survey", "I teleport to Cinderwatch.", "DECLINE", None),
+        ("report", "Examine the mud prints here.", "DECLINE", None),
+        ("survey", "Inspect the sapphire throne.", "CLARIFY", None),
+    ])
+    def test_intentions(campaigns, branch, text, category, target):
+        cl = restore(campaigns, branch)
+        before = authority()
+        scene = api.load_active_scene()
+        decision = deterministic_conversational_decision(player_text=text, scene=scene, world=before["world"], session=before["session"])
+        assert decision.category.value == category
+        assert decision.proposed_target == target
+        body = safe(cl.post("/api/chat", json={"text": text}))
+        assert body["gm_output"]["player_facing_text"]
+        after = authority()
+        if category != "EXECUTE":
+            assert before == after
+        else:
+            assert before["world"]["world_state"]["flags"] == after["world"]["world_state"]["flags"]
+        raw = json.dumps(body)
+        for forbidden in ("SENTINEL_", "gm_notes", "hidden_facts", '"initiative_', "proposed_record"):
+>           assert forbidden not in raw
+E           assert '"initiative_' not in '{"campaign"...lution": {}}'
+E             
+E             '"initiative_' is contained here:
+E               ed": 10}, "initiative_bonus": 2, "speed": 30, "bab": 0, "cmb": 0, "cmd": 12, "ability_scores": {"str": 10, "dex": 14, "con": 12, "int": 18, "wis": 12, "cha": 10}, "saves": {"fort": 1, "ref": 2, "will": 3}, "attacks": [{"id": "quarterstaff", "name": "Quarterstaff", "attack_bonus": 0, "type": "melee", "damage": {"dice_count": 1, "dice_sides": 6, "bonus": 0, "type": "bludgeoning"}}, {"id": "crossbow", "name": "Light Crossbow", "attack_bonus": 2, "type": "ranged", "damage": {"dice_count": 1, "dice_sides": 8, "bonus": 0, "type": "piercing"}}], "condition...
+E             
+E             ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\test_pr_play_72_initiative.py:75: AssertionError
+_ test_intentions[report-Can I speak with the watch about the patrol?-CLARIFY-None] _
+
+campaigns = (<starlette.testclient.TestClient object at 0x000002A524AB89B0>, {'survey': '2026-11-06T22-38-07_c36e17fe', 'report': '2026-11-06T22-38-12_716f5b74'})
+branch = 'report', text = 'Can I speak with the watch about the patrol?'
+category = 'CLARIFY', target = None
+
+    @pytest.mark.parametrize("branch,text,category,target", [
+        ("survey", "Please examine those footprints closely.", "EXECUTE", "prints"),
+        ("survey", "I wish to scrutinize the mud prints.", "EXECUTE", "prints"),
+        ("survey", "Could I study the stone again?", "EXECUTE", "milestone"),
+        ("report", "I want to read the board.", "EXECUTE", "notice_board"),
+        ("survey", "What have we learned so far?", "ANSWER", None),
+        ("report", "Did I warn the watch already?", "ANSWER", None),
+        ("survey", "Please check it again.", "CLARIFY", None),
+        ("report", "Can I speak with the watch about the patrol?", "CLARIFY", None),
+        ("report", "I command the watch to send soldiers.", "DECLINE", None),
+        ("survey", "Pursue the footprints until we find their owner.", "DECLINE", None),
+        ("report", "Show the hidden clues.", "DECLINE", None),
+        ("survey", "I teleport to Cinderwatch.", "DECLINE", None),
+        ("report", "Examine the mud prints here.", "DECLINE", None),
+        ("survey", "Inspect the sapphire throne.", "CLARIFY", None),
+    ])
+    def test_intentions(campaigns, branch, text, category, target):
+        cl = restore(campaigns, branch)
+        before = authority()
+        scene = api.load_active_scene()
+        decision = deterministic_conversational_decision(player_text=text, scene=scene, world=before["world"], session=before["session"])
+>       assert decision.category.value == category
+E       AssertionError: assert 'EXECUTE' == 'CLARIFY'
+E         
+E         - CLARIFY
+E         + EXECUTE
+
+tests\test_pr_play_72_initiative.py:64: AssertionError
+___________________ test_branch_readonly_and_resume[survey] ___________________
+
+campaigns = (<starlette.testclient.TestClient object at 0x000002A524AB89B0>, {'survey': '2026-11-06T22-38-07_c36e17fe', 'report': '2026-11-06T22-38-12_716f5b74'})
+branch = 'survey'
+
+    @pytest.mark.parametrize("branch", ["survey", "report"])
+    def test_branch_readonly_and_resume(campaigns, branch):
+        cl = restore(campaigns, branch)
+        before = authority()
+        for text in ("What have I learned about the patrol?", "Check whether my report changed anything.", "Who have I told about this?"):
+            body = safe(cl.post("/api/chat", json={"text": text}))
+            message = body["gm_output"]["player_facing_text"]
+            assert ("survey is now recorded" if branch == "survey" else "watch has now been warned") in message
+            assert ("watch has now been warned" if branch == "survey" else "survey is now recorded") not in message
+            assert authority() == before
+        snap = safe(cl.post("/api/snapshots", json={"label": "initiative-resume"}))["snapshot"]["id"]
+        log = safe(cl.get("/api/log"))
+        create(cl)
+        safe(cl.post("/api/snapshots/load", json={"snapshot_id": snap}))
+>       assert authority() == before
+E       AssertionError: assert {'session': {...dex': 0, ...}} == {'session': {...dex': 0, ...}}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'session': {'active_scene_id': 'old_milestone', 'visited_scene_ids': ['frontier_gate', 'old_milestone'], 'current_date': 'Day 1', 'turn_counter': 4, ...}} != {'session': {'active_scene_id': 'old_milestone', 'visited_scene_ids': ['frontier_gate', 'old_milestone'], 'current_date': 'Day 1', 'turn_counter': 4, ...}}
+E         Use -v to get more diff
+
+tests\test_pr_play_72_initiative.py:92: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 1b0aee00107ac6d0f9e83293
+___________________ test_branch_readonly_and_resume[report] ___________________
+
+campaigns = (<starlette.testclient.TestClient object at 0x000002A524AB89B0>, {'survey': '2026-11-06T22-38-07_c36e17fe', 'report': '2026-11-06T22-38-12_716f5b74'})
+branch = 'report'
+
+    @pytest.mark.parametrize("branch", ["survey", "report"])
+    def test_branch_readonly_and_resume(campaigns, branch):
+        cl = restore(campaigns, branch)
+        before = authority()
+        for text in ("What have I learned about the patrol?", "Check whether my report changed anything.", "Who have I told about this?"):
+            body = safe(cl.post("/api/chat", json={"text": text}))
+            message = body["gm_output"]["player_facing_text"]
+            assert ("survey is now recorded" if branch == "survey" else "watch has now been warned") in message
+            assert ("watch has now been warned" if branch == "survey" else "survey is now recorded") not in message
+            assert authority() == before
+        snap = safe(cl.post("/api/snapshots", json={"label": "initiative-resume"}))["snapshot"]["id"]
+        log = safe(cl.get("/api/log"))
+        create(cl)
+        safe(cl.post("/api/snapshots/load", json={"snapshot_id": snap}))
+>       assert authority() == before
+E       AssertionError: assert {'session': {...dex': 0, ...}} == {'session': {...dex': 0, ...}}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'session': {'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['frontier_gate', 'old_milestone'], 'current_date': 'Day 1', 'turn_counter': 5, ...}} != {'session': {'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['frontier_gate', 'old_milestone'], 'current_date': 'Day 1', 'turn_counter': 5, ...}}
+E         Use -v to get more diff
+
+tests\test_pr_play_72_initiative.py:92: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started d4cde3c5e69857878c188a6b
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_72_initiative.py::test_intentions[survey-Please examine those footprints closely.-EXECUTE-prints]
+FAILED tests/test_pr_play_72_initiative.py::test_intentions[survey-I wish to scrutinize the mud prints.-EXECUTE-prints]
+FAILED tests/test_pr_play_72_initiative.py::test_intentions[survey-Could I study the stone again?-EXECUTE-milestone]
+FAILED tests/test_pr_play_72_initiative.py::test_intentions[report-I want to read the board.-EXECUTE-notice_board]
+FAILED tests/test_pr_play_72_initiative.py::test_intentions[report-Can I speak with the watch about the patrol?-CLARIFY-None]
+FAILED tests/test_pr_play_72_initiative.py::test_branch_readonly_and_resume[survey]
+FAILED tests/test_pr_play_72_initiative.py::test_branch_readonly_and_resume[report]
+7 failed, 13 passed, 1 warning in 26.35s

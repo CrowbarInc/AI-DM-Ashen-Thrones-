@@ -1,0 +1,123 @@
+........................................................................ [ 31%]
+........................................................................ [ 63%]
+........F.FFFF..........FFF..F........F.FFF.FFFF........................ [ 95%]
+.F........                                                               [100%]
+================================== FAILURES ===================================
+_____ test_apply_socially_revealed_leads_twice_preserves_canonical_state ______
+tests\test_clue_idempotence.py:122: in test_apply_socially_revealed_leads_twice_preserves_canonical_state
+    assert len([e for e in social_events if e.get("clue_id") == "missing_patrol"]) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+_____________ test_social_lead_lands_discovered_clue_id_and_event _____________
+tests\test_social_lead_landing.py:65: in test_social_lead_lands_discovered_clue_id_and_event
+    assert "east_lanes" in added or "East road is dangerous." in added
+E   AssertionError: assert ('east_lanes' in [] or 'East road is dangerous.' in [])
+_______________ test_social_lead_idempotent_no_duplicate_event ________________
+tests\test_social_lead_landing.py:90: in test_social_lead_idempotent_no_duplicate_event
+    assert len(events) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+_________ test_social_topic_without_clue_id_gets_stable_synthetic_id __________
+tests\test_social_lead_landing.py:108: in test_social_topic_without_clue_id_gets_stable_synthetic_id
+    assert syn in get_all_known_clue_ids(session)
+E   AssertionError: assert 'social_gate_runner_t1' in set()
+E    +  where set() = get_all_known_clue_ids({})
+______ test_social_lead_with_leads_to_scene_adds_pending_and_actionable _______
+tests\test_social_lead_landing.py:127: in test_social_lead_with_leads_to_scene_adds_pending_and_actionable
+    assert any(isinstance(p, dict) and p.get("clue_id") == "to_milestone" for p in pending)
+E   assert False
+E    +  where False = any(<generator object test_social_lead_with_leads_to_scene_adds_pending_and_actionable.<locals>.<genexpr> at 0x0000020B580DEEA0>)
+____________ test_topic_text_old_milestone_creates_extracted_lead _____________
+tests\test_social_lead_landing.py:483: in test_topic_text_old_milestone_creates_extracted_lead
+    assert lid in get_all_known_clue_ids(session)
+E   AssertionError: assert 'lead_frontier_gate_old_milestone' in set()
+E    +  where set() = get_all_known_clue_ids({})
+_____________ test_topic_text_guards_and_town_crier_create_leads ______________
+tests\test_social_lead_landing.py:515: in test_topic_text_guards_and_town_crier_create_leads
+    assert lid in get_all_known_clue_ids(session)
+E   AssertionError: assert 'lead_frontier_gate_guards' in set()
+E    +  where set() = get_all_known_clue_ids({})
+__________ test_structured_fact_scene_id_without_regex_creates_lead ___________
+tests\test_social_lead_landing.py:542: in test_structured_fact_scene_id_without_regex_creates_lead
+    assert lid in get_all_known_clue_ids(session)
+E   AssertionError: assert 'lead_frontier_gate_old_milestone' in set()
+E    +  where set() = get_all_known_clue_ids({})
+____ test_duplicate_social_resolution_does_not_duplicate_extracted_pending ____
+tests\test_social_lead_landing.py:618: in test_duplicate_social_resolution_does_not_duplicate_extracted_pending
+    assert len(matches) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+________ test_extracted_social_lead_creates_authoritative_registry_row ________
+tests\test_social_lead_landing.py:851: in test_extracted_social_lead_creates_authoritative_registry_row
+    assert row is not None
+E   assert None is not None
+__________ test_lead_landing_metadata_reports_authoritative_outcomes __________
+tests\test_social_lead_landing.py:902: in test_lead_landing_metadata_reports_authoritative_outcomes
+    ll = res["metadata"]["lead_landing"]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'lead_landing'
+___ test_clue_discovery_then_social_extract_updates_same_authoritative_row ____
+tests\test_social_lead_landing.py:961: in test_clue_discovery_then_social_extract_updates_same_authoritative_row
+    assert "lead_frontier_gate_old_milestone" in ev
+E   AssertionError: assert 'lead_frontier_gate_old_milestone' in ['gate_hint']
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] gate_hint
+_ test_apply_socially_revealed_leads_reentrancy_one_authoritative_one_pending_idempotent_events _
+tests\test_social_lead_landing.py:1014: in test_apply_socially_revealed_leads_reentrancy_one_authoritative_one_pending_idempotent_events
+    assert get_lead(session, auth_id) is not None
+E   AssertionError: assert None is not None
+E    +  where None = get_lead({'scene_runtime': {}, 'clue_knowledge': {}, 'turn_counter': 1, 'lead_registry': {}}, 'lead_frontier_gate_old_milestone')
+_ test_ensure_minimum_actionable_skips_after_normal_social_landing_no_extra_rows _
+tests\test_social_lead_landing.py:1098: in test_ensure_minimum_actionable_skips_after_normal_social_landing_no_extra_rows
+    assert dbg.get("minimum_actionable_lead_enforced") is False
+E   AssertionError: assert True is False
+E    +  where True = <built-in method get of dict object at 0x0000020B58120A80>('minimum_actionable_lead_enforced')
+E    +    where <built-in method get of dict object at 0x0000020B58120A80> = {'minimum_actionable_lead_enforced': True, 'enforced_lead_id': 'to_milestone', 'enforced_lead_source': 'extracted_social'}.get
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] to_milestone
+___ test_first_pass_lead_landing_metadata_shape_actionable_matches_pending ____
+tests\test_social_lead_landing.py:1127: in test_first_pass_lead_landing_metadata_shape_actionable_matches_pending
+    ll = res["metadata"]["lead_landing"]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'lead_landing'
+_ test_canonical_extracted_sibling_collapses_evidence_uses_one_extracted_trigger_cid _
+tests\test_social_lead_landing.py:1172: in test_canonical_extracted_sibling_collapses_evidence_uses_one_extracted_trigger_cid
+    ext = res["metadata"]["lead_landing"]["extracted_lead_ids"]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'lead_landing'
+______ test_social_extract_reinforced_second_disclosure_one_registry_row ______
+tests\test_social_lead_landing.py:1224: in test_social_extract_reinforced_second_disclosure_one_registry_row
+    assert row is not None
+E   assert None is not None
+__ test_immutable_preseal_preserves_selected_authored_answer_over_ignorance ___
+tests\test_social_question_relevance_answer_selection.py:428: in test_immutable_preseal_preserves_selected_authored_answer_over_ignorance
+    assert record.get("provenance") == "initial_generation"
+E   AssertionError: assert 'authorized_host_speech' == 'initial_generation'
+E     
+E     - initial_generation
+E     + authorized_host_speech
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_clue_idempotence.py::test_apply_socially_revealed_leads_twice_preserves_canonical_state
+FAILED tests/test_social_lead_landing.py::test_social_lead_lands_discovered_clue_id_and_event
+FAILED tests/test_social_lead_landing.py::test_social_lead_idempotent_no_duplicate_event
+FAILED tests/test_social_lead_landing.py::test_social_topic_without_clue_id_gets_stable_synthetic_id
+FAILED tests/test_social_lead_landing.py::test_social_lead_with_leads_to_scene_adds_pending_and_actionable
+FAILED tests/test_social_lead_landing.py::test_topic_text_old_milestone_creates_extracted_lead
+FAILED tests/test_social_lead_landing.py::test_topic_text_guards_and_town_crier_create_leads
+FAILED tests/test_social_lead_landing.py::test_structured_fact_scene_id_without_regex_creates_lead
+FAILED tests/test_social_lead_landing.py::test_duplicate_social_resolution_does_not_duplicate_extracted_pending
+FAILED tests/test_social_lead_landing.py::test_extracted_social_lead_creates_authoritative_registry_row
+FAILED tests/test_social_lead_landing.py::test_lead_landing_metadata_reports_authoritative_outcomes
+FAILED tests/test_social_lead_landing.py::test_clue_discovery_then_social_extract_updates_same_authoritative_row
+FAILED tests/test_social_lead_landing.py::test_apply_socially_revealed_leads_reentrancy_one_authoritative_one_pending_idempotent_events
+FAILED tests/test_social_lead_landing.py::test_ensure_minimum_actionable_skips_after_normal_social_landing_no_extra_rows
+FAILED tests/test_social_lead_landing.py::test_first_pass_lead_landing_metadata_shape_actionable_matches_pending
+FAILED tests/test_social_lead_landing.py::test_canonical_extracted_sibling_collapses_evidence_uses_one_extracted_trigger_cid
+FAILED tests/test_social_lead_landing.py::test_social_extract_reinforced_second_disclosure_one_registry_row
+FAILED tests/test_social_question_relevance_answer_selection.py::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance

@@ -1,0 +1,249 @@
+{
+  "rows": [
+    {
+      "proposal": {
+        "family": "environment",
+        "campaign_id": "provider_probe",
+        "scene_id": "isolated_road",
+        "anchor": 0,
+        "quality": "rough",
+        "visibility": "public"
+      },
+      "validation": {
+        "accepted": true,
+        "reason": "accepted",
+        "category": "B",
+        "entry": {
+          "id": "wf_8e2f9b960b7540d440fb",
+          "campaign_id": "provider_probe",
+          "scene_id": "isolated_road",
+          "category": "B",
+          "family": "environment",
+          "entity_type": "surface",
+          "label": "rough stone surface",
+          "content": "The stone has a rough, uneven surface.",
+          "canonical_description": "The stone has a rough, uneven surface.",
+          "properties": {
+            "material": "stone",
+            "texture": "rough"
+          },
+          "anchor": "Stone boulders border a country road.",
+          "provenance": "accepted_improvisation",
+          "source": "validated_proposal",
+          "creation_turn": 1,
+          "visibility": "public",
+          "status": "accepted",
+          "authority": "controlled_world_fact",
+          "truth_status": "runtime_incidental",
+          "scope": "scene",
+          "persistence_status": "campaign",
+          "interactions": []
+        }
+      },
+      "committed": false,
+      "published_text": "",
+      "latency_ms": 4152.003700030036,
+      "retries": 0
+    },
+    {
+      "proposal": {
+        "family": "object",
+        "campaign_id": "provider_probe",
+        "scene_id": "isolated_road",
+        "anchor": 0,
+        "quality": "seat",
+        "visibility": "public"
+      },
+      "validation": {
+        "accepted": true,
+        "reason": "accepted",
+        "category": "C",
+        "entry": {
+          "id": "wf_8efaea84a7af0a7d4eab",
+          "campaign_id": "provider_probe",
+          "scene_id": "isolated_road",
+          "category": "C",
+          "family": "object",
+          "entity_type": "object",
+          "label": "ordinary stone seat",
+          "content": "An ordinary low stone beside the established stonework offers a place to sit.",
+          "canonical_description": "An ordinary low stone beside the established stonework offers a place to sit.",
+          "properties": {
+            "material": "stone",
+            "use": "seat"
+          },
+          "anchor": "Stone boulders border a country road.",
+          "provenance": "accepted_improvisation",
+          "source": "validated_proposal",
+          "creation_turn": 1,
+          "visibility": "public",
+          "status": "accepted",
+          "authority": "controlled_world_fact",
+          "truth_status": "runtime_incidental",
+          "scope": "scene",
+          "persistence_status": "campaign",
+          "interactions": []
+        }
+      },
+      "committed": false,
+      "published_text": "",
+      "latency_ms": 1156.907399999909,
+      "retries": 0
+    }
+  ],
+  "usage": {
+    "version": "ATGB-03B-1",
+    "run_id": "decf7ecfbd1e43a291792450fa319004",
+    "requests": 2,
+    "request_upper_bound": 2,
+    "dispatched_requests": 2,
+    "pending_requests": 0,
+    "input_tokens": 296,
+    "output_tokens": 64,
+    "total_tokens": 360,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "decf7ecfbd1e43a291792450fa319004",
+        "attempt_id": "41a663ff557b4c48b8d656f451e8208a",
+        "purpose": "controlled_improvisation",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:10:25.667743+00:00",
+        "time": "2026-11-07T15:10:28.893250+00:00",
+        "sent": true,
+        "request_id": "resp_0cbecd482e702651006aef3f64530c87d287131d86e0ad5588",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 148,
+        "output_tokens": 32,
+        "total_tokens": 180,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2193.643
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "decf7ecfbd1e43a291792450fa319004",
+        "attempt_id": "59d1ab9eca4046ce8983796a4d9947d2",
+        "purpose": "controlled_improvisation",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:10:28.895251+00:00",
+        "time": "2026-11-07T15:10:30.050658+00:00",
+        "sent": true,
+        "request_id": "resp_05ddf7823aa3fdb3006aef3f65c8b487d2aa8c3fc3d9d51b79",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 148,
+        "output_tokens": 32,
+        "total_tokens": 180,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 974.033
+      }
+    ],
+    "events": [
+      {
+        "event": "initialized",
+        "version": "ATGB-03B-1",
+        "run_id": "decf7ecfbd1e43a291792450fa319004",
+        "time": "2026-11-07T15:10:25.664743+00:00"
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "decf7ecfbd1e43a291792450fa319004",
+        "attempt_id": "41a663ff557b4c48b8d656f451e8208a",
+        "purpose": "controlled_improvisation",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:10:25.667743+00:00",
+        "time": "2026-11-07T15:10:25.667743+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "decf7ecfbd1e43a291792450fa319004",
+        "attempt_id": "41a663ff557b4c48b8d656f451e8208a",
+        "purpose": "controlled_improvisation",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:10:25.667743+00:00",
+        "time": "2026-11-07T15:10:26.696865+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "decf7ecfbd1e43a291792450fa319004",
+        "attempt_id": "41a663ff557b4c48b8d656f451e8208a",
+        "purpose": "controlled_improvisation",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:10:25.667743+00:00",
+        "time": "2026-11-07T15:10:28.893250+00:00",
+        "sent": true,
+        "request_id": "resp_0cbecd482e702651006aef3f64530c87d287131d86e0ad5588",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 148,
+        "output_tokens": 32,
+        "total_tokens": 180,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2193.643
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "decf7ecfbd1e43a291792450fa319004",
+        "attempt_id": "59d1ab9eca4046ce8983796a4d9947d2",
+        "purpose": "controlled_improvisation",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:10:28.895251+00:00",
+        "time": "2026-11-07T15:10:28.895251+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "decf7ecfbd1e43a291792450fa319004",
+        "attempt_id": "59d1ab9eca4046ce8983796a4d9947d2",
+        "purpose": "controlled_improvisation",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:10:28.895251+00:00",
+        "time": "2026-11-07T15:10:29.074292+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "decf7ecfbd1e43a291792450fa319004",
+        "attempt_id": "59d1ab9eca4046ce8983796a4d9947d2",
+        "purpose": "controlled_improvisation",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:10:28.895251+00:00",
+        "time": "2026-11-07T15:10:30.050658+00:00",
+        "sent": true,
+        "request_id": "resp_05ddf7823aa3fdb3006aef3f65c8b487d2aa8c3fc3d9d51b79",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 148,
+        "output_tokens": 32,
+        "total_tokens": 180,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 974.033
+      }
+    ]
+  }
+}

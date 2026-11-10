@@ -1,0 +1,5 @@
+# IMPLEMENTATION
+
+Player choice → existing action DTO/normalization → exploration resolver using current server-authored action ID and existing clue/flag conditions → existing API Stage 5 → existing world flag mutation owner → save_world/save_session → existing conditional affordances → trusted final publication → unchanged explicit HTTP DTO → existing frontend buttons. Minimal extension: finite authored set_flags/text contract; no new state store or intent model.
+
+Changed runtime files: game/authored_consequences.py (new contract and gated fixture overlay), game/storage.py (effective-scene overlay hook), game/exploration.py (server definition resolution and reserved metadata stripping), game/api.py (provider-free engine response and post-persistence exact publication). Added experiments/pr_play_70/scene_actions.json and tests/test_pr_play_70_branching.py. No frontend/schema/projection/canonical-data replacement. Incremental diff is relative to dirty entry sources. An unrelated archive-sealing fixture verifies generic reuse.

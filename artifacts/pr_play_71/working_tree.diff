@@ -1,0 +1,716 @@
+diff --git a/game/api.py b/game/api.py
+index d9adda17..3b2c6834 100644
+--- a/game/api.py
++++ b/game/api.py
+@@ -26,6 +26,7 @@ from pathlib import Path
+ import copy
+ import inspect
+ import json
++import os
+ import re
+ import time
+ from contextvars import ContextVar
+@@ -33,6 +34,8 @@ from fastapi import FastAPI, Request, UploadFile, File
+ from fastapi.middleware.cors import CORSMiddleware
+ from fastapi.staticfiles import StaticFiles
+ from fastapi.responses import FileResponse, JSONResponse
++from game.player_http_boundary import PlayerHTTPRoute
++from game.player_http_projection import project_player_state, project_player_response
+ 
+ from game.models import (
+     ActionRequest,
+@@ -303,6 +306,7 @@ async def lifespan(app: FastAPI):
+ 
+ 
+ app = FastAPI(title='Ashen Thrones AI GM', lifespan=lifespan)  # noqa: E302
++app.router.route_class = PlayerHTTPRoute
+ app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=False, allow_methods=['*'], allow_headers=['*'])
+ 
+ STATIC_DIR = BASE_DIR / 'static'
+@@ -4415,6 +4419,146 @@ def _build_gpt_narration_from_authoritative_state(
+     return gm
+ 
+ 
++def _publish_experimental_integrated_narration(
++    gm,
++    canonical_gm,
++    response_payload,
++    resolution,
++    session,
++    player_text: str,
++    publication=None,
++) -> None:
++    """Copy a passed investigation sentence into the response after state is saved.
++
++    The flag is off unless it is exactly ``1``. Rejected narration is not read
++    into the response. A miss leaves the deterministic sentence in place.
++    """
++    if os.environ.get("ASHEN_EXPERIMENTAL_INTEGRATED_NARRATION", "").strip() != "1":
++        return
++    if publication is not None:
++        for target in (gm, canonical_gm, response_payload.get('gm_output')):
++            if isinstance(target, dict):
++                target['player_facing_text'] = publication['text']
++        return
++    try:
++        from game.quarantined_investigation_narration import (
++            deterministic_fallback_text,
++            note_player_facing_publication,
++            validated_player_text,
++        )
++
++        kind = resolution.get("kind") if isinstance(resolution, dict) else None
++        session_id = ""
++        if isinstance(session, dict):
++            session_id = str(session.get("campaign_run_id") or session.get("session_id") or "")
++        player_text = str(player_text or "")
++        text = validated_player_text(player_text, session_id=session_id, kind=kind)
++        mode = "published" if text else ""
++        targets = []
++        if isinstance(gm, dict):
++            targets.append(gm)
++        if isinstance(canonical_gm, dict) and canonical_gm is not gm:
++            targets.append(canonical_gm)
++        payload_gm = response_payload.get("gm_output") if isinstance(response_payload, dict) else None
++        if isinstance(payload_gm, dict) and all(payload_gm is not item for item in targets):
++            targets.append(payload_gm)
++        if not text:
++            # A disabled provider leaves an infrastructure sentence. The engine
++            # fallback is the player-facing recovery; rejected prose stays out.
++            stub = "Provider calls are disabled for this run, so no live narration was generated."
++            fallback = deterministic_fallback_text(player_text, session_id=session_id, kind=kind)
++            if not fallback or not any(str(item.get("player_facing_text") or "") == stub for item in targets):
++                return
++            text = fallback
++            mode = "fallback"
++        for target in targets:
++            if mode == "fallback" and str(target.get("player_facing_text") or "") != (
++                "Provider calls are disabled for this run, so no live narration was generated."
++            ):
++                continue
++            target["player_facing_text"] = text
++            metadata = target.get("metadata")
++            if isinstance(metadata, dict):
++                metadata["experimental_integrated_narration"] = mode
++        if mode == "published":
++            note_player_facing_publication()
++    except Exception:
++        return
++
++
++def _quarantine_investigation_narration_enabled() -> bool:
++    """Explicit opt-in. The string is the gate documented on the quarantine module."""
++    return os.environ.get("ASHEN_QUARANTINE_INVESTIGATION_NARRATION", "").strip() == "1"
++
++
++def _finalize_investigation_publication(gm, canonical_gm, response_payload, resolution, session, player_text):
++    """Shared post-persistence PR66 boundary for chat and structured actions."""
++    from game.authored_consequences import trusted_text, enabled_for_session
++    text = trusted_text(resolution)
++    from game.quarantined_investigation_narration import experimental_publication_enabled
++    optional_publication = (os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1'
++                            and experimental_publication_enabled(
++                                str(session.get('campaign_run_id') or session.get('session_id') or '')))
++    if not text and enabled_for_session(session) and not optional_publication:
++        # The enrolled branch lifecycle requires its prerequisite discovery to
++        # reach the player even when optional AI presentation is disabled.
++        # Reuse the existing current-resolver-only disclosure contract.
++        from game.quarantined_investigation_narration import current_lifecycle_disclosure
++        text = current_lifecycle_disclosure(resolution, player_text)
++    if text:
++        for item in (gm, canonical_gm, response_payload.get('gm_output')):
++            if isinstance(item, dict):
++                item['player_facing_text'] = text
++        return
++    publication = None
++    if os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1':
++        from game.quarantined_investigation_narration import prepare_authoritative_publication
++        publication = prepare_authoritative_publication(
++            resolution, str(session.get('campaign_run_id') or session.get('session_id') or ''), player_text)
++    publication_failure = None
++    try:
++        args = (gm, canonical_gm, response_payload, resolution, session, player_text)
++        if publication is None:
++            _publish_experimental_integrated_narration(*args)
++        else:
++            _publish_experimental_integrated_narration(*args, publication=publication)
++    except Exception as exc:
++        if publication is None:
++            raise
++        publication_failure = 'publication_helper_' + type(exc).__name__
++    if publication is not None:
++        from game.quarantined_investigation_narration import verify_authoritative_publication
++        verify_authoritative_publication(
++            publication, [item for item in (gm, canonical_gm, response_payload.get('gm_output'))
++                          if isinstance(item, dict)], failure=publication_failure)
++
++
++def _observe_quarantined_investigation_narration(resolution, scene, session, player_text: str) -> None:
++    """After the player-facing narration object exists. Never replaces it.
++
++    The disabled path does not import the quarantine module. Every failure is
++    swallowed so a narration experiment cannot roll back a committed action.
++    """
++    if not _quarantine_investigation_narration_enabled():
++        return
++    try:
++        from game.quarantined_investigation_narration import (
++            observe_completed_investigation, bind_authoritative_publication,
++        )
++
++        known = tuple(sorted(get_all_known_clue_texts(session))) if isinstance(session, dict) else ()
++        evidence = observe_completed_investigation(
++            resolution=resolution if isinstance(resolution, dict) else None,
++            scene=scene if isinstance(scene, dict) else None,
++            known_clue_texts=known,
++            player_text=str(player_text or ""),
++        )
++        session_id = str(session.get('campaign_run_id') or session.get('session_id') or '')
++        bind_authoritative_publication(evidence, resolution, session_id)
++    except Exception:
++        return
++
++
+ def _run_resolved_turn_pipeline(
+     *,
+     campaign: dict,
+@@ -4499,6 +4643,13 @@ def _run_resolved_turn_pipeline(
+         route_choice=route_choice,
+         directed_social_entry=directed_social_entry,
+     )
++    from game.authored_consequences import trusted_text
++    consequence_text = trusted_text(resolution)
++    if consequence_text:
++        gm = {'player_facing_text': consequence_text, 'tags': [], 'scene_update': None,
++              'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None,
++              'suggested_action': None, 'debug_notes': 'engine_authored_consequence'}
++        return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
+     gm = _build_gpt_narration_from_authoritative_state(
+         campaign=campaign,
+         world=world,
+@@ -4517,6 +4668,9 @@ def _run_resolved_turn_pipeline(
+         latency_sink=latency_sink,
+         normalized_action=normalized_action,
+     )
++    # Quarantine sits after authoritative mutation and after the deterministic
++    # player-facing object is built. It is not consulted by finalization.
++    _observe_quarantined_investigation_narration(resolution, scene, session, user_text)
+     return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
+ 
+ 
+@@ -4842,7 +4996,7 @@ def _opening_response_rejection(
+     return None
+ 
+ 
+-def _opening_failure_response(reason: str) -> JSONResponse:
++def _opening_failure_response(reason: str, recovery: dict | None = None) -> JSONResponse:
+     if reason == "provider_budget_refused":
+         from game.provider_budget import PLAYTEST_STOP_MESSAGE
+ 
+@@ -4853,17 +5007,28 @@ def _opening_failure_response(reason: str) -> JSONResponse:
+         message = _OPENING_FAILURE_MESSAGE
+         status_code = 422
+         status = "opening_failed"
+-    return JSONResponse(
+-        status_code=status_code,
+-        content={
+-            "ok": False,
+-            "status": status,
+-            "error": message,
+-            "opening_failure_reason": reason,
+-            "campaign_started": False,
+-            "gameplay_committed": False,
+-        },
+-    )
++    content = {
++        "ok": False,
++        "status": status,
++        "error": message,
++        "opening_failure_reason": reason,
++        "campaign_started": False,
++        "gameplay_committed": False,
++    }
++    if (
++        isinstance(recovery, dict)
++        and recovery.get("fallback_attempted")
++        and not recovery.get("fallback_succeeded")
++    ):
++        content["opening_recovery_error"] = _stable_opening_reason(
++            recovery.get("fallback_error"),
++            "opening_recovery_failed",
++        )
++        content["opening_recovery_class"] = _stable_opening_reason(
++            recovery.get("recovery_eligibility"),
++            "uncertain_rejection",
++        )
++    return JSONResponse(status_code=status_code, content=content)
+ 
+ 
+ def _capture_opening_baseline(session: dict, world: dict, combat: dict) -> dict:
+@@ -5023,7 +5188,7 @@ def _ui_mode_error_response(err: UiModePolicyError) -> JSONResponse:
+ 
+ def _project_state_for_ui_mode(full_state: dict, ui_mode: str) -> dict:
+     # Always compute projections from the single internal snapshot.
+-    public_state = deep_project_public_payload(full_state)
++    public_state = project_player_state(full_state)
+     out: dict = {"ui_mode": ui_mode, "public_state": public_state}
+     if ui_mode == "author":
+         out["author_state"] = deep_project_author_payload(full_state)
+@@ -5032,6 +5197,22 @@ def _project_state_for_ui_mode(full_state: dict, ui_mode: str) -> dict:
+     return out
+ 
+ 
++def _project_player_runtime_response(response):
++    """Project the complete runtime result after all internal response enrichment.
++
++    Runtime endpoints admit only player mode. Keep their flat client contract,
++    applying the same recursive visibility rules as /api/state to every field,
++    including GM output, resolution and rejected-response state. Internal turn
++    helpers and persisted engine documents retain their full representations.
++    """
++    if isinstance(response, JSONResponse):
++        content = project_player_response(json.loads(response.body))
++        headers = {k: v for k, v in response.headers.items() if k != "content-length"}
++        return JSONResponse(content=content, status_code=response.status_code,
++                            headers=headers, background=response.background)
++    return project_player_response(response)
++
++
+ def _extract_log_player_input(entry: dict | None) -> str:
+     if not isinstance(entry, dict):
+         return ""
+@@ -5348,7 +5529,7 @@ def api_load_snapshot(request: Request, payload: dict):
+ def api_action(request: Request, req: ActionRequest):
+     try:
+         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+-        return action(req, ui_mode=ui_mode)
++        return _project_player_runtime_response(action(req, ui_mode=ui_mode))
+     except UiModePolicyError as e:
+         return _ui_mode_error_response(e)
+ 
+@@ -5862,6 +6043,8 @@ def action(req: ActionRequest, ui_mode: str = "player"):
+             'scene_transition_occurred': bool(resolution.get('resolved_transition')),
+         }
+ 
++    response_payload = _build_turn_response_payload(gm=gm, resolution=resolution, include_resolution=True)
++    _finalize_investigation_publication(gm, gm, response_payload, resolution, session, fallback_user_text)
+     append_log(
+         {
+             'timestamp': utc_iso_now(),
+@@ -5887,7 +6070,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
+             },
+         }
+     )
+-    return _build_turn_response_payload(gm=gm, resolution=resolution, include_resolution=True)
++    return response_payload
+ 
+ 
+ def _complete_opening_turn_persistence_like_chat(
+@@ -5990,6 +6173,41 @@ def _complete_opening_turn_persistence_like_chat(
+             directed_social_entry=canonical_entry,
+             attach_to_resolution=bool(isinstance(resolution, dict)),
+         )
++    opening_recovery_record = None
++    if mark_campaign_started:
++        from game.opening_initialization_recovery import (
++            apply_opening_initialization_recovery,
++            diagnostic_opening_recovery,
++        )
++        from game.provider_budget import observe_opening_validation
++
++        gm, opening_recovery_record = apply_opening_initialization_recovery(
++            gm if isinstance(gm, dict) else None,
++            resolution if isinstance(resolution, dict) else None,
++            response_type_contract if isinstance(response_type_contract, dict) else None,
++            scene=scene if isinstance(scene, dict) else None,
++            world=world if isinstance(world, dict) else None,
++            session=session if isinstance(session, dict) else None,
++        )
++        if opening_recovery_record.get("initialization_outcome") == "failed":
++            observe_opening_validation(
++                rejection=_stable_opening_reason(
++                    opening_recovery_record.get("original_rejection_code"),
++                    "opening_recovery_failed",
++                ),
++                recovery=_stable_opening_reason(
++                    opening_recovery_record.get("recovery_eligibility"),
++                    "uncertain_rejection",
++                ),
++                opening_recovery=diagnostic_opening_recovery(opening_recovery_record),
++            )
++            return _opening_failure_response(
++                _stable_opening_reason(
++                    opening_recovery_record.get("original_rejection_code"),
++                    "opening_recovery_failed",
++                ),
++                opening_recovery_record,
++            )
+     remember_recent_contextual_leads(
+         session,
+         scene["scene"]["id"],
+@@ -6121,17 +6339,50 @@ def _complete_opening_turn_persistence_like_chat(
+     synchronize_scene_addressability(session, scene, world)
+     scene["scene_state"] = session.get("scene_state")
+     if mark_campaign_started:
++        from game.opening_presentation_renderer import enforce_rendered_publication
++
++        gm = enforce_rendered_publication(gm)
++        canonical_gm = gm
+         opening_rejection = _opening_response_rejection(gm, resolution, response_type_contract)
++        from game.opening_initialization_recovery import (
++            diagnostic_opening_recovery,
++            stamp_opening_recovery_debug,
++        )
+         from game.provider_budget import observe_opening_validation
+-        observe_opening_validation(
+-            rejection=opening_rejection,
+-            recovery=_stable_opening_reason(
++
++        if opening_rejection and isinstance(opening_recovery_record, dict) and opening_recovery_record.get("fallback_succeeded"):
++            opening_recovery_record["initialization_outcome"] = "failed"
++            opening_recovery_record["fallback_succeeded"] = False
++            opening_recovery_record["fallback_error"] = opening_rejection
++            opening_recovery_record["state_integrity"] = "not_committed"
++        elif opening_rejection is None and isinstance(opening_recovery_record, dict):
++            opening_recovery_record["initialization_outcome"] = "started"
++            if opening_recovery_record.get("opening_source") == "deterministic_fallback":
++                opening_recovery_record["state_integrity"] = "authorized_initialization_only"
++            stamp_opening_recovery_debug(gm, opening_recovery_record)
++            canonical_gm = gm
++        if (
++            isinstance(opening_recovery_record, dict)
++            and opening_recovery_record.get("opening_source") == "deterministic_fallback"
++            and opening_recovery_record.get("fallback_succeeded")
++            and opening_rejection is None
++        ):
++            recovery_name = "deterministic_opening_recovery"
++        else:
++            recovery_name = _stable_opening_reason(
+                 ((gm.get("metadata") or {}).get("accepted_response") or {}).get("provenance"),
+                 "rejected_without_recovery" if opening_rejection else "unavailable",
+-            ),
++            )
++        observe_opening_validation(
++            rejection=opening_rejection,
++            recovery=recovery_name,
++            opening_recovery=diagnostic_opening_recovery(opening_recovery_record),
+         )
+         if opening_rejection:
+-            return _opening_failure_response(opening_rejection)
++            return _opening_failure_response(
++                opening_rejection,
++                opening_recovery_record if isinstance(opening_recovery_record, dict) and opening_recovery_record.get("fallback_attempted") else None,
++            )
+     save_world(world)
+ 
+     leads_inspection = _lead_debug_trace_around_authoritative_reconcile(session)
+@@ -6295,6 +6546,9 @@ def _complete_opening_turn_persistence_like_chat(
+         resolution=resolution if _include_res_chat else None,
+         include_resolution=_include_res_chat,
+     )
++    # State, clues, and clocks are already saved. This only selects response text.
++    _finalize_investigation_publication(
++        gm, canonical_gm, response_payload, resolution, session, player_text_for_eval)
+     final_text = str(canonical_gm.get("player_facing_text") or "")
+     payload_gm = response_payload.get("gm_output") if isinstance(response_payload, dict) else None
+     if mark_campaign_started and isinstance(response_payload, dict):
+@@ -6340,6 +6594,10 @@ def _complete_opening_turn_persistence_like_chat(
+ 
+ @app.post('/api/start_campaign')
+ def start_campaign(request: Request):
++    return _project_player_runtime_response(_start_campaign_response(request))
++
++
++def _start_campaign_response(request: Request):
+     """First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path)."""
+     from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
+     if playtest_stop_reason():
+@@ -6600,7 +6858,7 @@ def _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope:
+ def api_chat(request: Request, req: ChatRequest):
+     try:
+         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+-        return chat(req, ui_mode=ui_mode)
++        return _project_player_runtime_response(chat(req, ui_mode=ui_mode))
+     except UiModePolicyError as e:
+         return _ui_mode_error_response(e)
+ 
+@@ -6858,34 +7116,67 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
+             context["pending_intention"] = None
+ 
+     from game.ordinary_semantic_ownership import (
++        _NON_ADDRESSEE_OPERATIONS,
++        addressee_authority_applies,
+         assess_addressee_grounding,
+         conversational_authorization_record,
+         pending_addressee_clarification,
++        player_text_addresses_someone,
+     )
+ 
+-    if _confirmed_addressee_target(execution_decision) is None:
++    bridged_operation = ""
++    if isinstance(stored_bridge_meta, dict):
++        bridged_operation = str(stored_bridge_meta.get("operation") or "")
++    if not bridged_operation and isinstance(bridged_from_stored_interpretation, dict):
++        bridged_operation = str(
++            (
++                (bridged_from_stored_interpretation.get("metadata") or {}).get("stored_interpretation") or {}
++            ).get("operation")
++            or ""
++        )
++    # Movement replaces req.text with an internal route summary. Addressee
++    # authority stays on the original player line and on the accepted operation.
++    gate_text = original_player_text or req.text or ""
++    if bridged_operation.upper() != "MOVE":
++        gate_text = req.text or gate_text
++    if _confirmed_addressee_target(execution_decision) is None and addressee_authority_applies(
++        operation=bridged_operation,
++        player_text=gate_text,
++    ):
+         proposed_target = None
+         if isinstance(bridged_from_stored_interpretation, dict):
+             proposed_target = (
+                 (bridged_from_stored_interpretation.get("metadata") or {}).get("stored_interpretation") or {}
+             ).get("target_ref")
+         addressee = assess_addressee_grounding(
+-            req.text or "",
++            gate_text,
+             scene=scene,
+             world=world,
+             session=session,
+             proposed_target_id=str(proposed_target or "") or None,
+         )
+-        if addressee.get("direct_address") and addressee.get("operation_eligibility") == "requires_clarification":
+-            pending = pending_addressee_clarification(addressee, req.text or "", scene)
++        speech_on_noncommunication = (
++            bridged_operation.upper() in _NON_ADDRESSEE_OPERATIONS
++            and player_text_addresses_someone(gate_text)
++        )
++        unresolved = addressee.get("direct_address") and addressee.get("operation_eligibility") == "requires_clarification"
++        if unresolved or speech_on_noncommunication:
++            pending = pending_addressee_clarification(addressee, gate_text, scene)
+             blocked = ConversationalDecision(
+                 category=ConversationalDecisionCategory.CLARIFY,
+-                primary_intention=req.text or "",
++                primary_intention=gate_text,
+                 intent_family="clarification",
+                 communication_owner="GM",
+                 communication_purpose="CLARIFICATION",
+-                reason="unresolved_addressee",
+-                player_facing_text=str(addressee.get("clarification") or "Which person do you mean? Nothing has been attempted."),
++                reason="unresolved_addressee" if unresolved and not speech_on_noncommunication else "communication_act_not_object_or_route",
++                player_facing_text=str(
++                    addressee.get("clarification")
++                    or (
++                        "Which person do you mean? Nothing has been attempted."
++                        if unresolved
++                        else "That request addresses someone. Nothing has been attempted."
++                    )
++                ),
+                 context_update={
+                     "conversational_context": {
+                         "pending_clarification": pending,
+@@ -6894,11 +7185,11 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
+                 },
+                 execution_policy="answer_only",
+                 proposed_operation="ASK",
+-                proposed_target=str(proposed_target or "") or None,
++                proposed_target=None if speech_on_noncommunication else (str(proposed_target or "") or None),
+                 missing_information=["interlocutor"],
+                 authorization=conversational_authorization_record(
+                     addressee,
+-                    player_text=req.text or "",
++                    player_text=gate_text,
+                     authority_provenance="pre_tick_addressee_gate",
+                 ),
+             )
+@@ -7749,6 +8040,11 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
+             "mode_source": mode_decision.source,
+         },
+     }
++    # A travel purpose is explanation-only; it never runs a second resolver.
++    deferred = (session.get("conversational_context") or {}).get("pending_clarification") or {}
++    if (execution_decision is not None and execution_decision.proposed_operation == "MOVE"
++            and deferred.get("kind") == "deferred_intentions" and isinstance(gm, dict)):
++        resolution.setdefault("metadata", {})["deferred_intentions"] = deferred.get("steps") or []
+     result = _complete_opening_turn_persistence_like_chat(
+         turn_started=turn_started,
+         campaign=campaign,
+
+
+diff --git a/game/campaign_reset.py b/game/campaign_reset.py
+index 70462f4d..3e29dd1c 100644
+--- a/game/campaign_reset.py
++++ b/game/campaign_reset.py
+@@ -39,21 +39,40 @@ def apply_new_campaign_hard_reset() -> Dict[str, Any]:
+     from game.storage import _runtime_persistence_guard
+ 
+     with _runtime_persistence_guard("new_campaign_hard_reset"):
+-        session = load_session()
+-        # Root replacement: stale keys from older engines cannot survive.
+-        reset_session_state(session)
+-        save_session(session)
++        from game import storage
++        targets = (storage.SESSION_PATH, storage.WORLD_PATH, storage.COMBAT_PATH, storage.SESSION_LOG_PATH)
++        originals = {path: storage._read_bytes_if_exists(path) for path in targets}
++        try:
++            session = load_session()
++            # Root replacement: stale keys from older engines cannot survive.
++            reset_session_state(session)
++            # Explicit opt-in binds only this newly created identity.
++            import os
++            from game.authored_consequences import GATE, NEW_CAMPAIGNS, ENROLLMENT
++            if os.environ.get(GATE) == '1' and os.environ.get(NEW_CAMPAIGNS) == '1':
++                session[ENROLLMENT] = session['campaign_run_id']
++            save_session(session)
+ 
+-        world = load_world()
+-        reset_world_playthrough_state(world)
+-        save_world(world)
++            world = load_world()
++            reset_world_playthrough_state(world)
++            save_world(world)
+ 
+-        combat = load_combat()
+-        combat.clear()
+-        combat.update(create_fresh_combat_state())
+-        save_combat(combat)
+-
+-        clear_log()
++            combat = load_combat()
++            combat.clear()
++            combat.update(create_fresh_combat_state())
++            save_combat(combat)
++            clear_log()
++        except Exception:
++            # Match snapshot restore's validate/commit recovery convention. Do
++            # not replace an unchanged locked file while restoring prior state.
++            for path, raw in reversed(list(originals.items())):
++                if storage._read_bytes_if_exists(path) == raw:
++                    continue
++                if raw is None:
++                    path.unlink(missing_ok=True)
++                else:
++                    storage._atomic_write_bytes(path, raw)
++            raise
+     # Invariant (NC2): New Campaign is a silent reset â€” no persisted transcript rows until a turn runs.
+     tail = load_log()
+     if tail:
+
+diff --git a/static/app.js b/static/app.js
+index 82c35596..55a98021 100644
+--- a/static/app.js
++++ b/static/app.js
+@@ -1,6 +1,7 @@
+ const API = '/api';
+ let state = null; // Legacy local cache for public lane only (player mode helpers).
+ let startCampaignBusy = false;
++let newCampaignBusy = false;
+ 
+ /** Developer-facing copy for blocked new campaign (infra/billing/preflight â€” not narrative). */
+ function formatBlockedNewCampaignMessage(data){
+@@ -574,7 +575,14 @@ async function loadLog(){
+ 
+ async function reloadAll(){ await loadState(); await loadLog(); }
+ 
++// Local browser diagnostics: elapsed time ends on the next rendered frame.
++// No player text or campaign data is logged.
++function recordPlayerReady(operation, started){
++  requestAnimationFrame(()=>console.info('ASHEN_UI_READY '+JSON.stringify({operation, elapsed_ms:performance.now()-started})));
++}
++
+ async function sendChat(){
++  const readinessStarted = performance.now();
+   if(currentUIMode !== "player") return;
+   const text = $('chatInput').value.trim();
+   if(!text) return;
+@@ -586,6 +594,7 @@ async function sendChat(){
+   if(!data.ok){ replaceMessage(thinking,'error','Error',data.error || 'Unknown error'); return; }
+   replaceMessage(thinking,'gm','GM',data.gm_output?.player_facing_text || '(no narration)');
+   await reloadAll();
++  recordPlayerReady('chat', readinessStarted);
+ }
+ 
+ async function submitAction(){
+@@ -635,6 +644,10 @@ $('resetCombatBtn').addEventListener('click', async ()=>{
+   await loadState();
+ });
+ $('newCampaignBtn').addEventListener('click', async ()=>{
++  if(newCampaignBusy || startCampaignBusy) return;
++  newCampaignBusy = true;
++  $('newCampaignBtn').disabled = true;
++  try {
+   const data = await fetchJSON(apiUrl('/new_campaign', {ui_mode: currentUIMode}), {method:'POST'});
+   if (!data || data.ok === false || data.status === 'blocked' || data.status !== 'ok'){
+     const msg = formatBlockedNewCampaignMessage(data);
+@@ -644,20 +657,28 @@ $('newCampaignBtn').addEventListener('click', async ()=>{
+   console.log('Campaign reset complete', data.campaign_run_id || '');
+   state = null;
+   location.reload();
++  } finally {
++    newCampaignBusy = false;
++    $('newCampaignBtn').disabled = false;
++  }
+ });
+ 
+ const startCampaignBtn = $('startCampaignBtn');
+ if(startCampaignBtn){
+   startCampaignBtn.addEventListener('click', async ()=>{
++    const readinessStarted = performance.now();
+     if(currentUIMode !== "player") return;
+     if(startCampaignBusy) return;
+     if(!state?.ui?.campaign_can_start) return;
+     startCampaignBusy = true;
+     startCampaignBtn.disabled = true;
++    $('newCampaignBtn').disabled = true;
++    const controller = new AbortController();
++    const deadline = setTimeout(()=>controller.abort(), 90000);
+     const thinking = addMessage('system','System','Preparing openingâ€¦');
+     const openingFailure = 'Campaign opening could not be completed. Your campaign has not started, and no gameplay progress was committed. You can try again.';
+     try {
+-      const res = await fetch(apiUrl('/start_campaign', {ui_mode: currentUIMode}), {method:'POST'});
++      const res = await fetch(apiUrl('/start_campaign', {ui_mode: currentUIMode}), {method:'POST', signal:controller.signal});
+       const data = await res.json();
+       if(res.status === 503 || data.status === 'blocked'){
+         replaceMessage(thinking,'error','System', formatBlockedNewCampaignMessage(data), newCampaignBlockedDetails(data));
+@@ -676,11 +697,14 @@ if(startCampaignBtn){
+       }
+       replaceMessage(thinking,'gm','GM', data.gm_output?.player_facing_text || '(no narration)', data.resolution);
+       await reloadAll();
++      recordPlayerReady('start_campaign', readinessStarted);
+     } catch (_error) {
+       replaceMessage(thinking,'error','System', 'The opening request could not be confirmed. Refresh campaign state before trying again.');
+       try { await loadState(); } catch (_refreshError) { /* Keep visible feedback. */ }
+     } finally {
++      clearTimeout(deadline);
+       startCampaignBusy = false;
++      $('newCampaignBtn').disabled = false;
+       if(state) updateCampaignBootstrapUI(state);
+     }
+   });
+@@ -706,8 +730,9 @@ if (snapListEl) {
+     if(currentUIMode !== "player") return;
+     const btn = e.target.closest('.load-snapshot-btn');
+     if (!btn || !btn.dataset.id) return;
++    const readinessStarted = performance.now();
+     const data = await fetchJSON(apiUrl('/snapshots/load', {ui_mode: currentUIMode}), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ snapshot_id: btn.dataset.id, ui_mode: currentUIMode }) });
+-    if (data.ok) { addMessage('system', 'System', 'Snapshot restored.'); await loadState(); }
++    if (data.ok) { await reloadAll(); addMessage('system', 'System', 'Snapshot restored.'); recordPlayerReady('resume', readinessStarted); }
+     else addMessage('error', 'Error', data.error || 'Failed to load snapshot.');
+   });
+ }
+@@ -726,6 +751,7 @@ async function submitDirect(payload, label){
+ 
+ /** Submit a structured exploration action (affordance) to /api/action. Uses same log/error pattern as submitDirect. */
+ async function submitExplorationAction(affordance){
++  const readinessStarted = performance.now();
+   if(currentUIMode !== "player") return;
+   const label = affordance.label || (affordance.metadata && affordance.metadata.prompt) || 'Action';
+   const prompt = (affordance.metadata && affordance.metadata.prompt) || affordance.prompt || label;
+@@ -760,6 +786,7 @@ async function submitExplorationAction(affordance){
+   if(!data.ok){ replaceMessage(thinking,'error','Error',data.error || 'Unknown error'); return; }
+   replaceMessage(thinking,'gm','GM',data.gm_output?.player_facing_text || '(no narration)', data.resolution);
+   await reloadAll();
++  recordPlayerReady('exploration_action', readinessStarted);
+ }
+ 
+ async function saveCampaign(){

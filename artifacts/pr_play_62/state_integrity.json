@@ -1,0 +1,151 @@
+{
+  "protected_data_changes": [],
+  "control_vs_experiment": [
+    {
+      "turn": 1,
+      "different_authority_fields": [],
+      "same_mechanical_resolution": true
+    },
+    {
+      "turn": 2,
+      "different_authority_fields": [],
+      "same_mechanical_resolution": true
+    },
+    {
+      "turn": 3,
+      "different_authority_fields": [],
+      "same_mechanical_resolution": true
+    },
+    {
+      "turn": 4,
+      "different_authority_fields": [],
+      "same_mechanical_resolution": true
+    },
+    {
+      "turn": 5,
+      "different_authority_fields": [],
+      "same_mechanical_resolution": true
+    }
+  ],
+  "state_deltas": [
+    {
+      "input": "I examine the notice board.",
+      "changes": {
+        "clues": {
+          "before": [],
+          "after": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ]
+        },
+        "clocks": {
+          "before": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "after": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          }
+        }
+      }
+    },
+    {
+      "input": "I examine the rain barrel.",
+      "changes": {
+        "clocks": {
+          "before": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "after": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          }
+        }
+      }
+    },
+    {
+      "input": "I examine the notice board again.",
+      "changes": {
+        "world_flags": {
+          "before": {},
+          "after": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          }
+        },
+        "clocks": {
+          "before": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "after": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 3
+          }
+        }
+      }
+    },
+    {
+      "input": "I look around the gate.",
+      "changes": {
+        "clocks": {
+          "before": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 3
+          },
+          "after": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 4
+          }
+        }
+      }
+    },
+    {
+      "input": "I examine the rain barrel.",
+      "changes": {
+        "clocks": {
+          "before": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 4
+          },
+          "after": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 5
+          }
+        }
+      }
+    }
+  ]
+}

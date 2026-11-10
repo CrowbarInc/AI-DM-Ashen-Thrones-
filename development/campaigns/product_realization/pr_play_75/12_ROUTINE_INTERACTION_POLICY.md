@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 12 ROUTINE INTERACTION POLICY
+
+A narrow reusable policy recognizes sitting on an accepted, accessible ordinary seat in the active scene. It requires no roll or invented DC. Missing/imaginary/inaccessible seats do not gain success. The result is a scene-scoped posture receipt in the existing ledger, without inventory or movement effects; repeated sitting does not duplicate entities/effects. Seat improvisation itself retains PR74 public stone support. Final HTTP campaigns create the seat at the milestone and return to the gate afterward. Pickup, movement, climbing and broader physical adjudication remain deferred to PR76.

@@ -1,0 +1,118 @@
+{
+  "game/exploration.py": {
+    "sha256": "23f5fa0a4aa4f6665b385bce05db855b9883ed2927f7896324e45bcbfa7fd29c",
+    "symbols": {
+      "resolve_exploration_action": 191,
+      "process_investigation_discovery": 1101
+    }
+  },
+  "game/models.py": {
+    "sha256": "6acf7b7ff780e6e38f6f51a18e5709c70141682ba3a61a7e4708123b5fb2a064",
+    "symbols": {
+      "ExplorationEngineResult": 43
+    }
+  },
+  "game/authorized_information.py": {
+    "sha256": "b9098d474ab98b216d94ed5f48ee9401fdc2d3b50d196d86dab0389034bcfe8b",
+    "symbols": {
+      "revealed_information": 13,
+      "supplement_revealed_information": 29
+    }
+  },
+  "game/narration_authorization.py": {
+    "sha256": "1917b5b66347616d578c55a0b830c32769a6acaafadddf014108c37c26637747",
+    "symbols": {
+      "project_narration_payload": 18
+    }
+  },
+  "game/controlled_investigation_renderer.py": {
+    "sha256": "76d850cc4490c3c4d3a26c0beeb0836de3e2992922f39db8cbbd9f96f4316d19",
+    "symbols": {
+      "authorize_investigation": 60,
+      "render_investigation": 138,
+      "preview_investigation": 201
+    }
+  },
+  "game/mechanical_claims.py": {
+    "sha256": "6bebc73796b32a871721fff2c38755cd5e3a183bd26f09987c2f860d1a8c2bef",
+    "symbols": {
+      "mechanical_outcome": 22,
+      "mechanical_fallback": 72,
+      "audit_mechanical_claims": 127
+    }
+  },
+  "game/immutable_valid_response.py": {
+    "sha256": "1ffd6158184c621a79c0358e7a0ac6db49fc32580fcfbbd2dad07bb2df165afe",
+    "symbols": {
+      "validate_generated_response": 623,
+      "safe_nonresolution": 984,
+      "seal_accepted_response": 1301,
+      "seal_host_speech": 1490,
+      "run_preserve_if_valid": 1624,
+      "commit_text": 2265
+    }
+  },
+  "game/api.py": {
+    "sha256": "aada64647c844ad47106dd362cfaeffe92c5e584ad4feacfb3bc017ee75fff97",
+    "symbols": {
+      "deterministic_provider_skip_line": 1057,
+      "_validate_gm_scene_update_for_legacy_adoption": 1578,
+      "_validate_gm_world_updates_for_legacy_adoption": 1796,
+      "_apply_post_gm_updates": 1988,
+      "_build_gpt_narration_from_authoritative_state": 3163
+    }
+  },
+  "game/api_turn_support.py": {
+    "sha256": "1ab4aea97b5a0a7e6458ebd5c500190d2bd53e4d694b0de3f477d35b1a13a6e5",
+    "symbols": {
+      "_authoritative_resolution_fact_text": 259,
+      "_finalize_player_facing_for_turn": 604,
+      "_build_turn_response_payload": 1385
+    }
+  },
+  "game/gm.py": {
+    "sha256": "1f31510377adb072750bc187effffcf6c45387373a86594732601d88fe185614",
+    "symbols": {
+      "remember_recent_contextual_leads": 2559,
+      "_known_fact_from_recent_leads": 2996,
+      "build_messages": 4590,
+      "call_gpt": 5186
+    }
+  },
+  "game/prompt_context.py": {
+    "sha256": "ccf21b03150566d4439b48c2e4e53a0563be74636087c0ee0a8fa6479414996f",
+    "symbols": {
+      "build_narration_context": 1527
+    }
+  },
+  "game/dialogue_authority.py": {
+    "sha256": "9a36a5040545418535a4e4ffc968efd88370836ebd1768742f98ff0ecb13ae3f",
+    "symbols": {
+      "select_host_speech": 787
+    }
+  },
+  "game/bounded_improvisation.py": {
+    "sha256": "af4265b27b09039111266ff5307f985a538c242234ea80b552043794c1793248",
+    "symbols": {
+      "validate_bounded_improvisation_proposal": 230,
+      "promote_accepted_bounded_improvisation": 402
+    }
+  },
+  "game/incidental_entity.py": {
+    "sha256": "602ba862d28ebe1e59b0953e5cba6b2d0c1f74ae3bbfbbb47e5d3bd2cb2c91ec",
+    "symbols": {}
+  },
+  "game/conversational_memory_window.py": {
+    "sha256": "e513992795474690779c113bb44d1f81a4a9b7eec8a78fc2b08169616b2cfc32",
+    "symbols": {
+      "select_conversational_memory_window": 583
+    }
+  },
+  "game/world.py": {
+    "sha256": "4357ab3c94a1cd12067ed0fa3f17b6b6198ee8142da7f8a84a2a72f5b9362b1b",
+    "symbols": {
+      "apply_normalized_world_updates": 441,
+      "apply_resolution_world_updates": 566
+    }
+  }
+}

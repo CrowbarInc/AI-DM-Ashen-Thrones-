@@ -1,0 +1,106 @@
+{
+  "game/defaults.py": [
+    {
+      "line": 53,
+      "text": "def default_character():"
+    },
+    {
+      "line": 87,
+      "text": "\"inventory\": [{\"id\": \"spellbook\", \"name\": \"Spellbook\", \"quantity\": 1, \"usable\": False}],"
+    }
+  ],
+  "game/importers/pf_json_importer.py": [
+    {
+      "line": 70,
+      "text": "def collect_inventory(raw: Dict[str, Any]):"
+    }
+  ],
+  "game/conversational_orchestration.py": [
+    {
+      "line": 2856,
+      "text": "def _unbound_physical_decline("
+    },
+    {
+      "line": 2895,
+      "text": "reason=\"unsupported_physical_manipulation\","
+    }
+  ],
+  "game/api.py": [
+    {
+      "line": 874,
+      "text": "def _nonmutating_conversational_decision_response("
+    },
+    {
+      "line": 7226,
+      "text": "and deterministic_decision.category != ConversationalDecisionCategory.EXECUTE"
+    }
+  ],
+  "game/world.py": [
+    {
+      "line": 566,
+      "text": "def apply_resolution_world_updates(world: Dict[str, Any], resolution_updates: Dict[str, Any]) -> None:"
+    }
+  ],
+  "game/physical_adjudication.py": [
+    {
+      "line": 19,
+      "text": "ROUTINES = frozenset({"
+    },
+    {
+      "line": 99,
+      "text": "def _objects(session, scene) -> list[dict[str, Any]]:"
+    },
+    {
+      "line": 135,
+      "text": "row[\"properties\"].setdefault(\"accessible\", True)"
+    },
+    {
+      "line": 960,
+      "text": "def _write_props(session, row, props):"
+    },
+    {
+      "line": 969,
+      "text": "def _consequence(session, scene, *, target, operation, prior, result):"
+    },
+    {
+      "line": 1203,
+      "text": "def commit_physical(scene, session, world, action, *, prompt, action_id, label, character=None):"
+    }
+  ],
+  "game/storage.py": [
+    {
+      "line": 209,
+      "text": "def runtime_commit_scope():"
+    },
+    {
+      "line": 289,
+      "text": "def save_character(data: Dict[str, Any]) -> None:"
+    },
+    {
+      "line": 1182,
+      "text": "def create_snapshot(label: Optional[str] = None) -> Dict[str, Any]:"
+    },
+    {
+      "line": 1231,
+      "text": "def load_snapshot(snapshot_id: str) -> Optional[Dict[str, Any]]:"
+    }
+  ],
+  "game/mechanical_claims.py": [
+    {
+      "line": 198,
+      "text": "# Delta-only inventory authority has no consumption, equipment"
+    }
+  ],
+  "game/narration_authorization.py": [
+    {
+      "line": 66,
+      "text": "for key in ('items_added', 'items_removed', 'conditions_applied', 'conditions_removed',"
+    }
+  ],
+  "game/offline_investigation_projection.py": [
+    {
+      "line": 55,
+      "text": "unsupported = set(effects) - {"
+    }
+  ]
+}

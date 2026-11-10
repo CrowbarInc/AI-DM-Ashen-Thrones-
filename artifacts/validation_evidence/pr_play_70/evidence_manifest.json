@@ -1,0 +1,1221 @@
+{
+  "schema_version": "validation_evidence_packet.v1",
+  "evidence_scope": "behavioral",
+  "campaign": {
+    "campaign_id": "PR-PLAY-70",
+    "what_was_tested": "Two mutually exclusive persisted responses to uncertain patrol evidence, each with a distinct supported follow-up.",
+    "runtime_path": "Actual localhost TCP action/chat/state/snapshot endpoints; browser evidence separate.",
+    "gm_boundary": "Deterministic consequence publication; optional provider candidates shadow-only.",
+    "player_input_mode": "Developer scripted plausible button actions plus duplicate/incompatible stress probes.",
+    "run_count": 2,
+    "turn_count": 19,
+    "automated_conclusion": "Narrow branching contract passes; overall B/PARTIAL due qualified startup/browser/provider/performance evidence."
+  },
+  "claim_types": [
+    "runtime_evidence",
+    "semantic_behavioral_evidence",
+    "stress_test_evidence"
+  ],
+  "examples": [
+    {
+      "example_id": "survey_01",
+      "scenario_run_id": "c888e50f94efdde16548b49b",
+      "turn_index": 1,
+      "player_input": "I examine the notice board.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [],
+      "exact_gm_output": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {}
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_survey.json",
+      "continuation_decision": {
+        "action": {
+          "text": "I follow the missing patrol rumor."
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "survey_02",
+      "scenario_run_id": "c888e50f94efdde16548b49b",
+      "turn_index": 2,
+      "player_input": "I follow the missing patrol rumor.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "exact_gm_output": "You arrive at Old Milestone.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {}
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_survey.json",
+      "continuation_decision": {
+        "action": {
+          "text": "I examine the weathered milestone."
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "survey_03",
+      "scenario_run_id": "c888e50f94efdde16548b49b",
+      "turn_index": 3,
+      "player_input": "I examine the weathered milestone.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "You arrive at Old Milestone."
+      ],
+      "exact_gm_output": "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_survey.json",
+      "continuation_decision": {
+        "action": {
+          "action_type": "exploration",
+          "intent": "Survey the uncertain trail yourself",
+          "exploration_action": {
+            "id": "patrol_survey",
+            "label": "Survey the uncertain trail yourself",
+            "prompt": "Survey the uncertain trail yourself",
+            "type": "custom"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "survey_04",
+      "scenario_run_id": "c888e50f94efdde16548b49b",
+      "turn_index": 4,
+      "player_input": "Survey the uncertain trail yourself",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You arrive at Old Milestone.",
+        "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "exact_gm_output": "You commit to surveying the ground beyond the milestone yourself. Reporting to the watch is no longer your response to this discovery. You can now record the limits of your survey here.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_survey": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_survey.json",
+      "continuation_decision": {
+        "action": {
+          "action_type": "exploration",
+          "intent": "Survey the uncertain trail yourself",
+          "exploration_action": {
+            "id": "patrol_survey",
+            "label": "Survey the uncertain trail yourself",
+            "prompt": "Survey the uncertain trail yourself",
+            "type": "custom"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "survey_05",
+      "scenario_run_id": "c888e50f94efdde16548b49b",
+      "turn_index": 5,
+      "player_input": "Survey the uncertain trail yourself",
+      "player_input_classification": [
+        "stress_probe",
+        "synthetic_negative_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "You commit to surveying the ground beyond the milestone yourself. Reporting to the watch is no longer your response to this discovery. You can now record the limits of your survey here."
+      ],
+      "exact_gm_output": "That choice is not available here. No consequence was applied.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_survey": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_survey.json",
+      "continuation_decision": {
+        "action": {
+          "action_type": "exploration",
+          "intent": "Return to report the uncertain trail to the watch",
+          "exploration_action": {
+            "id": "patrol_report",
+            "label": "Return to report the uncertain trail to the watch",
+            "prompt": "Return to report the uncertain trail to the watch",
+            "type": "custom"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "survey_06",
+      "scenario_run_id": "c888e50f94efdde16548b49b",
+      "turn_index": 6,
+      "player_input": "Return to report the uncertain trail to the watch",
+      "player_input_classification": [
+        "stress_probe",
+        "synthetic_negative_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You commit to surveying the ground beyond the milestone yourself. Reporting to the watch is no longer your response to this discovery. You can now record the limits of your survey here.",
+        "That choice is not available here. No consequence was applied."
+      ],
+      "exact_gm_output": "That choice is not available here. No consequence was applied.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_survey": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_survey.json",
+      "continuation_decision": {
+        "action": {
+          "action_type": "exploration",
+          "intent": "Record the limits of your survey",
+          "exploration_action": {
+            "id": "patrol_record_survey",
+            "label": "Record the limits of your survey",
+            "prompt": "Record the limits of your survey",
+            "type": "custom"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "survey_07",
+      "scenario_run_id": "c888e50f94efdde16548b49b",
+      "turn_index": 7,
+      "player_input": "Record the limits of your survey",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "That choice is not available here. No consequence was applied.",
+        "That choice is not available here. No consequence was applied."
+      ],
+      "exact_gm_output": "You record your survey: the overlapping prints remain inconclusive. Your survey is now recorded; you have not warned the watch. You can return to the gate or continue investigating here.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_survey": true,
+          "patrol_survey_recorded": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_survey.json",
+      "continuation_decision": {
+        "action": {
+          "action_type": "exploration",
+          "intent": "Record the limits of your survey",
+          "exploration_action": {
+            "id": "patrol_record_survey",
+            "label": "Record the limits of your survey",
+            "prompt": "Record the limits of your survey",
+            "type": "custom"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "survey_08",
+      "scenario_run_id": "c888e50f94efdde16548b49b",
+      "turn_index": 8,
+      "player_input": "Record the limits of your survey",
+      "player_input_classification": [
+        "stress_probe",
+        "synthetic_negative_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "That choice is not available here. No consequence was applied.",
+        "You record your survey: the overlapping prints remain inconclusive. Your survey is now recorded; you have not warned the watch. You can return to the gate or continue investigating here."
+      ],
+      "exact_gm_output": "That choice is not available here. No consequence was applied.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_survey": true,
+          "patrol_survey_recorded": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_survey.json",
+      "continuation_decision": {
+        "action": {
+          "text": "I examine the mud prints."
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "survey_09",
+      "scenario_run_id": "c888e50f94efdde16548b49b",
+      "turn_index": 9,
+      "player_input": "I examine the mud prints.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You record your survey: the overlapping prints remain inconclusive. Your survey is now recorded; you have not warned the watch. You can return to the gate or continue investigating here.",
+        "That choice is not available here. No consequence was applied."
+      ],
+      "exact_gm_output": "You examine the mud prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_survey": true,
+          "patrol_survey_recorded": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_survey.json",
+      "continuation_decision": {
+        "action": "sequence complete"
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "report_01",
+      "scenario_run_id": "1cc9d558cd56e24cbf00960b",
+      "turn_index": 1,
+      "player_input": "I examine the notice board.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [],
+      "exact_gm_output": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {}
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_report.json",
+      "continuation_decision": {
+        "action": {
+          "text": "I follow the missing patrol rumor."
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "report_02",
+      "scenario_run_id": "1cc9d558cd56e24cbf00960b",
+      "turn_index": 2,
+      "player_input": "I follow the missing patrol rumor.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "exact_gm_output": "You arrive at Old Milestone.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {}
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_report.json",
+      "continuation_decision": {
+        "action": {
+          "text": "I examine the weathered milestone."
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "report_03",
+      "scenario_run_id": "1cc9d558cd56e24cbf00960b",
+      "turn_index": 3,
+      "player_input": "I examine the weathered milestone.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "You arrive at Old Milestone."
+      ],
+      "exact_gm_output": "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_report.json",
+      "continuation_decision": {
+        "action": {
+          "action_type": "exploration",
+          "intent": "Return to report the uncertain trail to the watch",
+          "exploration_action": {
+            "id": "patrol_report",
+            "label": "Return to report the uncertain trail to the watch",
+            "prompt": "Return to report the uncertain trail to the watch",
+            "type": "custom"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "report_04",
+      "scenario_run_id": "1cc9d558cd56e24cbf00960b",
+      "turn_index": 4,
+      "player_input": "Return to report the uncertain trail to the watch",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You arrive at Old Milestone.",
+        "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "exact_gm_output": "You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_report": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_report.json",
+      "continuation_decision": {
+        "action": {
+          "action_type": "exploration",
+          "intent": "Return to report the uncertain trail to the watch",
+          "exploration_action": {
+            "id": "patrol_report",
+            "label": "Return to report the uncertain trail to the watch",
+            "prompt": "Return to report the uncertain trail to the watch",
+            "type": "custom"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "report_05",
+      "scenario_run_id": "1cc9d558cd56e24cbf00960b",
+      "turn_index": 5,
+      "player_input": "Return to report the uncertain trail to the watch",
+      "player_input_classification": [
+        "stress_probe",
+        "synthetic_negative_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report."
+      ],
+      "exact_gm_output": "That choice is not available here. No consequence was applied.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_report": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_report.json",
+      "continuation_decision": {
+        "action": {
+          "action_type": "exploration",
+          "intent": "Survey the uncertain trail yourself",
+          "exploration_action": {
+            "id": "patrol_survey",
+            "label": "Survey the uncertain trail yourself",
+            "prompt": "Survey the uncertain trail yourself",
+            "type": "custom"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "report_06",
+      "scenario_run_id": "1cc9d558cd56e24cbf00960b",
+      "turn_index": 6,
+      "player_input": "Survey the uncertain trail yourself",
+      "player_input_classification": [
+        "stress_probe",
+        "synthetic_negative_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report.",
+        "That choice is not available here. No consequence was applied."
+      ],
+      "exact_gm_output": "That choice is not available here. No consequence was applied.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_report": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_report.json",
+      "continuation_decision": {
+        "action": {
+          "text": "I return to Cinderwatch Gate."
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "report_07",
+      "scenario_run_id": "1cc9d558cd56e24cbf00960b",
+      "turn_index": 7,
+      "player_input": "I return to Cinderwatch Gate.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "That choice is not available here. No consequence was applied.",
+        "That choice is not available here. No consequence was applied."
+      ],
+      "exact_gm_output": "You arrive at frontier gate.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_report": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_report.json",
+      "continuation_decision": {
+        "action": {
+          "action_type": "exploration",
+          "intent": "Give the watch your patrol report",
+          "exploration_action": {
+            "id": "patrol_warn_watch",
+            "label": "Give the watch your patrol report",
+            "prompt": "Give the watch your patrol report",
+            "type": "custom"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "report_08",
+      "scenario_run_id": "1cc9d558cd56e24cbf00960b",
+      "turn_index": 8,
+      "player_input": "Give the watch your patrol report",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "That choice is not available here. No consequence was applied.",
+        "You arrive at frontier gate."
+      ],
+      "exact_gm_output": "The watch receives your report that the patrol trail becomes unclear at the milestone. The watch has now been warned; no private survey was conducted. You can continue your inquiry at the gate or return to the milestone.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_report": true,
+          "patrol_guards_warned": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_report.json",
+      "continuation_decision": {
+        "action": {
+          "action_type": "exploration",
+          "intent": "Give the watch your patrol report",
+          "exploration_action": {
+            "id": "patrol_warn_watch",
+            "label": "Give the watch your patrol report",
+            "prompt": "Give the watch your patrol report",
+            "type": "custom"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "report_09",
+      "scenario_run_id": "1cc9d558cd56e24cbf00960b",
+      "turn_index": 9,
+      "player_input": "Give the watch your patrol report",
+      "player_input_classification": [
+        "stress_probe",
+        "synthetic_negative_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "You arrive at frontier gate.",
+        "The watch receives your report that the patrol trail becomes unclear at the milestone. The watch has now been warned; no private survey was conducted. You can continue your inquiry at the gate or return to the milestone."
+      ],
+      "exact_gm_output": "That choice is not available here. No consequence was applied.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_report": true,
+          "patrol_guards_warned": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_report.json",
+      "continuation_decision": {
+        "action": {
+          "text": "I examine the notice board."
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    },
+    {
+      "example_id": "report_10",
+      "scenario_run_id": "1cc9d558cd56e24cbf00960b",
+      "turn_index": 10,
+      "player_input": "I examine the notice board.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "synthetic_positive_control"
+      ],
+      "simulated_player_rationale": "Scripted canonical sequence to demonstrate exclusivity and persisted follow-up; not human-captured play.",
+      "relevant_prior_context": [
+        "The watch receives your report that the patrol trail becomes unclear at the milestone. The watch has now been warned; no private survey was conducted. You can continue your inquiry at the gate or return to the milestone.",
+        "That choice is not available here. No consequence was applied."
+      ],
+      "exact_gm_output": "You examine the notice board again. The examination adds nothing new to what you already know.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "publication": {
+          "status": "PASS",
+          "basis": "exact trusted authored consequence or required discovery text"
+        },
+        "isolation": {
+          "status": "PASS",
+          "basis": "complete serialized response sentinel scan"
+        }
+      },
+      "diagnostic_result": {
+        "scope": "narrow scripted branch contract"
+      },
+      "automated_evaluation": {
+        "branch_flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true,
+          "patrol_report": true,
+          "patrol_guards_warned": true
+        }
+      },
+      "runtime_validity": {
+        "status": "VALID_RUN",
+        "basis": "HTTP 200 with persisted server state"
+      },
+      "source_artifact_path": "artifacts/pr_play_70/http_report.json",
+      "continuation_decision": {
+        "action": "sequence complete"
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No external human review recorded."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "final_emission_metadata": {
+        "boundary": "player-safe HTTP; exact engine consequence publication"
+      }
+    }
+  ],
+  "selected_evidence": {
+    "representative_success": {
+      "selection_rule": "first automated PASS labeled representative_player_behavior and not HUMAN_REJECTED/HUMAN_AMBIGUOUS",
+      "status": "SELECTED",
+      "example_id": "survey_01",
+      "statement": null
+    },
+    "boundary_success": {
+      "selection_rule": "first automated PASS or HUMAN_ACCEPTED example labeled boundary_case",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "representative_failure": {
+      "selection_rule": "first failure labeled representative_player_behavior",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "severe_worst_failure": {
+      "selection_rule": "maximum INVALID_RUN, mandatory-gate failure count, then lowest diagnostic score; source order breaks ties",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "evaluator_disagreement": {
+      "selection_rule": "first example with explicit evaluator_disagreement.present=true",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "unexpected_unclassified": {
+      "selection_rule": "first HUMAN_AMBIGUOUS or unexpected_behavior example",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "stress_probe": {
+      "selection_rule": "first example labeled stress_probe",
+      "status": "SELECTED",
+      "example_id": "survey_05",
+      "statement": null
+    }
+  },
+  "missing_concepts_future_capabilities": [
+    {
+      "name": "Normal browser campaign creation and save-slot resume",
+      "evidence": "Browser harness seeded clean prestarted campaigns and reloaded actual UI.",
+      "status": "NOT_DEMONSTRATED"
+    }
+  ],
+  "limitations_and_unproven_claims": [
+    "No independent holdout or human-realism claim.",
+    "Provider candidates were not published.",
+    "Normal screenshots clipped by host viewport; browser visible latency unmeasured."
+  ]
+}

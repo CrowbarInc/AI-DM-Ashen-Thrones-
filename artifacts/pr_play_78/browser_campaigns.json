@@ -1,0 +1,61 @@
+{
+  "host": "http://127.0.0.1:8092/",
+  "provider": "disabled on this host",
+  "expression_generation": "disabled",
+  "live_dialogue_claim": false,
+  "campaign_a": {
+    "result": "completed",
+    "scene_after_resume": "frontier_gate",
+    "clues_after_resume": 1,
+    "snapshot_id": "2026-11-07T22-45-18_8757597a",
+    "turns": [
+      {"input": "Start Campaign", "via": "button", "response_head": "Rain spatters soot-dark stone across Cinderwatch's eastern gate"},
+      {"input": "I look around.", "via": "chat", "response": "You look around. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel."},
+      {"input": "I examine the notice board.", "via": "chat", "response": "The missing patrol was last seen taking the northwest mud track past the crates."},
+      {"input": "I step closer to the notice board and look at the ground beside it.", "via": "chat", "elapsed_ms": 1077, "response": "That part is not supported here. It was not carried out. Nothing further is established about that. No hidden object or passage was added."},
+      {"input": "Approach the guard and greet him.", "via": "chat", "elapsed_ms": 925, "response": "You move beside Gate Guard. Gate Guard says, \"Hello.\""},
+      {"input": "Ask the guard whether anyone has passed through recently.", "via": "chat", "elapsed_ms": 561, "response": "Gate Guard says, \"I do not know about that.\""},
+      {"input": "Does he seem nervous?", "via": "chat", "elapsed_ms": 180, "response": "Gate Guard seems matter-of-fact. Nothing establishes a hidden motive."},
+      {"input": "Create Snapshot campaign-a", "via": "button", "response": "Snapshot created."},
+      {"input": "Reload page", "via": "navigation", "response": "Transcript, discovered clue, and frontier_gate restored from the autosave."},
+      {"input": "Load campaign-a", "via": "snapshot button"},
+      {"input": "I thank the guard and step back.", "via": "chat", "elapsed_ms": 971, "response": "Gate Guard says, \"Thank you. Goodbye.\" You move away. No new place was created."},
+      {"input": "I look for signs of a struggle near the crates.", "via": "chat", "elapsed_ms": 198, "response": "No signs of a struggle are established here. Nothing was added."}
+    ]
+  },
+  "campaign_b": {
+    "result": "completed",
+    "branch": "patrol_report",
+    "follow_up": "Give the watch your patrol report",
+    "scene_after_resume": "frontier_gate",
+    "clues": 2,
+    "snapshot_id": "2026-11-07T22-47-48_1ecf02ec",
+    "survey_button_after_report": false,
+    "turns": [
+      {"input": "New Campaign", "via": "button"},
+      {"input": "Start Campaign", "via": "button", "elapsed_ms": 760},
+      {"input": "I examine the notice board.", "via": "chat", "elapsed_ms": 514, "response": "The missing patrol was last seen taking the northwest mud track past the crates."},
+      {"input": "I follow the missing patrol rumor.", "via": "chat", "elapsed_ms": 467, "response": "You arrive at Old Milestone.", "scene": "Old Milestone"},
+      {"input": "I look around.", "via": "chat", "elapsed_ms": 891, "response": "You look around. A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The track continues a short way past the stone before rainwater and brush make the next step unclear."},
+      {"input": "I climb the milestone.", "via": "chat", "elapsed_ms": 237, "response": "Weathered milestone is here, but no climbing check is configured, so the climb is not resolved and your position is unchanged."},
+      {"input": "I examine the weathered milestone.", "via": "chat", "elapsed_ms": 523, "response": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."},
+      {"input": "I return to report the uncertain trail to the watch.", "via": "chat", "elapsed_ms": 194, "response": "You want to reach report the uncertain trail to the watch, but that is not an established destination from here. You stay where you are.", "scene_remained": "old_milestone", "branch_taken": false},
+      {"input": "If the trail beyond the stone is clear, follow it; otherwise I stay and tell the watch what I saw.", "via": "chat", "elapsed_ms": 819, "response": "The published text was the Cinderwatch gate opening. The heading and save scene remained Old Milestone.", "narrative_contradiction": true},
+      {"input": "Approach the guard and ask what concerns him.", "via": "chat", "elapsed_ms": 889, "response": "That part is not supported here. It was not carried out. A later part was not attempted, because it depended on a step that did not succeed.", "scene": "old_milestone"},
+      {"input": "Am I standing?", "via": "chat", "elapsed_ms": 277, "response": "You are standing here."},
+      {"input": "Return to report the uncertain trail to the watch", "via": "suggested-action button", "elapsed_ms": 408, "response": "You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report."},
+      {"input": "I return to Cinderwatch Gate.", "via": "chat", "elapsed_ms": 653, "response": "You arrive at frontier gate.", "scene": "frontier_gate"},
+      {"input": "Approach the guard and ask whether he needs help.", "via": "chat", "elapsed_ms": 989, "response": "You move beside Gate Guard. Gate Guard says, \"I do not know about that.\""},
+      {"input": "Create Snapshot campaign-b", "via": "button", "response": "Snapshot created."},
+      {"input": "Reload page", "via": "navigation", "response": "Transcript, 2 clues, and frontier_gate restored. Both campaign-a and campaign-b snapshots remained listed."},
+      {"input": "Load campaign-b", "via": "snapshot button"},
+      {"input": "Give the watch your patrol report", "via": "suggested-action button", "elapsed_ms": 431, "response": "The watch receives your report that the patrol trail becomes unclear at the milestone. The watch has now been warned; no private survey was conducted. You can continue your inquiry at the gate or return to the milestone."}
+    ]
+  },
+  "screenshots": [
+    "artifacts/pr_play_78/browser_shots/campaign_a_before_reload.png",
+    "artifacts/pr_play_78/browser_shots/campaign_a_after_resume.png",
+    "artifacts/pr_play_78/browser_shots/campaign_b_before_reload.png",
+    "artifacts/pr_play_78/browser_shots/campaign_b_after_resume.png"
+  ]
+}

@@ -151,7 +151,27 @@ def bounded_log(pipe, path, secrets):
     pipe.close()
 
 
+def start_worker(run, env, *, script=None):
+    """Launch the interpreter whose PID must match the worker's attestation.
+
+    Windows venv redirectors create another process. Use the base interpreter,
+    retaining this environment's packages, for both module and observer workers.
+    Never fall back to a redirector when the expected base interpreter is missing.
+    """
+    executable = getattr(sys, '_base_executable', sys.executable)
+    if not executable or not Path(executable).is_file():
+        raise FileNotFoundError('Harness base interpreter unavailable')
+    child_env = dict(env)
+    child_env['PYTHONPATH'] = os.pathsep.join(dict.fromkeys([
+        str(ROOT), *[p for p in sys.path if p and 'site-packages' in p], env.get('PYTHONPATH', '')]))
+    target = [str(script)] if script is not None else ['-m', 'tools.playtest.worker']
+    return subprocess.Popen([executable, '-u', *target, str(run)],
+        cwd=ROOT, env=child_env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+
+
 def stop_owned(process, timeout):
+    started = time.monotonic()
     if process is None:
         return {'owned': False, 'stopped': True}
     if process.poll() is None:
@@ -162,7 +182,63 @@ def stop_owned(process, timeout):
             process.kill()
             process.wait(timeout=timeout)
     return {'owned': True, 'pid': process.pid, 'stopped': process.poll() is not None,
-            'exit_code': process.returncode}
+            'exit_code': process.returncode, 'shutdown_seconds': round(time.monotonic()-started, 6)}
+
+
+def wait_for_http_ready(process, run, timeout):
+    """Configuration attestation is separate from a successful endpoint response.
+
+    Persist safe transport metadata only: no response bodies or exception strings.
+    The deadline includes configuration loading and server initialization.
+    """
+    started = time.monotonic()
+    deadline = started + timeout
+    path = run/'diagnostics/ready.json'
+    with (run/'diagnostics/readiness_poll.jsonl').open('w', encoding='utf-8') as log:
+        def record(event, **details):
+            row = {'event': event, 'time': datetime.now(timezone.utc).isoformat(),
+                   'elapsed_seconds': round(time.monotonic()-started, 6), **details}
+            log.write(json.dumps(row)+'\n')
+            log.flush()
+        record('worker_spawned', pid=process.pid, deadline_seconds=timeout)
+        while time.monotonic() < deadline:
+            if process.poll() is not None:
+                record('worker_exited', exit_code=process.returncode)
+                raise RuntimeError('Owned server exited during startup')
+            if path.exists():
+                try:
+                    ready = json.loads(path.read_text(encoding='utf-8'))
+                except (OSError, json.JSONDecodeError) as exc:
+                    record('attestation_unavailable', error_type=type(exc).__name__)
+                else:
+                    if ready['pid'] != process.pid or Path(ready['data_dir']).resolve() != run/'data' or not ready['isolation_verified']:
+                        record('attestation_mismatch')
+                        raise RuntimeError('Isolation attestation mismatch')
+                    base = f"http://127.0.0.1:{ready['port']}"
+                    try:
+                        status, _ = request(base, 'GET', '/api/state', min(1, max(.001, deadline-time.monotonic())))
+                        record('http_response', url=base+'/api/state', status=status)
+                        if status == 200:
+                            if time.monotonic() >= deadline:
+                                break
+                            write(run/'diagnostics/http_ready.json', {
+                                'pid': process.pid, 'url': base+'/api/state', 'status': status,
+                                'time': datetime.now(timezone.utc).isoformat(),
+                                'startup_seconds': round(time.monotonic()-started, 6)})
+                            return ready, base
+                    except (OSError, URLError, ValueError) as exc:
+                        reason = getattr(exc, 'reason', exc)
+                        code = getattr(reason, 'winerror', None) or getattr(reason, 'errno', None)
+                        category = ('access_denied' if code in {13, 10013} else
+                                    'connection_refused' if code in {61, 111, 10061} else
+                                    'request_timeout' if isinstance(reason, TimeoutError) else
+                                    'invalid_response' if isinstance(exc, ValueError) else 'connection_error')
+                        record(category, error_type=type(exc).__name__, os_error=code)
+                        if category == 'access_denied':
+                            raise PermissionError('Local HTTP access denied') from exc
+            time.sleep(min(.05, max(0, deadline-time.monotonic())))
+        record('readiness_deadline_expired')
+        raise TimeoutError('Application startup deadline')
 
 
 def request(base, method, path, timeout, body=None):
@@ -182,7 +258,7 @@ def request(base, method, path, timeout, body=None):
 
 def snapshot(run, label, base, timeout):
     folder = run/label
-    status, state = request(base, 'GET', '/api/state?ui_mode=debug', timeout)
+    status, state = request(base, 'GET', '/api/state?ui_mode=player', timeout)
     if status != 200:
         raise ValueError('State capture failed')
     write(folder/'api_state.json', state)
@@ -295,8 +371,10 @@ def run_playtest(*, scenario='CampaignOpening', mode='Deterministic', authorize_
             __import__(dependency)
         prepare_isolated_store(run/'data', scenario_id=s['id'], repo=ROOT, player_campaign_dir=player)
         write(run/'configuration/scenario.json', s)
+        from game.opening_presentation_renderer import opening_renderer_diagnostics
         cfg = {'scenario_id': s['id'], 'mode': mode, 'fixture_response': case, 'port': port,
-               'player_data': str(player), 'capture_response': capture_response}
+               'player_data': str(player), 'capture_response': capture_response,
+               'opening_renderer': opening_renderer_diagnostics()}
         write(run/'configuration/run.json', cfg)
         result['environment_verification'] = {'repository_root': str(ROOT), 'python': sys.executable,
             'python_version': sys.version.split()[0], 'fixture_hash_verified': True,
@@ -304,42 +382,18 @@ def run_playtest(*, scenario='CampaignOpening', mode='Deterministic', authorize_
             'provider_request_ceiling': int(env['ASHEN_PROVIDER_REQUEST_LIMIT']),
             'token_allowances': {k: int(env[f'ASHEN_PROVIDER_{k.upper()}_TOKEN_LIMIT']) for k in CAPS},
             'live_authorization': authorize_live and mode == 'Live', 'retry_configuration': 'SDK=0, host=0',
-            'response_capture_opt_in': capture_response}
+            'response_capture_opt_in': capture_response,
+            'opening_renderer': cfg['opening_renderer']}
         print('Configured ceilings:', result['environment_verification']['provider_request_ceiling'],
               'requests;', result['environment_verification']['token_allowances'], 'tokens; retries=0', flush=True)
         if time.monotonic()-started > s['timeouts']['preflight']:
             raise TimeoutError('Preflight deadline')
         infrastructure = 'application_startup_failure'
-        # Windows venv python.exe may redirect to another PID. Launch the real
-        # interpreter and retain this environment's packages so the PID we own
-        # is the process holding the listening socket.
-        executable = getattr(sys, '_base_executable', sys.executable)
-        env['PYTHONPATH'] = os.pathsep.join(dict.fromkeys([str(ROOT), *[p for p in sys.path if p and 'site-packages' in p], env.get('PYTHONPATH', '')]))
-        process = subprocess.Popen([executable, '-u', '-m', 'tools.playtest.worker', str(run)],
-            cwd=ROOT, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+        process = start_worker(run, env)
         secrets = [v for k, v in env.items() if v and len(v)>6 and any(part in k.lower() for part in ('key', 'secret', 'password', 'credential', 'token'))]
         logger = threading.Thread(target=bounded_log, args=(process.stdout, run/'diagnostics/application.log', secrets), daemon=True)
         logger.start()
-        deadline = time.monotonic()+min(startup_timeout or s['timeouts']['startup'], s['timeouts']['startup'])
-        ready = None
-        while time.monotonic() < deadline:
-            if process.poll() is not None:
-                raise RuntimeError('Owned server exited during startup')
-            path = run/'diagnostics/ready.json'
-            if path.exists():
-                ready = json.loads(path.read_text(encoding='utf-8'))
-                if ready['pid'] != process.pid or Path(ready['data_dir']).resolve() != run/'data' or not ready['isolation_verified']:
-                    raise RuntimeError('Isolation attestation mismatch')
-                base = f"http://127.0.0.1:{ready['port']}"
-                try:
-                    if request(base, 'GET', '/api/state', min(1, max(.01, deadline-time.monotonic())))[0] == 200:
-                        break
-                except (OSError, URLError, ValueError):
-                    pass
-            time.sleep(.05)
-        else:
-            raise TimeoutError('Application startup deadline')
+        ready, base = wait_for_http_ready(process, run, min(startup_timeout or s['timeouts']['startup'], s['timeouts']['startup']))
         result['environment_verification']['application'] = ready
         if not ready['diagnostics_enabled'] or ready['sdk_retries'] or ready['host_retries']:
             raise RuntimeError('Worker safety attestation invalid')
@@ -355,10 +409,10 @@ def run_playtest(*, scenario='CampaignOpening', mode='Deterministic', authorize_
             result['steps'].append(row)
             try:
                 if kind == 'player_turn':
-                    from tools.playtest.gameplay import execute_turn, prerequisite_failure
+                    from tools.playtest.gameplay import execute_turn, prerequisite_failure, can_start_interaction
                     usage_path = run/'diagnostics/budget_snapshot.json'
                     current_usage = json.loads(usage_path.read_text(encoding='utf-8')) if usage_path.exists() else {}
-                    if current_usage.get('dispatched_requests', 0) >= int(env['ASHEN_PROVIDER_REQUEST_LIMIT']):
+                    if not can_start_interaction(current_usage, int(env['ASHEN_PROVIDER_REQUEST_LIMIT'])):
                         result['steps'].pop()
                         result['stop_reason'] = 'provider_budget_exhaustion'
                         break

@@ -1,0 +1,258 @@
+--- entry/game/api.py
++++ game/api.py
+@@ -5561,7 +5561,16 @@
+         assert_mode_allows_runtime_action(ui_mode)
+     except UiModePolicyError as e:
+         return _ui_mode_error_response(e)
+-    save_character(payload)
++    # Whole-character editing is not a classification authority. Preserve the
++    # established object-ID -> metadata binding, including across reordering.
++    from game.object_marking import _client_visibility_unchanged
++    from game.integrated_play import ordered_turn
++    from game import storage
++    with ordered_turn(str(DATA_DIR), mutating=True):
++        with storage._runtime_persistence_guard('update_character_visibility_guard'):
++            if not _client_visibility_unchanged(load_character(), payload):
++                return {'ok': False, 'ui_mode': ui_mode, 'error': 'trusted_visibility_operation_required'}
++            save_character(payload)
+     return {'ok': True, 'ui_mode': ui_mode, 'character': payload}
+ 
+ 
+@@ -5755,7 +5764,13 @@
+     return _mutate_inventory_object_marking(request, remove=True)
+ 
+ 
+-def _mutate_inventory_object_marking(request: dict, *, remove: bool = False) -> dict:
++def set_marking_visibility(request: dict, *, authorization=None) -> dict:
++    """Internal trusted classification only; no HTTP or natural-language route."""
++    return _mutate_inventory_object_marking(request, visibility=True, authorization=authorization)
++
++
++def _mutate_inventory_object_marking(request: dict, *, remove: bool = False,
++                                     visibility: bool = False, authorization=None) -> dict:
+     """Internal trusted structured entry. Never called by HTTP/gameplay routing.
+ 
+     Same lane as character identity and turns; durable dedupe is checked afresh,
+@@ -5764,15 +5779,20 @@
+     from game import storage
+     from game.integrated_play import ordered_turn
+     from game.object_marking import prepare_marking, _request_error, prepare_removal, _removal_request_error
++    from game.object_marking import prepare_visibility, _visibility_request_error, _visibility_authorized
+     from copy import deepcopy
+ 
+     request = deepcopy(request)
+     validate = _removal_request_error if remove else _request_error
+     prepare = prepare_removal if remove else prepare_marking
+     operation = 'remove_inventory_marking' if remove else 'add_inventory_marking'
++    if visibility:
++        validate, prepare, operation = _visibility_request_error, prepare_visibility, 'set_marking_visibility'
+     error = validate(request)
+     if error:
+         return {'status':'rejected', 'error':error}
++    if visibility and not _visibility_authorized(request, authorization):
++        return {'status':'rejected', 'error':'untrusted_visibility_authorization'}
+     with ordered_turn(str(DATA_DIR), mutating=True):
+         # Hold the existing persistence guard across read/validate/save so an
+         # in-process snapshot restore cannot interleave this character operation.
+@@ -5781,7 +5801,8 @@
+                 return {'status':'rejected','error':'missing_runtime_state'}
+             if storage.load_session().get('campaign_run_id') != request['campaign_run_id']:
+                 return {'status':'rejected','error':'campaign_mismatch'}
+-            proposal = prepare(storage.load_character(), request)
++            proposal = prepare(storage.load_character(), request,
++                **({'authorization': authorization} if visibility else {}))
+             if proposal['status'] == 'rejected':
+                 return proposal
+             if proposal['status'] == 'replay':
+--- entry/game/object_marking.py
++++ game/object_marking.py
+@@ -8,6 +8,7 @@
+ import copy
+ import hashlib
+ import json
++from dataclasses import dataclass
+ from uuid import uuid4
+ 
+ from game.object_instances import _text, _uuid, inspect_object_identity
+@@ -251,9 +252,10 @@
+     entries = ledger['entries']
+     rows = {r['instance_id']: r for r in character['inventory'] if isinstance(r, dict) and 'instance_id' in r}
+     seen_requests, seen_ids, revisions = set(), set(), set()
++    additions = {}
+ 
+     def addition(row, mark):
+-        if (not isinstance(mark, dict) or set(mark) != MARK_FIELDS
++        if (not isinstance(mark, dict) or not MARK_FIELDS.issubset(mark)
+                 or type(mark['version']) is not int or mark['version'] != 1 or mark['type'] != 'add_marking'
+                 or not _uuid(mark['modification_id']) or type(mark['applied_revision']) is not int
+                 or not 0 < mark['applied_revision'] <= row['revision']):
+@@ -271,6 +273,7 @@
+                 or any(type(receipt[k]) is not int for k in ('version','previous_revision','resulting_revision'))):
+             return False
+         seen_requests.add(key); seen_ids.add(mark['modification_id']); revisions.add(token)
++        additions[mark['modification_id']] = (row['instance_id'], mark['applied_revision'])
+         return True
+ 
+     for row in character['inventory']:
+@@ -308,4 +311,161 @@
+             if token in revisions:
+                 return False
+             revisions.add(token); seen_requests.add(key)
++    for key, receipt in entries.items():
++        if isinstance(receipt, dict) and receipt.get('operation') == 'set_marking_visibility':
++            if set(receipt) != VISIBILITY_RESULT_FIELDS:
++                return False
++            req = receipt['request']
++            if (_visibility_request_error(req) or req['request_id'] != key or key in seen_requests
++                    or req['campaign_run_id'] != campaign or req['character_id'] != actor):
++                return False
++            row = rows.get(req['instance_id'])
++            added = additions.get(req['modification_id'])
++            if (row is None or added is None or added[0] != req['instance_id']
++                    or added[1] > req['expected_revision']
++                    or receipt['status'] not in ('applied', 'no_change')
++                    or receipt != _visibility_result(req, receipt['status'] == 'applied')
++                    or any(type(receipt[k]) is not int for k in ('version','previous_revision','resulting_revision'))
++                    or receipt['resulting_revision'] > row['revision']):
++                return False
++            if receipt['status'] == 'applied':
++                token = (row['instance_id'], receipt['resulting_revision'])
++                if token in revisions:
++                    return False
++                revisions.add(token)
++            seen_requests.add(key)
+     return seen_requests == set(entries)
++
++
++VISIBILITY_PRECONDITIONS = frozenset({'target_exists', 'marking_exists', 'rights',
++                                     'classification_basis', 'capability'})
++VISIBILITY_FIELDS = REMOVAL_FIELDS | {'visibility'}
++VISIBILITY_RESULT_FIELDS = RESULT_FIELDS | {'operation', 'request'}
++
++
++@dataclass(frozen=True)
++class _VisibilityAuthorization:
++    request_digest: str
++
++
++def _valid_visibility(value):
++    # Exact observer vocabulary/schema; extensions belong outside this leaf.
++    return (type(value) is dict and type(value.get('classification')) is str and (
++        (set(value) == {'classification'} and value['classification'] in ('visible', 'concealed'))
++        or (set(value) == {'classification', 'scope'} and value['classification'] == 'restricted'
++            and _text(value['scope']))))
++
++
++def _visibility_request_error(req):
++    if (type(req) is not dict or set(req) != VISIBILITY_FIELDS | {'request_digest'}
++            or type(req['version']) is not int or req['version'] != 1
++            or req['operation'] != 'set_marking_visibility'
++            or not all(_text(req[k]) for k in ('campaign_run_id', 'character_id', 'request_id'))
++            or not _uuid(req['instance_id']) or not _uuid(req['modification_id'])
++            or type(req['expected_revision']) is not int or req['expected_revision'] < 0):
++        return 'invalid_request'
++    if not _valid_visibility(req['visibility']):
++        return 'invalid_visibility'
++    auth = req['authorization']
++    if (type(auth) is not dict or set(auth) != {'caller_id', 'decision_id', 'mechanics', 'preconditions'}
++            or not _text(auth['caller_id']) or not _text(auth['decision_id'])
++            or auth['mechanics'] != 'not_applicable'
++            or type(auth['preconditions']) is not dict or set(auth['preconditions']) != VISIBILITY_PRECONDITIONS
++            or not all(_text(v) for v in auth['preconditions'].values())):
++        return 'unauthorized_visibility'
++    if req['request_digest'] != request_digest(req):
++        return 'invalid_digest'
++    return None
++
++
++def _establish_visibility_authorization(request):
++    """Trusted internal assertion only, never an issuer for client/AI input.
++
++    No authenticated decision issuer exists. Like observation establishment,
++    this seam requires upstream adjudication. The typed grant binds ALL semantic
++    inputs, including scope, operation, mark, classification and expected revision.
++    The evidence strings alone are insufficient at the mutation entry.
++    """
++    if _visibility_request_error(request):
++        raise ValueError('invalid_visibility_authorization')
++    return _VisibilityAuthorization(request['request_digest'])
++
++
++def _visibility_authorized(request, authorization):
++    return (type(authorization) is _VisibilityAuthorization
++            and authorization.request_digest == request['request_digest'])
++
++
++def _visibility_result(req, changed):
++    result = dict(_result(req, req['modification_id']), operation='set_marking_visibility',
++                  request=copy.deepcopy(req))
++    if not changed:
++        result.update(status='no_change', resulting_revision=req['expected_revision'])
++    return result
++
++
++def prepare_visibility(character: dict, request: dict, *, authorization=None) -> dict:
++    """Stage authoritative row metadata and one shared durable receipt together."""
++    error = _visibility_request_error(request)
++    if error:
++        return _reject(error)
++    if not _visibility_authorized(request, authorization):
++        return _reject('untrusted_visibility_authorization')
++    index, error = _target(character, request)
++    if error:
++        return _reject(error)
++    receipt = character.get(LEDGER, {}).get('entries', {}).get(request['request_id'])
++    if receipt is not None:
++        if receipt['request_digest'] != request['request_digest']:
++            return _reject('conflicting_request')
++        return {'status':'replay', 'result':copy.deepcopy(receipt)}
++    row = character['inventory'][index]
++    if row['revision'] != request['expected_revision']:
++        return _reject('stale_revision')
++    if not any(m['modification_id'] == request['modification_id'] for m in row.get('markings', [])):
++        return _reject('missing_marking')
++    metadata = row.get('marking_visibility', {'version':1, 'markings':{}})
++    if (type(metadata) is not dict or type(metadata.get('version')) is not int
++            or metadata['version'] != 1 or type(metadata.get('markings')) is not dict):
++        return _reject('invalid_visibility_state')
++    current = metadata['markings'].get(request['modification_id'])
++    if current is not None and not _valid_visibility(current):
++        return _reject('invalid_visibility_state')
++    changed = current != request['visibility']
++    result = _visibility_result(request, changed)
++    candidate = copy.deepcopy(character)
++    target = candidate['inventory'][index] = copy.deepcopy(candidate['inventory'][index])
++    if changed:
++        target.setdefault('marking_visibility', {'version':1, 'markings':{}})['markings'][request['modification_id']] = copy.deepcopy(request['visibility'])
++        target['revision'] = result['resulting_revision']
++    candidate[LEDGER]['entries'][request['request_id']] = copy.deepcopy(result)
++    return {'status':'validated', 'character':candidate, 'result':result}
++
++
++def _client_visibility_unchanged(current, proposed):
++    """Narrow guard for the existing whole-character client replacement route.
++
++    No JSON input to that route may create, change, drop or rebind visibility.
++    Trusted storage/snapshot restoration remains independent of client editing.
++    """
++    def bindings(character):
++        values = {}
++        inventory = character.get('inventory', [])
++        if not isinstance(inventory, list):
++            return None
++        identities = set()
++        for row in inventory:
++            if not isinstance(row, dict):
++                continue
++            identity = row.get('instance_id')
++            if 'instance_id' in row:
++                if not _uuid(identity) or identity in identities:
++                    return None
++                identities.add(identity)
++            if 'marking_visibility' in row:
++                if not _uuid(identity):
++                    return None
++                values[identity] = row['marking_visibility']
++        return values
++    before, after = bindings(current), bindings(proposed)
++    return before is not None and after is not None and before == after

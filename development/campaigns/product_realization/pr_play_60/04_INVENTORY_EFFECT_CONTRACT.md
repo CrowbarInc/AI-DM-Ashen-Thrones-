@@ -1,0 +1,5 @@
+# 04 INVENTORY EFFECT CONTRACT
+
+Existing owner: game.mechanical_claims.mechanical_outcome, using resolver state_changes with established top-level fallback. Existing names: items_added/items_removed; strings, lists of strings and item records with id/name/quantity. The disclosure allowlist keeps id, name, quantity, label and excludes private fields. Quantity is a delta, never a total balance. Records without quantity retain the established implicit one-item convention.
+
+AuthorizedInvestigation now contains a detached immutable JSON snapshot of disclosure-approved inventory deltas. It is a read model, not persistent inventory or independent mutable authority. Other downstream projections are derived from that one snapshot. No source/destination/resulting total/equipment slot/reference is invented. Available item id is retained; no stable per-effect reference or post-state is supplied by the existing adapter. Unsupported source/destination claims are not authorized by player-only deltas.

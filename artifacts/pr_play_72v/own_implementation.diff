@@ -1,0 +1,321 @@
+--- entry/game/player_initiative.py
++++ final/game/player_initiative.py
+@@ -38,20 +38,46 @@
+         )
+ 
+     # Never adopt the player's presupposition as a world fact.
+-    if re.search(r"\b(gm\s+notes?|hidden\s+(?:facts?|clues?|information)|secret\s+(?:future|events?|plans?|motivations?))\b", low):
++    if re.search(r"\b(gm\s+notes?|hidden\s+(?:facts?|clues?|information|camp|locations?|destinations?)|secret\s+(?:future|events?|plans?|motivations?))\b", low):
+         return result(C.DECLINE, "hidden_information", "You can ask about what you have seen or learned; concealed facts remain unknown.")
+     if re.search(r"\b(teleport|rewrite\s+reality|delete\s+the\s+world|become\s+a\s+god)\b", low):
+         return result(C.DECLINE, "impossible", "That cannot be carried out with your available abilities and routes.")
+     if re.search(r"\b(?:order|command|force|make)\b.*\b(?:guards?|watch|soldiers?)\b|\b(?:send|dispatch)\b.*\b(?:patrol|search\s+party|soldiers?)\b", low):
+         return result(C.DECLINE, "npc_authority", "You cannot decide the watch's deployment. You can speak to a guard here or review what you have already reported.")
+-    if re.search(r"\b(?:follow|pursue|chase)\b.*\b(?:tracks?|footprints?|prints|whoever)\b", low):
++    if re.search(r"\b(?:follow|pursue|chase)\b.*\b(?:tracks?|footprints?|prints|trail|whoever)\b|\btrail\s+be\s+followed\b", low):
+         return result(C.DECLINE, "unsupported_pursuit", "No onward pursuit is established from these prints. You can examine accessible evidence or use a known route; no destination or encounter has been determined.")
+ 
+-    memory = bool(re.search(
++    # Resolve public pronouns before broad memory wording ("what happened").
++    # Reuse the conversation owner's single-visible-object mechanism, but do
++    # not persist pending clarification state in this read-only experiment.
++    inspect_reference = re.search(
++        r"\b(?:inspect|examine|look\s+at|check|study|read)\s+"
++        r"(?:it|them|(?:that|this)(?=\s*(?:[.!?]|$|again\b|once\b|more\b|using\b|and\b)))\b", low)
++    if inspect_reference:
++        if re.search(r"\b(?:if|unless|provided|while|then|and|don't|do\s+not|never)\b", low):
++            return result(C.CLARIFY, "qualified_attempt", "What single action do you want to attempt now? Nothing has been attempted.")
++        if re.search(r"\b(?:cast|magic|spell|excavate|dig|burn|microscope)\b", low):
++            return result(C.DECLINE, "unsupported_method", "That investigative method is not supported here. You can examine the visible evidence normally.")
++        from game.conversational_orchestration import _pending_clarification_decision
++        from dataclasses import replace
++        reference = _pending_clarification_decision(player_text=text, scene=scene, world=world)
++        if reference is not None:
++            return replace(reference, context_update={}, intent_family="player_initiative")
++        return result(C.CLARIFY, "missing_reference", "Which visible object do you mean?")
++    if re.search(r"\b(?:ask|speak|talk)\b.*\b(?:them|him|her)\b|\bgo\s+back\s+there\b", low) or re.fullmatch(
++        r"(?:please\s+)?(?:see|check|follow\s+up\s+on)\s+what\s+happened[.!?]*", low
++    ):
++        return result(C.CLARIFY, "ambiguous_reference", "Which person, place, or piece of evidence do you mean?")
++
++    # Auxiliary questions about past/current public facts are inquiries, even
++    # when their verb (record, search, inspect) also names a supported action.
++    memory = bool(re.match(
++        r"^(?:have|has|did|was|were|is|are)\s+(?:(?:i|we|you)\b|(?:the\s+)?(?:guards?|watch|patrol|survey|report)\b)", low
++    ) or re.search(r"\b(?:where|when)\b.*\b(?:patrol|guards?|watch|soldiers?)\b", low) or re.search(
+         r"\b(?:what\s+(?:do\s+(?:i|we)\s+know|(?:have|did)\s+(?:i|we)|happened|did\s+(?:our|the)\s+survey)|"
+         r"tell\s+me\s+what|remind\s+me|who\s+(?:have|did)\s+(?:i|we)\s+(?:told|tell)|"
+         r"(?:have|has|was|did)\b.*\b(?:warn|warned|warning|report)|check\s+(?:whether|if)|"
+-        r"what\s+did\s+the\s+survey)\b", low))
++        r"what\s+did\s+the\s+survey|what\s+(?:was|is)\s+(?:discovered|learned|found|known)|what\s+else\s+can\s+(?:i|we)\s+(?:tell|learn))\b", low))
+     if memory:
+         from game.journal import build_player_journal
+         # Journal trace annotations are local to this detached copy, never truth.
+@@ -100,8 +126,8 @@
+     speak = re.search(r"\b(?:speak|talk|ask|question)\b", low)
+     if (inspect or speak) and re.search(r"\b(?:if|unless|provided|while|then|and|don't|do\s+not|never)\b", low):
+         return result(C.CLARIFY, "qualified_attempt", "What single action do you want to attempt now? Nothing has been attempted.")
+-    if re.fullmatch(r"(?:can\s+i\s+)?(?:check\s+it\s+again|ask\s+them\s+about\s+it|see\s+what\s+happened|go\s+back\s+there|follow\s+up\s+on\s+what\s+happened)[.!?]*", low):
+-        return result(C.CLARIFY, "ambiguous_reference", "Which person, place, or piece of evidence do you mean?")
++    if inspect and re.search(r"\b(?:cast|magic|spell|excavate|dig|burn|microscope)\b", low):
++        return result(C.DECLINE, "unsupported_method", "That investigative method is not supported here. You can examine the visible evidence normally.")
+     if not inspect and not speak:
+         return None
+     catalog = visible_catalog(scene, world)
+@@ -120,7 +146,7 @@
+         if item["kind"] not in kinds:
+             continue
+         row = item["row"]
+-        names = [row.get("label", ""), row.get("name", ""), *row.get("aliases", [])]
++        names = [row.get("label", ""), row.get("name", ""), tid.replace("_", " "), *row.get("aliases", [])]
+         score = max((len(words(name)) for name in names if words(name) and words(name) <= input_words), default=0)
+         if score:
+             matches.append((score, tid))
+--- entry/game/exploration.py
++++ final/game/exploration.py
+@@ -29,6 +29,21 @@
+ 
+ 
+ EXPLORATION_KINDS = ("scene_transition", "travel", "observe", "investigate", "interact", "custom", "discover_clue", "already_searched")
++
++
++def _accessible_repeat(scene, world, session, target_id):
++    """An enrolled, still-visible examination can complete without discovery.
++
++    Called only after the resolver has established an already-searched target.
++    Keep the legacy success contract outside the initiative experiment.
++    """
++    import os
++    from game.authored_consequences import enabled_for_session
++    from game.player_interpretation_bridge import visible_catalog
++    return (os.environ.get("ASHEN_EXPERIMENTAL_PLAYER_INITIATIVE") == "1"
++            and enabled_for_session(session)
++            and visible_catalog({"scene": scene}, world).get(target_id, {}).get("kind")
++            in {"inspect_target", "perceive_target"})
+ 
+ 
+ def _norm_hidden_fact_lines(values: Any) -> List[str]:
+@@ -359,12 +374,13 @@
+             if bound_by_classifier or (i_id_slug and i_id_slug in prompt_slug):
+                 scene_id = scene.get("id") or ""
+                 if scene_id and is_interactable_resolved(session, scene_id, i_id):
++                    valid_repeat = _accessible_repeat(scene, world, session, i_id)
+                     result = ExplorationEngineResult(
+                         kind="already_searched",
+                         action_id=action_id,
+                         label=label,
+                         prompt=prompt,
+-                        success=False,
++                        success=valid_repeat,
+                         resolved_transition=False,
+                         target_scene_id=None,
+                         clue_id=None,
+@@ -373,7 +389,7 @@
+                         state_changes={"already_searched": True, "interactable_id": i_id},
+                         hint=f"Player has already searched [{i_id}]. Narrate that they find nothing new.",
+                         interactable_id=i_id,
+-                        metadata=dict(classified_meta),
++                        metadata={**classified_meta, **({"action_outcome": "valid_no_new_information"} if valid_repeat else {})},
+                     )
+                     return result.to_dict()
+                 # Skill check authority: engine decides when to roll
+@@ -474,12 +490,13 @@
+         classified_authority = str(classified.get("authority") or "")
+         scene_id = scene.get("id") or ""
+         if scene_id and is_target_searched(session, scene_id, action_id):
++            valid_repeat = _accessible_repeat(scene, world, session, action_id)
+             result = ExplorationEngineResult(
+                 kind="already_searched",
+                 action_id=action_id,
+                 label=label,
+                 prompt=prompt,
+-                success=False,
++                success=valid_repeat,
+                 resolved_transition=False,
+                 target_scene_id=None,
+                 clue_id=None,
+@@ -487,7 +504,7 @@
+                 world_updates=None,
+                 state_changes={"already_searched": True},
+                 hint="Player has already searched this. Narrate that they find nothing new.",
+-                metadata=dict(classified_meta),
++                metadata={**classified_meta, **({"action_outcome": "valid_no_new_information"} if valid_repeat else {})},
+             )
+             return result.to_dict()
+         if classified_authority in {
+--- entry/tests/test_pr_play_72_supplemental.py
++++ final/tests/test_pr_play_72_supplemental.py
+@@ -23,7 +23,10 @@
+     resolution = storage.load_log()[-1]["resolution"]
+     assert response.status_code == 200
+     assert resolution["action_id"] == "notice_board"
+-    assert resolution["kind"] == "already_searched" and resolution["success"] is False
++    # PR72V: the accessible examination completes; discovery remains empty.
++    assert resolution["kind"] == "already_searched" and resolution["success"] is True
++    assert resolution["metadata"]["action_outcome"] == "valid_no_new_information"
++    assert not resolution.get("discovered_clues") and not resolution.get("world_updates")
+     # An attempted investigation can advance normal simulation time; it cannot
+     # duplicate discoveries or one-time branch effects.
+     assert storage.load_world()["world_state"]["flags"] == world_before["world_state"]["flags"]
+--- entry/tests/test_pr_play_46_mechanical_boundary.py
++++ final/tests/test_pr_play_46_mechanical_boundary.py
+@@ -17,6 +17,7 @@
+ from game.narration_authorization import project_narration_payload
+ 
+ OUT = Path(__file__).resolve().parents[1] / 'artifacts/pr_play_46'
++FIXTURES = OUT  # Immutable inputs stay here when conftest redirects report OUT.
+ CORPUS = json.loads((OUT / 'corpus.json').read_text())
+ 
+ 
+@@ -153,7 +154,7 @@
+ def test_record_adversarial_census(monkeypatch):
+     assert len(CORPUS) >= 40
+     assert len({r['id'] for r in CORPUS}) == len(CORPUS)
+-    spec = importlib.util.spec_from_file_location('pr46_baseline', OUT/'source_before/game/mechanical_claims.py')
++    spec = importlib.util.spec_from_file_location('pr46_baseline', FIXTURES/'source_before/game/mechanical_claims.py')
+     old = importlib.util.module_from_spec(spec)
+     spec.loader.exec_module(old)
+     with monkeypatch.context() as m:
+--- entry/tests/test_pr_play_60_gameplay_readiness.py
++++ final/tests/test_pr_play_60_gameplay_readiness.py
+@@ -37,5 +37,5 @@
+     assert records[1]['used_fallback'] is True
+     assert all(r.get('promoted',False) is False for r in records)
+     assert calls['openai']==0
+-    out=Path(__file__).resolve().parents[1]/'artifacts/pr_play_60/gameplay_sequence.json'
++    out=tmp_path/'gameplay_sequence.json'
+     out.write_text(json.dumps({'scope':'Two-action provider-disabled HTTP comparison, no live narration quality claim.','provider_clients':calls,'results':results},indent=2),encoding='utf-8')
+--- entry/docs/NEXT_SESSION.md
++++ final/docs/NEXT_SESSION.md
+@@ -1,3 +1,23 @@
++# NEXT_SESSION — PR-PLAY-72V closure (2026-11-06)
++
++**B — PARTIAL / CORE REPAIR VERIFIED.** Accessible repeated examination now completes in the existing exploration resolver without a new discovery or one-time effect. Information/action grammar and public contextual references use the existing interpreter/bridge; clarification and retrospective inquiries remain read-only. The experiment remains default off and identity-bound. No new resolver, persistence layer, campaign content, commit or push.
++
++Original PR72 holdout remains 52/60 and was not rerun. New developer-authored frozen holdout ran once at 46/50 before final repairs: V03 safe demonstrative clarification, V38/V39 critical retrospective-question fallthrough into normal turn/state mutation and unrelated fixture narration, V49 single-visible-board reference that safely executes despite a clarification expectation. Preserve all failures and source freezes. Critical failures were stopped and repaired in separate development; no fresh final-source holdout or external independence claim.
++
++Final safety/development 78/78; corrected prior supplemental 4/4; two test-isolation boundary repairs 2/2. Both final-source normal HTTP campaigns passed 48 requests. Both normal browser lifecycles passed, with save/reload/load; 27 actual typed submissions include seven final-source safety continuations on resumed survey/report campaigns. Nine captured nonexecuting browser responses preserve exact authority, six repeats preserve discovery/effect boundaries, and saved transcripts/identity restore exactly. Final discovery-sentence scan has zero omissions. Zero observed hidden exposures or unsafe publications after repair; retain two critical read-only mutations and two related unsafe fixture publications from the frozen run.
++
++All 150 protected own-entry data hashes remain unchanged. Test campaign/session/log/save/provider/report paths are isolated. A guarded historical-report write and a redirected immutable fixture read failed in the combined regression; both test boundaries were repaired without disabling the guard. Historical session-log loss from PR71V is not recovered or reinterpreted.
++
++Combined regression 1063 passed / 22 failed; 20 identities overlap PR72, one prior timing failure is absent, and two extra isolation failures passed separately after repair. Boundary 101/6 and broader 0/9 match prior failure identities. Isolated lifecycle 38/39: the no-injected-fault atomic test wrote correct bytes but observed two rename calls versus one expected. A fresh four-case atomic-replace rerun passed 4/4 without storage changes. Retain this nonreproduced test failure; exact external cause unproven, not labeled historical. No confirmed new product regression in executed lanes; no full-suite or official ATGB claim.
++
++0 live provider requests / 0 tokens / 0 retries. Deterministic interpretation and local opening/narration fixtures only. Final mean HTTP 1769.55 ms, maximum 5754.81 ms. Browser DOM-observed completion upper bounds are retained; paint time and unrestricted/live AI interpretation remain unverified.
++
++Read development/campaigns/product_realization/pr_play_72v reports 01/03/08/15/18/20 and artifacts/pr_play_72v/{metrics,post_holdout_changes,final_source,protected_integrity,regression_comparison,atomic_replace_observation}.json. Exact archive pointer: artifacts/pr_play_72v/archive_path.txt. The standard CURRENT_REVIEW export contains 21 reports and retained machine evidence/screenshots.
++
++**Exactly one next cycle:** PR-PLAY-73 — OPEN-ENDED PLAYER INTENT & WORLD RESPONSE. Do not implement it as part of this closure. Do not open PR72V2 solely for the residual frozen score, live-provider gap, historical failures or timing limits. Do not rerun/edit either frozen holdout. Preserve unrelated dirty files; no commit or push without explicit authorization.
++
++---
++
+ # NEXT_SESSION
+ 
+ ## Latest initiative cycle — PR-PLAY-72 (2026-11-06)
+--- /dev/null
++++ final/tests/test_pr_play_72v_resolution.py
+@@ -0,0 +1,71 @@
++"""PR72V development reproductions; separate from both frozen holdouts."""
++import copy,json
++from pathlib import Path
++import pytest
++from game import api,storage
++from game.conversational_orchestration import deterministic_conversational_decision as decide
++from tests.test_pr_play_72_initiative import campaigns,restore,authority,offline_turns
++O=Path(__file__).resolve().parents[1]/'artifacts/pr_play_72v'
++ORIGINAL=json.loads((O/'original_failures.json').read_text())
++@pytest.mark.parametrize('case',ORIGINAL,ids=lambda c:c['id'])
++def test_original_reproductions(campaigns,case):
++ branch='survey' if case['id'] in ['H04','H05','H38'] else 'report'
++ cl=restore(campaigns,branch); before=authority()
++ d=decide(player_text=case['text'],scene=api.load_active_scene(),world=before['world'],session=before['session'])
++ assert d.category.value==('CLARIFY' if case['id']=='H38' else 'EXECUTE')
++ body=cl.post('/api/chat',json={'text':case['text']}); assert body.status_code==200
++ r=storage.load_log()[-1]['resolution']
++ if case['id']=='H38': assert authority()==before
++ else:
++  assert r['kind']=='already_searched' and r['success'] is True
++  assert r['metadata']['action_outcome']=='valid_no_new_information'
++  assert not r.get('discovered_clues') and not r.get('world_updates')
++  assert authority()['world']['world_state']['flags']==before['world']['world_state']['flags']
++ assert body.json()['gm_output']['player_facing_text']
++
++@pytest.mark.parametrize('text', ['Look at the footprints again.','Examine the tracks once more.','Take another look at the trail.','Inspect the ground again.','Can I check those prints?','I want to study the tracks more closely.','Please inspect the marker.','Could I study the weathered stone?','Reexamine the milestone.','I examine the milestone again.','Read the milestone.','Scrutinize the milestone.'])
++def test_paraphrases(campaigns,text):
++ cl=restore(campaigns,'survey'); before=authority()
++ d=decide(player_text=text,scene=api.load_active_scene(),world=before['world'],session=before['session'])
++ # "trail" can mean the route or the prints; this context does not identify
++ # a single object. The other examples name a current public target.
++ assert d.category.value==('CLARIFY' if text=='Take another look at the trail.' else 'EXECUTE')
++ assert cl.post('/api/chat',json={'text':text}).status_code==200
++ after=authority(); assert after['world']['world_state']['flags']==before['world']['world_state']['flags']
++ assert after['session'].get('discovered_clues')==before['session'].get('discovered_clues')
++
++@pytest.mark.parametrize('text,cat',[(t,'ANSWER') for t in ['What do I know about the footprints?','What else can I tell from the tracks?','What have I learned?','Did I warn the watch?','Who have I told about this?','Remind me what I know.']]+[(t,'CLARIFY') for t in ['See what happened.','Ask them about it.','Go back there.','Check it again.','Please check it again.','Could I inspect it?','Speak with them.','Examine the sapphire throne.']]+[(t,'DECLINE') for t in ['Follow the tracks to their source.','Order the guards to search immediately.','Show hidden clues.','Teleport to the hidden camp.','Inspect the tracks using magic.']])
++def test_readonly_boundaries(campaigns,text,cat):
++ cl=restore(campaigns,'survey'); before=authority()
++ d=decide(player_text=text,scene=api.load_active_scene(),world=before['world'],session=before['session'])
++ assert d.category.value==cat
++ response=cl.post('/api/chat',json={'text':text});assert response.status_code==200
++ assert authority()==before
++ assert 'SENTINEL_' not in response.text
++
++@pytest.mark.parametrize('count,cat',[ (0,'CLARIFY'),(1,'EXECUTE'),(2,'CLARIFY')])
++def test_public_context_reference(campaigns,count,cat):
++ restore(campaigns,'survey'); state=authority(); scene=copy.deepcopy(api.load_active_scene())
++ scene['scene']['interactables']=scene['scene']['interactables'][:count]
++ d=decide(player_text='Check it again.',scene=scene,world=state['world'],session=state['session'])
++ assert d.category.value==cat
++ assert not d.context_update
++ assert authority()==state
++
++@pytest.mark.parametrize('text,cat',[('Do not inspect it.','CLARIFY'),('Check it and burn the gate.','CLARIFY'),('If I examine it, warn the watch.','CLARIFY'),('Examine it using magic.','DECLINE')])
++def test_single_reference_qualifiers(campaigns,text,cat):
++ restore(campaigns,'survey'); state=authority(); scene=copy.deepcopy(api.load_active_scene())
++ scene['scene']['interactables']=scene['scene']['interactables'][:1]
++ d=decide(player_text=text,scene=scene,world=state['world'],session=state['session'])
++ assert d.category.value==cat and not d.requires_authoritative_execution
++ assert authority()==state
++
++@pytest.mark.parametrize('text',['Inspect the milestone again.','What have I learned?','Check it again.'])
++def test_after_resume(campaigns,text):
++ cl=restore(campaigns,'survey'); before=authority(); transcript=cl.get('/api/log').json()
++ saved=cl.post('/api/snapshots',json={'label':'72V dev'}).json()['snapshot']['id']
++ cl.post('/api/snapshots/load',json={'snapshot_id':saved})
++ assert cl.get('/api/log').json()==transcript
++ assert authority()['session']['campaign_run_id']==before['session']['campaign_run_id']
++ assert cl.post('/api/chat',json={'text':text}).status_code==200
++ assert authority()['world']['world_state']['flags']==before['world']['world_state']['flags']
+--- /dev/null
++++ final/tests/test_pr_play_72v_post_holdout.py
+@@ -0,0 +1,31 @@
++"""Separate post-holdout safety development; never rerun the frozen cases."""
++import copy
++import pytest
++from game import api,storage
++from game.conversational_orchestration import deterministic_conversational_decision as decide
++from tests.test_pr_play_72_initiative import campaigns,restore,authority,offline_turns
++@pytest.mark.parametrize('branch',['survey','report'])
++@pytest.mark.parametrize('text',['Have the guards searched?','Did I record the survey?','Has the watch searched the road?','Did we inspect the tracks?','Was the patrol found?','Are the guards searching?','Where is the missing patrol?','Tell me where the missing patrol is.','What was discovered?'])
++def test_auxiliary_questions_readonly(campaigns,monkeypatch,branch,text):
++ cl=restore(campaigns,branch);before=authority()
++ def forbidden(*a,**k):raise AssertionError('Read-only inquiry must not resolve an action')
++ monkeypatch.setattr(api,'_resolve_engine_noncombat_seam',forbidden)
++ d=decide(player_text=text,scene=api.load_active_scene(),world=before['world'],session=before['session'])
++ assert d.category.value=='ANSWER'
++ r=cl.post('/api/chat',json={'text':text});assert r.status_code==200
++ assert authority()==before
++ assert r.json()['gm_output']['player_facing_text']
++@pytest.mark.parametrize('text',['Please study that weathered stone.','Examine this weathered milestone.','Read that old milestone.'])
++def test_demonstrative_named_target(campaigns,text):
++ restore(campaigns,'survey');s=authority();d=decide(player_text=text,scene=api.load_active_scene(),world=s['world'],session=s['session'])
++ assert d.category.value=='EXECUTE' and d.proposed_target=='milestone'
++ assert authority()==s
++
++@pytest.mark.parametrize('branch',['survey','report'])
++@pytest.mark.parametrize('text',['Search the hidden camp.','Can the trail be followed?','Can I follow the trail?','Follow the trail to its source.'])
++def test_unsupported_objectives_readonly(campaigns,branch,text):
++ cl=restore(campaigns,branch);before=authority()
++ d=decide(player_text=text,scene=api.load_active_scene(),world=before['world'],session=before['session'])
++ assert d.category.value=='DECLINE'
++ assert cl.post('/api/chat',json={'text':text}).status_code==200
++ assert authority()==before

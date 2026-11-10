@@ -1,0 +1,114 @@
+{
+  "new_reproducible_regressions": [],
+  "resolved_preexisting_failures": [],
+  "entries": [
+    {
+      "test": "tests.test_pr_play_04_opening_integrity::test_invalid_provider_output_fails_without_progression[empty_response-]",
+      "classification": "environmental_WinError5_passed_targeted_rerun"
+    },
+    {
+      "test": "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_start_campaign_api::test_second_start_campaign_rejected",
+      "classification": "environmental_WinError5_passed_targeted_rerun"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_known_follow_up_bypasses_uncertainty_fallback",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_targeted_retry_unresolved_question_only",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_targeted_retry_prefers_highest_priority_failure_first",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_active_target_direct_command_routes_to_social_exchange",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_social_exchange_blocks_advisory_prose_before_emit",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+      "classification": "preexisting_original_17"
+    },
+    {
+      "test": "tests.test_physical_action_typing_compound_perception_realization::test_http_local_walk_stays_in_scene",
+      "classification": "preexisting_expanded_scope_paired_reproduction"
+    },
+    {
+      "test": "tests.test_physical_action_typing_compound_perception_realization::test_http_walk_listen_authored_sound",
+      "classification": "preexisting_expanded_scope_paired_reproduction"
+    },
+    {
+      "test": "tests.test_physical_action_typing_compound_perception_realization::test_http_unresolved_travel_stays_travel",
+      "classification": "preexisting_expanded_scope_paired_reproduction"
+    },
+    {
+      "test": "tests.test_physical_action_typing_compound_perception_realization::test_http_explicit_exit_travel",
+      "classification": "preexisting_expanded_scope_paired_reproduction"
+    },
+    {
+      "test": "tests.test_physical_action_typing_compound_perception_realization::test_social_then_walk_listen_is_not_stale_social",
+      "classification": "preexisting_expanded_scope_paired_reproduction"
+    },
+    {
+      "test": "tests.test_physical_action_typing_compound_perception_realization::test_http_repeated_local_walk_does_not_drift",
+      "classification": "preexisting_expanded_scope_paired_reproduction"
+    },
+    {
+      "test": "tests.test_physical_action_typing_compound_perception_realization::test_frontier_t16_calibration_is_typed_observe",
+      "classification": "preexisting_expanded_scope_paired_reproduction"
+    },
+    {
+      "test": "tests.test_pr_dy_live_gameplay::test_pr_dy_clarification_does_not_mutate",
+      "classification": "preexisting_expanded_scope_paired_reproduction"
+    }
+  ]
+}

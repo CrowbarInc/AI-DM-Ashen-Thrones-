@@ -1,0 +1,4 @@
+# PR-PLAY-19 evidence index
+Start with PR_PLAY_19_FINAL_VERDICT.md. Seven requested reports, exact live request/schema/SDK body, response/status, parsed plan, renderer catalog/trace, snapshots, accounting and timings are included. This is a reviewer archive: snapshots/raw API responses contain internal campaign information needed to evaluate authority; player-facing text is separately isolated in PLAYER_OPENING.txt. No hidden plot text is quoted in the public prose reports.
+
+One offline readiness worker and one live opening worker executed. Earlier pre-worker wrapper/bootstrap failures are retained. Main live run: artifacts/atgb/pr_play_19/live/20261101T155921Z-dece64b94204. Offline readiness: artifacts/atgb/pr_play_19/offline/20261101T155820Z-5af7c1e04b5d. Production sources remained unchanged; no commits or pushes. Capture scripts are local diagnostics, not a new provider client. Current pricing/cost and browser UI behavior are unverified.

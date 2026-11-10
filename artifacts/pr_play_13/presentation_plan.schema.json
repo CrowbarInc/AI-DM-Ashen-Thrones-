@@ -1,0 +1,21 @@
+{
+  "title": "Opening presentation plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["selected_entries"],
+  "properties": {
+    "selected_entries": {
+      "type": "array",
+      "maxItems": 24,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["catalog_id", "variant_id"],
+        "properties": {
+          "catalog_id": {"type": "string"},
+          "variant_id": {"type": "string"}
+        }
+      }
+    }
+  }
+}

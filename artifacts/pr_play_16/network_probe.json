@@ -1,0 +1,15 @@
+{
+  "evidence_type": "transcribed actual tool output; not a second probe",
+  "tool_chunk_id": "eb573c",
+  "shell_exit_code": 0,
+  "command": ".\\.venv\\Scripts\\python.exe -c \"import socket,json; s=socket.socket(); s.bind(('127.0.0.1',0)); s.listen(); c=socket.socket(); result=c.connect_ex(s.getsockname()); print(json.dumps({'socket_created':True,'http_bind_capable':True,'loopback_connect_ex':result})); c.close(); s.close()\"",
+  "stdout": {
+    "socket_created": true,
+    "http_bind_capable": true,
+    "loopback_connect_ex": 10013
+  },
+  "interpretation": "TCP bind/listen succeeded; loopback connection denied (WSAEACCES). The http_bind_capable label establishes TCP binding only, not HTTP readiness.",
+  "http_readiness": "NOT TESTED",
+  "provider_requests": 0,
+  "socket_cleanup": "Both probe sockets explicitly closed."
+}

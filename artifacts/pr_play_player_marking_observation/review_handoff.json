@@ -1,0 +1,220 @@
+{
+  "campaign_id": "pr_play_player_marking_observation",
+  "campaign_name": "PR-PLAY \u2014 Player-Facing Object Observation and Publication Integrity",
+  "campaign_date": "2026-11-09",
+  "purpose": "Player-facing read of a committed marking and publication consistency with that commit",
+  "objective_status": "A/PASS",
+  "executive_summary": "**A/PASS.** A player can examine the visible markings on an established carried object through the existing chat turn. The turn resolves the object, uses the existing disclosure service, and publishes only permitted current markings. Concealed, restricted, legacy, and removed markings stay out of the sentence. Observation does not write the character and survives save/reload and snapshots. A sealed sentence that contradicts a committed marking is not published; the character stays committed and the deterministic outcome is published instead. Twelve-turn text matches the immediate predecessor. Combined 408 passed / 17 failed before and after, same identities. Focused modules 574 passed inside a 596-passed run that also includes the new tests. Live provider calls 0. Next milestone: pr_play_grounded_marking_removal. Do not begin automatically.",
+  "changes": {
+    "production": [
+      "game/api.py",
+      "game/storage.py",
+      "game/marking_observation.py"
+    ],
+    "validation": [
+      "10 observation tests passed. The marking publication-failure test now expects the committed sentence and one marking."
+    ],
+    "tooling": [
+      "Cycle-local twelve-turn comparison and observation timing"
+    ],
+    "documentation": [
+      "17 milestone reports; historical NEXT_SESSION retained"
+    ],
+    "generated_artifacts": [
+      "Controlled HTTP loop, regression junit, twelve-turn comparison, and a fresh review archive"
+    ]
+  },
+  "testing": {
+    "focused": "Observation 10 passed. Grounded marking 12 passed. Focused command 596 passed, including predecessor modules 574 passed.",
+    "broader": "Combined before and after: 408 passed / 17 failed / 0 errors / 0 skipped (425 tests). New failing identities: none. Newly passing: none.",
+    "runtime_validation": "Controlled HTTP mark, observe, reload in a new process, remove, observe, and snapshot restore. Twelve-turn HTTP run. Publication fault injection.",
+    "full_suite": "Not run",
+    "model_runtime_boundary": "Zero provider calls; providers disabled and non-loopback sockets blocked.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "The same 17 combined identities before and after. See REGRESSION_RESULTS.md."
+  },
+  "decisions_requiring_human_review": [
+    "No further authorization required for this bounded implementation."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Natural-language removal is not implemented. A pronoun does not select an object. Ordinary observation does not certify that concealed markings are absent. Environmental materials, required consumption, and required mechanics stay unresolved."
+    ],
+    "pre_existing": [
+      "Combined 17 failure identities. See REGRESSION_RESULTS.md."
+    ]
+  },
+  "missing_concepts": [
+    "Natural-language removal of a visible marking."
+  ],
+  "does_not_prove": [
+    "Natural-language removal, environmental material inference, consumption, mechanical skill checks, a full suite, or live-model play."
+  ],
+  "recommended_next_step": "Exactly one recommended next milestone: pr_play_grounded_marking_removal \u2014 natural-language removal of one visible marking through the existing removal service. Do not begin automatically.",
+  "self_contained_review_test": "Reopen the archive and confirm milestone identity, the controlled HTTP loop, observation authority, confidentiality, publication repair, save/reload, snapshots, regressions, the twelve-turn comparison, ruleset portability, and the updated handoff.",
+  "primary_report": "development/campaigns/product_realization/pr_play_player_marking_observation/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/BASELINE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/OBSERVATION_INTEGRATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/OBSERVATION_AUTHORITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/DISCLOSURE_PROJECTION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/NARRATIVE_OBSERVATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/PUBLICATION_INTEGRITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/CONTROLLED_HTTP_LOOP.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/CONFIDENTIALITY_VERIFICATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/PERSISTENCE_VERIFICATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/PARAPHRASE_CONTROLS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/RULESET_PORTABILITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/REGRESSION_RESULTS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/TWELVE_TURN_COMPARISON.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/PERFORMANCE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/NEXT_STEP_DECISION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_player_marking_observation/INTEGRITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report for player marking observation."
+    },
+    {
+      "path": "artifacts/pr_play_player_marking_observation/controlled_http_loop.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    },
+    {
+      "path": "artifacts/pr_play_player_marking_observation/twelve_turn_after.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    },
+    {
+      "path": "artifacts/pr_play_player_marking_observation/performance.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    },
+    {
+      "path": "artifacts/pr_play_player_marking_observation/regression_results.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    },
+    {
+      "path": "artifacts/pr_play_player_marking_observation/source_changes.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    },
+    {
+      "path": "artifacts/pr_play_player_marking_observation/before_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    },
+    {
+      "path": "artifacts/pr_play_player_marking_observation/after_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    },
+    {
+      "path": "artifacts/pr_play_player_marking_observation/after_focused_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    },
+    {
+      "path": "game/marking_observation.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    },
+    {
+      "path": "tests/test_player_marking_observation.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Measured evidence or source for player marking observation."
+    }
+  ]
+}

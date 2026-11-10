@@ -1,0 +1,17 @@
+# PR-PLAY-22 failure analysis
+
+First decisive failure: T1. Expected: the visible, present tavern runner responds to a harmless approach/question about offerings. Observed: provider correctly identifies MOVE tavern_runner + ASK tavern_runner; engine marks first step unsupported and emits a nonmutating refusal. NPC is present, ASK is supported, but neither action executes. Confidence: high for observed boundary; moderate for generality across other phrasings. A pure ASK was not attempted; do not infer all possible ordinary actions fail.
+
+Exact player request: I approach the tavern runner and ask what they're offering.
+
+Exact published response: I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.
+
+Failure boundary: game/conversational_orchestration.py:_compound_clarification rejects when the first step is unsupported (around lines 1685–1710). game/player_interpretation_bridge.py maps MOVE to scene_transition and target kind exit; the provider proposes an NPC target instead. HTTP resolution records proposal_not_eligible, MOVE supported=false, ASK supported=true; resolver_invoked=false and narration_invoked=false. This is host action binding/orchestration, not a malformed provider response, missing narration transport, hidden-state mutation, or exhausted request budget.
+
+Known-test correlation: the preexisting test_chat_active_target_direct_command_routes_to_social_exchange expects social_probe but receives conversational_clarify (PR-PLAY-21 repaired_tests.txt lines 205–210). The live T1 also routes a grounded NPC intention to conversational_clarify instead of social execution: a concrete output-routing resemblance. That test uses a different utterance and does not establish the identical MOVE-to-NPC cause. test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback has captured_inputs=[] (lines 162–165), resembling the absence of NPC narration generation here, but its stub setup differs. No causal equivalence established. Retry-expectation failures, output-shape mismatch and parser rejection do not explain this live failure.
+
+Later observations: T2/T3 repeated the refusal verbatim; T4 asked clarification about unsupported later compound steps. These do not establish NPC continuity, and the generated T2/T3 inputs themselves confuse host refusal with NPC knowledge.
+
+PROTOCOL DEVIATION: T1 already made the intended NPC sequence unusable. The controller checked HTTP/provider errors but failed to detect this host-generated semantic dead end. It submitted T2–T4 before stopping, and its raw ordinary_completed=4 counter counts HTTP success, not gameplay success. Those raw records are preserved. Review counts: 4 attempted, 4 HTTP responses, 0 successful NPC/gameplay interactions. T2–T4 are post-failure diagnostic observations, not a valid continuation or recovery. No restart, provider retry, replacement initialization, or extra live run occurred.
+
+Smallest next investigation: offline reproduction of the exact T1 interpretation and bridge decision for a present NPC; inspect whether intra-scene approach should bind to a local interaction rather than an exit MOVE. Keep authoritative validation intact. Separately repair the test controller semantic stop predicate before another live authorization. No defect repaired in this pass.

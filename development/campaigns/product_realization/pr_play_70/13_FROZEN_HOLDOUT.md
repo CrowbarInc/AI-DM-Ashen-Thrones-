@@ -1,0 +1,3 @@
+# FROZEN HOLDOUT
+
+Developer-authored fixture frozen before implementation: 5748b71172f8711bc194cdd5592cb3598d025fb70c2b675a0edfde980bbd36fe. Run exactly once after implementation freeze. 50/50 correct; 0 failed. Distribution 10 prerequisites, 10 resolution, 10 persistence, 10 follow-up, 5 publication, 5 isolation. Frozen rows specify branch, variation, expected completion flag and invariants; runner checks conditions, flags, text and projection, not byte-identical complete snapshots. No external independence claim; no tuning/rerun. Snapshot fixture inherited a shared snapshot directory: generated holdout-labelled bundles are relocated to PR70 evidence after completion, preserving prior files.

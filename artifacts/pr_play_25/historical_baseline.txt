@@ -1,0 +1,67 @@
+.................F.FFFF.FF.............................................. [100%]
+================================== FAILURES ===================================
+_____________________ test_http_local_walk_stays_in_scene _____________________
+tests\test_physical_action_typing_compound_perception_realization.py:357: in test_http_local_walk_stays_in_scene
+    assert _kind(data) == "custom"
+E   AssertionError: assert 'conversational_clarify' == 'custom'
+E     
+E     - custom
+E     + conversational_clarify
+____________________ test_http_walk_listen_authored_sound _____________________
+tests\test_physical_action_typing_compound_perception_realization.py:381: in test_http_walk_listen_authored_sound
+    assert _kind(data) == "observe"
+E   AssertionError: assert 'conversational_clarify' == 'observe'
+E     
+E     - observe
+E     + conversational_clarify
+__________________ test_http_unresolved_travel_stays_travel ___________________
+tests\test_physical_action_typing_compound_perception_realization.py:392: in test_http_unresolved_travel_stays_travel
+    assert _kind(data) == "travel"
+E   AssertionError: assert 'conversational_decline' == 'travel'
+E     
+E     - travel
+E     + conversational_decline
+_______________________ test_http_explicit_exit_travel ________________________
+tests\test_physical_action_typing_compound_perception_realization.py:400: in test_http_explicit_exit_travel
+    assert kind in {"travel", "scene_transition"}
+E   AssertionError: assert 'conversational_decline' in {'scene_transition', 'travel'}
+______________ test_social_then_walk_listen_is_not_stale_social _______________
+tests\test_physical_action_typing_compound_perception_realization.py:423: in test_social_then_walk_listen_is_not_stale_social
+    assert _kind(data) == "observe"
+E   AssertionError: assert 'conversational_clarify' == 'observe'
+E     
+E     - observe
+E     + conversational_clarify
+________________ test_http_repeated_local_walk_does_not_drift _________________
+tests\test_physical_action_typing_compound_perception_realization.py:447: in test_http_repeated_local_walk_does_not_drift
+    assert _kind(data) == "custom"
+E   AssertionError: assert '' == 'custom'
+E     
+E     - custom
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[RETRY] selected_strategy= echo_or_repetition attempt= 1 reasons= ['echo_or_repetition:opening_overlap']
+[RETRY SKIPPED: UNCHANGED OR UNSENT OUTPUT]
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+_______________ test_frontier_t16_calibration_is_typed_observe ________________
+tests\test_physical_action_typing_compound_perception_realization.py:460: in test_frontier_t16_calibration_is_typed_observe
+    assert _kind(data) == "observe"
+E   AssertionError: assert 'conversational_clarify' == 'observe'
+E     
+E     - observe
+E     + conversational_clarify
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_http_local_walk_stays_in_scene
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_http_walk_listen_authored_sound
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_http_unresolved_travel_stays_travel
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_http_explicit_exit_travel
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_social_then_walk_listen_is_not_stale_social
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_http_repeated_local_walk_does_not_drift
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_frontier_t16_calibration_is_typed_observe

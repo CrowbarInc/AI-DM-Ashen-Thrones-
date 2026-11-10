@@ -1,0 +1,1646 @@
+{
+  "version": 1,
+  "note": "developer-authored holdout; not external validation",
+  "cases": [
+    {
+      "id": "H001",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Approach the traveler and ask whether they have seen the patrol.",
+          "setup": "traveler",
+          "fragment": "beside",
+          "absent": "northwest"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H002",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Examine the notice board and ask the guard about the warning.",
+          "setup": "traveler",
+          "fragment": "notice board",
+          "absent": "northwest"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H003",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Move the stone aside and inspect the ground beneath it.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "secret passage"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H004",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Look around the yard, approach the traveler, and introduce myself.",
+          "setup": "traveler",
+          "fragment": "beside",
+          "absent": "quest"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H005",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Ask the traveler about the road, thank them, and move away.",
+          "setup": "traveler",
+          "fragment": "thank",
+          "absent": "reward"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H006",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Open the door and ask the guard about the warning.",
+          "setup": "door",
+          "fragment": "open",
+          "absent": "northwest mud"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H007",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Look around the yard and ask the traveler about the road.",
+          "setup": "traveler",
+          "fragment": "mara",
+          "absent": "northwest mud"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H008",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Approach the guard and greet him.",
+          "setup": "traveler",
+          "fragment": "guard",
+          "absent": "reward"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H009",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Move the stone aside and look around the yard.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "secret passage"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H010",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Thank the guard and move away.",
+          "setup": "traveler",
+          "fragment": "move away",
+          "absent": "gold"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H011",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Greet Mara and ask what she knows about the patrol.",
+          "setup": "traveler",
+          "fragment": "do not know",
+          "absent": "northwest mud"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H012",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Approach the traveler and introduce myself.",
+          "setup": "traveler",
+          "fragment": "mara",
+          "absent": "quest"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H013",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Look around the yard and examine the notice board.",
+          "setup": "traveler",
+          "fragment": "notice",
+          "absent": "northwest mud"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H014",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Move the crate aside and look around.",
+          "setup": "crate",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H015",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Open the door and step back.",
+          "setup": "door",
+          "fragment": "open",
+          "absent": "room was created"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H016",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Go over to the traveler and ask about the road.",
+          "setup": "traveler",
+          "fragment": "mara",
+          "absent": "northwest mud"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H017",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Check the notice board and greet the guard.",
+          "setup": "traveler",
+          "fragment": "notice",
+          "absent": "secret"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H018",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Move the stone aside and thank Mara.",
+          "setup": "mixed",
+          "fragment": "thank",
+          "absent": "gold"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H019",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Look around, greet Mara, and move away.",
+          "setup": "traveler",
+          "fragment": "move away",
+          "absent": "gold"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H020",
+      "group": "mixed",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Sit on the bench and stand up.",
+          "setup": "bench",
+          "fragment": "stand",
+          "absent": "quest"
+        }
+      ],
+      "domains": true
+    },
+    {
+      "id": "H021",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H022",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H023",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H024",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H025",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H026",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H027",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H028",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H029",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H030",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H031",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H032",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H033",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H034",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H035",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H036",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H037",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H038",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H039",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H040",
+      "group": "continuity",
+      "kind": "play",
+      "save": true,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Move the stone aside.",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "northwest"
+        },
+        {
+          "input": "Where is the loose stone?",
+          "setup": "stone",
+          "fragment": "aside",
+          "absent": "treasure"
+        }
+      ]
+    },
+    {
+      "id": "H041",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H042",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H043",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H044",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H045",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H046",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H047",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H048",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H049",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H050",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H051",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H052",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H053",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H054",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H055",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H056",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H057",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H058",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H059",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H060",
+      "group": "continuity",
+      "kind": "play",
+      "save": false,
+      "multi": true,
+      "turns": [
+        {
+          "input": "Hello, Mara.",
+          "setup": "traveler",
+          "fragment": "hello",
+          "absent": "quest"
+        },
+        {
+          "input": "Does he seem nervous?",
+          "setup": "traveler",
+          "fragment": "reserved",
+          "absent": "secret plan"
+        }
+      ]
+    },
+    {
+      "id": "H061",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "Dust lifts as you move the loose stone aside from the stonework.",
+      "facts": "You move the loose stone. It is now aside from the stonework.",
+      "adopt": true
+    },
+    {
+      "id": "H062",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "You find gold beside a secret passage.",
+      "facts": "You move the loose stone. It is now aside from the stonework.",
+      "adopt": false
+    },
+    {
+      "id": "H063",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "The door stands open in the cold rain.",
+      "facts": "You open the wooden door. It is now open.",
+      "adopt": true
+    },
+    {
+      "id": "H064",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "You climb the wall and see the hidden camp.",
+      "facts": "The climb is not resolved.",
+      "adopt": false
+    },
+    {
+      "id": "H065",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "Rain ticks on the open door.",
+      "facts": "You open the wooden door. It is now open.",
+      "adopt": true
+    },
+    {
+      "id": "H066",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "Dust lifts as you move the loose stone aside from the stonework.",
+      "facts": "You move the loose stone. It is now aside from the stonework.",
+      "adopt": true
+    },
+    {
+      "id": "H067",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "You find gold beside a secret passage.",
+      "facts": "You move the loose stone. It is now aside from the stonework.",
+      "adopt": false
+    },
+    {
+      "id": "H068",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "The door stands open in the cold rain.",
+      "facts": "You open the wooden door. It is now open.",
+      "adopt": true
+    },
+    {
+      "id": "H069",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "You climb the wall and see the hidden camp.",
+      "facts": "The climb is not resolved.",
+      "adopt": false
+    },
+    {
+      "id": "H070",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "Rain ticks on the open door.",
+      "facts": "You open the wooden door. It is now open.",
+      "adopt": true
+    },
+    {
+      "id": "H071",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "Dust lifts as you move the loose stone aside from the stonework.",
+      "facts": "You move the loose stone. It is now aside from the stonework.",
+      "adopt": true
+    },
+    {
+      "id": "H072",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "You find gold beside a secret passage.",
+      "facts": "You move the loose stone. It is now aside from the stonework.",
+      "adopt": false
+    },
+    {
+      "id": "H073",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "The door stands open in the cold rain.",
+      "facts": "You open the wooden door. It is now open.",
+      "adopt": true
+    },
+    {
+      "id": "H074",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "You climb the wall and see the hidden camp.",
+      "facts": "The climb is not resolved.",
+      "adopt": false
+    },
+    {
+      "id": "H075",
+      "group": "narration",
+      "kind": "narration",
+      "candidate": "Rain ticks on the open door.",
+      "facts": "You open the wooden door. It is now open.",
+      "adopt": true
+    },
+    {
+      "id": "H076",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "I have not seen a patrol come through, and I cannot say where they went.",
+      "posture": "unknown",
+      "adopt": true
+    },
+    {
+      "id": "H077",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "The patrol went to the northwest mud track and I will give you gold.",
+      "posture": "unknown",
+      "adopt": false
+    },
+    {
+      "id": "H078",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "Hello there. The yard is quiet, and I am keeping to myself.",
+      "posture": "delivered",
+      "adopt": true
+    },
+    {
+      "id": "H079",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "I am Mara, an ordinary traveler in a weathered cloak.",
+      "posture": "delivered",
+      "adopt": true
+    },
+    {
+      "id": "H080",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "I promise you a reward of gold.",
+      "posture": "delivered",
+      "adopt": false
+    },
+    {
+      "id": "H081",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "I have not seen a patrol come through, and I cannot say where they went.",
+      "posture": "unknown",
+      "adopt": true
+    },
+    {
+      "id": "H082",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "The patrol went to the northwest mud track and I will give you gold.",
+      "posture": "unknown",
+      "adopt": false
+    },
+    {
+      "id": "H083",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "Hello there. The yard is quiet, and I am keeping to myself.",
+      "posture": "delivered",
+      "adopt": true
+    },
+    {
+      "id": "H084",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "I am Mara, an ordinary traveler in a weathered cloak.",
+      "posture": "delivered",
+      "adopt": true
+    },
+    {
+      "id": "H085",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "I promise you a reward of gold.",
+      "posture": "delivered",
+      "adopt": false
+    },
+    {
+      "id": "H086",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "I have not seen a patrol come through, and I cannot say where they went.",
+      "posture": "unknown",
+      "adopt": true
+    },
+    {
+      "id": "H087",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "The patrol went to the northwest mud track and I will give you gold.",
+      "posture": "unknown",
+      "adopt": false
+    },
+    {
+      "id": "H088",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "Hello there. The yard is quiet, and I am keeping to myself.",
+      "posture": "delivered",
+      "adopt": true
+    },
+    {
+      "id": "H089",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "I am Mara, an ordinary traveler in a weathered cloak.",
+      "posture": "delivered",
+      "adopt": true
+    },
+    {
+      "id": "H090",
+      "group": "dialogue",
+      "kind": "dialogue",
+      "spoken": "I promise you a reward of gold.",
+      "posture": "delivered",
+      "adopt": false
+    },
+    {
+      "id": "H091",
+      "group": "concurrency",
+      "kind": "concurrency",
+      "pattern": "reads"
+    },
+    {
+      "id": "H092",
+      "group": "concurrency",
+      "kind": "concurrency",
+      "pattern": "writes"
+    },
+    {
+      "id": "H093",
+      "group": "concurrency",
+      "kind": "concurrency",
+      "pattern": "duplicate"
+    },
+    {
+      "id": "H094",
+      "group": "concurrency",
+      "kind": "concurrency",
+      "pattern": "timeout"
+    },
+    {
+      "id": "H095",
+      "group": "concurrency",
+      "kind": "concurrency",
+      "pattern": "campaigns"
+    },
+    {
+      "id": "H096",
+      "group": "concurrency",
+      "kind": "concurrency",
+      "pattern": "reads"
+    },
+    {
+      "id": "H097",
+      "group": "concurrency",
+      "kind": "concurrency",
+      "pattern": "writes"
+    },
+    {
+      "id": "H098",
+      "group": "concurrency",
+      "kind": "concurrency",
+      "pattern": "duplicate"
+    },
+    {
+      "id": "H099",
+      "group": "concurrency",
+      "kind": "concurrency",
+      "pattern": "timeout"
+    },
+    {
+      "id": "H100",
+      "group": "concurrency",
+      "kind": "concurrency",
+      "pattern": "campaigns"
+    },
+    {
+      "id": "H101",
+      "group": "readonly",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "I look for signs of a struggle.",
+          "setup": "stone",
+          "fragment": "no signs",
+          "absent": "aside from"
+        }
+      ]
+    },
+    {
+      "id": "H102",
+      "group": "readonly",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "I look for signs of a struggle.",
+          "setup": "stone",
+          "fragment": "no signs",
+          "absent": "aside from"
+        }
+      ]
+    },
+    {
+      "id": "H103",
+      "group": "readonly",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "I look for signs of a struggle.",
+          "setup": "stone",
+          "fragment": "no signs",
+          "absent": "aside from"
+        }
+      ]
+    },
+    {
+      "id": "H104",
+      "group": "readonly",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "I look for signs of a struggle.",
+          "setup": "stone",
+          "fragment": "no signs",
+          "absent": "aside from"
+        }
+      ]
+    },
+    {
+      "id": "H105",
+      "group": "readonly",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "I look for signs of a struggle.",
+          "setup": "stone",
+          "fragment": "no signs",
+          "absent": "aside from"
+        }
+      ]
+    },
+    {
+      "id": "H106",
+      "group": "readonly",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "I look for signs of a struggle.",
+          "setup": "stone",
+          "fragment": "no signs",
+          "absent": "aside from"
+        }
+      ]
+    },
+    {
+      "id": "H107",
+      "group": "readonly",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "I look for signs of a struggle.",
+          "setup": "stone",
+          "fragment": "no signs",
+          "absent": "aside from"
+        }
+      ]
+    },
+    {
+      "id": "H108",
+      "group": "readonly",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "I look for signs of a struggle.",
+          "setup": "stone",
+          "fragment": "no signs",
+          "absent": "aside from"
+        }
+      ]
+    },
+    {
+      "id": "H109",
+      "group": "readonly",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "I look for signs of a struggle.",
+          "setup": "stone",
+          "fragment": "no signs",
+          "absent": "aside from"
+        }
+      ]
+    },
+    {
+      "id": "H110",
+      "group": "readonly",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "I look for signs of a struggle.",
+          "setup": "stone",
+          "fragment": "no signs",
+          "absent": "aside from"
+        }
+      ]
+    },
+    {
+      "id": "H111",
+      "group": "isolation",
+      "kind": "isolation"
+    },
+    {
+      "id": "H112",
+      "group": "isolation",
+      "kind": "isolation"
+    },
+    {
+      "id": "H113",
+      "group": "isolation",
+      "kind": "isolation"
+    },
+    {
+      "id": "H114",
+      "group": "isolation",
+      "kind": "isolation"
+    },
+    {
+      "id": "H115",
+      "group": "isolation",
+      "kind": "isolation"
+    },
+    {
+      "id": "H116",
+      "group": "publication",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Ask the guard where the patrol went.",
+          "setup": "traveler",
+          "fragment": "do not know",
+          "absent": "northwest mud"
+        }
+      ]
+    },
+    {
+      "id": "H117",
+      "group": "publication",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Ask the guard where the patrol went.",
+          "setup": "traveler",
+          "fragment": "do not know",
+          "absent": "northwest mud"
+        }
+      ]
+    },
+    {
+      "id": "H118",
+      "group": "publication",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Ask the guard where the patrol went.",
+          "setup": "traveler",
+          "fragment": "do not know",
+          "absent": "northwest mud"
+        }
+      ]
+    },
+    {
+      "id": "H119",
+      "group": "publication",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Ask the guard where the patrol went.",
+          "setup": "traveler",
+          "fragment": "do not know",
+          "absent": "northwest mud"
+        }
+      ]
+    },
+    {
+      "id": "H120",
+      "group": "publication",
+      "kind": "play",
+      "turns": [
+        {
+          "input": "Ask the guard where the patrol went.",
+          "setup": "traveler",
+          "fragment": "do not know",
+          "absent": "northwest mud"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,862 @@
+{
+  "cycle": "PR-PLAY-79",
+  "authored_by": "developer",
+  "external_validation": false,
+  "cases": [
+    {
+      "lane": "intent",
+      "text": "I want to follow the tracks farther.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I try to determine which direction the patrol went.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I search for a route along the road.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I chase the prints.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I trace the trail.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I peer down the road.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I scan the road ahead.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I look farther along the track.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I gaze down the road.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I view the road ahead.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Which direction did the prints go?",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I follow the prints.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I pursue the trail.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I wait to see whether anyone comes along.",
+      "outcome": "read_only",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I wait quietly.",
+      "outcome": "read_only",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I watch the road for a while.",
+      "outcome": "read_only",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "What is visible from here?",
+      "outcome": "read_only",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Rather than report, I keep examining.",
+      "outcome": "read_only",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Before I report, I look around the stone.",
+      "outcome": "read_only",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I leave a marker so I can find this place again.",
+      "outcome": "missing_mechanic",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I place a cairn beside the road.",
+      "outcome": "missing_mechanic",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I set a cairn by the road.",
+      "outcome": "missing_mechanic",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Look over there.",
+      "outcome": "clarify",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Move that.",
+      "outcome": "clarify",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Ask them.",
+      "outcome": "clarify",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Move it.",
+      "outcome": "clarify",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I climb the marker.",
+      "outcome": "missing_mechanic",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I look for a secret passage under the stone.",
+      "outcome": "needs_authority",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I look for buried treasure.",
+      "outcome": "needs_authority",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Describe the texture of the stone.",
+      "outcome": "not_promoted",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I scan farther down the road.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I look ahead along the prints.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "What do we know?",
+      "outcome": "read_only",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I watch the road.",
+      "outcome": "read_only",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Ask over there.",
+      "outcome": "clarify",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I scale the marker.",
+      "outcome": "missing_mechanic",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I balance on the marker.",
+      "outcome": "missing_mechanic",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I create a secret passage.",
+      "outcome": "needs_authority",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I summon a guide.",
+      "outcome": "needs_authority",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Is there a stable grip here?",
+      "outcome": "not_promoted",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I leave a blaze on the post.",
+      "outcome": "missing_mechanic",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "Shift it.",
+      "outcome": "clarify",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I search under the loose stone.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I dig beside the marker.",
+      "outcome": "success_without_discovery",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "intent",
+      "text": "I look for a handhold.",
+      "outcome": "cannot_attempt",
+      "multi_turn": false,
+      "save": false,
+      "cross": false
+    },
+    {
+      "lane": "narration",
+      "text": "You arrive at the Rain Barrel Tavern and the room is warm.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": "other_location",
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "Rain spatters soot-dark stone across Cinderwatch's eastern gate while banners snap.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": "other_location",
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "You stand in the Rain Barrel Tavern while the fire pops.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": "other_location",
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "You enter the Investigator's Office and shut the door behind you.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": "other_location",
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "You find yourself in the Cinderwatch Market Quarter among the stalls tonight.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": "other_location",
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "You are still at Old Milestone. The prints fade into the scrub ahead of you.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": null,
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "You are at Old Milestone. The prints still fade into the scrub.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": null,
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "You arrive at Cinderwatch's gate while the banners snap overhead.",
+      "scene_id": "frontier_gate",
+      "transition": false,
+      "reason": null,
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "The mud around the marker is churned with faint overlapping prints that fade.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": null,
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "You arrive at the Rain Barrel Tavern and the room is warm.",
+      "scene_id": "frontier_gate",
+      "transition": true,
+      "reason": null,
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "You shove the loose stone aside and leave the ground bare where it had been sitting.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": "object_state",
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "The loose stone is beside the stonework, and it has not been moved from that place.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": null,
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "The hidden patrol captain waits behind the ridge with the payroll, and he waves you over now.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": "hidden_fact",
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "You are still at Old Milestone. No travel was completed, so another place was not published.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": null,
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "narration",
+      "text": "Dust lifts around the old milestone while you stay with the prints.",
+      "scene_id": "old_milestone",
+      "transition": false,
+      "reason": null,
+      "multi_turn": false,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Hello, Mara.",
+      "fragment": "hello",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Who are you?",
+      "fragment": "mara",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "What is this place like?",
+      "fragment": "traveler is here",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "What do you make of the marker?",
+      "fragment": "marker",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Have you seen the patrol?",
+      "fragment": "do not know",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "I tell you the prints are unclear.",
+      "fragment": "whether",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "What did I tell you?",
+      "fragment": "prints",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Thank you, Mara.",
+      "fragment": "thank",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Have you seen any soldiers?",
+      "fragment": "do not know",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Tell me about the secret camp.",
+      "fragment": "do not know",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Ask Mara to promise a reward.",
+      "fragment": "do not know",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Does she seem worried?",
+      "fragment": "reserved",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Goodbye, Mara.",
+      "fragment": "mara",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Ask Mara about the area.",
+      "fragment": "mara",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "dialogue",
+      "text": "Thanks, Mara.",
+      "fragment": "thank",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "Move the stone aside and inspect the ground beneath it.",
+      "fragment": "aside",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "Move the stone aside and look around the yard.",
+      "fragment": "aside",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "Move the stone aside, climb the marker, and ask the traveler what they saw.",
+      "fragment": "aside",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "Look around the yard and wait and watch the road.",
+      "fragment": "look around",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "Greet the traveler and ask who they are.",
+      "fragment": "mara",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "Ask the traveler about the road, thank them, and move away.",
+      "fragment": "thank",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "I look for signs of a struggle.",
+      "fragment": "no signs",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "I offer to help search.",
+      "fragment": "no search party",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "I wait and watch the road.",
+      "fragment": "nothing new",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "I inspect the tracks more closely.",
+      "fragment": "not established",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "Move the stone aside.",
+      "fragment": "aside",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "Where is the loose stone?",
+      "fragment": "stonework",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "I stand up.",
+      "fragment": "stand",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "Approach the traveler and step back.",
+      "fragment": "move away",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "action",
+      "text": "Fly over the wall and look around the yard.",
+      "fragment": "not supported",
+      "multi_turn": true,
+      "save": false,
+      "cross": true
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #1",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #2",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #3",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #4",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #5",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #6",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #7",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #8",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #9",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #10",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #11",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #12",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #13",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #14",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    },
+    {
+      "lane": "save",
+      "text": "What is visible from here? #15",
+      "multi_turn": true,
+      "save": true,
+      "cross": false
+    }
+  ]
+}

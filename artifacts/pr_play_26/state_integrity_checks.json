@@ -1,0 +1,34 @@
+{
+  "unchanged_checks": {
+    "campaign.json": true,
+    "character.json": true,
+    "conditions.json": true,
+    "scenes/frontier_gate.json": true,
+    "scenes/market_quarter.json": true,
+    "scenes/old_milestone.json": true,
+    "session.active_scene_id": true,
+    "session.current_date": true,
+    "session.clue_knowledge": true,
+    "session.lead_registry": true,
+    "session.flags": true,
+    "npc_relationships_and_knowledge_unchanged": true,
+    "world.settlements": true,
+    "world.assets": true,
+    "world.projects": true,
+    "world.world_flags": true,
+    "world.inference_rules": true,
+    "world.clues": true,
+    "world.npcs": true,
+    "world.world_state": true
+  },
+  "all_unchanged": true,
+  "authorized": [
+    "turn_counter 1 -> 2",
+    "time_pressure 1 -> 2",
+    "active interlocutor tavern_runner, engagement, and last_interaction_turn null -> 2",
+    "conversation history, telemetry and runtime traces",
+    "each faction pressure +1 and agenda_progress +1; Ordo Pyric pressure event"
+  ],
+  "unauthorized": [],
+  "narrative_state_mismatches": []
+}

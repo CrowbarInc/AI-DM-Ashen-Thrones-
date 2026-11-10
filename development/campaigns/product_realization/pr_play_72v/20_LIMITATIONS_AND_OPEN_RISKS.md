@@ -1,0 +1,5 @@
+# PR-PLAY-72V — LIMITATIONS AND OPEN RISKS
+
+B remains appropriate: the frozen holdout is 46/50 and predates critical safety repairs; there is no fresh independent final-source holdout. Original PR72 is still 52/60. Live AI interpretation, arbitrary language, unrestricted world response and paint latency are unverified. Read-only answers can be broad known-fact summaries. Unusual unsupported wording outside the bounded grammar may still reach legacy handling. Historical authority/boundary failures remain; raw results are retained. One isolated atomic test observed an extra successful rename retry (38/39); a fresh 4/4 targeted run did not reproduce it. The cause is not proven and it is not called historical.
+
+Two critical read-only-state violations and two related unsafe fallback publications occurred in the frozen run; none are observed after the narrow repairs in final safety/HTTP/browser checks. Protected data remain unchanged. No PR72V2 is recommended solely for these verification limits.

@@ -1,0 +1,1751 @@
+{
+  "pr_play_20_known_failure_count": 17,
+  "all_known_failures_reproduced_before_and_after": true,
+  "known_failure_node_ids": [
+    "tests/test_start_campaign_api.py::test_start_campaign_emits_opening_and_sets_started",
+    "tests/test_start_campaign_api.py::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+    "tests/test_start_campaign_api.py::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+    "tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange",
+    "tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+    "tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback",
+    "tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+    "tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+    "tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+    "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit",
+    "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+    "tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+    "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first",
+    "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only",
+    "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback",
+    "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+    "tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback"
+  ],
+  "additional_baseline_failures": [
+    "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_does_not_override_forceful_world_action"
+  ],
+  "additional_repaired_failures": [
+    "tests/test_start_campaign_api.py::test_failed_start_campaign_does_not_mark_started"
+  ],
+  "runs": {
+    "baseline_tests": {
+      "tests/test_pr_play_20_response_confidentiality.py::test_successful_start_serialized_boundary": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_20_response_confidentiality.py::test_ordinary_success_and_rejection[/api/action-payload0]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_20_response_confidentiality.py::test_ordinary_success_and_rejection[/api/chat-payload1]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_20_response_confidentiality.py::test_failed_opening_and_mode_policy": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_20_response_confidentiality.py::test_rejected_turn_with_composed_state": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_public_projection_excludes_hidden_and_pairs_variants": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_enabled_request_parser_renderer_agree": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_incompatible_plan_atomicity[legacy-arbitrary_narration_field]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_incompatible_plan_atomicity[unknown-unknown_catalog_id]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_incompatible_plan_atomicity[variant-unknown_variant_id]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_disabled_legacy_request_unchanged": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_ordinary_turn_request_unchanged": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_real_sdk_serialization_with_in_memory_http": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r1_flag_disabled_keeps_legacy_opening": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r2_r21_r22_r28_r33_r35_r36_rendered_opening_commits_once": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r3_r4_catalog_includes_public_facts_and_excludes_hidden": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r5-<lambda>-unknown_catalog_id]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r6-<lambda>-unknown_variant_id]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r7-<lambda>-duplicate_selection]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r8-<lambda>-missing_required_entry]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r9-<lambda>-invalid_ordering]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r10-<lambda>-arbitrary_narration_field]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r11-<lambda>-model_supplied_authority]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r14-<lambda>-unsupported_field]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r12_exact_authored_and_r13_approved_alternate": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[gold-The guards award you 100 gold.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[movement-You enter the city.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[combat-The enemy dies.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[skill-You succeed at the skill check.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[quest-The missing patrol is rescued and the quest completes.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[hostility-The gate serjeant becomes hostile.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[item-You gain a brass key.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[time-An hour passes.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[damage-You suffer 8 damage.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[hidden-The gate serjeant is secretly Captain Veyr.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r23_r24_r29_r30_injected_prose_does_not_publish_or_commit": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r25_concurrent_rendered_opening_commits_once": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r26_r27_overlay_authority": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r31_r32_legacy_historical_outcomes_unchanged": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r34_harness_selects_renderer_only_when_enabled": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_publication_restore_drops_later_unauthorized_text": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_invalid_flag_fails_closed_without_dispatch": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_ordinary_turn_contract_ignores_renderer_flag": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_valid_opening_commits_once_and_repeat_does_not": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_invalid_provider_output_fails_without_progression[missing_envelope-You stand beside the gate in the rain.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_invalid_provider_output_fails_without_progression[malformed_json-{not json]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_invalid_provider_output_fails_without_progression[incomplete_envelope-{\"declared_claims\": []]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_invalid_provider_output_fails_without_progression[truncated_json-{\"declared_claims\": [], \"narration\": \"You stand at the gate]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_invalid_provider_output_fails_without_progression[empty_response-]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_provider_exception_does_not_commit": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_failure_then_failure_then_success_commits_once": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_provider_exception_then_success_commits_once": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_pipeline_exception_restores_world_and_session": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_exception_before_provider_dispatch_restores_state": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_persistence_failure_before_commit_restores_baseline": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_budget_rejection_is_before_dispatch": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_dispatched_failure_consumes_admission_and_blocks_the_next_start": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_market_quarter_opening_is_independent_of_cinderwatch_text": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_concurrent_starts_commit_one_opening": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_ordinary_information_fallback_is_not_treated_as_an_opening": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_chat_campaign_start_failure_then_success": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_compose_state_ui_campaign_flags_fresh_vs_started": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_new_campaign_leaves_log_empty_and_no_gm_payload": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_emits_opening_and_sets_started": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_promotes_valid_upstream_prepared_scene_opening": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_absent": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_facts": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_log_has_no_begin_player_line": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_second_start_campaign_rejected": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_prompt_includes_opening_contract_fields": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_play_ui_bootstrap_copy_and_no_gm_ready_placeholder": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_failed_start_campaign_does_not_mark_started": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_project_mixed_payloads_per_channel": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_final_emission_meta_is_debug": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_debug_trace_telemetry_suffixes_stripped_from_public": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_author_internal_keys_stripped_from_public": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_assert_no_debug_keys_in_prompt_payload_raises": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_assert_no_author_keys_in_player_output_raises": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_assert_helpers_pass_on_clean_or_empty_payload": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_backend_integration.py::test_api_state_projection_player_author_debug_and_unknown": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_backend_integration.py::test_state_leakage_guards_by_mode": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_backend_integration.py::test_endpoint_guards_author_debug_runtime": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_backend_integration.py::test_public_log_exposes_player_input_as_public_transcript_field": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_mode_to_allowed_state_channels_is_explicit_and_separated": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_mode_to_visible_tabs_is_deterministic": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_player_mode_cannot_access_author_or_debug_capabilities": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_author_mode_allows_author_reads_and_writes_but_not_debug_or_runtime_actions": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_debug_mode_allows_debug_reads_but_not_author_or_runtime_actions": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_fail_closed_on_unknown_mode": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_action_and_chat_social_use_equivalent_shared_turn_logic": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_action_and_chat_investigate_both_mark_runtime_discovery_memory": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_validator_voice_only": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_pipeline_ships_no_validator_voice_policy": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_social_route_ships_dialogue_contract_through_request_debug_and_trace": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_persists_recent_contextual_leads_from_gm_reply": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_scene_stall_only": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_single_wait_records_world_progress_and_keeps_hard_valid_narration": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_passive_waits_advance_world_and_ground_scene_stall": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_passive_scene_prefers_already_introduced_suspicious_figure": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_roll_requirement_question_routes_to_adjudication_without_gpt": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_adjudication_question_with_active_interlocutor_stays_answer_shaped": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_active_target_location_question_routes_to_social_exchange": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_npc_directed_question_regressions[runner_direct_address]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_npc_directed_question_regressions[pronoun_who_attacked]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_npc_directed_question_regressions[pronoun_what_planning]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_npc_directed_question_regressions[who_saw]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[what_next_well]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[next_step_so]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[where_lead]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_social_questions_keep_npc_uncertainty_voice": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_topic_questions_skip_policy_topic_pressure_for_strict_social": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane[lean_in_quiet_question]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane[scan_crowd_question]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_does_not_override_forceful_world_action": {
+        "status": "failed",
+        "windows_permission_error": true
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_stays_adjudication_without_gpt[ooc_roll_question]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_stays_adjudication_without_gpt[ooc_actions_available]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[pr_dw_original_failure]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[attack_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[move_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[state_mutation_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[inspect_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[roll_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[rollback_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[spelled_with_space]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_communication_mode_override_conflict_is_nonmutating": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ic_strips_declaration_before_narration_context": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_earshot_question_routes_to_adjudication_with_state_answer": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_adjudication_refuses_over_answer_without_basis": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_action_outcome_contract_survives_inside_active_social_scene": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_persuasion_returns_engine_check_prompt_without_gpt": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_covert_concealment_under_observation_prompts_engine_check": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_resolved_turn_trace_is_compact_and_authoritative": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_action_and_chat_mutate_runtime_before_request_build[via_api_action]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_action_and_chat_mutate_runtime_before_request_build[via_api_chat]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_affordances_are_state_derived_not_from_gpt_text": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_implied_lowered_voice_reaches_request_build_context": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_implied_sit_with_target_reaches_request_build_context": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_interruption_output_stays_coherent": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_ragged_stranger_fallback_repaired": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_pipeline_interruption_denial_still_emits_coherent_strict_social": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_apply_visible_tabs_matches_canonical_contract": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_current_ui_mode_drives_state_request": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_render_functions_are_lane_specific_and_not_mixed": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_mode_switch_clears_known_historical_leak_sites": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_authoritative_render_flow_not_mixed_with_chat_or_action_payloads": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_log_replay_renders_player_then_gm": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_state_envelope_keys_exact_per_mode": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_unknown_ui_mode_fails_closed": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_public_state_deep_projection_strips_nested_author_and_debug_leakage": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[player forbids POST /api/campaign]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[player forbids POST /api/scene]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[player forbids POST /api/world]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[player forbids GET /api/debug_trace]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[author forbids GET /api/debug_trace]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[author forbids POST /api/action]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[author forbids POST /api/chat]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug forbids POST /api/campaign]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug forbids POST /api/scene]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug forbids POST /api/world]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug forbids POST /api/action]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug forbids POST /api/chat]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[author allows POST /api/scene]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug allows GET /api/debug_trace]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[player allows GET /api/log]": {
+        "status": "passed",
+        "windows_permission_error": false
+      }
+    },
+    "repaired_tests": {
+      "tests/test_pr_play_21_privileged_reads.py::test_default_public_and_authority_preservation": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[author-/api/state]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[author-/api/log]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[author-/api/debug_trace]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[author-/api/snapshots]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[debug-/api/state]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[debug-/api/log]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[debug-/api/debug_trace]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[debug-/api/snapshots]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/campaign]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/scene]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/world]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[uiMode-/api/campaign]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[uiMode-/api/scene]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[uiMode-/api/world]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=%20author%20-403]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=debug-403]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=player&ui_mode=author-403]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=author&ui_mode=player-200]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=unknown-400]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_origin_and_loopback_do_not_grant_privilege": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_internal_projection_access_is_preserved": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_no_missing_request_or_forged_context_bypass": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_offline_initialization_and_ordinary_action": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_20_response_confidentiality.py::test_successful_start_serialized_boundary": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_20_response_confidentiality.py::test_ordinary_success_and_rejection[/api/action-payload0]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_20_response_confidentiality.py::test_ordinary_success_and_rejection[/api/chat-payload1]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_20_response_confidentiality.py::test_failed_opening_and_mode_policy": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_20_response_confidentiality.py::test_rejected_turn_with_composed_state": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_public_projection_excludes_hidden_and_pairs_variants": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_enabled_request_parser_renderer_agree": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_incompatible_plan_atomicity[legacy-arbitrary_narration_field]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_incompatible_plan_atomicity[unknown-unknown_catalog_id]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_incompatible_plan_atomicity[variant-unknown_variant_id]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_disabled_legacy_request_unchanged": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_ordinary_turn_request_unchanged": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_18_contract_alignment.py::test_real_sdk_serialization_with_in_memory_http": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r1_flag_disabled_keeps_legacy_opening": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r2_r21_r22_r28_r33_r35_r36_rendered_opening_commits_once": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r3_r4_catalog_includes_public_facts_and_excludes_hidden": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r5-<lambda>-unknown_catalog_id]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r6-<lambda>-unknown_variant_id]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r7-<lambda>-duplicate_selection]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r8-<lambda>-missing_required_entry]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r9-<lambda>-invalid_ordering]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r10-<lambda>-arbitrary_narration_field]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r11-<lambda>-model_supplied_authority]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_plan_rejections[r14-<lambda>-unsupported_field]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r12_exact_authored_and_r13_approved_alternate": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[gold-The guards award you 100 gold.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[movement-You enter the city.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[combat-The enemy dies.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[skill-You succeed at the skill check.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[quest-The missing patrol is rescued and the quest completes.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[hostility-The gate serjeant becomes hostile.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[item-You gain a brass key.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[time-An hour passes.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[damage-You suffer 8 damage.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r15_through_r20_unauthorized_sentences_are_not_rendered[hidden-The gate serjeant is secretly Captain Veyr.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r23_r24_r29_r30_injected_prose_does_not_publish_or_commit": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r25_concurrent_rendered_opening_commits_once": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r26_r27_overlay_authority": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r31_r32_legacy_historical_outcomes_unchanged": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_r34_harness_selects_renderer_only_when_enabled": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_publication_restore_drops_later_unauthorized_text": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_invalid_flag_fails_closed_without_dispatch": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_13_opening_renderer.py::test_ordinary_turn_contract_ignores_renderer_flag": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_valid_opening_commits_once_and_repeat_does_not": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_invalid_provider_output_fails_without_progression[missing_envelope-You stand beside the gate in the rain.]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_invalid_provider_output_fails_without_progression[malformed_json-{not json]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_invalid_provider_output_fails_without_progression[incomplete_envelope-{\"declared_claims\": []]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_invalid_provider_output_fails_without_progression[truncated_json-{\"declared_claims\": [], \"narration\": \"You stand at the gate]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_invalid_provider_output_fails_without_progression[empty_response-]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_provider_exception_does_not_commit": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_failure_then_failure_then_success_commits_once": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_provider_exception_then_success_commits_once": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_pipeline_exception_restores_world_and_session": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_exception_before_provider_dispatch_restores_state": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_persistence_failure_before_commit_restores_baseline": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_budget_rejection_is_before_dispatch": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_dispatched_failure_consumes_admission_and_blocks_the_next_start": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_market_quarter_opening_is_independent_of_cinderwatch_text": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_concurrent_starts_commit_one_opening": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_ordinary_information_fallback_is_not_treated_as_an_opening": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_04_opening_integrity.py::test_chat_campaign_start_failure_then_success": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_compose_state_ui_campaign_flags_fresh_vs_started": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_new_campaign_leaves_log_empty_and_no_gm_payload": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_emits_opening_and_sets_started": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_promotes_valid_upstream_prepared_scene_opening": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_absent": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_facts": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_log_has_no_begin_player_line": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_second_start_campaign_rejected": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_start_campaign_prompt_includes_opening_contract_fields": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_play_ui_bootstrap_copy_and_no_gm_ready_placeholder": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_start_campaign_api.py::test_failed_start_campaign_does_not_mark_started": {
+        "status": "failed",
+        "windows_permission_error": true
+      },
+      "tests/test_state_channels.py::test_project_mixed_payloads_per_channel": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_final_emission_meta_is_debug": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_debug_trace_telemetry_suffixes_stripped_from_public": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_author_internal_keys_stripped_from_public": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_assert_no_debug_keys_in_prompt_payload_raises": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_assert_no_author_keys_in_player_output_raises": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_state_channels.py::test_assert_helpers_pass_on_clean_or_empty_payload": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_backend_integration.py::test_api_state_projection_player_author_debug_and_unknown": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_backend_integration.py::test_state_leakage_guards_by_mode": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_backend_integration.py::test_endpoint_guards_author_debug_runtime": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_backend_integration.py::test_public_log_exposes_player_input_as_public_transcript_field": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_mode_to_allowed_state_channels_is_explicit_and_separated": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_mode_to_visible_tabs_is_deterministic": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_player_mode_cannot_access_author_or_debug_capabilities": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_author_mode_allows_author_reads_and_writes_but_not_debug_or_runtime_actions": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_debug_mode_allows_debug_reads_but_not_author_or_runtime_actions": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_policy.py::test_fail_closed_on_unknown_mode": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_action_and_chat_social_use_equivalent_shared_turn_logic": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_action_and_chat_investigate_both_mark_runtime_discovery_memory": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_validator_voice_only": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_pipeline_ships_no_validator_voice_policy": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_social_route_ships_dialogue_contract_through_request_debug_and_trace": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_persists_recent_contextual_leads_from_gm_reply": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_scene_stall_only": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_single_wait_records_world_progress_and_keeps_hard_valid_narration": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_passive_waits_advance_world_and_ground_scene_stall": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_passive_scene_prefers_already_introduced_suspicious_figure": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_roll_requirement_question_routes_to_adjudication_without_gpt": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_adjudication_question_with_active_interlocutor_stays_answer_shaped": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_active_target_location_question_routes_to_social_exchange": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_npc_directed_question_regressions[runner_direct_address]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_npc_directed_question_regressions[pronoun_who_attacked]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_npc_directed_question_regressions[pronoun_what_planning]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_npc_directed_question_regressions[who_saw]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[what_next_well]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[next_step_so]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[where_lead]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_social_questions_keep_npc_uncertainty_voice": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_topic_questions_skip_policy_topic_pressure_for_strict_social": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane[lean_in_quiet_question]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane[scan_crowd_question]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_does_not_override_forceful_world_action": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_stays_adjudication_without_gpt[ooc_roll_question]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_stays_adjudication_without_gpt[ooc_actions_available]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[pr_dw_original_failure]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[attack_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[move_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[state_mutation_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[inspect_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[roll_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[rollback_like]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[spelled_with_space]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_communication_mode_override_conflict_is_nonmutating": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_explicit_ic_strips_declaration_before_narration_context": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_earshot_question_routes_to_adjudication_with_state_answer": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_adjudication_refuses_over_answer_without_basis": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_action_outcome_contract_survives_inside_active_social_scene": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_persuasion_returns_engine_check_prompt_without_gpt": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_covert_concealment_under_observation_prompts_engine_check": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_resolved_turn_trace_is_compact_and_authoritative": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_action_and_chat_mutate_runtime_before_request_build[via_api_action]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_action_and_chat_mutate_runtime_before_request_build[via_api_chat]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_affordances_are_state_derived_not_from_gpt_text": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_implied_lowered_voice_reaches_request_build_context": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_implied_sit_with_target_reaches_request_build_context": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_interruption_output_stays_coherent": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract": {
+        "status": "failed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_ragged_stranger_fallback_repaired": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_pipeline_interruption_denial_still_emits_coherent_strict_social": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_apply_visible_tabs_matches_canonical_contract": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_current_ui_mode_drives_state_request": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_render_functions_are_lane_specific_and_not_mixed": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_mode_switch_clears_known_historical_leak_sites": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_authoritative_render_flow_not_mixed_with_chat_or_action_payloads": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_frontend_ui_mode_hardening_objective15.py::test_log_replay_renders_player_then_gm": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_state_envelope_keys_exact_per_mode": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_unknown_ui_mode_fails_closed": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_public_state_deep_projection_strips_nested_author_and_debug_leakage": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[player forbids POST /api/campaign]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[player forbids POST /api/scene]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[player forbids POST /api/world]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[player forbids GET /api/debug_trace]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[author forbids GET /api/debug_trace]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[author forbids POST /api/action]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[author forbids POST /api/chat]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug forbids POST /api/campaign]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug forbids POST /api/scene]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug forbids POST /api/world]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug forbids POST /api/action]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[debug forbids POST /api/chat]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[untrusted author denied POST /api/scene]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[untrusted debug denied GET /api/debug_trace]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_ui_mode_regression_matrix_objective15.py::test_endpoint_lockout_matrix[player allows GET /api/log]": {
+        "status": "passed",
+        "windows_permission_error": false
+      }
+    },
+    "focused_final_tests": {
+      "tests/test_pr_play_21_privileged_reads.py::test_default_public_and_authority_preservation": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[author-/api/state]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[author-/api/log]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[author-/api/debug_trace]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[author-/api/snapshots]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[debug-/api/state]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[debug-/api/log]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[debug-/api/debug_trace]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_privileged_http_denied_before_data_access[debug-/api/snapshots]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/campaign]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/scene]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/world]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[uiMode-/api/campaign]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[uiMode-/api/scene]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[uiMode-/api/world]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=%20author%20-403]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=debug-403]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=player&ui_mode=author-403]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=author&ui_mode=player-200]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=unknown-400]": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_origin_and_loopback_do_not_grant_privilege": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_internal_projection_access_is_preserved": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_missing_request_is_not_an_authorization_context": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_pr_play_21_privileged_reads.py::test_offline_initialization_and_ordinary_action": {
+        "status": "passed",
+        "windows_permission_error": false
+      },
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_does_not_override_forceful_world_action": {
+        "status": "passed",
+        "windows_permission_error": false
+      }
+    },
+    "windows_io_retry_tests": {
+      "tests/test_start_campaign_api.py::test_failed_start_campaign_does_not_mark_started": {
+        "status": "passed",
+        "windows_permission_error": false
+      }
+    }
+  }
+}

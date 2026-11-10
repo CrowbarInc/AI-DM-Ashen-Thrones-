@@ -1,0 +1,5 @@
+# PERSISTENT CONSEQUENCE CONTRACT
+
+Existing owners remain SemanticAuthority and trusted anchored outcome text. StateAssertion is an immutable local analysis record, not state or a writable grant channel. Matching binds exact normalized entity, property, result and permanence within a single trusted outcome; it never combines a noun and verb from unrelated facts. Previous state is used only where explicitly established. Existing inventory, condition, objective and route fields are matched to their specific results. Observations/discoveries may support an existing-state description, not authorize a transition. Temporary outcomes do not authorize lasting wording. Restricted disclosure remains an independent rejection layer.
+
+The investigation adapter has no general typed door/NPC/environment effect representation. Outcome frames offer a bounded trusted-text comparison, not a replacement engine contract. Ordinary integrated authorized_consequences remains empty. Generalized authorized inventory plumbing remains incomplete (D25). See authoritative_consequence_contracts.json.

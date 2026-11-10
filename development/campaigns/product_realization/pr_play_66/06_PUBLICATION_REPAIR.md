@@ -1,0 +1,8 @@
+# PUBLICATION REPAIR
+Reuse the existing quarantine/hook, outcome projection, trusted renderer, action fallback, validator result and API publication seam. A ContextVar binds the current hook evidence to the actual resolution object and campaign/session id within this request execution context. The publisher consumes that binding once and reprojects actual resolver fields to reject authority drift. It never selects a shared global evidence tail for the repaired path.
+
+Accepted optional text requires PASS, used_fallback=False, matching engine request/disclosure, the exact validated composition and existing engine-plus-validated-AI provenance. Otherwise build the trusted deterministic response directly from the existing action contract, independently of rejected or absent prose. No arbitrary legacy string participates in this selection.
+
+Final verification compares every server GM target with the selected response and every mandatory fact with its trusted literal rendering. On helper exception or invariant violation, replace all targets with the precomputed deterministic response once, record recovery_reason, verify again, and raise if a valid body cannot be constructed. No provider call, second action resolution, recursion, semantic weakening or state write. Original candidate and validation evidence remain intact. Publication means server construction, never delivery ACK. Serialization/application/initialization errors retain error behavior. A missing current authoritative investigation cannot borrow stale fallback.
+
+Justification: existing publication owner can carry the repair; no new framework or state owner. Request-local provenance prevents cross-action/session reuse, replacing reliance on shared evidence for this repaired selection only.

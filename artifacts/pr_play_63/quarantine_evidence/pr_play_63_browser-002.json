@@ -1,0 +1,185 @@
+{
+  "enabled": true,
+  "player_text": "I examine the rain barrel.",
+  "provider_requests": 1,
+  "state_write_attempted": false,
+  "projection_build_ms": 0.364,
+  "hook_input": {
+    "eligible": true,
+    "player_text": "I examine the rain barrel.",
+    "target_id": "i_examine_the_rain_barrel",
+    "target_label": "rain barrel",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "action_id": "i_examine_the_rain_barrel",
+      "interactable_id": null,
+      "discovered_clues": [],
+      "clue_text": "",
+      "state_changes": {}
+    },
+    "narration_payload": {
+      "scene": {
+        "public": {
+          "location": "Cinderwatch Gate District",
+          "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ]
+        },
+        "discovered_clues": [
+          {
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    }
+  },
+  "eligible": true,
+  "mode": "quarantined_integrated",
+  "authorized_outcome_contract": {
+    "player_action": "I examine the rain barrel.",
+    "resolved_outcome": {
+      "status": "observed",
+      "success": true
+    },
+    "must_communicate": [
+      {
+        "id": "outcome:status",
+        "source": "engine_status",
+        "status": "observed",
+        "text": "No new clue is established by this examination."
+      }
+    ],
+    "may_reference": {
+      "visible_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "continuity": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ]
+    },
+    "authorized_consequences": [],
+    "must_not_establish": [
+      "Only communicate completed engine outcomes; never establish additional facts or effects.",
+      "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+      "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+    ]
+  },
+  "anchors": [
+    {
+      "order": 0,
+      "source": "player_knowledge",
+      "status": "previously_known",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+    }
+  ],
+  "assembled": "You take a closer look at the rain barrel, but this examination yields no new clues.",
+  "raw_provider_text": "You take a closer look at the rain barrel, but this examination yields no new clues.",
+  "used_fallback": false,
+  "generator_calls": 1,
+  "validation_ms": 3.209,
+  "validation": {
+    "decision": "PASS",
+    "semantic": {
+      "decision": "PASS",
+      "reasons": [],
+      "claims": [],
+      "provider_requests": 0,
+      "coverage": "deterministic_frames_not_semantic_proof"
+    },
+    "legacy": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [
+        {
+          "text": "You take a closer look at the rain barrel, but this examination yields no new clues.",
+          "kind": "incidental_fact",
+          "epistemic_status": "world_truth",
+          "grounded": false,
+          "consequential": false,
+          "family": "incidental"
+        }
+      ],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      },
+      "consequential_validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      }
+    },
+    "coverage": {
+      "decision": "PASS",
+      "facts": [
+        {
+          "id": "outcome:status",
+          "source": "engine_status",
+          "status": "observed",
+          "text": "No new clue is established by this examination.",
+          "decision": "PASS",
+          "classification": "covered",
+          "evidence": "You take a closer look at the rain barrel, but this examination yields no new clues."
+        }
+      ],
+      "scope": "bounded_deterministic_coverage_not_semantic_proof"
+    }
+  },
+  "review_required": true,
+  "live_provider": {
+    "enabled": true,
+    "provider": "openai",
+    "adapter": "game.expressive_dialogue.request_expression",
+    "purpose": "expression",
+    "configured_output_cap": 80,
+    "experiment_output_token_ceiling": 700,
+    "model": "gpt-4.1-mini-2025-04-14",
+    "request_started_at": "2026-11-04T11:45:19.149528+00:00",
+    "request_completed_at": "2026-11-04T11:45:20.869978+00:00",
+    "provider_latency_ms": 1717.483,
+    "outer_latency_ms": 1720.364,
+    "input_tokens": 451,
+    "output_tokens": 19,
+    "total_tokens": 470,
+    "retry_count": 0,
+    "sdk_max_retries": 0,
+    "timeout": false,
+    "provider_error": null,
+    "sent": true,
+    "estimated_cost": null,
+    "estimated_cost_reason": "no configured price table",
+    "sanitized_provider_user_message": "{\"player_action\": \"I examine the rain barrel.\", \"resolved_outcome\": {\"status\": \"observed\", \"success\": true}, \"must_communicate\": [{\"id\": \"outcome:status\", \"source\": \"engine_status\", \"status\": \"observed\", \"text\": \"No new clue is established by this examination.\"}], \"may_reference\": {\"visible_scene\": [\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"Ash Compact census delays have tightened the eastern caravan choke point.\"], \"continuity\": [\"The missing patrol was last seen taking the northwest mud track past the crates.\"]}, \"authorized_consequences\": [], \"must_not_establish\": [\"Only communicate completed engine outcomes; never establish additional facts or effects.\", \"Preserve failure, uncertainty and previously-known status; no misleading hints.\", \"Only explicitly supplied inventory deltas are authorized; no additional persistent changes.\"]}"
+  },
+  "promoted": false,
+  "context_build_ms": 0.172,
+  "assembly_ms": 0.009,
+  "diagnostic": "PASS",
+  "total_integrated_ms": 1724.09,
+  "hook_work_ms": 1724.493,
+  "evidence_write": "ok",
+  "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_63\\quarantine_evidence\\pr_play_63_browser-002.json",
+  "serialization_ms": 0.268,
+  "evidence_write_ms": 1.016,
+  "total_hook_ms": 1730.049,
+  "player_facing_published": true
+}

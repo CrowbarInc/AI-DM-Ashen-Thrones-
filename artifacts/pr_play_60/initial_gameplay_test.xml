@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="4.779" timestamp="2026-11-03T20:22:33.638479-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_60_gameplay_readiness" name="test_investigation_then_repeat_preserves_persisted_state" time="0.740"><failure message="RuntimeError: This portal is not running">tests\test_pr_play_60_gameplay_readiness.py:24: in test_investigation_then_repeat_preserves_persisted_state
+    with TestClient(api.app) as client:
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:606: in close
+    self.__exit__(None, None, None)
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:598: in __exit__
+    raise exc_details[1]
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:583: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:466: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\from_thread.py:380: in start_task_soon
+    self._check_running()
+.venv\Lib\site-packages\anyio\from_thread.py:214: in _check_running
+    raise RuntimeError("This portal is not running")
+E   RuntimeError: This portal is not running</failure></testcase></testsuite></testsuites>

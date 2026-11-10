@@ -1,0 +1,114 @@
+﻿diff --git a/game/gm_resolution_decision.py b/game/gm_resolution_decision.py
+index 2ebb1991..5269a398 100644
+--- a/game/gm_resolution_decision.py
++++ b/game/gm_resolution_decision.py
+@@ -1659,6 +1659,77 @@ def _proposition_restates_statement(sentence: str, statement: str) -> bool:
+     return _norm_phrase(statement) == _norm_phrase(proposition)
+ 
+ 
++# Demonstrated realization texture from the PR-PLAY-35 opening. These words
++# locate or intensify an authorized statement. They do not add time, actor,
++# cause, possession, travel, or a mechanical outcome.
++_REALIZATION_TEXTURE_TOKENS = frozenset({"nearby", "tightly"})
++
++
++def _residual_is_realization_texture(residual: set[str]) -> bool:
++    return len(residual) <= 1 and residual <= _REALIZATION_TEXTURE_TOKENS
++
++
++def _pattern_licensed_by_authorized_blend(
++    sentence: str,
++    pattern: re.Pattern[str],
++    decision: Mapping[str, Any] | None,
++) -> bool:
++    """License a pattern already present in authorized wording of the same subject.
++
++    A sentence may blend authorized statements about that subject and add one
++    demonstrated texture word. Tokens outside that pool stay unauthorized.
++    A second consequential pattern, stateful act, lead, or movement does too.
++    """
++    sentence_tokens = _token_set(sentence)
++    if len(sentence_tokens) < 3:
++        return False
++    statements = _authorized_statement_texts(decision)
++    anchors = [
++        statement
++        for statement in statements
++        if pattern.search(statement) and len(_token_set(statement) & sentence_tokens) >= 3
++    ]
++    if not anchors:
++        return False
++    pool: list[str] = []
++    pool_tokens: set[str] = set()
++    for statement in statements:
++        tokens = _token_set(statement)
++        shares_anchor = any(len(tokens & _token_set(anchor)) >= 3 for anchor in anchors)
++        near_sentence = len(tokens) >= 4 and len(tokens & sentence_tokens) >= max(3, len(tokens) - 1)
++        if statement in anchors or (shares_anchor and near_sentence):
++            pool.append(statement)
++            pool_tokens |= tokens
++    if not _residual_is_realization_texture(sentence_tokens - pool_tokens):
++        return False
++    for _code, other in _CONSEQUENTIAL_PATTERNS:
++        if other.search(sentence) and not any(other.search(item) for item in pool):
++            return False
++    if _STATEFUL_ASSERTION_RE.search(sentence) and not any(_STATEFUL_ASSERTION_RE.search(item) for item in pool):
++        return False
++    if _SPECIFIC_LEAD_RE.search(sentence) and not any(_SPECIFIC_LEAD_RE.search(item) for item in pool):
++        return False
++    if _MOVEMENT_RE.search(sentence) and not any(_MOVEMENT_RE.search(item) for item in pool):
++        return False
++    return True
++
++
++def _accepted_declaration_texture_realization(
++    text: str,
++    accepted_claims: Sequence[Mapping[str, Any]] | None,
++) -> bool:
++    """A declared fact realized with at most one demonstrated texture word."""
++    for claim in accepted_claims or []:
++        if not isinstance(claim, Mapping):
++            continue
++        statement = _clean(claim.get("text"), limit=600)
++        if not statement or not _empty_identity_covers(text, statement):
++            continue
++        if _residual_is_realization_texture(_token_set(text) - _token_set(statement)):
++            return True
++    return False
++
++
+ def _pattern_licensed_by_statement(
+     sentence: str,
+     pattern: re.Pattern[str],
+@@ -1666,14 +1737,16 @@ def _pattern_licensed_by_statement(
+ ) -> bool:
+     """A consequential pattern that is already true of an authorized statement.
+ 
+-    Restating that statement is not a new discovery. Added content words are.
++    Restating that statement is not a new discovery. A blend of authorized
++    statements about the same subject may add one demonstrated texture word.
++    Any other added content word remains a new proposition.
+     """
+     if not pattern.search(sentence or ""):
+         return False
+     for statement in _authorized_statement_texts(decision):
+         if pattern.search(statement) and _proposition_restates_statement(sentence, statement):
+             return True
+-    return False
++    return _pattern_licensed_by_authorized_blend(sentence, pattern, decision)
+ 
+ 
+ def _unlicensed_consequential_reasons(
+@@ -4001,10 +4074,11 @@ def _undeclared_consequential_violations(
+         restates_authorized = any(
+             _proposition_restates_statement(text, statement) for statement in _authorized_statement_texts(decision)
+         )
++        declared_texture = authority == AUTH_WORLD and _accepted_declaration_texture_realization(text, accepted_claims)
+         if existence_only:
+             if _EXISTENCE_ACTION_RE.search(_outside_quotes(text)):
+                 consequential.append("unauthorized_npc_action")
+-        elif restates_authorized and authority == AUTH_WORLD:
++        elif (restates_authorized or declared_texture) and authority == AUTH_WORLD:
+             pass
+         elif authority == AUTH_WORLD or relation_kind in {REL_CAUSAL, REL_EVIDENTIAL, REL_GAMEPLAY_LEAD}:
+             consequential.append("authorized_consequential_claim")

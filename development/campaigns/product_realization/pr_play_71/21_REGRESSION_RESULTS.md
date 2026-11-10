@@ -1,0 +1,7 @@
+# REGRESSION RESULTS
+
+Focused aggregate: 1042 passed / 4 failed (1,046 collected, adds PR70's 42 tests to the prior 1,004). Three historical focused failures retained. New PR49 direct-import static regression was caused by this cycle, then repaired by moving the existing disclosure call behind the quarantine adapter; final targeted result above includes its rerun. Exact publication-rejection regression passed.
+
+Expanded boundary/start: 101 passed / 6 failed. The six newly executed startup failures ALSO FAIL with hash-verified entry API source in baseline_start_regression.*; they are pre-existing, newly measured scope, not silently classified from history alone. Original 82-test boundary lane final rerun: 82 passed / 0 failed. Broader authority retains nine historical failures. New product regression count after final targeted checks: zero observed; this is not a full-repository claim.
+
+The focused run began before the final disclosure/dependency/storage changes; its static assertion read updated source and exposed the import. Final changed boundaries were rerun explicitly rather than presenting the broad run as final-source frozen coverage. Concurrent final pytest processes initially collided in the repository's shared default basetemp: a publication FileNotFoundError and three boundary setup errors. Original collided outputs are retained; the same checks were rerun with distinct basetemp directories. No interrupted regression run was discarded; all logs/XML retained. Full suite and official ATGB were not run.

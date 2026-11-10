@@ -1,0 +1,52 @@
+{
+  "status": 200,
+  "request": "I walk over to the notice board and put a hand on the frame.",
+  "published": "Notice board is here. Approaching or touching it is not a supported action, and you have not moved.",
+  "reason": "local_object_not_a_destination",
+  "category": "DECLINE",
+  "execution_policy": "decline_unadjudicated_contact",
+  "intent_family": "local_interaction",
+  "kind": "conversational_decline",
+  "success": false,
+  "resolved_transition": false,
+  "scene_before": "frontier_gate",
+  "scene_after": "frontier_gate",
+  "location": "Cinderwatch Gate District",
+  "interactable_ids": [
+    "notice_board"
+  ],
+  "publication_before": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\"",
+  "publication_after": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\"",
+  "clues_before": {
+    "social_frontier_gate_guard_captain_patrol": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "explicit",
+      "text": "A patrol went missing near the old milestone."
+    },
+    "lead_frontier_gate_old_milestone": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "actionable",
+      "text": "Investigate the old milestone"
+    }
+  },
+  "clues_after": {
+    "social_frontier_gate_guard_captain_patrol": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "explicit",
+      "text": "A patrol went missing near the old milestone."
+    },
+    "lead_frontier_gate_old_milestone": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "actionable",
+      "text": "Investigate the old milestone"
+    }
+  },
+  "character_same": true,
+  "authorization_source": null,
+  "hard_valid": null,
+  "immutable": null
+}

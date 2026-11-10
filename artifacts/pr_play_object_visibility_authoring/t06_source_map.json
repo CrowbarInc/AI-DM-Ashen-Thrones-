@@ -1,0 +1,89 @@
+{
+  "request": "I try to copy the patrol warning onto my sleeve with a bit of mud so I won't forget the wording.",
+  "stages": [
+    {
+      "stage": "Player-message interpretation",
+      "status": "Implemented and usable",
+      "source": "game/api.py:7265 (api_chat)",
+      "finding": "Existing HTTP/FIFO/commit envelope; original T06 enters conversational orchestration."
+    },
+    {
+      "stage": "Action extraction",
+      "status": "Implemented but not integrated",
+      "source": "game/intent_parser.py:914 (recover_actionable_explicit_world_action)",
+      "finding": "Recovery captures physical verb try and an unbound clause. No canonical copy/source/garment/medium action."
+    },
+    {
+      "stage": "Object-target resolution",
+      "status": "Implemented but not integrated",
+      "source": "game/object_marking.py:167 (_target)",
+      "finding": "Durable inventory ID lookup works internally; no natural-language sleeve-to-existing-garment/part binding."
+    },
+    {
+      "stage": "Inventory/equipment resolution",
+      "status": "Missing",
+      "source": "game/object_instances.py:75 (inspect_object_identity)",
+      "finding": "Existing singleton identity is usable. Generic equipment/garment-part relation is absent; T06 has a Spellbook only."
+    },
+    {
+      "stage": "Environmental-material resolution",
+      "status": "Missing",
+      "source": "game/physical_adjudication.py:99 (_objects)",
+      "finding": "Scene enumeration is not an accessible usable-mud supply resolver. Experimental owner remains disabled."
+    },
+    {
+      "stage": "Physical prerequisite validation",
+      "status": "Blocked by missing authority",
+      "source": "game/object_marking.py:39 (_request_error)",
+      "finding": "Internal positive evidence schema exists; no upstream basis for this sleeve, wet accessible mud or compatibility."
+    },
+    {
+      "stage": "Ruleset adjudication",
+      "status": "Blocked by missing authority",
+      "source": "game/skill_checks.py:41 (resolve_skill_check)",
+      "finding": "Existing checks exist. No integrated marking decision adapter; explicit not_applicable is a trusted assertion, not default success."
+    },
+    {
+      "stage": "Object mutation authorization",
+      "status": "Implemented but not integrated",
+      "source": "game/api.py:5772 (_mutate_inventory_object_marking)",
+      "finding": "Existing world-state guard, lane and durable receipts. No player action issuer; do not call standalone lane recursively inside api_chat."
+    },
+    {
+      "stage": "Marking application",
+      "status": "Implemented but not integrated",
+      "source": "game/object_marking.py:77 (prepare_marking)",
+      "finding": "Exact known text can stage one addition after all evidence is established; T06 never calls it."
+    },
+    {
+      "stage": "Visibility classification",
+      "status": "Implemented but not integrated",
+      "source": "game/object_marking.py:407 (prepare_visibility)",
+      "finding": "This cycle stages typed-authorized metadata and shared receipt; no natural-language authority."
+    },
+    {
+      "stage": "Observation/disclosure",
+      "status": "Implemented but not integrated",
+      "source": "game/object_observation.py:118 (observe_object)",
+      "finding": "Existing typed grants filter current active metadata. No player inspection path calls it."
+    },
+    {
+      "stage": "State persistence",
+      "status": "Implemented and usable",
+      "source": "game/storage.py:316 (save_character)",
+      "finding": "Atomic character file carries active state and receipts; real save/reload/snapshots verified. Whole-turn integration still needed."
+    },
+    {
+      "stage": "Narrative publication",
+      "status": "Implemented but not integrated",
+      "source": "game/immutable_valid_response.py:32 (seal_delivery_contract)",
+      "finding": "Existing seal/publication is usable, but no applied-marking DTO/assertion adapter reaches it."
+    },
+    {
+      "stage": "Current decisive decline",
+      "status": "Implemented and usable",
+      "source": "game/conversational_orchestration.py:2856 (_unbound_physical_decline)",
+      "finding": "Unsupported before resolver/preconditions; T06 prior publication pointer retained."
+    }
+  ]
+}

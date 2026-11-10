@@ -1,0 +1,380 @@
+{
+  "verdict": "C — FAIL / REMEDIATION REQUIRED",
+  "development": {
+    "total": 43,
+    "groups": {
+      "ambiguous": {
+        "total": 2,
+        "pass": 0,
+        "fail": 0,
+        "review": 2,
+        "blocked": 2,
+        "exact_expected": 2
+      },
+      "contradictory": {
+        "total": 11,
+        "pass": 0,
+        "fail": 1,
+        "review": 10,
+        "blocked": 11,
+        "exact_expected": 1
+      },
+      "expansion": {
+        "total": 9,
+        "pass": 0,
+        "fail": 9,
+        "review": 0,
+        "blocked": 9,
+        "exact_expected": 9
+      },
+      "legitimate": {
+        "total": 15,
+        "pass": 14,
+        "fail": 1,
+        "review": 0,
+        "blocked": 1,
+        "exact_expected": 14
+      },
+      "missing": {
+        "total": 6,
+        "pass": 0,
+        "fail": 0,
+        "review": 6,
+        "blocked": 6,
+        "exact_expected": 6
+      }
+    },
+    "critical_false_acceptance_ids": [],
+    "false_rejection_ids": [
+      "D15"
+    ],
+    "review_required": 18,
+    "validation_errors": 0,
+    "confusion": {
+      "PASS->PASS": 14,
+      "PASS->FAIL": 1,
+      "REVIEW_REQUIRED->REVIEW_REQUIRED": 8,
+      "FAIL->REVIEW_REQUIRED": 10,
+      "FAIL->FAIL": 10
+    },
+    "latency": {
+      "coverage_ms": {
+        "average_ms": 0.18540465375841703,
+        "maximum_ms": 1.3697000104002655
+      },
+      "combined_ms": {
+        "average_ms": 2.2412302354242395,
+        "maximum_ms": 59.967200038954616
+      }
+    }
+  },
+  "holdout": {
+    "total": 50,
+    "groups": {
+      "ambiguous": {
+        "total": 5,
+        "pass": 0,
+        "fail": 0,
+        "review": 5,
+        "blocked": 5,
+        "exact_expected": 5
+      },
+      "contradictory": {
+        "total": 10,
+        "pass": 0,
+        "fail": 1,
+        "review": 9,
+        "blocked": 10,
+        "exact_expected": 1
+      },
+      "expansion": {
+        "total": 10,
+        "pass": 1,
+        "fail": 9,
+        "review": 0,
+        "blocked": 9,
+        "exact_expected": 9
+      },
+      "legitimate": {
+        "total": 15,
+        "pass": 14,
+        "fail": 0,
+        "review": 1,
+        "blocked": 1,
+        "exact_expected": 14
+      },
+      "missing": {
+        "total": 10,
+        "pass": 0,
+        "fail": 0,
+        "review": 10,
+        "blocked": 10,
+        "exact_expected": 10
+      }
+    },
+    "critical_false_acceptance_ids": [
+      "H41"
+    ],
+    "false_rejection_ids": [
+      "H12"
+    ],
+    "review_required": 25,
+    "validation_errors": 0,
+    "confusion": {
+      "PASS->PASS": 14,
+      "PASS->REVIEW_REQUIRED": 1,
+      "REVIEW_REQUIRED->REVIEW_REQUIRED": 15,
+      "FAIL->REVIEW_REQUIRED": 9,
+      "FAIL->FAIL": 10,
+      "FAIL->PASS": 1
+    },
+    "latency": {
+      "coverage_ms": {
+        "average_ms": 0.1606279972475022,
+        "maximum_ms": 1.3824999914504588
+      },
+      "combined_ms": {
+        "average_ms": 2.1189519995823503,
+        "maximum_ms": 68.68909997865558
+      }
+    }
+  },
+  "fixed_coverage_before": {
+    "REVIEW_REQUIRED": 4,
+    "PASS": 4
+  },
+  "fixed_coverage_after": {
+    "PASS": 8
+  },
+  "fixed_combined": {
+    "FAIL": 1,
+    "PASS": 7
+  },
+  "performance": {
+    "previous_coverage": {
+      "count": 800,
+      "average_ms": 0.10742787519120611,
+      "maximum_ms": 0.7321999873965979,
+      "median_ms": 0.09955000132322311
+    },
+    "updated_coverage": {
+      "count": 800,
+      "average_ms": 0.21440549957333133,
+      "maximum_ms": 0.7127000135369599,
+      "median_ms": 0.2067500026896596
+    },
+    "combined": {
+      "count": 800,
+      "average_ms": 4.399226250388892,
+      "maximum_ms": 128.67259996710345,
+      "median_ms": 2.6539500104263425
+    },
+    "provider_requests": 0,
+    "provider_tokens": 0,
+    "method": "800 warmed invocations per timing series, fixed samples only; wall clock, no tracemalloc during latency.",
+    "memory": {
+      "previous": {
+        "current_bytes": 240,
+        "peak_bytes": 6840
+      },
+      "updated": {
+        "current_bytes": 600,
+        "peak_bytes": 11487
+      },
+      "scope": "Sequential eight-sample coverage allocation peaks; not process RSS or persistent-state overhead."
+    }
+  },
+  "regressions": {
+    "focused": {
+      "label": "focused",
+      "collected": 604,
+      "failed": 3,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 601,
+      "exit_code": 1,
+      "failed_nodeids": [
+        "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+        "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+        "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues"
+      ],
+      "failure_messages": [
+        {
+          "nodeid": "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+          "message": "assert False"
+        },
+        {
+          "nodeid": "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+          "message": "assert set()\n +  where set() = get_all_known_clue_ids({})"
+        },
+        {
+          "nodeid": "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+          "message": "assert set()\n +  where set() = get_all_known_clue_ids({})"
+        }
+      ],
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_play_57_integrated_narration.py",
+        "tests/test_pr_play_58_semantic_coverage.py",
+        "tests/test_pr_play_55_discovery_claims.py",
+        "tests/test_pr_play_54_consequential_validation.py",
+        "tests/test_pr_play_53_quarantined_live.py",
+        "tests/test_pr_play_52_quarantined_integration.py",
+        "tests/test_pr_play_42_evidence_boundaries.py",
+        "tests/test_pr_play_51_geography_grounding.py",
+        "tests/test_pr_play_49_anchored_narration.py",
+        "tests/test_pr_play_47_controlled_renderer.py",
+        "tests/test_pr_play_45_narration_authority.py",
+        "tests/test_pr_play_46_mechanical_boundary.py",
+        "tests/test_pr_play_44_information_delivery.py",
+        "tests/test_pr_bu_lexical_scope.py",
+        "tests/test_provider_accounting_integrity.py",
+        "tests/test_pr_bw_narration_only_envelope.py",
+        "tests/test_diegetic_fallback_narration.py",
+        "tests/test_narration_state_consistency.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_58\\focused_final.xml",
+        "--basetemp",
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_58_focused_17432"
+      ],
+      "provider_calls": "disabled",
+      "preexisting_failures_seen": [
+        "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+        "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+        "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues"
+      ],
+      "new_failures": []
+    },
+    "holdout": {
+      "label": "holdout",
+      "collected": 1,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "exit_code": 0,
+      "failed_nodeids": [],
+      "failure_messages": [],
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_play_55_holdout.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_58\\holdout_final.xml",
+        "--basetemp",
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_58_holdout_17432"
+      ],
+      "provider_calls": "disabled"
+    },
+    "broader_hard_validation": {
+      "label": "broader_hard_validation",
+      "collected": 9,
+      "failed": 9,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 0,
+      "exit_code": 1,
+      "failed_nodeids": [
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]"
+      ],
+      "failure_messages": [
+        {
+          "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+          "message": "KeyError: 'hard_validation_attempt_1'"
+        },
+        {
+          "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+          "message": "KeyError: 'hard_validation_attempt_1'"
+        },
+        {
+          "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+          "message": "KeyError: 'hard_validation_attempt_1'"
+        },
+        {
+          "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+          "message": "KeyError: 'hard_validation_attempt_1'"
+        },
+        {
+          "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+          "message": "KeyError: 'hard_validation_attempt_1'"
+        },
+        {
+          "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+          "message": "KeyError: 'hard_validation_attempt_1'"
+        },
+        {
+          "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+          "message": "KeyError: 'hard_validation_attempt_1'"
+        },
+        {
+          "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+          "message": "KeyError: 'hard_validation_attempt_1'"
+        },
+        {
+          "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]",
+          "message": "KeyError: 'hard_validation_attempt_1'"
+        }
+      ],
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_cx_authority_assurance.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_58\\broader_hard_validation_final.xml",
+        "--basetemp",
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_58_broader_hard_validation_17432"
+      ],
+      "provider_calls": "disabled"
+    },
+    "restored": [
+      "artifacts/pr_play_49/evidence_performance.json",
+      "artifacts/pr_play_47/evidence_performance.json",
+      "artifacts/pr_play_52/integration_results.json",
+      "artifacts/pr_play_55/evaluation.json"
+    ],
+    "known_failures_not_modified": [
+      "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+      "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+      "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution"
+    ],
+    "note": "The holdout test writes artifacts/pr_play_55/evaluation.json. That file is restored after the run. Broader PR-BR continuation files were not all executed in this command."
+  },
+  "final_source_tests": {
+    "label": "final_frozen_source",
+    "collected": 204,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 204,
+    "exit_code": 0,
+    "failed_nodeids": [],
+    "failure_messages": [],
+    "command": [
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_58_semantic_coverage.py",
+      "tests/test_pr_play_57_integrated_narration.py",
+      "tests/test_pr_play_55_discovery_claims.py",
+      "tests/test_pr_play_54_consequential_validation.py",
+      "tests/test_state_authority.py",
+      "--tb=line",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_58\\final_frozen_source_final.xml",
+      "--basetemp",
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_58_final_frozen_source_33396"
+    ],
+    "provider_calls": "disabled"
+  }
+}

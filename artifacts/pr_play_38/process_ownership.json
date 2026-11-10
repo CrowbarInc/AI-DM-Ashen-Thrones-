@@ -1,0 +1,35 @@
+{
+  "ownership": {
+    "controller_pid": 1732,
+    "popen_pid": 13600,
+    "parent_pid": 1732,
+    "reported_image": "python.exe",
+    "worker_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "base_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "children": [
+      {
+        "pid": 27412,
+        "parent_pid": 13600,
+        "image": "conhost.exe",
+        "executable": "C:\\Windows\\System32\\conhost.exe"
+      }
+    ],
+    "interpreter_children": [],
+    "process_alive": true,
+    "ready_pid": 13600,
+    "ready_model": "gpt-4.1-mini",
+    "isolation_verified": true,
+    "sdk_retries": 0,
+    "host_retries": 0
+  },
+  "gates": {
+    "ready_pid_matches_popen": true,
+    "parent_is_controller": true,
+    "executable_is_base": true,
+    "no_interpreter_child": true,
+    "isolation_verified": true,
+    "retries_disabled": true,
+    "diagnostics_enabled": true
+  },
+  "ready_model": "gpt-4.1-mini"
+}

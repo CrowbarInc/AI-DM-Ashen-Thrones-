@@ -1,0 +1,1878 @@
+[
+  {
+    "source": "http_traces.json",
+    "text": "Look at the tracks again.",
+    "journal_equal": true,
+    "unique_clues": true,
+    "inventory_equal": true,
+    "flags_equal": true,
+    "before_journal": {
+      "known_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "active_leads": [
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 7,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 2,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 2,
+        "total": 2
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 9,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 7,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 9,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 7,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 8,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 7,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        }
+      ],
+      "projects": []
+    },
+    "after_journal": {
+      "known_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "active_leads": [
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 7,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 2,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 2,
+        "total": 2
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 9,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        }
+      ],
+      "projects": []
+    }
+  },
+  {
+    "source": "http_traces.json",
+    "text": "Examine the tracks once more.",
+    "journal_equal": true,
+    "unique_clues": true,
+    "inventory_equal": true,
+    "flags_equal": true,
+    "before_journal": {
+      "known_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "active_leads": [
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 7,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 2,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 2,
+        "total": 2
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 9,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        }
+      ],
+      "projects": []
+    },
+    "after_journal": {
+      "known_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "active_leads": [
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 7,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 2,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 2,
+        "total": 2
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        }
+      ],
+      "projects": []
+    }
+  },
+  {
+    "source": "http_traces.json",
+    "text": "Read the notice board again.",
+    "journal_equal": true,
+    "unique_clues": true,
+    "inventory_equal": true,
+    "flags_equal": true,
+    "before_journal": {
+      "known_facts": [
+        "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+        "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+        "A notice board announces new taxes and curfews, and names a missing patrol.",
+        "A tavern runner is hawking hot stew and rumor for coin.",
+        "A ragged stranger hangs back, watching the crowd more than the queue."
+      ],
+      "discovered_clues": [
+        "Follow the missing patrol rumor",
+        "The patrol route changed after the Ash Compact census choke worsened.",
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "Follow the missing patrol rumor",
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "The patrol route changed after the Ash Compact census choke worsened."
+      ],
+      "active_leads": [
+        {
+          "id": "patrol_route_change",
+          "title": "The patrol route changed after the Ash Compact census choke worsened.",
+          "summary": "The patrol route changed after the Ash Compact census choke worsened.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 9,
+          "last_updated_turn": 8
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "title": "Follow the missing patrol rumor",
+          "summary": "Follow the missing patrol rumor",
+          "type": "investigation",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 8,
+          "last_updated_turn": 8
+        },
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 4,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 4,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 4,
+        "total": 4
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "social_lead_revealed",
+          "clue_id": "patrol_route_change",
+          "scene_id": "frontier_gate",
+          "npc_id": "gate_serjeant",
+          "topic_id": "route_change"
+        },
+        {
+          "type": "social_extracted_lead",
+          "clue_id": "minlead_exit_frontier_gate_old_milestone",
+          "scene_id": "frontier_gate",
+          "source": "author_exit"
+        }
+      ],
+      "projects": []
+    },
+    "after_journal": {
+      "known_facts": [
+        "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+        "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+        "A notice board announces new taxes and curfews, and names a missing patrol.",
+        "A tavern runner is hawking hot stew and rumor for coin.",
+        "A ragged stranger hangs back, watching the crowd more than the queue."
+      ],
+      "discovered_clues": [
+        "Follow the missing patrol rumor",
+        "The patrol route changed after the Ash Compact census choke worsened.",
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "Follow the missing patrol rumor",
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "The patrol route changed after the Ash Compact census choke worsened."
+      ],
+      "active_leads": [
+        {
+          "id": "patrol_route_change",
+          "title": "The patrol route changed after the Ash Compact census choke worsened.",
+          "summary": "The patrol route changed after the Ash Compact census choke worsened.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 9,
+          "last_updated_turn": 8
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "title": "Follow the missing patrol rumor",
+          "summary": "Follow the missing patrol rumor",
+          "type": "investigation",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 8,
+          "last_updated_turn": 8
+        },
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 4,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 4,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 4,
+        "total": 4
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 10,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 10,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 10,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "social_lead_revealed",
+          "clue_id": "patrol_route_change",
+          "scene_id": "frontier_gate",
+          "npc_id": "gate_serjeant",
+          "topic_id": "route_change"
+        },
+        {
+          "type": "social_extracted_lead",
+          "clue_id": "minlead_exit_frontier_gate_old_milestone",
+          "scene_id": "frontier_gate",
+          "source": "author_exit"
+        }
+      ],
+      "projects": []
+    }
+  },
+  {
+    "source": "pre_holdout_http_traces.json",
+    "text": "Look at the tracks again.",
+    "journal_equal": true,
+    "unique_clues": true,
+    "inventory_equal": true,
+    "flags_equal": true,
+    "before_journal": {
+      "known_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "active_leads": [
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 7,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 2,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 2,
+        "total": 2
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 9,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 7,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 9,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 7,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 8,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 7,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        }
+      ],
+      "projects": []
+    },
+    "after_journal": {
+      "known_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "active_leads": [
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 7,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 2,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 2,
+        "total": 2
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 9,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        }
+      ],
+      "projects": []
+    }
+  },
+  {
+    "source": "pre_holdout_http_traces.json",
+    "text": "Examine the tracks once more.",
+    "journal_equal": true,
+    "unique_clues": true,
+    "inventory_equal": true,
+    "flags_equal": true,
+    "before_journal": {
+      "known_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "active_leads": [
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 7,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 2,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 2,
+        "total": 2
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 9,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 8,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        }
+      ],
+      "projects": []
+    },
+    "after_journal": {
+      "known_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "active_leads": [
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 7,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 2,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 2,
+        "total": 2
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        }
+      ],
+      "projects": []
+    }
+  },
+  {
+    "source": "pre_holdout_http_traces.json",
+    "text": "Read the notice board again.",
+    "journal_equal": true,
+    "unique_clues": true,
+    "inventory_equal": true,
+    "flags_equal": true,
+    "before_journal": {
+      "known_facts": [
+        "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+        "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+        "A notice board announces new taxes and curfews, and names a missing patrol.",
+        "A tavern runner is hawking hot stew and rumor for coin.",
+        "A ragged stranger hangs back, watching the crowd more than the queue."
+      ],
+      "discovered_clues": [
+        "Follow the missing patrol rumor",
+        "The patrol route changed after the Ash Compact census choke worsened.",
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "Follow the missing patrol rumor",
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "The patrol route changed after the Ash Compact census choke worsened."
+      ],
+      "active_leads": [
+        {
+          "id": "patrol_route_change",
+          "title": "The patrol route changed after the Ash Compact census choke worsened.",
+          "summary": "The patrol route changed after the Ash Compact census choke worsened.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 9,
+          "last_updated_turn": 8
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "title": "Follow the missing patrol rumor",
+          "summary": "Follow the missing patrol rumor",
+          "type": "investigation",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 8,
+          "last_updated_turn": 8
+        },
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 4,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 4,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 4,
+        "total": 4
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 9,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "social_lead_revealed",
+          "clue_id": "patrol_route_change",
+          "scene_id": "frontier_gate",
+          "npc_id": "gate_serjeant",
+          "topic_id": "route_change"
+        },
+        {
+          "type": "social_extracted_lead",
+          "clue_id": "minlead_exit_frontier_gate_old_milestone",
+          "scene_id": "frontier_gate",
+          "source": "author_exit"
+        }
+      ],
+      "projects": []
+    },
+    "after_journal": {
+      "known_facts": [
+        "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+        "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+        "A notice board announces new taxes and curfews, and names a missing patrol.",
+        "A tavern runner is hawking hot stew and rumor for coin.",
+        "A ragged stranger hangs back, watching the crowd more than the queue."
+      ],
+      "discovered_clues": [
+        "Follow the missing patrol rumor",
+        "The patrol route changed after the Ash Compact census choke worsened.",
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "unresolved_leads": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "Follow the missing patrol rumor",
+        "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "The patrol route changed after the Ash Compact census choke worsened."
+      ],
+      "active_leads": [
+        {
+          "id": "patrol_route_change",
+          "title": "The patrol route changed after the Ash Compact census choke worsened.",
+          "summary": "The patrol route changed after the Ash Compact census choke worsened.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 9,
+          "last_updated_turn": 8
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "title": "Follow the missing patrol rumor",
+          "summary": "Follow the missing patrol rumor",
+          "type": "investigation",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 8,
+          "last_updated_turn": 8
+        },
+        {
+          "id": "milestone_mud_prints",
+          "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 4,
+          "last_updated_turn": 4
+        },
+        {
+          "id": "notice_patrol_route",
+          "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "type": "rumor",
+          "status": "active",
+          "confidence": "plausible",
+          "priority": 0,
+          "next_step": "",
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "parent_lead_id": null,
+          "superseded_by": null,
+          "last_touched_turn": 2,
+          "last_updated_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 4,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 4,
+        "total": 4
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 10,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 10,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 10,
+          "goal": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "current_plan": "[REDACTED PRIVATE CAMPAIGN CONTENT]",
+          "agenda_progress": 10,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        },
+        {
+          "type": "social_lead_revealed",
+          "clue_id": "patrol_route_change",
+          "scene_id": "frontier_gate",
+          "npc_id": "gate_serjeant",
+          "topic_id": "route_change"
+        },
+        {
+          "type": "social_extracted_lead",
+          "clue_id": "minlead_exit_frontier_gate_old_milestone",
+          "scene_id": "frontier_gate",
+          "source": "author_exit"
+        }
+      ],
+      "projects": []
+    }
+  }
+]

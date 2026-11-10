@@ -1,0 +1,6 @@
+# BASELINE AND SCOPE
+Commit: `d40f1ed198236c604085f1c842ead267a8104ce2`. Entry worktree extensively dirty; exact status and 26478 protected content hashes in baseline.json. Incremental implementation.diff compares against entry copies, not HEAD. Relevant preexisting source and prior reviews are preserved. No canonical data or protected baseline edits; no commit/push.
+
+Production changes: game/api.py and game/quarantined_investigation_narration.py. New regression: tests/test_pr_play_66_publication.py. Updated historical static boundary assertion: tests/test_pr_play_49_anchored_narration.py; forbidden imports/effect protections retained. Tooling/evidence: artifacts/pr_play_66; 18 reports here; docs/NEXT_SESSION.md prepended orientation; generated review exports under handoff. No validator, claim extraction, gameplay mechanism, provider configuration, or persistent campaign model change.
+
+Read Development Constitution, NEXT_SESSION, state-authority model, validation-evidence/review-handoff standards, Product Realization bootstrap, PR65 reports 01/05/07/12/18/19 and incident/source/tests. The user's PR66 request explicitly supersedes prior session recommendations not to start PR66; it does not authorize commit/push. Known baseline: 848 focused passing/3 failures and 9 broader failures.

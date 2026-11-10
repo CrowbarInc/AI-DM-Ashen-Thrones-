@@ -1,0 +1,354 @@
+[
+  {
+    "id": "W01",
+    "group": "atomic",
+    "kind": "success",
+    "failures": 0,
+    "expect_calls": 1,
+    "expect_delays": []
+  },
+  {
+    "id": "W02",
+    "group": "atomic",
+    "kind": "success",
+    "failures": 1,
+    "expect_calls": 2,
+    "expect_delays": [
+      0.01
+    ]
+  },
+  {
+    "id": "W03",
+    "group": "atomic",
+    "kind": "success",
+    "failures": 2,
+    "expect_calls": 3,
+    "expect_delays": [
+      0.01,
+      0.03
+    ]
+  },
+  {
+    "id": "W04",
+    "group": "atomic",
+    "kind": "success",
+    "failures": 3,
+    "expect_calls": 4,
+    "expect_delays": [
+      0.01,
+      0.03,
+      0.09
+    ]
+  },
+  {
+    "id": "W05",
+    "group": "atomic",
+    "kind": "exhaust",
+    "expect_calls": 4,
+    "expect_delays": [
+      0.01,
+      0.03,
+      0.09
+    ],
+    "expect_winerror": 5
+  },
+  {
+    "id": "W06",
+    "group": "atomic",
+    "kind": "permission",
+    "code": 32,
+    "expect_calls": 1
+  },
+  {
+    "id": "W07",
+    "group": "atomic",
+    "kind": "permission",
+    "code": 13,
+    "expect_calls": 1
+  },
+  {
+    "id": "W08",
+    "group": "atomic",
+    "kind": "permission",
+    "code": null,
+    "expect_calls": 1
+  },
+  {
+    "id": "W09",
+    "group": "atomic",
+    "kind": "oserror",
+    "expect_calls": 1,
+    "expect_errno": 5
+  },
+  {
+    "id": "W10",
+    "group": "atomic",
+    "kind": "missing_source"
+  },
+  {
+    "id": "W11",
+    "group": "atomic",
+    "kind": "unavailable_destination"
+  },
+  {
+    "id": "W12",
+    "group": "atomic",
+    "kind": "single_outer",
+    "failures": 3,
+    "expect_calls": 4,
+    "expect_outer": 1
+  },
+  {
+    "id": "W13",
+    "group": "atomic",
+    "kind": "real_windows_lock"
+  },
+  {
+    "id": "W14",
+    "group": "atomic",
+    "kind": "create_missing"
+  },
+  {
+    "id": "W15",
+    "group": "atomic",
+    "kind": "success",
+    "failures": 0,
+    "expect_calls": 1,
+    "expect_delays": [],
+    "content": "COMPLETE-REPLACEMENT"
+  },
+  {
+    "id": "P01",
+    "group": "rollback",
+    "kind": "atomic_target",
+    "target": "session"
+  },
+  {
+    "id": "P02",
+    "group": "rollback",
+    "kind": "atomic_target",
+    "target": "combat"
+  },
+  {
+    "id": "P03",
+    "group": "rollback",
+    "kind": "atomic_target",
+    "target": "log"
+  },
+  {
+    "id": "P04",
+    "group": "rollback",
+    "kind": "world_write"
+  },
+  {
+    "id": "P05",
+    "group": "rollback",
+    "kind": "identifier"
+  },
+  {
+    "id": "P06",
+    "group": "rollback",
+    "kind": "opening"
+  },
+  {
+    "id": "P07",
+    "group": "rollback",
+    "kind": "recover_after_world"
+  },
+  {
+    "id": "P08",
+    "group": "rollback",
+    "kind": "no_sentinel"
+  },
+  {
+    "id": "P09",
+    "group": "rollback",
+    "kind": "unrelated_file"
+  },
+  {
+    "id": "P10",
+    "group": "rollback",
+    "kind": "normal_create"
+  },
+  {
+    "id": "C01",
+    "group": "chat",
+    "kind": "transient_1"
+  },
+  {
+    "id": "C02",
+    "group": "chat",
+    "kind": "transient_3"
+  },
+  {
+    "id": "C03",
+    "group": "chat",
+    "kind": "permanent_status"
+  },
+  {
+    "id": "C04",
+    "group": "chat",
+    "kind": "permanent_flag"
+  },
+  {
+    "id": "C05",
+    "group": "chat",
+    "kind": "permanent_log"
+  },
+  {
+    "id": "C06",
+    "group": "chat",
+    "kind": "permanent_resolve_once"
+  },
+  {
+    "id": "C07",
+    "group": "chat",
+    "kind": "recover_after_permanent"
+  },
+  {
+    "id": "C08",
+    "group": "chat",
+    "kind": "duplicate_followup"
+  },
+  {
+    "id": "C09",
+    "group": "chat",
+    "kind": "opposite_branch"
+  },
+  {
+    "id": "C010",
+    "group": "chat",
+    "kind": "reload_log"
+  },
+  {
+    "id": "L01",
+    "group": "lifecycle",
+    "kind": "create"
+  },
+  {
+    "id": "L02",
+    "group": "lifecycle",
+    "kind": "start"
+  },
+  {
+    "id": "L03",
+    "group": "lifecycle",
+    "kind": "opening_scene"
+  },
+  {
+    "id": "L04",
+    "group": "lifecycle",
+    "kind": "first_discovery"
+  },
+  {
+    "id": "L05",
+    "group": "lifecycle",
+    "kind": "branch",
+    "branch": "survey"
+  },
+  {
+    "id": "L06",
+    "group": "lifecycle",
+    "kind": "branch",
+    "branch": "report"
+  },
+  {
+    "id": "L07",
+    "group": "lifecycle",
+    "kind": "exclusive",
+    "branch": "survey"
+  },
+  {
+    "id": "L08",
+    "group": "lifecycle",
+    "kind": "exclusive",
+    "branch": "report"
+  },
+  {
+    "id": "L09",
+    "group": "lifecycle",
+    "kind": "resume",
+    "branch": "survey"
+  },
+  {
+    "id": "L10",
+    "group": "lifecycle",
+    "kind": "resume",
+    "branch": "report"
+  },
+  {
+    "id": "T01",
+    "group": "transcript",
+    "kind": "survey_text"
+  },
+  {
+    "id": "T02",
+    "group": "transcript",
+    "kind": "report_text"
+  },
+  {
+    "id": "T03",
+    "group": "transcript",
+    "kind": "restore_survey"
+  },
+  {
+    "id": "T04",
+    "group": "transcript",
+    "kind": "restore_report"
+  },
+  {
+    "id": "T05",
+    "group": "transcript",
+    "kind": "continuation_isolated"
+  },
+  {
+    "id": "D01",
+    "group": "disclosure",
+    "kind": "discovery"
+  },
+  {
+    "id": "D02",
+    "group": "disclosure",
+    "kind": "consequence"
+  },
+  {
+    "id": "D03",
+    "group": "disclosure",
+    "kind": "rejected_narration"
+  },
+  {
+    "id": "D04",
+    "group": "disclosure",
+    "kind": "failed_persist_hidden"
+  },
+  {
+    "id": "D05",
+    "group": "disclosure",
+    "kind": "reload"
+  },
+  {
+    "id": "S01",
+    "group": "projection",
+    "kind": "new"
+  },
+  {
+    "id": "S02",
+    "group": "projection",
+    "kind": "start"
+  },
+  {
+    "id": "S03",
+    "group": "projection",
+    "kind": "gameplay"
+  },
+  {
+    "id": "S04",
+    "group": "projection",
+    "kind": "save_resume"
+  },
+  {
+    "id": "S05",
+    "group": "projection",
+    "kind": "state"
+  }
+]

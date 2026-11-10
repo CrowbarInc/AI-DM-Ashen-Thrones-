@@ -1,0 +1,239 @@
+{
+  "ok": true,
+  "gm_output": {
+    "player_facing_text": "How do you want to follow the trail connected to the missing patrol? With whom or by what means?",
+    "tags": [
+      "conversational_orchestration",
+      "clarify",
+      "non_mutating"
+    ],
+    "scene_update": null,
+    "activate_scene_id": null,
+    "new_scene_draft": null,
+    "world_updates": null,
+    "suggested_action": null,
+    "metadata": {
+      "accepted_response": {
+        "addressee": "player",
+        "adoption_status": "candidate_accepted",
+        "attempt": 0,
+        "authority_result": "accepted",
+        "authorization_provenance": {
+          "addressee": "player",
+          "authority_category": "host_operation",
+          "authorized_proposition": "",
+          "epistemic_status": "none",
+          "operation": "ask",
+          "policy_version": "pr-eg-r6-r1-r1",
+          "provenance_id": "2608602d877553f8",
+          "source_id": "",
+          "speaker_id": "",
+          "validation": "host_operation"
+        },
+        "authorization_source": "conversational_decision:interpretation_not_interpreted",
+        "candidate_disposition": "host_selected",
+        "canonical": false,
+        "contract": {
+          "contract_id": "",
+          "expected_resolution": "",
+          "interlocutor_id": "",
+          "operation": ""
+        },
+        "contract_satisfying": true,
+        "generation_attempts": 0,
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "authority": [
+            "conversational_decision:interpretation_not_interpreted"
+          ],
+          "gm_resolution_decision_audit": null,
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": []
+        },
+        "immutable": true,
+        "interaction_completion": true,
+        "operation": "ask",
+        "player_input": "I want to follow the trail connected to the missing patrol.",
+        "provenance": "authorized_host_speech",
+        "resolution_kind": "conversational_clarify",
+        "speaker": "GM",
+        "speaker_id": "",
+        "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+        "subject": "",
+        "target": "",
+        "text": "How do you want to follow the trail connected to the missing patrol? With whom or by what means?",
+        "turn_identity": "",
+        "integrity_digest": "140155f871f3e02bd56bf5a7c5ea0562efdb7aa430f1d8432cdc6dbcb2681afd"
+      }
+    }
+  },
+  "resolution": {
+    "kind": "conversational_clarify",
+    "action_id": "conversational_clarify",
+    "label": "I want to follow the trail connected to the missing patrol.",
+    "prompt": "I want to follow the trail connected to the missing patrol.",
+    "success": null,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "metadata": {
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "authoritative_mutation": false,
+      "resolver_invoked": false,
+      "gameplay_parser_invoked": false,
+      "narration_invoked": false,
+      "processing_outcome": "conversational_clarify",
+      "conversational_decision": {
+        "category": "CLARIFY",
+        "primary_intention": "Express intent to follow the trail connected to the missing patrol",
+        "intent_family": "clarification",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [
+          "interpretable_action"
+        ],
+        "context_references": [],
+        "requires_authoritative_execution": false,
+        "reason": "interpretation_not_interpreted",
+        "confidence": 0.5,
+        "ambiguity": null,
+        "player_facing_text": "How do you want to follow the trail connected to the missing patrol? With whom or by what means?",
+        "context_update": null,
+        "intent_modality": "committed",
+        "secondary_intentions": [],
+        "execution_policy": "",
+        "communication_owner": "GM",
+        "communication_purpose": "CLARIFICATION",
+        "authorization": null
+      },
+      "live_chat_interpretation": {
+        "status": "blocked",
+        "reason": "clarification_required",
+        "eligibility_disposition": "NEEDS_CLARIFICATION",
+        "model_communication_mode": "CLARIFICATION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Follow the trail connected to the missing patrol - specify method or target NPC to follow with or how to proceed\",\"evidence_refs\":[\"scene\",\"visible:1\",\"visible:2\"]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"CLARIFICATION_REQUIRED\",\"player_intent\":{\"summary\":\"Express intent to follow the trail connected to the missing patrol\"},\"asserted_premises\":[{\"text\":\"The player wants to follow the trail connected to the missing patrol.\"},{\"text\":\"The scene includes a gate serjeant, a tavern runner, a notice board, and known exits including 'Follow the missing patrol rumor'.\"}],\"requested_outcomes\":[{\"text\":\"Clarify how the player wants to follow the trail: with whom or by what means, or what specific action to take.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"leave_for_follow_the_missing_patrol_rumor\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[\"method or NPC to follow with\"]},\"clarification_question\":\"How do you want to follow the trail connected to the missing patrol? With whom or by what means?\" ,\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+        "provider_requests": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "4d544ff8bccb445497610bd7bc3fe960",
+            "attempt_id": "2d068cebae8c4337a3d004afa93f51b5",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-11-02T02:11:05.639878+00:00",
+            "time": "2026-11-02T02:11:09.544528+00:00",
+            "sequence": 5,
+            "admission": "admitted",
+            "budget_remaining": 5,
+            "sdk_retries": 0,
+            "host_retries": "disabled",
+            "sent": true,
+            "request_id": "resp_0b0c39bc61ce3598006ae7f13bb05487d19d706b41078010ef",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2678,
+            "output_tokens": 268,
+            "total_tokens": 2946,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 3148.907
+          }
+        ],
+        "record": {
+          "communication_mode": "CLARIFICATION",
+          "interpretation_status": "CLARIFICATION_REQUIRED",
+          "player_intent": {
+            "summary": "Express intent to follow the trail connected to the missing patrol"
+          },
+          "asserted_premises": [
+            {
+              "text": "The player wants to follow the trail connected to the missing patrol.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The scene includes a gate serjeant, a tavern runner, a notice board, and known exits including 'Follow the missing patrol rumor'.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Clarify how the player wants to follow the trail: with whom or by what means, or what specific action to take.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [],
+          "references": {
+            "permitted_entity_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "leave_for_follow_the_missing_patrol_rumor",
+              "notice_board",
+              "tavern_runner"
+            ],
+            "unresolved_references": [
+              "method or NPC to follow with"
+            ]
+          },
+          "clarification_question": "How do you want to follow the trail connected to the missing patrol? With whom or by what means?",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "CLARIFICATION",
+            "subject": "Follow the trail connected to the missing patrol - specify method or target NPC to follow with or how to proceed",
+            "evidence_refs": [
+              "scene",
+              "visible:1",
+              "visible:2"
+            ]
+          },
+          "incidental_context": [],
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": ""
+          },
+          "public_evidence": {
+            "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+            "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel."
+          }
+        }
+      },
+      "stored_interpretation_bridge": null,
+      "provider_calls": {
+        "interpretation_requests": 1,
+        "narration_requests": 0,
+        "ooc_assistance_requests": 0,
+        "retries": 0
+      },
+      "performance": {
+        "elapsed_ms": 3938,
+        "interpretation_ms": null,
+        "resolution_ms": null,
+        "narration_ms": null,
+        "validation_ms": null,
+        "retry_ms": null,
+        "provider_call_count": 1,
+        "input_tokens": 2678,
+        "output_tokens": 268,
+        "retry_count": 0,
+        "retry_reason": null,
+        "disposition": "conversational_clarify",
+        "successful": false,
+        "provider_narration_skipped": false
+      }
+    }
+  }
+}

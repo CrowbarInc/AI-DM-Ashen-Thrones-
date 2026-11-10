@@ -1,0 +1,167 @@
+[
+  {
+    "path": "/session.json/campaign_run_id",
+    "before": "7c0c85c086673f548ceffd73",
+    "after": "4e5a1f653b6e482a8d925324"
+  },
+  {
+    "path": "/session.json/session_id",
+    "before": "7c0c85c086673f548ceffd73",
+    "after": "4e5a1f653b6e482a8d925324"
+  },
+  {
+    "path": "/world.json/npcs",
+    "before": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate",
+        "aliases": [
+          "guard",
+          "watch",
+          "watch guard"
+        ],
+        "topics": [
+          {
+            "id": "watch_command",
+            "text": "Captain Thoran commands the gate watch tonight.",
+            "clue_id": "captain_thoran_watch"
+          }
+        ]
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate",
+        "aliases": [
+          "serjeant",
+          "watch serjeant",
+          "gate serjeant"
+        ],
+        "topics": [
+          {
+            "id": "route_change",
+            "text": "The patrol route changed after the Ash Compact census choke worsened.",
+            "clue_id": "patrol_route_change"
+          }
+        ]
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate",
+        "aliases": [
+          "runner",
+          "tavern runner"
+        ],
+        "topics": [
+          {
+            "id": "patrol_rumor",
+            "discovery_categories": [
+              "rumor"
+            ],
+            "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "clue_id": "muddy_footprints_northwest"
+          }
+        ]
+      }
+    ],
+    "after": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate",
+        "aliases": [
+          "guard",
+          "watch",
+          "watch guard"
+        ],
+        "topics": [
+          {
+            "id": "watch_command",
+            "text": "Captain Thoran commands the gate watch tonight.",
+            "clue_id": "captain_thoran_watch"
+          }
+        ],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "disposition": "neutral",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate",
+        "aliases": [
+          "serjeant",
+          "watch serjeant",
+          "gate serjeant"
+        ],
+        "topics": [
+          {
+            "id": "route_change",
+            "text": "The patrol route changed after the Ash Compact census choke worsened.",
+            "clue_id": "patrol_route_change"
+          }
+        ],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "disposition": "neutral",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate",
+        "aliases": [
+          "runner",
+          "tavern runner"
+        ],
+        "topics": [
+          {
+            "id": "patrol_rumor",
+            "discovery_categories": [
+              "rumor"
+            ],
+            "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "clue_id": "muddy_footprints_northwest"
+          }
+        ],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "sell_rumors",
+        "disposition": "friendly",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ]
+  }
+]

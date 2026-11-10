@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 07 LIVE PROVIDER PROPOSALS
+
+12 actual requests / 3,398 measured tokens / 0 retries. Six proposal requests produced six accepted and committed NPCs, zero rejected live proposals; four final HTTP/browser identities have complete lifecycle verification. Six other requests attempted conversational wording. Initial offline and accounting-refusal attempts made zero live dispatches and remain separate evidence. Existing OpenAI configuration, SDK retry policy and provider_budget admission/accounting are reused. Single proposal attempt; a timeout/malformed proposal cannot publish an NPC. No fixture is counted as live.

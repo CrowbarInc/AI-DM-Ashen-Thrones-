@@ -1,0 +1,46 @@
+{
+  "collected": 405,
+  "failed": 3,
+  "errors": 0,
+  "skipped": 0,
+  "passed": 402,
+  "exit_code": 1,
+  "failed_nodeids": [
+    "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+    "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+    "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues"
+  ],
+  "preexisting_failures_seen": [
+    "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+    "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+    "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues"
+  ],
+  "new_failures": [],
+  "provider_calls": 0,
+  "command": [
+    "C:\\Users\\Master Mandalcio\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_pr_play_52_quarantined_integration.py",
+    "tests/test_pr_play_42_evidence_boundaries.py",
+    "tests/test_pr_play_51_geography_grounding.py",
+    "tests/test_pr_play_49_anchored_narration.py",
+    "tests/test_pr_play_47_controlled_renderer.py",
+    "tests/test_pr_play_45_narration_authority.py",
+    "tests/test_pr_play_46_mechanical_boundary.py",
+    "tests/test_pr_play_44_information_delivery.py",
+    "tests/test_pr_bu_lexical_scope.py",
+    "tests/test_provider_accounting_integrity.py",
+    "tests/test_pr_bw_narration_only_envelope.py",
+    "tests/test_diegetic_fallback_narration.py",
+    "tests/test_narration_state_consistency.py",
+    "--tb=line",
+    "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_52\\focused.xml",
+    "--basetemp",
+    "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_52_pytest_28444"
+  ],
+  "predecessor_evidence_restored": [
+    "artifacts/pr_play_49/evidence_performance.json",
+    "artifacts/pr_play_47/evidence_performance.json"
+  ]
+}

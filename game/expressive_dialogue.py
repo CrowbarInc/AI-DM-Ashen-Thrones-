@@ -9,12 +9,35 @@ path, and rejected lines stay on the turn audit.
 """
 from __future__ import annotations
 
+import contextvars
 import hashlib
 import json
 import os
 import re
 import time
 from typing import Any, Mapping
+
+_EXPRESSION_TRANSPORT = None
+_WITHHELD_PHRASES: contextvars.ContextVar = contextvars.ContextVar("ashen_withheld_phrases", default=())
+
+
+def set_expression_transport(transport) -> None:
+    """Test and live harnesses may supply one candidate. Production leaves this unset."""
+    global _EXPRESSION_TRANSPORT
+    _EXPRESSION_TRANSPORT = transport
+
+
+def expression_transport():
+    return _EXPRESSION_TRANSPORT
+
+
+def push_withheld_phrases(phrases) -> object:
+    cleaned = tuple(str(item).casefold() for item in (phrases or []) if str(item).strip())
+    return _WITHHELD_PHRASES.set(cleaned)
+
+
+def reset_withheld_phrases(token) -> None:
+    _WITHHELD_PHRASES.reset(token)
 
 _OUTPUT_CAP = 80
 
@@ -360,6 +383,7 @@ def build_expression_contract(
     forced_operation: str = "",
     proposition_id: str = "",
     entity_aliases: list[Any] | None = None,
+    extra_facts: list[Any] | None = None,
 ) -> dict[str, Any] | None:
     """Build a contract from host authority only. Provider text is not an input."""
     social = {}
@@ -372,6 +396,9 @@ def build_expression_contract(
     if str(fallback_source).startswith("social.topic_revealed") and topic_text:
         proposition = topic_text
         disclosure = "authorized_topic"
+    elif fallback_source.startswith("dialogue_authority.public_fact:") and authority.get("public_fact_source"):
+        proposition = str(authority.get("authorized_proposition") or "")
+        disclosure = "authorized_public_fact"
     else:
         proposition = inner
         disclosure = "prior_delivered_speech" if "reuse" in fallback_source or "delivered" in fallback_source or "repeat" in fallback_source else "host_line"
@@ -391,7 +418,7 @@ def build_expression_contract(
         knowledge_posture=posture,
         requested=requested,
         topic_text=topic_text if not forced_operation else "",
-        forced=forced_operation,
+        forced=forced_operation or ("faithful_paraphrase" if fallback_source.startswith("dialogue_authority.public_fact:") else ""),
     )
     if not operation:
         return None
@@ -402,6 +429,9 @@ def build_expression_contract(
         body = ""
     else:
         propositions = [body or proposition]
+    if operation == "bounded_social_line":
+        supplied = [str(item).strip() for item in (extra_facts or []) if str(item).strip()]
+        propositions = supplied or propositions
     anchor = _preference_anchor(proposition)
     if operation == "incidental_characterization" and not anchor:
         return None
@@ -433,6 +463,7 @@ def build_expression_contract(
         "incidental_characterization": "nonconsequential_subjective_reason",
         "uncertainty": "state_lack_of_knowledge",
         "nonbinding_refusal": "refuse_without_commitment",
+        "bounded_social_line": "ordinary_character_speech",
     }[operation]
     sufficiency = str(authority.get("answer_sufficiency") or "")
     if operation == "incidental_characterization":
@@ -454,6 +485,8 @@ def build_expression_contract(
             "preserve_epistemic_posture": True,
             "answer_sufficiency": sufficiency or "directly_answers",
         }
+        if fallback_source.startswith("dialogue_authority.public_fact:"):
+            meaning["relation"] = "own_offerings"
     entities = _entity_identities(" ".join(propositions), speaker_name, aliases)
     revision_payload = {
         "speaker_id": speaker_id,
@@ -517,6 +550,8 @@ def build_expression_prompt(contract: Mapping[str, Any]) -> dict[str, str]:
         )
         if frame == "word_is":
             guidance += " A leading 'Word is' is only a delivery frame and may be omitted."
+        if (contract.get("permitted_meaning") or {}).get("relation") == "own_offerings":
+            guidance += " For your own offerings, use I offer, I can offer you, I serve, or I've got. You may start with Well or end with to share, and reorder whole items. Use for sale only if the authority explicitly says sell. Keep every item description."
         if any(_REAL_HEDGE.search(item) for item in facts):
             guidance += " Keep the uncertainty (heard, rumor, may, or not sure). Do not make it certain."
     elif operation == "incidental_characterization":
@@ -533,6 +568,19 @@ def build_expression_prompt(contract: Mapping[str, Any]) -> dict[str, str]:
             "You may repeat the player's subject only to name what is unknown. "
             "Do not invent a maker, owner, place, time, or cause. Do not use because, but, or since."
         )
+    elif operation == "bounded_social_line":
+        posture = str(contract.get("knowledge_posture") or "")
+        guidance = (
+            "OPTIONAL NONCANONICAL EXPRESSION: speak in one or two ordinary sentences. "
+            "You may show manner, weather, or uncertainty. Do not copy the host line word for word. "
+            "Do not add a quest, reward, secret, route, name, clue, or event."
+        )
+        if posture in {"unknown", "withheld"}:
+            guidance += (
+                " You do not know more than the authorized facts. "
+                'The spoken line must include "I do not know" or "not certain". '
+                "Do not name a destination, a time, or a cause."
+            )
     else:
         guidance = (
             "AUTHORIZED FACTS are empty. OPTIONAL NONCANONICAL EXPRESSION: refuse the request in one sentence. "
@@ -656,6 +704,56 @@ def _faithful_reasons(spoken: str, proposition: str, identities: list[Any] | Non
     return reasons
 
 
+def _offering_reasons(spoken: str, proposition: str, contract: Mapping[str, Any]) -> list[str]:
+    """Closed offering grammar, licensed only by the host's own_offerings relation.
+
+    Compare whole item phrases (including adjectives), not a bag of words.
+    Offering does not license ownership, gifts, prices or a sale commitment.
+    """
+    source = _plain(proposition).strip().rstrip(".").lower()
+    speaker = re.escape(str(contract.get("speaker_name") or "").lower())
+    match = re.fullmatch(rf"(?:i|(?:the )?{speaker}) (offer[s]?|sell[s]?|serve[s]?) (.+)", source)
+    if not match:
+        return ["offering_structure_unsupported"]
+    verb, items = match.groups()
+    sale = verb in {"sell", "sells"}
+
+    def item_phrases(text: str) -> list[str]:
+        parts = re.split(r"\s+and\s+|,\s*", text)
+        # Singular room is a grammatical service unit, not a stock quantity.
+        return sorted("room" if part.strip() in {"rooms", "a room"} else part.strip()
+                      for part in parts if part.strip())
+
+    text = _plain(spoken).strip().rstrip(".!?").lower()
+    text = re.sub(r"^well,?\s+", "", text)
+    # These are complete sentence frames. No globally ignored content words.
+    prefix = r"(?:i offer(?: you)?|i can offer(?: you)?|i serve|i(?:'ve| have) got) "
+    if sale:
+        prefix = r"(?:i sell|i(?:'ve| have) got) "
+    candidate = re.fullmatch(prefix + r"(.+)", text)
+    if candidate:
+        candidate_items = candidate.group(1)
+        if sale:
+            if text.startswith("i sell "):
+                pass
+            elif candidate_items.endswith(" for sale"):
+                candidate_items = candidate_items[:-9]
+            else:
+                return ["offering_relation_changed"]
+        elif candidate_items.endswith(" to share"):
+            candidate_items = candidate_items[:-9]
+    else:
+        reverse = re.fullmatch(r"(.+?)[—–-]\s*that's what i(?:'ve| have) got", text)
+        if not reverse or sale:
+            return ["unsupported_offering_expression"]
+        candidate_items = reverse.group(1)
+    if item_phrases(candidate_items) != item_phrases(items):
+        return ["offering_items_changed"]
+    if _norm(spoken) == _norm(proposition):
+        return ["verbatim_repetition"]
+    return []
+
+
 def _characterization_reasons(spoken: str, proposition: str, contract: Mapping[str, Any] | None = None) -> list[str]:
     """Check the host premise. A new feeling-word is not authority, and a safe clause cannot carry an unsafe one."""
     reasons: list[str] = []
@@ -751,17 +849,80 @@ def _refusal_reasons(spoken: str, question: str) -> list[str]:
     return reasons
 
 
+def _bounded_social_reasons(spoken: str, contract: Mapping[str, Any]) -> list[str]:
+    """Allow ordinary wording. Reject new authority, hidden facts, and copied host lines."""
+    reasons: list[str] = []
+    words = _tokens(spoken)
+    if not spoken or len(words) < 2 or len(words) > 55:
+        reasons.append("length")
+    if len(_sentences(spoken)) > 3:
+        reasons.append("too_many_sentences")
+    if _INTERNAL.search(spoken):
+        reasons.append("internal_voice")
+    if re.search(r"\d", spoken or ""):
+        reasons.append("unsupported_number")
+    facts = " ".join(str(item) for item in (contract.get("authorized_propositions") or []))
+    fallback = str(contract.get("fallback_response") or "")
+    if _norm(spoken) and _norm(spoken) in {_norm(fallback), _norm(facts)}:
+        reasons.append("verbatim_host_line")
+    if re.search(
+        r"\b(?:quest|treasure|reward|gold|silver|secret|sentinel|password|you find|you discover|"
+        r"i grant|take this|skill check|difficulty class)\b",
+        spoken or "",
+        re.I,
+    ):
+        reasons.append("consequential_or_hidden")
+    posture = str(contract.get("knowledge_posture") or "")
+    if posture in {"unknown", "withheld"}:
+        if not _UNCERTAIN.search(spoken) and not re.search(
+            r"\b(?:haven't seen|have not seen|not certain|wouldn't know|would not know|can't tell|cannot tell)\b",
+            spoken or "",
+            re.I,
+        ):
+            reasons.append("uncertainty_required")
+        if re.search(r"\b(?:i saw them|last seen at|the patrol (?:is|was) at|they went to)\b", spoken or "", re.I):
+            reasons.append("invented_clue")
+    authorized = facts.casefold()
+    for phrase in _WITHHELD_PHRASES.get():
+        if phrase and phrase in spoken.casefold() and phrase not in authorized:
+            reasons.append("withheld_information")
+            break
+    speaker = str(contract.get("speaker_name") or "")
+    named = re.search(r"\bi am ([A-Z][a-z]+)\b", spoken or "")
+    if named and speaker and named.group(1).casefold() not in speaker.casefold():
+        reasons.append("identity_changed")
+    if _POSITIVE_COMMIT.search(spoken):
+        reasons.append("unauthorized_commitment")
+    reasons.extend(_introduced_name_reasons(spoken, contract.get("entity_identities")))
+    return reasons
+
+
 def validate_expression(spoken: str, contract: Mapping[str, Any]) -> dict[str, Any]:
     """Deterministic contract check. A second model is not consulted."""
     spoken = _plain(spoken)
     started = time.perf_counter()
     operation = str(contract.get("operation") or "")
+    if operation == "bounded_social_line":
+        reasons = _bounded_social_reasons(spoken, contract)
+        unique: list[str] = []
+        for reason in reasons:
+            if reason not in unique:
+                unique.append(reason)
+        return {
+            "adopt": not unique,
+            "reasons": unique,
+            "operation": operation,
+            "validation_ms": round((time.perf_counter() - started) * 1000, 3),
+        }
     reasons = _shared_reasons(spoken, contract)
     proposition = " ".join(str(item) for item in (contract.get("authorized_propositions") or []))
     question = str(contract.get("player_question") or "")
     identities = contract.get("entity_identities") if isinstance(contract.get("entity_identities"), list) else None
     if operation in {"faithful_paraphrase", "simple_explanation"}:
-        reasons.extend(_faithful_reasons(spoken, proposition, identities))
+        if (contract.get("permitted_meaning") or {}).get("relation") == "own_offerings":
+            reasons.extend(_offering_reasons(spoken, proposition, contract))
+        else:
+            reasons.extend(_faithful_reasons(spoken, proposition, identities))
     elif operation == "incidental_characterization":
         reasons.extend(_characterization_reasons(spoken, proposition, contract))
     elif operation == "uncertainty":
@@ -791,6 +952,15 @@ def request_expression(contract: Mapping[str, Any]) -> dict[str, Any]:
     prompt = contract.get("prompt") if isinstance(contract.get("prompt"), Mapping) else {}
     system = str(prompt.get("system") or "")
     user = str(prompt.get("user") or "")
+    transport = expression_transport()
+    if transport is not None:
+        started = time.perf_counter()
+        text = str(transport(contract) or "")
+        latency = round((time.perf_counter() - started) * 1000, 3)
+        return {
+            "ok": True, "sent": True, "text": text, "latency_ms": latency, "model": "bounded-transport",
+            "usage": {"input_tokens": 1, "output_tokens": max(1, len(text) // 4), "total_tokens": 1 + max(1, len(text) // 4)},
+        }
     messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
     estimated = max(1, (len(system) + len(user)) // 4)
     attempt = admit_request(owner="expressive_dialogue.request_expression", model=DEFAULT_MODEL_NAME, purpose="expression", estimated_input=estimated, max_output=_OUTPUT_CAP)
@@ -1014,3 +1184,165 @@ def maybe_reword_continuity_line(
         return original, None
     line, _source, audit = result
     return line, audit
+
+
+def _speech_facts(npc, scene, history, body):
+    inner = scene.get("scene", scene) if isinstance(scene, dict) else {}
+    facts = [
+        f"I am {npc.get('name') or npc.get('label')}, an ordinary {npc.get('role') or 'person'}.",
+        str(npc.get("appearance") or ""),
+        str(npc.get("demeanor") or ""),
+        str(body or ""),
+    ]
+    for fact in (inner.get("visible_facts") or [])[:4]:
+        if isinstance(fact, str):
+            facts.append(fact)
+    if history:
+        facts.append(str(history[-1].get("published_response") or ""))
+    return [item for item in facts if item.strip()]
+
+
+def _visible_overlap(low: str, scene) -> str | None:
+    """Public scene text the question actually names. Hidden lines are not cited."""
+    inner = scene.get("scene", scene) if isinstance(scene, dict) else {}
+    stop = {"about", "there", "their", "would", "could", "should", "where", "which", "think", "knows", "known"}
+    words = {word for word in re.findall(r"[a-z]{5,}", low) if word not in stop}
+    hidden = " ".join(str(item) for item in (inner.get("hidden_facts") or [])).casefold()
+    for fact in inner.get("visible_facts") or []:
+        if not isinstance(fact, str):
+            continue
+        fact_words = set(re.findall(r"[a-z]{5,}", fact.casefold()))
+        if words & fact_words and fact.casefold() not in hidden:
+            return fact
+    return None
+
+
+def _withheld_phrases(scene, authorized):
+    inner = scene.get("scene", scene) if isinstance(scene, dict) else {}
+    allowed = " ".join(str(item) for item in authorized).casefold()
+    phrases = []
+    for fact in list(inner.get("hidden_facts") or []) + [
+        str(item.get("text") or "") for item in (inner.get("discoverable_clues") or []) if isinstance(item, dict)
+    ]:
+        words = re.findall(r"[a-z0-9']+", str(fact).casefold())
+        for index in range(0, max(0, len(words) - 2)):
+            phrase = " ".join(words[index:index + 3])
+            if phrase and phrase not in allowed and phrase not in phrases:
+                phrases.append(phrase)
+    return phrases[:80]
+
+
+def _topical_prior(history, low):
+    stop = {"about", "there", "their", "would", "could", "should", "where", "which", "think", "knows", "known", "again", "earlier", "before"}
+    words = {word for word in re.findall(r"[a-z]{5,}", low) if word not in stop}
+    if not words:
+        return None
+    for row in reversed(history or []):
+        if not isinstance(row, Mapping):
+            continue
+        blob = f"{row.get('player_utterance') or ''} {row.get('published_response') or ''}".casefold()
+        if words & set(re.findall(r"[a-z]{5,}", blob)):
+            return row
+    return None
+
+
+def background_conversation(npc, *, session, scene, player_text):
+    """Select host authority, reuse expression contracts, then remember publication.
+
+    Knowledge is public population context, stable identity and prior validated
+    speech only. Player questions and transcript claims never become facts.
+    """
+    from game.dialogue_authority import background_history, remember_background_exchange
+    low = _plain(player_text).casefold()
+    history = background_history(session,npc['id'])
+    name = npc.get('name') or npc['label']
+    receipt = None; operation = 'faithful_paraphrase'
+    cited_public = _visible_overlap(low, scene)
+    # A public fact that actually overlaps the question is not hidden merely because it mentions a patrol.
+    if re.search(r'\b(?:quest|treasure|secret|hidden|passage|noble|allegiance|faction|enemy|enemies|soldiers|promise|reward|gm|sentinel)\b',low) or (
+        re.search(r'\bpatrol\b', low) and not cited_public
+    ):
+        body = "I do not know about that, and I cannot promise assistance."
+        operation = 'uncertainty'
+    elif re.search(r'\b(?:hello|hi|greetings|greet)\b',low):
+        body = 'Hello again.' if history else 'Hello.'
+        receipt = 'greeted'
+    elif re.search(r'\b(?:thank|thanks|farewell|goodbye|end the conversation)\b',low):
+        body = 'Thank you. Goodbye.' if re.search(r'\b(?:thank|thanks)\b', low) else 'Goodbye.'
+        receipt = 'thanked'
+    elif re.search(r'\b(?:who|name|yourself|identity)\b',low):
+        body = f"I am {name}, an ordinary {npc['role']} in {npc['appearance']}."
+    elif re.search(r'\b(?:mean|meant|why|more|explain|again|earlier|before that)\b',low) and (topical := _topical_prior(history, low)):
+        body = topical['published_response']
+        operation = 'simple_explanation'
+    elif history and re.search(r'\b(?:when did you|last hear|do you think|something happened)\b', low):
+        topical = _topical_prior(history, low) or history[-1]
+        prior = str(topical.get('published_response') or '')
+        if "not certain" in prior.casefold():
+            body = prior
+        else:
+            body = "I am not certain of the time, or whether something happened. " + prior
+        operation = 'uncertainty'
+    elif re.search(r'\b(?:what did i (?:tell|say)|do you remember what i)\b', low) and history:
+        earlier = str(history[-1].get('player_utterance') or history[-1].get('published_response') or '')
+        body = f"You said this: {earlier} I do not know whether that is true."
+        operation = 'uncertainty'
+    elif re.search(r'\b(?:i tell|i told|tell you|i found|i saw)\b', low):
+        body = "I hear you. I do not know whether that is true, and I cannot add it to what is established."
+        receipt = 'heard'
+        operation = 'uncertainty'
+    elif re.search(r'\b(?:area|here|around|local|place|surroundings)\b',low):
+        inner = scene.get('scene', scene) if isinstance(scene, dict) else {}
+        facts = [str(item) for item in (inner.get('visible_facts') or []) if isinstance(item, str)]
+        chosen = _visible_overlap(low, scene) or (facts[0] if facts else "")
+        if chosen:
+            body = chosen + " That is what is in view. I do not know anything beyond it."
+        else:
+            body = 'I do not know about that.'
+        operation = 'uncertainty'
+    else:
+        cited = _visible_overlap(low, scene)
+        if cited:
+            body = cited + " That is what is in view. I do not know anything beyond it."
+            operation = 'uncertainty'
+        else:
+            body = 'I do not know about that.'
+            operation = 'uncertainty'
+    bounded = os.environ.get("ASHEN_BOUNDED_SPEECH") == "1"
+    posture = "unknown" if operation == "uncertainty" else "delivered"
+    speech_operation = "bounded_social_line" if bounded else operation
+    extra = _speech_facts(npc, scene, history, body) if bounded else None
+    # A follow-up's source is the delivered statement, not an arbitrary history
+    # entry rewritten as a new world fact. Build a fresh public-only contract.
+    contract = build_expression_contract(player_text=player_text,speaker_name=name,speaker_id=npc['id'],
+        fallback_line=body,fallback_source='background.validated_history' if history and operation=='simple_explanation' else 'background.authorized_identity_or_public',
+        forced_operation=speech_operation, extra_facts=extra,
+        resolution={"social": {"dialogue_authority": {"knowledge_posture": posture}}})
+    audit = dict(adopted=False,reason='disabled',operation=speech_operation)
+    delivered = body
+    withheld = push_withheld_phrases(_withheld_phrases(scene, extra or []))
+    try:
+        if contract is not None and not expression_generation_disabled():
+            attempt = request_expression(contract)
+            candidate = attempt.get('text','')
+            validation = validate_expression(candidate, contract) if attempt.get('ok') else {'adopt': False, 'reasons': ['provider_unavailable']}
+            # Preserve predicate order and polarity as well as vocabulary. The
+            # general lexical validator alone cannot reject negated/reversed claims.
+            if validation['adopt'] and speech_operation in {'faithful_paraphrase', 'simple_explanation'}:
+                def relation_words(value):
+                    value = _plain(value).lower().replace("i'm", 'i am').replace("that's", 'that is')
+                    return [w for w in _tokens(value) if w not in {'a', 'an', 'the'}]
+                if relation_words(candidate) != relation_words(body):
+                    validation = dict(adopt=False, reasons=['background_relation_changed'])
+            audit = dict(adopted=bool(validation['adopt']), validation=validation, attempt=attempt, contract=contract)
+            if validation['adopt']:
+                delivered = candidate
+    finally:
+        reset_withheld_phrases(withheld)
+    # Store only validated speech in existing memory. No freeform biography or
+    # consequential state mutation is supported by this contract.
+    remember_background_exchange(session,npc_id=npc['id'],player_text=player_text,response=delivered,social_receipt=receipt)
+    if receipt and receipt not in npc['social_receipts']:
+        npc['social_receipts'].append(receipt)
+    session['last_background_expression'] = audit
+    return wrap_speech(name,delivered,'')

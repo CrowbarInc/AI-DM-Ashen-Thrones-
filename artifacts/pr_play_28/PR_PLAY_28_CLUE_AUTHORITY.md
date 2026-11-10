@@ -1,0 +1,23 @@
+# PR-PLAY-28 clue authority
+
+## Original chain and independent sources
+
+Patrol ASK is interpreted/bound to the accessible tavern_runner. `game/social.py::_next_topic_to_reveal` selects patrol_rumor. `authorize_npc_disclosure` emits speaker_id/source_id, permission, authorized proposition, authorized clue id/text, epistemic status and authored-source provenance. Resolution records action_id=tavern_runner (target/action key, not a unique event UUID), prompt, kind=question, success, target binding, topic_revealed and disclosure authorization. Persisted session-log ordinal plus turn counter and exact player input distinguish the originating turn.
+
+`game/api.py` authoritative resolution landing calls `game/clues.py::apply_socially_revealed_leads`. It re-resolves the authored source and validates proposed clue strings/id before writing clue knowledge and overlay mirrors. The primary event `social_lead_revealed(muddy_footprints_northwest)` records scene_id, npc_id, topic_id.
+
+The crossroads lead is **not supported by patrol_rumor itself**. The existing `ensure_scene_has_minimum_actionable_lead` rule, after an information-bearing successful unchecked local social interaction with no actionable pending lead, selects authored scene discoverable text via `_pick_actionable_lead_from_discoverable_clues`. `_apply_extracted_social_leads` writes the registry, compatibility pending lead and `social_extracted_lead(lead_frontier_gate_old_trading_crossroads)` with source=discoverable_clue:old_trading_crossroads. Resolution metadata records minimum_actionable_lead, enforced_lead_id/source and lead_landing. That independent authored scene source and host rule explain the second effect. It must not be attributed to the NPC topic alone.
+
+## Confirmed mismatch: evaluator (Case B)
+
+`tools/playtest/gameplay.py::evaluate` previously called `compare_overlays` without any ordinary-turn evidence. `tools/playtest/overlays.py` implemented only accepted-opening projections. Its accepted=false branch unconditionally reported opening_not_accepted_or_ordinary_turn_authority_unavailable. Both campaign_started snapshots were true, and the turn was question rather than scene_opening. Existing engine evidence was not consulted. The historical minimal replay also omitted log/scene evidence; that omission is not authority proof and is not repaired by relaxing engine rules.
+
+Repair is evaluator-only: pass the action/turn response; new `tools/playtest/social_overlay_authority.py::social_overlay_projection` requires a started campaign, stable active scene, one advanced turn, append-only single persisted log record, exact player input and response action binding, successful unchecked question/social_probe, resolved accessible local NPC, complete authored scene snapshot, exact source reauthorization, selector agreement, clue and hook agreement, and uncontradicted disclosure receipt.
+
+It replays only host source-based clue landing and minimum-lead selection on deep copies of the pre-turn world/session/resolution, with no generated prose. Exact expected world event log and active overlay must match. The complete overlay comparison continues rejecting other scene/root changes. Receipts include originating player action, source id, disclosure, authored scene, reconstructed events and minimum-lead decision. Missing/malformed/incomplete evidence fails closed. Original opening validation is unchanged; ordinary turns do not require a new opening-acceptance receipt.
+
+No mutation-name whitelist, provider judge, engine authority expansion, provenance schema migration or integrity bypass. General ordinary-turn effects without an overlay delta retain existing behavior. Other overlay-changing effect families remain unsupported and conservatively rejected; this is a targeted social-clue interpretation, not a general effect authorization system.
+
+Negative tests remove/change action/log/scene/lifecycle evidence, topic policy, speaker, clue id, event id, disclosure receipt, hook and response binding; inject unrelated overlay and inventory effects. Engine disclosure rechecks remain in place. Full integration checks character/campaign/combat/conditions unchanged and world equal to the normal world tick plus the two identified events. Exact outcomes and limitations appear in TEST_RESULTS and FINAL_VERDICT.
+
+Fixture integrity: the one-row discovery metadata update in the maintained benchmark world is accompanied by its world.json digest in manifest.json and MANIFEST_SHA256 in tools/atgb/baseline.py. The manifest source note records this transformation; all other frozen fixture files are unchanged. Integrity verification remains strict.

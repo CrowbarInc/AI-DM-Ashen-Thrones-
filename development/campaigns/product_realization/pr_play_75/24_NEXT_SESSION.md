@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 24 NEXT SESSION
+
+Proceed toward PR-PLAY-76 — GENERAL-PURPOSE ACTION ADJUDICATION AND ENVIRONMENTAL INTERACTION. Safe dynamic identities persist, bounded conversation works, and remaining gaps are noncritical. Preserve authority and isolation; do not implement PR76 in this cycle or rerun/tune this frozen holdout. Do not create another stabilization cycle solely for shallow personalities, repeated phrasing, historical failures or unavailable paint timing. Read 01/04/13/18/23, metrics.json, source_task.diff, final_source.json, final browser/HTTP results and exact regression comparison. No commit or push without authorization.

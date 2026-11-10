@@ -1,0 +1,105 @@
+- complementary:
+  - generic: UI Mode
+  - combobox "UI Mode":
+    - option "Player" [selected]
+    - option "Author"
+    - option "Debug"
+  - button "Play"
+  - button "Character"
+  - button "World"
+  - heading "Play" [level=2]
+  - strong: Galinor
+  - text: — Level 1 Wizard
+  - text: "HP: 8/8"
+  - text: "AC: 12 | Touch 12 | Flat-Footed 10"
+  - text: "Conditions: none"
+  - heading "Save Status" [level=3]
+  - strong: "Last saved:"
+  - text: 11/5/2026, 7:50:07 PM
+  - strong: "Active scene at save:"
+  - text: old_milestone
+  - strong: "Save data exists:"
+  - text: "Yes"
+  - generic: Auto-saves on each action/chat. 2 clues, 7 log entries.
+  - heading "Scene & Mode" [level=3]
+  - strong: "Scene:"
+  - text: Old Milestone
+  - strong: "Mode:"
+  - text: exploration
+  - generic: Narration Mode
+  - combobox "Narration Mode":
+    - option "Terse"
+    - option "Standard" [selected]
+    - option "Vivid"
+    - option "Tactical"
+    - option "Investigative"
+  - generic: Modes change narration style only — mechanics stay the same.
+  - heading "Combat" [level=3]
+  - generic: Combat inactive.
+  - generic: No living enemies.
+  - button "Roll Initiative"
+  - button "End Turn"
+  - heading "Action Helper" [level=3]
+  - generic: Target
+  - combobox
+  - generic: Action Type
+  - combobox:
+    - option "Attack" [selected]
+    - option "Spell"
+    - option "Skill"
+    - option "Freeform"
+  - generic: Attack
+  - combobox:
+    - option "Quarterstaff (+0)" [selected]
+    - option "Light Crossbow (+2)"
+  - checkbox "Risky Strike"
+  - text: Risky Strike
+  - checkbox "Defensive Stance"
+  - text: Defensive Stance
+  - button "Submit Attack"
+  - heading "Controls" [level=3]
+  - button "Clear Log"
+  - button "Reset Combat"
+  - button "New Campaign"
+  - generic "Save Slots"
+- main:
+  - heading "Old Milestone" [level=1]
+  - generic: A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.
+  - generic: "Suggested Actions:"
+  - button "Examine the Weathered milestone (already searched)"
+  - button "Examine the Mud prints (already searched)" [active]
+  - button "Examine A weathered stone milestone leans bes"
+  - button "Examine The mud around the marker is churned"
+  - button "Examine The track continues a short way past"
+  - generic: GM
+  - generic: Rain spatters soot-dark stone beneath frayed banners that hang limply above Cinderwatch's eastern gate. A well-appointed townhouse overlooks the square, its noble colors a quiet contrast to the muddied clamor of the gate district. Refugees, wagons, and foot traffic clog the muddy approach, pressing forward as guards hold the choke point firmly. Near the gate, a gate serjeant manages the crowd with practiced eyes, intermittently glancing at the roster board. Threadbare watchers and ragged strangers cluster along the muddy gate line, while a tavern runner calls out offers of hot stew and paid rumors beside a rain barrel. The notice board nearby catches your eye, listing the new taxes and curfews imposed by the city, and prominently featuring a warning about a missing patrol. Ash Compact census delays have also tightened the eastern caravan's choke point, adding to the tension and chaos in the area.
+  - generic: Galinor
+  - generic: I examine the Notice board.
+  - generic: GM
+  - generic: The missing patrol was last seen taking the northwest mud track past the crates.
+  - generic: Galinor
+  - generic: I follow the missing patrol rumor.
+  - generic: GM
+  - generic: You arrive at Old Milestone.
+  - generic: Galinor
+  - generic: I examine the Weathered milestone.
+  - generic: GM
+  - generic: Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.
+  - generic: Galinor
+  - generic: Survey the uncertain trail yourself
+  - generic: GM
+  - generic: You commit to surveying the ground beyond the milestone yourself. Reporting to the watch is no longer your response to this discovery. You can now record the limits of your survey here.
+  - generic: Galinor
+  - generic: Record the limits of your survey
+  - generic: GM
+  - generic: "You record your survey: the overlapping prints remain inconclusive. Your survey is now recorded; you have not warned the watch. You can return to the gate or continue investigating here."
+  - generic: Galinor
+  - generic: I examine the Mud prints.
+  - generic: GM
+  - generic: Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.
+  - generic: Galinor
+  - generic: Examine the Mud prints (already searched)
+  - generic: System
+  - generic: Resolving action...
+  - textbox "Play by chat here. Describe what Galinor says or does."
+  - button "Send"

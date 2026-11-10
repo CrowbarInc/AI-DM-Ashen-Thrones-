@@ -1,0 +1,3 @@
+# BASELINE AND SCOPE
+
+Commit d40f1ed198236c604085f1c842ead267a8104ce2. Entry tree extensively dirty; exact git status and protected hashes are in baseline.json, relevant entry sources under entry_source/. Incremental implementation.diff compares against entry, not HEAD. Existing changes retained. Read Development Constitution, NEXT_SESSION, state-authority model, validation-evidence and review-handoff standards, Product Realization bootstrap, PR65/66/67 sources/reports/harnesses. No applicable AGENTS.md found. No delegation. Protected data and old evidence hashes checked after tests; see protected_integrity.json. No baseline approval requested or needed because protected files are not implementation targets. All existing experimental gates default off.

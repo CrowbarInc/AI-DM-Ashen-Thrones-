@@ -1,0 +1,26 @@
+# Consequential claim classification
+
+Milestone `pr_play_claim_acceptance_audit`. A consequential narrative claim asserts a material actor/object/location outcome or supplies actionable evidence about the world as established fact beyond the existing resolution, disclosure or approved fact-creation grant. The unit can be a residual clause inside an otherwise authorized sentence. Persistence is neither necessary nor sufficient for consequence.
+
+This definition follows state_authority_model (expression is not a truth store), mechanical_outcome, GM decision provenance/epistemic ceilings and referenced-surface authority. “You acquired it” can mislead without inventory changing; an authorized clue can be disclosed without creating new truth.
+
+| Category | Authority required | Available source | Persistence necessary | Immutable acceptance | Negative controls |
+|---|---|---|---|---|---|
+| Physical state change | Actor/object/quantity-specific resolved outcome | mechanical_outcome(resolution), physical adjudication, permitted mutations; resolved_transition/destination | Yes for material effects, through engine owner | Only within actual grant; investigate success=True is not retrieval | False/unresolved action, compound additional item, incidental dust |
+| Established world / inspected record | Selected readable contents, public authored fact, authorized clue or approved fact creation | referenced_surface, revealed_information, GM decision realization claims, bounded world-fact owner | No new write for existing fact disclosure; new truth needs its owner | No contents from hidden/abstract/unsupported target | Glassport crews and overseers; allow tariff/notice clue |
+| Harmless description | Incidental texture permission; no consequential residual | proposition_authority / GM decision incidental classes | Not required | Yes; no universal authored-detail requirement | Wind, gesture, creak, lantern vs evidence events such as tracks/whisper/bell |
+| Ordinary dialogue | Resolved NPC target and dialogue authority; factual status retained | social resolution, dialogue_authority, host-speech adoption, NPC-claim authority | Optional discourse memory, not canonical truth | Opinions, questions, uncertainty, refusal, repetition within contract | Unsolicited speech on inspection; incorrect speaker |
+| Speculation / testimony | Epistemic ceiling and authorized inference/premises or attributed claim | epistemic_acts, premise_claim_ids, source_claim_id, modality ranks | No world mutation; testimony may persist as claim | Qualified status may pass; hedge does not license adjacent assertion | Possible passage vs confirmed culprit; incomplete records vs invented exact roster |
+| Unsupported established assertion | None available | Explicit blocked target / missing outcome or record source | Never invent state to make text true | No; select validated truthful nonresolution before seal | All three demonstrated defects |
+
+Acquiring/dropping items requires actor/item/quantity-specific authority. Opening a locked container, moving/destroying an object or injury requires the relevant adjudicated object/actor outcome, not investigate success. mechanical_outcome lacks adapters for some physical operations; absence never grants them. Genuine travel has resolved_transition and destination authority. Current recognizers do not guarantee detection of every physical assertion.
+
+Record contents require an actual readable source, selected public clue or approved world-fact creation. A request supplies none of those. New NPC information can be authorized by the world/NPC resolver; being new is not inherently invalid. Here no such grant exists.
+
+Wind, floorboard creak, lantern flicker and mannerism need not persist or all be preauthored. Bells are context-sensitive: current perception grounding treats an audible bell as a perceptible event requiring evidence. Existing authorized/unsupported bell tests enforce that distinction; do not declare every distant bell harmless under this architecture. Tracks, blood, whispers, signals or counted rosters may be actionable evidence.
+
+NPC opinions, questions, uncertainty, refusal and repetition remain permissible within resolved speaker/dialogue authority. Testimony may use NPC-claim authority without being world truth. Quoted speech is not proof an item moved; dialogue may still contain factual assertions subject to its authority contract.
+
+Existing speculation/inference/testimony distinctions use proposition_authority epistemic frames and GM decision epistemic_acts, source_claim_id, premise_claim_ids and modality ranks. They are bounded. A hedge does not authorize unrelated certainty, cause or new factual premises elsewhere in the sentence. Unknown records do not license exact counts.
+
+The selected implementation constrains only explicitly closed inspect/investigate routes. It must not ban all new details, all empty claims, all unchanged state or all new NPCs. It may replace provider decoration on those closed routes with the existing authoritative rendering and visible surroundings; that limited style tradeoff is explicit. Protect ordinary improvisation elsewhere with baseline and post-implementation controls.

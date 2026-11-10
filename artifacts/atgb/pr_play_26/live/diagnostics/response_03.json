@@ -1,0 +1,103 @@
+{
+  "latency_seconds": 0.9882380000053672,
+  "response": {
+    "id": "resp_0556cbdc06f9a0e3006ae7abfeea9487d2a1b9574d37050286",
+    "created_at": 1793567742.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-4.1-mini-2025-04-14",
+    "object": "response",
+    "output": [
+      {
+        "id": "msg_0556cbdc06f9a0e3006ae7abff8f0887d29bc2d3220e85d5e2",
+        "content": [
+          {
+            "annotations": [],
+            "text": "I've got hot stew and rumors to share.",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 0.2,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 1.0,
+    "background": false,
+    "completed_at": 1793567743.0,
+    "conversation": null,
+    "max_output_tokens": 80,
+    "max_tool_calls": null,
+    "moderation": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "context": null,
+      "effort": null,
+      "generate_summary": null,
+      "mode": null,
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 221,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 10,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 231
+    },
+    "user": null,
+    "access_programs": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "presence_penalty": 0.0,
+    "store": true,
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    }
+  },
+  "sdk_request_id": "req_d8a11e0b1a1d4773a7be408e8e0b992e"
+}

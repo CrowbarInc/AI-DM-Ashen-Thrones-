@@ -1,0 +1,34 @@
+{
+  "verification_budget": {
+    "request_limit": 4,
+    "input_tokens": 3000,
+    "output_tokens": 600,
+    "total_tokens": 3000,
+    "source": "default",
+    "override": false,
+    "historical_unenforced_total": 200000
+  },
+  "limits": [
+    4,
+    3000,
+    600,
+    3000
+  ],
+  "historical_200000_rejected": true,
+  "ceiling_after_rejection": [
+    4,
+    3000,
+    600,
+    3000
+  ],
+  "oversized_estimated_input": 28000,
+  "oversized_refusal": "provider calls disabled",
+  "oversized_dispatched": false,
+  "oversized_invoke_calls": 0,
+  "oversized_error": "ProviderBudgetRefused",
+  "within_budget_refusal": "provider calls disabled",
+  "within_budget_dispatched": false,
+  "within_budget_local_stub_calls": 0,
+  "within_budget_error": "ProviderBudgetRefused",
+  "live_provider_calls": 0
+}

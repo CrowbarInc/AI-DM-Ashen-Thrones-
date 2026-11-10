@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="17" time="8.130" timestamp="2026-11-08T23:04:41.957791-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_preseal_authority" name="test_closed_candidates_are_prepared_validated_and_sealed[authored_hidden-You pry up the hopper and pocket the brass token.]" time="0.082" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_closed_candidates_are_prepared_validated_and_sealed[authored_abstract_reference-The ledger lists eight named crews bound for Glassport.]" time="0.011" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_closed_candidates_are_prepared_validated_and_sealed[unsupported-The kiln schedule names four new overseers.]" time="0.005" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_http_publication_matches_prepared_authority[I inspect the brass token.-You pry up the hopper and pocket the brass token.-authored_hidden]" time="0.783"><failure message="assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}&#10;  &#10;  Omitting 8 identical items, use -vv to show&#10;  Differing items:&#10;  {'event_log': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': &quot;The Ash Cowl's pressure mounts.&quot;, 'source': 'ash_cowl'}]} != {'event_log': []}&#10;  {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...&#10;  &#10;  ...Full output truncated (2 lines hidden), use '-vv' to show">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000254C4677F50&gt;
+player_request = 'I inspect the brass token.'
+bad = 'You pry up the hopper and pocket the brass token.'
+authority = 'authored_hidden'
+
+    @pytest.mark.parametrize("player_request,bad,authority", [
+        ("I inspect the brass token.", "You pry up the hopper and pocket the brass token.", "authored_hidden"),
+        ("I inspect the shipping ledger.", "The ledger lists eight named crews bound for Glassport.", "authored_abstract_reference"),
+        ("I inspect the glass kiln schedule.", "The kiln schedule names four new overseers.", "unsupported"),
+    ])
+    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):
+        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())
+        before_character = copy.deepcopy(storage.load_character())
+        before_world = copy.deepcopy(storage.load_world())
+        data = _chat(monkeypatch, player_request, bad)
+        line = _facing(data)
+        assert line and line != bad
+        assert not any(term in line.lower() for term in ("token", "sealed under", "pocket", "glassport", "eight", "overseers"))
+        assert storage.load_character() == before_character
+&gt;       assert storage.load_world() == before_world
+E       assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}
+E         
+E         Omitting 8 identical items, use -vv to show
+E         Differing items:
+E         {'event_log': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': "The Ash Cowl's pressure mounts.", 'source': 'ash_cowl'}]} != {'event_log': []}
+E         {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\test_pr_play_preseal_authority.py:71: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_preseal_authority" name="test_http_publication_matches_prepared_authority[I inspect the shipping ledger.-The ledger lists eight named crews bound for Glassport.-authored_abstract_reference]" time="0.662"><failure message="assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}&#10;  &#10;  Omitting 8 identical items, use -vv to show&#10;  Differing items:&#10;  {'event_log': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': &quot;The Ash Cowl's pressure mounts.&quot;, 'source': 'ash_cowl'}]} != {'event_log': []}&#10;  {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...&#10;  &#10;  ...Full output truncated (2 lines hidden), use '-vv' to show">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000254C46B0350&gt;
+player_request = 'I inspect the shipping ledger.'
+bad = 'The ledger lists eight named crews bound for Glassport.'
+authority = 'authored_abstract_reference'
+
+    @pytest.mark.parametrize("player_request,bad,authority", [
+        ("I inspect the brass token.", "You pry up the hopper and pocket the brass token.", "authored_hidden"),
+        ("I inspect the shipping ledger.", "The ledger lists eight named crews bound for Glassport.", "authored_abstract_reference"),
+        ("I inspect the glass kiln schedule.", "The kiln schedule names four new overseers.", "unsupported"),
+    ])
+    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):
+        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())
+        before_character = copy.deepcopy(storage.load_character())
+        before_world = copy.deepcopy(storage.load_world())
+        data = _chat(monkeypatch, player_request, bad)
+        line = _facing(data)
+        assert line and line != bad
+        assert not any(term in line.lower() for term in ("token", "sealed under", "pocket", "glassport", "eight", "overseers"))
+        assert storage.load_character() == before_character
+&gt;       assert storage.load_world() == before_world
+E       assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}
+E         
+E         Omitting 8 identical items, use -vv to show
+E         Differing items:
+E         {'event_log': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': "The Ash Cowl's pressure mounts.", 'source': 'ash_cowl'}]} != {'event_log': []}
+E         {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\test_pr_play_preseal_authority.py:71: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_preseal_authority" name="test_http_publication_matches_prepared_authority[I inspect the glass kiln schedule.-The kiln schedule names four new overseers.-unsupported]" time="0.536"><failure message="assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}&#10;  &#10;  Omitting 8 identical items, use -vv to show&#10;  Differing items:&#10;  {'event_log': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': &quot;The Ash Cowl's pressure mounts.&quot;, 'source': 'ash_cowl'}]} != {'event_log': []}&#10;  {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...&#10;  &#10;  ...Full output truncated (2 lines hidden), use '-vv' to show">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000254C488A8A0&gt;
+player_request = 'I inspect the glass kiln schedule.'
+bad = 'The kiln schedule names four new overseers.', authority = 'unsupported'
+
+    @pytest.mark.parametrize("player_request,bad,authority", [
+        ("I inspect the brass token.", "You pry up the hopper and pocket the brass token.", "authored_hidden"),
+        ("I inspect the shipping ledger.", "The ledger lists eight named crews bound for Glassport.", "authored_abstract_reference"),
+        ("I inspect the glass kiln schedule.", "The kiln schedule names four new overseers.", "unsupported"),
+    ])
+    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):
+        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())
+        before_character = copy.deepcopy(storage.load_character())
+        before_world = copy.deepcopy(storage.load_world())
+        data = _chat(monkeypatch, player_request, bad)
+        line = _facing(data)
+        assert line and line != bad
+        assert not any(term in line.lower() for term in ("token", "sealed under", "pocket", "glassport", "eight", "overseers"))
+        assert storage.load_character() == before_character
+&gt;       assert storage.load_world() == before_world
+E       assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}
+E         
+E         Omitting 8 identical items, use -vv to show
+E         Differing items:
+E         {'event_log': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': "The Ash Cowl's pressure mounts.", 'source': 'ash_cowl'}]} != {'event_log': []}
+E         {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\test_pr_play_preseal_authority.py:71: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_preseal_authority" name="test_selected_notice_clue_takes_precedence_over_stale_closed_classification" time="0.003" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_resolved_acquisition_remains_narratable" time="0.003" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_resolved_physical_outcome_takes_precedence" time="0.002" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_genuine_travel_remains_narratable" time="0.002" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_ordinary_npc_speech_is_unchanged[The clerk says, &quot;I prefer the morning shift.&quot;]" time="0.002" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_ordinary_npc_speech_is_unchanged[The clerk says, &quot;I am not sure.&quot;]" time="0.002" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_ordinary_npc_speech_is_unchanged[The clerk asks, &quot;Which record do you mean?&quot;]" time="0.002" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_sensory_improvisation_outside_closed_path_is_unchanged" time="0.002" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_no_classification_is_not_inferred_from_candidate_words" time="0.002" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_preparation_is_validated_before_replacement_and_never_retries" time="0.003" /><testcase classname="tests.test_pr_play_preseal_authority" name="test_already_accepted_text_is_never_reprepared" time="0.002" /></testsuite></testsuites>

@@ -1,0 +1,92 @@
+[
+  {
+    "path": "/api/state",
+    "before_status": 200,
+    "after_status": 200,
+    "before_sentinel": false,
+    "after_sentinel": false,
+    "projection_selector": "_project_state_for_ui_mode",
+    "authorization_before": "requested mode policy only; no independent authorization",
+    "authorization_after": "player-only policy"
+  },
+  {
+    "path": "/api/state?ui_mode=author",
+    "before_status": 200,
+    "after_status": 403,
+    "before_sentinel": true,
+    "after_sentinel": false,
+    "projection_selector": "_project_state_for_ui_mode",
+    "authorization_before": "requested mode policy only; no independent authorization",
+    "authorization_after": "shared resolver rejects privileged mode before data access"
+  },
+  {
+    "path": "/api/state?ui_mode=debug",
+    "before_status": 200,
+    "after_status": 403,
+    "before_sentinel": true,
+    "after_sentinel": false,
+    "projection_selector": "_project_state_for_ui_mode",
+    "authorization_before": "requested mode policy only; no independent authorization",
+    "authorization_after": "shared resolver rejects privileged mode before data access"
+  },
+  {
+    "path": "/api/log",
+    "before_status": 200,
+    "after_status": 200,
+    "before_sentinel": false,
+    "after_sentinel": false,
+    "projection_selector": "_project_log_entry_for_ui_mode",
+    "authorization_before": "requested mode policy only; no independent authorization",
+    "authorization_after": "player-only policy"
+  },
+  {
+    "path": "/api/log?ui_mode=author",
+    "before_status": 200,
+    "after_status": 403,
+    "before_sentinel": false,
+    "after_sentinel": false,
+    "projection_selector": "_project_log_entry_for_ui_mode",
+    "authorization_before": "requested mode policy only; no independent authorization",
+    "authorization_after": "shared resolver rejects privileged mode before data access"
+  },
+  {
+    "path": "/api/log?ui_mode=debug",
+    "before_status": 200,
+    "after_status": 403,
+    "before_sentinel": true,
+    "after_sentinel": false,
+    "projection_selector": "_project_log_entry_for_ui_mode",
+    "authorization_before": "requested mode policy only; no independent authorization",
+    "authorization_after": "shared resolver rejects privileged mode before data access"
+  },
+  {
+    "path": "/api/debug_trace",
+    "before_status": 403,
+    "after_status": 403,
+    "before_sentinel": false,
+    "after_sentinel": false,
+    "projection_selector": "direct diagnostic/metadata return",
+    "authorization_before": "requested mode policy only; no independent authorization",
+    "authorization_after": "player-only policy"
+  },
+  {
+    "path": "/api/debug_trace?ui_mode=debug",
+    "before_status": 200,
+    "after_status": 403,
+    "before_sentinel": true,
+    "after_sentinel": false,
+    "projection_selector": "direct diagnostic/metadata return",
+    "authorization_before": "requested mode policy only; no independent authorization",
+    "authorization_after": "shared resolver rejects privileged mode before data access"
+  },
+  {
+    "path": "/api/snapshots",
+    "before_status": 200,
+    "after_status": 200,
+    "before_sentinel": false,
+    "after_sentinel": false,
+    "projection_selector": "direct diagnostic/metadata return",
+    "authorization_before": "requested mode policy only; no independent authorization",
+    "authorization_after": "player-only policy"
+  }
+]

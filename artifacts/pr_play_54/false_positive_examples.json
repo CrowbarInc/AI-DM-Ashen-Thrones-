@@ -1,0 +1,42 @@
+[
+  {
+    "id": "P1",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "text": "At sundown, the guard makes his rounds along the west road.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "ungrounded_authoritative_rule"
+      ],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S21",
+    "category": "incidental_debris",
+    "group": "positive",
+    "text": "A little dust lies in your pack.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:items_added"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:items_added"
+      ],
+      "decision": "PASS"
+    }
+  }
+]

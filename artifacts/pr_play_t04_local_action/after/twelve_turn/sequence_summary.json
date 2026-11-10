@@ -1,0 +1,285 @@
+{
+  "elapsed_ms": 2616.811,
+  "live_provider_calls": 0,
+  "network_blocks": [],
+  "turns": [
+    {
+      "id": "T01",
+      "text": "I stop under the gate and look around. What is actually in front of me?",
+      "status": 200,
+      "visible": "Provider calls are disabled for this run, so no live narration was generated.",
+      "kind": "observe",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "reason": null,
+      "action_owner": null,
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "publication": "Provider calls are disabled for this run, so no live narration was generated.",
+      "clues": [],
+      "discovered": null
+    },
+    {
+      "id": "T02",
+      "text": "Gate Guard, do you have a moment?",
+      "status": 200,
+      "visible": "Guard Captain says, \"I couldn't tell you.\"",
+      "kind": "question",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "reason": null,
+      "action_owner": null,
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "publication": "Guard Captain says, \"I couldn't tell you.\"",
+      "clues": [],
+      "discovered": null
+    },
+    {
+      "id": "T03",
+      "text": "You mentioned the patrol. What have you heard?",
+      "status": 200,
+      "visible": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\"",
+      "kind": "question",
+      "success": true,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "reason": null,
+      "action_owner": null,
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "publication": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\"",
+      "clues": [
+        "lead_frontier_gate_old_milestone",
+        "social_frontier_gate_guard_captain_patrol"
+      ],
+      "discovered": null
+    },
+    {
+      "id": "T04",
+      "text": "I walk over to the notice board and put a hand on the frame.",
+      "status": 200,
+      "visible": "You walk over to the notice board and rest a hand on its frame. You remain in Cinderwatch Gate District.",
+      "kind": "conversational_answer",
+      "success": true,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "reason": "transient_local_action_completed",
+      "action_owner": "local_interaction",
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "publication": "You walk over to the notice board and rest a hand on its frame. You remain in Cinderwatch Gate District.",
+      "clues": [
+        "lead_frontier_gate_old_milestone",
+        "social_frontier_gate_guard_captain_patrol"
+      ],
+      "discovered": null,
+      "transient_local_action": {
+        "status": "completed",
+        "category": "transient_local_action",
+        "reason": "transient_local_action_completed",
+        "target_id": "notice_board",
+        "label": "Notice board",
+        "action_category": "local_movement_and_physical_contact",
+        "categories": [
+          "local_movement",
+          "physical_contact"
+        ],
+        "completion": {
+          "local_movement": "completed",
+          "physical_contact": "completed"
+        },
+        "authority_basis": {
+          "source": "authored_interactable_visible_catalog",
+          "visible_catalog_kind": "inspect_target",
+          "referenced_surface_authority": "authored_interactable",
+          "existence": true,
+          "visibility": true,
+          "inspectability": true,
+          "explicit_access_block": false
+        },
+        "scene_transition": false,
+        "persistent_state_changed": false,
+        "narration_authorized": true,
+        "player_facing_text": "You walk over to the notice board and rest a hand on its frame. You remain in Cinderwatch Gate District.",
+        "scene_id": "frontier_gate"
+      },
+      "accepted": {
+        "text": "You walk over to the notice board and rest a hand on its frame. You remain in Cinderwatch Gate District.",
+        "immutable": true,
+        "hard_valid": true,
+        "authorization_source": "conversational_decision:transient_local_action_completed"
+      }
+    },
+    {
+      "id": "T05",
+      "text": "Read me the missing-patrol notice, not the tax lines.",
+      "status": 200,
+      "visible": "You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "kind": "discover_clue",
+      "success": true,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "reason": null,
+      "action_owner": null,
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "publication": "You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "clues": [
+        "lead_frontier_gate_old_milestone",
+        "notice_patrol_route",
+        "social_frontier_gate_guard_captain_patrol"
+      ],
+      "discovered": null
+    },
+    {
+      "id": "T06",
+      "text": "I try to copy the patrol warning onto my sleeve with a bit of mud so I won't forget the wording.",
+      "status": 200,
+      "visible": "That part is not supported here. It was not carried out.",
+      "kind": "conversational_decline",
+      "success": false,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "reason": "unsupported_physical_manipulation",
+      "action_owner": null,
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "publication": "You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "clues": [
+        "lead_frontier_gate_old_milestone",
+        "notice_patrol_route",
+        "social_frontier_gate_guard_captain_patrol"
+      ],
+      "discovered": null
+    },
+    {
+      "id": "T07",
+      "text": "Handle it.",
+      "status": 200,
+      "visible": "Provider calls are disabled for this run, so no live narration was generated.",
+      "kind": null,
+      "success": null,
+      "resolved_transition": null,
+      "target_scene_id": null,
+      "reason": null,
+      "action_owner": null,
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "publication": "Provider calls are disabled for this run, so no live narration was generated.",
+      "clues": [
+        "lead_frontier_gate_old_milestone",
+        "notice_patrol_route",
+        "social_frontier_gate_guard_captain_patrol"
+      ],
+      "discovered": null
+    },
+    {
+      "id": "T08",
+      "text": "Don't send me anywhere yet. I'll choose after I know what the board actually says.",
+      "status": 200,
+      "visible": "The action stands, and no further narration request was sent.",
+      "kind": "question",
+      "success": false,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "reason": null,
+      "action_owner": null,
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "publication": "The action stands, and no further narration request was sent.",
+      "clues": [
+        "lead_frontier_gate_old_milestone",
+        "notice_patrol_route",
+        "social_frontier_gate_guard_captain_patrol"
+      ],
+      "discovered": null
+    },
+    {
+      "id": "T09",
+      "text": "What did that notice say about where the patrol was last seen?",
+      "status": 200,
+      "visible": "You examine the notice again. Previously disclosed here: The missing patrol was last seen taking the northwest mud track past the crates. The examination adds nothing new to what you already know.",
+      "kind": "already_searched",
+      "success": false,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "reason": null,
+      "action_owner": null,
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "publication": "You examine the notice again. Previously disclosed here: The missing patrol was last seen taking the northwest mud track past the crates. The examination adds nothing new to what you already know.",
+      "clues": [
+        "lead_frontier_gate_old_milestone",
+        "notice_patrol_route",
+        "social_frontier_gate_guard_captain_patrol"
+      ],
+      "discovered": null
+    },
+    {
+      "id": "T10",
+      "text": "Can I trade my dry cloak for the tavern runner's stew?",
+      "status": 200,
+      "visible": "No nearby tavern is currently established in this scene.",
+      "kind": "adjudication_query",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "reason": null,
+      "action_owner": null,
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "publication": "No nearby tavern is currently established in this scene.",
+      "clues": [
+        "lead_frontier_gate_old_milestone",
+        "notice_patrol_route",
+        "social_frontier_gate_guard_captain_patrol"
+      ],
+      "discovered": null
+    },
+    {
+      "id": "T11",
+      "text": "I follow the missing patrol rumor toward the northwest track.",
+      "status": 200,
+      "visible": "You arrive at Old Milestone.",
+      "kind": "scene_transition",
+      "success": true,
+      "resolved_transition": true,
+      "target_scene_id": "old_milestone",
+      "reason": null,
+      "action_owner": null,
+      "scene_before": "frontier_gate",
+      "scene_after": "old_milestone",
+      "publication": "You arrive at Old Milestone.",
+      "clues": [
+        "lead_frontier_gate_old_milestone",
+        "notice_patrol_route",
+        "social_frontier_gate_guard_captain_patrol"
+      ],
+      "discovered": null
+    },
+    {
+      "id": "T12",
+      "text": "I step back from the notice board.",
+      "status": 200,
+      "visible": "That part is not supported here. It was not carried out.",
+      "kind": "interact",
+      "success": false,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "reason": null,
+      "action_owner": null,
+      "scene_before": "old_milestone",
+      "scene_after": "old_milestone",
+      "publication": "You arrive at Old Milestone.",
+      "clues": [
+        "lead_frontier_gate_old_milestone",
+        "notice_patrol_route",
+        "social_frontier_gate_guard_captain_patrol"
+      ],
+      "discovered": null
+    }
+  ]
+}

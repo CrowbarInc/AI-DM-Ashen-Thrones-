@@ -1,0 +1,62 @@
+{
+  "resolution_available": false,
+  "historical_structured_effects": null,
+  "projection": {
+    "kind": "investigate",
+    "state_changes": {}
+  },
+  "validation": {
+    "decision": "FAIL",
+    "semantic": {
+      "decision": "PASS",
+      "reasons": [],
+      "claims": [],
+      "provider_requests": 0,
+      "coverage": "deterministic_frames_not_semantic_proof"
+    },
+    "legacy": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:items_added"
+      ],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": false,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [
+          {
+            "category": "items_added",
+            "claim": "the key",
+            "supported": false
+          },
+          {
+            "category": "items_added",
+            "claim": "place it in your pack",
+            "supported": false
+          }
+        ],
+        "reasons": [
+          "unsupported_mechanical_claim:items_added"
+        ]
+      },
+      "consequential_validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      }
+    },
+    "coverage": {
+      "decision": "PASS",
+      "facts": [],
+      "scope": "bounded_deterministic_coverage_not_semantic_proof"
+    }
+  }
+}

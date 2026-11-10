@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 09 NPC KNOWLEDGE BOUNDARIES
+
+NPC view contains accepted identity/role/location, public population support and relevant validated speech. Hidden GM facts, undiscovered clues, branch flags and unrestricted world state are not supplied to the dialogue provider. Questions do not become knowledge. Unestablished road history receives uncertainty. Quest, treasure, secret-passage, noble/faction authority and unsupported assistance requests do not gain facts or effects. Browser B shows a grounded refusal and continued conversation. Host-selected public facts are shared local context; no NPC-specific plot knowledge was added.

@@ -1,0 +1,23 @@
+{
+  "source": "tests/test_grounded_marking_removal.py::test_http_lifecycle_persists_reloads_and_restores passed in the 611-test focused run. The removal and following observation sentences were also measured by measure_performance.py.",
+  "requests": [
+    "I copy the warning onto my sleeve using the available mud.",
+    "I examine the writing on my sleeve.",
+    "I wipe the warning off my sleeve.",
+    "I examine the writing on my sleeve."
+  ],
+  "observe_before": "On the sleeve, the visible writing reads: Warning: keep to the north wall.",
+  "published_removal": "You wipe the marking off the sleeve. It is no longer there. It read: Warning: keep to the north wall.",
+  "observe_after": "You look at the sleeve. No writing is visible there.",
+  "reload_observation_matches_observe_after": true,
+  "retry_same_request_id": "replay",
+  "revision_unchanged_on_retry": true,
+  "instance_id_unchanged": true,
+  "ruleset_extension": "pf1e",
+  "removal_receipt_present": true,
+  "add_receipt_kept": true,
+  "snapshot_s1_shows_warning": true,
+  "snapshot_s0_hides_later_warning": true,
+  "snapshot_s2_hides_warning": true,
+  "providers": 0
+}

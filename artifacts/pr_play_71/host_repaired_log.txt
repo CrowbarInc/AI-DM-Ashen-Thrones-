@@ -1,0 +1,122 @@
+INFO:     Started server process [32308]
+INFO:     Waiting for application startup.
+[API preflight] ok health_class=healthy checked_at=2026-11-06T00:42:11Z
+[upstream_dependent_run_gate] healthy - startup_run_valid=true; preflight_available=true; live-upstream gameplay evidence may be treated as valid.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8071 (Press CTRL+C to quit)
+INFO:     127.0.0.1:64381 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64381 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64381 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[SESSION RESET] runtime state cleared
+[API] New campaign started 773fd69321b43769105090e9
+INFO:     127.0.0.1:50444 - "POST /api/new_campaign?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50444 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50444 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50444 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+INFO:     127.0.0.1:63517 - "POST /api/start_campaign?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63517 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63517 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[CLUE DISCOVERED] notice_patrol_route
+INFO:     127.0.0.1:58592 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58592 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58592 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58618 - "GET /static/app.js HTTP/1.1" 200 OK
+[ENGINE] Scene transition -> old_milestone
+INFO:     127.0.0.1:51886 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51886 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51886 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[CLUE DISCOVERED] milestone_mud_prints
+INFO:     127.0.0.1:54031 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54031 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54031 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65143 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65143 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65143 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61948 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61948 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61948 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[CLUE DUPLICATE IGNORED] milestone_mud_prints
+INFO:     127.0.0.1:64936 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64936 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64936 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52296 - "POST /api/snapshots?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52296 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64357 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64357 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64357 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[SESSION RESET] runtime state cleared
+[API] New campaign started 8745c42b19d54d1794f99ad1
+INFO:     127.0.0.1:54748 - "POST /api/new_campaign?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54748 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54748 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54748 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+INFO:     127.0.0.1:57327 - "POST /api/start_campaign?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57327 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57327 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[CLUE DISCOVERED] notice_patrol_route
+INFO:     127.0.0.1:52110 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52110 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52110 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[ENGINE] Scene transition -> old_milestone
+INFO:     127.0.0.1:57937 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57937 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57937 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[CLUE DISCOVERED] milestone_mud_prints
+INFO:     127.0.0.1:58910 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58910 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58910 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61616 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61616 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61616 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[ENGINE] Scene transition -> frontier_gate
+INFO:     127.0.0.1:51978 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51978 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51978 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56010 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56010 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56010 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+INFO:     127.0.0.1:53955 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53955 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53955 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "POST /api/snapshots?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60885 - "POST /api/snapshots/load?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60885 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61688 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61688 - "GET /static/styles.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51175 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51175 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51175 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+INFO:     127.0.0.1:63874 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63874 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63874 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56784 - "POST /api/snapshots/load?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56784 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56784 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+INFO:     127.0.0.1:57884 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57884 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57884 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49992 - "POST /api/snapshots/load?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49992 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49992 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+INFO:     127.0.0.1:64892 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64892 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64892 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64723 - "POST /api/snapshots/load?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64723 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64723 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64723 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64723 - "GET /static/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:64723 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64723 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61418 - "POST /api/action?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61418 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61418 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK

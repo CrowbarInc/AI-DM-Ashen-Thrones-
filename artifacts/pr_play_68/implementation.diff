@@ -1,0 +1,129 @@
+--- entry/game/api.py
++++ game/api.py
+@@ -4491,6 +4491,31 @@
+     return os.environ.get("ASHEN_QUARANTINE_INVESTIGATION_NARRATION", "").strip() == "1"
+ 
+ 
++def _finalize_investigation_publication(gm, canonical_gm, response_payload, resolution, session, player_text):
++    """Shared post-persistence PR66 boundary for chat and structured actions."""
++    publication = None
++    if os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1':
++        from game.quarantined_investigation_narration import prepare_authoritative_publication
++        publication = prepare_authoritative_publication(
++            resolution, str(session.get('campaign_run_id') or session.get('session_id') or ''), player_text)
++    publication_failure = None
++    try:
++        args = (gm, canonical_gm, response_payload, resolution, session, player_text)
++        if publication is None:
++            _publish_experimental_integrated_narration(*args)
++        else:
++            _publish_experimental_integrated_narration(*args, publication=publication)
++    except Exception as exc:
++        if publication is None:
++            raise
++        publication_failure = 'publication_helper_' + type(exc).__name__
++    if publication is not None:
++        from game.quarantined_investigation_narration import verify_authoritative_publication
++        verify_authoritative_publication(
++            publication, [item for item in (gm, canonical_gm, response_payload.get('gm_output'))
++                          if isinstance(item, dict)], failure=publication_failure)
++
++
+ def _observe_quarantined_investigation_narration(resolution, scene, session, player_text: str) -> None:
+     """After the player-facing narration object exists. Never replaces it.
+ 
+@@ -5994,6 +6019,8 @@
+             'scene_transition_occurred': bool(resolution.get('resolved_transition')),
+         }
+ 
++    response_payload = _build_turn_response_payload(gm=gm, resolution=resolution, include_resolution=True)
++    _finalize_investigation_publication(gm, gm, response_payload, resolution, session, fallback_user_text)
+     append_log(
+         {
+             'timestamp': utc_iso_now(),
+@@ -6019,7 +6046,7 @@
+             },
+         }
+     )
+-    return _build_turn_response_payload(gm=gm, resolution=resolution, include_resolution=True)
++    return response_payload
+ 
+ 
+ def _complete_opening_turn_persistence_like_chat(
+@@ -6496,28 +6523,8 @@
+         include_resolution=_include_res_chat,
+     )
+     # State, clues, and clocks are already saved. This only selects response text.
+-    publication = None
+-    if os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1':
+-        from game.quarantined_investigation_narration import prepare_authoritative_publication
+-        publication = prepare_authoritative_publication(
+-            resolution, str(session.get('campaign_run_id') or session.get('session_id') or ''),
+-            player_text_for_eval)
+-    publication_failure = None
+-    try:
+-        publication_args = (gm, canonical_gm, response_payload, resolution, session, player_text_for_eval)
+-        if publication is None:
+-            _publish_experimental_integrated_narration(*publication_args)
+-        else:
+-            _publish_experimental_integrated_narration(*publication_args, publication=publication)
+-    except Exception as exc:
+-        if publication is None:
+-            raise
+-        publication_failure = 'publication_helper_' + type(exc).__name__
+-    if publication is not None:
+-        from game.quarantined_investigation_narration import verify_authoritative_publication
+-        verify_authoritative_publication(
+-            publication, [item for item in (gm, canonical_gm, response_payload.get('gm_output'))
+-                          if isinstance(item, dict)], failure=publication_failure)
++    _finalize_investigation_publication(
++        gm, canonical_gm, response_payload, resolution, session, player_text_for_eval)
+     final_text = str(canonical_gm.get("player_facing_text") or "")
+     payload_gm = response_payload.get("gm_output") if isinstance(response_payload, dict) else None
+     if mark_campaign_started and isinstance(response_payload, dict):
+--- entry/game/integrated_investigation_narration.py
++++ game/integrated_investigation_narration.py
+@@ -47,9 +47,12 @@
+     "Do not repeat, paraphrase, contradict or qualify that disclosure. "
+     "Do not narrate discoveries, outcomes, possessions, NPC actions, movement or persistent effects. "
+     "Do not invent facts, hints or hidden information. Output only complete prose sentences."
+-    " Prefer a simple introduction: You examine [the target from player_action]. "
+-    "You may use inspect or study instead of examine, or repeat an exact visible_scene observation. "
+-    "Do not add new adjectives, metaphors or subordinate clauses."
++    " The must_communicate list belongs exclusively to the engine; it is not your writing task. "
++    "Write only the lead-in. You may repeat an exact visible_scene observation, or frame the player's "
++    "attention naturally: You take a moment to examine [target]; You pause to inspect [target]; "
++    "You turn your attention to [target]; You look more closely at [target]; "
++    "You give [target] your attention. End with a period. "
++    "Use the exact target from player_action. No new adjectives, metaphors or subordinate clauses."
+ )
+ 
+ 
+@@ -81,9 +84,15 @@
+         target = re.sub(r'\s+again$', '', target, flags=re.I)
+     intro = (rf'you (?:examine|inspect|study|focus on) {re.escape(target)}'
+              rf'(?: carefully| again)?' if target else r'(?!)')
++    # Finite, nonconsequential attention frames. The target is literal and the
++    # whole sentence must match; suffix claims cannot ride an allowed opening.
++    framing = (rf'you (?:(?:take a moment to|pause to) (?:examine|inspect|study) {re.escape(target)}'
++               rf'|turn your attention to {re.escape(target)}'
++               rf'|look more closely at {re.escape(target)}'
++               rf'|give {re.escape(target)} your attention)' if target else r'(?!)')
+     for sentence in re.split(r'(?<=[.!?])\s+', raw.strip()):
+         normal = sentence.casefold().rstrip('.!?').strip()
+-        if normal in literals or re.fullmatch(intro, normal, re.I):
++        if normal in literals or re.fullmatch(intro, normal, re.I) or re.fullmatch(framing, normal, re.I):
+             continue
+         # An explicit no-new result is itself engine supplied, not an AI hint.
+         if not contract.outcome.revealed and normal in {
+@@ -273,6 +282,10 @@
+         if authoritative:
+             provider_request['engine_disclosure'] = trusted
+             provider_request['presentation_responsibility'] = 'optional introduction only; engine supplies mandatory facts'
++            # Separate writing instructions from engine-owned facts. Retain
++            # disclosure as reference so contradiction/duplication is avoidable.
++            provider_request.pop('must_communicate', None)
++            provider_request['engine_owned_facts_do_not_narrate'] = request['must_communicate']
+         raw = generator.generate(provider_request)
+         result['raw_provider_text'] = raw if isinstance(raw, str) else None
+         validation_start = time.perf_counter()

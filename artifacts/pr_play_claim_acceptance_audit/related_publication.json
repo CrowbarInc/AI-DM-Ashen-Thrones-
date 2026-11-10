@@ -1,0 +1,806 @@
+{
+  "tests/test_pr_play_79df3_classification.py::test_duplicate_refusal_does_not_publish": [
+    {
+      "request": {
+        "text": "Good day, Gate Guard.",
+        "client_request_id": "same"
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "gm_output": {
+          "player_facing_text": "Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted."
+        },
+        "resolution": {}
+      },
+      "last_publication_before": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "a1c483434a3af46a56cfef35"
+      },
+      "last_publication_after": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "a1c483434a3af46a56cfef35"
+      },
+      "turn_before": 4,
+      "turn_after": 4
+    },
+    {
+      "request": {
+        "text": "Good day, Gate Guard.",
+        "client_request_id": "same"
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "gm_output": {
+          "player_facing_text": "Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted."
+        },
+        "resolution": {}
+      },
+      "last_publication_before": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "a1c483434a3af46a56cfef35"
+      },
+      "last_publication_after": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "a1c483434a3af46a56cfef35"
+      },
+      "turn_before": 4,
+      "turn_after": 4
+    }
+  ],
+  "tests/test_pr_play_79df3_classification.py::test_two_refusals_then_gameplay_advances": [
+    {
+      "request": {
+        "text": "Good day, Gate Guard.",
+        "client_request_id": "a"
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "gm_output": {
+          "player_facing_text": "Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted."
+        },
+        "resolution": {}
+      },
+      "last_publication_before": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "6221c7813a55d9ca5285a065"
+      },
+      "last_publication_after": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "6221c7813a55d9ca5285a065"
+      },
+      "turn_before": 4,
+      "turn_after": 4
+    }
+  ],
+  "tests/test_pr_play_79df3_classification.py::test_save_reload_keeps_the_preceding_publication": [
+    {
+      "request": {
+        "text": "Good day, Gate Guard.",
+        "client_request_id": "save"
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "gm_output": {
+          "player_facing_text": "Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted."
+        },
+        "resolution": {}
+      },
+      "last_publication_before": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "ccf681df15f5688c19fea2ec"
+      },
+      "last_publication_after": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "ccf681df15f5688c19fea2ec"
+      },
+      "turn_before": 4,
+      "turn_after": 4
+    },
+    {
+      "request": {
+        "label": "after-refusal"
+      },
+      "http_status": 200,
+      "response": {
+        "public_state": {
+          "campaign": {
+            "title": "Ashen Thrones"
+          },
+          "character": {
+            "id": "galinor",
+            "name": "Galinor",
+            "class": "Wizard",
+            "level": 1,
+            "ancestry": "Human",
+            "hp": {
+              "current": 8,
+              "max": 8,
+              "nonlethal": 0
+            },
+            "ac": {
+              "normal": 12,
+              "touch": 12,
+              "flat_footed": 10
+            },
+            "initiative_bonus": 2,
+            "speed": 30,
+            "bab": 0,
+            "cmb": 0,
+            "cmd": 12,
+            "ability_scores": {
+              "str": 10,
+              "dex": 14,
+              "con": 12,
+              "int": 18,
+              "wis": 12,
+              "cha": 10
+            },
+            "saves": {
+              "fort": 1,
+              "ref": 2,
+              "will": 3
+            },
+            "attacks": [
+              {
+                "id": "quarterstaff",
+                "name": "Quarterstaff",
+                "attack_bonus": 0,
+                "type": "melee",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 6,
+                  "bonus": 0,
+                  "type": "bludgeoning"
+                }
+              },
+              {
+                "id": "crossbow",
+                "name": "Light Crossbow",
+                "attack_bonus": 2,
+                "type": "ranged",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 8,
+                  "bonus": 0,
+                  "type": "piercing"
+                }
+              }
+            ],
+            "conditions": [],
+            "inventory": [
+              {
+                "id": "spellbook",
+                "name": "Spellbook",
+                "quantity": 1,
+                "usable": false
+              }
+            ],
+            "spells": {
+              "prepared": [
+                {
+                  "id": "daze",
+                  "name": "Daze",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "detect_magic",
+                  "name": "Detect Magic",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "magic_missile",
+                  "name": "Magic Missile",
+                  "cast": false,
+                  "level": 1
+                },
+                {
+                  "id": "shield",
+                  "name": "Shield",
+                  "cast": false,
+                  "level": 1
+                }
+              ],
+              "slots": {
+                "0": 3,
+                "1": 1
+              }
+            },
+            "skills": {
+              "knowledge_arcana": 8,
+              "spellcraft": 8,
+              "perception": 4,
+              "sense_motive": 4,
+              "stealth": 4,
+              "diplomacy": 4,
+              "intimidate": 2,
+              "bluff": 2
+            }
+          },
+          "session": {
+            "session_id": "ccf681df15f5688c19fea2ec",
+            "campaign_run_id": "ccf681df15f5688c19fea2ec",
+            "active_scene_id": "frontier_gate",
+            "character_name": "Galinor",
+            "response_mode": "standard",
+            "campaign_started": true,
+            "turn_counter": 4,
+            "visited_scene_ids": [
+              "frontier_gate"
+            ]
+          },
+          "scene": {
+            "scene": {
+              "id": "frontier_gate",
+              "location": "Cinderwatch Gate District",
+              "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+              "mode": "social",
+              "visible_facts": [
+                "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                "A tavern runner trades hot stew and rumors near the rain barrel.",
+                "Threadbare watchers and refugees cluster along the muddy gate line.",
+                "Ash Compact census delays have tightened the eastern caravan choke point."
+              ]
+            }
+          },
+          "combat": {
+            "in_combat": false,
+            "round": 0,
+            "active_actor_id": "",
+            "player_turn_used": false
+          },
+          "ui": {
+            "player_can_act": true,
+            "campaign_started": true,
+            "campaign_can_start": false,
+            "living_enemies": [],
+            "scene_ids": [
+              "frontier_gate"
+            ],
+            "affordances": [
+              {
+                "id": "question_guard_captain",
+                "label": "Talk to Guard Captain",
+                "type": "question",
+                "prompt": "I talk to Guard Captain.",
+                "target_scene_id": "",
+                "target_id": "guard_captain",
+                "target_location_id": ""
+              },
+              {
+                "id": "question_tavern_runner",
+                "label": "Talk to Tavern Runner",
+                "type": "question",
+                "prompt": "I talk to Tavern Runner.",
+                "target_scene_id": "",
+                "target_id": "tavern_runner",
+                "target_location_id": ""
+              },
+              {
+                "id": "notice_board",
+                "label": "Examine the Notice board",
+                "type": "investigate",
+                "prompt": "I examine the Notice board.",
+                "target_scene_id": "",
+                "target_id": "notice_board",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_the_notice_board_lists_taxes",
+                "label": "Examine The notice board lists taxes",
+                "type": "investigate",
+                "prompt": "I examine The notice board lists taxes.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              },
+              {
+                "id": "leave_for_a_gate_serjeant_manages_the_crowd_and",
+                "label": "Leave for A gate serjeant manages the crowd and",
+                "type": "investigate",
+                "prompt": "I head toward A gate serjeant manages the crowd and.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              }
+            ],
+            "clues": {
+              "known": [],
+              "implicit": [],
+              "explicit": [],
+              "actionable": []
+            },
+            "scene_npcs": [
+              {
+                "id": "guard_captain",
+                "name": "Guard Captain",
+                "disposition": "neutral"
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "disposition": "friendly"
+              }
+            ],
+            "interaction": {
+              "active_interaction_target_id": "",
+              "active_interaction_kind": "",
+              "interaction_mode": "none"
+            }
+          },
+          "journal": {
+            "known_facts": [
+              "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+              "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+              "A notice board announces new taxes and curfews, and names a missing patrol.",
+              "A tavern runner is hawking hot stew and rumor for coin.",
+              "A ragged stranger hangs back, watching the crowd more than the queue."
+            ],
+            "discovered_clues": [],
+            "unresolved_leads": [],
+            "status_effects": [],
+            "suspicion_flags": [],
+            "active_leads": [],
+            "pursued_leads": [],
+            "stale_leads": [],
+            "resolved_leads": [],
+            "obsolete_leads": [],
+            "lead_counts": {
+              "active": 0,
+              "pursued": 0,
+              "stale": 0,
+              "resolved": 0,
+              "obsolete": 0
+            }
+          },
+          "player_name": "Galinor",
+          "campaign_run_id": "ccf681df15f5688c19fea2ec",
+          "save_summary": {
+            "saved_at": "2026-11-09T02:27:07.623061Z",
+            "save_data_exists": true,
+            "active_scene_id": "frontier_gate",
+            "discovered_clues": 0,
+            "chat_messages": 1
+          },
+          "snapshots": [
+            {
+              "id": "2026-11-09T02-27-07_9cf04693",
+              "created_at": "2026-11-09T02:27:07.076722Z",
+              "label": "after-refusal"
+            }
+          ],
+          "world": {}
+        },
+        "ok": true,
+        "ui_mode": "player",
+        "snapshot": {
+          "id": "2026-11-09T02-27-07_9cf04693",
+          "created_at": "2026-11-09T02:27:07.076722Z",
+          "label": "after-refusal"
+        }
+      },
+      "last_publication_before": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "ccf681df15f5688c19fea2ec"
+      },
+      "last_publication_after": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "ccf681df15f5688c19fea2ec"
+      },
+      "turn_before": 4,
+      "turn_after": 4
+    },
+    {
+      "request": {
+        "snapshot_id": "2026-11-09T02-27-07_9cf04693"
+      },
+      "http_status": 200,
+      "response": {
+        "public_state": {
+          "campaign": {
+            "title": "Ashen Thrones"
+          },
+          "character": {
+            "id": "galinor",
+            "name": "Galinor",
+            "class": "Wizard",
+            "level": 1,
+            "ancestry": "Human",
+            "hp": {
+              "current": 8,
+              "max": 8,
+              "nonlethal": 0
+            },
+            "ac": {
+              "normal": 12,
+              "touch": 12,
+              "flat_footed": 10
+            },
+            "initiative_bonus": 2,
+            "speed": 30,
+            "bab": 0,
+            "cmb": 0,
+            "cmd": 12,
+            "ability_scores": {
+              "str": 10,
+              "dex": 14,
+              "con": 12,
+              "int": 18,
+              "wis": 12,
+              "cha": 10
+            },
+            "saves": {
+              "fort": 1,
+              "ref": 2,
+              "will": 3
+            },
+            "attacks": [
+              {
+                "id": "quarterstaff",
+                "name": "Quarterstaff",
+                "attack_bonus": 0,
+                "type": "melee",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 6,
+                  "bonus": 0,
+                  "type": "bludgeoning"
+                }
+              },
+              {
+                "id": "crossbow",
+                "name": "Light Crossbow",
+                "attack_bonus": 2,
+                "type": "ranged",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 8,
+                  "bonus": 0,
+                  "type": "piercing"
+                }
+              }
+            ],
+            "conditions": [],
+            "inventory": [
+              {
+                "id": "spellbook",
+                "name": "Spellbook",
+                "quantity": 1,
+                "usable": false
+              }
+            ],
+            "spells": {
+              "prepared": [
+                {
+                  "id": "daze",
+                  "name": "Daze",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "detect_magic",
+                  "name": "Detect Magic",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "magic_missile",
+                  "name": "Magic Missile",
+                  "cast": false,
+                  "level": 1
+                },
+                {
+                  "id": "shield",
+                  "name": "Shield",
+                  "cast": false,
+                  "level": 1
+                }
+              ],
+              "slots": {
+                "0": 3,
+                "1": 1
+              }
+            },
+            "skills": {
+              "knowledge_arcana": 8,
+              "spellcraft": 8,
+              "perception": 4,
+              "sense_motive": 4,
+              "stealth": 4,
+              "diplomacy": 4,
+              "intimidate": 2,
+              "bluff": 2
+            }
+          },
+          "session": {
+            "session_id": "ccf681df15f5688c19fea2ec",
+            "campaign_run_id": "ccf681df15f5688c19fea2ec",
+            "active_scene_id": "frontier_gate",
+            "character_name": "Galinor",
+            "response_mode": "standard",
+            "campaign_started": true,
+            "turn_counter": 4,
+            "visited_scene_ids": [
+              "frontier_gate"
+            ]
+          },
+          "scene": {
+            "scene": {
+              "id": "frontier_gate",
+              "location": "Cinderwatch Gate District",
+              "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+              "mode": "social",
+              "visible_facts": [
+                "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                "A tavern runner trades hot stew and rumors near the rain barrel.",
+                "Threadbare watchers and refugees cluster along the muddy gate line.",
+                "Ash Compact census delays have tightened the eastern caravan choke point."
+              ]
+            }
+          },
+          "combat": {
+            "in_combat": false,
+            "round": 0,
+            "active_actor_id": "",
+            "player_turn_used": false
+          },
+          "ui": {
+            "player_can_act": true,
+            "campaign_started": true,
+            "campaign_can_start": false,
+            "living_enemies": [],
+            "scene_ids": [
+              "frontier_gate"
+            ],
+            "affordances": [
+              {
+                "id": "question_guard_captain",
+                "label": "Talk to Guard Captain",
+                "type": "question",
+                "prompt": "I talk to Guard Captain.",
+                "target_scene_id": "",
+                "target_id": "guard_captain",
+                "target_location_id": ""
+              },
+              {
+                "id": "question_tavern_runner",
+                "label": "Talk to Tavern Runner",
+                "type": "question",
+                "prompt": "I talk to Tavern Runner.",
+                "target_scene_id": "",
+                "target_id": "tavern_runner",
+                "target_location_id": ""
+              },
+              {
+                "id": "notice_board",
+                "label": "Examine the Notice board",
+                "type": "investigate",
+                "prompt": "I examine the Notice board.",
+                "target_scene_id": "",
+                "target_id": "notice_board",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_the_notice_board_lists_taxes",
+                "label": "Examine The notice board lists taxes",
+                "type": "investigate",
+                "prompt": "I examine The notice board lists taxes.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              },
+              {
+                "id": "leave_for_a_gate_serjeant_manages_the_crowd_and",
+                "label": "Leave for A gate serjeant manages the crowd and",
+                "type": "investigate",
+                "prompt": "I head toward A gate serjeant manages the crowd and.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              }
+            ],
+            "clues": {
+              "known": [],
+              "implicit": [],
+              "explicit": [],
+              "actionable": []
+            },
+            "scene_npcs": [
+              {
+                "id": "guard_captain",
+                "name": "Guard Captain",
+                "disposition": "neutral"
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "disposition": "friendly"
+              }
+            ],
+            "interaction": {
+              "active_interaction_target_id": "",
+              "active_interaction_kind": "",
+              "interaction_mode": "none"
+            }
+          },
+          "journal": {
+            "known_facts": [
+              "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+              "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+              "A notice board announces new taxes and curfews, and names a missing patrol.",
+              "A tavern runner is hawking hot stew and rumor for coin.",
+              "A ragged stranger hangs back, watching the crowd more than the queue."
+            ],
+            "discovered_clues": [],
+            "unresolved_leads": [],
+            "status_effects": [],
+            "suspicion_flags": [],
+            "active_leads": [],
+            "pursued_leads": [],
+            "stale_leads": [],
+            "resolved_leads": [],
+            "obsolete_leads": [],
+            "lead_counts": {
+              "active": 0,
+              "pursued": 0,
+              "stale": 0,
+              "resolved": 0,
+              "obsolete": 0
+            }
+          },
+          "player_name": "Galinor",
+          "campaign_run_id": "ccf681df15f5688c19fea2ec",
+          "save_summary": {
+            "saved_at": "2026-11-09T02:27:08.842909Z",
+            "save_data_exists": true,
+            "active_scene_id": "frontier_gate",
+            "discovered_clues": 0,
+            "chat_messages": 1
+          },
+          "snapshots": [
+            {
+              "id": "2026-11-09T02-27-07_9cf04693",
+              "created_at": "2026-11-09T02:27:07.076722Z",
+              "label": "after-refusal"
+            }
+          ],
+          "world": {}
+        },
+        "ok": true,
+        "ui_mode": "player",
+        "snapshot": {
+          "id": "2026-11-09T02-27-07_9cf04693",
+          "created_at": "2026-11-09T02:27:07.076722Z",
+          "label": "after-refusal"
+        }
+      },
+      "last_publication_before": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "ccf681df15f5688c19fea2ec"
+      },
+      "last_publication_after": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 4,
+        "campaign_run_id": "ccf681df15f5688c19fea2ec"
+      },
+      "turn_before": 4,
+      "turn_after": 4
+    }
+  ],
+  "tests/test_pr_play_79df3_classification.py::test_http_fallback_is_not_an_operational_refusal": [
+    {
+      "request": {
+        "text": "Gate Guard, what does the notice board say about the patrol?",
+        "client_request_id": "a51865256f934929985fbf0fb8695c44"
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "gm_output": {
+          "player_facing_text": "That request addresses someone. Nothing has been attempted."
+        },
+        "resolution": {}
+      },
+      "last_publication_before": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 1,
+        "campaign_run_id": "c046998b2afaaae5fcf96fc7"
+      },
+      "last_publication_after": {
+        "owner": "integrated_play.commit_integrated",
+        "contract": "FINAL_ENGINE_RESPONSE",
+        "final": true,
+        "dialogue_accepted": true,
+        "dialogue_published": true,
+        "visible": "Gate Guard says, \"The notice board mentions a missing patrol.\"",
+        "turn": 1,
+        "campaign_run_id": "c046998b2afaaae5fcf96fc7"
+      },
+      "turn_before": 1,
+      "turn_after": 1
+    }
+  ]
+}

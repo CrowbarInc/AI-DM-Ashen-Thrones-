@@ -1,0 +1,108 @@
+{
+  "opening": {
+    "gameplay_mutations": [
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "bookkeeping_mutations": [
+      "combat.json",
+      "session.json"
+    ],
+    "unexpected_mutations": [],
+    "integrity": true,
+    "changed_fields": {
+      "session.json": [
+        "_runtime_canonical_ctir_stamp_v1",
+        "_runtime_canonical_ctir_v1",
+        "_runtime_narration_plan_bundle_stamp_v1",
+        "_runtime_narration_plan_bundle_v1",
+        "_runtime_progression_nodes_fingerprint_v1",
+        "bounded_improvisation",
+        "campaign_started",
+        "chat_history",
+        "clocks",
+        "conversational_context",
+        "discourse_focus",
+        "emergent_actor_debug",
+        "interpretation_telemetry",
+        "last_action_debug",
+        "last_bounded_improvisation_promotion",
+        "last_turn_response_policy",
+        "narration_temporal_provenance",
+        "scene_runtime",
+        "turn_counter"
+      ],
+      "world.json": [
+        "event_log",
+        "factions"
+      ]
+    },
+    "overlay_comparison": {
+      "integrity": true,
+      "changes": [],
+      "omitted_entries": 0,
+      "total_changes": 0
+    },
+    "turn_delta": 1,
+    "log_delta": 1,
+    "campaign_started": true,
+    "scene_identity": "frontier_gate",
+    "contract": "docs/state_authority_model.md; game.api.start_campaign; PR-PLAY-04 rollback"
+  },
+  "ordinary": [
+    {
+      "turn": 1,
+      "world_equals_native_tick_plus_authorized_events": true,
+      "other_documents_unchanged": {
+        "campaign.json": true,
+        "character.json": true,
+        "combat.json": true,
+        "conditions.json": true,
+        "scenes/frontier_gate.json": true,
+        "scenes/market_quarter.json": true,
+        "scenes/old_milestone.json": true
+      },
+      "scene_unchanged": true,
+      "turn_delta": 1,
+      "log_delta": 1,
+      "overlay_integrity": true,
+      "evaluation_stop": false,
+      "new_world_events": []
+    },
+    {
+      "turn": 2,
+      "world_equals_native_tick_plus_authorized_events": true,
+      "other_documents_unchanged": {
+        "campaign.json": true,
+        "character.json": true,
+        "combat.json": true,
+        "conditions.json": true,
+        "scenes/frontier_gate.json": true,
+        "scenes/market_quarter.json": true,
+        "scenes/old_milestone.json": true
+      },
+      "scene_unchanged": true,
+      "turn_delta": 1,
+      "log_delta": 1,
+      "overlay_integrity": true,
+      "evaluation_stop": false,
+      "new_world_events": [
+        {
+          "type": "social_lead_revealed",
+          "clue_id": "muddy_footprints_northwest",
+          "scene_id": "frontier_gate",
+          "npc_id": "tavern_runner",
+          "topic_id": "patrol_rumor"
+        },
+        {
+          "type": "social_extracted_lead",
+          "clue_id": "minlead_exit_frontier_gate_old_milestone",
+          "scene_id": "frontier_gate",
+          "source": "author_exit"
+        }
+      ]
+    }
+  ],
+  "verdict": "PASS"
+}

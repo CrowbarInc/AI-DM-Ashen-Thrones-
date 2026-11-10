@@ -1,0 +1,561 @@
+{
+  "campaign_id": "pr_play_t06_persistent_manipulation",
+  "campaign_name": "PR-PLAY T06 Persistent Physical Manipulation",
+  "campaign_date": "2026-11-09",
+  "purpose": "Investigate persistent physical modification through existing authority; stop when existing item ownership and mutation contracts cannot safely carry it.",
+  "objective_status": "BLOCKED",
+  "executive_summary": "Original HTTP T06 reproduces. Parsing recovers a physical interaction but calls its verb `try` and leaves the entire copy clause as an unbound target. `_unbound_physical_decline` selects `unsupported_physical_manipulation`; `_chat_turn` returns before any physical resolver or prerequisite checks. The refusal is truthful but generic.\n\nThe known clue is present; an equipped sleeve identity, access, suitability and usable mud supply are not established. More fundamentally, inventory dictionaries can persist JSON but there is no existing item-instance modification validator/application owner, equipment binding, or later item-inspection projection for this action. Adding fields to character inventory alone would not satisfy the authority contract. The experimental physical owner has its own scene-object/posture ledger and no carried-item binding; enabling or repurposing it here would create a parallel authority.\n\nNo production files changed. No successful controlled-fixture modification is claimed. The stop conditions in sections 8 and 17 of the request apply; no fabricated A/PASS or B/PARTIAL implementation.\n\nOriginal and final T06: \u201cThat part is not supported here. It was not carried out.\u201d Character, world, scene and knowledge are unchanged. Refusal text is hard-valid and immutable; the completed-publication pointer still references T05, accurately not recording a completed inscription.\n\nFresh baseline: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). Final same selection: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). New failure identities: 0. New diagnostic controls: 6 passed / 0 failed / 0 errors / 0 skipped (6 tests). Existing physical/persistence/state-authority controls: 93 passed / 0 failed / 0 errors / 0 skipped (93 tests). Historical 408/17 is reference only; exact fresh identities are in REGRESSION_RESULTS and test_results.json. No causal repair claim for fluctuating failures.\n\nAll twelve published turns and compared authority/state fields are unchanged. T04 contact, T05 disclosure, T09 recall and T11 travel remain. T01/T07 narration, T02 NPC usefulness, T08 acknowledgment, T10 trading and T12 refusal remain deferred. Zero live provider calls; no commits/pushes.\n\nExactly one proposed next action: Conduct one bounded architecture review to assign item-instance modification ownership and define its validated mutation and inspection contract within existing character persistence.\n",
+  "changes": {
+    "production": [
+      "None; conditional implementation stopped on architectural ownership/contract gaps."
+    ],
+    "validation": [
+      "Six diagnostic provider-free HTTP tests; fresh same-node regression and existing persistence/authority selections."
+    ],
+    "tooling": [
+      "Cycle-local trace/report runners; no production tools changed."
+    ],
+    "documentation": [
+      "Twelve reports and a prepended NEXT_SESSION entry, preserving historical suffix."
+    ],
+    "generated_artifacts": [
+      "Before/final T06 traces, source manifests, twelve-turn comparison, JUnit, prerequisite and architecture evidence."
+    ]
+  },
+  "testing": {
+    "focused": "6 passed / 0 failed / 0 errors / 0 skipped (6 tests)",
+    "broader": "405 passed / 20 failed / 0 errors / 0 skipped (425 tests); physical/persistence/authority 93 passed / 0 failed / 0 errors / 0 skipped (93 tests)",
+    "full_suite": "Not run",
+    "runtime_validation": "Original T06 remains refused. All twelve published turns unchanged. Negative snapshot restore/retry passed; no successful inscription persistence claim.",
+    "model_runtime_boundary": "Zero live provider calls. Fail-closed network/provider and production-data guards.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "Exact identities and fluctuation notes: REGRESSION_RESULTS.md and test_results.json."
+  },
+  "decisions_requiring_human_review": [
+    "Item-instance mutation and inspection ownership must be settled before implementation; see NEXT_STEP_DECISION.md."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "No persistent-modification mechanism implemented. Original T06 still unresolved. Successful controlled HTTP, mutation and inspection verification unavailable."
+    ],
+    "pre_existing": [
+      "T01/T02/T07/T08/T10/T12 and baseline failures remain."
+    ]
+  },
+  "missing_concepts": [
+    "Equipped item/part binding, positive material/surface prerequisites, validated item-instance mutation and later inspection contract."
+  ],
+  "does_not_prove": [
+    "Successful original or controlled inscription, successful modification persistence/idempotency, playability, full-suite or live-provider acceptance."
+  ],
+  "recommended_next_step": "Conduct one bounded architecture review to assign item-instance modification ownership and define its validated mutation and inspection contract within existing character persistence. Do not begin automatically.",
+  "self_contained_review_test": "Reopen ZIP; verify BLOCKED identity, unchanged original T06, absent mutation, negative persistence result, fresh regressions, source hashes and preserved historical handoff suffix.",
+  "primary_report": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/IMPLEMENTATION.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/INTEGRITY.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/MANIPULATION_CONTRACT.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/NEGATIVE_CONTROLS.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/NEXT_STEP_DECISION.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/PERFORMANCE.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/PERSISTENCE_VERIFICATION.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/REGRESSION_RESULTS.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/ROOT_CAUSE.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/T06_BEFORE_AFTER.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t06_persistent_manipulation/TWELVE_TURN_COMPARISON.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_play_t06_persistent_manipulation.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/entry_next_session.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/entry_current_review.md",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/after_aborted_node_command.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/after_collected_nodes.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/after_command.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/after_execution.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/after_junit.xml",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/after_manifest.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/architecture_evidence.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/baseline_aborted_node_command.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/baseline_collected_nodes.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/baseline_command.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/baseline_execution.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/baseline_junit.xml",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/before_manifest.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/before_sequence.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/before_t06.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/entry_git_status.txt",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/entry_identity.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/files_created.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/final_sequence.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/final_t06.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/focused_command.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/focused_execution.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/focused_junit.xml",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/investigate.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/mutation_evidence.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/persistence_controls_command.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/persistence_controls_execution.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/persistence_controls_junit.xml",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/persistence_results.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/prerequisite_evaluation.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/production.diff",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/seal_review.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/source_changes.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/test_results.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/twelve_turn_comparison.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/write_reports.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/defaults.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/importers/pf_json_importer.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/world.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/physical_adjudication.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/storage.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/mechanical_claims.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/narration_authorization.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/offline_investigation_projection.py",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/evidence_manifest.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t06_persistent_manipulation/review_handoff.json",
+      "role": "investigation_evidence",
+      "canonical": true,
+      "why": "Supports the bounded T06 investigation, stop decision, regression or integrity evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "max_file_bytes": 52428800
+}

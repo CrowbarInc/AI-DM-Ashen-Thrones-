@@ -5,6 +5,8 @@ import json
 import os
 import socket
 import sys
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace as NS
 
@@ -86,6 +88,13 @@ def install_transport(case, gameplay=False):
         if case == 'exception' or (case == 'turn2_exception' and CURRENT_TURN == 2):
             raise RuntimeError('Synthetic provider exception')
         content = gameplay_fixture(CURRENT_TURN, (kwargs.get('text', {}).get('format', {}).get('name') == 'pr_dr_interpretation')) if gameplay and CURRENT_TURN else text
+        if case == 'success' and not (gameplay and CURRENT_TURN):
+            from game.opening_presentation_renderer import opening_renderer_mode, plan_selecting_required
+
+            if opening_renderer_mode() == 'enabled':
+                planned = plan_selecting_required(kwargs.get('input'))
+                if planned:
+                    content = planned
         if case == 'turn3_invalid_json' and CURRENT_TURN == 3:
             content = '{broken'
         value = NS(output_text=content, id='synthetic-response', model=kwargs['model'],
@@ -113,10 +122,20 @@ def main():
     run = Path(sys.argv[1]).resolve()
     cfg = json.loads((run/'configuration/run.json').read_text(encoding='utf-8'))
     diagnostics = run/'diagnostics'
+    def stage(name):
+        with (diagnostics/'startup_events.jsonl').open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'event': name, 'time': datetime.now(timezone.utc).isoformat(),
+                                     'monotonic': time.monotonic(), 'pid': os.getpid()})+'\n')
+    import faulthandler
+    stack_log = (diagnostics/'startup_stack.log').open('w', encoding='utf-8')
+    faulthandler.dump_traceback_later(8, file=stack_log)
+    stage('worker_started')
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # Bind before readiness; an occupied port is never reused or terminated.
+    stage('socket_binding')
     sock.bind(('127.0.0.1', cfg['port']))
     sock.listen(128)
+    stage('socket_listening')
     from game import storage as st
     from tools.atgb.isolation import assert_imported_data_dir
     assert_imported_data_dir(st.DATA_DIR, run/'data', player_campaign_dir=Path(cfg['player_data']))
@@ -125,6 +144,7 @@ def main():
         install_transport(cfg['fixture_response'], cfg['scenario_id'] == 'FiveTurnGameplay')
     from game import api, gm, provider_budget as budget
     from game.config import get_openai_api_key, DEFAULT_MODEL_NAME
+    from game.opening_presentation_renderer import opening_renderer_diagnostics
     if cfg['mode'] == 'Live':
         # Existence check only. Never dispatch connectivity probes.
         if not get_openai_api_key().strip() or budget.provider_calls_disabled():
@@ -142,26 +162,41 @@ def main():
     if api._compute_upstream_gate_for_live_gameplay()[0].get('manual_testing_blocked'):
         raise RuntimeError('Existing upstream gate blocked this run')
     write(diagnostics/'ready.json', {'pid': os.getpid(), 'port': sock.getsockname()[1],
+          'phase': 'configuration_initialized', 'time': datetime.now(timezone.utc).isoformat(),
           'data_dir': str(st.DATA_DIR), 'isolation_verified': True,
           'model': DEFAULT_MODEL_NAME, 'opening_output_allowance': gm._opening_max_output_tokens(),
+          'opening_renderer': opening_renderer_diagnostics(),
           'limits': budget.limits(), 'sdk_retries': 0, 'host_retries': 0,
           'diagnostics_enabled': budget.generation_diagnostics_enabled(),
           'credentials_present': cfg['mode'] == 'Live', 'connectivity_diagnostics': False})
 
     async def application(scope, receive, send):
         global CURRENT_TURN
+        async def observed_send(message):
+            if message['type'] in {'lifespan.startup.complete', 'lifespan.startup.failed'}:
+                stage(message['type'])
+            await send(message)
+        if scope['type'] == 'lifespan':
+            stage('application_initializing')
         if scope['type'] == 'http' and scope.get('path') == '/api/chat':
             CURRENT_TURN += 1
+        if scope['type'] == 'http':
+            faulthandler.cancel_dump_traceback_later()
         try:
-            await api.app(scope, receive, send)
+            await api.app(scope, receive, observed_send)
         finally:
             if scope['type'] == 'http':
                 write(diagnostics/'budget_snapshot.json', budget.snapshot())
 
+    stage('configuration_initialized')
     import uvicorn
+    stage('uvicorn_imported')
     try:
+        stage('server_run_entered')
         uvicorn.Server(uvicorn.Config(application, log_level='info', access_log=False)).run(sockets=[sock])
     finally:
+        faulthandler.cancel_dump_traceback_later()
+        stack_log.close()
         write(diagnostics/'budget_snapshot.json', budget.snapshot())
         sock.close()
 
@@ -172,5 +207,8 @@ if __name__ == '__main__':
     except Exception as exc:
         # Exception messages can contain provider/private text. Record the type only.
         run = Path(sys.argv[1])
-        write(run/'diagnostics/worker_failure.json', {'type': type(exc).__name__, 'stage': 'worker_bootstrap'})
+        events = run/'diagnostics/startup_events.jsonl'
+        last_stage = json.loads(events.read_text(encoding='utf-8').splitlines()[-1])['event'] if events.exists() else 'worker_bootstrap'
+        write(run/'diagnostics/worker_failure.json', {'type': type(exc).__name__, 'stage': last_stage,
+              'os_error': getattr(exc, 'winerror', None) or getattr(exc, 'errno', None)})
         raise SystemExit(2)

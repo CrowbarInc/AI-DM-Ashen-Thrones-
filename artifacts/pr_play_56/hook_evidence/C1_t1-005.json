@@ -1,0 +1,210 @@
+{
+  "enabled": true,
+  "player_text": "I examine the rain barrel.",
+  "provider_requests": 1,
+  "state_write_attempted": false,
+  "projection_build_ms": 0.041,
+  "hook_input": {
+    "eligible": true,
+    "player_text": "I examine the rain barrel.",
+    "target_id": "i_examine_the_rain_barrel",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "action_id": "i_examine_the_rain_barrel",
+      "interactable_id": null,
+      "discovered_clues": [],
+      "clue_text": "",
+      "state_changes": {}
+    },
+    "narration_payload": {
+      "scene": {
+        "public": {
+          "location": "Cinderwatch Gate District",
+          "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ]
+        },
+        "discovered_clues": []
+      }
+    }
+  },
+  "eligible": true,
+  "target_id": "i_examine_the_rain_barrel",
+  "anchors": [
+    {
+      "order": 0,
+      "source": "engine_status",
+      "status": "observed",
+      "text": "No new clue is established by this examination."
+    },
+    {
+      "order": 1,
+      "source": "public_observation",
+      "status": "observed",
+      "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+    },
+    {
+      "order": 2,
+      "source": "public_observation",
+      "status": "observed",
+      "text": "A gate serjeant manages the crowd and keeps one eye on the roster board."
+    },
+    {
+      "order": 3,
+      "source": "public_observation",
+      "status": "observed",
+      "text": "A tavern runner trades hot stew and rumors near the rain barrel."
+    },
+    {
+      "order": 4,
+      "source": "public_observation",
+      "status": "observed",
+      "text": "Threadbare watchers and refugees cluster along the muddy gate line."
+    },
+    {
+      "order": 5,
+      "source": "public_observation",
+      "status": "observed",
+      "text": "Ash Compact census delays have tightened the eastern caravan choke point."
+    }
+  ],
+  "authorized_narration_projection": {
+    "authorized_investigation": {
+      "target": "i_examine_the_rain_barrel",
+      "status": "observed",
+      "success": true,
+      "newly_discovered": [],
+      "previously_known": []
+    },
+    "public_scene": {
+      "observations": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ]
+    },
+    "descriptive_constraints": [
+      "Write only a descriptive prelude to the examination, ending a complete sentence.",
+      "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+      "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+      "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+      "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+    ],
+    "max_output_utf8_bytes": 1600
+  },
+  "prelude_source": "live_provider",
+  "sample": "live",
+  "saved_investigation_id": null,
+  "saved_authoritative_discovery": null,
+  "raw_provider_text": "The rain barrel stands near the bustling gate, its surface slick with recent drizzle. The air carries the mingled scents of damp earth and simmering stew, while murmurs of the crowd ebb and flow around it. Shadows shift as watchers and travelers pass by, leaving the barrel’s purpose quietly unspoken.",
+  "extracted_narration_text": null,
+  "extraction_matches_raw": null,
+  "projection_ms": 0.173,
+  "saved_lookup_ms": 0.004,
+  "generator_calls": 1,
+  "live_provider": {
+    "enabled": true,
+    "provider": "openai",
+    "adapter": "game.expressive_dialogue.request_expression",
+    "purpose": "expression",
+    "configured_output_cap": 80,
+    "experiment_output_token_ceiling": 1000,
+    "model": "gpt-4.1-mini-2025-04-14",
+    "request_started_at": "2026-11-04T00:03:49.188719+00:00",
+    "request_completed_at": "2026-11-04T00:03:50.914476+00:00",
+    "provider_latency_ms": 1723.679,
+    "outer_latency_ms": 1725.756,
+    "input_tokens": 411,
+    "output_tokens": 62,
+    "total_tokens": 473,
+    "retry_count": 0,
+    "sdk_max_retries": 0,
+    "timeout": false,
+    "provider_error": null,
+    "sent": true,
+    "estimated_cost": null,
+    "estimated_cost_reason": "no configured price table",
+    "sanitized_provider_user_message": "{\"player_action\": \"I examine the rain barrel.\", \"requested_prelude_length\": \"about 20-60 words\", \"authorized_narration_projection\": {\"authorized_investigation\": {\"target\": \"i_examine_the_rain_barrel\", \"status\": \"observed\", \"success\": true, \"newly_discovered\": [], \"previously_known\": []}, \"public_scene\": {\"observations\": [\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"Ash Compact census delays have tightened the eastern caravan choke point.\"]}, \"descriptive_constraints\": [\"Write only a descriptive prelude to the examination, ending a complete sentence.\", \"Do not repeat or reinterpret discoveries; the engine appends them verbatim.\", \"Preserve uncertainty. Do not establish culprits, counts, links or destinations.\", \"No possessions, rewards, health, conditions, travel, quests or persistent changes.\", \"Compatible incidental texture is ephemeral and grants no world facts or mechanics.\"], \"max_output_utf8_bytes\": 1600}}",
+    "validation_result": "heuristic_pass_pending_review"
+  },
+  "diagnostic": "heuristic_pass_pending_review",
+  "injected_fault": null,
+  "assembled": "The rain barrel stands near the bustling gate, its surface slick with recent drizzle. The air carries the mingled scents of damp earth and simmering stew, while murmurs of the crowd ebb and flow around it. Shadows shift as watchers and travelers pass by, leaving the barrel’s purpose quietly unspoken.\n\nNo new clue is established by this examination. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+  "used_fallback": false,
+  "validation_ms": 3.985,
+  "assembly_ms": 0.006,
+  "validation": {
+    "hard_valid": true,
+    "reasons": [],
+    "soft_flags": [],
+    "speaker": "",
+    "addressee": "",
+    "operation": "",
+    "interaction_complete": true,
+    "contract_satisfying": true,
+    "authority": [
+      {
+        "text": "The rain barrel stands near the bustling gate, its surface slick with recent drizzle.",
+        "kind": "incidental_fact",
+        "epistemic_status": "world_truth",
+        "grounded": false,
+        "consequential": false,
+        "family": "incidental"
+      }
+    ],
+    "gm_resolution_decision_audit": null,
+    "mechanical_claim_audit": {
+      "coverage": "bounded_assertion_frames_not_semantic_proof",
+      "claims": [],
+      "reasons": []
+    },
+    "consequential_validation": {
+      "decision": "PASS",
+      "reasons": [],
+      "claims": [],
+      "provider_requests": 0,
+      "coverage": "deterministic_frames_not_semantic_proof"
+    }
+  },
+  "generator_request": {
+    "authorized_investigation": {
+      "target": "i_examine_the_rain_barrel",
+      "status": "observed",
+      "success": true,
+      "newly_discovered": [],
+      "previously_known": []
+    },
+    "public_scene": {
+      "observations": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ]
+    },
+    "descriptive_constraints": [
+      "Write only a descriptive prelude to the examination, ending a complete sentence.",
+      "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+      "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+      "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+      "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+    ],
+    "max_output_utf8_bytes": 1600
+  },
+  "review_required": true,
+  "hook_work_ms": 1730.364,
+  "evidence_write": "ok",
+  "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_56\\hook_evidence\\C1_t1-005.json",
+  "serialization_ms": 0.118,
+  "evidence_write_ms": 0.585,
+  "total_hook_ms": 1732.822
+}

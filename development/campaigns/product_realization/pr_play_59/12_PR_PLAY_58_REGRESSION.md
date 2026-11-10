@@ -1,0 +1,3 @@
+# PR PLAY 58 REGRESSION
+
+Eight original PR57 samples: 8/8 mandatory coverage and 7/8 combined PASS, unchanged. PR58 development 43 cases: all decisions unchanged; 14/15 legitimate PASS, 6/6 omissions blocked, 11/11 contradictions blocked, 9/9 expansions blocked. Prior frozen holdout is now regression: 14/15 legitimate PASS, 10/10 omissions blocked, 10/10 contradictions blocked, 10/10 expansions blocked (previously 9/10); H41 is the only changed label. H12 remains REVIEW_REQUIRED and D15 remains legacy FAIL. Five holdout ambiguity cases still review. Exact raw prose and layer decisions retained in pr58_regression.json. PR55 70-case former holdout is 70/70 exact; previous scored corpus remains 49/49 fabrication FAIL. No previous holdout is described as unseen.

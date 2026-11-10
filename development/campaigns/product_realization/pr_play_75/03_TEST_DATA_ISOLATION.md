@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 03 TEST DATA ISOLATION
+
+150/150 entry protected hashes preserved. The inherited 150-path manifest was re-hashed before implementation. Existing storage_isolation.install runs before game imports. Separate roots cover development, holdout, HTTP, browser, faults, provider logs, save slots, performance and reports. Its audit guard rejects production-data and historical-artifact writes. HTTP helper import initially reset provider flags; the corrected harness restores only budgeted NPC lanes. Reusing an old usage log was refused safely; final HTTP uses http_final_data. No production data was restored or overwritten. Initial failures/evidence remain retained.

@@ -1,0 +1,113 @@
+{
+  "case": "A",
+  "captured_before_cleanup": true,
+  "timeout_seconds": 30,
+  "session_before": {
+    "exists": false,
+    "path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\A\\20261102T010511Z-7938740cf7c8\\data\\session.json",
+    "debug_traces": [],
+    "inside_isolated_store": null,
+    "log_entries": 0
+  },
+  "live": {
+    "controller_pid": 26144,
+    "controller_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "controller_created_utc": "2026-11-02T01:05:11Z",
+    "popen_pid": 32792,
+    "parent_pid": 26144,
+    "reported_image": "python.exe",
+    "worker_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "worker_created_utc": "2026-11-02T01:05:13Z",
+    "worker_query_error": null,
+    "base_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "launch_command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "tools.playtest.worker",
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\A\\20261102T010511Z-7938740cf7c8"
+    ],
+    "children": [
+      {
+        "pid": 16612,
+        "parent_pid": 32792,
+        "image": "conhost.exe",
+        "executable": "C:\\Windows\\System32\\conhost.exe",
+        "created_utc": "2026-11-02T01:05:13Z"
+      }
+    ],
+    "parent_chain": [
+      {
+        "pid": 32792,
+        "parent_pid": 26144,
+        "image": "python.exe",
+        "executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "created_utc": "2026-11-02T01:05:13Z"
+      },
+      {
+        "pid": 26144,
+        "parent_pid": 31564,
+        "image": "python.exe",
+        "executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "created_utc": "2026-11-02T01:05:11Z"
+      },
+      {
+        "pid": 31564,
+        "parent_pid": 25876,
+        "image": "python.exe",
+        "executable": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "created_utc": "2026-11-02T01:05:11Z"
+      },
+      {
+        "pid": 25876,
+        "parent_pid": 17976,
+        "image": "powershell.exe",
+        "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "created_utc": "2026-11-02T01:05:11Z"
+      },
+      {
+        "pid": 17976,
+        "parent_pid": 20240,
+        "image": "Cursor.exe",
+        "executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\cursor\\Cursor.exe",
+        "created_utc": "2026-11-01T17:38:26Z"
+      },
+      {
+        "pid": 20240,
+        "parent_pid": 9844,
+        "image": "Cursor.exe",
+        "executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\cursor\\Cursor.exe",
+        "created_utc": "2026-11-01T17:38:23Z"
+      },
+      {
+        "pid": 9844,
+        "parent_pid": 9800,
+        "image": "explorer.exe",
+        "executable": "C:\\Windows\\explorer.exe",
+        "created_utc": "2026-10-31T15:51:42Z"
+      }
+    ],
+    "process_alive": true,
+    "exit_code": null,
+    "ready": {
+      "pid": 32792,
+      "port": 50250,
+      "isolation_verified": true,
+      "diagnostics_enabled": true,
+      "sdk_retries": 0,
+      "host_retries": 0,
+      "data_dir": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\A\\20261102T010511Z-7938740cf7c8\\data"
+    },
+    "reported_pid": 32792,
+    "startup_event_pid": 32792
+  },
+  "live_after_wait": null,
+  "wait_exception": null,
+  "http_requests": [
+    {
+      "method": "GET",
+      "path": "/api/state"
+    }
+  ],
+  "http_status": 200
+}

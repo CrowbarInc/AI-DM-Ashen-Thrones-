@@ -1,0 +1,881 @@
+{
+  "step_id": "T3",
+  "intent": "notice board investigation",
+  "player_input": "I examine the notice board.",
+  "submitted": true,
+  "retried": false,
+  "current_scene_before": "frontier_gate",
+  "http_status": 200,
+  "api_latency_seconds": 3.516,
+  "player_facing_text": "Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+  "engine": {
+    "ok": true,
+    "status": null,
+    "error": null,
+    "resolution_keys": [
+      "action_id",
+      "discovered_clues",
+      "kind",
+      "label",
+      "metadata",
+      "prompt",
+      "resolved_transition",
+      "state_changes",
+      "success",
+      "target_scene_id",
+      "world_updates"
+    ],
+    "action_type": null,
+    "intent": null,
+    "kind": "conversational_clarify",
+    "action_id": "conversational_clarify",
+    "success": null,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "originating_scene_id": null,
+    "prompt": "I examine the notice board.",
+    "discovered_clues": [],
+    "state_changes": {},
+    "noncombat_resolution": null,
+    "authoritative_mutation": false,
+    "processing_outcome": "conversational_clarify",
+    "resolver_invoked": false,
+    "narration_invoked": false,
+    "gameplay_parser_invoked": false,
+    "provider_calls": {
+      "interpretation_requests": 1,
+      "narration_requests": 0,
+      "ooc_assistance_requests": 0,
+      "retries": 0
+    },
+    "resolution_metadata_keys": [
+      "authoritative_mutation",
+      "communication_mode",
+      "conversational_decision",
+      "gameplay_parser_invoked",
+      "live_chat_interpretation",
+      "mode_source",
+      "narration_invoked",
+      "performance",
+      "processing_outcome",
+      "provider_calls",
+      "resolver_invoked",
+      "stored_interpretation_bridge"
+    ],
+    "conversational_decision": {
+      "category": "CLARIFY",
+      "primary_intention": "I examine the notice board.",
+      "intent_family": "clarification",
+      "incidental_context": [],
+      "proposed_operation": "ASK",
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [
+        "interlocutor"
+      ],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "unresolved_addressee",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "context_update": {
+        "conversational_context": {
+          "pending_clarification": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "frontier_gate",
+            "original_text": "I examine the notice board.",
+            "choices": [
+              {
+                "entity_id": "gate_serjeant",
+                "label": "Gate Serjeant"
+              },
+              {
+                "entity_id": "tavern_runner",
+                "label": "Tavern Runner"
+              }
+            ],
+            "clarification": "Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+            "target_resolution": "ambiguous"
+          },
+          "pending_intention": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "frontier_gate",
+            "original_text": "I examine the notice board.",
+            "choices": [
+              {
+                "entity_id": "gate_serjeant",
+                "label": "Gate Serjeant"
+              },
+              {
+                "entity_id": "tavern_runner",
+                "label": "Tavern Runner"
+              }
+            ],
+            "clarification": "Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+            "target_resolution": "ambiguous"
+          }
+        }
+      },
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": {
+        "communication_ownership": "ambiguous_unresolved",
+        "intent_purpose": "request_information",
+        "target_resolution": "ambiguous",
+        "target_provenance": "none",
+        "target_id": null,
+        "candidate_target_ids": [],
+        "operation_eligibility": "requires_clarification",
+        "mutation_eligibility": false,
+        "authority_provenance": "communication_decision",
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "requires_clarification",
+        "allowed_operation": null,
+        "clarification": "Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+        "choices": [
+          {
+            "entity_id": "gate_serjeant",
+            "label": "Gate Serjeant"
+          },
+          {
+            "entity_id": "tavern_runner",
+            "label": "Tavern Runner"
+          }
+        ],
+        "direct_address": true,
+        "player_text": "I examine the notice board."
+      }
+    },
+    "stored_interpretation_bridge": null,
+    "live_interpretation": {
+      "status": "accepted",
+      "reason": "eligible_for_bridge",
+      "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+      "model_communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"ACTION\",\"subject\":\"examine notice board\",\"evidence_refs\":[\"visible:0\",\"visible:5\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player intends to examine the notice board.\"},\"asserted_premises\":[{\"text\":\"The player is at Cinderwatch Gate District where a notice board is visible.\"},{\"text\":\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\"}],\"requested_outcomes\":[{\"text\":\"A description or relevant information from the notice board is provided.\"}],\"action_components\":[{\"order\":1,\"description\":\"Examine the notice board to learn its contents.\",\"target_ref\":\"notice_board\",\"operation_class\":\"INSPECT\"}],\"references\":{\"permitted_entity_ids\":[\"notice_board\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "provider_requests": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "4afd0500fee54290b3e8ecd1f01ade35",
+          "attempt_id": "6b9e2e13b1de4c0b8bd4716ec58828e7",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-02T11:00:43.692442+00:00",
+          "time": "2026-11-02T11:00:46.973010+00:00",
+          "sequence": 4,
+          "admission": "admitted",
+          "budget_remaining": 6,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "sent": true,
+          "request_id": "resp_07cb50fc3f52ce1e006ae86d5e1fb887d1a25e190f3b9a7449",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2979,
+          "output_tokens": 197,
+          "total_tokens": 3176,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2357.348
+        }
+      ],
+      "record": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player intends to examine the notice board."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player is at Cinderwatch Gate District where a notice board is visible.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "A description or relevant information from the notice board is provided.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Examine the notice board to learn its contents.",
+            "target_ref": "notice_board",
+            "operation_class": "INSPECT"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "notice_board"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        },
+        "communication": {
+          "recipient": "CHARACTER",
+          "purpose": "ACTION",
+          "subject": "examine notice board",
+          "evidence_refs": [
+            "visible:0",
+            "visible:5"
+          ]
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "INSPECT"
+        },
+        "public_evidence": {
+          "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "visible:5": "the notice board lists taxes, curfew rules, and a warning about a missing patrol"
+        }
+      }
+    },
+    "tags": [
+      "conversational_orchestration",
+      "clarify",
+      "non_mutating"
+    ],
+    "provenance": "authorized_host_speech",
+    "hard_valid": true,
+    "expression_decision": null,
+    "gm_metadata_keys": [
+      "accepted_response"
+    ],
+    "missing_observability": []
+  },
+  "persisted_engine": {
+    "log_index": 3,
+    "player_input": "I examine the notice board.",
+    "player_facing_text": "Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+    "intent_classification": null,
+    "resolution_kind": "conversational_clarify",
+    "action_id": "conversational_clarify",
+    "action_type": null,
+    "success": null,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "originating_scene_id": null,
+    "prompt": "I examine the notice board.",
+    "discovered_clues": [],
+    "state_changes": {},
+    "clocks_changed": null,
+    "discovered_clues_added": null,
+    "approved_state_updates": null,
+    "rejected_state_updates": null,
+    "log_meta_keys": [
+      "authoritative_mutation",
+      "communication_mode",
+      "mode_source",
+      "player_input",
+      "processing_outcome",
+      "resolver_invoked"
+    ],
+    "resolution_metadata_keys": [
+      "authoritative_mutation",
+      "communication_mode",
+      "conversational_decision",
+      "gameplay_parser_invoked",
+      "live_chat_interpretation",
+      "mode_source",
+      "narration_invoked",
+      "performance",
+      "processing_outcome",
+      "provider_calls",
+      "resolver_invoked",
+      "stored_interpretation_bridge"
+    ],
+    "processing_outcome": "conversational_clarify",
+    "resolver_invoked": false,
+    "narration_invoked": false,
+    "gameplay_parser_invoked": false,
+    "conversational_decision": {
+      "category": "CLARIFY",
+      "primary_intention": "I examine the notice board.",
+      "intent_family": "clarification",
+      "incidental_context": [],
+      "proposed_operation": "ASK",
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [
+        "interlocutor"
+      ],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "unresolved_addressee",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "context_update": {
+        "conversational_context": {
+          "pending_clarification": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "frontier_gate",
+            "original_text": "I examine the notice board.",
+            "choices": [
+              {
+                "entity_id": "gate_serjeant",
+                "label": "Gate Serjeant"
+              },
+              {
+                "entity_id": "tavern_runner",
+                "label": "Tavern Runner"
+              }
+            ],
+            "clarification": "Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+            "target_resolution": "ambiguous"
+          },
+          "pending_intention": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "frontier_gate",
+            "original_text": "I examine the notice board.",
+            "choices": [
+              {
+                "entity_id": "gate_serjeant",
+                "label": "Gate Serjeant"
+              },
+              {
+                "entity_id": "tavern_runner",
+                "label": "Tavern Runner"
+              }
+            ],
+            "clarification": "Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+            "target_resolution": "ambiguous"
+          }
+        }
+      },
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": {
+        "communication_ownership": "ambiguous_unresolved",
+        "intent_purpose": "request_information",
+        "target_resolution": "ambiguous",
+        "target_provenance": "none",
+        "target_id": null,
+        "candidate_target_ids": [],
+        "operation_eligibility": "requires_clarification",
+        "mutation_eligibility": false,
+        "authority_provenance": "communication_decision",
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "requires_clarification",
+        "allowed_operation": null,
+        "clarification": "Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+        "choices": [
+          {
+            "entity_id": "gate_serjeant",
+            "label": "Gate Serjeant"
+          },
+          {
+            "entity_id": "tavern_runner",
+            "label": "Tavern Runner"
+          }
+        ],
+        "direct_address": true,
+        "player_text": "I examine the notice board."
+      }
+    },
+    "stored_interpretation_bridge": null,
+    "opening_recovery_debug": null,
+    "provenance": "authorized_host_speech",
+    "hard_valid": true,
+    "response_type_contract": null
+  },
+  "provider": [
+    {
+      "event": "admitted",
+      "stage": null,
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null,
+      "sequence": 4,
+      "budget_remaining": 6,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "dispatch_attempted",
+      "stage": null,
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null,
+      "sequence": 4,
+      "budget_remaining": 6,
+      "fallback": null,
+      "retry_count": null
+    },
+    {
+      "event": "completed",
+      "stage": null,
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 2979,
+      "output_tokens": 197,
+      "total_tokens": 3176,
+      "latency_ms": 2357.348,
+      "completion_status": "completed",
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null,
+      "sequence": 4,
+      "budget_remaining": 6,
+      "fallback": null,
+      "retry_count": null
+    }
+  ],
+  "provider_completed_count": 1,
+  "state_before": {
+    "campaign_title": "Ashen Thrones",
+    "campaign_run_id": "915f737a90f647e388887b3e",
+    "session_id": "915f737a90f647e388887b3e",
+    "campaign_started": true,
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 1
+    },
+    "turn_counter": 1,
+    "chat_history_len": 0,
+    "log_entries": 3,
+    "discovered_clues_by_scene": {},
+    "clue_knowledge": {},
+    "known_clue_ids": null,
+    "deferred_intentions": null,
+    "deferred_steps": null,
+    "time_pressure": 1,
+    "active_quests": null,
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "hp_current": 8,
+      "hp_max": 8,
+      "gold": null,
+      "resources": null,
+      "inventory_count": 1,
+      "inventory_ids": [
+        "spellbook"
+      ]
+    },
+    "world_clue_ids": [],
+    "authority_catalog": {
+      "npc_ids": [
+        "gate_guard",
+        "gate_serjeant",
+        "tavern_runner"
+      ],
+      "npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "watch_command"
+          ]
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "route_change"
+          ]
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "patrol_rumor"
+          ]
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "pressure": 3,
+          "influence": 3,
+          "agenda_progress": 1
+        },
+        {
+          "id": "ash_cowl",
+          "pressure": 3,
+          "influence": 3,
+          "agenda_progress": 1
+        },
+        {
+          "id": "ordo_pyric",
+          "pressure": 2,
+          "influence": 2,
+          "agenda_progress": 1
+        }
+      ],
+      "world_event_log_len": 2,
+      "scenes": {
+        "frontier_gate": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Enter Cinderwatch",
+              "target_scene_id": "market_quarter"
+            },
+            {
+              "id": null,
+              "label": "Follow the missing patrol rumor",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [
+            "notice_board"
+          ],
+          "addressable_ids": [
+            "guard_captain",
+            "tavern_runner",
+            "refugee",
+            "threadbare_watcher"
+          ]
+        },
+        "market_quarter": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to the Gate",
+              "target_scene_id": "frontier_gate"
+            },
+            {
+              "id": null,
+              "label": "Seek the fortress trail",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [],
+          "addressable_ids": []
+        },
+        "old_milestone": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to Cinderwatch Gate",
+              "target_scene_id": "frontier_gate"
+            }
+          ],
+          "interactable_ids": [
+            "milestone",
+            "prints"
+          ],
+          "addressable_ids": []
+        }
+      }
+    },
+    "documents_present": [
+      "campaign.json",
+      "character.json",
+      "combat.json",
+      "conditions.json",
+      "scenes/frontier_gate.json",
+      "scenes/market_quarter.json",
+      "scenes/old_milestone.json",
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "observability_gaps": [
+      "active_quests",
+      "known_clues",
+      "character_resources"
+    ]
+  },
+  "state_after": {
+    "campaign_title": "Ashen Thrones",
+    "campaign_run_id": "915f737a90f647e388887b3e",
+    "session_id": "915f737a90f647e388887b3e",
+    "campaign_started": true,
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 1
+    },
+    "turn_counter": 1,
+    "chat_history_len": 0,
+    "log_entries": 4,
+    "discovered_clues_by_scene": {},
+    "clue_knowledge": {},
+    "known_clue_ids": null,
+    "deferred_intentions": null,
+    "deferred_steps": null,
+    "time_pressure": 1,
+    "active_quests": null,
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "hp_current": 8,
+      "hp_max": 8,
+      "gold": null,
+      "resources": null,
+      "inventory_count": 1,
+      "inventory_ids": [
+        "spellbook"
+      ]
+    },
+    "world_clue_ids": [],
+    "authority_catalog": {
+      "npc_ids": [
+        "gate_guard",
+        "gate_serjeant",
+        "tavern_runner"
+      ],
+      "npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "watch_command"
+          ]
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "route_change"
+          ]
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "patrol_rumor"
+          ]
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "pressure": 3,
+          "influence": 3,
+          "agenda_progress": 1
+        },
+        {
+          "id": "ash_cowl",
+          "pressure": 3,
+          "influence": 3,
+          "agenda_progress": 1
+        },
+        {
+          "id": "ordo_pyric",
+          "pressure": 2,
+          "influence": 2,
+          "agenda_progress": 1
+        }
+      ],
+      "world_event_log_len": 2,
+      "scenes": {
+        "frontier_gate": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Enter Cinderwatch",
+              "target_scene_id": "market_quarter"
+            },
+            {
+              "id": null,
+              "label": "Follow the missing patrol rumor",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [
+            "notice_board"
+          ],
+          "addressable_ids": [
+            "guard_captain",
+            "tavern_runner",
+            "refugee",
+            "threadbare_watcher"
+          ]
+        },
+        "market_quarter": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to the Gate",
+              "target_scene_id": "frontier_gate"
+            },
+            {
+              "id": null,
+              "label": "Seek the fortress trail",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [],
+          "addressable_ids": []
+        },
+        "old_milestone": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to Cinderwatch Gate",
+              "target_scene_id": "frontier_gate"
+            }
+          ],
+          "interactable_ids": [
+            "milestone",
+            "prints"
+          ],
+          "addressable_ids": []
+        }
+      }
+    },
+    "documents_present": [
+      "campaign.json",
+      "character.json",
+      "combat.json",
+      "conditions.json",
+      "scenes/frontier_gate.json",
+      "scenes/market_quarter.json",
+      "scenes/old_milestone.json",
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "observability_gaps": [
+      "active_quests",
+      "known_clues",
+      "character_resources"
+    ]
+  },
+  "state_delta": {
+    "log_entries": {
+      "before": 3,
+      "after": 4
+    }
+  },
+  "changed_documents": [
+    "session.json",
+    "session_log.jsonl"
+  ],
+  "usage_after": {
+    "dispatched_requests": 4,
+    "input_tokens": 35101,
+    "output_tokens": 2326,
+    "total_tokens": 37427,
+    "stopped": false,
+    "stop_reason": "",
+    "pending_requests": 0
+  }
+}

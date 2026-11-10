@@ -1,0 +1,123 @@
+[
+  {
+    "path": "/session.json/conversational_context/delivered_exchanges",
+    "before": [
+      {
+        "speaker_id": "",
+        "speaker_name": "",
+        "addressee": "player",
+        "ownership": "gm",
+        "player_text": "",
+        "delivered_text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. A tavern runner shouts offers of hot stew and paid rumor. A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+        "subject": "",
+        "topic_id": "",
+        "requested_information": "",
+        "supplied_text": "",
+        "uncertain": false,
+        "commitment": false,
+        "scene_id": "frontier_gate",
+        "turn": 1,
+        "active": true,
+        "authorized_proposition": "",
+        "answer_sufficiency": "",
+        "proposition_id": "",
+        "response_integrity_digest": "3a7fe3f55d6e48c5e2ed4f4894aa019f1cd1989b76f8331acc32280be6af2e10",
+        "authorization_source": "initial_generation",
+        "adoption_turn_identity": "rc_dd89a2b89c62"
+      }
+    ],
+    "after": [
+      {
+        "speaker_id": "",
+        "speaker_name": "",
+        "addressee": "player",
+        "ownership": "gm",
+        "player_text": "",
+        "delivered_text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. A tavern runner shouts offers of hot stew and paid rumor. A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+        "subject": "",
+        "topic_id": "",
+        "requested_information": "",
+        "supplied_text": "",
+        "uncertain": false,
+        "commitment": false,
+        "scene_id": "frontier_gate",
+        "turn": 1,
+        "active": false,
+        "authorized_proposition": "",
+        "answer_sufficiency": "",
+        "proposition_id": "",
+        "response_integrity_digest": "3a7fe3f55d6e48c5e2ed4f4894aa019f1cd1989b76f8331acc32280be6af2e10",
+        "authorization_source": "initial_generation",
+        "adoption_turn_identity": "rc_dd89a2b89c62"
+      },
+      {
+        "speaker_id": "",
+        "speaker_name": "",
+        "addressee": "player",
+        "ownership": "gm",
+        "player_text": "I approach the tavern runner and ask what they're offering.",
+        "delivered_text": "I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+        "subject": "",
+        "topic_id": "",
+        "requested_information": "",
+        "supplied_text": "",
+        "uncertain": true,
+        "commitment": false,
+        "scene_id": "frontier_gate",
+        "turn": 1,
+        "active": true,
+        "authorized_proposition": "",
+        "answer_sufficiency": "",
+        "proposition_id": "",
+        "response_integrity_digest": "a0a971ffb27e308744144f85ce827ba1282dce4ed9d712c518ecd0e1b80a7d60",
+        "authorization_source": "conversational_decision:proposal_not_eligible",
+        "adoption_turn_identity": ""
+      }
+    ]
+  },
+  {
+    "path": "/session.json/conversational_context/last_gm_exchange/category",
+    "before": "RESOLVED",
+    "after": "CLARIFY"
+  },
+  {
+    "path": "/session.json/conversational_context/last_gm_exchange/operation",
+    "before": "scene_opening",
+    "after": null
+  },
+  {
+    "path": "/session.json/conversational_context/last_gm_exchange/purpose",
+    "before": "ACTION_RESULT",
+    "after": "CLARIFICATION"
+  },
+  {
+    "path": "/session.json/conversational_context/last_gm_exchange/response",
+    "before": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. A tavern runner shouts offers of hot stew and paid rumor. A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+    "after": "I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet."
+  },
+  {
+    "path": "/session.json/conversational_context/last_gm_exchange/subject",
+    "before": "",
+    "after": "Approach the tavern runner and ask what they are offering"
+  },
+  {
+    "path": "/session.json/last_saved_at",
+    "before": "2026-11-01T18:08:55.516147Z",
+    "after": "2026-11-01T18:08:58.549297Z"
+  },
+  {
+    "path": "/session_log.jsonl",
+    "before": {
+      "preview": "[{\"timestamp\": \"2026-11-01T18:08:55.558373Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+      "truncated": true,
+      "characters": 127532,
+      "sha256": "0822141ed46b669870a439f19dd14bb0dfb2c84af334f0f6a52884464e327c34"
+    },
+    "after": {
+      "preview": "[{\"timestamp\": \"2026-11-01T18:08:55.558373Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+      "truncated": true,
+      "characters": 137967,
+      "sha256": "66192a72b21c285deb320550991de1c567982ada19bcd55d4000a6cdca9e506f"
+    }
+  }
+]

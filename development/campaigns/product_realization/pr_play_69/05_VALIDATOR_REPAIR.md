@@ -1,0 +1,5 @@
+# VALIDATOR REPAIR
+
+Failure class: implementation. Earliest demonstrated incorrect decision: compose_authoritative classified the word prints in a nonassertive attention sentence as discovery overlap. The new shared target_attention_sentence predicate requires a finite full frame and the engine-projected current target. The overlap vocabulary check skips only such a sentence; exact mandatory-coverage duplication still rejects the entire optional candidate. Remaining sentences retain the existing vocabulary heuristic. presentation_within_boundary shares the same frame predicate, preventing mismatch between overlap and frame recognition.
+
+No broad synonyms, noun allowlist, semantic-validator redesign, hidden-state access, provider retry, new authority owner or alternate publication path. Optional text is still validated before composition; trusted text stays verbatim; composed text is validated again. No extra provider call or validation pass was added. Incremental source diff is implementation.diff; source freeze and postrun integrity are recorded separately.

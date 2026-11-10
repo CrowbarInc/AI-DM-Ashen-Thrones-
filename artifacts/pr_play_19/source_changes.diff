@@ -1,0 +1,399 @@
+diff --git a/game/api.py b/game/api.py
+index d9adda17..3e0ab4bc 100644
+--- a/game/api.py
++++ b/game/api.py
+@@ -6121,6 +6121,10 @@ def _complete_opening_turn_persistence_like_chat(
+     synchronize_scene_addressability(session, scene, world)
+     scene["scene_state"] = session.get("scene_state")
+     if mark_campaign_started:
++        from game.opening_presentation_renderer import enforce_rendered_publication
++
++        gm = enforce_rendered_publication(gm)
++        canonical_gm = gm
+         opening_rejection = _opening_response_rejection(gm, resolution, response_type_contract)
+         from game.provider_budget import observe_opening_validation
+         observe_opening_validation(
+diff --git a/game/gm.py b/game/gm.py
+index a7b7ac99..2b1029a8 100644
+--- a/game/gm.py
++++ b/game/gm.py
+@@ -5116,9 +5116,16 @@ def _generation_response_diagnostic(response, text, extraction, parsed, *, maxim
+         json_ok = True
+     except (ValueError, TypeError):
+         value, json_ok = None, False
+-    envelope_present = (isinstance(value, dict) and
+-                        (("narration" in value) if contract == "narration_only"
+-                         else {"declared_claims", "narration"} <= value.keys()))
++    if contract == "opening_presentation":
++        envelope_present = (
++            isinstance(value, dict)
++            and isinstance(value.get("selected_entries"), list)
++            and not ({"narration", "player_facing_text", "declared_claims"} & set(value))
++        )
++    else:
++        envelope_present = (isinstance(value, dict) and
++                            (("narration" in value) if contract == "narration_only"
++                             else {"declared_claims", "narration"} <= value.keys()))
+     meta = parsed.get("metadata") or {}
+     reason = meta.get("structured_contract_reason")
+     valid = not bool(meta.get("structured_output_rejected") or meta.get("structured_contract_failure"))
+@@ -5161,7 +5168,12 @@ def _generation_response_diagnostic(response, text, extraction, parsed, *, maxim
+             "requested_max_output_tokens": maximum, "output_limit_reached": reached,
+             "possible_output_truncation": bool(reached and not valid),
+             "json_parsing_succeeded": json_ok, "expected_envelope_present": envelope_present,
+-            "recognized_envelope_keys": sorted(set(value) & {"narration", "declared_claims", "player_facing_text"}) if isinstance(value, dict) else [],
++            "recognized_envelope_keys": (
++                sorted(set(value) & {"selected_entries"})
++                if contract == "opening_presentation" and isinstance(value, dict)
++                else sorted(set(value) & {"narration", "declared_claims", "player_facing_text"}) if isinstance(value, dict)
++                else []
++            ),
+             "parser_output_form": classified["form"], "structured_validation_result": valid,
+             "rejection_reason": reason, "classification": category,
+             "provider_response_contract": contract}
+@@ -5217,6 +5229,32 @@ def call_gpt(
+             strict_social=strict_social,
+             force_high_precision=force_high_precision,
+         )
++    requested_response_type = _requested_response_type_from_messages(messages)
++    is_opening = requested_response_type == "scene_opening"
++    from game.opening_presentation_renderer import opening_renderer_mode
++
++    renderer_mode = opening_renderer_mode() if is_opening else "disabled"
++    opening_catalog = None
++    if is_opening and renderer_mode == "invalid":
++        failed = _structured_contract_failure(
++            "structured",
++            "opening_renderer_configuration_invalid",
++            provider_response_contract="opening_presentation",
++        )
++        failed["metadata"]["opening_renderer"] = {
++            "mode": "invalid", "selected": False, "flag": "ASHEN_OPENING_RENDERER",
++        }
++        return _attach_model_route_metadata(
++            failed,
++            selected_model=route.selected_model,
++            route_reason=route.route_reason,
++            route_family=route.route_family,
++            purpose=purpose,
++            retry_attempt=retry_attempt,
++            retry_reason=retry_reason,
++            strict_social=strict_social,
++            force_high_precision=force_high_precision,
++        )
+     if os.environ.get("ASHEN_DISABLE_PROVIDER_CALLS", "").strip().lower() in {"1", "true", "yes", "on"}:
+         metadata = {
+             "provider_calls_disabled": True,
+@@ -5264,9 +5302,33 @@ def call_gpt(
+     )
+     pinned_model = os.environ.get("ASHEN_PIN_PROVIDER_MODEL", "").strip()
+     selected_model = pinned_model or route.selected_model
+-    requested_response_type = _requested_response_type_from_messages(messages)
+-    is_opening = requested_response_type == "scene_opening"
+-    if is_opening:
++    if is_opening and renderer_mode == "enabled":
++        from game.opening_presentation_renderer import prepare_opening_renderer
++
++        prepared = prepare_opening_renderer(messages)
++        if not prepared["ok"]:
++            failed = _structured_contract_failure(
++                "structured",
++                str(prepared["reason"] or "opening_catalog_empty"),
++                provider_response_contract="opening_presentation",
++            )
++            failed["metadata"]["opening_renderer"] = {
++                "mode": "enabled", "selected": False, "flag": "ASHEN_OPENING_RENDERER",
++            }
++            return _attach_model_route_metadata(
++                failed,
++                selected_model=route.selected_model,
++                route_reason=route.route_reason,
++                route_family=route.route_family,
++                purpose=purpose,
++                retry_attempt=retry_attempt,
++                retry_reason=retry_reason,
++                strict_social=strict_social,
++                force_high_precision=force_high_precision,
++            )
++        messages = prepared["messages"]
++        opening_catalog = prepared["catalog"]
++    elif is_opening:
+         # Free-text authored claims are checked by lexical coverage, not a
+         # synonym/entailment model. Supply that existing constraint at generation.
+         messages = [*messages[:1], {"role": "system", "content": (
+@@ -5353,6 +5415,8 @@ def call_gpt(
+             force_high_precision=force_high_precision,
+         )
+         create_kwargs = {"model": selected_model, "input": messages}
++        if opening_catalog is not None:
++            create_kwargs["text"] = {"format": prepared["text_format"]}
+         if accounting_active() or is_opening:
+             create_kwargs["max_output_tokens"] = narration_cap
+         request_sent = True
+@@ -5388,10 +5452,27 @@ def call_gpt(
+                 }
+             )
+         provider_response_contract = _provider_response_contract_from_messages(messages)
+-        parsed_response = _safe_json(
+-            text.strip(), require_structured_claims=True,
+-            provider_response_contract=provider_response_contract,
+-        )
++        if opening_catalog is not None:
++            from game.opening_presentation_renderer import gm_response_from_render, realize_opening_provider_text
++
++            rendered = realize_opening_provider_text(text.strip(), opening_catalog)
++            provider_response_contract = "opening_presentation"
++            if rendered["ok"]:
++                parsed_response = gm_response_from_render(rendered)
++            else:
++                parsed_response = _structured_contract_failure(
++                    "structured",
++                    str(rendered["reason"] or "plan_schema"),
++                    provider_response_contract="opening_presentation",
++                )
++                parsed_response["metadata"]["opening_renderer"] = {
++                    "mode": "enabled", "selected": True, "flag": "ASHEN_OPENING_RENDERER",
++                }
++        else:
++            parsed_response = _safe_json(
++                text.strip(), require_structured_claims=True,
++                provider_response_contract=provider_response_contract,
++            )
+         # A complete JSON fragment cannot override an explicit incomplete opening.
+         # Preserve the normal parser diagnostics, then fail through the existing
+         # structured-contract rejection/rollback path without retrying.
+diff --git a/tools/playtest/runner.py b/tools/playtest/runner.py
+index ef95fc3d..eaeeb5c6 100644
+--- a/tools/playtest/runner.py
++++ b/tools/playtest/runner.py
+@@ -152,6 +152,7 @@ def bounded_log(pipe, path, secrets):
+ 
+ 
+ def stop_owned(process, timeout):
++    started = time.monotonic()
+     if process is None:
+         return {'owned': False, 'stopped': True}
+     if process.poll() is None:
+@@ -162,7 +163,63 @@ def stop_owned(process, timeout):
+             process.kill()
+             process.wait(timeout=timeout)
+     return {'owned': True, 'pid': process.pid, 'stopped': process.poll() is not None,
+-            'exit_code': process.returncode}
++            'exit_code': process.returncode, 'shutdown_seconds': round(time.monotonic()-started, 6)}
++
++
++def wait_for_http_ready(process, run, timeout):
++    """Configuration attestation is separate from a successful endpoint response.
++
++    Persist safe transport metadata only: no response bodies or exception strings.
++    The deadline includes configuration loading and server initialization.
++    """
++    started = time.monotonic()
++    deadline = started + timeout
++    path = run/'diagnostics/ready.json'
++    with (run/'diagnostics/readiness_poll.jsonl').open('w', encoding='utf-8') as log:
++        def record(event, **details):
++            row = {'event': event, 'time': datetime.now(timezone.utc).isoformat(),
++                   'elapsed_seconds': round(time.monotonic()-started, 6), **details}
++            log.write(json.dumps(row)+'\n')
++            log.flush()
++        record('worker_spawned', pid=process.pid, deadline_seconds=timeout)
++        while time.monotonic() < deadline:
++            if process.poll() is not None:
++                record('worker_exited', exit_code=process.returncode)
++                raise RuntimeError('Owned server exited during startup')
++            if path.exists():
++                try:
++                    ready = json.loads(path.read_text(encoding='utf-8'))
++                except (OSError, json.JSONDecodeError) as exc:
++                    record('attestation_unavailable', error_type=type(exc).__name__)
++                else:
++                    if ready['pid'] != process.pid or Path(ready['data_dir']).resolve() != run/'data' or not ready['isolation_verified']:
++                        record('attestation_mismatch')
++                        raise RuntimeError('Isolation attestation mismatch')
++                    base = f"http://127.0.0.1:{ready['port']}"
++                    try:
++                        status, _ = request(base, 'GET', '/api/state', min(1, max(.001, deadline-time.monotonic())))
++                        record('http_response', url=base+'/api/state', status=status)
++                        if status == 200:
++                            if time.monotonic() >= deadline:
++                                break
++                            write(run/'diagnostics/http_ready.json', {
++                                'pid': process.pid, 'url': base+'/api/state', 'status': status,
++                                'time': datetime.now(timezone.utc).isoformat(),
++                                'startup_seconds': round(time.monotonic()-started, 6)})
++                            return ready, base
++                    except (OSError, URLError, ValueError) as exc:
++                        reason = getattr(exc, 'reason', exc)
++                        code = getattr(reason, 'winerror', None) or getattr(reason, 'errno', None)
++                        category = ('access_denied' if code in {13, 10013} else
++                                    'connection_refused' if code in {61, 111, 10061} else
++                                    'request_timeout' if isinstance(reason, TimeoutError) else
++                                    'invalid_response' if isinstance(exc, ValueError) else 'connection_error')
++                        record(category, error_type=type(exc).__name__, os_error=code)
++                        if category == 'access_denied':
++                            raise PermissionError('Local HTTP access denied') from exc
++            time.sleep(min(.05, max(0, deadline-time.monotonic())))
++        record('readiness_deadline_expired')
++        raise TimeoutError('Application startup deadline')
+ 
+ 
+ def request(base, method, path, timeout, body=None):
+@@ -295,8 +352,10 @@ def run_playtest(*, scenario='CampaignOpening', mode='Deterministic', authorize_
+             __import__(dependency)
+         prepare_isolated_store(run/'data', scenario_id=s['id'], repo=ROOT, player_campaign_dir=player)
+         write(run/'configuration/scenario.json', s)
++        from game.opening_presentation_renderer import opening_renderer_diagnostics
+         cfg = {'scenario_id': s['id'], 'mode': mode, 'fixture_response': case, 'port': port,
+-               'player_data': str(player), 'capture_response': capture_response}
++               'player_data': str(player), 'capture_response': capture_response,
++               'opening_renderer': opening_renderer_diagnostics()}
+         write(run/'configuration/run.json', cfg)
+         result['environment_verification'] = {'repository_root': str(ROOT), 'python': sys.executable,
+             'python_version': sys.version.split()[0], 'fixture_hash_verified': True,
+@@ -304,7 +363,8 @@ def run_playtest(*, scenario='CampaignOpening', mode='Deterministic', authorize_
+             'provider_request_ceiling': int(env['ASHEN_PROVIDER_REQUEST_LIMIT']),
+             'token_allowances': {k: int(env[f'ASHEN_PROVIDER_{k.upper()}_TOKEN_LIMIT']) for k in CAPS},
+             'live_authorization': authorize_live and mode == 'Live', 'retry_configuration': 'SDK=0, host=0',
+-            'response_capture_opt_in': capture_response}
++            'response_capture_opt_in': capture_response,
++            'opening_renderer': cfg['opening_renderer']}
+         print('Configured ceilings:', result['environment_verification']['provider_request_ceiling'],
+               'requests;', result['environment_verification']['token_allowances'], 'tokens; retries=0', flush=True)
+         if time.monotonic()-started > s['timeouts']['preflight']:
+@@ -321,25 +381,7 @@ def run_playtest(*, scenario='CampaignOpening', mode='Deterministic', authorize_
+         secrets = [v for k, v in env.items() if v and len(v)>6 and any(part in k.lower() for part in ('key', 'secret', 'password', 'credential', 'token'))]
+         logger = threading.Thread(target=bounded_log, args=(process.stdout, run/'diagnostics/application.log', secrets), daemon=True)
+         logger.start()
+-        deadline = time.monotonic()+min(startup_timeout or s['timeouts']['startup'], s['timeouts']['startup'])
+-        ready = None
+-        while time.monotonic() < deadline:
+-            if process.poll() is not None:
+-                raise RuntimeError('Owned server exited during startup')
+-            path = run/'diagnostics/ready.json'
+-            if path.exists():
+-                ready = json.loads(path.read_text(encoding='utf-8'))
+-                if ready['pid'] != process.pid or Path(ready['data_dir']).resolve() != run/'data' or not ready['isolation_verified']:
+-                    raise RuntimeError('Isolation attestation mismatch')
+-                base = f"http://127.0.0.1:{ready['port']}"
+-                try:
+-                    if request(base, 'GET', '/api/state', min(1, max(.01, deadline-time.monotonic())))[0] == 200:
+-                        break
+-                except (OSError, URLError, ValueError):
+-                    pass
+-            time.sleep(.05)
+-        else:
+-            raise TimeoutError('Application startup deadline')
++        ready, base = wait_for_http_ready(process, run, min(startup_timeout or s['timeouts']['startup'], s['timeouts']['startup']))
+         result['environment_verification']['application'] = ready
+         if not ready['diagnostics_enabled'] or ready['sdk_retries'] or ready['host_retries']:
+             raise RuntimeError('Worker safety attestation invalid')
+diff --git a/tools/playtest/worker.py b/tools/playtest/worker.py
+index c70b864b..87d0dbe3 100644
+--- a/tools/playtest/worker.py
++++ b/tools/playtest/worker.py
+@@ -5,6 +5,8 @@ import json
+ import os
+ import socket
+ import sys
++import time
++from datetime import datetime, timezone
+ from pathlib import Path
+ from types import SimpleNamespace as NS
+ 
+@@ -86,6 +88,13 @@ def install_transport(case, gameplay=False):
+         if case == 'exception' or (case == 'turn2_exception' and CURRENT_TURN == 2):
+             raise RuntimeError('Synthetic provider exception')
+         content = gameplay_fixture(CURRENT_TURN, (kwargs.get('text', {}).get('format', {}).get('name') == 'pr_dr_interpretation')) if gameplay and CURRENT_TURN else text
++        if case == 'success' and not (gameplay and CURRENT_TURN):
++            from game.opening_presentation_renderer import opening_renderer_mode, plan_selecting_required
++
++            if opening_renderer_mode() == 'enabled':
++                planned = plan_selecting_required(kwargs.get('input'))
++                if planned:
++                    content = planned
+         if case == 'turn3_invalid_json' and CURRENT_TURN == 3:
+             content = '{broken'
+         value = NS(output_text=content, id='synthetic-response', model=kwargs['model'],
+@@ -113,10 +122,20 @@ def main():
+     run = Path(sys.argv[1]).resolve()
+     cfg = json.loads((run/'configuration/run.json').read_text(encoding='utf-8'))
+     diagnostics = run/'diagnostics'
++    def stage(name):
++        with (diagnostics/'startup_events.jsonl').open('a', encoding='utf-8') as stream:
++            stream.write(json.dumps({'event': name, 'time': datetime.now(timezone.utc).isoformat(),
++                                     'monotonic': time.monotonic(), 'pid': os.getpid()})+'\n')
++    import faulthandler
++    stack_log = (diagnostics/'startup_stack.log').open('w', encoding='utf-8')
++    faulthandler.dump_traceback_later(8, file=stack_log)
++    stage('worker_started')
+     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+     # Bind before readiness; an occupied port is never reused or terminated.
++    stage('socket_binding')
+     sock.bind(('127.0.0.1', cfg['port']))
+     sock.listen(128)
++    stage('socket_listening')
+     from game import storage as st
+     from tools.atgb.isolation import assert_imported_data_dir
+     assert_imported_data_dir(st.DATA_DIR, run/'data', player_campaign_dir=Path(cfg['player_data']))
+@@ -125,6 +144,7 @@ def main():
+         install_transport(cfg['fixture_response'], cfg['scenario_id'] == 'FiveTurnGameplay')
+     from game import api, gm, provider_budget as budget
+     from game.config import get_openai_api_key, DEFAULT_MODEL_NAME
++    from game.opening_presentation_renderer import opening_renderer_diagnostics
+     if cfg['mode'] == 'Live':
+         # Existence check only. Never dispatch connectivity probes.
+         if not get_openai_api_key().strip() or budget.provider_calls_disabled():
+@@ -142,26 +162,41 @@ def main():
+     if api._compute_upstream_gate_for_live_gameplay()[0].get('manual_testing_blocked'):
+         raise RuntimeError('Existing upstream gate blocked this run')
+     write(diagnostics/'ready.json', {'pid': os.getpid(), 'port': sock.getsockname()[1],
++          'phase': 'configuration_initialized', 'time': datetime.now(timezone.utc).isoformat(),
+           'data_dir': str(st.DATA_DIR), 'isolation_verified': True,
+           'model': DEFAULT_MODEL_NAME, 'opening_output_allowance': gm._opening_max_output_tokens(),
++          'opening_renderer': opening_renderer_diagnostics(),
+           'limits': budget.limits(), 'sdk_retries': 0, 'host_retries': 0,
+           'diagnostics_enabled': budget.generation_diagnostics_enabled(),
+           'credentials_present': cfg['mode'] == 'Live', 'connectivity_diagnostics': False})
+ 
+     async def application(scope, receive, send):
+         global CURRENT_TURN
++        async def observed_send(message):
++            if message['type'] in {'lifespan.startup.complete', 'lifespan.startup.failed'}:
++                stage(message['type'])
++            await send(message)
++        if scope['type'] == 'lifespan':
++            stage('application_initializing')
+         if scope['type'] == 'http' and scope.get('path') == '/api/chat':
+             CURRENT_TURN += 1
++        if scope['type'] == 'http':
++            faulthandler.cancel_dump_traceback_later()
+         try:
+-            await api.app(scope, receive, send)
++            await api.app(scope, receive, observed_send)
+         finally:
+             if scope['type'] == 'http':
+                 write(diagnostics/'budget_snapshot.json', budget.snapshot())
+ 
++    stage('configuration_initialized')
+     import uvicorn
++    stage('uvicorn_imported')
+     try:
++        stage('server_run_entered')
+         uvicorn.Server(uvicorn.Config(application, log_level='info', access_log=False)).run(sockets=[sock])
+     finally:
++        faulthandler.cancel_dump_traceback_later()
++        stack_log.close()
+         write(diagnostics/'budget_snapshot.json', budget.snapshot())
+         sock.close()
+ 
+@@ -172,5 +207,8 @@ if __name__ == '__main__':
+     except Exception as exc:
+         # Exception messages can contain provider/private text. Record the type only.
+         run = Path(sys.argv[1])
+-        write(run/'diagnostics/worker_failure.json', {'type': type(exc).__name__, 'stage': 'worker_bootstrap'})
++        events = run/'diagnostics/startup_events.jsonl'
++        last_stage = json.loads(events.read_text(encoding='utf-8').splitlines()[-1])['event'] if events.exists() else 'worker_bootstrap'
++        write(run/'diagnostics/worker_failure.json', {'type': type(exc).__name__, 'stage': last_stage,
++              'os_error': getattr(exc, 'winerror', None) or getattr(exc, 'errno', None)})
+         raise SystemExit(2)

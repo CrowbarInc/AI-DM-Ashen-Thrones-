@@ -1,0 +1,5 @@
+# ADVERSARIAL TARGET TESTS
+
+adversarial_decisions.json retains five safe current mud-prints frames, eighteen unauthorized/ambiguous assertions, and all eighteen safe+unsafe mixtures. All safe frames pass; every unsupported property/discovery/inventory/persistent/route/NPC/hidden assertion and mixed candidate is rejected. "Important", "unusual", "may hide", "larger group" and "seems wrong" receive no automatic exemption: they imply unsupported significance or properties and fall outside finite attention frames. Full original text, semantic claims, decision, final composition and rationale are retained.
+
+Development tests also cover weathered milestone, authored weathered stone and mud track aliases; current/hidden/gated/invisible/invented/wrong-id/other-scene/failed targets. Holdout uses separately frozen copper marker, river stones, worn sign and cart ruts names. Context isolation evidence rejects stale session/campaign/resolution/action publication bindings. A previously visible object does not become the current target merely by appearing in prose; valid current-context projections are reconstructed.

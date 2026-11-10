@@ -1,0 +1,342 @@
+--- entry/game/integrated_investigation_narration.py
++++ game/integrated_investigation_narration.py
+@@ -7,12 +7,12 @@
+ 
+ from dataclasses import asdict
+ import json
+-import re
+ import time
+ 
+ from game import anchored_investigation_narration as anchored
+ from game import consequential_narration_validation as semantic
+ from game import quarantined_investigation_narration as quarantine
++from game.mandatory_outcome_coverage import mandatory_coverage
+ from game.immutable_valid_response import validate_generated_response
+ from game.resolution_contract import contract_mapping_from_resolution
+ 
+@@ -60,43 +60,6 @@
+     if len(json.dumps(request).encode('utf-8')) > 10000:
+         raise ValueError('integrated_projection_too_large')
+     return contract, request
+-
+-
+-def mandatory_coverage(text: str, request: dict) -> dict:
+-    """Reuse PR55 normalization without a new synonym ontology.
+-
+-    Match content within one sentence, preserving negative polarity and explicit
+-    uncertainty. Unrecognized paraphrases are REVIEW_REQUIRED, never inferred safe.
+-    The semantic gate independently checks contradictions and unauthorized claims.
+-    """
+-    sentences = re.split(r'(?<=[.!?])\s+', text)
+-    negative = re.compile(r"\b(?:nothing (?:new|further)|no (?:new|further|additional) (?:clue|information|discovery)|adds? nothing new|establish\w* nothing new)\b", re.I)
+-    repeated = re.compile(r'\b(?:again|already|previously|still|remains?|remember|recall|before|revisit\w*)\b', re.I)
+-    rows = []
+-    for fact in request['must_communicate']:
+-        needed = set(semantic._tokens(fact['text']))
+-        matched = None
+-        if fact['source'] == 'engine_status':
+-            matched = next((s for s in sentences if negative.search(s)), None)
+-            if fact['status'] == 'known' and not repeated.search(text):
+-                matched = None
+-        else:
+-            for sentence in sentences:
+-                # Negating a matching fact is not coverage. Ambiguous negation
+-                # is intentionally sent for review even if semantically harmless.
+-                if re.search(r"\b(?:not|never|isn't|wasn't|didn't)\b", sentence, re.I):
+-                    continue
+-                if needed and needed <= set(semantic._tokens(sentence)):
+-                    matched = sentence
+-                    break
+-        overlap = max((len(needed & set(semantic._tokens(s))) / max(1, len(needed))
+-                       for s in sentences), default=0)
+-        rows.append({**fact, 'decision': 'PASS' if matched else 'REVIEW_REQUIRED',
+-                     'classification': 'covered' if matched else
+-                     'ambiguous_paraphrase' if overlap >= .4 else 'missing_mandatory_outcome',
+-                     'evidence': matched, 'content_overlap': round(overlap, 3)})
+-    return {'decision': 'PASS' if all(r['decision'] == 'PASS' for r in rows) else 'REVIEW_REQUIRED',
+-            'facts': rows, 'scope': 'provisional_conservative_coverage_not_semantic_proof'}
+ 
+ 
+ def validate_integrated(contract, request, raw):
+--- entry/game/consequential_narration_validation.py
++++ game/consequential_narration_validation.py
+@@ -756,7 +756,7 @@
+         r"\bwounds?\s+(?:knit|close|heal)\b"
+         r"|\b(?:poison|curse)\s+(?:has|have)\s+(?:worn off|faded|lifted|left)\b"
+         r"|\byou\s+are\s+no\s+longer\s+(?:poisoned|wounded|injured|cursed|bleeding|stunned|sick)\b"
+-        r"|\byou\s+(?:become|are now)\s+(?:poisoned|wounded|injured|healed|cursed|bleeding|stunned)\b",
++        r"|\byou\s+(?:become|are(?: now)?)\s+(?:poisoned|wounded|injured|healed|cursed|bleeding|stunned)\b",
+         clause,
+         re.IGNORECASE,
+     ):
+@@ -798,6 +798,14 @@
+ 
+ 
+ def _expansion(clause: str, authority: SemanticAuthority) -> list[dict]:
++    # Completed harmful events and attributed knowledge are consequential even
++    # when appended to an otherwise accurately covered discovery (PR-PLAY-58).
++    if re.search(
++        r"\b(?:was|were|is|are|has been|have been)\s+(?:ambushed|captured|killed|abducted)\b"
++        r"|\b(?:knows|knew)\s+(?:your|the|a)\s+(?:secret|hidden|patrol|destination)\b",
++        clause, re.IGNORECASE,
++    ) and not _covered(clause, authority):
++        return [_claim("discovery", "consequential_expansion", clause)]
+     match = re.search(r"\b(unprotected|unguarded|unwatched|unmanned)\b", clause, re.IGNORECASE)
+     if match is None or _hedged(clause):
+         return []
+--- /dev/null
++++ game/mandatory_outcome_coverage.py
+@@ -0,0 +1,166 @@
++"""Bounded read-only coverage relationships for completed investigation facts.
++
++This is a leaf of integrated narration validation, not an authority store or a
++general natural-language inference engine. Unsupported grammar stays in review.
++"""
++from __future__ import annotations
++
++import re
++
++from game import consequential_narration_validation as semantic
++
++
++def _has(pattern, text):
++    return re.search(pattern, text, re.I) is not None
++
++
++def _normal(text):
++    text = text.casefold().replace('\u2019', "'")
++    # Morphology and tightly scoped surface variants, not world synonyms.
++    for pattern, value in (
++        (r'\bfootprints?\b', 'prints'), (r'\bprint\b', 'prints'),
++        (r'\bmuddy\b', 'mud'), (r'\b(?:track|trail|path)\b', 'track'),
++        (r'\b(?:spotted|observed)\b', 'seen'),
++        (r'\b(?:heading|following|taking)\b', 'taking'),
++        (r'\b(?:beyond)\b', 'past'),
++        (r'\b(?:weathered)\s+(?:stone\s+)?milestone\b', 'old milestone'),
++    ):
++        text = re.sub(pattern, value, text)
++    return re.sub(r'\s+', ' ', text).strip()
++
++
++_DOUBT = r'\b(?:perhaps|maybe|might|may|could|supposedly|allegedly|if|whether|seems?|suggests?)\b|\?'
++_NEGATION = r"\b(?:not|never|isn't|wasn't|didn't|cannot|can't)\b"
++_CONTINUITY = r'\b(?:again|already|previously|still|remains?|recall|remember|revisit\w*|return|once more|familiar)\b'
++_NEW = r'\b(?:first time|newly discover\w*|new discovery|fresh discovery)\b'
++_NO_NEW = (
++    r'\b(?:nothing (?:new|further)|no (?:new|fresh|further|additional) '
++    r'(?:clues?|information|discover\w*|evidence)|'
++    r'(?:find|learn|reveal|uncover)\w* nothing (?:new|further)|'
++    r'without (?:finding|learning|uncovering) (?:anything|something) new|'
++    r'nothing beyond what you already know)\b'
++)
++
++
++def _route_shape(text):
++    """Parse a finite reported movement relation, retaining subject and path.
++
++    Requiring the whole relation prevents a list of matching words or movement
++    by another actor from proving coverage. No action synonym crosses domains.
++    """
++    match = re.search(
++        r'\bthe (?P<subject>[a-z ]{1,60}?) was last seen taking '
++        r'(?:along )?the (?P<path>[a-z ]{1,80}?) past the (?P<landmark>[a-z ]{1,40})[.!?,;:]?$', text)
++    return match.groupdict() if match else None
++
++
++def _route(text, fact):
++    shape = _route_shape(_normal(fact))
++    if not shape:
++        return None
++    subject, path, landmark = (re.escape(shape[k]) for k in ('subject', 'path', 'landmark'))
++    # Northwest mud / mud northwest are equivalent adjective order only.
++    parts = shape['path'].split()
++    paths = [path]
++    if len(parts) == 3 and parts[-1] == 'track' and parts[1] == 'mud':
++        paths.append(re.escape(' '.join([parts[1], parts[0], parts[2]])))
++    path = '(?:' + '|'.join(paths) + ')'
++    movement = rf'the {subject} was last seen taking (?:along )?the {path} past the {landmark}\b'
++    reordered = rf'past the {landmark},? the {subject} was last seen taking (?:along )?the {path}\b'
++    record = rf'(?:notices?|records?|reports?) place the {subject} on the {path},? past the {landmark}\b'
++    directional = r'(?!)'
++    if len(parts) == 3 and parts[1:] == ['mud','track']:
++        directional = (rf'the {subject} was last seen taking {re.escape(parts[0])} '
++                       rf'along the mud track past the {landmark}\b')
++    candidates = re.split(r'(?<=[.!?])\s+', _normal(text))
++    evidence = next((s for s in candidates if _has(movement+'|'+reordered+'|'+record+'|'+directional, s)
++                     and not _has(_NEGATION+'|'+_DOUBT, s)), None)
++    # Contradictory restatements do not disappear just because one sentence fits.
++    relevant = [s for s in candidates if _has(rf'\b{subject}\b', s)]
++    directions = set(re.findall(r'\b(?:northwest|northeast|southwest|southeast|north|south|east|west)\b', shape['path']))
++    wrong = any((set(re.findall(r'\b(?:northwest|northeast|southwest|southeast|north|south|east|west)\b', s)) - directions)
++                or _has(r'\b(?:was not last seen|will be seen|before the '+landmark+r')\b', s)
++                for s in relevant)
++    if wrong:
++        return 'contradicted', None, {'relation':shape}
++    if evidence:
++        return 'covered', evidence, {'relation':shape}
++    return 'ambiguous' if any(_has(_DOUBT, s) for s in relevant) else 'partial' if relevant else 'missing', None, {'relation':shape}
++
++
++_FACETS = {
++    'number': r'\bnumber\b|\bhow many (?:people|persons|travelers|prints)',
++    'origin': r'\b(?:origin|source)\b|\bwhere they came from\b',
++    'direction': r'\bdirection\b|\bwhich way they (?:went|go)\b',
++}
++_UNCERTAIN = (r'\b(?:unclear|uncertain|unknown|indistinct|unresolved|doubtful|ambiguous)\b|'
++              r"\b(?:cannot|can't|unable to) (?:tell|determine|discern|establish)\b|"
++              r'\bno evidence of\b')
++
++
++def _uncertainty(text, fact):
++    required = _normal(fact)
++    # Only parse coordinated uncertainty when all facets are explicitly required.
++    if not all(_has(p, required) for p in _FACETS.values()) or not _has(_UNCERTAIN, required):
++        return None
++    observation, sep, _ = required.partition(', but ')
++    if not sep or 'prints' not in observation:
++        return None
++    # Preserve every observation detail using finite observation predicates.
++    observation = re.sub(r'\bprints mark\b', 'prints', observation)
++    required_terms = set(semantic._tokens(observation)) - {'mark'}
++    sentences = re.split(r'(?<=[.!?])\s+', _normal(text))
++    evidence = None
++    facets = []
++    for i, sentence in enumerate(sentences):
++        # Adjacent anaphora only: "Their number..." must follow the observation.
++        window = sentence + (' ' + sentences[i+1] if i+1 < len(sentences)
++                             and _has(r'^(?:their|the prints|though|but)\b', sentences[i+1]) else '')
++        terms = set(semantic._tokens(window))
++        visible = required_terms <= terms and _has(r'\bprints\b', sentence)
++        if _has(r'\b(?:no prints|prints (?:are|were) not|not visible|might be prints|absent|imaginary)\b', window):
++            continue
++        if not visible:
++            continue
++        # Each facet needs the same uncertainty predicate in its own clause.
++        for clause in re.split(r'[.!?;]|\bbut\b|\bthough\b', window):
++            if _has(_UNCERTAIN, clause) and not _has(r'\b(?:not unclear|not uncertain|no longer|not unknown)\b', clause):
++                facets.extend(k for k,p in _FACETS.items() if _has(p, clause))
++        evidence = window
++        if set(facets) == set(_FACETS):
++            break
++    certain = _has(r'\bprints (?:lead|go|head) (?:toward|to|north|south|east|west)|'
++                   r'\b(?:three|two|four|five|\d+) (?:travelers|people|persons)\b|'
++                   r'\b(?:number|origin|source|direction) (?:is|are|remains?) (?:known|clear|certain|resolved)\b', _normal(text))
++    if certain:
++        return 'contradicted', None, {'uncertainty_facets':sorted(set(facets))}
++    covered = set(facets) == set(_FACETS) and not _has(_DOUBT, _normal(text))
++    return ('covered' if covered else 'partial' if evidence else 'ambiguous'), evidence, {'uncertainty_facets':sorted(set(facets))}
++
++
++def mandatory_coverage(text: str, request: dict) -> dict:
++    rows = []
++    normalized = _normal(text)
++    for fact in request['must_communicate']:
++        result = None
++        if fact['source'] == 'engine_status':
++            no_new = any(_has(_NO_NEW,s) and not _has(_DOUBT+'|'+r'\bnot (?:true|nothing|no new)\b',s)
++                         for s in re.split(r'(?<=[.!?])\s+',normalized))
++            repeat = fact['status'] != 'known' or _has(_CONTINUITY, normalized)
++            result = ('covered' if no_new and repeat else 'partial' if no_new else 'missing',
++                      text if no_new and repeat else None, {})
++        else:
++            result = _route(text, fact['text']) or _uncertainty(text, fact['text'])
++        if result is None:
++            # Unknown fact types require a literal proposition, not a bag of words.
++            literal = _normal(fact['text']).rstrip('.!?')
++            covered = any(literal in s and not _has(_NEGATION+'|'+_DOUBT, s)
++                          for s in re.split(r'(?<=[.!?])\s+', normalized))
++            result = ('covered' if covered else 'ambiguous', text if covered else None, {})
++        classification, evidence, details = result
++        if (fact['status'] in ('known', 'previously_known') and _has(_NEW, normalized)):
++            classification, evidence = 'contradicted', None
++        rows.append({**fact, 'decision':'PASS' if classification == 'covered' else 'REVIEW_REQUIRED',
++                     'classification':classification, 'evidence':evidence, **details})
++    return {'decision':'PASS' if all(r['decision']=='PASS' for r in rows) else 'REVIEW_REQUIRED',
++            'facts':rows, 'scope':'bounded_deterministic_coverage_not_semantic_proof'}
+--- /dev/null
++++ tests/pr_play_58_development.py
+@@ -0,0 +1,53 @@
++"""Development controls; deliberately separate from the frozen holdout."""
++from tests.test_pr_play_57_integrated_narration import ROUTE, hook
++
++PRINTS = ('Faint overlapping prints mark the mud around the old milestone, '
++          'but their number, origin, and direction stay unclear.')
++
++
++def cases():
++    rows = []
++    def add(group, texts, **kwargs):
++        for text in texts:
++            rows.append({'id':f'D{len(rows)+1:02}', 'group':group,
++                         'expected':'PASS' if group=='legitimate' else 'REVIEW_REQUIRED' if group in ('missing','ambiguous') else 'FAIL',
++                         'hook':hook(**kwargs), 'text':text})
++    add('legitimate', [ROUTE,
++        'Past the crates, the missing patrol was last seen heading along the northwest muddy path.',
++        'The missing patrol was last spotted following the northwest mud trail past the crates.',
++        'The notices place the missing patrol on the northwest mud track, past the crates.',
++        'Wind stirs the paper. '+ROUTE])
++    add('legitimate', [PRINTS,
++        'Faint overlapping footprints mark the mud around the weathered milestone. Their number, source and direction remain uncertain.',
++        'Faint overlapping prints mark the mud around the old milestone, but you cannot determine how many people left them, where they came from or which way they went.',
++        'Faint overlapping prints mark the mud around the old milestone, but their number, origin and direction remain ambiguous.',
++        'Faint overlapping prints mark the mud around the old milestone, but their number, origin and direction remain unresolved.',
++        'Faint overlapping prints mark the mud around the old milestone, but there is no evidence of their number, origin or direction.'], clues=[PRINTS])
++    add('legitimate', ['You inspect it again, but find nothing further. '+ROUTE,
++        'You recall the earlier examination; no fresh clues emerge. '+ROUTE],
++        kind='already_searched', success=False, clues=[], known=[ROUTE])
++    add('legitimate', ['Your examination yields no additional information.',
++        'You learn nothing new from your failed investigation.'], clues=[], success=False)
++    add('missing', ['The board creaks.', 'The missing patrol was last seen taking the northwest mud track.',
++        'The missing patrol was last seen past the crates.', 'Northwest mud track, crates, missing patrol.'])
++    add('missing', ['Faint overlapping prints mark the mud around the old milestone.',
++        'Faint overlapping prints mark the mud around the old milestone, but their number is unknown.'], clues=[PRINTS])
++    add('contradictory', [ROUTE.replace('northwest','southwest'), ROUTE.replace('patrol','merchant'),
++        ROUTE.replace('past the crates','before the crates'), ROUTE.replace('was last seen','will be seen'),
++        ROUTE.replace('was last seen','was not last seen'), 'Your investigation fails.'])
++    add('contradictory', ['The prints lead north.', 'Three people left the prints heading east.'], clues=[PRINTS])
++    add('contradictory', [
++        PRINTS+' Their direction is known.',
++        'Faint overlapping prints mark the mud around the old milestone, but their number and origin are unknown; their direction is clear.',
++        ROUTE+' The missing patrol was last seen taking the southeast mud track past the crates.',
++    ], clues=[PRINTS])
++    add('expansion', [ROUTE+' The patrol was ambushed by smugglers.',
++        ROUTE+' You find a hidden map beneath the board.', ROUTE+' You acquire a silver key.',
++        ROUTE+' The captain knows the secret destination.', ROUTE+' You gain 10 gold coins.',
++        ROUTE+' A secret tunnel runs beneath the gate.', ROUTE+' Your quest is complete.',
++        ROUTE+' You are poisoned.'])
++    add('expansion', ['You discover the route for the first time. '+ROUTE],
++        kind='already_searched', success=False, clues=[], known=[ROUTE])
++    add('ambiguous', ['Perhaps '+ROUTE[0].lower()+ROUTE[1:],
++        'The missing patrol might have followed the northwest mud track past the crates.'])
++    return rows
+--- /dev/null
++++ tests/test_pr_play_58_semantic_coverage.py
+@@ -0,0 +1,28 @@
++import copy
++import pytest
++
++from game import integrated_investigation_narration as integrated
++from tests.pr_play_58_development import cases
++
++
++@pytest.mark.parametrize('case', cases(), ids=lambda c:c['id'])
++def test_development_coverage_safety(case):
++    before = copy.deepcopy(case['hook'])
++    contract, request = integrated.outcome_contract(case['hook'])
++    result = integrated.validate_integrated(contract, request, case['text'])
++    assert case['hook'] == before
++    if case['expected']=='PASS':
++        assert result['coverage']['decision']=='PASS'
++    else:
++        assert result['decision']!='PASS'
++
++
++def test_coverage_does_not_override_semantic_or_legacy(monkeypatch):
++    case=cases()[0]
++    contract,request=integrated.outcome_contract(case['hook'])
++    for decision in ['FAIL','REVIEW_REQUIRED','VALIDATION_ERROR']:
++        monkeypatch.setattr(integrated.semantic,'validate_consequential_narration',
++            lambda *args, d=decision: {'decision':d,'reasons':['injected'],'claims':[]})
++        result=integrated.validate_integrated(contract,request,case['text'])
++        assert result['coverage']['decision']=='PASS'
++        assert result['decision']==decision

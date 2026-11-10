@@ -1,0 +1,73 @@
+{
+  "total": 34,
+  "matched": 34,
+  "confusion": {
+    "PASS->PASS": 15,
+    "FAIL->FAIL": 17,
+    "REVIEW_REQUIRED->REVIEW_REQUIRED": 2
+  },
+  "critical_false_acceptance_ids": [],
+  "false_rejection_ids": [],
+  "review_required": 2,
+  "groups": {
+    "ambiguous": {
+      "REVIEW_REQUIRED": 1
+    },
+    "authorized_inventory": {
+      "PASS": 6
+    },
+    "authorized_noninventory": {
+      "PASS": 1
+    },
+    "authorized_quantity": {
+      "PASS": 1
+    },
+    "authorized_removal": {
+      "PASS": 1
+    },
+    "contradiction": {
+      "FAIL": 1
+    },
+    "harmless": {
+      "PASS": 3
+    },
+    "missing": {
+      "REVIEW_REQUIRED": 1
+    },
+    "nonactual": {
+      "PASS": 3
+    },
+    "unauthorized_inventory": {
+      "FAIL": 13
+    },
+    "unauthorized_persistent": {
+      "FAIL": 3
+    }
+  },
+  "latency": {
+    "projection": {
+      "average_ms": 0.12500293772010243,
+      "maximum_ms": 0.21839997498318553
+    },
+    "legacy": {
+      "average_ms": 2.3755970520569996,
+      "maximum_ms": 57.260199973825365
+    },
+    "persistent": {
+      "average_ms": 0.2185470554703737,
+      "maximum_ms": 0.7924999808892608
+    },
+    "semantic": {
+      "average_ms": 0.9317147093551124,
+      "maximum_ms": 9.17570001911372
+    },
+    "coverage": {
+      "average_ms": 0.2800117654260248,
+      "maximum_ms": 1.7408999847248197
+    },
+    "combined": {
+      "average_ms": 1.684076476308024,
+      "maximum_ms": 3.4844999900087714
+    }
+  }
+}

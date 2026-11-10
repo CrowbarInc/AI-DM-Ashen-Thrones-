@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="13.273" timestamp="2026-11-08T07:21:51.654047-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_61_player_facing" name="test_four_actions_keep_authority_and_recover" time="4.863"><failure message="AssertionError: assert [True, True, False, True] == [True, True, True, True]&#10;  &#10;  At index 2 diff: False != True&#10;  &#10;  Full diff:&#10;    [&#10;        True,&#10;        True,...&#10;  &#10;  ...Full output truncated (4 lines hidden), use '-vv' to show">tests\test_pr_play_61_player_facing.py:192: in test_four_actions_keep_authority_and_recover
+    assert published == [True, True, True, True]
+E   AssertionError: assert [True, True, False, True] == [True, True, True, True]
+E     
+E     At index 2 diff: False != True
+E     
+E     Full diff:
+E       [
+E           True,
+E           True,...
+E     
+E     ...Full output truncated (4 lines hidden), use '-vv' to show</failure></testcase><testcase classname="tests.test_pr_play_47_controlled_renderer" name="test_matrix[5]" time="0.020" /><testcase classname="tests.test_pr_play_66_publication" name="test_publication_http[no_new]" time="1.395" /><testcase classname="tests.test_pr_play_66_publication" name="test_publication_http[continuity]" time="2.083" /><testcase classname="tests.test_pr_play_66_publication" name="test_publication_http[fast_path]" time="1.087" /></testsuite></testsuites>

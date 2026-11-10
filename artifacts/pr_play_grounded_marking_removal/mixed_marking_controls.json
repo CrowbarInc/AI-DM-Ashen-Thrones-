@@ -1,0 +1,11 @@
+{
+  "source": "tests/test_grounded_marking_removal.py::test_mixed_and_ambiguous_markings_remove_only_the_selected_one and test_identical_request_does_not_pick_one_of_two_copies, both passed in the focused run.",
+  "ambiguous_phrase": "I erase the writing off my sleeve.",
+  "ambiguous_result": "more than one marking; no removal",
+  "active_before_selected_removal": ["warning", "name", "concealed signal", "restricted route"],
+  "selected_phrase": "I wipe the warning off my sleeve.",
+  "active_after": ["concealed signal", "restricted route", "name"],
+  "observation_names_name": true,
+  "observation_omits_warning_signal_route_and_concealed_count": true,
+  "identical_visible_copies": "not reduced; the reply asks for one marking"
+}

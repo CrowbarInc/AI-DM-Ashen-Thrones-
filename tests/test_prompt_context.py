@@ -286,7 +286,7 @@ def test_prompt_contract_owner_exposes_rule_priority_hierarchy() -> None:
     policy = ctx["response_policy"]
     instructions = " ".join(ctx.get("instructions", []))
 
-    assert policy["rule_priority_order"] == [label for _, label in RESPONSE_RULE_PRIORITY]
+    assert policy["rule_priority_order"] == [label.replace(' / SECRETS', '') for _, label in RESPONSE_RULE_PRIORITY]
     rd = policy.get("response_delta") or {}
     assert rd.get("enabled") is False
     assert rd.get("trigger_source") == "none"
@@ -580,18 +580,12 @@ def test_prompt_contract_owner_exports_promoted_npc_identity_and_social_profile(
     )
     assert ctx["session"]["active_interaction_target_id"] == "frontier_gate__ragged_stranger"
     assert ctx["session"]["active_interaction_target_name"] == "Keene"
-    profile = ctx["social_context"]["interlocutor_profile"]
-    assert profile["npc_is_promoted"] is True
-    assert profile["reliability"] == "partial"
-    assert profile["stance"] == "wary"
-    assert "scene:frontier_gate" in profile["knowledge_scope"]
+    # PLAY-45: private knowledge scope, agenda and reliability are not disclosure grants.
+    assert "social_context" not in ctx
     active = ctx["active_interlocutor"]
     assert active["npc_id"] == "frontier_gate__ragged_stranger"
-    assert active["raw_interaction_target_id"] == "ragged_stranger"
-    assert active["promoted_from_actor_id"] == "ragged_stranger"
-    hints = ctx["social_context"]["answer_style_hints"]
-    assert any("INFORMATION_RELIABILITY partial" in hint for hint in hints)
-    assert any("INTERLOCUTOR KNOWLEDGE GATE" in hint for hint in hints)
+    assert active["display_name"] == "Keene"
+    assert set(active) == {"npc_id", "display_name"}
     assert any("NAMING CONTINUITY (engine)" in line for line in ctx["instructions"])
 
 
@@ -1798,7 +1792,7 @@ def test_build_narration_context_narration_visibility_minimal_export():
         )
     )
     assert "narration_visibility" in ctx
-    assert ctx["discoverable_hinting"] is True
+    assert ctx["discoverable_hinting"] is False
     nv = ctx["narration_visibility"]
     assert "visible_entities" in nv and isinstance(nv["visible_entities"], list)
     assert "visible_facts" in nv and isinstance(nv["visible_facts"], list)
@@ -1821,9 +1815,9 @@ def test_build_narration_context_narration_visibility_minimal_export():
     instr = "\n".join(ctx["instructions"])
     assert "MUST NOT reference entities outside narration_visibility.visible_entities" in instr
     assert "MUST NOT assert facts outside narration_visibility.visible_facts" in instr
-    assert "discoverable_hinting is true" in instr
-    lr = ctx["scene"]["layering_rules"]
-    assert "only visible facts may be directly asserted" in lr["visible_facts"].lower()
+    assert "undiscovered facts are unavailable" in instr
+    assert "gm_only" not in ctx["scene"]
+    assert "undiscovered" not in ctx["scene"]["clue_records"]
 
 
 @pytest.mark.unit
@@ -1981,7 +1975,7 @@ def test_build_narration_context_exposes_lead_context_and_preserves_pending_surf
     ):
         assert key in lc
     assert ctx["scene"]["pending_leads"] == [{"surface": "scene hook"}]
-    assert ctx["scene"]["runtime"]["pending_leads"] == [{"hint": "legacy pending"}]
+    assert ctx["scene"]["runtime"]["pending_leads"] == []  # internal hint lacks a public surface
 
 
 def test_build_narration_context_filters_terminal_pending_leads_from_prompt_export():

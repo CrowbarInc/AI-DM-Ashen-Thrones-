@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 19 REAL HTTP GAMEPLAY
+
+Final normal TCP campaigns A/survey and B/report both PASS. New Campaign → Start → notice → milestone → exclusive branch/follow-up → suitable populated gate → live NPC proposal/validation/commit/publication → conversation → routine seat at milestone → save → fresh campaign → load → restored transcript/history → same-NPC response. Two final live proposal calls / 703 tokens; dialogue in this final rerun uses host fallback after the earlier live wording sample. Full original requests, publications, stage timings and authority before/after are retained. Initial live HTTP continuation was partial and remains separate. A third bounded attempt refused old accounting state with zero dispatches; final fresh-root run is distinct.

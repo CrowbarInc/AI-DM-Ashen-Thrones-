@@ -1,0 +1,115 @@
+- complementary:
+  - generic: UI Mode
+  - combobox "UI Mode":
+    - option "Player" [selected]
+    - option "Author"
+    - option "Debug"
+  - button "Play"
+  - button "Character"
+  - button "World"
+  - heading "Play" [level=2]
+  - strong: Galinor
+  - text: — Level 1 Wizard
+  - text: "HP: 8/8"
+  - text: "AC: 12 | Touch 12 | Flat-Footed 10"
+  - text: "Conditions: none"
+  - heading "Save Status" [level=3]
+  - strong: "Last saved:"
+  - text: 11/5/2026, 7:53:09 PM
+  - strong: "Active scene at save:"
+  - text: frontier_gate
+  - strong: "Save data exists:"
+  - text: "Yes"
+  - generic: Auto-saves on each action/chat. 2 clues, 8 log entries.
+  - heading "Scene & Mode" [level=3]
+  - strong: "Scene:"
+  - text: Cinderwatch Gate District
+  - strong: "Mode:"
+  - text: social
+  - generic: Narration Mode
+  - combobox "Narration Mode":
+    - option "Terse"
+    - option "Standard" [selected]
+    - option "Vivid"
+    - option "Tactical"
+    - option "Investigative"
+  - generic: Modes change narration style only — mechanics stay the same.
+  - heading "Combat" [level=3]
+  - generic: Combat inactive.
+  - generic: No living enemies.
+  - button "Roll Initiative"
+  - button "End Turn"
+  - heading "Action Helper" [level=3]
+  - generic: Target
+  - combobox
+  - generic: Action Type
+  - combobox:
+    - option "Attack" [selected]
+    - option "Spell"
+    - option "Skill"
+    - option "Freeform"
+  - generic: Attack
+  - combobox:
+    - option "Quarterstaff (+0)" [selected]
+    - option "Light Crossbow (+2)"
+  - checkbox "Risky Strike"
+  - text: Risky Strike
+  - checkbox "Defensive Stance"
+  - text: Defensive Stance
+  - button "Submit Attack"
+  - heading "Controls" [level=3]
+  - button "Clear Log"
+  - button "Reset Combat"
+  - button "New Campaign"
+  - generic "Save Slots"
+  - paragraph: Create restore points for playtesting and branching.
+  - textbox "Optional label"
+  - button "Create Snapshot"
+  - list:
+    - button "Load"
+    - text: PR71 Report B (11/5/2026, 7:49:50 PM)
+    - button "Load"
+    - text: PR71 Survey A (11/5/2026, 7:46:59 PM)
+- main:
+  - heading "Cinderwatch Gate District" [level=1]
+  - generic: Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.
+  - generic: "Suggested Actions:"
+  - button "Talk to Gate Guard"
+  - button "Talk to Gate Serjeant"
+  - button "Talk to Tavern Runner"
+  - button "Examine the Notice board (already searched)"
+  - button "Examine The notice board lists taxes"
+  - generic: GM
+  - generic: Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and paid rumor. You can read the notice board, press the guards, or approach the tavern runner.
+  - generic: Galinor
+  - generic: I examine the Notice board.
+  - generic: GM
+  - generic: The missing patrol was last seen taking the northwest mud track past the crates.
+  - generic: Galinor
+  - generic: I follow the missing patrol rumor.
+  - generic: GM
+  - generic: You arrive at Old Milestone.
+  - generic: Galinor
+  - generic: I examine the Weathered milestone.
+  - generic: GM
+  - generic: Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.
+  - generic: Galinor
+  - generic: Return to report the uncertain trail to the watch
+  - generic: GM
+  - generic: You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report.
+  - generic: Galinor
+  - generic: I return to Cinderwatch Gate.
+  - generic: GM
+  - generic: You arrive at frontier gate.
+  - generic: Galinor
+  - generic: Give the watch your patrol report
+  - generic: GM
+  - generic: The watch receives your report that the patrol trail becomes unclear at the milestone. The watch has now been warned; no private survey was conducted. You can continue your inquiry at the gate or return to the milestone.
+  - generic: Galinor
+  - generic: I examine the Notice board.
+  - generic: GM
+  - generic: The examination adds nothing new to what you already know.
+  - generic: System
+  - generic: Snapshot restored.
+  - textbox "Play by chat here. Describe what Galinor says or does."
+  - button "Send"

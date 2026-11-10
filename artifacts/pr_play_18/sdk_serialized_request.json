@@ -1,0 +1,171 @@
+{
+  "input": [
+    {
+      "role": "system",
+      "content": "OPENING PRESENTATION PLAN: Return one JSON object and no other text. The only allowed key is selected_entries. Each entry may contain only catalog_id and variant_id. Select every required entry in increasing sequence. Optional entries may be included. Do not write narration, facts, outcomes, or state changes.\nOPENING_PRESENTATION_CATALOG\n{\"entries\":[{\"catalog_id\":\"rc_ad718c5402fd\",\"required\":true,\"sequence\":0,\"variant_ids\":[\"authored\"]},{\"catalog_id\":\"rc_b08a2a2bacbe\",\"required\":true,\"sequence\":1,\"variant_ids\":[\"authored\"]},{\"catalog_id\":\"rc_abcf2a4da605\",\"required\":true,\"sequence\":2,\"variant_ids\":[\"authored\"]},{\"catalog_id\":\"rc_ceeffa83562d\",\"required\":true,\"sequence\":3,\"variant_ids\":[\"authored\"]},{\"catalog_id\":\"rc_ea492080989d\",\"required\":true,\"sequence\":4,\"variant_ids\":[\"authored\"]},{\"catalog_id\":\"rc_e1a3e4a3b185\",\"required\":true,\"sequence\":5,\"variant_ids\":[\"authored\"]}]}\nEND_OPENING_PRESENTATION_CATALOG"
+    },
+    {
+      "role": "user",
+      "content": "{\"response_type_contract\": {\"required_response_type\": \"scene_opening\"}, \"opening_public_choices\": [{\"catalog_id\": \"rc_ad718c5402fd\", \"variants\": {\"authored\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.\"}}, {\"catalog_id\": \"rc_b08a2a2bacbe\", \"variants\": {\"authored\": \"Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.\"}}, {\"catalog_id\": \"rc_abcf2a4da605\", \"variants\": {\"authored\": \"A notice board lists new taxes, curfews, and a posted warning about a missing patrol.\"}}, {\"catalog_id\": \"rc_ceeffa83562d\", \"variants\": {\"authored\": \"A tavern runner shouts offers of hot stew and paid rumor.\"}}, {\"catalog_id\": \"rc_ea492080989d\", \"variants\": {\"authored\": \"A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.\"}}, {\"catalog_id\": \"rc_e1a3e4a3b185\", \"variants\": {\"authored\": \"One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\"}}]}"
+    }
+  ],
+  "max_output_tokens": 3000,
+  "model": "gpt-4.1-mini",
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "name": "opening_presentation",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "selected_entries": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 24,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "catalog_id": {
+                      "type": "string",
+                      "enum": [
+                        "rc_ad718c5402fd"
+                      ]
+                    },
+                    "variant_id": {
+                      "type": "string",
+                      "enum": [
+                        "authored"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "catalog_id",
+                    "variant_id"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "catalog_id": {
+                      "type": "string",
+                      "enum": [
+                        "rc_b08a2a2bacbe"
+                      ]
+                    },
+                    "variant_id": {
+                      "type": "string",
+                      "enum": [
+                        "authored"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "catalog_id",
+                    "variant_id"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "catalog_id": {
+                      "type": "string",
+                      "enum": [
+                        "rc_abcf2a4da605"
+                      ]
+                    },
+                    "variant_id": {
+                      "type": "string",
+                      "enum": [
+                        "authored"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "catalog_id",
+                    "variant_id"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "catalog_id": {
+                      "type": "string",
+                      "enum": [
+                        "rc_ceeffa83562d"
+                      ]
+                    },
+                    "variant_id": {
+                      "type": "string",
+                      "enum": [
+                        "authored"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "catalog_id",
+                    "variant_id"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "catalog_id": {
+                      "type": "string",
+                      "enum": [
+                        "rc_ea492080989d"
+                      ]
+                    },
+                    "variant_id": {
+                      "type": "string",
+                      "enum": [
+                        "authored"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "catalog_id",
+                    "variant_id"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "catalog_id": {
+                      "type": "string",
+                      "enum": [
+                        "rc_e1a3e4a3b185"
+                      ]
+                    },
+                    "variant_id": {
+                      "type": "string",
+                      "enum": [
+                        "authored"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "catalog_id",
+                    "variant_id"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "selected_entries"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

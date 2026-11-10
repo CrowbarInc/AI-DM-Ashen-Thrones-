@@ -1,0 +1,843 @@
+{
+  "campaign_id": "pr_play_64",
+  "campaign_name": "PR-PLAY-64 — Authorized discovery language repair",
+  "campaign_date": "2026-11-04",
+  "purpose": "Targeted historical narration rejection repair with preserved authority and honest remaining live limitation.",
+  "objective_status": "B — PARTIAL / TARGETED REPAIR INCOMPLETE",
+  "executive_summary": "# 01 EXECUTIVE SUMMARY\n\n**B — PARTIAL / TARGETED REPAIR INCOMPLETE.** The exact historical authorized narration is repaired (FAIL → PASS), as is the exact historical gate observation. A fresh live candidate uses a further introductory variant and safely falls back; some legitimate discovery language therefore remains rejected.\n\nDevelopment matrix: 30/30. New tests: 37 passed. One-shot developer-authored holdout: 40/40 final decisions and publication expectations, 39/40 full expectations; zero false acceptances and zero false rejections. H18 correctly rejects contradictory coverage, contrary to its frozen coverage expectation. Expectations remain unchanged.\n\nThree consecutive supported HTTP application actions, including two live attempts: two provider requests, one validated and published AI response, two deterministic fallbacks. State matches disabled controls. Failure injections: 12/12. Focused regression: 808 passed, 3 known failures; broader: 9 known failures. No significant new suite regression.\n\nPrimary next step: Close the newly captured finite information-carrier wording gap: study ... carefully and discover that ..., with a new preimplementation holdout. Do not start broader validator or mechanics work.\n\nNo commit or push. Browser-originated gameplay and natural branching remain deferred.\n",
+  "primary_report": "development/campaigns/product_realization/pr_play_64/01_EXECUTIVE_SUMMARY.md",
+  "evidence_packets": [],
+  "max_file_bytes": 33554432,
+  "changes": {
+    "production": [
+      "Finite reported-route carrier handling, finite observation idioms, exact learned-fact complement comparison, separate prior-disclosure authorization."
+    ],
+    "validation": [
+      "No mandatory coverage or persistent-state relaxation. Historical route and extended gate candidate FAIL to PASS."
+    ],
+    "tooling": [
+      "30-case complete-pipeline development, 40-case one-shot frozen holdout, supported HTTP publication and 12 injected failures."
+    ],
+    "documentation": [
+      "18 numbered reports."
+    ],
+    "generated_artifacts": [
+      "Raw historical/live traces, state/control comparison, provider accounting, regression XML/logs, scoped diffs, input/source hashes."
+    ]
+  },
+  "testing": {
+    "focused": "808 passed, same 3 known failures; 37 new tests included.",
+    "broader": "PR55 wrapper passes; same 9 hard_validation_attempt_1 failures.",
+    "full_suite": "Not executed.",
+    "runtime_validation": "3 supported HTTP application actions; 2 live attempts; 1 AI publication, 2 fallbacks. 12/12 assessed faults; state and session isolation pass.",
+    "model_runtime_boundary": "2 OpenAI requests, gpt-4.1-mini-2025-04-14; 895 input + 44 output = 939 tokens; zero retries.",
+    "new_regressions": "No new suite failures; a further legitimate live carrier remains rejected. Holdout 39/40 full expectations, 40/40 decisions/publication; 0 false acceptances/rejections.",
+    "pre_existing_failures": "3 focused and 9 broader unchanged."
+  },
+  "decisions_requiring_human_review": [
+    "Review partial verdict and bounded next step. No enablement or deployment approval requested."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Fresh live discovery phrasing with carefully and discover that still falls back.",
+      "Frozen H18 expected coverage PASS but contradictory route correctly returns REVIEW_REQUIRED; expectations unchanged."
+    ],
+    "pre_existing": [
+      "Finite heuristic validators; browser gameplay and natural choices unverified; known regression failures."
+    ]
+  },
+  "missing_concepts": [
+    "Natural branching and typed direct follow-up remain deferred."
+  ],
+  "does_not_prove": [
+    "Universal discovery-language support, arbitrary hidden-paraphrase safety, browser or external TCP interaction, independent blind validation, authenticated human quality or general RPG competence."
+  ],
+  "recommended_next_step": "Close the newly captured finite information-carrier wording gap: study ... carefully and discover that ..., with a new preimplementation holdout. Do not start broader validator or mechanics work.",
+  "self_contained_review_test": "18 reports and explicit originals, source deltas, full validation/publication traces, holdout hash/results, live usage/state, failures and regression summaries packaged.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_64/assess.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/baseline.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/broader_hard_validation_final.txt",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/broader_hard_validation_final.xml",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/build_reports.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/control.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/development.xml",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/development_results.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/entry_source/consequential_narration_validation.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/entry_source/integrated_investigation_narration.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/entry_source/mandatory_outcome_coverage.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/entry_source/mechanical_claims.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/entry_source_manifest.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/evaluate.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/failure_injection.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/failure_injection_assessed.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/final_worktree_status.txt",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/focused_final.txt",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/focused_final.xml",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/focused_initial_collection_error.txt",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/frozen_holdout.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/frozen_holdout_manifest.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/gameplay.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/gameplay_actions.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/gate_after.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/gate_before.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/h41_regression.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/historical_after.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/historical_before.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/historical_original_gameplay.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/holdout_final.txt",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/holdout_final.xml",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/holdout_results.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/implementation.diff",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/implementation_freeze.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/isolation.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/live_summary.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/metrics.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/package_review.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/prepare.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/protected_integrity.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/provider_snapshot.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/provider_usage.jsonl",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-001.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-002.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-003.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-004.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-005.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-006.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-007.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-008.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-009.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-010.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-011.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-012.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-013.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-014.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-015.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-016.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-017.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-018.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-019.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-020.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-021.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-022.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-023.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-024.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-025.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-026.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-027.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/quarantine_evidence/pr_play_64_live-028.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/regression_summary_final.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/review_config.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/run_regression.py",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_64/source_freeze_verification.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/state_integrity.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_64/state_snapshots.json",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/01_EXECUTIVE_SUMMARY.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/02_BASELINE_AND_SCOPE.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/03_PR_PLAY_63_REPRODUCTION.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/04_DISCOVERY_LANGUAGE_ROOT_CAUSE.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/05_PRIMARY_REPAIR.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/06_GATE_OBSERVATION_ANALYSIS.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/07_AUTHORITY_PROJECTION.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/08_DEVELOPMENT_TESTS.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/09_FROZEN_HOLDOUT.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/10_HISTORICAL_CANDIDATE_REPLAY.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/11_LIVE_PROVIDER_RESULTS.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/12_PLAYER_FACING_PUBLICATION.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/13_DISCLOSURE_REGRESSION.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/14_FAILURE_INJECTION.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/15_STATE_AND_CONTINUITY.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/16_REGRESSION_RESULTS.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/17_LIMITATIONS_AND_OPEN_RISKS.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_64/18_NEXT_SESSION.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/reports/atgb_05_baseline_preservation.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "docs/testing/protected_replay_manifest.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "docs/testing/replay_governance_contract.md",
+      "role": "restricted_campaign_evidence",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/anchored_investigation_narration.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/authorized_information.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/consequential_narration_validation.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/integrated_investigation_narration.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/mandatory_outcome_coverage.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/mechanical_claims.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/offline_investigation_projection.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/persistent_consequence_claims.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/quarantined_investigation_narration.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/pr_play_64_development.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_57_integrated_narration.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_63_disclosure.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_64_discovery_language.py",
+      "role": "source",
+      "why": "Scoped implementation, exact evidence, governance or report; no canonical fixture rewrite.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    }
+  ]
+}

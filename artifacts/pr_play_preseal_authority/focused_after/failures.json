@@ -1,0 +1,47 @@
+[
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_http_publication_matches_prepared_authority[I inspect the brass token.-You pry up the hopper and pocket the brass token.-authored_hidden]",
+    "phase": "call",
+    "traceback": "tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_0')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000254C4677F50>\nplayer_request = 'I inspect the brass token.'\nbad = 'You pry up the hopper and pocket the brass token.'\nauthority = 'authored_hidden'\n\n    @pytest.mark.parametrize(\"player_request,bad,authority\", [\n        (\"I inspect the brass token.\", \"You pry up the hopper and pocket the brass token.\", \"authored_hidden\"),\n        (\"I inspect the shipping ledger.\", \"The ledger lists eight named crews bound for Glassport.\", \"authored_abstract_reference\"),\n        (\"I inspect the glass kiln schedule.\", \"The kiln schedule names four new overseers.\", \"unsupported\"),\n    ])\n    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):\n        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())\n        before_character = copy.deepcopy(storage.load_character())\n        before_world = copy.deepcopy(storage.load_world())\n        data = _chat(monkeypatch, player_request, bad)\n        line = _facing(data)\n        assert line and line != bad\n        assert not any(term in line.lower() for term in (\"token\", \"sealed under\", \"pocket\", \"glassport\", \"eight\", \"overseers\"))\n        assert storage.load_character() == before_character\n>       assert storage.load_world() == before_world\nE       assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}\nE         \nE         Omitting 8 identical items, use -vv to show\nE         Differing items:\nE         {'event_log': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': \"The Ash Cowl's pressure mounts.\", 'source': 'ash_cowl'}]} != {'event_log': []}\nE         {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...\nE         \nE         ...Full output truncated (2 lines hidden), use '-vv' to show\n\ntests\\test_pr_play_preseal_authority.py:71: AssertionError",
+    "fixtures": [
+      "tmp_path_factory",
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "tmp_path",
+      "request",
+      "player_request",
+      "bad",
+      "authority"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_http_publication_matches_prepared_authority[I inspect the shipping ledger.-The ledger lists eight named crews bound for Glassport.-authored_abstract_reference]",
+    "phase": "call",
+    "traceback": "tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_1')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000254C46B0350>\nplayer_request = 'I inspect the shipping ledger.'\nbad = 'The ledger lists eight named crews bound for Glassport.'\nauthority = 'authored_abstract_reference'\n\n    @pytest.mark.parametrize(\"player_request,bad,authority\", [\n        (\"I inspect the brass token.\", \"You pry up the hopper and pocket the brass token.\", \"authored_hidden\"),\n        (\"I inspect the shipping ledger.\", \"The ledger lists eight named crews bound for Glassport.\", \"authored_abstract_reference\"),\n        (\"I inspect the glass kiln schedule.\", \"The kiln schedule names four new overseers.\", \"unsupported\"),\n    ])\n    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):\n        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())\n        before_character = copy.deepcopy(storage.load_character())\n        before_world = copy.deepcopy(storage.load_world())\n        data = _chat(monkeypatch, player_request, bad)\n        line = _facing(data)\n        assert line and line != bad\n        assert not any(term in line.lower() for term in (\"token\", \"sealed under\", \"pocket\", \"glassport\", \"eight\", \"overseers\"))\n        assert storage.load_character() == before_character\n>       assert storage.load_world() == before_world\nE       assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}\nE         \nE         Omitting 8 identical items, use -vv to show\nE         Differing items:\nE         {'event_log': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': \"The Ash Cowl's pressure mounts.\", 'source': 'ash_cowl'}]} != {'event_log': []}\nE         {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...\nE         \nE         ...Full output truncated (2 lines hidden), use '-vv' to show\n\ntests\\test_pr_play_preseal_authority.py:71: AssertionError",
+    "fixtures": [
+      "tmp_path_factory",
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "tmp_path",
+      "request",
+      "player_request",
+      "bad",
+      "authority"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_http_publication_matches_prepared_authority[I inspect the glass kiln schedule.-The kiln schedule names four new overseers.-unsupported]",
+    "phase": "call",
+    "traceback": "tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_2')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000254C488A8A0>\nplayer_request = 'I inspect the glass kiln schedule.'\nbad = 'The kiln schedule names four new overseers.', authority = 'unsupported'\n\n    @pytest.mark.parametrize(\"player_request,bad,authority\", [\n        (\"I inspect the brass token.\", \"You pry up the hopper and pocket the brass token.\", \"authored_hidden\"),\n        (\"I inspect the shipping ledger.\", \"The ledger lists eight named crews bound for Glassport.\", \"authored_abstract_reference\"),\n        (\"I inspect the glass kiln schedule.\", \"The kiln schedule names four new overseers.\", \"unsupported\"),\n    ])\n    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):\n        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())\n        before_character = copy.deepcopy(storage.load_character())\n        before_world = copy.deepcopy(storage.load_world())\n        data = _chat(monkeypatch, player_request, bad)\n        line = _facing(data)\n        assert line and line != bad\n        assert not any(term in line.lower() for term in (\"token\", \"sealed under\", \"pocket\", \"glassport\", \"eight\", \"overseers\"))\n        assert storage.load_character() == before_character\n>       assert storage.load_world() == before_world\nE       assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}\nE         \nE         Omitting 8 identical items, use -vv to show\nE         Differing items:\nE         {'event_log': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': \"The Ash Cowl's pressure mounts.\", 'source': 'ash_cowl'}]} != {'event_log': []}\nE         {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...\nE         \nE         ...Full output truncated (2 lines hidden), use '-vv' to show\n\ntests\\test_pr_play_preseal_authority.py:71: AssertionError",
+    "fixtures": [
+      "tmp_path_factory",
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "tmp_path",
+      "request",
+      "player_request",
+      "bad",
+      "authority"
+    ]
+  }
+]

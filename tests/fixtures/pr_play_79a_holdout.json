@@ -1,0 +1,744 @@
+{
+  "cycle": "PR-PLAY-79A",
+  "authored_by": "developer",
+  "external_validation": false,
+  "frozen_before_holdout_tuning": true,
+  "cases": [
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Who are you?"
+      ],
+      "present": "i am gate guard",
+      "absent": "which person",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What do you know about the missing patrol?"
+      ],
+      "present": "missing patrol",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "When did you last hear about them?"
+      ],
+      "present": "not certain",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Do you think something happened?"
+      ],
+      "present": "not certain",
+      "absent": "attacked",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What do you know about the missing patrol?",
+        "What about the patrol again?"
+      ],
+      "present": "missing patrol",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What is this place like?"
+      ],
+      "present": "notice board",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What is this place like?",
+        "What about the patrol again?"
+      ],
+      "present": "missing patrol",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Thank you."
+      ],
+      "present": "thank",
+      "absent": "reward",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Where is the hidden patrol captain?"
+      ],
+      "present": "do not know",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What is the payroll?"
+      ],
+      "present": "do not know",
+      "absent": "payroll",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Tell me the secret passage."
+      ],
+      "present": "do not know",
+      "absent": "passage",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What quest should I finish?"
+      ],
+      "present": "do not know",
+      "absent": "quest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Will you give me a reward?"
+      ],
+      "present": "do not know",
+      "absent": "gold",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Have you heard anything else?"
+      ],
+      "present": "do not know",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Hello, Gate Serjeant.",
+        "Who are you?"
+      ],
+      "present": "gate serjeant",
+      "absent": "northwest",
+      "focus": "gate_serjeant",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Goodbye."
+      ],
+      "present": "goodbye",
+      "absent": "northwest",
+      "focus": "ended",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "I end the conversation."
+      ],
+      "present": "goodbye",
+      "absent": "northwest",
+      "focus": "ended",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Serjeant.",
+        "Who are you?"
+      ],
+      "present": "gate serjeant",
+      "absent": "i am gate guard",
+      "focus": "gate_serjeant",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "You know the notice?"
+      ],
+      "present": "notice",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Do you hear anything?"
+      ],
+      "present": "do not know",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Look around the gate."
+      ],
+      "present": "notice board",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "I wait and watch."
+      ],
+      "present": "nothing new",
+      "absent": "northwest",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Who are you?",
+        "What do you know about the missing patrol?"
+      ],
+      "present": "missing patrol",
+      "absent": "which person",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Who are you?",
+        "When did you last hear about them?"
+      ],
+      "present": "not certain",
+      "absent": "which person",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "talk",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Who are you?",
+        "Do you think something happened?"
+      ],
+      "present": "not certain",
+      "absent": "which person",
+      "focus": "gate_guard",
+      "multi_turn": true
+    },
+    {
+      "lane": "invalidate",
+      "kind": "leave",
+      "multi_turn": true
+    },
+    {
+      "lane": "invalidate",
+      "kind": "campaign",
+      "multi_turn": true
+    },
+    {
+      "lane": "invalidate",
+      "kind": "goodbye",
+      "multi_turn": true
+    },
+    {
+      "lane": "invalidate",
+      "kind": "depart",
+      "multi_turn": true
+    },
+    {
+      "lane": "invalidate",
+      "kind": "end",
+      "multi_turn": true
+    },
+    {
+      "lane": "invalidate",
+      "kind": "switch",
+      "multi_turn": true
+    },
+    {
+      "lane": "invalidate",
+      "kind": "norevive",
+      "multi_turn": true
+    },
+    {
+      "lane": "invalidate",
+      "kind": "unfocused",
+      "multi_turn": true
+    },
+    {
+      "lane": "invalidate",
+      "kind": "other-scene",
+      "multi_turn": true
+    },
+    {
+      "lane": "invalidate",
+      "kind": "foreign-copy",
+      "multi_turn": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The tracks continue northwest through the mud.",
+      "facts": "The player found tracks leading northwest.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The trail bends toward the northwest.",
+      "facts": "Tracks lead northwest past the crates.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The disturbed ground still points northwest.",
+      "facts": "A northwest mud track remains.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The loose stone now sits aside from the stonework.",
+      "facts": "You move the loose stone. It is now aside.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The crate is open and stays where it was.",
+      "facts": "The crate is now open.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The gate is closed against the rain.",
+      "facts": "The gate is closed.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "There is no hidden passage. The tracks continue northwest.",
+      "facts": "Tracks lead northwest.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "Rain darkens the mud around the tracks.",
+      "facts": "Tracks lead northwest.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The milestone is still beside the road.",
+      "facts": "A weathered milestone stands beside the road.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The stone remains aside.",
+      "facts": "The loose stone is aside.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "You are seated on the stone.",
+      "facts": "You are seated.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The mud is only mud. The tracks continue northwest.",
+      "facts": "Tracks lead northwest.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The gate remains closed.",
+      "facts": "The gate is closed.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "Your earlier examination suggests the trail bends toward the northwest.",
+      "facts": "Tracks lead northwest.",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The tracks continue northwest.",
+      "facts": "northwest mud track",
+      "adopt": true,
+      "paraphrase": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "Fresh blood confirms the patrol was attacked.",
+      "facts": "Tracks lead northwest.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The patrol captain was dragged northwest.",
+      "facts": "Tracks lead northwest.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "You discover the hidden patrol camp.",
+      "facts": "Tracks lead northwest.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "You find gold beside the milestone.",
+      "facts": "The milestone is weathered.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The tracks bend southeast.",
+      "facts": "Tracks lead northwest.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The quest is complete and the reward is yours.",
+      "facts": "Tracks lead northwest.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "You climb the wall and see the hidden camp.",
+      "facts": "The wall is rough.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "Tracks lead northwest.",
+      "facts": "Tracks lead northwest.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "An ambush confirms the patrol was killed.",
+      "facts": "Tracks lead northwest.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "A treasure waits under the milestone.",
+      "facts": "A weathered milestone stands here.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "A sentinel steps out of the trees.",
+      "facts": "The road is empty.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "You receive a reward for the report.",
+      "facts": "You gave the report.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "The trail turns northeast.",
+      "facts": "Tracks lead northwest.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "A hidden passage opens beside you.",
+      "facts": "The crates are stacked.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "narration",
+      "candidate": "You find the captain behind the crates.",
+      "facts": "The crates are stacked.",
+      "adopt": false,
+      "rejection": true
+    },
+    {
+      "lane": "prompt",
+      "question": "Who are you?",
+      "efficiency": true
+    },
+    {
+      "lane": "prompt",
+      "question": "What do you know about the missing patrol?",
+      "efficiency": true
+    },
+    {
+      "lane": "prompt",
+      "question": "When did you last hear about them?",
+      "efficiency": true
+    },
+    {
+      "lane": "prompt",
+      "question": "Do you think something happened?",
+      "efficiency": true
+    },
+    {
+      "lane": "prompt",
+      "question": "What about the patrol again?",
+      "efficiency": true
+    },
+    {
+      "lane": "prompt",
+      "question": "What is this place like?",
+      "efficiency": true
+    },
+    {
+      "lane": "prompt",
+      "question": "Where is the hidden patrol captain?",
+      "efficiency": true
+    },
+    {
+      "lane": "prompt",
+      "question": "Will you give me a reward?",
+      "efficiency": true
+    },
+    {
+      "lane": "prompt",
+      "question": "Thank you.",
+      "efficiency": true
+    },
+    {
+      "lane": "prompt",
+      "question": "Goodbye.",
+      "efficiency": true
+    },
+    {
+      "lane": "save",
+      "text": "Who are you?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "What do you know about the missing patrol?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "When did you last hear about them?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "Do you think something happened?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "What is this place like?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "Thank you.",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "Have you heard anything else?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "You know the notice?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "Do you hear anything?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "Where is the hidden patrol captain?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "What is the payroll?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "What quest should I finish?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "Will you give me a reward?",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "Tell me the secret passage.",
+      "multi_turn": true
+    },
+    {
+      "lane": "save",
+      "text": "What about the patrol again?",
+      "multi_turn": true
+    },
+    {
+      "lane": "route",
+      "text": "What does the notice board say?",
+      "present": "missing patrol",
+      "absent": "which person",
+      "routing": true
+    },
+    {
+      "lane": "route",
+      "text": "Where am I?",
+      "present": "frontier gate",
+      "absent": "which person",
+      "routing": true
+    },
+    {
+      "lane": "route",
+      "text": "What do I know about the patrol?",
+      "present": "missing patrol",
+      "absent": "which person",
+      "routing": true
+    },
+    {
+      "lane": "route",
+      "text": "Ask them.",
+      "present": "which",
+      "absent": "gate guard says",
+      "routing": true
+    },
+    {
+      "lane": "route",
+      "text": "Look over there.",
+      "present": "which",
+      "absent": "gate guard says",
+      "routing": true
+    },
+    {
+      "lane": "route",
+      "text": "Move that.",
+      "present": "which",
+      "absent": "gate guard says",
+      "routing": true
+    },
+    {
+      "lane": "route",
+      "text": "What is this place like?",
+      "present": "notice",
+      "absent": "which person",
+      "routing": true
+    },
+    {
+      "lane": "route",
+      "text": "Where is the hidden patrol captain?",
+      "present": "do not know",
+      "absent": "northwest",
+      "routing": true
+    },
+    {
+      "lane": "route",
+      "text": "Will you give me a reward?",
+      "present": "do not know",
+      "absent": "gold",
+      "routing": true
+    },
+    {
+      "lane": "route",
+      "text": "Who are you?",
+      "present": "gate guard",
+      "absent": "which person",
+      "routing": true
+    }
+  ]
+}

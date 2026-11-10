@@ -1,0 +1,1811 @@
+{
+  "summary": {
+    "total": 50,
+    "groups": {
+      "ambiguous": {
+        "total": 5,
+        "exact_expected": 5,
+        "blocked": 5,
+        "pass": 0
+      },
+      "attempted": {
+        "total": 3,
+        "exact_expected": 3,
+        "blocked": 0,
+        "pass": 3
+      },
+      "authorized": {
+        "total": 10,
+        "exact_expected": 10,
+        "blocked": 0,
+        "pass": 10
+      },
+      "harmless": {
+        "total": 10,
+        "exact_expected": 10,
+        "blocked": 0,
+        "pass": 10
+      },
+      "hypothetical": {
+        "total": 3,
+        "exact_expected": 3,
+        "blocked": 0,
+        "pass": 3
+      },
+      "negated": {
+        "total": 4,
+        "exact_expected": 4,
+        "blocked": 0,
+        "pass": 4
+      },
+      "unauthorized": {
+        "total": 15,
+        "exact_expected": 15,
+        "blocked": 15,
+        "pass": 0
+      }
+    },
+    "critical_false_acceptance_ids": [],
+    "false_rejection_ids": [],
+    "review_required": 5,
+    "validation_errors": 0,
+    "confusion": {
+      "FAIL->FAIL": 15,
+      "PASS->PASS": 30,
+      "REVIEW_REQUIRED->REVIEW_REQUIRED": 5
+    },
+    "latency": {
+      "persistent_ms": {
+        "average_ms": 0.06220799754373729,
+        "maximum_ms": 0.6892000092193484
+      },
+      "semantic_ms": {
+        "average_ms": 0.4428580030798912,
+        "maximum_ms": 12.160300044342875
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "H01",
+      "group": "unauthorized",
+      "text": "The copper iris has been opened.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The copper iris has been opened.",
+            "subject": "copper iri",
+            "property": "access",
+            "result": "open",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "copper iri",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The copper iris has been opened."
+        }
+      ],
+      "persistent_ms": 0.6892000092193484,
+      "semantic_ms": 12.160300044342875
+    },
+    {
+      "id": "H02",
+      "group": "unauthorized",
+      "text": "The trapdoor is now unlocked.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The trapdoor is now unlocked.",
+            "subject": "trapdoor",
+            "property": "lock",
+            "result": "unlocked",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "trapdoor",
+          "property": "lock",
+          "result": "unlocked",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The trapdoor is now unlocked."
+        }
+      ],
+      "persistent_ms": 0.06610003765672445,
+      "semantic_ms": 0.33629999961704016
+    },
+    {
+      "id": "H03",
+      "group": "unauthorized",
+      "text": "The aqueduct is now accessible.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The aqueduct is now accessible.",
+            "subject": "aqueduct",
+            "property": "accessibility",
+            "result": "accessible",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "aqueduct",
+          "property": "accessibility",
+          "result": "accessible",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The aqueduct is now accessible."
+        }
+      ],
+      "persistent_ms": 0.061400001868605614,
+      "semantic_ms": 0.30559999868273735
+    },
+    {
+      "id": "H04",
+      "group": "unauthorized",
+      "text": "The crystal lens has been destroyed.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The crystal lens has been destroyed.",
+            "subject": "crystal len",
+            "property": "integrity",
+            "result": "destroyed",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "crystal len",
+          "property": "integrity",
+          "result": "destroyed",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The crystal lens has been destroyed."
+        }
+      ],
+      "persistent_ms": 0.07369997911155224,
+      "semantic_ms": 0.3522000042721629
+    },
+    {
+      "id": "H05",
+      "group": "unauthorized",
+      "text": "The lookout is now unconscious.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The lookout is now unconscious.",
+            "subject": "lookout",
+            "property": "capacity",
+            "result": "unconscious",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "lookout",
+          "property": "capacity",
+          "result": "unconscious",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The lookout is now unconscious."
+        }
+      ],
+      "persistent_ms": 0.07160002132877707,
+      "semantic_ms": 0.3034999826923013
+    },
+    {
+      "id": "H06",
+      "group": "unauthorized",
+      "text": "The ferryman is now dead.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The ferryman is now dead.",
+            "subject": "ferryman",
+            "property": "life",
+            "result": "dead",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "ferryman",
+          "property": "life",
+          "result": "dead",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The ferryman is now dead."
+        }
+      ],
+      "persistent_ms": 0.0523999915458262,
+      "semantic_ms": 0.2547000185586512
+    },
+    {
+      "id": "H07",
+      "group": "unauthorized",
+      "text": "You are now poisoned.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence",
+          "unauthorized_condition"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "You are now poisoned.",
+            "subject": "you",
+            "property": "condition",
+            "result": "poisoned",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          },
+          {
+            "category": "condition",
+            "reason": "unauthorized_condition",
+            "decision": "FAIL",
+            "epistemic": "assertion",
+            "text": "You are now poisoned."
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "you",
+          "property": "condition",
+          "result": "poisoned",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "You are now poisoned."
+        }
+      ],
+      "persistent_ms": 0.040899962186813354,
+      "semantic_ms": 0.22050004918128252
+    },
+    {
+      "id": "H08",
+      "group": "unauthorized",
+      "text": "You pick up the opal and place it in your pack.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence",
+          "unauthorized_discovery"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "You pick up the opal and place it in your pack.",
+            "subject": "opal",
+            "property": "inventory",
+            "result": "acquired",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          },
+          {
+            "category": "discovery",
+            "reason": "unauthorized_discovery",
+            "decision": "FAIL",
+            "epistemic": "assertion",
+            "text": "You pick up the opal and place it in your pack.",
+            "relation": "establishes_discovery",
+            "actor": "player",
+            "assertion": "affirmative",
+            "subject": "opal"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "opal",
+          "property": "inventory",
+          "result": "acquired",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "You pick up the opal and place it in your pack."
+        }
+      ],
+      "persistent_ms": 0.14949997421354055,
+      "semantic_ms": 1.485200016759336
+    },
+    {
+      "id": "H09",
+      "group": "unauthorized",
+      "text": "The pilgrimage quest is now complete.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence",
+          "unauthorized_quest"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The pilgrimage quest is now complete.",
+            "subject": "pilgrimage quest",
+            "property": "progress",
+            "result": "complete",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          },
+          {
+            "category": "quest",
+            "reason": "unauthorized_quest",
+            "decision": "FAIL",
+            "epistemic": "assertion",
+            "text": "The pilgrimage quest is now complete."
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "pilgrimage quest",
+          "property": "progress",
+          "result": "complete",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The pilgrimage quest is now complete."
+        }
+      ],
+      "persistent_ms": 0.08050003089010715,
+      "semantic_ms": 0.35389995900914073
+    },
+    {
+      "id": "H10",
+      "group": "unauthorized",
+      "text": "The courtyard is now flooded.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The courtyard is now flooded.",
+            "subject": "courtyard",
+            "property": "environment",
+            "result": "flooded",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "courtyard",
+          "property": "environment",
+          "result": "flooded",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The courtyard is now flooded."
+        }
+      ],
+      "persistent_ms": 0.06049999501556158,
+      "semantic_ms": 0.28930004918947816
+    },
+    {
+      "id": "H11",
+      "group": "unauthorized",
+      "text": "The ward is permanently broken.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The ward is permanently broken.",
+            "subject": "ward",
+            "property": "integrity",
+            "result": "broken",
+            "permanent": true,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "ward",
+          "property": "integrity",
+          "result": "broken",
+          "permanent": true,
+          "kind": "persistent_change",
+          "text": "The ward is permanently broken."
+        }
+      ],
+      "persistent_ms": 0.058399979025125504,
+      "semantic_ms": 0.3032999811694026
+    },
+    {
+      "id": "H12",
+      "group": "unauthorized",
+      "text": "The sluice will remain open from now on.",
+      "authority": {
+        "authorized_outcomes": [
+          "The sluice opens temporarily."
+        ],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The sluice will remain open from now on.",
+            "subject": "sluice",
+            "property": "access",
+            "result": "open",
+            "permanent": true,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "sluice",
+          "property": "access",
+          "result": "open",
+          "permanent": true,
+          "kind": "persistent_change",
+          "text": "The sluice will remain open from now on."
+        }
+      ],
+      "persistent_ms": 0.16830000095069408,
+      "semantic_ms": 0.2838000073097646
+    },
+    {
+      "id": "H13",
+      "group": "unauthorized",
+      "text": "The west shutter opens.",
+      "authority": {
+        "authorized_outcomes": [
+          "The east shutter opens."
+        ],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The west shutter opens.",
+            "subject": "west shutter",
+            "property": "access",
+            "result": "open",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "west shutter",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The west shutter opens."
+        }
+      ],
+      "persistent_ms": 0.06079999729990959,
+      "semantic_ms": 0.20790001144632697
+    },
+    {
+      "id": "H14",
+      "group": "unauthorized",
+      "text": "The portal opens and the seal breaks.",
+      "authority": {
+        "authorized_outcomes": [
+          "The portal opens."
+        ],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "the seal breaks.",
+            "subject": "seal",
+            "property": "integrity",
+            "result": "broken",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "portal",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The portal opens"
+        },
+        {
+          "entity": "seal",
+          "property": "integrity",
+          "result": "broken",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "the seal breaks."
+        }
+      ],
+      "persistent_ms": 0.14650000957772136,
+      "semantic_ms": 0.29739999445155263
+    },
+    {
+      "id": "H15",
+      "group": "unauthorized",
+      "text": "The hatch can no longer be closed.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "FAIL",
+      "expected_classification": "unauthorized",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The hatch can no longer be closed.",
+            "subject": "hatch",
+            "property": "irreversibility",
+            "result": "closed",
+            "permanent": true,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "hatch",
+          "property": "irreversibility",
+          "result": "closed",
+          "permanent": true,
+          "kind": "persistent_change",
+          "text": "The hatch can no longer be closed."
+        }
+      ],
+      "persistent_ms": 0.05689996760338545,
+      "semantic_ms": 0.24500000290572643
+    },
+    {
+      "id": "H16",
+      "group": "authorized",
+      "text": "The copper iris swings open.",
+      "authority": {
+        "authorized_outcomes": [
+          "The copper iris opens."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "copper iri",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The copper iris swings open."
+        }
+      ],
+      "persistent_ms": 0.06990000838413835,
+      "semantic_ms": 0.3339999821037054
+    },
+    {
+      "id": "H17",
+      "group": "authorized",
+      "text": "The trapdoor stands unlocked.",
+      "authority": {
+        "authorized_outcomes": [
+          "The trapdoor is unlocked."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "trapdoor",
+          "property": "lock",
+          "result": "unlocked",
+          "permanent": false,
+          "kind": "existing_state",
+          "text": "The trapdoor stands unlocked."
+        }
+      ],
+      "persistent_ms": 0.06130000110715628,
+      "semantic_ms": 0.19719998817890882
+    },
+    {
+      "id": "H18",
+      "group": "authorized",
+      "text": "The aqueduct is now accessible.",
+      "authority": {
+        "authorized_outcomes": [
+          "The aqueduct becomes accessible."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "aqueduct",
+          "property": "accessibility",
+          "result": "accessible",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The aqueduct is now accessible."
+        }
+      ],
+      "persistent_ms": 0.06399996345862746,
+      "semantic_ms": 0.2256000298075378
+    },
+    {
+      "id": "H19",
+      "group": "authorized",
+      "text": "The crystal lens is destroyed.",
+      "authority": {
+        "authorized_outcomes": [
+          "The crystal lens is destroyed."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "crystal len",
+          "property": "integrity",
+          "result": "destroyed",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The crystal lens is destroyed."
+        }
+      ],
+      "persistent_ms": 0.06960000609979033,
+      "semantic_ms": 0.23030000738799572
+    },
+    {
+      "id": "H20",
+      "group": "authorized",
+      "text": "The lookout falls unconscious.",
+      "authority": {
+        "authorized_outcomes": [
+          "The lookout is unconscious."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "lookout",
+          "property": "capacity",
+          "result": "unconscious",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The lookout falls unconscious."
+        }
+      ],
+      "persistent_ms": 0.056699966080486774,
+      "semantic_ms": 0.19570003496482968
+    },
+    {
+      "id": "H21",
+      "group": "authorized",
+      "text": "The ferryman is now dead.",
+      "authority": {
+        "authorized_outcomes": [
+          "The ferryman is dead."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "ferryman",
+          "property": "life",
+          "result": "dead",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The ferryman is now dead."
+        }
+      ],
+      "persistent_ms": 0.054500007536262274,
+      "semantic_ms": 0.17799995839595795
+    },
+    {
+      "id": "H22",
+      "group": "authorized",
+      "text": "The courtyard becomes flooded.",
+      "authority": {
+        "authorized_outcomes": [
+          "The courtyard is flooded."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "courtyard",
+          "property": "environment",
+          "result": "flooded",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The courtyard becomes flooded."
+        }
+      ],
+      "persistent_ms": 0.05539995618164539,
+      "semantic_ms": 0.18929998623207211
+    },
+    {
+      "id": "H23",
+      "group": "authorized",
+      "text": "The ward has been broken.",
+      "authority": {
+        "authorized_outcomes": [
+          "The ward is broken."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "ward",
+          "property": "integrity",
+          "result": "broken",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The ward has been broken."
+        }
+      ],
+      "persistent_ms": 0.05100003909319639,
+      "semantic_ms": 0.18079997971653938
+    },
+    {
+      "id": "H24",
+      "group": "authorized",
+      "text": "The shutter closes with a clatter.",
+      "authority": {
+        "authorized_outcomes": [
+          "The shutter closes."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "shutter",
+          "property": "access",
+          "result": "closed",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The shutter closes with a clatter."
+        }
+      ],
+      "persistent_ms": 0.07459998596459627,
+      "semantic_ms": 0.2536000101827085
+    },
+    {
+      "id": "H25",
+      "group": "authorized",
+      "text": "The gangway gives way and falls into the ravine.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gangway collapses."
+        ],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "authorized",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gangway",
+          "property": "integrity",
+          "result": "collapsed",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The gangway gives way and falls into the ravine."
+        }
+      ],
+      "persistent_ms": 0.10089995339512825,
+      "semantic_ms": 0.367300002835691
+    },
+    {
+      "id": "H26",
+      "group": "harmless",
+      "text": "The copper iris rattles in the wind.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.05319999763742089,
+      "semantic_ms": 0.18060003640130162
+    },
+    {
+      "id": "H27",
+      "group": "harmless",
+      "text": "Rain runs down the trapdoor.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.033800024539232254,
+      "semantic_ms": 0.12689997674897313
+    },
+    {
+      "id": "H28",
+      "group": "harmless",
+      "text": "The aqueduct creaks beneath your feet.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.05420000525191426,
+      "semantic_ms": 0.16880000475794077
+    },
+    {
+      "id": "H29",
+      "group": "harmless",
+      "text": "The lookout shifts his weight.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.03679998917505145,
+      "semantic_ms": 0.13870000839233398
+    },
+    {
+      "id": "H30",
+      "group": "harmless",
+      "text": "Dust settles on the courtyard.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.035999983083456755,
+      "semantic_ms": 0.1362999901175499
+    },
+    {
+      "id": "H31",
+      "group": "harmless",
+      "text": "The hinges groan.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.017700018361210823,
+      "semantic_ms": 0.07599999662488699
+    },
+    {
+      "id": "H32",
+      "group": "harmless",
+      "text": "The lantern flickers.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.020300038158893585,
+      "semantic_ms": 0.0850000069476664
+    },
+    {
+      "id": "H33",
+      "group": "harmless",
+      "text": "The ward looks old and weathered.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.04710000939667225,
+      "semantic_ms": 0.16469997353851795
+    },
+    {
+      "id": "H34",
+      "group": "harmless",
+      "text": "The shutter appears difficult to open.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.04290003562346101,
+      "semantic_ms": 0.15209999401122332
+    },
+    {
+      "id": "H35",
+      "group": "harmless",
+      "text": "The gangway seems narrow.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "harmless",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.027300033252686262,
+      "semantic_ms": 0.037999998312443495
+    },
+    {
+      "id": "H36",
+      "group": "negated",
+      "text": "The iris does not open.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "negated",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.00589998671784997,
+      "semantic_ms": 0.0646000262349844
+    },
+    {
+      "id": "H37",
+      "group": "negated",
+      "text": "The hatch remains closed.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "negated",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "hatch",
+          "property": "access",
+          "result": "closed",
+          "permanent": false,
+          "kind": "existing_state",
+          "text": "The hatch remains closed."
+        }
+      ],
+      "persistent_ms": 0.1422999775968492,
+      "semantic_ms": 0.14650000957772136
+    },
+    {
+      "id": "H38",
+      "group": "negated",
+      "text": "The lens has not been destroyed.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "negated",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.006699992809444666,
+      "semantic_ms": 0.08700002217665315
+    },
+    {
+      "id": "H39",
+      "group": "hypothetical",
+      "text": "The ward might break.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "hypothetical",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.009599956683814526,
+      "semantic_ms": 0.05990004865452647
+    },
+    {
+      "id": "H40",
+      "group": "hypothetical",
+      "text": "If you repair it, the iris will open.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "hypothetical",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.006599992047995329,
+      "semantic_ms": 0.01309998333454132
+    },
+    {
+      "id": "H41",
+      "group": "hypothetical",
+      "text": "The shutter could be unlocked.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "hypothetical",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.005800044164061546,
+      "semantic_ms": 0.07469998672604561
+    },
+    {
+      "id": "H42",
+      "group": "attempted",
+      "text": "You try to open the trapdoor.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "attempted",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.005699985194951296,
+      "semantic_ms": 0.08259998867288232
+    },
+    {
+      "id": "H43",
+      "group": "attempted",
+      "text": "You attempt to break the seal.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "attempted",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.005699985194951296,
+      "semantic_ms": 0.07750000804662704
+    },
+    {
+      "id": "H44",
+      "group": "attempted",
+      "text": "You try to pick up the opal.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "attempted",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.00589998671784997,
+      "semantic_ms": 0.0801000278443098
+    },
+    {
+      "id": "H45",
+      "group": "negated",
+      "text": "The guard does not become unconscious.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "PASS",
+      "expected_classification": "negated",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.006599992047995329,
+      "semantic_ms": 0.08809997234493494
+    },
+    {
+      "id": "H46",
+      "group": "ambiguous",
+      "text": "The iris seems to have opened.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "REVIEW_REQUIRED",
+      "expected_classification": "ambiguous",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "reasons": [
+          "ambiguous_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "ambiguous_persistent_consequence",
+            "decision": "REVIEW_REQUIRED",
+            "epistemic": "ambiguous",
+            "text": "The iris seems to have opened.",
+            "subject": "",
+            "property": "",
+            "result": "",
+            "permanent": false,
+            "authority_match": "AMBIGUOUS"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "",
+          "property": "",
+          "result": "",
+          "permanent": false,
+          "kind": "ambiguous",
+          "text": "The iris seems to have opened."
+        }
+      ],
+      "persistent_ms": 0.012400036212056875,
+      "semantic_ms": 0.027499976567924023
+    },
+    {
+      "id": "H47",
+      "group": "ambiguous",
+      "text": "The seal may already be broken.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "REVIEW_REQUIRED",
+      "expected_classification": "ambiguous",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "reasons": [
+          "ambiguous_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "ambiguous_persistent_consequence",
+            "decision": "REVIEW_REQUIRED",
+            "epistemic": "ambiguous",
+            "text": "The seal may already be broken.",
+            "subject": "",
+            "property": "",
+            "result": "",
+            "permanent": false,
+            "authority_match": "AMBIGUOUS"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "",
+          "property": "",
+          "result": "",
+          "permanent": false,
+          "kind": "ambiguous",
+          "text": "The seal may already be broken."
+        }
+      ],
+      "persistent_ms": 0.010400020983070135,
+      "semantic_ms": 0.09859999408945441
+    },
+    {
+      "id": "H48",
+      "group": "ambiguous",
+      "text": "Something about the hatch has changed.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "REVIEW_REQUIRED",
+      "expected_classification": "ambiguous",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "reasons": [
+          "ambiguous_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "ambiguous_persistent_consequence",
+            "decision": "REVIEW_REQUIRED",
+            "epistemic": "ambiguous",
+            "text": "Something about the hatch has changed.",
+            "subject": "",
+            "property": "",
+            "result": "",
+            "permanent": false,
+            "authority_match": "AMBIGUOUS"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "",
+          "property": "",
+          "result": "",
+          "permanent": false,
+          "kind": "ambiguous",
+          "text": "Something about the hatch has changed."
+        }
+      ],
+      "persistent_ms": 0.009399955160915852,
+      "semantic_ms": 0.10210002074018121
+    },
+    {
+      "id": "H49",
+      "group": "ambiguous",
+      "text": "It is now open.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "REVIEW_REQUIRED",
+      "expected_classification": "ambiguous",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "reasons": [
+          "ambiguous_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "ambiguous_persistent_consequence",
+            "decision": "REVIEW_REQUIRED",
+            "epistemic": "ambiguous",
+            "text": "It is now open.",
+            "subject": "",
+            "property": "",
+            "result": "",
+            "permanent": false,
+            "authority_match": "AMBIGUOUS"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "",
+          "property": "",
+          "result": "",
+          "permanent": false,
+          "kind": "ambiguous",
+          "text": "It is now open."
+        }
+      ],
+      "persistent_ms": 0.006999995093792677,
+      "semantic_ms": 0.06309995660558343
+    },
+    {
+      "id": "H50",
+      "group": "ambiguous",
+      "text": "The ward yields.",
+      "authority": {
+        "authorized_outcomes": [],
+        "observable_scene": []
+      },
+      "expected": "REVIEW_REQUIRED",
+      "expected_classification": "ambiguous",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "reasons": [
+          "ambiguous_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "ambiguous_persistent_consequence",
+            "decision": "REVIEW_REQUIRED",
+            "epistemic": "ambiguous",
+            "text": "The ward yields.",
+            "subject": "",
+            "property": "",
+            "result": "",
+            "permanent": false,
+            "authority_match": "AMBIGUOUS"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "",
+          "property": "",
+          "result": "",
+          "permanent": false,
+          "kind": "ambiguous",
+          "text": "The ward yields."
+        }
+      ],
+      "persistent_ms": 0.006499991286545992,
+      "semantic_ms": 0.0597000471316278
+    }
+  ]
+}

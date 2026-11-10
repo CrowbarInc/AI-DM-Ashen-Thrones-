@@ -1,0 +1,35 @@
+{
+  "host": "http://127.0.0.1:8072/",
+  "data": "artifacts/pr_play_71v/browser_data",
+  "network": "browser_lifecycle_network.jsonl",
+  "aborted_partial_log": "browser_network.jsonl",
+  "requests": 75,
+  "statuses": {
+    "200": 75
+  },
+  "mean_server_ms": 90.9,
+  "max_server_ms": 397.7,
+  "browser_visible_latency": "not instrumented",
+  "campaign_a": {
+    "id": "b71d9ab269b14913826d9790",
+    "branch": "survey",
+    "scene_after_resume": "old_milestone",
+    "result": "pass"
+  },
+  "campaign_b": {
+    "id": "9d6a1a036881996f1883786c",
+    "branch": "report",
+    "scene_after_resume": "frontier_gate",
+    "result": "pass"
+  },
+  "cross_load": {
+    "survey_restored": true,
+    "report_only_text_absent": true,
+    "authoritative_flags_match_loaded_campaign": true
+  },
+  "screenshots": [
+    "artifacts/pr_play_71v/screenshots/pr71v-a-opening.png",
+    "artifacts/pr_play_71v/screenshots/pr71v-a-survey.png",
+    "artifacts/pr_play_71v/screenshots/pr71v-b-report.png"
+  ]
+}

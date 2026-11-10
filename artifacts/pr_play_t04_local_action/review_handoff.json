@@ -1,0 +1,311 @@
+{
+  "campaign_id": "pr_play_t04_local_action",
+  "campaign_name": "PR-PLAY T04 Local Physical-Action Completion",
+  "campaign_date": "2026-11-09",
+  "purpose": "Authorize simple approach and contact with an accessible current-scene object as a transient outcome, without a scene transition or persistent mutation.",
+  "objective_status": "A/PASS",
+  "executive_summary": "Original T04 HTTP refusal is replaced by an authoritative approach and contact: You walk over to the notice board and rest a hand on its frame. You remain in Cinderwatch Gate District. The unique local-object hit was previously declined before any physical outcome. The existing local-interaction owner now records that transient outcome when visibility and authored interactability are both positive. Three production files change. Combined tests 408 passed / 17 failed of 425; the 17 are a subset of the prior 20. Only T04 changes in the twelve-turn replay. T05 clue and T06 refusal stay. Zero live provider calls.",
+  "changes": {
+    "production": [
+      "game/local_interaction.py adds resolve_transient_local_action. conversational_orchestration.py consults it from the local-presence owner. api.py publishes the sealed narration through the existing immutable acceptance path."
+    ],
+    "validation": [
+      "12 new local-action HTTP and resolver tests. One post-NPC handoff assertion now expects the repaired completion. Established main, authority, pre-seal, and T05 selections rerun."
+    ],
+    "tooling": [
+      "Provider-free twelve-turn runner under artifacts/pr_play_t04_local_action/run_sequence.py."
+    ],
+    "documentation": [
+      "Eleven reports and a prepended NEXT_SESSION entry. Historical NEXT_SESSION bytes remain the file suffix."
+    ],
+    "generated_artifacts": [
+      "T04 before/after traces, twelve-turn comparison, source manifests, logical production diff, and junit."
+    ]
+  },
+  "testing": {
+    "focused": "12/12 new local-action tests. Post-NPC handoff and 15 T05 composition tests pass. Physical module 32/32.",
+    "broader": "Combined 425: 408 passed / 17 failed / 0 errors / 0 skipped. Main 222/13 unchanged. Authority 142/4. Pre-seal 17/0. No new failure identity.",
+    "full_suite": "Not run",
+    "runtime_validation": "Original T04 HTTP path completes approach and contact, stays in frontier_gate, seals the narration, and does not disclose the patrol clue. Twelve-turn published text changes only at T04. T05 clue, T06 refusal, T09 recall, and T11 travel remain.",
+    "model_runtime_boundary": "Zero live provider calls, retries, or added prompts. Twelve-turn network block list empty.",
+    "new_regressions": "None in the established selection. Three prior greeting/refusal failures were not reproduced and are not claimed as a classification repair.",
+    "pre_existing_failures": "Seventeen baseline identities remain, including obsolete public-resolution assertions, the stew mismatch, and authority/publication KeyErrors."
+  },
+  "decisions_requiring_human_review": [],
+  "known_problems": {
+    "campaign_specific": [
+      "Low-stakes approach and contact only. Copying, taking, opening, and the experimental physical owner remain outside this outcome. Scene JSON has no accessible:true flag; positive authored-interactable evidence is required."
+    ],
+    "pre_existing": [
+      "T01/T07 missing narration; T02 unhelpful NPC; T06 persistent copying; T08 generic acknowledgment; T10 trade; T12 operational refusal; seventeen baseline failures."
+    ]
+  },
+  "missing_concepts": [
+    "No general physics engine, persistent gesture position, or unrestricted multi-action planner."
+  ],
+  "does_not_prove": [
+    "Broad playability, independent held-out generalization, full-suite acceptance, live-provider behavior, or a Gameplay Benchmark result."
+  ],
+  "recommended_next_step": "Exactly one proposed next action: investigate T06 copying the patrol warning onto clothing through its existing unsupported-manipulation owner. Preserve T04 and T05. Do not begin automatically.",
+  "self_contained_review_test": "Reopen the archive and confirm the milestone, T04 before/after sentences, twelve-turn change limited to T04, 408/17 regression record, source manifests, and the preserved NEXT_SESSION suffix.",
+  "primary_report": "development/campaigns/product_realization/pr_play_t04_local_action/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "development/campaigns/product_realization/pr_play_t04_local_action/ROOT_CAUSE.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t04_local_action/ACTION_CONTRACT.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t04_local_action/IMPLEMENTATION.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t04_local_action/T04_BEFORE_AFTER.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t04_local_action/NEGATIVE_CONTROLS.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t04_local_action/REGRESSION_RESULTS.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t04_local_action/TWELVE_TURN_COMPARISON.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t04_local_action/PERFORMANCE.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t04_local_action/NEXT_STEP_DECISION.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_t04_local_action/INTEGRITY.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/local_interaction.py",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_play_t04_local_action.py",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_play_post_npc_handoff.py",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/before/t04_before.json",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/t04_after.json",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/t04_comparison.json",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/twelve_turn_comparison.json",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/after/twelve_turn/sequence_summary.json",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/before_source_manifest.json",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/after_source_manifest.json",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/source_changes.json",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/production.diff",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/entry_identity.json",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/test_results.json",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/after_regression_junit.xml",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/run_sequence.py",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_t04_local_action/entry/docs/NEXT_SESSION.md",
+      "role": "repair_evidence",
+      "canonical": true,
+      "why": "Supports the local-action repair, its HTTP evidence, or its regression record.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "max_file_bytes": 52428800
+}

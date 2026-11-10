@@ -1,0 +1,663 @@
+{
+  "verdict": "B \u2014 PARTIAL / CORE REPAIR VERIFIED",
+  "baseline": {
+    "branch": "feature/product-realization",
+    "head": "d40f1ed198236c604085f1c842ead267a8104ce2"
+  },
+  "protected": {
+    "entries": 150,
+    "preserved": 150
+  },
+  "development": {
+    "development_before": {
+      "cases": 45,
+      "passed": 37,
+      "failed": 8,
+      "failures": [
+        "tests.test_pr_play_72v_resolution::test_paraphrases[Take another look at the trail.]",
+        "tests.test_pr_play_72v_resolution::test_paraphrases[Reexamine the milestone.]",
+        "tests.test_pr_play_72v_resolution::test_paraphrases[I examine the milestone again.]",
+        "tests.test_pr_play_72v_resolution::test_paraphrases[Read the milestone.]",
+        "tests.test_pr_play_72v_resolution::test_paraphrases[Scrutinize the milestone.]",
+        "tests.test_pr_play_72v_resolution::test_readonly_boundaries[Check it again.-CLARIFY]",
+        "tests.test_pr_play_72v_resolution::test_readonly_boundaries[Please check it again.-CLARIFY]",
+        "tests.test_pr_play_72v_resolution::test_readonly_boundaries[Could I inspect it?-CLARIFY]"
+      ]
+    },
+    "development": {
+      "cases": 105,
+      "passed": 104,
+      "failed": 1,
+      "failures": [
+        "tests.test_pr_play_72_supplemental::test_reinspection_may_authoritatively_add_nothing"
+      ]
+    },
+    "final_development": {
+      "cases": 49,
+      "passed": 49,
+      "failed": 0,
+      "failures": []
+    },
+    "final_supplemental": {
+      "cases": 4,
+      "passed": 4,
+      "failed": 0,
+      "failures": []
+    },
+    "post_holdout_development": {
+      "cases": 68,
+      "passed": 68,
+      "failed": 0,
+      "failures": []
+    },
+    "final_safety": {
+      "cases": 78,
+      "passed": 78,
+      "failed": 0,
+      "failures": []
+    },
+    "isolation_repairs": {
+      "cases": 2,
+      "passed": 2,
+      "failed": 0,
+      "failures": []
+    },
+    "atomic_timing_recheck": {
+      "cases": 4,
+      "passed": 4,
+      "failed": 0,
+      "failures": []
+    }
+  },
+  "holdout": {
+    "cases": 50,
+    "passed": 46,
+    "failed": [
+      {
+        "id": "V03",
+        "text": "Please study that weathered stone.",
+        "checks": [
+          "category",
+          "target",
+          "resolver",
+          "completed",
+          "actual_publication"
+        ]
+      },
+      {
+        "id": "V38",
+        "text": "Have the guards searched?",
+        "checks": [
+          "category",
+          "state"
+        ]
+      },
+      {
+        "id": "V39",
+        "text": "Did I record the survey?",
+        "checks": [
+          "category",
+          "state"
+        ]
+      },
+      {
+        "id": "V49",
+        "text": "Check it again.",
+        "checks": [
+          "category",
+          "target",
+          "state"
+        ]
+      }
+    ],
+    "executions": 1,
+    "manifest_sha256": "a263695fb01c174329c5fccd70bb7988ac4e3eba3b499e1064d00cda7cf6d6ef",
+    "authorship": "developer-authored; not independent external validation"
+  },
+  "http": {
+    "campaigns": [
+      {
+        "branch": "survey",
+        "identity": "7df40c1d94c9da3c3c367e65",
+        "snapshot_id": "2026-11-07T02-26-41_808668e0",
+        "followup_flag": "patrol_survey_recorded",
+        "information": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. The missing patrol was last seen taking the northwest mud track past the crates. The northwest mud track reaches an old milestone beyond the gate. The mud around the marker is churned; any trail beyond it is unclear. You commit to surveying the ground beyond the milestone yourself. Reporting to the watch is no longer your response to this discovery. You can now record the limits of your survey here. You record your survey: the overlapping prints remain inconclusive. Your survey is now recorded; you have not warned the watch. You can return to the gate or continue investigating here.",
+        "resumed": true,
+        "natural_followup": true,
+        "transcript_restored": true
+      },
+      {
+        "branch": "report",
+        "identity": "651a521bc32ccae4ee6b0093",
+        "snapshot_id": "2026-11-07T02-29-01_f8b85441",
+        "followup_flag": "patrol_guards_warned",
+        "information": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. Follow the missing patrol rumor The patrol route changed after the Ash Compact census choke worsened. The missing patrol was last seen taking the northwest mud track past the crates. Cold rain needles Cinderwatch's eastern gate under frayed banners. The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline. A notice board announces new taxes and curfews, and names a missing patrol. A tavern runner is hawking hot stew and rumor for coin. A ragged stranger hangs back, watching the crowd more than the queue. You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report. The watch receives your report that the patrol trail becomes unclear at the milestone. The watch has now been warned; no private survey was conducted. You can continue your inquiry at the gate or return to the milestone. You have no established report of further guard activity.",
+        "resumed": true,
+        "natural_followup": true,
+        "transcript_restored": true
+      }
+    ],
+    "requests": 48,
+    "mean_http_ms": 1769.549712499914,
+    "median_http_ms": 1805.628450063523,
+    "max_http_ms": 5754.814599989913,
+    "provider_requests": 0,
+    "provider_tokens": 0,
+    "hidden_exposures": 0,
+    "stage_timings": "Server function durations captured through ContextVar middleware; HTTP total measured separately. Replay interpretation is labeled separately."
+  },
+  "browser": {
+    "campaign_A": "PASS",
+    "campaign_B": "PASS",
+    "typed_submissions": 27,
+    "readonly": [
+      {
+        "text": "What do I know about the footprints?",
+        "category": "ANSWER",
+        "unchanged": true
+      },
+      {
+        "text": "Ask them about it.",
+        "category": "CLARIFY",
+        "unchanged": true
+      },
+      {
+        "text": "Have the guards acted on my warning?",
+        "category": "ANSWER",
+        "unchanged": true
+      },
+      {
+        "text": "See what happened.",
+        "category": "CLARIFY",
+        "unchanged": true
+      },
+      {
+        "text": "Have the guards searched?",
+        "category": "ANSWER",
+        "unchanged": true
+      },
+      {
+        "text": "Did I record the survey?",
+        "category": "ANSWER",
+        "unchanged": true
+      },
+      {
+        "text": "Have the guards searched?",
+        "category": "ANSWER",
+        "unchanged": true
+      },
+      {
+        "text": "Did I record the survey?",
+        "category": "ANSWER",
+        "unchanged": true
+      },
+      {
+        "text": "Search the hidden camp.",
+        "category": "DECLINE",
+        "unchanged": true
+      }
+    ],
+    "repeats": [
+      {
+        "text": "Look at the weathered milestone again.",
+        "success": true,
+        "no_discovery": true,
+        "no_effect": true,
+        "flags_equal": true
+      },
+      {
+        "text": "Can I examine the milestone again?",
+        "success": true,
+        "no_discovery": true,
+        "no_effect": true,
+        "flags_equal": true
+      },
+      {
+        "text": "Read the notice board again.",
+        "success": true,
+        "no_discovery": true,
+        "no_effect": true,
+        "flags_equal": true
+      },
+      {
+        "text": "Examine the milestone once more.",
+        "success": true,
+        "no_discovery": true,
+        "no_effect": true,
+        "flags_equal": true
+      },
+      {
+        "text": "Please study that weathered stone.",
+        "success": true,
+        "no_discovery": true,
+        "no_effect": true,
+        "flags_equal": true
+      },
+      {
+        "text": "Check it again.",
+        "success": true,
+        "no_discovery": true,
+        "no_effect": true,
+        "flags_equal": true
+      }
+    ],
+    "loads": [
+      {
+        "snapshot_id": "2026-11-07T02-12-27_8c978c1b",
+        "label": "PR72V Browser A",
+        "identity": true,
+        "world": true,
+        "character": true,
+        "combat": true
+      },
+      {
+        "snapshot_id": "2026-11-07T02-17-16_c836d57f",
+        "label": "PR72V Browser B",
+        "identity": true,
+        "world": true,
+        "character": true,
+        "combat": true
+      },
+      {
+        "snapshot_id": "2026-11-07T02-12-27_8c978c1b",
+        "label": "PR72V Browser A",
+        "identity": true,
+        "world": true,
+        "character": true,
+        "combat": true
+      },
+      {
+        "snapshot_id": "2026-11-07T02-17-16_c836d57f",
+        "label": "PR72V Browser B",
+        "identity": true,
+        "world": true,
+        "character": true,
+        "combat": true
+      }
+    ],
+    "load_integrity": true,
+    "screenshots": [
+      "browser_A_final_resume.png",
+      "browser_A_post_repair.png",
+      "browser_A_resumed.png",
+      "browser_A_saved.png",
+      "browser_A_survey.png",
+      "browser_B_post_repair.png",
+      "browser_B_resumed.png",
+      "browser_B_saved.png",
+      "browser_B_watch.png"
+    ],
+    "attachment": [
+      "initial webview attach timeout",
+      "one retry succeeded"
+    ],
+    "authority_safe": true,
+    "transcript": "Snapshot log bundles retained; per-load /api/log responses verified by persistence analysis.",
+    "provider_requests": 0,
+    "provider_tokens": 0
+  },
+  "regression": {
+    "focused": {
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_play_66_publication.py",
+        "tests/test_pr_play_65_authoritative_disclosure.py",
+        "tests/test_pr_play_64_discovery_language.py",
+        "tests/test_pr_play_63_disclosure.py",
+        "tests/test_state_authority.py",
+        "tests/test_pr_play_61_player_facing.py",
+        "tests/test_pr_play_62_investigation_quality.py",
+        "tests/test_pr_play_60_inventory_projection.py",
+        "tests/test_pr_play_60_gameplay_readiness.py",
+        "tests/test_pr_play_59_persistent_consequences.py",
+        "tests/test_pr_play_57_integrated_narration.py",
+        "tests/test_pr_play_58_semantic_coverage.py",
+        "tests/test_pr_play_55_discovery_claims.py",
+        "tests/test_pr_play_54_consequential_validation.py",
+        "tests/test_pr_play_53_quarantined_live.py",
+        "tests/test_pr_play_52_quarantined_integration.py",
+        "tests/test_pr_play_42_evidence_boundaries.py",
+        "tests/test_pr_play_51_geography_grounding.py",
+        "tests/test_pr_play_49_anchored_narration.py",
+        "tests/test_pr_play_47_controlled_renderer.py",
+        "tests/test_pr_play_45_narration_authority.py",
+        "tests/test_pr_play_46_mechanical_boundary.py",
+        "tests/test_pr_play_44_information_delivery.py",
+        "tests/test_pr_bu_lexical_scope.py",
+        "tests/test_provider_accounting_integrity.py",
+        "tests/test_pr_bw_narration_only_envelope.py",
+        "tests/test_diegetic_fallback_narration.py",
+        "tests/test_narration_state_consistency.py",
+        "tests/test_pr_play_68_structured_publication.py",
+        "tests/test_pr_play_69_target_references.py",
+        "tests/test_pr_play_70_branching.py",
+        "tests/test_pr_play_71_lifecycle.py",
+        "tests/test_pr_play_71_persistence_recovery.py",
+        "tests/test_pr_play_71v_verification.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72v\\focused.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72v\\focused_tmp"
+      ],
+      "exit_code": 1,
+      "passed": 1063,
+      "failed": [
+        "tests.test_pr_play_60_gameplay_readiness::test_investigation_then_repeat_preserves_persisted_state",
+        "tests.test_pr_play_46_mechanical_boundary::test_record_adversarial_census",
+        "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+        "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+        "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+        "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[survey]",
+        "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[report]",
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[off]",
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[no_optin]",
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[other_identity]",
+        "tests.test_pr_play_71_lifecycle::test_duplicate_start",
+        "tests.test_pr_play_71_persistence_recovery::test_new_campaign_failure_restores_prior_runtime",
+        "tests.test_pr_play_71v_verification::test_new_campaign_rollback_on_each_runtime_file",
+        "tests.test_pr_play_71v_verification::test_new_campaign_identifier_failure_changes_nothing",
+        "tests.test_pr_play_71v_verification::test_opening_persistence_failure_does_not_publish_start",
+        "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[1]",
+        "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[3]",
+        "tests.test_pr_play_71v_verification::test_chat_permanent_rename_does_not_publish_success",
+        "tests.test_pr_play_71v_verification::test_transcript_and_authoritative_isolation",
+        "tests.test_pr_play_71v_verification::test_player_safe_projection_across_lifecycle",
+        "tests.test_pr_play_71v_verification::test_mandatory_disclosure_survives_rejected_narration",
+        "tests.test_pr_play_71v_verification::test_duplicate_request_does_not_duplicate_branch"
+      ]
+    },
+    "boundary": {
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_play_67_player_projection.py",
+        "tests/test_ui_mode_backend_integration.py",
+        "tests/test_ui_mode_regression_matrix_objective15.py",
+        "tests/test_frontend_ui_mode_hardening_objective15.py",
+        "tests/test_state_channels.py",
+        "tests/test_snapshots.py",
+        "tests/test_start_campaign_api.py",
+        "tests/test_pr_play_37_opening_recovery.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72v\\boundary.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72v\\boundary_tmp"
+      ],
+      "exit_code": 1,
+      "passed": 101,
+      "failed": [
+        "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+        "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+        "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+        "tests.test_start_campaign_api::test_failed_start_campaign_does_not_mark_started",
+        "tests.test_pr_play_37_opening_recovery::test_http_invalid_declaration_discards_provider_text",
+        "tests.test_pr_play_37_opening_recovery::test_http_composer_failure_does_not_commit"
+      ]
+    },
+    "broader": {
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_cx_authority_assurance.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72v\\broader.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72v\\broader_tmp"
+      ],
+      "exit_code": 1,
+      "passed": 0,
+      "failed": [
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]"
+      ]
+    },
+    "lifecycle_isolated": {
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_play_71_lifecycle.py",
+        "tests/test_pr_play_71_persistence_recovery.py",
+        "tests/test_pr_play_71v_verification.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72v\\lifecycle_isolated.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72v\\lifecycle_isolated_tmp"
+      ],
+      "exit_code": 1,
+      "passed": 38,
+      "failed": [
+        "tests.test_pr_play_71v_verification::test_atomic_replace_succeeds_within_budget[0]"
+      ]
+    }
+  },
+  "provider_requests": 0,
+  "provider_tokens": 0,
+  "retries": 0,
+  "latency": {
+    "http_ms": {
+      "count": 48,
+      "mean": 1769.549712499914,
+      "median": 1805.628450063523,
+      "maximum": 5754.814599989913
+    },
+    "five_category_samples": {
+      "initial": {
+        "http_ms": {
+          "count": 1,
+          "mean": 357.8504999168217,
+          "median": 357.8504999168217,
+          "maximum": 357.8504999168217
+        },
+        "stages_ms": {
+          "interpretation_ms": {
+            "count": 1,
+            "mean": 7.426,
+            "median": 7.426,
+            "maximum": 7.426
+          },
+          "grounding_validation_mapping_ms": {
+            "count": 1,
+            "mean": 0.105,
+            "median": 0.105,
+            "maximum": 0.105
+          },
+          "resolver_ms": {
+            "count": 1,
+            "mean": 43.914,
+            "median": 43.914,
+            "maximum": 43.914
+          },
+          "atomic_write_ms": {
+            "count": 3,
+            "mean": 5.193333333333333,
+            "median": 5.257,
+            "maximum": 6.173
+          },
+          "publication_ms": {
+            "count": 1,
+            "mean": 0.683,
+            "median": 0.683,
+            "maximum": 0.683
+          },
+          "log_append_ms": {
+            "count": 1,
+            "mean": 3.213,
+            "median": 3.213,
+            "maximum": 3.213
+          }
+        }
+      },
+      "repeat": {
+        "http_ms": {
+          "count": 1,
+          "mean": 4410.4340999620035,
+          "median": 4410.4340999620035,
+          "maximum": 4410.4340999620035
+        },
+        "stages_ms": {
+          "interpretation_ms": {
+            "count": 1,
+            "mean": 0.289,
+            "median": 0.289,
+            "maximum": 0.289
+          },
+          "grounding_validation_mapping_ms": {
+            "count": 1,
+            "mean": 0.111,
+            "median": 0.111,
+            "maximum": 0.111
+          },
+          "resolver_ms": {
+            "count": 1,
+            "mean": 361.62,
+            "median": 361.62,
+            "maximum": 361.62
+          },
+          "atomic_write_ms": {
+            "count": 3,
+            "mean": 34.705,
+            "median": 36.0,
+            "maximum": 38.318
+          },
+          "publication_ms": {
+            "count": 1,
+            "mean": 0.328,
+            "median": 0.328,
+            "maximum": 0.328
+          },
+          "log_append_ms": {
+            "count": 1,
+            "mean": 22.445,
+            "median": 22.445,
+            "maximum": 22.445
+          }
+        }
+      },
+      "information": {
+        "http_ms": {
+          "count": 1,
+          "mean": 490.90510001406074,
+          "median": 490.90510001406074,
+          "maximum": 490.90510001406074
+        },
+        "stages_ms": {
+          "interpretation_ms": {
+            "count": 1,
+            "mean": 89.231,
+            "median": 89.231,
+            "maximum": 89.231
+          },
+          "log_append_ms": {
+            "count": 1,
+            "mean": 64.023,
+            "median": 64.023,
+            "maximum": 64.023
+          }
+        }
+      },
+      "clarification": {
+        "http_ms": {
+          "count": 1,
+          "mean": 316.7291999561712,
+          "median": 316.7291999561712,
+          "maximum": 316.7291999561712
+        },
+        "stages_ms": {
+          "interpretation_ms": {
+            "count": 1,
+            "mean": 0.101,
+            "median": 0.101,
+            "maximum": 0.101
+          },
+          "log_append_ms": {
+            "count": 1,
+            "mean": 33.89,
+            "median": 33.89,
+            "maximum": 33.89
+          }
+        }
+      },
+      "unsupported": {
+        "http_ms": {
+          "count": 1,
+          "mean": 370.0109999626875,
+          "median": 370.0109999626875,
+          "maximum": 370.0109999626875
+        },
+        "stages_ms": {
+          "interpretation_ms": {
+            "count": 1,
+            "mean": 0.094,
+            "median": 0.094,
+            "maximum": 0.094
+          },
+          "log_append_ms": {
+            "count": 1,
+            "mean": 23.21,
+            "median": 23.21,
+            "maximum": 23.21
+          }
+        }
+      }
+    },
+    "browser_observed_upper_bounds_ms": {
+      "count": 7,
+      "mean": 3359.5714285714284,
+      "median": 1175,
+      "maximum": 9805
+    },
+    "browser_samples": [
+      {
+        "text": "Have the guards searched?",
+        "observed_ms": 702
+      },
+      {
+        "text": "Did I record the survey?",
+        "observed_ms": 1175
+      },
+      {
+        "text": "Please study that weathered stone.",
+        "observed_ms": 5771
+      },
+      {
+        "text": "Have the guards searched?",
+        "observed_ms": 1072
+      },
+      {
+        "text": "Did I record the survey?",
+        "observed_ms": 4172
+      },
+      {
+        "text": "Search the hidden camp.",
+        "observed_ms": 820
+      },
+      {
+        "text": "Check it again.",
+        "observed_ms": 9805
+      }
+    ],
+    "notes": "DOM-observed upper bounds, not paint timing. Grounding, validation and mapping measured together at existing bridge. Atomic writes and append-log are persistence components; stages can overlap. Five dedicated categories have n=1 each, under concurrent validation.",
+    "provider_requests": 0,
+    "provider_tokens": 0,
+    "retries": 0
+  },
+  "hidden_exposures_observed": 0,
+  "mandatory_disclosure_omissions_final": 0,
+  "critical_readonly_mutations_in_frozen_run": 2,
+  "unsafe_fallback_publications_in_frozen_run": 2,
+  "critical_unsafe_publications_after_repair": 0,
+  "new_product_regressions_confirmed": 0,
+  "new_isolation_failures_repaired": 2,
+  "unresolved_nonreproduced_test_failures": 1,
+  "official_ATGB": "not run",
+  "live_AI_interpretation": "not tested",
+  "next_cycle": "PR-PLAY-73 \u2014 Open-ended Player Intent & World Response; do not implement in this cycle"
+}

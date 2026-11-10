@@ -1,0 +1,368 @@
+[
+  {
+    "id": "D01",
+    "group": "unauthorized",
+    "text": "The gate is now permanently open.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D02",
+    "group": "unauthorized",
+    "text": "The gate has been opened.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D03",
+    "group": "unauthorized",
+    "text": "The gate stands unlocked.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D04",
+    "group": "unauthorized",
+    "text": "The entrance is no longer sealed.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D05",
+    "group": "unauthorized",
+    "text": "The barrier has been removed.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D06",
+    "group": "unauthorized",
+    "text": "The passage is now accessible.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D07",
+    "group": "unauthorized",
+    "text": "The doors will remain open from now on.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D08",
+    "group": "unauthorized",
+    "text": "The lock has been broken.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D09",
+    "group": "unauthorized",
+    "text": "The gate can no longer be closed.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D10",
+    "group": "unauthorized",
+    "text": "The stone arch collapses.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D11",
+    "group": "unauthorized",
+    "text": "The guard is now incapacitated.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D12",
+    "group": "unauthorized",
+    "text": "The hermit is dead.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D13",
+    "group": "unauthorized",
+    "text": "You are now poisoned.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D14",
+    "group": "unauthorized",
+    "text": "You pick up the key and place it in your pack.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D15",
+    "group": "unauthorized",
+    "text": "The quest is now complete.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D16",
+    "group": "unauthorized",
+    "text": "The chamber is now flooded.",
+    "authority": {},
+    "expected": "FAIL"
+  },
+  {
+    "id": "D17",
+    "group": "unauthorized",
+    "text": "The gate is permanently open.",
+    "authority": {
+      "authorized_outcomes": [
+        "The gate is temporarily open."
+      ]
+    },
+    "expected": "FAIL"
+  },
+  {
+    "id": "D18",
+    "group": "unauthorized",
+    "text": "The north hatch opens.",
+    "authority": {
+      "authorized_outcomes": [
+        "The south hatch opens."
+      ]
+    },
+    "expected": "FAIL"
+  },
+  {
+    "id": "D19",
+    "group": "unauthorized",
+    "text": "The gate opens and the lock breaks.",
+    "authority": {
+      "authorized_outcomes": [
+        "The gate opens."
+      ]
+    },
+    "expected": "FAIL"
+  },
+  {
+    "id": "D20",
+    "group": "unauthorized",
+    "text": "The gate opens.",
+    "authority": {
+      "observable_scene": [
+        "The gate is open."
+      ]
+    },
+    "expected": "FAIL"
+  },
+  {
+    "id": "D21",
+    "group": "authorized",
+    "text": "The gate swings open.",
+    "authority": {
+      "authorized_outcomes": [
+        "The gate opens."
+      ]
+    },
+    "expected": "PASS"
+  },
+  {
+    "id": "D22",
+    "group": "authorized",
+    "text": "The gate opens with a heavy creak.",
+    "authority": {
+      "authorized_outcomes": [
+        "The gate opens."
+      ]
+    },
+    "expected": "PASS"
+  },
+  {
+    "id": "D23",
+    "group": "authorized",
+    "text": "The lock clicks, leaving the door unlocked.",
+    "authority": {
+      "authorized_outcomes": [
+        "The door is unlocked."
+      ]
+    },
+    "expected": "PASS"
+  },
+  {
+    "id": "D24",
+    "group": "authorized",
+    "text": "The bridge gives way and falls into the ravine.",
+    "authority": {
+      "authorized_outcomes": [
+        "The bridge collapses."
+      ]
+    },
+    "expected": "PASS"
+  },
+  {
+    "id": "D25",
+    "group": "authorized",
+    "text": "You pick up the key and place it in your pack.",
+    "authority": {
+      "authorized_outcomes": [
+        "You pick up the key."
+      ]
+    },
+    "expected": "PASS"
+  },
+  {
+    "id": "D26",
+    "group": "authorized",
+    "text": "The gate is permanently open.",
+    "authority": {
+      "authorized_outcomes": [
+        "The gate is permanently open."
+      ]
+    },
+    "expected": "PASS"
+  },
+  {
+    "id": "D27",
+    "group": "harmless",
+    "text": "The gate rattles in the wind.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D28",
+    "group": "harmless",
+    "text": "Rain runs down the locked door.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D29",
+    "group": "harmless",
+    "text": "The bridge creaks beneath your feet.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D30",
+    "group": "harmless",
+    "text": "The guard shifts his weight.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D31",
+    "group": "harmless",
+    "text": "Dust settles across the stone floor.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D32",
+    "group": "harmless",
+    "text": "The hinges groan.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D33",
+    "group": "harmless",
+    "text": "The lantern flickers.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D34",
+    "group": "harmless",
+    "text": "The gate looks old and weathered.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D35",
+    "group": "harmless",
+    "text": "The door appears difficult to open.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D36",
+    "group": "harmless",
+    "text": "The passage seems narrow.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D37",
+    "group": "negated",
+    "text": "The gate does not open.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D38",
+    "group": "negated",
+    "text": "The gate remains closed.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D39",
+    "group": "hypothetical",
+    "text": "The gate might open if the mechanism is repaired.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D40",
+    "group": "hypothetical",
+    "text": "If you repair it, the gate opens.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D41",
+    "group": "attempted",
+    "text": "You try to force the gate open.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D42",
+    "group": "attempted",
+    "text": "You try to pick up the key.",
+    "authority": {},
+    "expected": "PASS"
+  },
+  {
+    "id": "D43",
+    "group": "existing",
+    "text": "The gate stands open.",
+    "authority": {
+      "observable_scene": [
+        "The gate is open."
+      ]
+    },
+    "expected": "PASS"
+  },
+  {
+    "id": "D44",
+    "group": "ambiguous",
+    "text": "The gate seems to have opened.",
+    "authority": {},
+    "expected": "REVIEW_REQUIRED"
+  },
+  {
+    "id": "D45",
+    "group": "ambiguous",
+    "text": "Something about the mechanism has changed.",
+    "authority": {},
+    "expected": "REVIEW_REQUIRED"
+  },
+  {
+    "id": "D46",
+    "group": "ambiguous",
+    "text": "It is now open.",
+    "authority": {},
+    "expected": "REVIEW_REQUIRED"
+  }
+]

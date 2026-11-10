@@ -1,0 +1,19 @@
+# Root cause and original production trace
+
+Failure class: implementation. Earliest demonstrated incorrect decision: scene-momentum enforcement decides that a missing momentum tag warrants synthetic scene pressure even when the resolver has just supplied the requested information.
+
+Original request: `Read me the missing-patrol notice, not the tax lines.`. Current scene: frontier_gate / Cinderwatch Gate District. The visible board lists taxes, curfew rules and a missing-patrol warning. The previous NPC answer concerns a patrol missing near the old milestone; T04 approaches the board locally without completing touch or revealing the notice. The parsed contract is inquiry / inspect / Notice board, explicit player target; the resolver selects discover_clue, interactable notice_board, clue notice_patrol_route. Full history, available surfaces, contract construction, resolver metadata and state are in t05_before.json.
+
+The deterministic `resolved_clue_discovery` candidate (provider_narration_skipped, zero calls) is:
+
+> You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.
+
+When scene momentum is due and the candidate has no momentum tag, enforcement calls `render_scene_momentum_diegetic_append(scene_envelope, seed_key='frontier_gate')`. Its scene-wide notice/patrol template returns the jab sentence. It has no selected-clue or resolved-event input. The output is appended as a separate paragraph and tagged scene_momentum:consequence_or_opportunity. The semantic write-site record names `_apply_scene_momentum_enforcement` / scene_momentum_enforced_fallback. This is demonstrated by captured inputs, nested renderer result and enforcement output, not inferred from wording.
+
+`continuation_preserves_resolution` retains the combined text because the selected answer survives and no recognized repeat splice appears. Subsequent presentation removes the generic inspection lead and joins the paragraphs; it does not introduce the jab. The pre-seal candidate already contains both sentences. Normal hard validation passes; seal_accepted_response adopts attempt 1 / initial_generation; downstream mutators preserve it. There is no publication-stage append or provider fallback responsible for the contamination.
+
+Authorized disclosure contract: resolver-selected public information must be delivered and may be paraphrased or supplemented by the existing information owner. Relevant notice description, presentation, supported observation or NPC reaction can remain in candidate narration, including multiple sentences and multiple authorized facts. The request resolves an information inquiry, not a new physical event. Scene-wide synthetic crowd pressure is not a required resolved outcome. Multiple components are legal when their sources support them; this stock renderer is independent of the selected disclosure. Immutable acceptance begins only after assembly and hard validation.
+
+An initial correction omitted both the stock append and its tag. The full twelve-turn run exposed T07 entering the existing scene_stall:momentum_due_without_progress terminal fallback. Inspection of storage.SCENE_MOMENTUM_KINDS established the existing new_information kind. The final correction tags the real clue disclosure with that kind, preserving cadence without inventing a pressure event. The complete final scenario is rerun; this does not repair T07 narration itself. Intermediate traces/results remain preserved, including intermediate_t07_investigation.json.
+
+The narrow correction is at the proven source-selection/append boundary. It never tries to classify arbitrary sentences or remove material from a sealed response. Raw before/after traces and compact composition/publication comparisons are cycle-owned evidence under artifacts/pr_play_t05_composition/.

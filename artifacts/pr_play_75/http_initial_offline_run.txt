@@ -1,0 +1,70 @@
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+[SESSION RESET] runtime state cleared
+[API] New campaign started e7d1bd8f04aa805fdd7006a1
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+[SESSION RESET] runtime state cleared
+[API] New campaign started 397474af9e5becb6a141d140
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+{
+  "campaigns": [
+    {
+      "branch": "survey",
+      "result": "BLOCKED",
+      "reason": "live proposal not accepted",
+      "response": "No additional person could be established here. You can still speak to the people already present.",
+      "proposal": {
+        "proposal": null,
+        "validation": {
+          "accepted": false,
+          "reason": "RuntimeError"
+        },
+        "latency_ms": 0.1094999024644494,
+        "retries": 0
+      }
+    },
+    {
+      "branch": "report",
+      "result": "BLOCKED",
+      "reason": "live proposal not accepted",
+      "response": "No additional person could be established here. You can still speak to the people already present.",
+      "proposal": {
+        "proposal": null,
+        "validation": {
+          "accepted": false,
+          "reason": "RuntimeError"
+        },
+        "latency_ms": 0.11989998165518045,
+        "retries": 0
+      }
+    }
+  ],
+  "requests": 19,
+  "mean_http_ms": 338.28337371079743,
+  "median_http_ms": 309.31290006265044,
+  "max_http_ms": 846.105600008741,
+  "provider_usage": {
+    "version": "ATGB-03B-1",
+    "run_id": "3f67ade9cc02475a970c41c5ced116d1",
+    "requests": 0,
+    "request_upper_bound": null,
+    "dispatched_requests": 0,
+    "pending_requests": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [],
+    "events": []
+  },
+  "hidden_exposures": 0
+}

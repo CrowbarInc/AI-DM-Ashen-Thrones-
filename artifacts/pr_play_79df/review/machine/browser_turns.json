@@ -1,0 +1,90 @@
+{
+  "cycle": "PR-PLAY-79D-F",
+  "source_head": "d40f1ed198236c604085f1c842ead267a8104ce2",
+  "server_pid": 23332,
+  "port": 8111,
+  "campaign": "isolated copy of artifacts/pr_play_79d/browser_data",
+  "opening_generated": false,
+  "turns": [
+    {
+      "input": "I step back from the notice board.",
+      "player_facing": "You take a step backward away from the Notice board.",
+      "status": 200,
+      "server_monotonic_ms": 4115.47,
+      "t2_wall": 1794143911.3666606,
+      "t5_wall": 1794143915.481791,
+      "completed_provider_purposes": ["expression"],
+      "expression_attempts": 1,
+      "position_before": "beside notice_board",
+      "position_after": "back notice_board",
+      "turn_before": 14,
+      "turn_after": 15,
+      "publication_owner": "completed_runtime_response",
+      "response_category": "live_narration",
+      "validation_outcome": "accepted_expression",
+      "provider_attempt": "aed6b30c010a448681b307a0fe012397",
+      "expression_reference": "da5c689e11b10e161fa7110e949a6d72a86af2bf2ba01f737f29e69dbd981423"
+    },
+    {
+      "input": "Gate Guard, what does the notice board say about the patrol?",
+      "player_facing": "Gate Guard mutters, \"Word is, check the notice board.\"",
+      "status": 200,
+      "server_monotonic_ms": 4054.42,
+      "t2_wall": 1794143983.80283,
+      "t5_wall": 1794143987.8569112,
+      "completed_provider_purposes": ["contract_interpretation", "expression"],
+      "expression_attempts": 1,
+      "turn_before": 15,
+      "turn_after": 16,
+      "publication_owner": "completed_runtime_response",
+      "response_category": "engine_response",
+      "validation_outcome": "engine_or_grounded_fallback",
+      "accepted_expression_references": [],
+      "provider_attempts": ["8ec204a85891458382e48cd17e29bb26", "a47332cdcfcf44e5b4721a69f309ede4"],
+      "session_last_publication_visible": "Gate Guard says, \"The notice board does mention a missing patrol, but I don’t have any details beyond that.\"",
+      "new_clue": "lead_frontier_gate_notice_board: Check the notice board"
+    },
+    {
+      "input": "I examine the notice board.",
+      "player_facing": "You examine the notice board again. Previously disclosed here: The missing patrol was last seen taking the northwest mud track past the crates. The examination adds nothing new to what you already know.",
+      "status": 200,
+      "server_monotonic_ms": 2613.36,
+      "completed_provider_purposes": ["contract_interpretation"],
+      "expression_attempts": 0,
+      "turn_before": 16,
+      "turn_after": 17,
+      "validation_outcome": "engine_or_grounded_fallback",
+      "provider_attempt": "7048bd2695c3489e9600451bfe359d7b"
+    },
+    {
+      "input": "I examine the notice board again.",
+      "player_facing": "You examine the notice board again. Previously disclosed here: The missing patrol was last seen taking the northwest mud track past the crates. The examination adds nothing new to what you already know.",
+      "status": 200,
+      "server_monotonic_ms": 3301.16,
+      "completed_provider_purposes": ["contract_interpretation"],
+      "expression_attempts": 0,
+      "turn_before": 17,
+      "turn_after": 18,
+      "validation_outcome": "engine_or_grounded_fallback",
+      "provider_attempt": "bfb084b295d349f68965818471ce70d0",
+      "published_expression_reference": "6ffa6d6c6ae6451cd50a20fbb624a92b40896fc75b18b021f57a1cfa61af4a5b"
+    }
+  ],
+  "snapshot": {
+    "id": "2026-11-08T13-23-16_b6d3684f",
+    "label": "79DF final-source",
+    "create_server_monotonic_ms": 568.51,
+    "load_server_monotonic_ms": 453.04,
+    "provider_rows_on_create_or_load": 0
+  },
+  "resume": {
+    "scene": "frontier_gate",
+    "turn": 18,
+    "position": {"kind": "back", "target_id": "notice_board", "label": "Notice board"},
+    "clues": [
+      "notice_patrol_route",
+      "lead_frontier_gate_notice_board"
+    ],
+    "ui": "Snapshot restored."
+  }
+}

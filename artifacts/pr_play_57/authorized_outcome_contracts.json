@@ -1,0 +1,286 @@
+[
+  {
+    "id": "A1",
+    "contract": {
+      "player_action": "I examine the notice board.",
+      "resolved_outcome": {
+        "status": "discovered",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": []
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    }
+  },
+  {
+    "id": "A2",
+    "contract": {
+      "player_action": "I examine the notice board.",
+      "resolved_outcome": {
+        "status": "discovered",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": []
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    }
+  },
+  {
+    "id": "B1",
+    "contract": {
+      "player_action": "I examine the rain barrel.",
+      "resolved_outcome": {
+        "status": "observed",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "engine_status",
+          "status": "observed",
+          "text": "No new clue is established by this examination."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": []
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    }
+  },
+  {
+    "id": "B2",
+    "contract": {
+      "player_action": "I examine the rain barrel.",
+      "resolved_outcome": {
+        "status": "observed",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "engine_status",
+          "status": "observed",
+          "text": "No new clue is established by this examination."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": []
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    }
+  },
+  {
+    "id": "C1",
+    "contract": {
+      "player_action": "I examine the notice board.",
+      "resolved_outcome": {
+        "status": "known",
+        "success": false
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "engine_status",
+          "status": "known",
+          "text": "The examination adds nothing new to what you already know."
+        },
+        {
+          "id": "outcome:1",
+          "source": "player_knowledge",
+          "status": "previously_known",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ]
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    }
+  },
+  {
+    "id": "C2",
+    "contract": {
+      "player_action": "I examine the notice board.",
+      "resolved_outcome": {
+        "status": "known",
+        "success": false
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "engine_status",
+          "status": "known",
+          "text": "The examination adds nothing new to what you already know."
+        },
+        {
+          "id": "outcome:1",
+          "source": "player_knowledge",
+          "status": "previously_known",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ]
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    }
+  },
+  {
+    "id": "D1",
+    "contract": {
+      "player_action": "I examine the footprints.",
+      "resolved_outcome": {
+        "status": "discovered",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "A weathered stone milestone leans beside the northwest mud track.",
+          "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+          "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+        ],
+        "continuity": []
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    }
+  },
+  {
+    "id": "D2",
+    "contract": {
+      "player_action": "I examine the footprints.",
+      "resolved_outcome": {
+        "status": "discovered",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "A weathered stone milestone leans beside the northwest mud track.",
+          "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+          "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+        ],
+        "continuity": []
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    }
+  }
+]

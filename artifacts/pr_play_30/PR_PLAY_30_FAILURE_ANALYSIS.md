@@ -1,0 +1,10 @@
+# PR-PLAY-30 failure analysis
+First failed execution boundary: deterministic spatial/destination grounding, before provider interpretation. Native decision reason=destination_not_established, kind=conversational_decline, resolver_invoked=false, gameplay_parser_invoked=false, zero provider calls. HTTP 200 is transport success only. Native semantic evaluator correctly stops on action_or_compound_rejection; no harness classification repair required.
+
+Existing capability defect: purpose text after “to” is extracted as a destination; “investigate” is absent from this router's inspection cues. This is reproducible independently of provider behavior because Turn 3 never invokes the configured mock interpreter. Secondary effect: awkward deterministic text and active NPC context cleared; legitimate clue persists, but play cannot proceed naturally in the requested action.
+
+Missing content/representation: exact rumor clue has no physical target or authored location pointer; crates are prose only. Related old_milestone prints do exist under a distinct clue. This is not a blanket absence of environmental investigation. It is not permissible to equate the prints, invent local geometry, or silently switch to unrelated notice-board examination.
+
+Provider failure: not implicated/tested on investigation. Authority rejection: preserves world boundaries, but not a fully actionable VALID BLOCK because response neither resolves nor offers a supported next step. Result classification: ENGINE FAILURE at pre-interpretation routing for understood natural-purpose wording, plus UNSUPPORTED CONTENT for immediate local footprint inspection. No claim that a fully authorized exact investigation was denied: its physical mapping is missing.
+
+A targeted follow-up is warranted: audit/repair clue-directed exploration intent grounding so destination and purpose remain separate and the system offers only existing authored routes when exact physical mapping is absent. Add no world content as an incidental parser fix. PR-PLAY-31 is a recommendation only; no repair started.

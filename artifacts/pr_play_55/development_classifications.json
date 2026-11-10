@@ -1,0 +1,491 @@
+[
+  {
+    "id": "D01",
+    "group": "negative",
+    "category": "unknown_object_discovery",
+    "text": "You find a ribbon beneath the board.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_discovery"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.7442999922204763
+  },
+  {
+    "id": "D02",
+    "group": "negative",
+    "category": "unknown_object_discovery",
+    "text": "You discover a ribbon beneath the board.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_discovery"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.3499999875202775
+  },
+  {
+    "id": "D03",
+    "group": "negative",
+    "category": "unknown_object_discovery",
+    "text": "You notice a ribbon beneath the board.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_discovery"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.33099998836405575
+  },
+  {
+    "id": "D04",
+    "group": "negative",
+    "category": "indirect_object_discovery",
+    "text": "You spot a ribbon tucked beneath the board.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_discovery"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.34890000824816525
+  },
+  {
+    "id": "D05",
+    "group": "positive",
+    "category": "surface_observation",
+    "text": "You notice a crack in the board.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.26020000223070383
+  },
+  {
+    "id": "D06",
+    "group": "positive",
+    "category": "surface_observation",
+    "text": "You notice a crack running through the weathered board.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.3040999872609973
+  },
+  {
+    "id": "D07",
+    "group": "positive",
+    "category": "surface_observation",
+    "text": "You find a crack in the board.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.15609999536536634
+  },
+  {
+    "id": "D08",
+    "group": "positive",
+    "category": "scene_embellishment",
+    "text": "The wind catches a ribbon tied to the nearby fence.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.17579999985173345
+  },
+  {
+    "id": "D09",
+    "group": "positive",
+    "category": "scene_embellishment",
+    "text": "The rain catches on a loose ribbon tied to the fence.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.17380001372657716
+  },
+  {
+    "id": "D10",
+    "group": "negative",
+    "category": "unknown_object_acquisition",
+    "text": "A ribbon lies in your hand after the search.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_acquisition"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.1587000151630491
+  },
+  {
+    "id": "D11",
+    "group": "negative",
+    "category": "presupposed_acquisition",
+    "text": "The ribbon you recovered is marked with a symbol.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_discovery"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.1883000077214092
+  },
+  {
+    "id": "D12",
+    "group": "negative",
+    "category": "false_success_without_success_word",
+    "text": "Your search leaves you holding a narrow strip of cloth.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_acquisition"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.23780000628903508
+  },
+  {
+    "id": "D13",
+    "group": "positive",
+    "category": "attention_without_object",
+    "text": "Something beneath the board catches your attention.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.1703999878372997
+  },
+  {
+    "id": "D14",
+    "group": "positive",
+    "category": "speculation",
+    "text": "You suspect something may be concealed beneath the board.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.07989999721758068
+  },
+  {
+    "id": "D15",
+    "group": "positive",
+    "category": "speculation",
+    "text": "You wonder whether something might be hidden beneath the board.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.07460001506842673
+  },
+  {
+    "id": "D16",
+    "group": "positive",
+    "category": "speculation",
+    "text": "The ribbon might conceal a message.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.1346999779343605
+  },
+  {
+    "id": "D17",
+    "group": "ambiguous",
+    "category": "ambiguous_marking",
+    "text": "You notice an unfamiliar marking near the door.",
+    "expected": "REVIEW_REQUIRED",
+    "actual": "REVIEW_REQUIRED",
+    "reasons": [
+      "ambiguous_consequential"
+    ],
+    "reason_codes": [
+      "AMBIGUOUS_CONSEQUENCE"
+    ],
+    "latency_ms": 0.1832999987527728
+  },
+  {
+    "id": "D18",
+    "group": "negative",
+    "category": "unknown_object_discovery",
+    "text": "You recover the ribbon containing the smuggler's cipher.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_discovery"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.2164000179618597
+  },
+  {
+    "id": "D19",
+    "group": "positive",
+    "category": "harmless_unfamiliar_object",
+    "text": "A dented tin cup sits beside the rain barrel.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.15269999857991934
+  },
+  {
+    "id": "D20",
+    "group": "positive",
+    "category": "surface_observation",
+    "text": "You see the grain of the board.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.14680001186206937
+  },
+  {
+    "id": "D21",
+    "group": "negative",
+    "category": "false_failure_without_failure_word",
+    "text": "The search comes up empty.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "false_mechanical_failure"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.1202999847009778
+  },
+  {
+    "id": "D22",
+    "group": "positive",
+    "category": "accurate_failure",
+    "text": "The search comes up empty.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.11490000179037452
+  },
+  {
+    "id": "D23",
+    "group": "negative",
+    "category": "false_success_without_success_word",
+    "text": "The board gives up a sealed ribbon.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "false_mechanical_success"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.17010001465678215
+  },
+  {
+    "id": "D24",
+    "group": "negative",
+    "category": "false_failure_without_failure_word",
+    "text": "You come away empty-handed.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "false_mechanical_failure"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.12589999823831022
+  },
+  {
+    "id": "D25",
+    "group": "negative",
+    "category": "implied_npc_identification",
+    "text": "The runner is the one who sold the route.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_identity"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.16799999866634607
+  },
+  {
+    "id": "D26",
+    "group": "negative",
+    "category": "implied_npc_confession",
+    "text": "The guard owns up to selling the route.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_confession"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.16750002396292984
+  },
+  {
+    "id": "D27",
+    "group": "negative",
+    "category": "implied_npc_confession",
+    "text": "He does not deny selling the patrol route.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_confession"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.17180002760142088
+  },
+  {
+    "id": "D28",
+    "group": "negative",
+    "category": "unauthorized_location_access",
+    "text": "You step into a hidden loft behind the board.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_access"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.18670002464205027
+  },
+  {
+    "id": "D29",
+    "group": "negative",
+    "category": "unauthorized_quest_progression",
+    "text": "This finding finishes the patrol objective.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_quest"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.14470002497546375
+  },
+  {
+    "id": "D30",
+    "group": "negative",
+    "category": "unauthorized_environment",
+    "text": "The watchtower has collapsed.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_environment"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.135900016175583
+  },
+  {
+    "id": "D31",
+    "group": "negative",
+    "category": "consequential_expansion",
+    "text": "You learn that the western gate is unwatched at dusk.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_discovery",
+      "consequential_expansion"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.25019998429343104
+  },
+  {
+    "id": "D32",
+    "group": "paraphrase",
+    "category": "authorized_discovery_paraphrase",
+    "text": "At sunset, the sentry makes his rounds along the west road.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.19109999993816018
+  },
+  {
+    "id": "D33",
+    "group": "paraphrase",
+    "category": "authorized_discovery_paraphrase",
+    "text": "You uncover the patrol route recorded on the notice board.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.21500000730156898
+  },
+  {
+    "id": "D34",
+    "group": "paraphrase",
+    "category": "authorized_discovery_paraphrase",
+    "text": "You learn that the guard patrols the western road at dusk.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.2046999870799482
+  },
+  {
+    "id": "D35",
+    "group": "negative",
+    "category": "consequential_expansion",
+    "text": "The western gate is completely unguarded at dusk.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "consequential_expansion"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.1838000025600195
+  },
+  {
+    "id": "D36",
+    "group": "positive",
+    "category": "metaphor",
+    "text": "The rain is a curtain across the board.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.14359998749569058
+  },
+  {
+    "id": "D37",
+    "group": "negative",
+    "category": "indirect_object_acquisition",
+    "text": "A narrow strip of cloth lies in your grasp after the search.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "unauthorized_acquisition"
+    ],
+    "reason_codes": [],
+    "latency_ms": 0.1745999907143414
+  },
+  {
+    "id": "D38",
+    "group": "positive",
+    "category": "negation",
+    "text": "You do not notice a ribbon beneath the board.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.1511000155005604
+  },
+  {
+    "id": "D39",
+    "group": "negative",
+    "category": "discovery_contradiction",
+    "text": "The guard patrols the east road at dusk.",
+    "expected": "FAIL",
+    "actual": "FAIL",
+    "reasons": [
+      "discovery_contradiction"
+    ],
+    "reason_codes": [
+      "CONTRADICTORY_AUTHORITY"
+    ],
+    "latency_ms": 0.15279999934136868
+  },
+  {
+    "id": "D40",
+    "group": "positive",
+    "category": "incidental_debris",
+    "text": "A little grit lies in your satchel.",
+    "expected": "PASS",
+    "actual": "PASS",
+    "reasons": [],
+    "reason_codes": [],
+    "latency_ms": 0.14150000060908496
+  }
+]

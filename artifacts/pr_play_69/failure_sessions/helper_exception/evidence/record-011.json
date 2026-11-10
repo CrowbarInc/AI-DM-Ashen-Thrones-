@@ -1,0 +1,251 @@
+{
+  "enabled": true,
+  "player_text": "I examine the weathered milestone.",
+  "provider_requests": 0,
+  "state_write_attempted": false,
+  "projection_build_ms": 0.266,
+  "hook_input": {
+    "eligible": true,
+    "player_text": "I examine the weathered milestone.",
+    "target_id": "milestone",
+    "target_label": "weathered milestone",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "action_id": "milestone",
+      "interactable_id": "milestone",
+      "discovered_clues": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "clue_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "state_changes": {}
+    },
+    "narration_payload": {
+      "scene": {
+        "public": {
+          "location": "Old Milestone",
+          "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+          "visible_facts": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ]
+        },
+        "discovered_clues": [
+          {
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ]
+      }
+    }
+  },
+  "eligible": true,
+  "mode": "quarantined_integrated",
+  "authorized_outcome_contract": {
+    "player_action": "I examine the weathered milestone.",
+    "authorized_target": "weathered milestone",
+    "resolved_outcome": {
+      "status": "discovered",
+      "success": true
+    },
+    "must_communicate": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      }
+    ],
+    "may_reference": {
+      "visible_scene": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+        "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      ],
+      "continuity": []
+    },
+    "authorized_consequences": [],
+    "must_not_establish": [
+      "Only communicate completed engine outcomes; never establish additional facts or effects.",
+      "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+      "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+    ]
+  },
+  "anchors": [
+    {
+      "order": 0,
+      "source": "resolved_action",
+      "status": "newly_revealed",
+      "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    }
+  ],
+  "assembled": "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+  "raw_provider_text": "You examine the weathered milestone.",
+  "used_fallback": false,
+  "generator_calls": 1,
+  "validation_ms": 13.497,
+  "validation": {
+    "decision": "PASS",
+    "semantic": {
+      "decision": "PASS",
+      "reasons": [],
+      "claims": [],
+      "provider_requests": 0,
+      "coverage": "deterministic_frames_not_semantic_proof"
+    },
+    "legacy": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [
+        {
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "kind": "incidental_fact",
+          "epistemic_status": "world_truth",
+          "grounded": false,
+          "consequential": false,
+          "family": "incidental"
+        }
+      ],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      },
+      "consequential_validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      }
+    },
+    "coverage": {
+      "decision": "PASS",
+      "facts": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "decision": "PASS",
+          "classification": "covered",
+          "evidence": "faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "uncertainty_facets": [
+            "direction",
+            "number",
+            "origin"
+          ]
+        }
+      ],
+      "scope": "bounded_deterministic_coverage_not_semantic_proof"
+    },
+    "presentation": {
+      "decision": "PASS",
+      "semantic": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "legacy": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        },
+        "consequential_validation": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        }
+      },
+      "coverage": {
+        "decision": "PASS",
+        "facts": [],
+        "scope": "bounded_deterministic_coverage_not_semantic_proof"
+      }
+    },
+    "trusted_coverage": {
+      "decision": "PASS",
+      "facts": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "decision": "PASS",
+          "classification": "covered",
+          "evidence": "faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "uncertainty_facets": [
+            "direction",
+            "number",
+            "origin"
+          ]
+        }
+      ],
+      "scope": "bounded_deterministic_coverage_not_semantic_proof"
+    },
+    "provenance": "engine_current_action_plus_validated_ai",
+    "composition_ms": 0.002
+  },
+  "review_required": true,
+  "live_provider": {
+    "enabled": false
+  },
+  "promoted": false,
+  "context_build_ms": 8.53,
+  "assembly_ms": 0.007,
+  "disclosure_mode": "authoritative",
+  "trusted_disclosure": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+  "trusted_disclosure_ms": 0.004,
+  "trusted_facts": [
+    {
+      "id": "outcome:0",
+      "source": "resolved_action",
+      "status": "newly_revealed",
+      "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    }
+  ],
+  "diagnostic": "PASS",
+  "validated_composition": "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+  "total_integrated_ms": 33.903,
+  "hook_work_ms": 91.527,
+  "evidence_write": "ok",
+  "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_69\\failure_sessions\\helper_exception\\evidence\\record-011.json",
+  "serialization_ms": 0.392,
+  "evidence_write_ms": 0.831,
+  "total_hook_ms": 118.332,
+  "publication": {
+    "decision": "fallback",
+    "trusted_disclosure": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "mandatory_disclosures": [
+      "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    ],
+    "final_text": "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "invariant": "PASS",
+    "recovery_reason": "publication_helper_RuntimeError",
+    "server_constructed": true,
+    "client_received": "unknown"
+  },
+  "player_facing_published": false
+}

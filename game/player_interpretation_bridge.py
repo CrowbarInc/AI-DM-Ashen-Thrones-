@@ -41,6 +41,8 @@ def visible_catalog(scene: dict | None, world: dict | None) -> dict[str, dict[st
     for item in current_scene.get("interactables") or []:
         if not isinstance(item, dict):
             continue
+        if item.get("hidden") or item.get("visible") is False or item.get("accessible") is False:
+            continue
         entity_id = str(item.get("id") or "").strip()
         if not entity_id:
             continue
@@ -48,8 +50,12 @@ def visible_catalog(scene: dict | None, world: dict | None) -> dict[str, dict[st
             "kind": "inspect_target" if item.get("reveals_clue") else "perceive_target",
             "row": item,
         }
-    for item in current_scene.get("exits") or []:
+    from game.route_authority import authored_exit_rows
+    for item in authored_exit_rows(scene or {}):
         if not isinstance(item, dict):
+            continue
+        from game.route_authority import route_status
+        if route_status(item, scene_id, {}, {}) == "hidden":
             continue
         entity_id = str(item.get("id") or "").strip()
         if not entity_id:
@@ -57,6 +63,8 @@ def visible_catalog(scene: dict | None, world: dict | None) -> dict[str, dict[st
         out[entity_id] = {"kind": "exit", "row": item}
     for npc in (world or {}).get("npcs") or []:
         if not isinstance(npc, dict):
+            continue
+        if npc.get("hidden") or npc.get("visible") is False or npc.get("accessible") is False:
             continue
         entity_id = str(npc.get("id") or "").strip()
         if not entity_id:
@@ -238,6 +246,90 @@ def normalized_action_from_interpretation(
             "reference_reconciliation": reconciliation,
         }
     operation, target_ref = _single_component(record)
+    if operation == "ELABORATE":
+        from game.bounded_improvisation import controlled_request
+        plan = controlled_request(player_text, scene=scene, world=world, session=session)
+        allowed = bool(plan and plan.get('mode') in {'propose', 'interact'} and plan.get('id') == target_ref)
+        meta = {'source': 'stored_interpretation', 'accepted': allowed,
+                'reason': 'controlled_detail' if allowed else 'unsupported_operation'}
+        if not allowed:
+            return None, meta
+        return {'id': target_ref, 'target_id': target_ref, 'type': 'observe',
+                'label': 'Examine ordinary detail', 'prompt': player_text,
+                'metadata': {'controlled_world_fact': True, 'skip_unrelated_clue_discovery': True}}, meta
+    if operation == "CUSTOM":
+        # A semantic match only proposes an id. Re-check it against the current
+        # scene before the existing authored executor is allowed to run.
+        from game.authored_action_language import propose
+        from game.player_initiative import decide
+        hosted = propose(player_text, scene=scene, world=world, session=session)
+        proposal = decide(player_text, scene=scene, world=world, session=session)
+        allowed = bool(hosted and hosted.get("kind") == "execute" and hosted.get("id") == target_ref) or bool(
+            proposal and proposal.requires_authoritative_execution
+            and proposal.proposed_operation == "CUSTOM"
+            and proposal.proposed_target == target_ref)
+        meta = {"source": "stored_interpretation", "accepted": allowed,
+                "reason": "grounded_authored_choice" if allowed else "unsupported_operation",
+                "operation": operation, "target_ref": target_ref}
+        if not allowed:
+            return None, meta
+        row = next(a for a in _scene_obj(scene).get("actions", []) if a.get("id") == target_ref)
+        return {"id": target_ref, "type": "custom", "label": row["label"], "prompt": player_text,
+                "metadata": {"stored_interpretation": {"operation": operation, "target_ref": target_ref}}}, meta
+    if operation in {"OBSERVE_FACT", "SEARCH_ESTABLISHED", "PERSUADE"}:
+        from game.general_purpose_actions import fact_by_id, FAMILY_OBSERVATION, FAMILY_SEARCH, FAMILY_SOCIAL
+        import re as _re
+        if operation == "PERSUADE":
+            catalog = visible_catalog(scene, world)
+            target = catalog.get(str(target_ref or ""))
+            if not target or target.get("kind") != "npc":
+                return None, {"source": "stored_interpretation", "accepted": False,
+                              "reason": "target_not_visible", "operation": operation, "target_ref": target_ref}
+            row = target.get("row") if isinstance(target.get("row"), dict) else {}
+            return {
+                "id": str(target_ref),
+                "label": str(row.get("name") or target_ref),
+                "type": "persuade",
+                "prompt": player_text,
+                "target_id": str(target_ref),
+                "targetEntityId": str(target_ref),
+                "metadata": {
+                    "general_purpose_family": FAMILY_SOCIAL,
+                    "stored_interpretation": {"operation": operation, "target_ref": str(target_ref)},
+                },
+            }, {"source": "stored_interpretation", "accepted": True, "operation": operation,
+                "target_ref": str(target_ref), "engine_type": "persuade"}
+        fact = fact_by_id(scene, str(target_ref or ""))
+        surface_ok = bool(fact) or any(
+            isinstance(item, dict) and str(item.get("id") or "") == str(target_ref or "")
+            for item in _scene_obj(scene).get("interactables") or []
+        )
+        if not surface_ok:
+            return None, {"source": "stored_interpretation", "accepted": False,
+                          "reason": "target_not_visible", "operation": operation, "target_ref": target_ref}
+        family = FAMILY_OBSERVATION if operation == "OBSERVE_FACT" else FAMILY_SEARCH
+        engine_type = "observe" if operation == "OBSERVE_FACT" else "investigate"
+        elevated_claim = bool(_re.search(r"\b(?:from\s+up\s+here|from\s+above)\b", player_text or "", _re.I))
+        elevated = False
+        state = (session or {}).get("scene_state") if isinstance(session, dict) else None
+        if isinstance(state, dict):
+            elevated = bool(state.get("elevated_position"))
+        return {
+            "id": str(target_ref),
+            "label": fact or str(target_ref),
+            "type": engine_type,
+            "prompt": player_text,
+            "target_id": str(target_ref),
+            "targetEntityId": str(target_ref),
+            "metadata": {
+                "general_purpose_family": family,
+                "elevated_claim": elevated_claim,
+                "elevated_established": elevated,
+                "skip_unrelated_clue_discovery": True,
+                "stored_interpretation": {"operation": operation, "target_ref": str(target_ref)},
+            },
+        }, {"source": "stored_interpretation", "accepted": True, "operation": operation,
+            "target_ref": str(target_ref), "engine_type": engine_type}
     if operation not in CONNECTED_OPERATIONS:
         return None, {
             "source": "stored_interpretation",
@@ -328,6 +420,8 @@ def normalized_action_from_interpretation(
         },
     }
     semantic_plan = record.get("unified_semantic_plan")
+    if isinstance(record.get("local_approach_normalization"), dict):
+        normalized["metadata"]["stored_interpretation"]["local_approach_normalization"] = dict(record["local_approach_normalization"])
     if isinstance(semantic_plan, dict) and semantic_plan.get("locked"):
         normalized["metadata"]["unified_semantic_plan"] = dict(semantic_plan)
     communication = record.get("communication")
@@ -338,6 +432,10 @@ def normalized_action_from_interpretation(
         normalized["metadata"]["stored_interpretation"]["compatibility"] = "visible_surface_inspection"
     if operation == "MOVE":
         row = target.get("row") if isinstance(target.get("row"), dict) else {}
+        from game.route_authority import route_status
+        if route_status(row, str(_scene_obj(scene).get("id") or ""), session or {}, world or {}) != "available":
+            return None, {"source": "stored_interpretation", "accepted": False,
+                          "reason": "route_requires_prerequisite", "operation": operation, "target_ref": target_id}
         destination = str(row.get("target_scene_id") or "").strip()
         if not destination:
             return None, {

@@ -1,0 +1,196 @@
+{
+  "verdict": "C — FAIL / CRITICAL DEFECT",
+  "baseline": "d40f1ed198236c604085f1c842ead267a8104ce2",
+  "development_tests": 40,
+  "holdout_cases": 40,
+  "holdout_matches": 32,
+  "critical_false_acceptances": 0,
+  "false_rejections": [
+    "H09",
+    "H26",
+    "H29",
+    "H36",
+    "H37",
+    "H38",
+    "H39",
+    "H40"
+  ],
+  "offline_mandatory_omissions": [],
+  "http_mandatory_omissions": 1,
+  "provider_available": true,
+  "pathway": "FastAPI TestClient HTTP /api/chat?ui_mode=player; no browser/TCP client",
+  "gameplay_actions": 5,
+  "live_provider_requests": 4,
+  "validated_ai": 0,
+  "published_ai": 0,
+  "fallbacks": 4,
+  "http_latency_ms": [
+    16132.749,
+    5305.805,
+    6771.985,
+    2718.663,
+    6001.068
+  ],
+  "provider_usage": {
+    "provider": "openai",
+    "model": "gpt-4.1-mini-2025-04-14",
+    "requests": 4,
+    "input_tokens": 1658,
+    "output_tokens": 88,
+    "total_tokens": 1746,
+    "retries": 0
+  },
+  "average_response_ms": 7386.054,
+  "maximum_response_ms": 16132.749,
+  "state_integrity": true,
+  "protected_integrity": true,
+  "experimental_isolation": true,
+  "meaningful_transition": true,
+  "transition_presentation_complete": false,
+  "failure_injections": {
+    "cases": 14,
+    "passed": 13,
+    "scope": "offline after critical stop"
+  },
+  "focused_regression": {
+    "label": "focused",
+    "collected": 851,
+    "failed": 3,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 848,
+    "exit_code": 1,
+    "failed_nodeids": [
+      "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+      "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+      "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues"
+    ],
+    "failure_messages": [
+      {
+        "nodeid": "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+        "message": "assert False"
+      },
+      {
+        "nodeid": "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+        "message": "assert set()\n +  where set() = get_all_known_clue_ids({})"
+      },
+      {
+        "nodeid": "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+        "message": "assert set()\n +  where set() = get_all_known_clue_ids({})"
+      }
+    ],
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_65_authoritative_disclosure.py",
+      "tests/test_pr_play_64_discovery_language.py",
+      "tests/test_pr_play_63_disclosure.py",
+      "tests/test_state_authority.py",
+      "tests/test_pr_play_61_player_facing.py",
+      "tests/test_pr_play_62_investigation_quality.py",
+      "tests/test_pr_play_60_inventory_projection.py",
+      "tests/test_pr_play_60_gameplay_readiness.py",
+      "tests/test_pr_play_59_persistent_consequences.py",
+      "tests/test_pr_play_57_integrated_narration.py",
+      "tests/test_pr_play_58_semantic_coverage.py",
+      "tests/test_pr_play_55_discovery_claims.py",
+      "tests/test_pr_play_54_consequential_validation.py",
+      "tests/test_pr_play_53_quarantined_live.py",
+      "tests/test_pr_play_52_quarantined_integration.py",
+      "tests/test_pr_play_42_evidence_boundaries.py",
+      "tests/test_pr_play_51_geography_grounding.py",
+      "tests/test_pr_play_49_anchored_narration.py",
+      "tests/test_pr_play_47_controlled_renderer.py",
+      "tests/test_pr_play_45_narration_authority.py",
+      "tests/test_pr_play_46_mechanical_boundary.py",
+      "tests/test_pr_play_44_information_delivery.py",
+      "tests/test_pr_bu_lexical_scope.py",
+      "tests/test_provider_accounting_integrity.py",
+      "tests/test_pr_bw_narration_only_envelope.py",
+      "tests/test_diegetic_fallback_narration.py",
+      "tests/test_narration_state_consistency.py",
+      "--tb=line",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_65\\focused_final.xml",
+      "--basetemp",
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_65_focused_22988"
+    ],
+    "provider_calls": "disabled",
+    "preexisting_failures_seen": [
+      "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+      "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+      "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues"
+    ],
+    "new_failures": []
+  },
+  "broader_regression": {
+    "label": "broader_hard_validation",
+    "collected": 9,
+    "failed": 9,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 0,
+    "exit_code": 1,
+    "failed_nodeids": [
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]"
+    ],
+    "failure_messages": [
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    ],
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pr_cx_authority_assurance.py",
+      "--tb=line",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_65\\broader_hard_validation_final.xml",
+      "--basetemp",
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_65_broader_hard_validation_22988"
+    ],
+    "provider_calls": "disabled"
+  },
+  "next_step": "Repair the existing publication seam so every current-action mandatory disclosure survives legacy rejection/failure, with publication-failure and interruption controls before any new live run."
+}

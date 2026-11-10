@@ -1,0 +1,54 @@
+{
+  "model_configured": "gpt-4.1-mini",
+  "model_returned": "gpt-4.1-mini-2025-04-14",
+  "completed_requests": 14,
+  "retries": 0,
+  "input_tokens": 2665,
+  "output_tokens": 335,
+  "total_tokens": 3000,
+  "budget_requests": 24,
+  "budget_tokens": 48000,
+  "sessions": {
+    "extended_play": {
+      "admitted": 6,
+      "dispatch_attempted": 6,
+      "completed": 6,
+      "input_tokens": 1550,
+      "output_tokens": 116,
+      "total_tokens": 1666,
+      "note": "Ran before scene-scoped NPC grounding. The gate guard was still addressable at the milestone."
+    },
+    "live_gate": {
+      "admitted": 8,
+      "dispatch_attempted": 8,
+      "completed": 8,
+      "input_tokens": 1115,
+      "output_tokens": 219,
+      "total_tokens": 1334,
+      "note": "After scene scoping. Expression and integrated narration gates were on. Browser host did not call the provider."
+    }
+  },
+  "published_live_dialogue": [
+    "Approach the guard and greet him. (live_gate)",
+    "Ask the guard about the warning. (live_gate)",
+    "Thank the guard. (live_gate)",
+    "Approach the guard and greet him. (extended, pre-fix, milestone)",
+    "Ask the guard about the warning. (extended, pre-fix)",
+    "Examine the notice board and ask the guard what concerns him. (extended, pre-fix)",
+    "Ask the guard whether anyone passed recently. (extended, pre-fix)"
+  ],
+  "published_live_narration": [
+    "I stand up.",
+    "Approach the guard and greet him.",
+    "Ask the guard about the warning.",
+    "Thank the guard."
+  ],
+  "rejected_narration": [
+    {"input": "I look around.", "reasons": ["not_a_variation"]}
+  ],
+  "not_counted_as_live": [
+    "Who are you? returned 'Which available person do you mean?' in 35.6 ms with no provider call. The session speech_adopted flag stayed true from the previous turn."
+  ],
+  "committed_by_provider": false,
+  "estimated_cost": "not priced; no rate table applied"
+}

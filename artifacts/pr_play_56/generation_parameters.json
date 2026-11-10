@@ -1,0 +1,19 @@
+{
+  "adapter": "game.expressive_dialogue.request_expression",
+  "endpoint": "responses.create",
+  "temperature_in_source": true,
+  "max_output_tokens_constant": 80,
+  "timeout_seconds": 45.0,
+  "sdk_retry_options": {
+    "max_retries": 0
+  },
+  "host_retries_disabled": true,
+  "hook_forbids_second_generate": true,
+  "hook_request_ceiling": 6,
+  "hook_output_ceiling": 1000,
+  "hook_total_token_ceiling": 10000,
+  "cycle_request_ceiling": 8,
+  "cycle_output_ceiling": 700,
+  "cycle_total_token_ceiling": 12000,
+  "system_prompt": "The investigation is already complete. Its mechanical result is authoritative. Write one descriptive prelude of about 20 to 60 words, and end on a complete sentence. You are writing prose only. Do not decide the outcome. Do not invent rewards, possessions, currency, health, conditions, travel, quests, or any other mechanical change. Do not invent definitive conclusions, culprits, counts, links, or destinations. Preserve uncertainty that the result leaves open. Do not reveal information that is absent from the supplied context. Harmless incidental atmosphere is allowed and creates no new facts or mechanics. Avoid generic filler. Do not repeat the authorized discovery; the engine appends that sentence separately."
+}

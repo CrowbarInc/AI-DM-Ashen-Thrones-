@@ -1,0 +1,1 @@
+HTTP, holdout, and browser hosts call `tests.helpers.storage_isolation.install` before importing the game, with distinct roots under `artifacts/pr_play_73`. Pytest uses its own temporary roots. The audit hook refuses writes to repository `data/` and to other artifact directories. Protected-file rehash after the runs: 150/150 unchanged. Changed list: none.

@@ -1,0 +1,663 @@
+[
+  {
+    "case": {
+      "id": "H01",
+      "group": "creation",
+      "variant": 0,
+      "input": "Introduce an ordinary traveler.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "traveler",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": true,
+      "reason": "accepted",
+      "entry": {
+        "id": "npc_5915b499d613ad675312",
+        "campaign_id": "alpha",
+        "scene_id": "harbor",
+        "location": "harbor",
+        "entity_type": "npc",
+        "family": "npc",
+        "label": "ordinary traveler",
+        "name": "Mara",
+        "role": "traveler",
+        "appearance": "weathered cloak",
+        "demeanor": "reserved",
+        "visibility": "public",
+        "provenance": "accepted_improvisation",
+        "source": "validated_provider_proposal",
+        "creation_turn": 1,
+        "status": "accepted",
+        "authority": "accepted_background_npc",
+        "scope": "scene",
+        "persistence_status": "campaign",
+        "interaction_available": true,
+        "knowledge": [],
+        "social_receipts": [],
+        "content": "An ordinary traveler in weathered cloak is among the people here."
+      }
+    },
+    "passed": true,
+    "latency_ms": 0.6917999126017094
+  },
+  {
+    "case": {
+      "id": "H02",
+      "group": "creation",
+      "variant": 1,
+      "input": "Find a local resident to speak with.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "resident",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": true,
+      "reason": "accepted",
+      "entry": {
+        "id": "npc_5915b499d613ad675312",
+        "campaign_id": "alpha",
+        "scene_id": "harbor",
+        "location": "harbor",
+        "entity_type": "npc",
+        "family": "npc",
+        "label": "ordinary resident",
+        "name": "Mara",
+        "role": "resident",
+        "appearance": "weathered cloak",
+        "demeanor": "reserved",
+        "visibility": "public",
+        "provenance": "accepted_improvisation",
+        "source": "validated_provider_proposal",
+        "creation_turn": 1,
+        "status": "accepted",
+        "authority": "accepted_background_npc",
+        "scope": "scene",
+        "persistence_status": "campaign",
+        "interaction_available": true,
+        "knowledge": [],
+        "social_receipts": [],
+        "content": "An ordinary resident in weathered cloak is among the people here."
+      }
+    },
+    "passed": true,
+    "latency_ms": 0.2623000182211399
+  },
+  {
+    "case": {
+      "id": "H03",
+      "group": "creation",
+      "variant": 2,
+      "input": "Introduce a merchant.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "merchant",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": true,
+      "reason": "accepted",
+      "entry": {
+        "id": "npc_5915b499d613ad675312",
+        "campaign_id": "alpha",
+        "scene_id": "harbor",
+        "location": "harbor",
+        "entity_type": "npc",
+        "family": "npc",
+        "label": "ordinary merchant",
+        "name": "Mara",
+        "role": "merchant",
+        "appearance": "weathered cloak",
+        "demeanor": "reserved",
+        "visibility": "public",
+        "provenance": "accepted_improvisation",
+        "source": "validated_provider_proposal",
+        "creation_turn": 1,
+        "status": "accepted",
+        "authority": "accepted_background_npc",
+        "scope": "scene",
+        "persistence_status": "campaign",
+        "interaction_available": true,
+        "knowledge": [],
+        "social_receipts": [],
+        "content": "An ordinary merchant in weathered cloak is among the people here."
+      }
+    },
+    "passed": true,
+    "latency_ms": 0.22489996626973152
+  },
+  {
+    "case": {
+      "id": "H04",
+      "group": "creation",
+      "variant": 3,
+      "input": "Introduce an ordinary traveler.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "bystander",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": true,
+      "reason": "accepted",
+      "entry": {
+        "id": "npc_5915b499d613ad675312",
+        "campaign_id": "alpha",
+        "scene_id": "harbor",
+        "location": "harbor",
+        "entity_type": "npc",
+        "family": "npc",
+        "label": "ordinary bystander",
+        "name": "Mara",
+        "role": "bystander",
+        "appearance": "weathered cloak",
+        "demeanor": "reserved",
+        "visibility": "public",
+        "provenance": "accepted_improvisation",
+        "source": "validated_provider_proposal",
+        "creation_turn": 1,
+        "status": "accepted",
+        "authority": "accepted_background_npc",
+        "scope": "scene",
+        "persistence_status": "campaign",
+        "interaction_available": true,
+        "knowledge": [],
+        "social_receipts": [],
+        "content": "An ordinary bystander in weathered cloak is among the people here."
+      }
+    },
+    "passed": true,
+    "latency_ms": 0.25290006306022406
+  },
+  {
+    "case": {
+      "id": "H05",
+      "group": "creation",
+      "variant": 4,
+      "input": "Find a local resident to speak with.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "laborer",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": true,
+      "reason": "accepted",
+      "entry": {
+        "id": "npc_5915b499d613ad675312",
+        "campaign_id": "alpha",
+        "scene_id": "harbor",
+        "location": "harbor",
+        "entity_type": "npc",
+        "family": "npc",
+        "label": "ordinary laborer",
+        "name": "Mara",
+        "role": "laborer",
+        "appearance": "weathered cloak",
+        "demeanor": "reserved",
+        "visibility": "public",
+        "provenance": "accepted_improvisation",
+        "source": "validated_provider_proposal",
+        "creation_turn": 1,
+        "status": "accepted",
+        "authority": "accepted_background_npc",
+        "scope": "scene",
+        "persistence_status": "campaign",
+        "interaction_available": true,
+        "knowledge": [],
+        "social_receipts": [],
+        "content": "An ordinary laborer in weathered cloak is among the people here."
+      }
+    },
+    "passed": true,
+    "latency_ms": 0.2484999131411314
+  },
+  {
+    "case": {
+      "id": "H06",
+      "group": "creation",
+      "variant": 5,
+      "input": "Introduce a merchant.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "patron",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": true,
+      "reason": "accepted",
+      "entry": {
+        "id": "npc_5915b499d613ad675312",
+        "campaign_id": "alpha",
+        "scene_id": "harbor",
+        "location": "harbor",
+        "entity_type": "npc",
+        "family": "npc",
+        "label": "ordinary patron",
+        "name": "Mara",
+        "role": "patron",
+        "appearance": "weathered cloak",
+        "demeanor": "reserved",
+        "visibility": "public",
+        "provenance": "accepted_improvisation",
+        "source": "validated_provider_proposal",
+        "creation_turn": 1,
+        "status": "accepted",
+        "authority": "accepted_background_npc",
+        "scope": "scene",
+        "persistence_status": "campaign",
+        "interaction_available": true,
+        "knowledge": [],
+        "social_receipts": [],
+        "content": "An ordinary patron in weathered cloak is among the people here."
+      }
+    },
+    "passed": true,
+    "latency_ms": 0.22990000434219837
+  },
+  {
+    "case": {
+      "id": "H07",
+      "group": "creation",
+      "variant": 6,
+      "input": "Introduce an ordinary traveler.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "traveler",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public",
+      "quest": true
+    },
+    "validation": {
+      "accepted": false,
+      "reason": "schema"
+    },
+    "passed": true,
+    "latency_ms": 0.20300003234297037
+  },
+  {
+    "case": {
+      "id": "H08",
+      "group": "creation",
+      "variant": 7,
+      "input": "Find a local resident to speak with.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "duke",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": false,
+      "reason": "ordinary_scope"
+    },
+    "passed": true,
+    "latency_ms": 0.29470003210008144
+  },
+  {
+    "case": {
+      "id": "H09",
+      "group": "creation",
+      "variant": 8,
+      "input": "Introduce a merchant.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "other",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "traveler",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": false,
+      "reason": "context"
+    },
+    "passed": true,
+    "latency_ms": 0.2815000480040908
+  },
+  {
+    "case": {
+      "id": "H10",
+      "group": "creation",
+      "variant": 9,
+      "input": "Introduce an ordinary traveler.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "other",
+      "anchor": 0,
+      "role": "traveler",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": false,
+      "reason": "context"
+    },
+    "passed": true,
+    "latency_ms": 0.2878999803215265
+  },
+  {
+    "case": {
+      "id": "H11",
+      "group": "creation",
+      "variant": 10,
+      "input": "Find a local resident to speak with.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "traveler",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "hidden"
+    },
+    "validation": {
+      "accepted": false,
+      "reason": "ordinary_scope"
+    },
+    "passed": true,
+    "latency_ms": 0.19260006956756115
+  },
+  {
+    "case": {
+      "id": "H12",
+      "group": "creation",
+      "variant": 11,
+      "input": "Introduce a merchant.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": true,
+      "role": "traveler",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": false,
+      "reason": "schema"
+    },
+    "passed": true,
+    "latency_ms": 0.1700000138953328
+  },
+  {
+    "case": {
+      "id": "H13",
+      "group": "creation",
+      "variant": 12,
+      "input": "Introduce an ordinary traveler.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "traveler",
+      "name": "Mara",
+      "appearance": "secret ring",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": false,
+      "reason": "ordinary_scope"
+    },
+    "passed": true,
+    "latency_ms": 0.17989997286349535
+  },
+  {
+    "case": {
+      "id": "H14",
+      "group": "creation",
+      "variant": 13,
+      "input": "Find a local resident to speak with.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "traveler",
+      "name": "Mara the spy",
+      "appearance": "weathered cloak",
+      "demeanor": "reserved",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": false,
+      "reason": "name"
+    },
+    "passed": true,
+    "latency_ms": 0.2095999661833048
+  },
+  {
+    "case": {
+      "id": "H15",
+      "group": "creation",
+      "variant": 14,
+      "input": "Introduce a merchant.",
+      "starting_authority": "fresh isolated campaign, public crowd; empty/inaccessible variants for creation",
+      "player_visible_context": "public facts only",
+      "npc_context": "accepted ordinary identity, no plot knowledge",
+      "expected_classification": "clarify/decline on absent or ambiguous targets; otherwise bounded interaction",
+      "expected_proposal": "strict schema, public population support, campaign and scene match",
+      "expected_mutation": "identity once; conversation receipt only; no quest, treasure, allegiance or authority",
+      "dialogue_constraints": "grounded identity/public facts/prior speech or uncertainty",
+      "persistence": false,
+      "multi_turn": false,
+      "publication": "no internal fields or hidden sentinel"
+    },
+    "proposal": {
+      "campaign_id": "alpha",
+      "scene_id": "harbor",
+      "anchor": 0,
+      "role": "traveler",
+      "name": "Mara",
+      "appearance": "weathered cloak",
+      "demeanor": "absolute loyalty",
+      "visibility": "public"
+    },
+    "validation": {
+      "accepted": false,
+      "reason": "ordinary_scope"
+    },
+    "passed": true,
+    "latency_ms": 0.2449000021442771
+  }
+]

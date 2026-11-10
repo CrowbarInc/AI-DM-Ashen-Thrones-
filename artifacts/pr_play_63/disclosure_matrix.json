@@ -1,0 +1,102 @@
+[
+  {
+    "requirement": 1,
+    "description": "New discovery communicated",
+    "evidence": "development + HTTP turn 1 fallback"
+  },
+  {
+    "requirement": 2,
+    "description": "New discovery omitted rejected",
+    "evidence": "development + H06-H10"
+  },
+  {
+    "requirement": 3,
+    "description": "Unrelated prior omitted accepted",
+    "evidence": "development + H11-H20 + HTTP turn 2"
+  },
+  {
+    "requirement": 4,
+    "description": "Accurate prior reference accepted",
+    "evidence": "development + holdout"
+  },
+  {
+    "requirement": 5,
+    "description": "Prior contradiction rejected",
+    "evidence": "development southeast negative"
+  },
+  {
+    "requirement": 6,
+    "description": "Unauthorized consequence rejected",
+    "evidence": "development + fault I"
+  },
+  {
+    "requirement": 7,
+    "description": "Hidden disclosure rejected",
+    "evidence": "H31-H35 + fault K; finite grammar only"
+  },
+  {
+    "requirement": 8,
+    "description": "Repeat no new discovery accepted",
+    "evidence": "development + H21-H25 + HTTP turn 3"
+  },
+  {
+    "requirement": 9,
+    "description": "Repeat invented clue rejected",
+    "evidence": "development repeat negative"
+  },
+  {
+    "requirement": 10,
+    "description": "Direct follow-up accurate",
+    "evidence": "synthetic resolver reconfirmation passes; actual free-text follow-up ordinary investigate, partial route answer"
+  },
+  {
+    "requirement": 11,
+    "description": "Explicit reconfirmation mandatory",
+    "evidence": "resolver-selected discovered_clues even in post-state; no native reconfirmation parser"
+  },
+  {
+    "requirement": 12,
+    "description": "New plus prior only new required",
+    "evidence": "development + mixed holdout"
+  },
+  {
+    "requirement": 13,
+    "description": "Multiple new disclosures required",
+    "evidence": "development route + prints"
+  },
+  {
+    "requirement": 14,
+    "description": "Mixed distinction",
+    "evidence": "development + mixed holdout"
+  },
+  {
+    "requirement": 15,
+    "description": "Provider failure fallback communicates new",
+    "evidence": "faults A/B"
+  },
+  {
+    "requirement": 16,
+    "description": "Validation failure fallback communicates new",
+    "evidence": "faults E/F/G/H"
+  },
+  {
+    "requirement": 17,
+    "description": "State recorded before validation",
+    "evidence": "development post-state route + HTTP turn 1"
+  },
+  {
+    "requirement": 18,
+    "description": "Different campaign no context leak",
+    "evidence": "detached + isolated fresh campaign"
+  },
+  {
+    "requirement": 19,
+    "description": "Different session/player no leak",
+    "evidence": "binding tests + different_player_isolation.json"
+  },
+  {
+    "requirement": 20,
+    "description": "Ambiguous provenance conservative",
+    "evidence": "missing resolution ValueError; no inferred discovery from known state"
+  }
+]

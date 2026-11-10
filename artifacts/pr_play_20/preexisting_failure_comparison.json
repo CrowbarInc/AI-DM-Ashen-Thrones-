@@ -1,0 +1,26 @@
+{
+  "expected_preexisting_failure_count": 17,
+  "final_failure_count": 17,
+  "identical_failure_node_ids": true,
+  "failure_node_ids": [
+    "tests/test_start_campaign_api.py::test_start_campaign_emits_opening_and_sets_started",
+    "tests/test_start_campaign_api.py::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+    "tests/test_start_campaign_api.py::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+    "tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange",
+    "tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+    "tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback",
+    "tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+    "tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+    "tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+    "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit",
+    "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+    "tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+    "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first",
+    "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only",
+    "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback",
+    "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+    "tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback"
+  ],
+  "focused_cases": 5,
+  "focused_failures": 0
+}

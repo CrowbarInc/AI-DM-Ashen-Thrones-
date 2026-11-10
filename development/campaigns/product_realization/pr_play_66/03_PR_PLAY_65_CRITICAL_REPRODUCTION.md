@@ -1,0 +1,4 @@
+# EXACT CRITICAL REPRODUCTION
+The original final action, full hook input/candidate/validation, initial session/character and post-action authority are preserved in historical_fixture.json. Copied PR65 disposable data/scenes and restored the captured pre-action session/character; original fixture files were not rewritten. harness.py shows configuration. Provider-free replay uses the exact saved PR65 candidate, not a new provider execution.
+
+Player action: `I examine the weathered milestone.`. Baseline final HTTP 200: `I cannot provide a validated response to that request.`. The hook fallback contains the exact mandatory discovery; final HTTP omits it. Independent reproduction therefore matches the original incident. baseline_reproduction.json contains actual serialized body, hook, outcome and before/after state. Permanent historical HTTP regression is test_publication_http[historical].

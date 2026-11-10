@@ -1,0 +1,1500 @@
+[
+  {
+    "id": "bridge",
+    "category": "partial",
+    "scene": {
+      "scene": {
+        "id": "unfamiliar_site",
+        "location": "Unfamiliar Site",
+        "visible_facts": [
+          "A bridge lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "summary": "A quiet place for a closer look.",
+        "interactables": [
+          {
+            "id": "bridge",
+            "label": "bridge",
+            "type": "investigate",
+            "reveals_clue": "selected"
+          }
+        ],
+        "discoverable_clues": [
+          {
+            "id": "selected",
+            "text": "One support bears fresh scoring; its cause cannot be determined."
+          },
+          {
+            "id": "hidden",
+            "text": "CANARY_UNDISCOVERED"
+          },
+          {
+            "id": "UNSEEN_CLUE_K42",
+            "text": "UNSEEN_CLUE_K42"
+          }
+        ],
+        "hidden_facts": [
+          "HIDDEN_DESTINATION_K42"
+        ],
+        "gm_notes": [
+          "PRIVATE_GM_NOTE_K42"
+        ],
+        "npcs": [
+          {
+            "hidden_motivation": "NPC_MOTIVE_K42"
+          }
+        ],
+        "hidden_faction": "CANARY_FACTION_ACTIVITY",
+        "exits": []
+      }
+    },
+    "resolution": {
+      "kind": "discover_clue",
+      "action_id": "bridge",
+      "label": "bridge",
+      "prompt": "I examine the bridge.",
+      "success": true,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": "selected",
+      "discovered_clues": [
+        "One support bears fresh scoring; its cause cannot be determined."
+      ],
+      "world_updates": null,
+      "state_changes": {
+        "clue_revealed": true,
+        "interactable_id": "bridge"
+      },
+      "hint": "Player investigated [bridge] and discovered clue [selected]. Narrate the discovery and its significance.",
+      "interactable_id": "bridge",
+      "clue_text": "One support bears fresh scoring; its cause cannot be determined.",
+      "metadata": {
+        "referenced_surface_authority": "authored_interactable",
+        "referenced_surface_target": "bridge",
+        "referenced_surface_existence": true,
+        "referenced_surface_visibility": true,
+        "referenced_surface_inspectability": true,
+        "referenced_surface_interactable_id": "bridge",
+        "referenced_surface_visible_fact": "",
+        "referenced_surface_inspectable_text": "One support bears fresh scoring; its cause cannot be determined.",
+        "skip_unrelated_clue_discovery": false
+      }
+    },
+    "known": [],
+    "origin": "actual resolver on synthetic scene",
+    "player": "I examine the bridge.",
+    "hidden_information": [
+      "UNSEEN_CLUE_K42",
+      "PRIVATE_GM_NOTE_K42",
+      "NPC_MOTIVE_K42",
+      "HIDDEN_DESTINATION_K42",
+      "PRIVATE_WORLD_K42",
+      "QUEST_TWIST_K42"
+    ],
+    "authoritative_projection": {
+      "outcome": {
+        "status": "discovered",
+        "success": true,
+        "target_id": "bridge",
+        "revealed": [
+          "One support bears fresh scoring; its cause cannot be determined."
+        ],
+        "known": [],
+        "observations": [
+          "A bridge lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "consequences": ""
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "One support bears fresh scoring; its cause cannot be determined."
+        }
+      ]
+    },
+    "prelude_request": {
+      "authorized_investigation": {
+        "target": "bridge",
+        "status": "discovered",
+        "success": true,
+        "newly_discovered": [
+          "One support bears fresh scoring; its cause cannot be determined."
+        ],
+        "previously_known": []
+      },
+      "public_scene": {
+        "observations": [
+          "A bridge lies in plain view.",
+          "Light catches the uneven surface."
+        ]
+      },
+      "descriptive_constraints": [
+        "Write only a descriptive prelude to the examination, ending a complete sentence.",
+        "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+        "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+        "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+        "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+      ],
+      "max_output_utf8_bytes": 1600
+    },
+    "candidate_prelude": "You look closely, taking time over the examination.",
+    "final_response": {
+      "preview_text": "You look closely, taking time over the examination.\n\nOne support bears fresh scoring; its cause cannot be determined.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "One support bears fresh scoring; its cause cannot be determined."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "fallback": "You examine the evidence. One support bears fresh scoring; its cause cannot be determined. A bridge lies in plain view. Light catches the uneven surface.",
+    "state_unchanged": true,
+    "host": {
+      "text": "You inspect bridge. One support bears fresh scoring; its cause cannot be determined.",
+      "source": {
+        "kind": "discover_clue",
+        "source": "clue_text"
+      }
+    },
+    "controlled": "A bridge lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. One support bears fresh scoring; its cause cannot be determined."
+  },
+  {
+    "id": "campsite",
+    "category": "multiple",
+    "scene": {
+      "scene": {
+        "id": "unfamiliar_site",
+        "location": "Unfamiliar Site",
+        "visible_facts": [
+          "A campsite lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "summary": "A quiet place for a closer look.",
+        "interactables": [
+          {
+            "id": "campsite",
+            "label": "campsite",
+            "type": "investigate",
+            "reveals_clue": "selected"
+          }
+        ],
+        "discoverable_clues": [
+          {
+            "id": "selected",
+            "text": "The ashes contain fragments of blue cloth."
+          },
+          {
+            "id": "hidden",
+            "text": "CANARY_UNDISCOVERED"
+          },
+          {
+            "id": "UNSEEN_CLUE_K42",
+            "text": "UNSEEN_CLUE_K42"
+          }
+        ],
+        "hidden_facts": [
+          "HIDDEN_DESTINATION_K42"
+        ],
+        "gm_notes": [
+          "PRIVATE_GM_NOTE_K42"
+        ],
+        "npcs": [
+          {
+            "hidden_motivation": "NPC_MOTIVE_K42"
+          }
+        ],
+        "hidden_faction": "CANARY_FACTION_ACTIVITY",
+        "exits": []
+      }
+    },
+    "resolution": {
+      "kind": "discover_clue",
+      "action_id": "campsite",
+      "label": "campsite",
+      "prompt": "I examine the campsite.",
+      "success": true,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": "selected",
+      "discovered_clues": [
+        "The ashes contain fragments of blue cloth.",
+        "A boot impression ends at the edge of the ash; its owner is unknown."
+      ],
+      "world_updates": null,
+      "state_changes": {
+        "clue_revealed": true,
+        "interactable_id": "campsite"
+      },
+      "hint": "Player investigated [campsite] and discovered clue [selected]. Narrate the discovery and its significance.",
+      "interactable_id": "campsite",
+      "clue_text": "The ashes contain fragments of blue cloth.",
+      "metadata": {
+        "referenced_surface_authority": "authored_interactable",
+        "referenced_surface_target": "campsite",
+        "referenced_surface_existence": true,
+        "referenced_surface_visibility": true,
+        "referenced_surface_inspectability": true,
+        "referenced_surface_interactable_id": "campsite",
+        "referenced_surface_visible_fact": "",
+        "referenced_surface_inspectable_text": "The ashes contain fragments of blue cloth.",
+        "skip_unrelated_clue_discovery": false
+      }
+    },
+    "known": [],
+    "origin": "actual single-clue resolver plus explicit multi-disclosure outcome fixture",
+    "player": "I examine the campsite.",
+    "hidden_information": [
+      "UNSEEN_CLUE_K42",
+      "PRIVATE_GM_NOTE_K42",
+      "NPC_MOTIVE_K42",
+      "HIDDEN_DESTINATION_K42",
+      "PRIVATE_WORLD_K42",
+      "QUEST_TWIST_K42"
+    ],
+    "authoritative_projection": {
+      "outcome": {
+        "status": "discovered",
+        "success": true,
+        "target_id": "campsite",
+        "revealed": [
+          "The ashes contain fragments of blue cloth.",
+          "A boot impression ends at the edge of the ash; its owner is unknown."
+        ],
+        "known": [],
+        "observations": [
+          "A campsite lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "consequences": ""
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The ashes contain fragments of blue cloth."
+        },
+        {
+          "order": 1,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "A boot impression ends at the edge of the ash; its owner is unknown."
+        }
+      ]
+    },
+    "prelude_request": {
+      "authorized_investigation": {
+        "target": "campsite",
+        "status": "discovered",
+        "success": true,
+        "newly_discovered": [
+          "The ashes contain fragments of blue cloth.",
+          "A boot impression ends at the edge of the ash; its owner is unknown."
+        ],
+        "previously_known": []
+      },
+      "public_scene": {
+        "observations": [
+          "A campsite lies in plain view.",
+          "Light catches the uneven surface."
+        ]
+      },
+      "descriptive_constraints": [
+        "Write only a descriptive prelude to the examination, ending a complete sentence.",
+        "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+        "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+        "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+        "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+      ],
+      "max_output_utf8_bytes": 1600
+    },
+    "candidate_prelude": "You look closely, taking time over the examination.",
+    "final_response": {
+      "preview_text": "You look closely, taking time over the examination.\n\nThe ashes contain fragments of blue cloth. A boot impression ends at the edge of the ash; its owner is unknown.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The ashes contain fragments of blue cloth."
+        },
+        {
+          "order": 1,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "A boot impression ends at the edge of the ash; its owner is unknown."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "fallback": "You examine the evidence. The ashes contain fragments of blue cloth. A boot impression ends at the edge of the ash; its owner is unknown. A campsite lies in plain view. Light catches the uneven surface.",
+    "state_unchanged": true,
+    "host": {
+      "text": "You inspect campsite. The ashes contain fragments of blue cloth. A boot impression ends at the edge of the ash; its owner is unknown.",
+      "source": {
+        "kind": "discover_clue",
+        "source": "clue_text"
+      }
+    },
+    "controlled": "A campsite lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The ashes contain fragments of blue cloth. A boot impression ends at the edge of the ash; its owner is unknown."
+  },
+  {
+    "id": "chamber",
+    "category": "failed",
+    "scene": {
+      "scene": {
+        "id": "unfamiliar_site",
+        "location": "Unfamiliar Site",
+        "visible_facts": [
+          "A chamber lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "summary": "A quiet place for a closer look.",
+        "interactables": [
+          {
+            "id": "chamber",
+            "label": "chamber",
+            "type": "investigate",
+            "reveals_clue": "selected"
+          }
+        ],
+        "discoverable_clues": [
+          {
+            "id": "selected",
+            "text": "The concealed release lies behind the lintel."
+          },
+          {
+            "id": "hidden",
+            "text": "CANARY_UNDISCOVERED"
+          },
+          {
+            "id": "UNSEEN_CLUE_K42",
+            "text": "UNSEEN_CLUE_K42"
+          }
+        ],
+        "hidden_facts": [
+          "HIDDEN_DESTINATION_K42"
+        ],
+        "gm_notes": [
+          "PRIVATE_GM_NOTE_K42"
+        ],
+        "npcs": [
+          {
+            "hidden_motivation": "NPC_MOTIVE_K42"
+          }
+        ],
+        "hidden_faction": "CANARY_FACTION_ACTIVITY",
+        "exits": []
+      }
+    },
+    "resolution": {
+      "kind": "investigate",
+      "action_id": "chamber",
+      "label": "chamber",
+      "prompt": "I examine the chamber.",
+      "success": false,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": "selected",
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {
+        "skill_check_failed": true
+      },
+      "hint": "Player investigated [chamber] and discovered clue [selected]. Narrate the discovery and its significance.",
+      "interactable_id": "chamber",
+      "clue_text": "The concealed release lies behind the lintel.",
+      "metadata": {
+        "referenced_surface_authority": "authored_interactable",
+        "referenced_surface_target": "chamber",
+        "referenced_surface_existence": true,
+        "referenced_surface_visibility": true,
+        "referenced_surface_inspectability": true,
+        "referenced_surface_interactable_id": "chamber",
+        "referenced_surface_visible_fact": "",
+        "referenced_surface_inspectable_text": "The concealed release lies behind the lintel.",
+        "skip_unrelated_clue_discovery": false
+      }
+    },
+    "known": [],
+    "origin": "explicit failed-check fixture; actual failed resolver independently tested",
+    "player": "I examine the chamber.",
+    "hidden_information": [
+      "UNSEEN_CLUE_K42",
+      "PRIVATE_GM_NOTE_K42",
+      "NPC_MOTIVE_K42",
+      "HIDDEN_DESTINATION_K42",
+      "PRIVATE_WORLD_K42",
+      "QUEST_TWIST_K42"
+    ],
+    "authoritative_projection": {
+      "outcome": {
+        "status": "failed",
+        "success": false,
+        "target_id": "chamber",
+        "revealed": [],
+        "known": [],
+        "observations": [
+          "A chamber lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "consequences": ""
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "engine_status",
+          "status": "failed",
+          "text": "The investigation establishes nothing new."
+        },
+        {
+          "order": 1,
+          "source": "public_observation",
+          "status": "observed",
+          "text": "A chamber lies in plain view."
+        },
+        {
+          "order": 2,
+          "source": "public_observation",
+          "status": "observed",
+          "text": "Light catches the uneven surface."
+        }
+      ]
+    },
+    "prelude_request": {
+      "authorized_investigation": {
+        "target": "chamber",
+        "status": "failed",
+        "success": false,
+        "newly_discovered": [],
+        "previously_known": []
+      },
+      "public_scene": {
+        "observations": [
+          "A chamber lies in plain view.",
+          "Light catches the uneven surface."
+        ]
+      },
+      "descriptive_constraints": [
+        "Write only a descriptive prelude to the examination, ending a complete sentence.",
+        "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+        "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+        "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+        "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+      ],
+      "max_output_utf8_bytes": 1600
+    },
+    "candidate_prelude": "You look closely, taking time over the examination.",
+    "final_response": {
+      "preview_text": "You look closely, taking time over the examination.\n\nThe investigation establishes nothing new. A chamber lies in plain view. Light catches the uneven surface.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "engine_status",
+          "status": "failed",
+          "text": "The investigation establishes nothing new."
+        },
+        {
+          "order": 1,
+          "source": "public_observation",
+          "status": "observed",
+          "text": "A chamber lies in plain view."
+        },
+        {
+          "order": 2,
+          "source": "public_observation",
+          "status": "observed",
+          "text": "Light catches the uneven surface."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "fallback": "You examine the evidence. The investigation establishes nothing new. A chamber lies in plain view. Light catches the uneven surface.",
+    "state_unchanged": true,
+    "host": {
+      "text": "You inspect the target, but nothing new is established.",
+      "source": {
+        "kind": "investigate",
+        "source": "failed_inspection"
+      }
+    },
+    "controlled": "A chamber lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The attempt establishes nothing new."
+  },
+  {
+    "id": "frontier_gate",
+    "category": "canonical",
+    "scene": {
+      "scene": {
+        "id": "frontier_gate",
+        "location": "Cinderwatch Gate District",
+        "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+        "mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "opening_seed_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+        ],
+        "journal_seed_facts": [
+          "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+          "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+          "A notice board announces new taxes and curfews, and names a missing patrol.",
+          "A tavern runner is hawking hot stew and rumor for coin.",
+          "A ragged stranger hangs back, watching the crowd more than the queue."
+        ],
+        "discoverable_clues": [
+          {
+            "id": "notice_patrol_route",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "hidden_facts": [
+          "An agent of a noble house is watching new arrivals from the square's edge.",
+          "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+          "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+          "A spotter above the lane is matching faces to a written list paid for in silver."
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "enemies": [],
+        "actions": [],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "scene_id": "frontier_gate",
+            "kind": "npc",
+            "addressable": true,
+            "address_priority": 0,
+            "address_roles": [
+              "guard",
+              "watchman",
+              "sentry",
+              "guardsman",
+              "captain"
+            ],
+            "aliases": []
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "scene_id": "frontier_gate",
+            "kind": "npc",
+            "addressable": true,
+            "address_priority": 1,
+            "address_roles": [
+              "runner",
+              "informant"
+            ],
+            "aliases": []
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "scene_id": "frontier_gate",
+            "kind": "scene_actor",
+            "addressable": true,
+            "address_priority": 2,
+            "address_roles": [
+              "stranger",
+              "refugee"
+            ],
+            "aliases": [
+              "ragged stranger"
+            ]
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "scene_id": "frontier_gate",
+            "kind": "scene_actor",
+            "addressable": true,
+            "address_priority": 3,
+            "address_roles": [
+              "watcher"
+            ],
+            "aliases": []
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "aliases": [
+              "notice",
+              "board",
+              "curfew notice",
+              "missing patrol warning"
+            ],
+            "type": "investigate",
+            "reveals_clue": "notice_patrol_route"
+          }
+        ]
+      }
+    },
+    "resolution": {
+      "kind": "discover_clue",
+      "action_id": "notice_board",
+      "label": "notice_board",
+      "prompt": "I examine the notice board.",
+      "success": true,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": "notice_patrol_route",
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "world_updates": null,
+      "state_changes": {
+        "clue_revealed": true,
+        "interactable_id": "notice_board"
+      },
+      "hint": "Player investigated [notice_board] and discovered clue [notice_patrol_route]. Narrate the discovery and its significance.",
+      "interactable_id": "notice_board",
+      "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "metadata": {
+        "referenced_surface_authority": "authored_interactable",
+        "referenced_surface_target": "notice board",
+        "referenced_surface_existence": true,
+        "referenced_surface_visibility": true,
+        "referenced_surface_inspectability": true,
+        "referenced_surface_interactable_id": "notice_board",
+        "referenced_surface_visible_fact": "",
+        "referenced_surface_inspectable_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "skip_unrelated_clue_discovery": false
+      }
+    },
+    "known": [],
+    "player": "I examine the notice board.",
+    "hidden_information": [
+      "UNSEEN_CLUE_K42",
+      "PRIVATE_GM_NOTE_K42",
+      "NPC_MOTIVE_K42",
+      "HIDDEN_DESTINATION_K42",
+      "PRIVATE_WORLD_K42",
+      "QUEST_TWIST_K42"
+    ],
+    "authoritative_projection": {
+      "outcome": {
+        "status": "discovered",
+        "success": true,
+        "target_id": "notice_board",
+        "revealed": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "known": [],
+        "observations": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "consequences": ""
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ]
+    },
+    "prelude_request": {
+      "authorized_investigation": {
+        "target": "notice_board",
+        "status": "discovered",
+        "success": true,
+        "newly_discovered": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "previously_known": []
+      },
+      "public_scene": {
+        "observations": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ]
+      },
+      "descriptive_constraints": [
+        "Write only a descriptive prelude to the examination, ending a complete sentence.",
+        "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+        "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+        "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+        "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+      ],
+      "max_output_utf8_bytes": 1600
+    },
+    "candidate_prelude": "You look closely, taking time over the examination.",
+    "final_response": {
+      "preview_text": "You look closely, taking time over the examination.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "fallback": "You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+    "state_unchanged": true,
+    "host": {
+      "text": "You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "source": {
+        "kind": "discover_clue",
+        "source": "clue_text"
+      }
+    },
+    "controlled": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The missing patrol was last seen taking the northwest mud track past the crates."
+  },
+  {
+    "id": "ledger",
+    "category": "success",
+    "scene": {
+      "scene": {
+        "id": "unfamiliar_site",
+        "location": "Unfamiliar Site",
+        "visible_facts": [
+          "A ledger lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "summary": "A quiet place for a closer look.",
+        "interactables": [
+          {
+            "id": "ledger",
+            "label": "ledger",
+            "type": "investigate",
+            "reveals_clue": "selected"
+          }
+        ],
+        "discoverable_clues": [
+          {
+            "id": "selected",
+            "text": "The ledger records twelve ingots arriving, but only nine entered stock."
+          },
+          {
+            "id": "hidden",
+            "text": "CANARY_UNDISCOVERED"
+          },
+          {
+            "id": "UNSEEN_CLUE_K42",
+            "text": "UNSEEN_CLUE_K42"
+          }
+        ],
+        "hidden_facts": [
+          "HIDDEN_DESTINATION_K42"
+        ],
+        "gm_notes": [
+          "PRIVATE_GM_NOTE_K42"
+        ],
+        "npcs": [
+          {
+            "hidden_motivation": "NPC_MOTIVE_K42"
+          }
+        ],
+        "hidden_faction": "CANARY_FACTION_ACTIVITY",
+        "exits": []
+      }
+    },
+    "resolution": {
+      "kind": "discover_clue",
+      "action_id": "ledger",
+      "label": "ledger",
+      "prompt": "I examine the ledger.",
+      "success": true,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": "selected",
+      "discovered_clues": [
+        "The ledger records twelve ingots arriving, but only nine entered stock."
+      ],
+      "world_updates": null,
+      "state_changes": {
+        "clue_revealed": true,
+        "interactable_id": "ledger"
+      },
+      "hint": "Player investigated [ledger] and discovered clue [selected]. Narrate the discovery and its significance.",
+      "interactable_id": "ledger",
+      "clue_text": "The ledger records twelve ingots arriving, but only nine entered stock.",
+      "metadata": {
+        "referenced_surface_authority": "authored_interactable",
+        "referenced_surface_target": "ledger",
+        "referenced_surface_existence": true,
+        "referenced_surface_visibility": true,
+        "referenced_surface_inspectability": true,
+        "referenced_surface_interactable_id": "ledger",
+        "referenced_surface_visible_fact": "",
+        "referenced_surface_inspectable_text": "The ledger records twelve ingots arriving, but only nine entered stock.",
+        "skip_unrelated_clue_discovery": false
+      }
+    },
+    "known": [],
+    "origin": "actual resolver on synthetic scene",
+    "player": "I examine the ledger.",
+    "hidden_information": [
+      "UNSEEN_CLUE_K42",
+      "PRIVATE_GM_NOTE_K42",
+      "NPC_MOTIVE_K42",
+      "HIDDEN_DESTINATION_K42",
+      "PRIVATE_WORLD_K42",
+      "QUEST_TWIST_K42"
+    ],
+    "authoritative_projection": {
+      "outcome": {
+        "status": "discovered",
+        "success": true,
+        "target_id": "ledger",
+        "revealed": [
+          "The ledger records twelve ingots arriving, but only nine entered stock."
+        ],
+        "known": [],
+        "observations": [
+          "A ledger lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "consequences": ""
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The ledger records twelve ingots arriving, but only nine entered stock."
+        }
+      ]
+    },
+    "prelude_request": {
+      "authorized_investigation": {
+        "target": "ledger",
+        "status": "discovered",
+        "success": true,
+        "newly_discovered": [
+          "The ledger records twelve ingots arriving, but only nine entered stock."
+        ],
+        "previously_known": []
+      },
+      "public_scene": {
+        "observations": [
+          "A ledger lies in plain view.",
+          "Light catches the uneven surface."
+        ]
+      },
+      "descriptive_constraints": [
+        "Write only a descriptive prelude to the examination, ending a complete sentence.",
+        "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+        "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+        "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+        "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+      ],
+      "max_output_utf8_bytes": 1600
+    },
+    "candidate_prelude": "You look closely, taking time over the examination.",
+    "final_response": {
+      "preview_text": "You look closely, taking time over the examination.\n\nThe ledger records twelve ingots arriving, but only nine entered stock.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The ledger records twelve ingots arriving, but only nine entered stock."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "fallback": "You examine the evidence. The ledger records twelve ingots arriving, but only nine entered stock. A ledger lies in plain view. Light catches the uneven surface.",
+    "state_unchanged": true,
+    "host": {
+      "text": "You inspect ledger. The ledger records twelve ingots arriving, but only nine entered stock.",
+      "source": {
+        "kind": "discover_clue",
+        "source": "clue_text"
+      }
+    },
+    "controlled": "A ledger lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The ledger records twelve ingots arriving, but only nine entered stock."
+  },
+  {
+    "id": "monument",
+    "category": "mundane",
+    "scene": {
+      "scene": {
+        "id": "unfamiliar_site",
+        "location": "Unfamiliar Site",
+        "visible_facts": [
+          "A monument lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "summary": "A quiet place for a closer look.",
+        "interactables": [
+          {
+            "id": "monument",
+            "label": "monument",
+            "type": "investigate"
+          }
+        ],
+        "discoverable_clues": [
+          {
+            "id": "hidden",
+            "text": "CANARY_UNDISCOVERED"
+          },
+          {
+            "id": "UNSEEN_CLUE_K42",
+            "text": "UNSEEN_CLUE_K42"
+          }
+        ],
+        "hidden_facts": [
+          "HIDDEN_DESTINATION_K42"
+        ],
+        "gm_notes": [
+          "PRIVATE_GM_NOTE_K42"
+        ],
+        "npcs": [
+          {
+            "hidden_motivation": "NPC_MOTIVE_K42"
+          }
+        ],
+        "hidden_faction": "CANARY_FACTION_ACTIVITY",
+        "exits": []
+      }
+    },
+    "resolution": {
+      "kind": "investigate",
+      "action_id": "monument",
+      "label": "monument",
+      "prompt": "I examine the monument.",
+      "success": true,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "hint": "Player inspected an authored interactable that has no further authored contents.",
+      "metadata": {
+        "referenced_surface_authority": "authored_interactable",
+        "referenced_surface_target": "monument",
+        "referenced_surface_existence": true,
+        "referenced_surface_visibility": true,
+        "referenced_surface_inspectability": true,
+        "referenced_surface_interactable_id": "monument",
+        "referenced_surface_visible_fact": "",
+        "referenced_surface_inspectable_text": "",
+        "skip_unrelated_clue_discovery": true
+      }
+    },
+    "known": [],
+    "origin": "actual resolver on synthetic scene",
+    "player": "I examine the monument.",
+    "hidden_information": [
+      "UNSEEN_CLUE_K42",
+      "PRIVATE_GM_NOTE_K42",
+      "NPC_MOTIVE_K42",
+      "HIDDEN_DESTINATION_K42",
+      "PRIVATE_WORLD_K42",
+      "QUEST_TWIST_K42"
+    ],
+    "authoritative_projection": {
+      "outcome": {
+        "status": "observed",
+        "success": true,
+        "target_id": "monument",
+        "revealed": [],
+        "known": [],
+        "observations": [
+          "A monument lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "consequences": ""
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "engine_status",
+          "status": "observed",
+          "text": "No new clue is established by this examination."
+        },
+        {
+          "order": 1,
+          "source": "public_observation",
+          "status": "observed",
+          "text": "A monument lies in plain view."
+        },
+        {
+          "order": 2,
+          "source": "public_observation",
+          "status": "observed",
+          "text": "Light catches the uneven surface."
+        }
+      ]
+    },
+    "prelude_request": {
+      "authorized_investigation": {
+        "target": "monument",
+        "status": "observed",
+        "success": true,
+        "newly_discovered": [],
+        "previously_known": []
+      },
+      "public_scene": {
+        "observations": [
+          "A monument lies in plain view.",
+          "Light catches the uneven surface."
+        ]
+      },
+      "descriptive_constraints": [
+        "Write only a descriptive prelude to the examination, ending a complete sentence.",
+        "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+        "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+        "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+        "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+      ],
+      "max_output_utf8_bytes": 1600
+    },
+    "candidate_prelude": "You look closely, taking time over the examination.",
+    "final_response": {
+      "preview_text": "You look closely, taking time over the examination.\n\nNo new clue is established by this examination. A monument lies in plain view. Light catches the uneven surface.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "engine_status",
+          "status": "observed",
+          "text": "No new clue is established by this examination."
+        },
+        {
+          "order": 1,
+          "source": "public_observation",
+          "status": "observed",
+          "text": "A monument lies in plain view."
+        },
+        {
+          "order": 2,
+          "source": "public_observation",
+          "status": "observed",
+          "text": "Light catches the uneven surface."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "fallback": "You examine the evidence. No new clue is established by this examination. A monument lies in plain view. Light catches the uneven surface.",
+    "state_unchanged": true,
+    "host": {
+      "text": "monument",
+      "source": {
+        "kind": "investigate",
+        "source": "visible_surface_text"
+      }
+    },
+    "controlled": "A monument lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. No new clue is established by this examination."
+  },
+  {
+    "id": "old_milestone",
+    "category": "canonical",
+    "scene": {
+      "scene": {
+        "id": "old_milestone",
+        "location": "Old Milestone",
+        "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+        "mode": "exploration",
+        "visible_facts": [
+          "A weathered stone milestone leans beside the northwest mud track.",
+          "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+          "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+        ],
+        "opening_seed_facts": [
+          "A weathered stone milestone leans beside the northwest mud track.",
+          "The mud around the marker is churned with faint overlapping prints that fade into the scrub."
+        ],
+        "journal_seed_facts": [
+          "The northwest mud track reaches an old milestone beyond the gate.",
+          "The mud around the marker is churned; any trail beyond it is unclear."
+        ],
+        "discoverable_clues": [
+          {
+            "id": "milestone_mud_prints",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ],
+        "hidden_facts": [],
+        "exits": [
+          {
+            "label": "Return to Cinderwatch Gate",
+            "target_scene_id": "frontier_gate"
+          }
+        ],
+        "enemies": [],
+        "actions": [],
+        "interactables": [
+          {
+            "id": "milestone",
+            "label": "Weathered milestone",
+            "aliases": [
+              "old milestone",
+              "stone",
+              "marker",
+              "weathered stone"
+            ],
+            "type": "investigate",
+            "reveals_clue": "milestone_mud_prints"
+          },
+          {
+            "id": "prints",
+            "label": "Mud prints",
+            "aliases": [
+              "footprints",
+              "mud",
+              "track",
+              "mud track",
+              "northwest track"
+            ],
+            "type": "investigate",
+            "reveals_clue": "milestone_mud_prints"
+          }
+        ]
+      }
+    },
+    "resolution": {
+      "kind": "discover_clue",
+      "action_id": "prints",
+      "label": "prints",
+      "prompt": "I examine the footprints.",
+      "success": true,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": "milestone_mud_prints",
+      "discovered_clues": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "world_updates": null,
+      "state_changes": {
+        "clue_revealed": true,
+        "interactable_id": "prints"
+      },
+      "hint": "Player investigated [prints] and discovered clue [milestone_mud_prints]. Narrate the discovery and its significance.",
+      "interactable_id": "prints",
+      "clue_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "metadata": {
+        "referenced_surface_authority": "authored_interactable",
+        "referenced_surface_target": "footprint",
+        "referenced_surface_existence": true,
+        "referenced_surface_visibility": true,
+        "referenced_surface_inspectability": true,
+        "referenced_surface_interactable_id": "prints",
+        "referenced_surface_visible_fact": "",
+        "referenced_surface_inspectable_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "skip_unrelated_clue_discovery": false
+      }
+    },
+    "known": [],
+    "player": "I examine the footprints.",
+    "hidden_information": [
+      "UNSEEN_CLUE_K42",
+      "PRIVATE_GM_NOTE_K42",
+      "NPC_MOTIVE_K42",
+      "HIDDEN_DESTINATION_K42",
+      "PRIVATE_WORLD_K42",
+      "QUEST_TWIST_K42"
+    ],
+    "authoritative_projection": {
+      "outcome": {
+        "status": "discovered",
+        "success": true,
+        "target_id": "prints",
+        "revealed": [
+          "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        ],
+        "known": [],
+        "observations": [
+          "A weathered stone milestone leans beside the northwest mud track.",
+          "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+          "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+        ],
+        "consequences": ""
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ]
+    },
+    "prelude_request": {
+      "authorized_investigation": {
+        "target": "prints",
+        "status": "discovered",
+        "success": true,
+        "newly_discovered": [
+          "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        ],
+        "previously_known": []
+      },
+      "public_scene": {
+        "observations": [
+          "A weathered stone milestone leans beside the northwest mud track.",
+          "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+          "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+        ]
+      },
+      "descriptive_constraints": [
+        "Write only a descriptive prelude to the examination, ending a complete sentence.",
+        "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+        "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+        "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+        "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+      ],
+      "max_output_utf8_bytes": 1600
+    },
+    "candidate_prelude": "You look closely, taking time over the examination.",
+    "final_response": {
+      "preview_text": "You look closely, taking time over the examination.\n\nFaint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "fallback": "You examine the evidence. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+    "state_unchanged": true,
+    "host": {
+      "text": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "source": {
+        "kind": "discover_clue",
+        "source": "clue_text"
+      }
+    },
+    "controlled": "A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+  },
+  {
+    "id": "testimony",
+    "category": "known",
+    "scene": {
+      "scene": {
+        "id": "unfamiliar_site",
+        "location": "Unfamiliar Site",
+        "visible_facts": [
+          "A testimony lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "summary": "A quiet place for a closer look.",
+        "interactables": [
+          {
+            "id": "testimony",
+            "label": "testimony",
+            "type": "investigate",
+            "reveals_clue": "selected"
+          }
+        ],
+        "discoverable_clues": [
+          {
+            "id": "selected",
+            "text": "The testimony places the ferryman at the quay; the time is unknown."
+          },
+          {
+            "id": "hidden",
+            "text": "CANARY_UNDISCOVERED"
+          },
+          {
+            "id": "UNSEEN_CLUE_K42",
+            "text": "UNSEEN_CLUE_K42"
+          }
+        ],
+        "hidden_facts": [
+          "HIDDEN_DESTINATION_K42"
+        ],
+        "gm_notes": [
+          "PRIVATE_GM_NOTE_K42"
+        ],
+        "npcs": [
+          {
+            "hidden_motivation": "NPC_MOTIVE_K42"
+          }
+        ],
+        "hidden_faction": "CANARY_FACTION_ACTIVITY",
+        "exits": []
+      }
+    },
+    "resolution": {
+      "kind": "already_searched",
+      "action_id": "testimony",
+      "label": "testimony",
+      "prompt": "I examine the testimony.",
+      "success": false,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": "selected",
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {
+        "already_searched": true
+      },
+      "hint": "Player investigated [testimony] and discovered clue [selected]. Narrate the discovery and its significance.",
+      "interactable_id": "testimony",
+      "clue_text": "The testimony places the ferryman at the quay; the time is unknown.",
+      "metadata": {
+        "referenced_surface_authority": "authored_interactable",
+        "referenced_surface_target": "testimony",
+        "referenced_surface_existence": true,
+        "referenced_surface_visibility": true,
+        "referenced_surface_inspectability": true,
+        "referenced_surface_interactable_id": "testimony",
+        "referenced_surface_visible_fact": "",
+        "referenced_surface_inspectable_text": "The testimony places the ferryman at the quay; the time is unknown.",
+        "skip_unrelated_clue_discovery": false
+      }
+    },
+    "known": [
+      "The testimony places the ferryman at the quay; the time is unknown."
+    ],
+    "origin": "explicit repeat fixture; actual repeat resolver independently tested",
+    "player": "I examine the testimony.",
+    "hidden_information": [
+      "UNSEEN_CLUE_K42",
+      "PRIVATE_GM_NOTE_K42",
+      "NPC_MOTIVE_K42",
+      "HIDDEN_DESTINATION_K42",
+      "PRIVATE_WORLD_K42",
+      "QUEST_TWIST_K42"
+    ],
+    "authoritative_projection": {
+      "outcome": {
+        "status": "known",
+        "success": false,
+        "target_id": "testimony",
+        "revealed": [],
+        "known": [
+          "The testimony places the ferryman at the quay; the time is unknown."
+        ],
+        "observations": [
+          "A testimony lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "consequences": ""
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "engine_status",
+          "status": "known",
+          "text": "The examination adds nothing new to what you already know."
+        },
+        {
+          "order": 1,
+          "source": "player_knowledge",
+          "status": "previously_known",
+          "text": "The testimony places the ferryman at the quay; the time is unknown."
+        }
+      ]
+    },
+    "prelude_request": {
+      "authorized_investigation": {
+        "target": "testimony",
+        "status": "known",
+        "success": false,
+        "newly_discovered": [],
+        "previously_known": [
+          "The testimony places the ferryman at the quay; the time is unknown."
+        ]
+      },
+      "public_scene": {
+        "observations": [
+          "A testimony lies in plain view.",
+          "Light catches the uneven surface."
+        ]
+      },
+      "descriptive_constraints": [
+        "Write only a descriptive prelude to the examination, ending a complete sentence.",
+        "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+        "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+        "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+        "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+      ],
+      "max_output_utf8_bytes": 1600
+    },
+    "candidate_prelude": "You look closely, taking time over the examination.",
+    "final_response": {
+      "preview_text": "You look closely, taking time over the examination.\n\nThe examination adds nothing new to what you already know. The testimony places the ferryman at the quay; the time is unknown.",
+      "anchors": [
+        {
+          "order": 0,
+          "source": "engine_status",
+          "status": "known",
+          "text": "The examination adds nothing new to what you already know."
+        },
+        {
+          "order": 1,
+          "source": "player_knowledge",
+          "status": "previously_known",
+          "text": "The testimony places the ferryman at the quay; the time is unknown."
+        }
+      ],
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}}",
+      "review_required": true
+    },
+    "fallback": "You examine the evidence. The examination adds nothing new to what you already know. The testimony places the ferryman at the quay; the time is unknown.",
+    "state_unchanged": true,
+    "host": {
+      "text": "You inspect the target, but nothing new is established.",
+      "source": {
+        "kind": "already_searched",
+        "source": "failed_inspection"
+      }
+    },
+    "controlled": "A testimony lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. Already established: The testimony places the ferryman at the quay; the time is unknown. The examination adds nothing new to what you already know."
+  }
+]

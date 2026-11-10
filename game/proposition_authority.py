@@ -145,15 +145,47 @@ _BIOGRAPHY_RE = re.compile(
     r"once\s+served|formerly\s+served|used\s+to\s+serve)\b",
     re.IGNORECASE,
 )
-_GEOGRAPHY_RE = re.compile(
-    r"\b(?:milestone|crossroads?|roads?|routes?|paths?|tunnels?|passages?|keeps?|bridges?|towers?)\b"
-    r"[^.!?]{0,80}\b(?:lies?|stands?|sits?|runs?|leads?|passes?)?\s*(?:east|west|north|south|beyond|beneath|under|past|into)\b"
-    r"|\b(?:east|west|north|south|beyond|beneath|under|past|into)\b[^.!?]{0,80}\b(?:milestone|crossroads?|roads?|routes?|paths?|tunnels?|passages?|keeps?|bridges?|towers?)\b",
+# A place word merely near a preposition is not a geographic assertion.
+# "Recent passage" is movement across ground. "Elusive beneath the soil" places
+# obscured details under rain and dirt. Neither one locates a route or feature.
+# An assertion has to do one of three things: take a feature as the object of a
+# locative preposition, point a feature along a compass, or link a feature to a
+# direction with a placement or traversal verb in the same clause.
+_PLACE_FEATURE = (
+    r"milestones?|crossroads?|roads?|routes?|paths?|tunnels?|passages?|"
+    r"keeps?|bridges?|towers?"
+)
+_COMPASS = r"east|west|north|south"
+_LOCATIVE_PREP = r"beyond|beneath|under|past|into"
+_PLACEMENT_VERB = (
+    r"lies?|stands?|sits?|runs?|leads?|leading|opens?|opening|"
+    r"descends?|descending|passes?|heads?|heading|goes?|going|turns?|turning"
+)
+_PREP_PLACE_RE = re.compile(
+    rf"\b(?:{_LOCATIVE_PREP})\s+(?:the|a|an)\s+"
+    rf"(?:(?!(?:{_LOCATIVE_PREP}|and|or|but|of|near|around|beside|with|from)\b)[a-z]+\s+){{0,3}}"
+    rf"(?:{_PLACE_FEATURE})\b"
+    rf"|\b(?:{_LOCATIVE_PREP})\s+(?:{_PLACE_FEATURE})\b",
+    re.IGNORECASE,
+)
+_COMPASS_LOCATIVE_RE = re.compile(
+    rf"\b(?:{_PLACE_FEATURE})\s+(?:{_COMPASS})\b"
+    rf"|\b(?:{_COMPASS})\s+(?:[a-z]+\s+){{0,2}}(?:{_PLACE_FEATURE})\b"
+    # A compass word that closes the clause points the feature. "North wind"
+    # does not: the compass is then an attributive modifier of another noun.
+    rf"|\b(?:{_PLACE_FEATURE})\b[^.!?,;]{{0,70}}\b(?:{_COMPASS})\b(?!\s+[A-Za-z])",
+    re.IGNORECASE,
+)
+_VERB_PREP_RE = re.compile(
+    rf"\b(?:{_PLACE_FEATURE})\b[^.!?,;]{{0,48}}"
+    rf"\b(?:{_PLACEMENT_VERB})\s+(?:{_COMPASS}|{_LOCATIVE_PREP})\b",
     re.IGNORECASE,
 )
 _HIDDEN_INFORMATION_RE = re.compile(
-    r"\b(?:secret|hidden|buried|sealed)\s+(?:tunnel|passage|map|door|vault|route|cache|letter|ledger|clue|fact)\b"
-    r"|\b(?:tunnel|passage|map|door|vault|route|cache|letter|ledger|clue)\b[^.!?]{0,80}\b(?:hidden|secret|buried|sealed)\b",
+    r"\b(?:secret|hidden|buried|sealed|concealed)\s+"
+    r"(?:tunnel|passage|map|door|doorway|entrance|chamber|stairway|vault|route|cache|letter|ledger|clue|fact)\b"
+    r"|\b(?:tunnel|passage|map|door|doorway|entrance|chamber|stairway|vault|route|cache|letter|ledger|clue)\b"
+    r"[^.!?]{0,80}\b(?:hidden|secret|buried|sealed|concealed)\b",
     re.IGNORECASE,
 )
 _NPC_ACTION_RE = re.compile(
@@ -164,7 +196,9 @@ _NPC_ACTION_RE = re.compile(
 )
 _DISCOVERY_RE = re.compile(
     r"\byou\s+(?:discover|find|spot|uncover|notice|learn|realize)\b[^.!?]{0,80}"
-    r"\b(?:hidden|secret|map|clue|tunnel|passage|vault|cache|letter|ledger|evidence)\b",
+    r"\b(?:hidden|secret|map|clue|tunnel|passage|vault|cache|letter|ledger|evidence)\b"
+    r"|\byou\s+find\s+yourself\s+(?:inside|within)\s+(?:the|a|an)\s+"
+    r"(?:crypt|vault|chamber|tomb|tunnel|passage|keep|tower|cellar)\b",
     re.IGNORECASE,
 )
 _DURATION_RE = re.compile(
@@ -268,6 +302,19 @@ def consequential_identity_assertion(sentence: str) -> bool:
     return False
 
 
+def _geographic_assertion(sentence: str) -> bool:
+    """True when the sentence places, directs, or opens onto a geographic feature.
+
+    Co-occurrence is not enough. The preposition's object, a compass locative,
+    or a same-clause placement verb has to tie the feature to a location.
+    """
+    return bool(
+        _PREP_PLACE_RE.search(sentence)
+        or _COMPASS_LOCATIVE_RE.search(sentence)
+        or _VERB_PREP_RE.search(sentence)
+    )
+
+
 def _family(sentence: str) -> str:
     if _NOT_AN_ASSERTION_RE.search(sentence):
         return FAMILY_NONE
@@ -295,7 +342,7 @@ def _family(sentence: str) -> str:
         return FAMILY_NPC_ACTION
     if _BIOGRAPHY_RE.search(sentence):
         return FAMILY_BIOGRAPHY
-    if _GEOGRAPHY_RE.search(sentence):
+    if _geographic_assertion(sentence):
         return FAMILY_GEOGRAPHY
     if _INCIDENTAL_RE.search(sentence) or (_DURATION_RE.search(sentence) and not _STATE_CHANGE_RE.search(sentence)):
         return FAMILY_INCIDENTAL
@@ -363,6 +410,47 @@ def _identity_grounded(sentence: str, corpus: str) -> bool:
     return any(name.lower() in corpus_l for name in names)
 
 
+_GEO_ALIAS = {
+    "western": "west", "westward": "west", "westerly": "west",
+    "eastern": "east", "eastward": "east", "easterly": "east",
+    "northern": "north", "northward": "north", "northerly": "north",
+    "southern": "south", "southward": "south", "southerly": "south",
+    "sundown": "dusk", "sunset": "dusk", "nightfall": "dusk",
+    "rounds": "patrol", "patrols": "patrol", "patrolling": "patrol", "patrolled": "patrol",
+    "roadway": "road", "roads": "road",
+    "guards": "guard", "sentry": "guard", "sentries": "guard",
+    "watchman": "guard", "watchmen": "guard",
+}
+_GEO_LIGHT = frozenset({"make", "makes", "made", "making", "along", "during", "while", "when"})
+_GEO_SHORT = frozenset({"west", "east", "dusk", "dawn", "road"})
+
+
+def _geo_tokens(text: str) -> set[str]:
+    """Fold directional and patrol synonyms. Drop light verbs that add no place."""
+    found = set()
+    for word in re.findall(r"[a-z0-9']+", str(text or "").lower()):
+        word = _GEO_ALIAS.get(word, word)
+        if word in _GEO_LIGHT:
+            continue
+        if len(word) < 4 and word not in _GEO_SHORT:
+            continue
+        found.add(word)
+    return found
+
+
+def _geography_grounded(sentence: str, corpus: str) -> bool:
+    """A geographic sentence is the same fact when every content token is already authorized.
+
+    Synonyms such as sundown/dusk and rounds/patrol count as the same token.
+    A new place word is not authorized by a nearby road.
+    """
+    tokens = _geo_tokens(sentence)
+    corpus_tokens = _geo_tokens(corpus)
+    if not tokens or not corpus_tokens:
+        return False
+    return tokens.issubset(corpus_tokens)
+
+
 def _grounded(sentence: str, family: str, corpus: str, response: str) -> bool:
     if family == FAMILY_IDENTITY:
         return _identity_grounded(sentence, corpus)
@@ -379,9 +467,10 @@ def _grounded(sentence: str, family: str, corpus: str, response: str) -> bool:
     if family == FAMILY_LEGAL:
         match = _LEGAL_RE.search(sentence)
         return bool(match and _corpus_has(corpus, match.group(0)))
+    if family == FAMILY_GEOGRAPHY:
+        return _geography_grounded(sentence, corpus)
     if family in {
         FAMILY_BIOGRAPHY,
-        FAMILY_GEOGRAPHY,
         FAMILY_HIDDEN_INFORMATION,
         FAMILY_NPC_ACTION,
         FAMILY_DISCOVERY,

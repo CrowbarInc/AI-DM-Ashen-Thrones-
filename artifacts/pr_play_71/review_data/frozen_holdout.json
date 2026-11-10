@@ -1,0 +1,802 @@
+[
+  {
+    "id": "H01",
+    "group": "start",
+    "variant": "normal",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H02",
+    "group": "start",
+    "variant": "duplicate",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H03",
+    "group": "start",
+    "variant": "new_twice",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H04",
+    "group": "start",
+    "variant": "failure_retry",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H05",
+    "group": "start",
+    "variant": "timeout_retry",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H06",
+    "group": "start",
+    "variant": "empty_retry",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H07",
+    "group": "start",
+    "variant": "malformed_retry",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H08",
+    "group": "start",
+    "variant": "refresh_before",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H09",
+    "group": "start",
+    "variant": "identity",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H10",
+    "group": "start",
+    "variant": "safe",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H11",
+    "group": "persistence",
+    "variant": "scene",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H12",
+    "group": "persistence",
+    "variant": "journal",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H13",
+    "group": "persistence",
+    "variant": "inventory",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H14",
+    "group": "persistence",
+    "variant": "character",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H15",
+    "group": "persistence",
+    "variant": "session",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H16",
+    "group": "persistence",
+    "variant": "actions",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H17",
+    "group": "persistence",
+    "variant": "followup",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H18",
+    "group": "persistence",
+    "variant": "reload",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H19",
+    "group": "persistence",
+    "variant": "switch",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H20",
+    "group": "persistence",
+    "variant": "continue",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H21",
+    "group": "continuity",
+    "variant": "choice",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H22",
+    "group": "continuity",
+    "variant": "exclusive",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H23",
+    "group": "continuity",
+    "variant": "followup",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H24",
+    "group": "continuity",
+    "variant": "duplicate_choice",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H25",
+    "group": "continuity",
+    "variant": "opposite",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H26",
+    "group": "continuity",
+    "variant": "duplicate_followup",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H27",
+    "group": "continuity",
+    "variant": "resume_choice",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H28",
+    "group": "continuity",
+    "variant": "resume_followup",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H29",
+    "group": "continuity",
+    "variant": "post_resume_opposite",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H30",
+    "group": "continuity",
+    "variant": "post_resume_continue",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H31",
+    "group": "isolation",
+    "variant": "identity",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H32",
+    "group": "isolation",
+    "variant": "flags",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H33",
+    "group": "isolation",
+    "variant": "journal",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H34",
+    "group": "isolation",
+    "variant": "inventory",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H35",
+    "group": "isolation",
+    "variant": "selection",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H36",
+    "group": "publication",
+    "variant": "rejected",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H37",
+    "group": "publication",
+    "variant": "empty",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H38",
+    "group": "publication",
+    "variant": "malformed",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H39",
+    "group": "publication",
+    "variant": "timeout",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H40",
+    "group": "publication",
+    "variant": "unavailable",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H41",
+    "group": "projection",
+    "variant": "creation",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H42",
+    "group": "projection",
+    "variant": "opening",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H43",
+    "group": "projection",
+    "variant": "gameplay",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H44",
+    "group": "projection",
+    "variant": "resume",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H45",
+    "group": "projection",
+    "variant": "invalid",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H46",
+    "group": "recovery",
+    "variant": "missing_id",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H47",
+    "group": "recovery",
+    "variant": "invalid_id",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H48",
+    "group": "recovery",
+    "variant": "corrupt_snapshot",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H49",
+    "group": "recovery",
+    "variant": "incomplete_snapshot",
+    "branch": "report",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_report",
+      "opposite_absent": "patrol_survey",
+      "followup_flag": "patrol_guards_warned",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  },
+  {
+    "id": "H50",
+    "group": "recovery",
+    "variant": "stale_resume",
+    "branch": "survey",
+    "expected": {
+      "opening_scene": "frontier_gate",
+      "branch_flag": "patrol_survey",
+      "opposite_absent": "patrol_report",
+      "followup_flag": "patrol_survey_recorded",
+      "campaign_identity": "distinct on creation; same on resume",
+      "safe": "no CANARY_ or raw hidden fields",
+      "publication": "trusted discovery and consequence text preserved",
+      "failure": "prior valid state preserved; no fabricated success"
+    }
+  }
+]

@@ -1,0 +1,79 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "structure",
+    "pace",
+    "tone",
+    "sensory_focus",
+    "detail",
+    "perspective",
+    "transition",
+    "information_order"
+  ],
+  "properties": {
+    "structure": {
+      "type": "string",
+      "enum": [
+        "action_first",
+        "evidence_first",
+        "setting_first"
+      ]
+    },
+    "pace": {
+      "type": "string",
+      "enum": [
+        "clipped",
+        "flowing",
+        "measured"
+      ]
+    },
+    "tone": {
+      "type": "string",
+      "enum": [
+        "spare",
+        "reflective",
+        "intent"
+      ]
+    },
+    "sensory_focus": {
+      "type": "string",
+      "enum": [
+        "none",
+        "visual",
+        "texture",
+        "listening"
+      ]
+    },
+    "detail": {
+      "type": "string",
+      "enum": [
+        "lean",
+        "standard",
+        "extended"
+      ]
+    },
+    "perspective": {
+      "type": "string",
+      "enum": [
+        "second_person",
+        "close_observation"
+      ]
+    },
+    "transition": {
+      "type": "string",
+      "enum": [
+        "direct",
+        "pause",
+        "question"
+      ]
+    },
+    "information_order": {
+      "type": "string",
+      "enum": [
+        "new_first",
+        "known_first"
+      ]
+    }
+  }
+}

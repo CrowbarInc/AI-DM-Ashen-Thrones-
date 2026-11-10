@@ -1,0 +1,11 @@
+--- before/artifacts/pr_play_32/execute.py
++++ after/artifacts/pr_play_32/execute.py
+@@ -56,7 +56,7 @@
+     write(run/'reports'/(label+'_decision.json'),accepted)
+     return accepted.get('pass') is True
+ try:
+-    process=subprocess.Popen([sys.executable,'-u',str(OUT/'worker_capture.py'),str(run)],cwd=ROOT,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
++    process=runner.start_worker(run,env,script=OUT/'worker_capture.py')
+     secrets=[v for k,v in env.items() if len(v)>6 and any(s in k.lower() for s in ('key','token','secret','password','credential'))]
+     logger=threading.Thread(target=runner.bounded_log,args=(process.stdout,run/'diagnostics/application.log',secrets),daemon=True);logger.start()
+     ready,base=runner.wait_for_http_ready(process,run,30)

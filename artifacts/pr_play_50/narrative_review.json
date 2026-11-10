@@ -1,0 +1,208 @@
+{
+  "reviewed_before_validator": true,
+  "rater": "Unblinded implementing-agent editorial assessment of the four provider preludes. Not a player study and not a reliability rate.",
+  "rubric": "Same PR-PLAY-49 scale. 0 absent/incorrect or strongly weak; 1 adequate/limited; 2 complete/strong. Expressive range rates this four-sample corpus, not uniqueness of one sentence. Repetition 2 means little avoidable repetition. Scores apply to the assembled preview: provider prelude plus the exact engine anchor.",
+  "mechanical_correctness_is_separate": true,
+  "consequential_fabrication_found": false,
+  "samples": [
+    {
+      "request_id": "A1",
+      "investigation_id": "notice_board",
+      "prelude": "The notice board stands weathered and crowded, its surface plastered with official decrees and hastily scrawled warnings. Nearby, the murmur of the gate serjeant and the clatter of the tavern runner’s calls mingle with the restless shifting of watchers and refugees. The board’s messages draw a wary crowd, each line hinting at unease and unanswered questions.",
+      "mechanical_consistency": {
+        "supported": true,
+        "unsupported_consequences": [],
+        "excerpt": "No sentence grants an item, coin, injury, condition, journey, or completed quest."
+      },
+      "world_consistency": {
+        "supported": true,
+        "notes": "Serjeant, tavern runner, watchers, and refugees are public observations. Taxes and curfew notices can support 'official decrees.' 'Weathered' and 'hastily scrawled' are not public facts."
+      },
+      "discovery_integrity": {
+        "supported": true,
+        "notes": "The prelude does not state the northwest track, the crates, or who was last seen. It does not add a witness, culprit, or destination."
+      },
+      "uncertainty_preservation": {
+        "supported": true,
+        "excerpt": "each line hinting at unease and unanswered questions",
+        "notes": "The authoritative discovery is definite. The prelude does not invent a tighter conclusion."
+      },
+      "hidden_information": {
+        "leak": false,
+        "notes": "Watchers and refugees are in the authorized public observations. The withheld noble-house agent, Ash Cowl contact, checkpoint signal, and paid spotter list do not appear."
+      },
+      "incidental_invention": {
+        "harmless": ["weathered", "hastily scrawled warnings", "murmur of the gate serjeant", "clatter of the tavern runner’s calls", "wary crowd"],
+        "consequential": []
+      },
+      "naturalness": "Reads as a dungeon master setting the gate before the finding. The last sentence is more generic than the sensory middle.",
+      "cohesion": "The crowd image can lead into the posted finding, but the closer talks about unease rather than the patrol warning, so the anchor arrives as a new fact rather than a landed detail.",
+      "repetition": "Does not repeat the anchor. 'Unease and unanswered questions' is generic filler.",
+      "readability": "Three complete sentences. Clear. Inside the 20–60 word target.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 2,
+        "investigative_clarity": 2,
+        "repetition": 1,
+        "cohesion": 1
+      },
+      "total_of_16": 13,
+      "mechanical_correctness_of_2": 2,
+      "narrative_of_12": 11
+    },
+    {
+      "request_id": "A2",
+      "investigation_id": "notice_board",
+      "prelude": "The notice board stands weathered and worn, its surface crowded with official decrees and hastily scrawled warnings. Nearby, the murmur of the gate serjeant and the clatter of the tavern runner’s trade blend with the restless shifting of watchers and refugees. The board’s messages seem to pulse with urgency, inviting closer scrutiny.",
+      "mechanical_consistency": {
+        "supported": true,
+        "unsupported_consequences": [],
+        "excerpt": "No possessions, currency, harm, travel, or quest result is asserted."
+      },
+      "world_consistency": {
+        "supported": true,
+        "notes": "'Trade' matches the public tavern-runner observation more closely than A1's 'calls.' Worn and weathered remain incidental."
+      },
+      "discovery_integrity": {
+        "supported": true,
+        "notes": "No route, crate, witness, or extra notice is invented."
+      },
+      "uncertainty_preservation": {
+        "supported": true,
+        "excerpt": "seem to pulse with urgency",
+        "notes": "The hedge 'seem' avoids turning atmosphere into a new conclusion."
+      },
+      "hidden_information": {
+        "leak": false,
+        "notes": "No withheld gate secret is named. Public watchers are not given the withheld motive."
+      },
+      "incidental_invention": {
+        "harmless": ["weathered and worn", "hastily scrawled warnings", "pulse with urgency"],
+        "consequential": []
+      },
+      "naturalness": "Same spoken register as A1, with a cleaner handoff in the last clause.",
+      "cohesion": "'Inviting closer scrutiny' gives the engine anchor a natural place to land.",
+      "repetition": "Does not repeat the discovery sentence. Less empty filler than A1.",
+      "readability": "Three complete sentences. Clear.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 2,
+        "investigative_clarity": 2,
+        "repetition": 2,
+        "cohesion": 2
+      },
+      "total_of_16": 15,
+      "mechanical_correctness_of_2": 2,
+      "narrative_of_12": 13
+    },
+    {
+      "request_id": "B1",
+      "investigation_id": "footprints",
+      "prelude": "The damp earth near the leaning milestone bears the faint impression of footsteps, their edges softened by recent rain. The muddied ground tells a story of passage, yet the details remain elusive, leaving the trail’s origin and direction shrouded in uncertainty.",
+      "mechanical_consistency": {
+        "supported": true,
+        "unsupported_consequences": [],
+        "excerpt": "No count of travelers becomes an item, route unlock, or quest update."
+      },
+      "world_consistency": {
+        "supported": true,
+        "notes": "The leaning milestone and rain-softened mud agree with the public milestone, churned mud, and rainwater. The prelude does not name a next destination."
+      },
+      "discovery_integrity": {
+        "supported": true,
+        "notes": "Faint footsteps and uncertain origin are the authorized discovery, paraphrased early. It does not assign the prints to the missing patrol or state how many people passed."
+      },
+      "uncertainty_preservation": {
+        "supported": true,
+        "excerpt": "leaving the trail’s origin and direction shrouded in uncertainty",
+        "notes": "Number is left unstated. Origin and direction stay unresolved. 'A story of passage' only restates that prints imply someone passed."
+      },
+      "hidden_information": {
+        "leak": false,
+        "notes": "The saved milestone scene has no hidden-fact strings. The prelude does not import gate secrets or a patrol identity."
+      },
+      "incidental_invention": {
+        "harmless": ["edges softened by recent rain", "damp earth"],
+        "consequential": []
+      },
+      "naturalness": "Understandable, but 'tells a story' and 'shrouded in uncertainty' sound like stock mystery prose.",
+      "cohesion": "The second sentence already delivers the anchor's uncertainty, so the engine sentence repeats the finding instead of completing it.",
+      "repetition": "Avoidable paraphrase of 'origin and direction' plus faint prints. Not an exact copy of the anchor.",
+      "readability": "Two complete sentences. Easy to follow, then redundant once the anchor is appended.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_correctness_of_2": 2,
+      "narrative_of_12": 8
+    },
+    {
+      "request_id": "B2",
+      "investigation_id": "footprints",
+      "prelude": "The ground near the weathered milestone is soft and disturbed, bearing the faint impressions of footsteps that overlap and blur together. The muddied earth tells of recent passage, yet the details remain elusive beneath the shifting layers of soil and rain.",
+      "mechanical_consistency": {
+        "supported": true,
+        "unsupported_consequences": [],
+        "excerpt": "Overlap is described as a visual fact, not as a counted party, a destination, or a reward."
+      },
+      "world_consistency": {
+        "supported": true,
+        "notes": "Weathered milestone, disturbed mud, overlap, and rain match the public observations. 'Recent' is a little more specific than the authorized timing, which is unstated."
+      },
+      "discovery_integrity": {
+        "supported": true,
+        "notes": "Faint overlapping impressions are the authorized print observation. No owner, count, or path beyond the marker is decided."
+      },
+      "uncertainty_preservation": {
+        "supported": true,
+        "excerpt": "yet the details remain elusive",
+        "notes": "Uncertainty is kept, though less precise than the anchor's number, origin, and direction. 'Recent passage' is a mild temporal sharpening, not a resolved trail."
+      },
+      "hidden_information": {
+        "leak": false,
+        "notes": "No patrol link and no withheld fact."
+      },
+      "incidental_invention": {
+        "harmless": ["soft", "blur together", "shifting layers of soil"],
+        "consequential": [],
+        "mild_overspecificity": ["recent passage"]
+      },
+      "naturalness": "Concrete first sentence, then a stock 'tells of passage / details remain elusive' close.",
+      "cohesion": "The vague 'details remain elusive' can lead into the anchor's exact uncertainty. The overlapping impressions are still said twice.",
+      "repetition": "Paraphrases faint overlapping prints. Leaves the specific unknowns to the anchor, so the echo is narrower than B1.",
+      "readability": "Two complete sentences. Clear.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 1,
+        "cohesion": 1
+      },
+      "total_of_16": 11,
+      "mechanical_correctness_of_2": 2,
+      "narrative_of_12": 9
+    }
+  ],
+  "variety": {
+    "notice_board": "A1 and A2 use the same three-sentence plan: weathered board and scrawled warnings, then serjeant and tavern-runner sound, then a soft closer. Shared wording includes 'official decrees and hastily scrawled warnings,' 'murmur of the gate serjeant,' and 'restless shifting of watchers and refugees.' The closers differ: wary unease versus urgency and closer scrutiny. That is small lexical variation inside one rhetorical family, not a new structure, pace, or perspective.",
+    "footprints": "B1 and B2 both use two sentences: physical mud, then elusive passage. B1 stresses rain-softened edges and names origin and direction. B2 stresses overlap, blur, and soil. The plan and the 'tells of passage / details remain elusive' cadence still match. Preliminary only: two samples do not establish a repertoire.",
+    "corpus_expressive_range_score": 1,
+    "authoritative_facts_changed": false
+  }
+}

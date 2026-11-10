@@ -473,7 +473,13 @@ def _derive_transition_node(
         transition_required = True
         source_fields.append("resolution.target_scene_id")
         derivation_codes.append("signal:resolution.target_scene_id")
-    if _as_str(sm_scene.get("scene_id") or sm_scene.get("activate_scene_id")):
+    # ``scene_id`` on this block is the current scene stamp written for every narration.
+    # It is not a location change when it equals the known current scene. Explicit
+    # activation, a different stamp, and a stamp whose current identity is unknown
+    # keep the existing signal. Equality does not clear an independent trigger.
+    activate_scene_id = _as_str(sm_scene.get("activate_scene_id"))
+    stamped_scene_id = _as_str(sm_scene.get("scene_id"))
+    if activate_scene_id or (stamped_scene_id and not (before_scene_id and stamped_scene_id == before_scene_id)):
         transition_required = True
         source_fields.append("state_mutations.scene.(scene_id|activate_scene_id)")
         derivation_codes.append("signal:state_mutations.scene")

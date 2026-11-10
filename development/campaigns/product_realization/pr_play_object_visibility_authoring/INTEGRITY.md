@@ -1,0 +1,5 @@
+# Integrity
+
+Milestone: `pr_play_object_visibility_authoring`. Date: 2026-11-09.
+
+Branch/HEAD unchanged: feature/product-realization / d40f1ed198236c604085f1c842ead267a8104ce2. Entry status retained. Of 1589 protected files, only game/api.py and game/object_marking.py changed; test addition tests/test_object_visibility_authoring.py. Incremental production.diff compares entry bytes, preserving all pre-existing dirty work. All other protected source/test/data/static/tool/script bytes, including frozen fixtures, remain unchanged. No reset/clean/stash/revert/checkout/commit/push. NEXT_SESSION prepends this milestone and preserves historical bytes as suffix. Fifteen reports, exact commands/results and bounded evidence feed standard build_review_handoff.py; canonical review stable/history and fresh dated ZIP are reopened for CRC, identity, all canonical/evidence hashes and semantic acceptance claims. Archive SHA-256/reopen seal remain external to avoid circular hashing; see archive_sha256.txt/archive_verification.json. No completed archive claim is made until seal_review.py succeeds. Live provider calls 0.

@@ -1,0 +1,92 @@
+{
+  "provider": "OpenAI",
+  "models": [
+    "gpt-4.1-mini",
+    "gpt-4.1-mini-2025-04-14"
+  ],
+  "requests": 15,
+  "completed": 15,
+  "tokens": 189036,
+  "input_tokens": 180400,
+  "output_tokens": 8636,
+  "provider_latency_ms": [
+    2065.333,
+    10914.157,
+    1732.867,
+    1212.442,
+    11124.112,
+    1684.353,
+    3390.004,
+    14974.769,
+    1656.384,
+    10770.53,
+    1629.625,
+    5505.927,
+    5010.861,
+    5276.939,
+    349.04
+  ],
+  "failures": [],
+  "admission_refusals": [
+    {
+      "event": "rejected",
+      "version": "ATGB-03B-1",
+      "run_id": "8bf0f1d899fa497bacaeecebc6d50b5c",
+      "attempt_id": "ccd6e700d3be4fa9bed153c46e82dcad",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": null,
+      "time": "2026-11-06T00:55:47.560626+00:00",
+      "sequence": null,
+      "admission": "rejected",
+      "budget_remaining": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": "provider usage accounting unavailable",
+      "sent": false,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "ledger_file": "provider_usage_32308.jsonl"
+    }
+  ],
+  "purposes": {
+    "preflight": 4,
+    "primary_turn": 8,
+    "contract_interpretation": 3
+  },
+  "sdk_retries": 0,
+  "host_retries": 0,
+  "observed_saved_openings": [
+    {
+      "label": "PR71 Survey A",
+      "recovery": {
+        "opening_source": "ai",
+        "original_rejection_code": null,
+        "recovery_eligibility": "ai_accepted",
+        "fallback_attempted": false,
+        "fallback_succeeded": false,
+        "fallback_error": null,
+        "provider_requests_consumed": 1,
+        "initialization_outcome": "started",
+        "state_integrity": "ai_opening_accepted"
+      }
+    },
+    {
+      "label": "PR71 Report B",
+      "recovery": {
+        "opening_source": "deterministic_fallback",
+        "original_rejection_code": "safe_nonresolution",
+        "recovery_eligibility": "semantic_narration_rejection",
+        "fallback_attempted": true,
+        "fallback_succeeded": true,
+        "fallback_error": null,
+        "provider_requests_consumed": 1,
+        "initialization_outcome": "started",
+        "state_integrity": "authorized_initialization_only"
+      }
+    }
+  ],
+  "scope": "all application startup preflight and ordinary required browser actions; no shadow study"
+}

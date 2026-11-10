@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from game.api import app
+from game.api import app, compose_state, _project_state_for_ui_mode
 from game import storage
 from game.defaults import (
     default_campaign,
@@ -82,16 +82,18 @@ def test_api_state_projection_player_author_debug_and_unknown(tmp_path: Path, mo
         assert "debug_state" not in d0
 
         r1 = client.get("/api/state?ui_mode=author")
-        assert r1.status_code == 200
-        d1 = r1.json()
+        assert r1.status_code == 403
+        # Privileged projections remain an internal Python tool; HTTP mode is
+        # not an authorized identity (PR-PLAY-21).
+        d1 = _project_state_for_ui_mode(compose_state(), "author")
         assert d1.get("ui_mode") == "author"
         assert "public_state" in d1
         assert "author_state" in d1
         assert "debug_state" not in d1
 
         r2 = client.get("/api/state?ui_mode=debug")
-        assert r2.status_code == 200
-        d2 = r2.json()
+        assert r2.status_code == 403
+        d2 = _project_state_for_ui_mode(compose_state(), "debug")
         assert d2.get("ui_mode") == "debug"
         assert "public_state" in d2
         assert "debug_state" in d2
@@ -114,13 +116,15 @@ def test_state_leakage_guards_by_mode(tmp_path: Path, monkeypatch: pytest.Monkey
         assert "_final_emission_meta" not in public_blob
         assert "hidden_facts" not in (public_state.get("scene") or {}).get("scene", {})
 
-        author = client.get("/api/state?ui_mode=author").json()
+        assert client.get("/api/state?ui_mode=author").status_code == 403
+        author = _project_state_for_ui_mode(compose_state(), "author")
         author_blob = json.dumps(author.get("author_state") or {}, sort_keys=True)
         assert "hidden_facts" in author_blob
         assert "debug_traces" not in author_blob
         assert "_final_emission_meta" not in author_blob
 
-        debug = client.get("/api/state?ui_mode=debug").json()
+        assert client.get("/api/state?ui_mode=debug").status_code == 403
+        debug = _project_state_for_ui_mode(compose_state(), "debug")
         debug_blob = json.dumps(debug.get("debug_state") or {}, sort_keys=True)
         assert "debug_traces" in debug_blob
         assert "_final_emission_meta" in debug_blob
@@ -140,7 +144,7 @@ def test_endpoint_guards_author_debug_runtime(tmp_path: Path, monkeypatch: pytes
         # Debug read endpoints: debug only
         assert client.get("/api/debug_trace").status_code == 403
         assert client.get("/api/debug_trace?ui_mode=author").status_code == 403
-        assert client.get("/api/debug_trace?ui_mode=debug").status_code == 200
+        assert client.get("/api/debug_trace?ui_mode=debug").status_code == 403
 
         # Runtime action endpoints: player only
         assert client.post("/api/chat", json={"text": "hello", "ui_mode": "author"}).status_code == 403

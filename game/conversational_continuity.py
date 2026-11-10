@@ -61,7 +61,8 @@ _CONDITIONAL_ACTION = re.compile(
 _HIDDEN = re.compile(r"\b(?:passwords?|passcodes?)\b", re.IGNORECASE)
 _REPEAT = re.compile(
     r"\b(?:repeat|say (?:that|it) again|(?:simpler|plainer|plain|other) words|"
-    r"(?:put|say|in) (?:that |it )?another way|go back to|back to the)\b",
+    r"(?:put|say|in) (?:that |it )?another way|go back to|back to the|"
+    r"(?:tell|say|give)\s+me\b[^.!?]{0,48}\bagain|what did .{1,48}? just say)\b",
     re.IGNORECASE,
 )
 _EARLIER = re.compile(
@@ -537,6 +538,16 @@ def _vocative(text: str, present: Mapping[str, Mapping[str, Any]]) -> str:
     return ""
 
 
+def _unique_name_token(text: str, present: Mapping[str, Mapping[str, Any]]) -> str:
+    """One present person named by any whole word of their authored name."""
+    hits = []
+    for npc_id, npc in present.items():
+        words = [word for word in str(npc.get("name") or "").split() if len(word) >= 4]
+        if any(re.search(rf"\b{re.escape(word)}\b", text, re.IGNORECASE) for word in words):
+            hits.append(npc_id)
+    return hits[0] if len(hits) == 1 else ""
+
+
 def _unique_named(text: str, present: Mapping[str, Mapping[str, Any]]) -> str:
     low = text.lower()
     hits = [
@@ -606,6 +617,35 @@ def find_reusable_commitment(session: Mapping[str, Any] | None, npc_id: str, pla
             if text:
                 return text
     return ""
+
+
+def established_scene_object_ids(player_text: str, scene: Mapping[str, Any] | None) -> set[str]:
+    """Interactable ids whose authored label or alias is named in this utterance.
+
+    A short token is not enough. The match is a whole authored name, so a
+    shared word does not select an object and two names stay unresolved.
+    """
+    text = " ".join(str(player_text or "").split())
+    inner = scene.get("scene") if isinstance(scene, Mapping) and isinstance(scene.get("scene"), Mapping) else scene
+    if not text or not isinstance(inner, Mapping):
+        return set()
+    found: set[str] = set()
+    for item in inner.get("interactables") or []:
+        if not isinstance(item, Mapping):
+            continue
+        entity_id = str(item.get("id") or "").strip()
+        if not entity_id:
+            continue
+        names = [item.get("label"), item.get("name"), entity_id.replace("_", " ")]
+        names.extend(item.get("aliases") or [])
+        for name in names:
+            cleaned = " ".join(str(name or "").split())
+            if len(cleaned) < 4:
+                continue
+            if re.search(rf"\b{re.escape(cleaned)}\b", text, re.IGNORECASE):
+                found.add(entity_id)
+                break
+    return found
 
 
 def continuity_directive(
@@ -766,6 +806,28 @@ def continuity_directive(
             "line": f'{speaker_name} says, "I can\'t promise you a reward for that."',
             "reason": "npc_request_declined",
         }
+    if _REPEAT.search(text) and not isinstance(exchange, dict):
+        titled = _unique_name_token(text, present)
+        certain = [row for row in rows if isinstance(row, dict) and not row.get("uncertain")]
+        if titled and titled in present:
+            name = _named(present, titled).casefold()
+            matched = [
+                row for row in certain
+                if str(row.get("speaker_id") or "") == titled
+                or name in str(row.get("delivered_text") or "").casefold()
+                or name in str(row.get("speaker_name") or "").casefold()
+            ]
+        elif not titled:
+            matched = certain
+        else:
+            matched = []
+        if matched:
+            exchange = matched[-1]
+            bound = titled or _unique_name_token(str(exchange.get("delivered_text") or ""), present) or active
+            if bound and bound in present:
+                speaker_id = bound
+                speaker_present = True
+                speaker_name = _named(present, bound)
     if _REPEAT.search(text) and exchange:
         if speaker_present:
             return {
@@ -785,6 +847,9 @@ def continuity_directive(
             "reason": "absent_npc_reference",
         }
     if _EARLIER.search(text):
+        # "What did that notice say earlier?" names the object, not the speaker.
+        if established_scene_object_ids(text, scene) and not _unique_named(text, present):
+            return None
         if not exchange and not speaker_present:
             speakers = {str(row.get("speaker_id") or ""): str(row.get("speaker_name") or "")
                         for row in rows if row.get("ownership") == "npc"}
@@ -850,6 +915,10 @@ def continuity_directive(
         return _ask()
     if (_DEICTIC.search(text) and _QUESTION.search(text) and speaker_present
             and (exchange or any(row.get("ownership") == "npc" and row.get("speaker_id") == speaker_id for row in rows))):
+        # "That notice" names a scene object. It is not a request to continue
+        # the previous speaker, and an ambiguous object is not given to them either.
+        if established_scene_object_ids(text, scene):
+            return None
         if exchange and str(exchange.get("requested_information") or "") in {"opinion", "personal_state"}:
             return {
                 "action": "answer",
@@ -872,6 +941,10 @@ def continuity_directive(
             "reason": "repeat_delivered_statement",
         }
     if _supplied_overlap(text, exchange) and not re.search(r"\bwhich\b.+\bmean\b", text, re.IGNORECASE):
+        # Keyword overlap with the previous answer is not a request to replay it.
+        # Questions can still reuse a statement that already covers them.
+        if not _QUESTION.search(text) or established_scene_object_ids(text, scene):
+            return None
         if isinstance(exchange, dict):
             from game.dialogue_authority import classify_answer_sufficiency
 

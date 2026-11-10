@@ -1,0 +1,16 @@
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+[SESSION RESET] runtime state cleared
+[API] New campaign started 42c0192f8e0c4d8b4ba28451
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[CLUE DUPLICATE IGNORED] milestone_mud_prints
+Traceback (most recent call last):
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\artifacts\pr_play_72v\http_gameplay.py", line 95, in <module>
+    if __name__ == "__main__": main()
+                               ^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\artifacts\pr_play_72v\http_gameplay.py", line 57, in main
+    assert repeat["kind"] == "already_searched" and repeat["success"] is True
+AssertionError

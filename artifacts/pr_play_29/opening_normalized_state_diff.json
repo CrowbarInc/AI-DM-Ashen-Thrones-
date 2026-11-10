@@ -1,0 +1,465 @@
+[
+  {
+    "path": "/session.json/_runtime_canonical_ctir_stamp_v1",
+    "before": null,
+    "after": "1:249d447a540:0"
+  },
+  {
+    "path": "/session.json/_runtime_canonical_ctir_v1",
+    "before": null,
+    "after": {
+      "preview": "{\"version\": 1, \"turn_id\": 1, \"scene_id\": \"frontier_gate\", \"player_input\": \"\", \"intent\": {\"raw_text\": null, \"normalized_kind\": \"scene_opening\", \"mode\": \"scene_opening\", \"classified_action\": \"scene_opening\", \"requires_check\": false, \"check_request\": null, \"targets\": [\"frontier_gate\", \"frontier_gate\"], \"labels\": []}, \"resolution\": {\"kind\": \"scene_opening\", \"outcome_type\": null, \"success_state\": \"success\", \"consequences\": [\"arrived_at_scene\", \"new_scene_context_available\", \"opening_scene_turn\"], \"authoritative_outputs\": {\"action_id\": \"campaign_start_opening_scene\", \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\"}, \"state_changes\": {\"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"action_id\": \"campaign_start_opening_scene\", \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\"}, \"noncombat\": {}, \"state_mutations\": {\"scene\": {\"scene_id\": \"frontier_gate\"}, \"session\": {\"scene_id\": \"frontier_gate\"}, \"combat\": {\"combat_active\": false, \"round\": 0}, \"clues_leads\": {}}, \"interaction\": {\"active_target_id\": null, \"interaction_mode\": \"none\", \"interaction_kind\": null, \"continuity_snapshot\": {}, \"responder_target\": {}, \"speaker_target\": {}}, \"world\": {\"progression\": {\"changed_node_ids\": [], \"active_projects\": [], \"faction_pressure\": [{\"id\": \"ash_cowl\", \"status\": \"active\", \"value\": 3}, {\"id\": \"house_verevin\", \"status\": \"active\", \"value\": 3}, {\"id\": \"ordo_pyric\", \"status\": \"active\", \"value\": 2}], \"faction_agenda\": [{\"id\": \"ash_cowl\", \"status\": \"active\", \"value\": 1}, {\"id\": \"house_verevin\", \"status\": \"active\", \"value\": 1}, {\"id\": \"ordo_pyric\", \"status\": \"active\", \"value\": 1}], \"world_clocks\": [], \"set_flags\": []}}, \"narrative_anchors\": {\"scene_framing\": [], \"actors_speakers\": [], \"outcomes\": [], \"uncertainty\": [], \"next_leads_affordances\": []}, \"provenance\": {\"builder_source\": \"game.api._build_gpt_narration_from_authoritative_state\", \"source_modules\": [\"game.api\", \"game.ctir_runtime\"], \"signals_used\": [], \"retry_safe_flags\": {}, \"extras\": {}}, \"debug\": {\"missing_optional_sections\": [\"narrat",
+      "truncated": true,
+      "characters": 2096,
+      "sha256": "94e20916423b33e593e5d4d57f45c4f044d49cadf6348af9b2edf29ea3c5859e"
+    }
+  },
+  {
+    "path": "/session.json/_runtime_narration_plan_bundle_stamp_v1",
+    "before": null,
+    "after": "1:249d447a540:0"
+  },
+  {
+    "path": "/session.json/_runtime_narration_plan_bundle_v1",
+    "before": null,
+    "after": {
+      "preview": "{\"plan_metadata\": {\"ctir_stamp\": \"1:249d447a540:0\", \"narrative_plan_bundle_version\": 1, \"narrative_plan_version\": 1, \"narration_plan_bundle_error\": null, \"semantic_bypass_blocked\": false, \"ctir_backed_bundle_required\": true, \"fallback_visible_failure\": false, \"legacy_no_ctir_only\": false, \"non_ctir_semantic_path\": false, \"planning_session_interaction\": {}}, \"narrative_plan\": {\"version\": 1, \"scene_anchors\": {\"scene_id\": \"frontier_gate\", \"scene_name\": null, \"location_anchors\": [\"board\", \"cinderwatch gate\", \"cinderwatch gate district\", \"curfew\", \"frontier gate\", \"frontier_gate\", \"gate district\", \"lists\", \"missing\", \"notice\", \"patrol\", \"rules\", \"taxes\", \"warning\"], \"active_interlocutor\": null, \"active_target\": null, \"relevant_actors\": []}, \"active_pressures\": {\"pending_lead_ids\": [], \"context_codes\": [], \"interaction_pressure\": \"none\", \"scene_tension_codes\": [], \"world_pressure\": null, \"clock_summaries\": []}, \"required_new_information\": [{\"kind\": \"authoritative_output_keys\", \"keys\": [\"action_id\", \"resolved_transition\", \"target_scene_id\"]}, {\"kind\": \"consequence_atoms\", \"values\": [\"arrived_at_scene\", \"new_scene_context_available\", \"opening_scene_turn\"]}, {\"kind\": \"resolution_kind\", \"value\": \"scene_opening\"}, {\"kind\": \"state_change\", \"flag\": \"arrived_at_scene\"}, {\"kind\": \"state_change\", \"flag\": \"new_scene_context_available\"}, {\"kind\": \"success_state\", \"value\": \"success\"}, {\"kind\": \"transition\", \"target_scene_id\": \"frontier_gate\"}], \"allowable_entity_references\": [{\"entity_id\": \"gate_guard\", \"descriptor\": \"gate guard\"}, {\"entity_id\": \"gate_serjeant\", \"descriptor\": \"gate serjeant\"}, {\"entity_id\": \"guard_captain\", \"descriptor\": \"guard captain\"}, {\"entity_id\": \"refugee\", \"descriptor\": \"ragged stranger\"}, {\"entity_id\": \"tavern_runner\", \"descriptor\": \"tavern runner\"}, {\"entity_id\": \"threadbare_watcher\", \"descriptor\": \"threadbare watcher\"}], \"transition_node\": {\"transition_required\": true, \"transition_type\": \"scene_entry\", \"before_anchor\": {\"scene_id\": \"frontier_gate\", \"location_id\": null, \"location_label\": \"frontier_gate\", \"",
+      "truncated": true,
+      "characters": 32741,
+      "sha256": "1708cac42040a281104c3a2b206eb0111c77d6dad5af77f6a4844a9daee4d3ad"
+    }
+  },
+  {
+    "path": "/session.json/_runtime_progression_nodes_fingerprint_v1",
+    "before": null,
+    "after": {
+      "faction_agenda:ash_cowl": "active|1|10",
+      "faction_agenda:house_verevin": "active|1|10",
+      "faction_agenda:ordo_pyric": "active|1|10",
+      "faction_pressure:ash_cowl": "active|3|10",
+      "faction_pressure:house_verevin": "active|3|10",
+      "faction_pressure:ordo_pyric": "active|2|10"
+    }
+  },
+  {
+    "path": "/session.json/bounded_improvisation",
+    "before": null,
+    "after": {
+      "version": 1,
+      "entries": [],
+      "rejected": []
+    }
+  },
+  {
+    "path": "/session.json/campaign_started",
+    "before": false,
+    "after": true
+  },
+  {
+    "path": "/session.json/chat_history",
+    "before": [],
+    "after": null
+  },
+  {
+    "path": "/session.json/clocks/time_pressure",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "path": "/session.json/conversational_context",
+    "before": null,
+    "after": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "",
+          "delivered_text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. A tavern runner shouts offers of hot stew and paid rumor. A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 1,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "3a7fe3f55d6e48c5e2ed4f4894aa019f1cd1989b76f8331acc32280be6af2e10",
+          "authorization_source": "initial_generation",
+          "adoption_turn_identity": "rc_dd89a2b89c62"
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "RESOLVED",
+        "owner": "GM",
+        "purpose": "ACTION_RESULT",
+        "subject": "",
+        "response": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. A tavern runner shouts offers of hot stew and paid rumor. A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+        "refusal_reason": null,
+        "scene_id": "frontier_gate",
+        "operation": "scene_opening"
+      }
+    }
+  },
+  {
+    "path": "/session.json/discourse_focus",
+    "before": null,
+    "after": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 1,
+      "last_committed_contract_id": "rc_dd89a2b89c62"
+    }
+  },
+  {
+    "path": "/session.json/emergent_actor_debug",
+    "before": null,
+    "after": {
+      "emergent_actor_enrolled": false,
+      "emergent_actor_id": null,
+      "emergent_actor_source_text": null
+    }
+  },
+  {
+    "path": "/session.json/interpretation_telemetry",
+    "before": null,
+    "after": {
+      "fast_path_success": 1,
+      "fast_path_abstention": 0,
+      "model_interpreter_invoked": 0,
+      "proposal_accepted": 0,
+      "proposal_rejected": 0,
+      "clarification_after_model": 0,
+      "interpretation_api_calls": 0
+    }
+  },
+  {
+    "path": "/session.json/last_action_debug",
+    "before": null,
+    "after": {
+      "last_action_type": "start_campaign",
+      "player_input": "",
+      "normalized_action": {
+        "id": "campaign_start_opening_scene",
+        "label": "start_campaign",
+        "type": "scene_opening",
+        "prompt": "",
+        "targetSceneId": "frontier_gate",
+        "target_scene_id": "frontier_gate"
+      },
+      "resolution_kind": "scene_opening",
+      "target_scene": null,
+      "resolver_result": {
+        "kind": "scene_opening",
+        "action_id": "campaign_start_opening_scene",
+        "label": "start_campaign",
+        "prompt": "",
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": "frontier_gate",
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {
+          "opening_scene_turn": true,
+          "arrived_at_scene": true,
+          "new_scene_context_available": true
+        },
+        "hint": "Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.",
+        "world_tick_events": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          }
+        ]
+      },
+      "scene_transition": null,
+      "narration_state_mismatch_detected": false,
+      "mismatch_kind": "",
+      "mismatch_repair_applied": "none",
+      "mismatch_repairs_applied": [],
+      "response_type_contract": {
+        "required_response_type": "scene_opening",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "scene_opening_requires_opening_response",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "emergent_actor_enrolled": false,
+      "emergent_actor_id": null,
+      "emergent_actor_source_text": null
+    }
+  },
+  {
+    "path": "/session.json/last_bounded_improvisation_promotion",
+    "before": null,
+    "after": {
+      "promoted_count": 0,
+      "rejected_count": 0,
+      "accepted_count": 0,
+      "promoted_ids": []
+    }
+  },
+  {
+    "path": "/session.json/last_turn_response_policy",
+    "before": null,
+    "after": {
+      "preview": "{\"rule_priority_order\": [\"ANSWER THE PLAYER\", \"DO NOT CONTRADICT AUTHORITATIVE STATE\", \"DO NOT LEAK HIDDEN FACTS / SECRETS\", \"DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT\", \"PRESERVE PLAYER AGENCY \\u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS\", \"IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER\", \"WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING\", \"KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY\", \"MAINTAIN DIEGETIC VOICE (no validator/system voice)\", \"KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING\", \"PRESERVE SCENE MOMENTUM\", \"ADD SPECIFICITY / FLAVOR / POLISH\"], \"must_answer\": true, \"forbid_state_invention\": true, \"forbid_secret_leak\": true, \"allow_partial_answer\": true, \"response_delta\": {\"enabled\": false, \"delta_required\": false, \"delta_must_come_early\": false, \"trigger_source\": \"none\", \"topic_tokens\": [], \"press_depth\": 0, \"previous_player_input\": null, \"previous_answer_snippet\": null, \"overlap_ratio\": null, \"allowed_delta_kinds\": [], \"forbid_semantic_restatement\": false, \"forbid_repackaged_nonanswer\": false, \"allow_short_bridge_before_delta\": false, \"require_delta_when_answer_required\": false, \"expected_delta_shape\": \"none\", \"trace\": {\"question_detected_from_player_text\": false, \"follow_up_pressure_detected\": false, \"follow_up_press_depth\": 0, \"follow_up_overlap_ratio\": null, \"prior_answer_available\": false, \"answer_completeness_required\": false, \"social_lock\": false, \"active_target_id\": null, \"answer_pressure_followup_detected\": false, \"strict_social_answer_seek_override\": false, \"same_interlocutor_followup\": false, \"answer_pressure_suppressed_because\": [\"empty_player_input\"], \"answer_pressure_family\": null, \"answer_pressure_anchor_kind\": null, \"contradiction_followup_detected\": false, \"explanation_followup_detected\": false, \"insufficiency_followup_detected\": false, \"short_followup_anchor_detected\": false, ",
+      "truncated": true,
+      "characters": 21241,
+      "sha256": "22c430362512a83ec0fcc071a04c5e2bca3b9f31115c2e278aa8326245932378"
+    }
+  },
+  {
+    "path": "/session.json/narration_temporal_provenance",
+    "before": null,
+    "after": {
+      "version": 1,
+      "gm_inferences": [],
+      "player_hypotheses": [],
+      "accepted_incidentals": [],
+      "rejected_consequential": []
+    }
+  },
+  {
+    "path": "/session.json/scene_runtime/frontier_gate/last_exploration_action_key",
+    "before": null,
+    "after": "campaign_start_opening_scene"
+  },
+  {
+    "path": "/session.json/scene_runtime/frontier_gate/last_player_action_passive",
+    "before": null,
+    "after": false
+  },
+  {
+    "path": "/session.json/scene_runtime/frontier_gate/last_player_action_text",
+    "before": null,
+    "after": ""
+  },
+  {
+    "path": "/session.json/scene_runtime/frontier_gate/last_resolution_kind",
+    "before": null,
+    "after": "scene_opening"
+  },
+  {
+    "path": "/session.json/scene_runtime/frontier_gate/momentum_exchanges_since",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "path": "/session.json/scene_runtime/frontier_gate/passive_action_streak",
+    "before": null,
+    "after": 0
+  },
+  {
+    "path": "/session.json/scene_runtime/frontier_gate/recent_contextual_leads",
+    "before": null,
+    "after": [
+      {
+        "key": "active_event_refugees_wagons_and_foot_traffic_clog_the_muddy_approach_guards_hold_the_choke_while_the_crowd_presses_in",
+        "kind": "active_event",
+        "subject": "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 1
+      },
+      {
+        "key": "active_event_tavern_runner_shouts_offers_of_hot_stew_and_paid_rumor",
+        "kind": "active_event",
+        "subject": "tavern runner shouts offers of hot stew and paid rumor",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 1
+      },
+      {
+        "key": "active_event_well_appointed_townhouse_overlooking_the_square_flies_noble_colors_a_quiet_contrast_to_the_mud_and_clamor",
+        "kind": "active_event",
+        "subject": "well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 1
+      },
+      {
+        "key": "active_event_one_figure_in_threadbare_clothes_stands_uncannily_still_gaze_flicking_to",
+        "kind": "active_event",
+        "subject": "one figure in threadbare clothes stands uncannily still, gaze flicking to",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 1
+      },
+      {
+        "key": "notice_board_notice_board",
+        "kind": "notice_board",
+        "subject": "notice board",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 1
+      },
+      {
+        "key": "scene_npc_tavern_runner",
+        "kind": "scene_npc",
+        "subject": "Tavern Runner",
+        "position": "",
+        "named": true,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 1
+      }
+    ]
+  },
+  {
+    "path": "/session.json/scene_runtime/frontier_gate/recent_player_actions",
+    "before": null,
+    "after": [
+      {
+        "text": "",
+        "passive": false,
+        "markers": [],
+        "resolution_kind": null,
+        "turn": 1
+      }
+    ]
+  },
+  {
+    "path": "/session.json/scene_runtime/frontier_gate/repeated_action_count",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "path": "/session.json/turn_counter",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "path": "/session_log.jsonl",
+    "before": [],
+    "after": {
+      "preview": "[{\"timestamp\": \"2026-11-01T22:58:48.445983Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+      "truncated": true,
+      "characters": 127532,
+      "sha256": "0b15a4be2563a6bcddb744ceff514f762e10ec6873df6b511883766d8acb6242"
+    }
+  },
+  {
+    "path": "/world.json/event_log",
+    "before": [],
+    "after": [
+      {
+        "type": "faction_pressure",
+        "text": "House Verevin's pressure mounts.",
+        "source": "house_verevin"
+      },
+      {
+        "type": "faction_pressure",
+        "text": "The Ash Cowl's pressure mounts.",
+        "source": "ash_cowl"
+      }
+    ]
+  },
+  {
+    "path": "/world.json/factions",
+    "before": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "after": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 3,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 1,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 3,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 1,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 2,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 1,
+        "assets": []
+      }
+    ]
+  }
+]

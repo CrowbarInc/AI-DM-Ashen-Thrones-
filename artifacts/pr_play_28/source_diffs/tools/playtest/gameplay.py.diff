@@ -1,0 +1,11 @@
+--- before/tools/playtest/gameplay.py
++++ after/tools/playtest/gameplay.py
+@@ -229,7 +229,7 @@
+                          'step_id': action['step_id'], 'player_input': action['player_input'],
+                          'dm_response': text[:8192], 'diagnostics': f"turns/{action['step_id']}/evaluation.json#diagnostics",
+                          'state_comparison': f"turns/{action['step_id']}/evaluation.json#state_diff"})
+-    overlays = compare_overlays(before, after)
++    overlays = compare_overlays(before, after, ordinary_action=action, turn_response=body)
+     if not overlays['integrity']:
+         finding('unauthorized_overlay_mutation', 'confirmed_mechanical_failure', overlays,
+                 'Overlay mutation authority unresolved; fail closed')

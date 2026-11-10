@@ -1,0 +1,63 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "anchor",
+    "appearance",
+    "campaign_id",
+    "demeanor",
+    "name",
+    "role",
+    "scene_id",
+    "visibility"
+  ],
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "traveler",
+        "resident",
+        "merchant",
+        "bystander",
+        "laborer",
+        "patron"
+      ]
+    },
+    "scene_id": {
+      "type": "string"
+    },
+    "campaign_id": {
+      "type": "string"
+    },
+    "demeanor": {
+      "type": "string",
+      "enum": [
+        "reserved",
+        "friendly",
+        "tired",
+        "matter-of-fact"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "public"
+      ]
+    },
+    "appearance": {
+      "type": "string",
+      "enum": [
+        "plain wool coat",
+        "weathered cloak",
+        "simple linen clothes",
+        "patched work clothes"
+      ]
+    },
+    "anchor": {
+      "type": "integer"
+    }
+  }
+}

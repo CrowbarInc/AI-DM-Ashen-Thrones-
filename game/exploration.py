@@ -31,6 +31,76 @@ from game.scene_destination_binding import (
 EXPLORATION_KINDS = ("scene_transition", "travel", "observe", "investigate", "interact", "custom", "discover_clue", "already_searched")
 
 
+def _repeat_publication(metadata: Dict[str, Any] | None, valid_repeat: bool, player_text: str = "", *, recalled=()) -> Dict[str, Any]:
+    """A repeated search names the examined thing and the no-new result."""
+    import re
+
+    from game.publication_contract import KNOWN_REPEAT_LINE, stamp
+    from game.referenced_surface import extract_inspection_target
+
+    base = dict(metadata or {})
+    if valid_repeat:
+        base["action_outcome"] = "valid_no_new_information"
+    target = re.sub(r"\s+", " ", re.sub(r"\bagain$", "", extract_inspection_target(player_text) or "", flags=re.I)).strip(" ,.")
+    if target and not re.match(r"^(?:the|a|an)\b", target, re.I):
+        target = "the " + target
+    prior = "Previously disclosed here: " + " ".join(recalled) + " " if recalled else ""
+    line = (f"You examine {target} again. " if target else "") + prior + KNOWN_REPEAT_LINE
+    if recalled:
+        base["recalled_facts"] = list(recalled)
+    return stamp(base, "FINAL_ENGINE_RESPONSE", publication=line)
+
+
+def _source_disclosed_facts(scene, session, interactable):
+    """Read only explicit knowledge bound to this still-present, unchanged source.
+
+    The catalog verifies validity; it never supplies publication text. Legacy
+    records require both the same scene and exact disclosed text/identity.
+    Ambiguous, inferred, invalidated or modified records are omitted.
+    """
+    cid = interactable.get("reveals_clue")
+    knowledge = session.get("clue_knowledge") or {}
+    entry = knowledge.get(cid) if isinstance(knowledge, dict) else None
+    if not isinstance(entry, dict):
+        return ()
+    if (entry.get("state") != "discovered" or entry.get("presentation") not in {"explicit", "actionable"}
+            or entry.get("source_scene") != scene.get("id")
+            or entry.get("valid") is False or entry.get("stale") or entry.get("superseded_by")):
+        return ()
+    source = entry.get("source_interactable")
+    if source and source != interactable.get("id"):
+        return ()
+    # A historical record without object provenance is usable only if the
+    # current authored binding is unique. Never dump global player knowledge.
+    matches = [i for i in scene.get("interactables") or []
+               if isinstance(i, dict) and i.get("reveals_clue") == cid]
+    if not source and len(matches) != 1:
+        return ()
+    text = entry.get("text")
+    current = [c for c in scene.get("discoverable_clues") or []
+               if isinstance(c, dict) and c.get("id") == cid]
+    if (not isinstance(text, str) or not text.strip() or len(current) != 1
+            or current[0].get("text") != text or current[0].get("valid") is False
+            or current[0].get("stale") or current[0].get("superseded_by")):
+        return ()
+    return (text.strip(),)
+
+
+def _accessible_repeat(scene, world, session, target_id):
+    """An enrolled, still-visible examination can complete without discovery.
+
+    Called only after the resolver has established an already-searched target.
+    Keep the legacy success contract outside the initiative experiment.
+    """
+    import os
+    from game.authored_consequences import enabled_for_session
+    from game.player_interpretation_bridge import visible_catalog
+    return (os.environ.get("ASHEN_EXPERIMENTAL_PLAYER_INITIATIVE") == "1"
+            and enabled_for_session(session)
+            and visible_catalog({"scene": scene}, world).get(target_id, {}).get("kind")
+            in {"inspect_target", "perceive_target"})
+
+
 def _norm_hidden_fact_lines(values: Any) -> List[str]:
     if not isinstance(values, list):
         return []
@@ -117,6 +187,7 @@ def _build_skill_check_context(
     scene_id = str(scene.get("id") or "").strip()
     scene_runtime = get_scene_runtime(session, scene_id) if scene_id else {}
     action_id = str(normalized_action.get("id") or "").strip() or "action"
+
     character_id = (character or {}).get("id", "")
     turn_counter = session.get("turn_counter", 0)
     return {
@@ -221,6 +292,32 @@ def resolve_exploration_action(
     if target_scene_id is not None:
         target_scene_id = str(target_scene_id).strip() or None
     action_id = str(normalized_action.get("id") or "").strip() or "action"
+
+    from game.authored_consequences import resolve as resolve_consequence
+    consequence = resolve_consequence(scene, session, world, normalized_action)
+    if consequence is not None:
+        return consequence
+
+    action_meta = normalized_action.get("metadata") if isinstance(normalized_action.get("metadata"), dict) else {}
+    if action_meta.get('controlled_world_fact'):
+        from game.bounded_improvisation import resolve_controlled_fact
+        controlled = resolve_controlled_fact(scene_envelope, session, world, normalized_action,
+                                             prompt=prompt, action_id=action_id, label=label)
+        if controlled is not None:
+            return controlled
+            return ExplorationEngineResult(kind='observe', action_id=action_id, label=label, prompt=prompt,
+            success=False, resolved_transition=False, target_scene_id=None, clue_id=None, discovered_clues=[], metadata={'engine_publication': 'That detail is not accessible. Nothing has been added.',
+            'publication_contract': 'UNSUPPORTED_ACTION', 'skip_primary_narration': True,
+            'skip_unrelated_clue_discovery': True}).to_dict()
+    if action_meta.get("general_purpose_family") in {"environmental_observation", "physical_search"}:
+        from game.general_purpose_actions import exploration_outcome
+        general = exploration_outcome(
+            scene_envelope, normalized_action, prompt=prompt, action_id=action_id, label=label,
+        )
+        if general is not None:
+            from game.general_purpose_actions import remember_general_resolution
+            remember_general_resolution(session, scene_envelope, prompt, general)
+            return general
 
     known_ids: List[str] = []
     if list_scene_ids is not None:
@@ -353,12 +450,13 @@ def resolve_exploration_action(
             if bound_by_classifier or (i_id_slug and i_id_slug in prompt_slug):
                 scene_id = scene.get("id") or ""
                 if scene_id and is_interactable_resolved(session, scene_id, i_id):
+                    valid_repeat = _accessible_repeat(scene, world, session, i_id)
                     result = ExplorationEngineResult(
                         kind="already_searched",
                         action_id=action_id,
                         label=label,
                         prompt=prompt,
-                        success=False,
+                        success=valid_repeat,
                         resolved_transition=False,
                         target_scene_id=None,
                         clue_id=None,
@@ -367,7 +465,8 @@ def resolve_exploration_action(
                         state_changes={"already_searched": True, "interactable_id": i_id},
                         hint=f"Player has already searched [{i_id}]. Narrate that they find nothing new.",
                         interactable_id=i_id,
-                        metadata=dict(classified_meta),
+                        metadata=_repeat_publication(classified_meta, valid_repeat, raw_player_text or prompt,
+                            recalled=_source_disclosed_facts(scene, session, i)),
                     )
                     return result.to_dict()
                 # Skill check authority: engine decides when to roll
@@ -468,12 +567,13 @@ def resolve_exploration_action(
         classified_authority = str(classified.get("authority") or "")
         scene_id = scene.get("id") or ""
         if scene_id and is_target_searched(session, scene_id, action_id):
+            valid_repeat = _accessible_repeat(scene, world, session, action_id)
             result = ExplorationEngineResult(
                 kind="already_searched",
                 action_id=action_id,
                 label=label,
                 prompt=prompt,
-                success=False,
+                success=valid_repeat,
                 resolved_transition=False,
                 target_scene_id=None,
                 clue_id=None,
@@ -481,7 +581,7 @@ def resolve_exploration_action(
                 world_updates=None,
                 state_changes={"already_searched": True},
                 hint="Player has already searched this. Narrate that they find nothing new.",
-                metadata=dict(classified_meta),
+                metadata=_repeat_publication(classified_meta, valid_repeat, raw_player_text or prompt),
             )
             return result.to_dict()
         if classified_authority in {
@@ -544,7 +644,7 @@ def resolve_exploration_action(
                 world_updates=None,
                 state_changes={"already_searched": True},
                 hint="Player has already searched this. Narrate that they find nothing new.",
-                metadata={},
+                metadata=_repeat_publication({}, False, raw_player_text or prompt),
             )
             return result.to_dict()
 
@@ -706,6 +806,10 @@ def resolve_exploration_action(
         transition_candidate=transition_candidate,
     )
 
+    # These keys belong exclusively to the server-authored consequence resolver.
+    # Transition metadata otherwise preserves legacy client fields.
+    res_metadata.pop('authored_consequence', None)
+    res_metadata.pop('trusted_text', None)
     result = ExplorationEngineResult(
         kind=action_type,
         action_id=action_id,

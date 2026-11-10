@@ -1,0 +1,212 @@
+{
+  "resolution": {
+    "kind": "conversational_answer",
+    "action_id": "conversational_answer",
+    "label": "I ask the tavern runner: \"I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets.\" How do they know that?",
+    "prompt": "I ask the tavern runner: \"I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets.\" How do they know that?",
+    "success": null,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "metadata": {
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "authoritative_mutation": false,
+      "resolver_invoked": false,
+      "gameplay_parser_invoked": false,
+      "narration_invoked": false,
+      "processing_outcome": "conversational_answer",
+      "conversational_decision": {
+        "category": "ANSWER",
+        "primary_intention": "I ask the tavern runner: \"I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets.\" How do they know that?",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [
+          "reply:1",
+          "reply:2"
+        ],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "EXPLANATION",
+        "authorization": null
+      },
+      "live_chat_interpretation": {
+        "status": "blocked",
+        "reason": "clarification_required",
+        "eligibility_disposition": "SAFE_ABSTENTION",
+        "model_communication_mode": "OTHER",
+        "interpretation_status": "INTERPRETED",
+        "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"EXPLANATION\",\"subject\":\"how the tavern runner knows about the inability to carry out the approach and ask actions\",\"evidence_refs\":[\"reply:1\",\"reply:2\"]},\"communication_mode\":\"OTHER\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask the GM how the tavern runner knows that the player cannot carry out the approach and ask actions.\"},\"asserted_premises\":[{\"text\":\"The GM has stated twice that it cannot carry out the approach and ask actions yet.\"}],\"requested_outcomes\":[{\"text\":\"An explanation of how the tavern runner would know about the player's inability to perform those actions.\"}],\"action_components\": [] ,\"references\":{\"permitted_entity_ids\":[\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+        "provider_requests": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "4f7d8cedc94a4a2a89c97b308ceb2b9c",
+            "attempt_id": "4e72eac2a79f48cc821c9cb0bb236490",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-11-01T18:09:03.661468+00:00",
+            "time": "2026-11-01T18:09:07.141162+00:00",
+            "sequence": 4,
+            "admission": "admitted",
+            "budget_remaining": 2,
+            "sdk_retries": 0,
+            "host_retries": "disabled",
+            "sent": true,
+            "request_id": "resp_0c921726233158a3006ae780418cac87d28a945cbe5bee410f",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2615,
+            "output_tokens": 184,
+            "total_tokens": 2799,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2631.724
+          }
+        ],
+        "record": {
+          "communication_mode": "OTHER",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Ask the GM how the tavern runner knows that the player cannot carry out the approach and ask actions."
+          },
+          "asserted_premises": [
+            {
+              "text": "The GM has stated twice that it cannot carry out the approach and ask actions yet.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "An explanation of how the tavern runner would know about the player's inability to perform those actions.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [],
+          "references": {
+            "permitted_entity_ids": [
+              "tavern_runner"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "EXPLANATION",
+            "subject": "how the tavern runner knows about the inability to carry out the approach and ask actions",
+            "evidence_refs": [
+              "reply:1",
+              "reply:2"
+            ]
+          },
+          "incidental_context": [],
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": ""
+          },
+          "public_evidence": {
+            "reply:1": "I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+            "reply:2": "I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet."
+          }
+        }
+      },
+      "stored_interpretation_bridge": null,
+      "provider_calls": {
+        "interpretation_requests": 1,
+        "narration_requests": 0,
+        "ooc_assistance_requests": 0,
+        "retries": 0
+      },
+      "performance": {
+        "elapsed_ms": 3521,
+        "interpretation_ms": null,
+        "resolution_ms": null,
+        "narration_ms": null,
+        "validation_ms": null,
+        "retry_ms": null,
+        "provider_call_count": 1,
+        "input_tokens": 2615,
+        "output_tokens": 184,
+        "retry_count": 0,
+        "retry_reason": null,
+        "disposition": "conversational_answer",
+        "successful": true,
+        "provider_narration_skipped": false
+      }
+    }
+  },
+  "accepted_response": {
+    "addressee": "player",
+    "adoption_status": "candidate_accepted",
+    "attempt": 0,
+    "authority_result": "accepted",
+    "authorization_provenance": {
+      "addressee": "player",
+      "authority_category": "host_operation",
+      "authorized_proposition": "",
+      "epistemic_status": "none",
+      "operation": "ask",
+      "policy_version": "pr-eg-r6-r1-r1",
+      "provenance_id": "2608602d877553f8",
+      "source_id": "",
+      "speaker_id": "",
+      "validation": "host_operation"
+    },
+    "authorization_source": "conversational_decision:communication_before_execution",
+    "candidate_disposition": "host_selected",
+    "canonical": false,
+    "contract": {
+      "contract_id": "",
+      "expected_resolution": "",
+      "interlocutor_id": "",
+      "operation": ""
+    },
+    "contract_satisfying": true,
+    "generation_attempts": 0,
+    "grounding_result": "not_a_replacement_trigger",
+    "hard_validation": {
+      "authority": [
+        "conversational_decision:communication_before_execution"
+      ],
+      "gm_resolution_decision_audit": null,
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": []
+    },
+    "immutable": true,
+    "interaction_completion": true,
+    "operation": "ask",
+    "player_input": "I ask the tavern runner: \"I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets.\" How do they know that?",
+    "provenance": "authorized_host_speech",
+    "resolution_kind": "conversational_answer",
+    "speaker": "GM",
+    "speaker_id": "",
+    "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+    "subject": "",
+    "target": "",
+    "text": "I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+    "turn_identity": "",
+    "integrity_digest": "2c0293f4c9034d78f7f05b362d6423fab1119edcc3d6610ae18e9a3d72743b6d"
+  }
+}

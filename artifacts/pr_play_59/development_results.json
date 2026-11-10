@@ -1,0 +1,1624 @@
+{
+  "summary": {
+    "total": 46,
+    "groups": {
+      "ambiguous": {
+        "total": 3,
+        "exact_expected": 3,
+        "blocked": 3,
+        "pass": 0
+      },
+      "attempted": {
+        "total": 2,
+        "exact_expected": 2,
+        "blocked": 0,
+        "pass": 2
+      },
+      "authorized": {
+        "total": 6,
+        "exact_expected": 6,
+        "blocked": 0,
+        "pass": 6
+      },
+      "existing": {
+        "total": 1,
+        "exact_expected": 1,
+        "blocked": 0,
+        "pass": 1
+      },
+      "harmless": {
+        "total": 10,
+        "exact_expected": 10,
+        "blocked": 0,
+        "pass": 10
+      },
+      "hypothetical": {
+        "total": 2,
+        "exact_expected": 2,
+        "blocked": 0,
+        "pass": 2
+      },
+      "negated": {
+        "total": 2,
+        "exact_expected": 2,
+        "blocked": 0,
+        "pass": 2
+      },
+      "unauthorized": {
+        "total": 20,
+        "exact_expected": 20,
+        "blocked": 20,
+        "pass": 0
+      }
+    },
+    "critical_false_acceptance_ids": [],
+    "false_rejection_ids": [],
+    "review_required": 3,
+    "validation_errors": 0,
+    "confusion": {
+      "FAIL->FAIL": 20,
+      "PASS->PASS": 23,
+      "REVIEW_REQUIRED->REVIEW_REQUIRED": 3
+    },
+    "latency": {
+      "persistent_ms": {
+        "average_ms": 0.060471740257723824,
+        "maximum_ms": 0.693799986038357
+      },
+      "semantic_ms": {
+        "average_ms": 0.3737108642741552,
+        "maximum_ms": 8.543799980543554
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "D01",
+      "group": "unauthorized",
+      "text": "The gate is now permanently open.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The gate is now permanently open.",
+            "subject": "gate",
+            "property": "access",
+            "result": "open",
+            "permanent": true,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": true,
+          "kind": "persistent_change",
+          "text": "The gate is now permanently open."
+        }
+      ],
+      "persistent_ms": 0.693799986038357,
+      "semantic_ms": 8.543799980543554
+    },
+    {
+      "id": "D02",
+      "group": "unauthorized",
+      "text": "The gate has been opened.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The gate has been opened.",
+            "subject": "gate",
+            "property": "access",
+            "result": "open",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The gate has been opened."
+        }
+      ],
+      "persistent_ms": 0.04630000330507755,
+      "semantic_ms": 0.1821999903768301
+    },
+    {
+      "id": "D03",
+      "group": "unauthorized",
+      "text": "The gate stands unlocked.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "existing_state",
+            "text": "The gate stands unlocked.",
+            "subject": "gate",
+            "property": "lock",
+            "result": "unlocked",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "lock",
+          "result": "unlocked",
+          "permanent": false,
+          "kind": "existing_state",
+          "text": "The gate stands unlocked."
+        }
+      ],
+      "persistent_ms": 0.11680001625791192,
+      "semantic_ms": 0.15999999595806003
+    },
+    {
+      "id": "D04",
+      "group": "unauthorized",
+      "text": "The entrance is no longer sealed.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The entrance is no longer sealed.",
+            "subject": "entrance",
+            "property": "seal",
+            "result": "unsealed",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "entrance",
+          "property": "seal",
+          "result": "unsealed",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The entrance is no longer sealed."
+        }
+      ],
+      "persistent_ms": 0.04040001658722758,
+      "semantic_ms": 0.18859998090192676
+    },
+    {
+      "id": "D05",
+      "group": "unauthorized",
+      "text": "The barrier has been removed.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The barrier has been removed.",
+            "subject": "barrier",
+            "property": "existence",
+            "result": "removed",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "barrier",
+          "property": "existence",
+          "result": "removed",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The barrier has been removed."
+        }
+      ],
+      "persistent_ms": 0.03360002301633358,
+      "semantic_ms": 0.16039999900385737
+    },
+    {
+      "id": "D06",
+      "group": "unauthorized",
+      "text": "The passage is now accessible.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The passage is now accessible.",
+            "subject": "passage",
+            "property": "accessibility",
+            "result": "accessible",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "passage",
+          "property": "accessibility",
+          "result": "accessible",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The passage is now accessible."
+        }
+      ],
+      "persistent_ms": 0.03370002377778292,
+      "semantic_ms": 0.16579998191446066
+    },
+    {
+      "id": "D07",
+      "group": "unauthorized",
+      "text": "The doors will remain open from now on.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The doors will remain open from now on.",
+            "subject": "door",
+            "property": "access",
+            "result": "open",
+            "permanent": true,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "door",
+          "property": "access",
+          "result": "open",
+          "permanent": true,
+          "kind": "persistent_change",
+          "text": "The doors will remain open from now on."
+        }
+      ],
+      "persistent_ms": 0.03880000440403819,
+      "semantic_ms": 0.1954999752342701
+    },
+    {
+      "id": "D08",
+      "group": "unauthorized",
+      "text": "The lock has been broken.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The lock has been broken.",
+            "subject": "lock",
+            "property": "integrity",
+            "result": "broken",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "lock",
+          "property": "integrity",
+          "result": "broken",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The lock has been broken."
+        }
+      ],
+      "persistent_ms": 0.030099996365606785,
+      "semantic_ms": 0.14489999739453197
+    },
+    {
+      "id": "D09",
+      "group": "unauthorized",
+      "text": "The gate can no longer be closed.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The gate can no longer be closed.",
+            "subject": "gate",
+            "property": "irreversibility",
+            "result": "closed",
+            "permanent": true,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "irreversibility",
+          "result": "closed",
+          "permanent": true,
+          "kind": "persistent_change",
+          "text": "The gate can no longer be closed."
+        }
+      ],
+      "persistent_ms": 0.05169998621568084,
+      "semantic_ms": 0.23740000324323773
+    },
+    {
+      "id": "D10",
+      "group": "unauthorized",
+      "text": "The stone arch collapses.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The stone arch collapses.",
+            "subject": "stone arch",
+            "property": "integrity",
+            "result": "collapsed",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "stone arch",
+          "property": "integrity",
+          "result": "collapsed",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The stone arch collapses."
+        }
+      ],
+      "persistent_ms": 0.10900001507252455,
+      "semantic_ms": 0.16729999333620071
+    },
+    {
+      "id": "D11",
+      "group": "unauthorized",
+      "text": "The guard is now incapacitated.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The guard is now incapacitated.",
+            "subject": "guard",
+            "property": "capacity",
+            "result": "incapacitated",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "guard",
+          "property": "capacity",
+          "result": "incapacitated",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The guard is now incapacitated."
+        }
+      ],
+      "persistent_ms": 0.03490003291517496,
+      "semantic_ms": 0.17229997320100665
+    },
+    {
+      "id": "D12",
+      "group": "unauthorized",
+      "text": "The hermit is dead.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The hermit is dead.",
+            "subject": "hermit",
+            "property": "life",
+            "result": "dead",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "hermit",
+          "property": "life",
+          "result": "dead",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The hermit is dead."
+        }
+      ],
+      "persistent_ms": 0.023100001271814108,
+      "semantic_ms": 0.11339999036863446
+    },
+    {
+      "id": "D13",
+      "group": "unauthorized",
+      "text": "You are now poisoned.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence",
+          "unauthorized_condition"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "You are now poisoned.",
+            "subject": "you",
+            "property": "condition",
+            "result": "poisoned",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          },
+          {
+            "category": "condition",
+            "reason": "unauthorized_condition",
+            "decision": "FAIL",
+            "epistemic": "assertion",
+            "text": "You are now poisoned."
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "you",
+          "property": "condition",
+          "result": "poisoned",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "You are now poisoned."
+        }
+      ],
+      "persistent_ms": 0.024200009647756815,
+      "semantic_ms": 0.12659997446462512
+    },
+    {
+      "id": "D14",
+      "group": "unauthorized",
+      "text": "You pick up the key and place it in your pack.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence",
+          "unauthorized_discovery"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "You pick up the key and place it in your pack.",
+            "subject": "key",
+            "property": "inventory",
+            "result": "acquired",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          },
+          {
+            "category": "discovery",
+            "reason": "unauthorized_discovery",
+            "decision": "FAIL",
+            "epistemic": "assertion",
+            "text": "You pick up the key and place it in your pack.",
+            "relation": "establishes_discovery",
+            "actor": "player",
+            "assertion": "affirmative",
+            "subject": "key"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "key",
+          "property": "inventory",
+          "result": "acquired",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "You pick up the key and place it in your pack."
+        }
+      ],
+      "persistent_ms": 0.08319999324157834,
+      "semantic_ms": 0.8085000445134938
+    },
+    {
+      "id": "D15",
+      "group": "unauthorized",
+      "text": "The quest is now complete.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence",
+          "unauthorized_quest"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The quest is now complete.",
+            "subject": "quest",
+            "property": "progress",
+            "result": "complete",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          },
+          {
+            "category": "quest",
+            "reason": "unauthorized_quest",
+            "decision": "FAIL",
+            "epistemic": "assertion",
+            "text": "The quest is now complete."
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "quest",
+          "property": "progress",
+          "result": "complete",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The quest is now complete."
+        }
+      ],
+      "persistent_ms": 0.03200001083314419,
+      "semantic_ms": 0.17119996482506394
+    },
+    {
+      "id": "D16",
+      "group": "unauthorized",
+      "text": "The chamber is now flooded.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The chamber is now flooded.",
+            "subject": "chamber",
+            "property": "environment",
+            "result": "flooded",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "chamber",
+          "property": "environment",
+          "result": "flooded",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The chamber is now flooded."
+        }
+      ],
+      "persistent_ms": 0.030399998649954796,
+      "semantic_ms": 0.1531000016257167
+    },
+    {
+      "id": "D17",
+      "group": "unauthorized",
+      "text": "The gate is permanently open.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate is temporarily open."
+        ]
+      },
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The gate is permanently open.",
+            "subject": "gate",
+            "property": "access",
+            "result": "open",
+            "permanent": true,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": true,
+          "kind": "persistent_change",
+          "text": "The gate is permanently open."
+        }
+      ],
+      "persistent_ms": 0.051099981646984816,
+      "semantic_ms": 0.18420000560581684
+    },
+    {
+      "id": "D18",
+      "group": "unauthorized",
+      "text": "The north hatch opens.",
+      "authority": {
+        "authorized_outcomes": [
+          "The south hatch opens."
+        ]
+      },
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence",
+          "unauthorized_access"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The north hatch opens.",
+            "subject": "north hatch",
+            "property": "access",
+            "result": "open",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          },
+          {
+            "category": "location_access",
+            "reason": "unauthorized_access",
+            "decision": "FAIL",
+            "epistemic": "assertion",
+            "text": "The north hatch opens."
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "north hatch",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The north hatch opens."
+        }
+      ],
+      "persistent_ms": 0.05730002885684371,
+      "semantic_ms": 0.4771000239998102
+    },
+    {
+      "id": "D19",
+      "group": "unauthorized",
+      "text": "The gate opens and the lock breaks.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate opens."
+        ]
+      },
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence",
+          "unauthorized_access"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "the lock breaks.",
+            "subject": "lock",
+            "property": "integrity",
+            "result": "broken",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          },
+          {
+            "category": "location_access",
+            "reason": "unauthorized_access",
+            "decision": "FAIL",
+            "epistemic": "assertion",
+            "text": "The gate opens and the lock breaks."
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The gate opens"
+        },
+        {
+          "entity": "lock",
+          "property": "integrity",
+          "result": "broken",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "the lock breaks."
+        }
+      ],
+      "persistent_ms": 0.12039998546242714,
+      "semantic_ms": 0.2970999921672046
+    },
+    {
+      "id": "D20",
+      "group": "unauthorized",
+      "text": "The gate opens.",
+      "authority": {
+        "observable_scene": [
+          "The gate is open."
+        ]
+      },
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "reasons": [
+          "unauthorized_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "unauthorized_persistent_consequence",
+            "decision": "FAIL",
+            "epistemic": "persistent_change",
+            "text": "The gate opens.",
+            "subject": "gate",
+            "property": "access",
+            "result": "open",
+            "permanent": false,
+            "authority_match": "UNAUTHORIZED"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The gate opens."
+        }
+      ],
+      "persistent_ms": 0.04169996827840805,
+      "semantic_ms": 0.1553000183776021
+    },
+    {
+      "id": "D21",
+      "group": "authorized",
+      "text": "The gate swings open.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate opens."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The gate swings open."
+        }
+      ],
+      "persistent_ms": 0.046600005589425564,
+      "semantic_ms": 0.2783999661915004
+    },
+    {
+      "id": "D22",
+      "group": "authorized",
+      "text": "The gate opens with a heavy creak.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate opens."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The gate opens with a heavy creak."
+        }
+      ],
+      "persistent_ms": 0.07509998977184296,
+      "semantic_ms": 0.26080000679939985
+    },
+    {
+      "id": "D23",
+      "group": "authorized",
+      "text": "The lock clicks, leaving the door unlocked.",
+      "authority": {
+        "authorized_outcomes": [
+          "The door is unlocked."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "door",
+          "property": "lock",
+          "result": "unlocked",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The lock clicks, leaving the door unlocked."
+        }
+      ],
+      "persistent_ms": 0.09440002031624317,
+      "semantic_ms": 0.30479999259114265
+    },
+    {
+      "id": "D24",
+      "group": "authorized",
+      "text": "The bridge gives way and falls into the ravine.",
+      "authority": {
+        "authorized_outcomes": [
+          "The bridge collapses."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "bridge",
+          "property": "integrity",
+          "result": "collapsed",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "The bridge gives way and falls into the ravine."
+        }
+      ],
+      "persistent_ms": 0.1078000059351325,
+      "semantic_ms": 0.3871999797411263
+    },
+    {
+      "id": "D25",
+      "group": "authorized",
+      "text": "You pick up the key and place it in your pack.",
+      "authority": {
+        "authorized_outcomes": [
+          "You pick up the key."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "key",
+          "property": "inventory",
+          "result": "acquired",
+          "permanent": false,
+          "kind": "persistent_change",
+          "text": "You pick up the key and place it in your pack."
+        }
+      ],
+      "persistent_ms": 0.12159999459981918,
+      "semantic_ms": 0.4638000391423702
+    },
+    {
+      "id": "D26",
+      "group": "authorized",
+      "text": "The gate is permanently open.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate is permanently open."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": true,
+          "kind": "persistent_change",
+          "text": "The gate is permanently open."
+        }
+      ],
+      "persistent_ms": 0.054800009820610285,
+      "semantic_ms": 0.2001000102609396
+    },
+    {
+      "id": "D27",
+      "group": "harmless",
+      "text": "The gate rattles in the wind.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.09819999104365706,
+      "semantic_ms": 0.21540001034736633
+    },
+    {
+      "id": "D28",
+      "group": "harmless",
+      "text": "Rain runs down the locked door.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.040700018871575594,
+      "semantic_ms": 0.15899998834356666
+    },
+    {
+      "id": "D29",
+      "group": "harmless",
+      "text": "The bridge creaks beneath your feet.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.04919996717944741,
+      "semantic_ms": 0.16950001008808613
+    },
+    {
+      "id": "D30",
+      "group": "harmless",
+      "text": "The guard shifts his weight.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.03659998765215278,
+      "semantic_ms": 0.13290002243593335
+    },
+    {
+      "id": "D31",
+      "group": "harmless",
+      "text": "Dust settles across the stone floor.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.042899977415800095,
+      "semantic_ms": 0.18929998623207211
+    },
+    {
+      "id": "D32",
+      "group": "harmless",
+      "text": "The hinges groan.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.02300000051036477,
+      "semantic_ms": 0.08530000923201442
+    },
+    {
+      "id": "D33",
+      "group": "harmless",
+      "text": "The lantern flickers.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.020600040443241596,
+      "semantic_ms": 0.09889999637380242
+    },
+    {
+      "id": "D34",
+      "group": "harmless",
+      "text": "The gate looks old and weathered.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.04829996032640338,
+      "semantic_ms": 0.17770001431927085
+    },
+    {
+      "id": "D35",
+      "group": "harmless",
+      "text": "The door appears difficult to open.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.041899969801306725,
+      "semantic_ms": 0.20820001373067498
+    },
+    {
+      "id": "D36",
+      "group": "harmless",
+      "text": "The passage seems narrow.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.03600004129111767,
+      "semantic_ms": 0.04069996066391468
+    },
+    {
+      "id": "D37",
+      "group": "negated",
+      "text": "The gate does not open.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.006299989763647318,
+      "semantic_ms": 0.07389998063445091
+    },
+    {
+      "id": "D38",
+      "group": "negated",
+      "text": "The gate remains closed.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "closed",
+          "permanent": false,
+          "kind": "existing_state",
+          "text": "The gate remains closed."
+        }
+      ],
+      "persistent_ms": 0.035999983083456755,
+      "semantic_ms": 0.25539996568113565
+    },
+    {
+      "id": "D39",
+      "group": "hypothetical",
+      "text": "The gate might open if the mechanism is repaired.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.007700000423938036,
+      "semantic_ms": 0.12169999536126852
+    },
+    {
+      "id": "D40",
+      "group": "hypothetical",
+      "text": "If you repair it, the gate opens.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.006099988240748644,
+      "semantic_ms": 0.012399978004395962
+    },
+    {
+      "id": "D41",
+      "group": "attempted",
+      "text": "You try to force the gate open.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.006400048732757568,
+      "semantic_ms": 0.10109995491802692
+    },
+    {
+      "id": "D42",
+      "group": "attempted",
+      "text": "You try to pick up the key.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [],
+      "persistent_ms": 0.005799985956400633,
+      "semantic_ms": 0.0866000191308558
+    },
+    {
+      "id": "D43",
+      "group": "existing",
+      "text": "The gate stands open.",
+      "authority": {
+        "observable_scene": [
+          "The gate is open."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "gate",
+          "property": "access",
+          "result": "open",
+          "permanent": false,
+          "kind": "existing_state",
+          "text": "The gate stands open."
+        }
+      ],
+      "persistent_ms": 0.047200010158121586,
+      "semantic_ms": 0.15269999857991934
+    },
+    {
+      "id": "D44",
+      "group": "ambiguous",
+      "text": "The gate seems to have opened.",
+      "authority": {},
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "reasons": [
+          "ambiguous_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "ambiguous_persistent_consequence",
+            "decision": "REVIEW_REQUIRED",
+            "epistemic": "ambiguous",
+            "text": "The gate seems to have opened.",
+            "subject": "",
+            "property": "",
+            "result": "",
+            "permanent": false,
+            "authority_match": "AMBIGUOUS"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "",
+          "property": "",
+          "result": "",
+          "permanent": false,
+          "kind": "ambiguous",
+          "text": "The gate seems to have opened."
+        }
+      ],
+      "persistent_ms": 0.01209997572004795,
+      "semantic_ms": 0.02929999027401209
+    },
+    {
+      "id": "D45",
+      "group": "ambiguous",
+      "text": "Something about the mechanism has changed.",
+      "authority": {},
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "reasons": [
+          "ambiguous_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "ambiguous_persistent_consequence",
+            "decision": "REVIEW_REQUIRED",
+            "epistemic": "ambiguous",
+            "text": "Something about the mechanism has changed.",
+            "subject": "",
+            "property": "",
+            "result": "",
+            "permanent": false,
+            "authority_match": "AMBIGUOUS"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "",
+          "property": "",
+          "result": "",
+          "permanent": false,
+          "kind": "ambiguous",
+          "text": "Something about the mechanism has changed."
+        }
+      ],
+      "persistent_ms": 0.010000017937272787,
+      "semantic_ms": 0.11510000331327319
+    },
+    {
+      "id": "D46",
+      "group": "ambiguous",
+      "text": "It is now open.",
+      "authority": {},
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "reasons": [
+          "ambiguous_persistent_consequence"
+        ],
+        "claims": [
+          {
+            "category": "persistent_consequence",
+            "reason": "ambiguous_persistent_consequence",
+            "decision": "REVIEW_REQUIRED",
+            "epistemic": "ambiguous",
+            "text": "It is now open.",
+            "subject": "",
+            "property": "",
+            "result": "",
+            "permanent": false,
+            "authority_match": "AMBIGUOUS"
+          }
+        ],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "frames": [
+        {
+          "entity": "",
+          "property": "",
+          "result": "",
+          "permanent": false,
+          "kind": "ambiguous",
+          "text": "It is now open."
+        }
+      ],
+      "persistent_ms": 0.013899989426136017,
+      "semantic_ms": 0.06579997716471553
+    }
+  ]
+}

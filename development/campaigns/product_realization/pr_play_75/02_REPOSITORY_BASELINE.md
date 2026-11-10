@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 02 REPOSITORY BASELINE
+
+Branch: `feature/product-realization`. Revision: `d40f1ed198236c604085f1c842ead267a8104ce2`. Extensive dirty/untracked state predates this task. `baseline.json` records entry status; `source_before/` retains entry bytes. `source_task.diff` separates this task from pre-existing edits. Runtime changes: game/api.py, game/bounded_improvisation.py, game/dialogue_authority.py, game/expressive_dialogue.py. New tests: test_pr_play_75_dynamic_npcs.py and test_pr_play_75_persistence.py. Also changed NEXT_SESSION and generated this cycle evidence/review exports. PR74 tests, frozen files and protected data were not edited.

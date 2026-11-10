@@ -1,0 +1,260 @@
+{
+  "campaign": {
+    "campaign_id": "pr_play_66",
+    "run_count": 2,
+    "turn_count": 2,
+    "gm_boundary": "Exact historical HTTP before/after replay using saved provider candidate; separate five-action TCP sequence, zero live-provider calls. Full-body hidden leak forces C FAIL."
+  },
+  "evidence_scope": "runtime_and_semantic_behavioral_evidence",
+  "official_ATGB": false,
+  "examples": [
+    {
+      "campaign": "pr_play_66",
+      "scenario_id": "historical_milestone",
+      "turn_index": 5,
+      "player_input": "I examine the weathered milestone.",
+      "input_classification": "runtime_discovered",
+      "simulated_player_rationale": "Exact historical defect replay",
+      "prior_context": "Existing authored patrol-rumor exit moved to old_milestone; captured pre-action state retained.",
+      "gm_player_facing_output": "I cannot provide a validated response to that request.",
+      "original_semantic_result": "mandatory_omission",
+      "mandatory_gates": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "uncertainty_facets": [
+                "direction",
+                "number",
+                "origin"
+              ]
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        },
+        "composition_reason": "optional_disclosure_overlap"
+      },
+      "diagnostic_result": {},
+      "runtime_validity": true,
+      "final_emission_metadata": null,
+      "continuation": "Baseline reproduction stopped before repair",
+      "source_artifact": "artifacts/pr_play_66/baseline_reproduction.json",
+      "human_review_status": "not_human_reviewed",
+      "evidence_label": "representative_failure",
+      "evaluator_disagreement": {
+        "present": false,
+        "rationale": "Frozen holdout audit documented separately."
+      },
+      "example_id": "representative_failure",
+      "player_input_classification": [
+        "runtime_discovered"
+      ],
+      "exact_gm_output": "I cannot provide a validated response to that request.",
+      "semantic_result": "mandatory_omission",
+      "human_review": {
+        "status": "not_human_reviewed",
+        "rationale": "Inspect exact response and source trace."
+      },
+      "source_artifact_path": "artifacts/pr_play_66/baseline_reproduction.json"
+    },
+    {
+      "campaign": "pr_play_66",
+      "scenario_id": "historical_milestone",
+      "turn_index": 5,
+      "player_input": "I examine the weathered milestone.",
+      "input_classification": "runtime_discovered",
+      "simulated_player_rationale": "Exact historical defect replay",
+      "prior_context": "Existing authored patrol-rumor exit moved to old_milestone; captured pre-action state retained.",
+      "gm_player_facing_output": "You examine what is visible. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "original_semantic_result": "trusted_disclosure_published",
+      "mandatory_gates": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "uncertainty_facets": [
+                "direction",
+                "number",
+                "origin"
+              ]
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        },
+        "composition_reason": "optional_disclosure_overlap"
+      },
+      "diagnostic_result": {
+        "decision": "fallback",
+        "trusted_disclosure": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "mandatory_disclosures": [
+          "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        ],
+        "final_text": "You examine what is visible. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "invariant": "PASS",
+        "recovery_reason": null,
+        "server_constructed": true,
+        "client_received": "unknown"
+      },
+      "runtime_validity": true,
+      "final_emission_metadata": {
+        "decision": "fallback",
+        "trusted_disclosure": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "mandatory_disclosures": [
+          "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        ],
+        "final_text": "You examine what is visible. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "invariant": "PASS",
+        "recovery_reason": null,
+        "server_constructed": true,
+        "client_received": "unknown"
+      },
+      "continuation": "Two follow-ups completed in the separate five-action TCP sequence",
+      "source_artifact": "artifacts/pr_play_66/historical_after.json",
+      "human_review_status": "not_human_reviewed",
+      "evidence_label": "representative_success",
+      "evaluator_disagreement": {
+        "present": false,
+        "rationale": "Frozen holdout audit documented separately."
+      },
+      "example_id": "representative_success",
+      "player_input_classification": [
+        "runtime_discovered"
+      ],
+      "exact_gm_output": "You examine what is visible. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "semantic_result": "trusted_disclosure_published",
+      "human_review": {
+        "status": "not_human_reviewed",
+        "rationale": "Inspect exact response and source trace."
+      },
+      "source_artifact_path": "artifacts/pr_play_66/historical_after.json"
+    },
+    {
+      "example_id": "critical_hidden_payload",
+      "player_input": "I examine the weathered milestone.",
+      "player_input_classification": [
+        "runtime_discovered"
+      ],
+      "exact_gm_output": "Full response contains hidden payload values: [{\"path\": \"/session/gm_notes/0\", \"canary\": \"CANARY_GM_NOTE\", \"value\": \"CANARY_GM_NOTE\"}, {\"path\": \"/world/gm_only/motivation\", \"canary\": \"CANARY_NPC_MOTIVE\", \"value\": \"CANARY_NPC_MOTIVE\"}, {\"path\": \"/scene/scene/discoverable_clues/1/text\", \"canary\": \"CANARY_UNDISCOVERED_CLUE\", \"value\": \"CANARY_UNDISCOVERED_CLUE\"}, {\"path\": \"/scene/scene/gm_notes/0\", \"canary\": \"CANARY_GM_NOTE\", \"value\": \"CANARY_GM_NOTE\"}, {\"path\": \"/scene/scene/private_notes\", \"canary\": \"CANARY_NPC_MOTIVE\", \"value\": \"CANARY_NPC_MOTIVE\"}]",
+      "semantic_result": "FAIL_HIDDEN_INFORMATION_PUBLICATION",
+      "human_review": {
+        "status": "not_human_reviewed",
+        "rationale": "Offline exact payload key/value inspection; no human review claimed."
+      },
+      "source_artifact_path": "artifacts/pr_play_66/critical_incident.json",
+      "evaluator_disagreement": {
+        "present": true,
+        "rationale": "Narration-only hidden assertions passed while the full HTTP body leaked. This is an evaluation coverage gap."
+      }
+    }
+  ],
+  "selected_evidence": {
+    "representative_failure": {
+      "example_id": "representative_failure"
+    },
+    "representative_success": {
+      "example_id": "representative_success"
+    },
+    "unexpected_unclassified": {
+      "example_id": "critical_hidden_payload"
+    },
+    "evaluator_disagreement": {
+      "example_id": "critical_hidden_payload"
+    }
+  }
+}

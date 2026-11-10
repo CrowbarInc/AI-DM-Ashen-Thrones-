@@ -1,0 +1,48 @@
+{
+  "function": "game.player_interpretation_bridge.normalized_action_from_interpretation",
+  "result": [
+    {
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "type": "question",
+      "prompt": "What sort of rumors have you heard?",
+      "target_id": "tavern_runner",
+      "targetEntityId": "tavern_runner",
+      "metadata": {
+        "stored_interpretation": {
+          "operation": "ASK",
+          "target_ref": "tavern_runner",
+          "visible_surface_inspection": false,
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": "ASK"
+          }
+        },
+        "communication": {
+          "recipient": "NPC",
+          "purpose": "QUESTION",
+          "subject": "rumors heard",
+          "evidence_refs": [
+            "npc_latest_reply",
+            "visible:2",
+            "visible:4"
+          ]
+        },
+        "public_conversation_evidence": {
+          "npc_latest_reply": "Tavern Runner says, \"Well, I've got hot stew and rumors to share.\"",
+          "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point."
+        }
+      }
+    },
+    {
+      "source": "stored_interpretation",
+      "accepted": true,
+      "operation": "ASK",
+      "target_ref": "tavern_runner",
+      "engine_type": "question",
+      "visible_surface_inspection": false
+    }
+  ]
+}

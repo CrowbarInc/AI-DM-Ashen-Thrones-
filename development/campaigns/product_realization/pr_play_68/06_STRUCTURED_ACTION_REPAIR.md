@@ -1,0 +1,3 @@
+# STRUCTURED ACTION REPAIR
+
+Extract the existing chat publication block into _finalize_investigation_publication without changing its gate, recovery, or verification behavior. Invoke it for structured actions after authority saves and before append_log, using the exact fallback_user_text passed to the observation hook. Chat invokes the same helper at its existing boundary. Response/log text reflects final selection. No resolver, provider replay, persistence mutation, hidden metadata copy, retry or publication recursion is added. Deterministic resolver exceptions remain HTTP errors; unsupported action remains rejected. Flag-disabled/session-mismatch behavior is preserved.

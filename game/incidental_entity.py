@@ -300,6 +300,29 @@ def public_scene_text(scene: Mapping[str, Any] | None) -> str:
     return " ".join(parts)
 
 
+def public_evidence_units(scene: Mapping[str, Any] | None) -> list[str]:
+    """Public evidence pieces with structured facts kept whole.
+
+    Summary, location, and mode are prose and split on sentence punctuation.
+    Each visible, opening, or journal fact stays one piece even when it has
+    no terminal punctuation, so neighboring facts do not become one
+    relationship. A fact that names two people still names both of them.
+    """
+    body = _scene_body(scene)
+    units: list[str] = []
+    for key in ("summary", "location", "mode"):
+        text = _clean(body.get(key), limit=400)
+        if not text:
+            continue
+        pieces = [part.strip() for part in re.split(r"[.!?]+", text) if part.strip()]
+        units.extend(pieces or [text])
+    for key in ("visible_facts", "opening_seed_facts", "journal_seed_facts"):
+        values = body.get(key)
+        if isinstance(values, list):
+            units.extend(_clean(item, limit=400) for item in values if _clean(item, limit=400))
+    return units
+
+
 def scene_population(scene: Mapping[str, Any] | None) -> str:
     text = public_scene_text(scene)
     populated = bool(_POPULATED_RE.search(text))

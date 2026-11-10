@@ -1,0 +1,55 @@
+# Regression Results
+
+Milestone: `pr_play_object_instance_identity`. Date: 2026-11-09.
+
+Preservation: 143 passed / 0 failed / 0 errors / 0 skipped (143 tests) before and 143 passed / 0 failed / 0 errors / 0 skipped (143 tests) after. Combined: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests) before; 405 passed / 20 failed / 0 errors / 0 skipped (425 tests) after. New failing identities: []. Identity: 52 passed. Additional inventory/snapshot: 50 passed.
+
+Exact commands and arguments are in regression_results.json and *_command.json; invoke `.venv/Scripts/python.exe artifacts/pr_play_object_instance_identity/run_checks.py <mode>` for modes before_preservation, before_combined_retry, after_preservation, after_combined, final_identity_v2, after_inventory_snapshot. All use provider/network/data guards and cycle-specific --basetemp and --junitxml. Three closed-inspection HTTP reproductions are parametrized tests in the preservation and combined selections. T04 12, T05 15, pre-seal 17, T06 diagnostics 6 and physical/persistence/authority 93 form the 143 preservation slice.
+
+No collection errors/skips; zero live provider calls. New assertion diagnostics: none after normalizing process addresses, temporary run paths and random turn IDs. Failures and complete assertions retained in regression_results.json/JUnit. Known portal/stock-response/legacy public-resolution/pointer/KeyError failures remain outside this cycle. Full suite and live Gameplay Benchmark not run. Initial new identity run was 44/45, corrected only its missing-scene fixture; final 52/52.
+
+Known before identities:
+
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_unknown_player_named_object_is_not_instantiated
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_narration_only_object_does_not_gain_authority
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_then_observe_uses_current_scene
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_alias_binds
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_observe_stock_replacement_keeps_notice_board_working
+- tests/test_pr_play_39_action_admission.py::test_sequence_patrol_travel_reaches_the_movement_resolver
+- tests/test_pr_play_39_action_admission.py::test_sequence_unsupported_actions_invent_nothing
+- tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid
+- tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_whisper_does_not_create_one
+- tests/test_perception_narration_authority_audible_non_invention.py::test_http_empty_listen_complete_and_grounded
+- tests/test_perception_narration_authority_audible_non_invention.py::test_http_authorized_speech_can_survive
+- tests/test_pr_play_79df3_classification.py::test_duplicate_refusal_does_not_publish
+- tests/test_pr_play_79df3_classification.py::test_two_refusals_then_gameplay_advances
+- tests/test_pr_play_79df3_classification.py::test_save_reload_keeps_the_preceding_publication
+- tests/test_pr_play_79df3_classification.py::test_http_fallback_is_not_an_operational_refusal
+- tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context
+- tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop
+- tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload
+
+After identities:
+
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_unknown_player_named_object_is_not_instantiated
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_narration_only_object_does_not_gain_authority
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_then_observe_uses_current_scene
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_alias_binds
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock
+- tests/test_referenced_surface_grounding_inspection_resolution.py::test_observe_stock_replacement_keeps_notice_board_working
+- tests/test_pr_play_39_action_admission.py::test_sequence_patrol_travel_reaches_the_movement_resolver
+- tests/test_pr_play_39_action_admission.py::test_sequence_unsupported_actions_invent_nothing
+- tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid
+- tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_whisper_does_not_create_one
+- tests/test_perception_narration_authority_audible_non_invention.py::test_http_empty_listen_complete_and_grounded
+- tests/test_perception_narration_authority_audible_non_invention.py::test_http_authorized_speech_can_survive
+- tests/test_pr_play_79df3_classification.py::test_duplicate_refusal_does_not_publish
+- tests/test_pr_play_79df3_classification.py::test_two_refusals_then_gameplay_advances
+- tests/test_pr_play_79df3_classification.py::test_save_reload_keeps_the_preceding_publication
+- tests/test_pr_play_79df3_classification.py::test_http_fallback_is_not_an_operational_refusal
+- tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context
+- tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop
+- tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload

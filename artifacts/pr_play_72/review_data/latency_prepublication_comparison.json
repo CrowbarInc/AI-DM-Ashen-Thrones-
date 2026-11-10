@@ -1,0 +1,1444 @@
+{
+  "rows": [
+    {
+      "method": "natural",
+      "repetition": 1,
+      "http_ms": 379.855600069277,
+      "stages": {
+        "interpretation_ms": [
+          3.458
+        ],
+        "interpretation": {
+          "category": "EXECUTE",
+          "primary_intention": "I examine the mud prints again.",
+          "intent_family": "player_initiative",
+          "incidental_context": [],
+          "proposed_operation": "INSPECT",
+          "proposed_target": "prints",
+          "proposed_record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "I examine the mud prints again."
+            },
+            "action_components": [
+              {
+                "operation_class": "INSPECT",
+                "target_ref": "prints",
+                "description": "I examine the mud prints again."
+              }
+            ],
+            "references": {
+              "resolved_references": [],
+              "unresolved_references": []
+            }
+          },
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": true,
+          "reason": "initiative_grounded_inspect",
+          "confidence": 0.9,
+          "ambiguity": null,
+          "player_facing_text": "",
+          "context_update": null,
+          "intent_modality": "committed",
+          "secondary_intentions": [],
+          "execution_policy": "",
+          "communication_owner": "CHARACTER",
+          "communication_purpose": "ACTION",
+          "authorization": null
+        },
+        "resolver_ms": [
+          36.943
+        ],
+        "atomic_write_ms": [
+          7.908,
+          7.887,
+          4.015
+        ],
+        "publication_ms": [
+          0.685
+        ]
+      },
+      "resolution": {
+        "kind": "discover_clue",
+        "action_id": "prints",
+        "success": true
+      },
+      "world_unchanged": false,
+      "response": {
+        "campaign": {
+          "title": "Ashen Thrones"
+        },
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "class": "Wizard",
+          "level": 1,
+          "ancestry": "Human",
+          "hp": {
+            "current": 8,
+            "max": 8,
+            "nonlethal": 0
+          },
+          "ac": {
+            "normal": 12,
+            "touch": 12,
+            "flat_footed": 10
+          },
+          "initiative_bonus": 2,
+          "speed": 30,
+          "bab": 0,
+          "cmb": 0,
+          "cmd": 12,
+          "ability_scores": {
+            "str": 10,
+            "dex": 14,
+            "con": 12,
+            "int": 18,
+            "wis": 12,
+            "cha": 10
+          },
+          "saves": {
+            "fort": 1,
+            "ref": 2,
+            "will": 3
+          },
+          "attacks": [
+            {
+              "id": "quarterstaff",
+              "name": "Quarterstaff",
+              "attack_bonus": 0,
+              "type": "melee",
+              "damage": {
+                "dice_count": 1,
+                "dice_sides": 6,
+                "bonus": 0,
+                "type": "bludgeoning"
+              }
+            },
+            {
+              "id": "crossbow",
+              "name": "Light Crossbow",
+              "attack_bonus": 2,
+              "type": "ranged",
+              "damage": {
+                "dice_count": 1,
+                "dice_sides": 8,
+                "bonus": 0,
+                "type": "piercing"
+              }
+            }
+          ],
+          "conditions": [],
+          "inventory": [
+            {
+              "id": "spellbook",
+              "name": "Spellbook",
+              "quantity": 1,
+              "usable": false
+            }
+          ],
+          "spells": {
+            "prepared": [
+              {
+                "id": "daze",
+                "name": "Daze",
+                "cast": false,
+                "level": 0
+              },
+              {
+                "id": "detect_magic",
+                "name": "Detect Magic",
+                "cast": false,
+                "level": 0
+              },
+              {
+                "id": "magic_missile",
+                "name": "Magic Missile",
+                "cast": false,
+                "level": 1
+              },
+              {
+                "id": "shield",
+                "name": "Shield",
+                "cast": false,
+                "level": 1
+              }
+            ],
+            "slots": {
+              "0": 3,
+              "1": 1
+            }
+          },
+          "skills": {
+            "knowledge_arcana": 8,
+            "spellcraft": 8,
+            "perception": 4,
+            "sense_motive": 4,
+            "stealth": 4,
+            "diplomacy": 4,
+            "intimidate": 2,
+            "bluff": 2
+          }
+        },
+        "session": {
+          "session_id": "fcbdc9b34003d945145a9973",
+          "campaign_run_id": "fcbdc9b34003d945145a9973",
+          "active_scene_id": "old_milestone",
+          "character_name": "Galinor",
+          "response_mode": "standard",
+          "campaign_started": true,
+          "turn_counter": 7,
+          "visited_scene_ids": [
+            "frontier_gate",
+            "old_milestone"
+          ]
+        },
+        "scene": {
+          "scene": {
+            "id": "old_milestone",
+            "location": "Old Milestone",
+            "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+            "mode": "exploration",
+            "visible_facts": [
+              "A weathered stone milestone leans beside the northwest mud track.",
+              "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+              "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+            ]
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "active_actor_id": "",
+          "player_turn_used": false
+        },
+        "ui": {
+          "player_can_act": true,
+          "campaign_started": true,
+          "campaign_can_start": false,
+          "living_enemies": [],
+          "scene_ids": [
+            "frontier_gate",
+            "old_milestone"
+          ],
+          "affordances": [
+            {
+              "id": "milestone",
+              "label": "Examine the Weathered milestone (already searched)",
+              "type": "investigate",
+              "prompt": "I examine the Weathered milestone.",
+              "target_scene_id": "",
+              "target_id": "milestone",
+              "target_location_id": ""
+            },
+            {
+              "id": "prints",
+              "label": "Examine the Mud prints (already searched)",
+              "type": "investigate",
+              "prompt": "I examine the Mud prints.",
+              "target_scene_id": "",
+              "target_id": "prints",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_a_weathered_stone_milestone_leans_bes",
+              "label": "Examine A weathered stone milestone leans bes",
+              "type": "investigate",
+              "prompt": "I examine A weathered stone milestone leans bes.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_the_mud_around_the_marker_is_churned",
+              "label": "Examine The mud around the marker is churned",
+              "type": "investigate",
+              "prompt": "I examine The mud around the marker is churned.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_the_track_continues_a_short_way_past",
+              "label": "Examine The track continues a short way past",
+              "type": "investigate",
+              "prompt": "I examine The track continues a short way past.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            }
+          ],
+          "clues": {
+            "known": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "presentation": "explicit"
+              },
+              {
+                "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "presentation": "explicit"
+              }
+            ],
+            "implicit": [],
+            "explicit": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "presentation": "explicit"
+              },
+              {
+                "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "presentation": "explicit"
+              }
+            ],
+            "actionable": []
+          },
+          "scene_npcs": [],
+          "interaction": {
+            "active_interaction_target_id": "",
+            "active_interaction_kind": "investigate",
+            "interaction_mode": "activity"
+          }
+        },
+        "journal": {
+          "known_facts": [
+            "The northwest mud track reaches an old milestone beyond the gate.",
+            "The mud around the marker is churned; any trail beyond it is unclear."
+          ],
+          "discovered_clues": [
+            "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "unresolved_leads": [
+            "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "status_effects": [],
+          "suspicion_flags": [],
+          "active_leads": [
+            {
+              "id": "milestone_mud_prints",
+              "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "next_step": "",
+              "last_touched_turn": 7
+            },
+            {
+              "id": "notice_patrol_route",
+              "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "next_step": "",
+              "last_touched_turn": 2
+            }
+          ],
+          "pursued_leads": [],
+          "stale_leads": [],
+          "resolved_leads": [],
+          "obsolete_leads": [],
+          "lead_counts": {
+            "active": 2,
+            "pursued": 0,
+            "stale": 0,
+            "resolved": 0,
+            "obsolete": 0
+          }
+        },
+        "player_name": "Galinor",
+        "campaign_run_id": "fcbdc9b34003d945145a9973",
+        "save_summary": {
+          "saved_at": "2026-11-06T22:53:39.931963Z",
+          "save_data_exists": true,
+          "active_scene_id": "old_milestone",
+          "discovered_clues": 2,
+          "chat_messages": 10
+        },
+        "snapshots": [
+          {
+            "id": "2026-11-06T22-49-38_6a1b495b",
+            "created_at": "2026-11-06T22:49:38.671288Z",
+            "label": "PR72 HTTP report"
+          },
+          {
+            "id": "2026-11-06T22-47-58_a640d241",
+            "created_at": "2026-11-06T22:47:58.078981Z",
+            "label": "PR72 HTTP survey"
+          },
+          {
+            "id": "2026-11-06T22-42-17_51d9b95b",
+            "created_at": "2026-11-06T22:42:17.061214Z",
+            "label": "PR72 HTTP survey"
+          }
+        ],
+        "world": {},
+        "ok": true,
+        "gm_output": {
+          "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        },
+        "resolution": {}
+      }
+    },
+    {
+      "method": "natural",
+      "repetition": 2,
+      "http_ms": 3622.2880999557674,
+      "stages": {
+        "interpretation_ms": [
+          0.29
+        ],
+        "interpretation": {
+          "category": "EXECUTE",
+          "primary_intention": "I examine the mud prints again.",
+          "intent_family": "player_initiative",
+          "incidental_context": [],
+          "proposed_operation": "INSPECT",
+          "proposed_target": "prints",
+          "proposed_record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "I examine the mud prints again."
+            },
+            "action_components": [
+              {
+                "operation_class": "INSPECT",
+                "target_ref": "prints",
+                "description": "I examine the mud prints again."
+              }
+            ],
+            "references": {
+              "resolved_references": [],
+              "unresolved_references": []
+            }
+          },
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": true,
+          "reason": "initiative_grounded_inspect",
+          "confidence": 0.9,
+          "ambiguity": null,
+          "player_facing_text": "",
+          "context_update": null,
+          "intent_modality": "committed",
+          "secondary_intentions": [],
+          "execution_policy": "",
+          "communication_owner": "CHARACTER",
+          "communication_purpose": "ACTION",
+          "authorization": null
+        },
+        "resolver_ms": [
+          615.957
+        ],
+        "atomic_write_ms": [
+          55.948,
+          58.202,
+          47.863
+        ],
+        "publication_ms": [
+          13.249
+        ]
+      },
+      "resolution": {
+        "kind": "discover_clue",
+        "action_id": "prints",
+        "success": true
+      },
+      "world_unchanged": false,
+      "response": {
+        "campaign": {
+          "title": "Ashen Thrones"
+        },
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "class": "Wizard",
+          "level": 1,
+          "ancestry": "Human",
+          "hp": {
+            "current": 8,
+            "max": 8,
+            "nonlethal": 0
+          },
+          "ac": {
+            "normal": 12,
+            "touch": 12,
+            "flat_footed": 10
+          },
+          "initiative_bonus": 2,
+          "speed": 30,
+          "bab": 0,
+          "cmb": 0,
+          "cmd": 12,
+          "ability_scores": {
+            "str": 10,
+            "dex": 14,
+            "con": 12,
+            "int": 18,
+            "wis": 12,
+            "cha": 10
+          },
+          "saves": {
+            "fort": 1,
+            "ref": 2,
+            "will": 3
+          },
+          "attacks": [
+            {
+              "id": "quarterstaff",
+              "name": "Quarterstaff",
+              "attack_bonus": 0,
+              "type": "melee",
+              "damage": {
+                "dice_count": 1,
+                "dice_sides": 6,
+                "bonus": 0,
+                "type": "bludgeoning"
+              }
+            },
+            {
+              "id": "crossbow",
+              "name": "Light Crossbow",
+              "attack_bonus": 2,
+              "type": "ranged",
+              "damage": {
+                "dice_count": 1,
+                "dice_sides": 8,
+                "bonus": 0,
+                "type": "piercing"
+              }
+            }
+          ],
+          "conditions": [],
+          "inventory": [
+            {
+              "id": "spellbook",
+              "name": "Spellbook",
+              "quantity": 1,
+              "usable": false
+            }
+          ],
+          "spells": {
+            "prepared": [
+              {
+                "id": "daze",
+                "name": "Daze",
+                "cast": false,
+                "level": 0
+              },
+              {
+                "id": "detect_magic",
+                "name": "Detect Magic",
+                "cast": false,
+                "level": 0
+              },
+              {
+                "id": "magic_missile",
+                "name": "Magic Missile",
+                "cast": false,
+                "level": 1
+              },
+              {
+                "id": "shield",
+                "name": "Shield",
+                "cast": false,
+                "level": 1
+              }
+            ],
+            "slots": {
+              "0": 3,
+              "1": 1
+            }
+          },
+          "skills": {
+            "knowledge_arcana": 8,
+            "spellcraft": 8,
+            "perception": 4,
+            "sense_motive": 4,
+            "stealth": 4,
+            "diplomacy": 4,
+            "intimidate": 2,
+            "bluff": 2
+          }
+        },
+        "session": {
+          "session_id": "fcbdc9b34003d945145a9973",
+          "campaign_run_id": "fcbdc9b34003d945145a9973",
+          "active_scene_id": "old_milestone",
+          "character_name": "Galinor",
+          "response_mode": "standard",
+          "campaign_started": true,
+          "turn_counter": 7,
+          "visited_scene_ids": [
+            "frontier_gate",
+            "old_milestone"
+          ]
+        },
+        "scene": {
+          "scene": {
+            "id": "old_milestone",
+            "location": "Old Milestone",
+            "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+            "mode": "exploration",
+            "visible_facts": [
+              "A weathered stone milestone leans beside the northwest mud track.",
+              "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+              "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+            ]
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "active_actor_id": "",
+          "player_turn_used": false
+        },
+        "ui": {
+          "player_can_act": true,
+          "campaign_started": true,
+          "campaign_can_start": false,
+          "living_enemies": [],
+          "scene_ids": [
+            "frontier_gate",
+            "old_milestone"
+          ],
+          "affordances": [
+            {
+              "id": "milestone",
+              "label": "Examine the Weathered milestone (already searched)",
+              "type": "investigate",
+              "prompt": "I examine the Weathered milestone.",
+              "target_scene_id": "",
+              "target_id": "milestone",
+              "target_location_id": ""
+            },
+            {
+              "id": "prints",
+              "label": "Examine the Mud prints (already searched)",
+              "type": "investigate",
+              "prompt": "I examine the Mud prints.",
+              "target_scene_id": "",
+              "target_id": "prints",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_a_weathered_stone_milestone_leans_bes",
+              "label": "Examine A weathered stone milestone leans bes",
+              "type": "investigate",
+              "prompt": "I examine A weathered stone milestone leans bes.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_the_mud_around_the_marker_is_churned",
+              "label": "Examine The mud around the marker is churned",
+              "type": "investigate",
+              "prompt": "I examine The mud around the marker is churned.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_the_track_continues_a_short_way_past",
+              "label": "Examine The track continues a short way past",
+              "type": "investigate",
+              "prompt": "I examine The track continues a short way past.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            }
+          ],
+          "clues": {
+            "known": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "presentation": "explicit"
+              },
+              {
+                "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "presentation": "explicit"
+              }
+            ],
+            "implicit": [],
+            "explicit": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "presentation": "explicit"
+              },
+              {
+                "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "presentation": "explicit"
+              }
+            ],
+            "actionable": []
+          },
+          "scene_npcs": [],
+          "interaction": {
+            "active_interaction_target_id": "",
+            "active_interaction_kind": "investigate",
+            "interaction_mode": "activity"
+          }
+        },
+        "journal": {
+          "known_facts": [
+            "The northwest mud track reaches an old milestone beyond the gate.",
+            "The mud around the marker is churned; any trail beyond it is unclear."
+          ],
+          "discovered_clues": [
+            "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "unresolved_leads": [
+            "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "status_effects": [],
+          "suspicion_flags": [],
+          "active_leads": [
+            {
+              "id": "milestone_mud_prints",
+              "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "next_step": "",
+              "last_touched_turn": 7
+            },
+            {
+              "id": "notice_patrol_route",
+              "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "next_step": "",
+              "last_touched_turn": 2
+            }
+          ],
+          "pursued_leads": [],
+          "stale_leads": [],
+          "resolved_leads": [],
+          "obsolete_leads": [],
+          "lead_counts": {
+            "active": 2,
+            "pursued": 0,
+            "stale": 0,
+            "resolved": 0,
+            "obsolete": 0
+          }
+        },
+        "player_name": "Galinor",
+        "campaign_run_id": "fcbdc9b34003d945145a9973",
+        "save_summary": {
+          "saved_at": "2026-11-06T22:53:43.035208Z",
+          "save_data_exists": true,
+          "active_scene_id": "old_milestone",
+          "discovered_clues": 2,
+          "chat_messages": 10
+        },
+        "snapshots": [
+          {
+            "id": "2026-11-06T22-49-38_6a1b495b",
+            "created_at": "2026-11-06T22:49:38.671288Z",
+            "label": "PR72 HTTP report"
+          },
+          {
+            "id": "2026-11-06T22-47-58_a640d241",
+            "created_at": "2026-11-06T22:47:58.078981Z",
+            "label": "PR72 HTTP survey"
+          },
+          {
+            "id": "2026-11-06T22-42-17_51d9b95b",
+            "created_at": "2026-11-06T22:42:17.061214Z",
+            "label": "PR72 HTTP survey"
+          }
+        ],
+        "world": {},
+        "ok": true,
+        "gm_output": {
+          "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        },
+        "resolution": {}
+      }
+    },
+    {
+      "method": "structured",
+      "repetition": 1,
+      "http_ms": 5132.0590999675915,
+      "stages": {
+        "resolver_ms": [
+          894.465
+        ],
+        "atomic_write_ms": [
+          105.937,
+          112.089,
+          45.888
+        ],
+        "publication_ms": [
+          0.335
+        ]
+      },
+      "resolution": {
+        "kind": "discover_clue",
+        "action_id": "prints",
+        "success": true
+      },
+      "world_unchanged": true,
+      "response": {
+        "campaign": {
+          "title": "Ashen Thrones"
+        },
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "class": "Wizard",
+          "level": 1,
+          "ancestry": "Human",
+          "hp": {
+            "current": 8,
+            "max": 8,
+            "nonlethal": 0
+          },
+          "ac": {
+            "normal": 12,
+            "touch": 12,
+            "flat_footed": 10
+          },
+          "initiative_bonus": 2,
+          "speed": 30,
+          "bab": 0,
+          "cmb": 0,
+          "cmd": 12,
+          "ability_scores": {
+            "str": 10,
+            "dex": 14,
+            "con": 12,
+            "int": 18,
+            "wis": 12,
+            "cha": 10
+          },
+          "saves": {
+            "fort": 1,
+            "ref": 2,
+            "will": 3
+          },
+          "attacks": [
+            {
+              "id": "quarterstaff",
+              "name": "Quarterstaff",
+              "attack_bonus": 0,
+              "type": "melee",
+              "damage": {
+                "dice_count": 1,
+                "dice_sides": 6,
+                "bonus": 0,
+                "type": "bludgeoning"
+              }
+            },
+            {
+              "id": "crossbow",
+              "name": "Light Crossbow",
+              "attack_bonus": 2,
+              "type": "ranged",
+              "damage": {
+                "dice_count": 1,
+                "dice_sides": 8,
+                "bonus": 0,
+                "type": "piercing"
+              }
+            }
+          ],
+          "conditions": [],
+          "inventory": [
+            {
+              "id": "spellbook",
+              "name": "Spellbook",
+              "quantity": 1,
+              "usable": false
+            }
+          ],
+          "spells": {
+            "prepared": [
+              {
+                "id": "daze",
+                "name": "Daze",
+                "cast": false,
+                "level": 0
+              },
+              {
+                "id": "detect_magic",
+                "name": "Detect Magic",
+                "cast": false,
+                "level": 0
+              },
+              {
+                "id": "magic_missile",
+                "name": "Magic Missile",
+                "cast": false,
+                "level": 1
+              },
+              {
+                "id": "shield",
+                "name": "Shield",
+                "cast": false,
+                "level": 1
+              }
+            ],
+            "slots": {
+              "0": 3,
+              "1": 1
+            }
+          },
+          "skills": {
+            "knowledge_arcana": 8,
+            "spellcraft": 8,
+            "perception": 4,
+            "sense_motive": 4,
+            "stealth": 4,
+            "diplomacy": 4,
+            "intimidate": 2,
+            "bluff": 2
+          }
+        },
+        "session": {
+          "session_id": "fcbdc9b34003d945145a9973",
+          "campaign_run_id": "fcbdc9b34003d945145a9973",
+          "active_scene_id": "old_milestone",
+          "character_name": "Galinor",
+          "response_mode": "standard",
+          "campaign_started": true,
+          "turn_counter": 6,
+          "visited_scene_ids": [
+            "frontier_gate",
+            "old_milestone"
+          ]
+        },
+        "scene": {
+          "scene": {
+            "id": "old_milestone",
+            "location": "Old Milestone",
+            "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+            "mode": "exploration",
+            "visible_facts": [
+              "A weathered stone milestone leans beside the northwest mud track.",
+              "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+              "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+            ]
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "active_actor_id": "",
+          "player_turn_used": false
+        },
+        "ui": {
+          "player_can_act": true,
+          "campaign_started": true,
+          "campaign_can_start": false,
+          "living_enemies": [],
+          "scene_ids": [
+            "frontier_gate",
+            "old_milestone"
+          ],
+          "affordances": [
+            {
+              "id": "milestone",
+              "label": "Examine the Weathered milestone (already searched)",
+              "type": "investigate",
+              "prompt": "I examine the Weathered milestone.",
+              "target_scene_id": "",
+              "target_id": "milestone",
+              "target_location_id": ""
+            },
+            {
+              "id": "prints",
+              "label": "Examine the Mud prints (already searched)",
+              "type": "investigate",
+              "prompt": "I examine the Mud prints.",
+              "target_scene_id": "",
+              "target_id": "prints",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_a_weathered_stone_milestone_leans_bes",
+              "label": "Examine A weathered stone milestone leans bes",
+              "type": "investigate",
+              "prompt": "I examine A weathered stone milestone leans bes.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_the_mud_around_the_marker_is_churned",
+              "label": "Examine The mud around the marker is churned",
+              "type": "investigate",
+              "prompt": "I examine The mud around the marker is churned.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_the_track_continues_a_short_way_past",
+              "label": "Examine The track continues a short way past",
+              "type": "investigate",
+              "prompt": "I examine The track continues a short way past.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            }
+          ],
+          "clues": {
+            "known": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "presentation": "explicit"
+              },
+              {
+                "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "presentation": "explicit"
+              }
+            ],
+            "implicit": [],
+            "explicit": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "presentation": "explicit"
+              },
+              {
+                "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "presentation": "explicit"
+              }
+            ],
+            "actionable": []
+          },
+          "scene_npcs": [],
+          "interaction": {
+            "active_interaction_target_id": "",
+            "active_interaction_kind": "investigate",
+            "interaction_mode": "activity"
+          }
+        },
+        "journal": {
+          "known_facts": [
+            "The northwest mud track reaches an old milestone beyond the gate.",
+            "The mud around the marker is churned; any trail beyond it is unclear."
+          ],
+          "discovered_clues": [
+            "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "unresolved_leads": [
+            "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "status_effects": [],
+          "suspicion_flags": [],
+          "active_leads": [
+            {
+              "id": "milestone_mud_prints",
+              "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "next_step": "",
+              "last_touched_turn": 6
+            },
+            {
+              "id": "notice_patrol_route",
+              "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "next_step": "",
+              "last_touched_turn": 2
+            }
+          ],
+          "pursued_leads": [],
+          "stale_leads": [],
+          "resolved_leads": [],
+          "obsolete_leads": [],
+          "lead_counts": {
+            "active": 2,
+            "pursued": 0,
+            "stale": 0,
+            "resolved": 0,
+            "obsolete": 0
+          }
+        },
+        "player_name": "Galinor",
+        "campaign_run_id": "fcbdc9b34003d945145a9973",
+        "save_summary": {
+          "saved_at": "2026-11-06T22:53:50.465469Z",
+          "save_data_exists": true,
+          "active_scene_id": "old_milestone",
+          "discovered_clues": 2,
+          "chat_messages": 10
+        },
+        "snapshots": [
+          {
+            "id": "2026-11-06T22-49-38_6a1b495b",
+            "created_at": "2026-11-06T22:49:38.671288Z",
+            "label": "PR72 HTTP report"
+          },
+          {
+            "id": "2026-11-06T22-47-58_a640d241",
+            "created_at": "2026-11-06T22:47:58.078981Z",
+            "label": "PR72 HTTP survey"
+          },
+          {
+            "id": "2026-11-06T22-42-17_51d9b95b",
+            "created_at": "2026-11-06T22:42:17.061214Z",
+            "label": "PR72 HTTP survey"
+          }
+        ],
+        "world": {},
+        "ok": true,
+        "gm_output": {
+          "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        },
+        "resolution": {}
+      }
+    },
+    {
+      "method": "structured",
+      "repetition": 2,
+      "http_ms": 4087.2537000104785,
+      "stages": {
+        "resolver_ms": [
+          494.436
+        ],
+        "atomic_write_ms": [
+          63.873,
+          74.703,
+          62.81
+        ],
+        "publication_ms": [
+          12.382
+        ]
+      },
+      "resolution": {
+        "kind": "discover_clue",
+        "action_id": "prints",
+        "success": true
+      },
+      "world_unchanged": true,
+      "response": {
+        "campaign": {
+          "title": "Ashen Thrones"
+        },
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "class": "Wizard",
+          "level": 1,
+          "ancestry": "Human",
+          "hp": {
+            "current": 8,
+            "max": 8,
+            "nonlethal": 0
+          },
+          "ac": {
+            "normal": 12,
+            "touch": 12,
+            "flat_footed": 10
+          },
+          "initiative_bonus": 2,
+          "speed": 30,
+          "bab": 0,
+          "cmb": 0,
+          "cmd": 12,
+          "ability_scores": {
+            "str": 10,
+            "dex": 14,
+            "con": 12,
+            "int": 18,
+            "wis": 12,
+            "cha": 10
+          },
+          "saves": {
+            "fort": 1,
+            "ref": 2,
+            "will": 3
+          },
+          "attacks": [
+            {
+              "id": "quarterstaff",
+              "name": "Quarterstaff",
+              "attack_bonus": 0,
+              "type": "melee",
+              "damage": {
+                "dice_count": 1,
+                "dice_sides": 6,
+                "bonus": 0,
+                "type": "bludgeoning"
+              }
+            },
+            {
+              "id": "crossbow",
+              "name": "Light Crossbow",
+              "attack_bonus": 2,
+              "type": "ranged",
+              "damage": {
+                "dice_count": 1,
+                "dice_sides": 8,
+                "bonus": 0,
+                "type": "piercing"
+              }
+            }
+          ],
+          "conditions": [],
+          "inventory": [
+            {
+              "id": "spellbook",
+              "name": "Spellbook",
+              "quantity": 1,
+              "usable": false
+            }
+          ],
+          "spells": {
+            "prepared": [
+              {
+                "id": "daze",
+                "name": "Daze",
+                "cast": false,
+                "level": 0
+              },
+              {
+                "id": "detect_magic",
+                "name": "Detect Magic",
+                "cast": false,
+                "level": 0
+              },
+              {
+                "id": "magic_missile",
+                "name": "Magic Missile",
+                "cast": false,
+                "level": 1
+              },
+              {
+                "id": "shield",
+                "name": "Shield",
+                "cast": false,
+                "level": 1
+              }
+            ],
+            "slots": {
+              "0": 3,
+              "1": 1
+            }
+          },
+          "skills": {
+            "knowledge_arcana": 8,
+            "spellcraft": 8,
+            "perception": 4,
+            "sense_motive": 4,
+            "stealth": 4,
+            "diplomacy": 4,
+            "intimidate": 2,
+            "bluff": 2
+          }
+        },
+        "session": {
+          "session_id": "fcbdc9b34003d945145a9973",
+          "campaign_run_id": "fcbdc9b34003d945145a9973",
+          "active_scene_id": "old_milestone",
+          "character_name": "Galinor",
+          "response_mode": "standard",
+          "campaign_started": true,
+          "turn_counter": 6,
+          "visited_scene_ids": [
+            "frontier_gate",
+            "old_milestone"
+          ]
+        },
+        "scene": {
+          "scene": {
+            "id": "old_milestone",
+            "location": "Old Milestone",
+            "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+            "mode": "exploration",
+            "visible_facts": [
+              "A weathered stone milestone leans beside the northwest mud track.",
+              "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+              "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+            ]
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "active_actor_id": "",
+          "player_turn_used": false
+        },
+        "ui": {
+          "player_can_act": true,
+          "campaign_started": true,
+          "campaign_can_start": false,
+          "living_enemies": [],
+          "scene_ids": [
+            "frontier_gate",
+            "old_milestone"
+          ],
+          "affordances": [
+            {
+              "id": "milestone",
+              "label": "Examine the Weathered milestone (already searched)",
+              "type": "investigate",
+              "prompt": "I examine the Weathered milestone.",
+              "target_scene_id": "",
+              "target_id": "milestone",
+              "target_location_id": ""
+            },
+            {
+              "id": "prints",
+              "label": "Examine the Mud prints (already searched)",
+              "type": "investigate",
+              "prompt": "I examine the Mud prints.",
+              "target_scene_id": "",
+              "target_id": "prints",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_a_weathered_stone_milestone_leans_bes",
+              "label": "Examine A weathered stone milestone leans bes",
+              "type": "investigate",
+              "prompt": "I examine A weathered stone milestone leans bes.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_the_mud_around_the_marker_is_churned",
+              "label": "Examine The mud around the marker is churned",
+              "type": "investigate",
+              "prompt": "I examine The mud around the marker is churned.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            },
+            {
+              "id": "examine_the_track_continues_a_short_way_past",
+              "label": "Examine The track continues a short way past",
+              "type": "investigate",
+              "prompt": "I examine The track continues a short way past.",
+              "target_scene_id": "",
+              "target_id": "",
+              "target_location_id": ""
+            }
+          ],
+          "clues": {
+            "known": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "presentation": "explicit"
+              },
+              {
+                "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "presentation": "explicit"
+              }
+            ],
+            "implicit": [],
+            "explicit": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "presentation": "explicit"
+              },
+              {
+                "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "presentation": "explicit"
+              }
+            ],
+            "actionable": []
+          },
+          "scene_npcs": [],
+          "interaction": {
+            "active_interaction_target_id": "",
+            "active_interaction_kind": "investigate",
+            "interaction_mode": "activity"
+          }
+        },
+        "journal": {
+          "known_facts": [
+            "The northwest mud track reaches an old milestone beyond the gate.",
+            "The mud around the marker is churned; any trail beyond it is unclear."
+          ],
+          "discovered_clues": [
+            "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "unresolved_leads": [
+            "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "status_effects": [],
+          "suspicion_flags": [],
+          "active_leads": [
+            {
+              "id": "milestone_mud_prints",
+              "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "next_step": "",
+              "last_touched_turn": 6
+            },
+            {
+              "id": "notice_patrol_route",
+              "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "next_step": "",
+              "last_touched_turn": 2
+            }
+          ],
+          "pursued_leads": [],
+          "stale_leads": [],
+          "resolved_leads": [],
+          "obsolete_leads": [],
+          "lead_counts": {
+            "active": 2,
+            "pursued": 0,
+            "stale": 0,
+            "resolved": 0,
+            "obsolete": 0
+          }
+        },
+        "player_name": "Galinor",
+        "campaign_run_id": "fcbdc9b34003d945145a9973",
+        "save_summary": {
+          "saved_at": "2026-11-06T22:53:58.121175Z",
+          "save_data_exists": true,
+          "active_scene_id": "old_milestone",
+          "discovered_clues": 2,
+          "chat_messages": 10
+        },
+        "snapshots": [
+          {
+            "id": "2026-11-06T22-49-38_6a1b495b",
+            "created_at": "2026-11-06T22:49:38.671288Z",
+            "label": "PR72 HTTP report"
+          },
+          {
+            "id": "2026-11-06T22-47-58_a640d241",
+            "created_at": "2026-11-06T22:47:58.078981Z",
+            "label": "PR72 HTTP survey"
+          },
+          {
+            "id": "2026-11-06T22-42-17_51d9b95b",
+            "created_at": "2026-11-06T22:42:17.061214Z",
+            "label": "PR72 HTTP survey"
+          }
+        ],
+        "world": {},
+        "ok": true,
+        "gm_output": {
+          "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        },
+        "resolution": {}
+      }
+    }
+  ],
+  "provider_requests": 0,
+  "provider_tokens": 0,
+  "browser_visible_ms": null,
+  "notes": "Two samples per entry path, same saved scene and target; instrumentation and concurrent verification add overhead.",
+  "natural_ms": {
+    "mean": 2001.0718500125222,
+    "median": 2001.0718500125222,
+    "maximum": 3622.2880999557674
+  },
+  "structured_ms": {
+    "mean": 4609.656399989035,
+    "median": 4609.656399989035,
+    "maximum": 5132.0590999675915
+  }
+}

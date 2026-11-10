@@ -1,0 +1,51 @@
+{
+  "gameplay_mutations": [
+    "session.json",
+    "session_log.jsonl",
+    "world.json"
+  ],
+  "bookkeeping_mutations": [
+    "combat.json",
+    "session.json"
+  ],
+  "unexpected_mutations": [],
+  "integrity": true,
+  "changed_fields": {
+    "session.json": [
+      "_runtime_canonical_ctir_stamp_v1",
+      "_runtime_canonical_ctir_v1",
+      "_runtime_narration_plan_bundle_stamp_v1",
+      "_runtime_narration_plan_bundle_v1",
+      "_runtime_progression_nodes_fingerprint_v1",
+      "bounded_improvisation",
+      "campaign_started",
+      "chat_history",
+      "clocks",
+      "conversational_context",
+      "discourse_focus",
+      "emergent_actor_debug",
+      "interpretation_telemetry",
+      "last_action_debug",
+      "last_bounded_improvisation_promotion",
+      "last_turn_response_policy",
+      "narration_temporal_provenance",
+      "scene_runtime",
+      "turn_counter"
+    ],
+    "world.json": [
+      "event_log",
+      "factions"
+    ]
+  },
+  "overlay_comparison": {
+    "integrity": true,
+    "changes": [],
+    "omitted_entries": 0,
+    "total_changes": 0
+  },
+  "turn_delta": 1,
+  "log_delta": 1,
+  "campaign_started": true,
+  "scene_identity": "frontier_gate",
+  "contract": "docs/state_authority_model.md; game.api.start_campaign; PR-PLAY-04 rollback"
+}

@@ -1,0 +1,728 @@
+{
+  "pr_play_79": {
+    "path": "artifacts\\pr_play_79\\live_data\\provider_usage.jsonl",
+    "exists": true,
+    "events": 40,
+    "completed_rows": 13,
+    "sent": 13,
+    "unsent_completed": 0,
+    "input_tokens": 140601,
+    "output_tokens": 4367,
+    "total_tokens": 144968,
+    "output_exactly_600": 2,
+    "purposes": {
+      "contract_interpretation": {
+        "requests": 2,
+        "sent": 2,
+        "input_tokens": 1843,
+        "output_tokens": 223,
+        "total_tokens": 2066,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 2
+        },
+        "tokens_per_request": 1033.0,
+        "input_per_request": 921.5,
+        "latency_median_ms": 1570.396,
+        "latency_p95_ms": null,
+        "latency_samples": 2
+      },
+      "expression": {
+        "requests": 2,
+        "sent": 2,
+        "input_tokens": 154,
+        "output_tokens": 77,
+        "total_tokens": 231,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 2
+        },
+        "tokens_per_request": 115.5,
+        "input_per_request": 77.0,
+        "latency_median_ms": 812.493,
+        "latency_p95_ms": null,
+        "latency_samples": 2
+      },
+      "interpretation": {
+        "requests": 4,
+        "sent": 4,
+        "input_tokens": 10096,
+        "output_tokens": 864,
+        "total_tokens": 10960,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 4
+        },
+        "tokens_per_request": 2740.0,
+        "input_per_request": 2524.0,
+        "latency_median_ms": 1899.244,
+        "latency_p95_ms": null,
+        "latency_samples": 4
+      },
+      "primary_turn": {
+        "requests": 3,
+        "sent": 3,
+        "input_tokens": 71433,
+        "output_tokens": 2582,
+        "total_tokens": 74015,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 3
+        },
+        "tokens_per_request": 24671.7,
+        "input_per_request": 23811.0,
+        "latency_median_ms": 4344.5,
+        "latency_p95_ms": null,
+        "latency_samples": 3
+      },
+      "retry_escalation": {
+        "requests": 2,
+        "sent": 2,
+        "input_tokens": 57075,
+        "output_tokens": 621,
+        "total_tokens": 57696,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 2
+        },
+        "tokens_per_request": 28848.0,
+        "input_per_request": 28537.5,
+        "latency_median_ms": 2968.145,
+        "latency_p95_ms": null,
+        "latency_samples": 2
+      }
+    },
+    "over_20000_input": [
+      {
+        "attempt_id": "15df9ff963974f57a4a233ba7623209c",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "input_tokens": 25294,
+        "output_tokens": 1382,
+        "total_tokens": 26676,
+        "latency_ms": 9758.784,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      {
+        "attempt_id": "b06c87bdbd50411d84b5aeb05d3aa80b",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "input_tokens": 22961,
+        "output_tokens": 600,
+        "total_tokens": 23561,
+        "latency_ms": 4312.177,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      {
+        "attempt_id": "a6f4df8e93fa40a18144bd5a3e058ab2",
+        "purpose": "retry_escalation",
+        "owner": "gm.call_gpt",
+        "input_tokens": 28425,
+        "output_tokens": 314,
+        "total_tokens": 28739,
+        "latency_ms": 3254.451,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      {
+        "attempt_id": "1ab49aabd22748399e810eaed24344c1",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "input_tokens": 23178,
+        "output_tokens": 600,
+        "total_tokens": 23778,
+        "latency_ms": 4344.5,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      {
+        "attempt_id": "1bc932f2b5af46449c627386d4fae0d7",
+        "purpose": "retry_escalation",
+        "owner": "gm.call_gpt",
+        "input_tokens": 28650,
+        "output_tokens": 307,
+        "total_tokens": 28957,
+        "latency_ms": 2681.839,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    ],
+    "refusals": []
+  },
+  "pr_play_79a": {
+    "path": "artifacts\\pr_play_79a\\live_data\\provider_usage.jsonl",
+    "exists": true,
+    "events": 64,
+    "completed_rows": 21,
+    "sent": 21,
+    "unsent_completed": 0,
+    "input_tokens": 81239,
+    "output_tokens": 5367,
+    "total_tokens": 86606,
+    "output_exactly_600": 1,
+    "purposes": {
+      "contract_interpretation": {
+        "requests": 2,
+        "sent": 2,
+        "input_tokens": 1880,
+        "output_tokens": 208,
+        "total_tokens": 2088,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 2
+        },
+        "tokens_per_request": 1044.0,
+        "input_per_request": 940.0,
+        "latency_median_ms": 1316.202,
+        "latency_p95_ms": null,
+        "latency_samples": 2
+      },
+      "expression": {
+        "requests": 15,
+        "sent": 15,
+        "input_tokens": 2676,
+        "output_tokens": 464,
+        "total_tokens": 3140,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 15
+        },
+        "tokens_per_request": 209.3,
+        "input_per_request": 178.4,
+        "latency_median_ms": 886.118,
+        "latency_p95_ms": 1306.873,
+        "latency_samples": 15
+      },
+      "interpretation": {
+        "requests": 1,
+        "sent": 1,
+        "input_tokens": 2426,
+        "output_tokens": 227,
+        "total_tokens": 2653,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 1
+        },
+        "tokens_per_request": 2653.0,
+        "input_per_request": 2426.0,
+        "latency_median_ms": 1906.221,
+        "latency_p95_ms": null,
+        "latency_samples": 1
+      },
+      "primary_turn": {
+        "requests": 3,
+        "sent": 3,
+        "input_tokens": 74257,
+        "output_tokens": 4468,
+        "total_tokens": 78725,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 3
+        },
+        "tokens_per_request": 26241.7,
+        "input_per_request": 24752.3,
+        "latency_median_ms": 11579.405,
+        "latency_p95_ms": null,
+        "latency_samples": 3
+      }
+    },
+    "over_20000_input": [
+      {
+        "attempt_id": "e2a22ccee0f141f58c5ca5ba6f3e8f31",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "input_tokens": 25294,
+        "output_tokens": 1924,
+        "total_tokens": 27218,
+        "latency_ms": 13107.816,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      {
+        "attempt_id": "af601fdae7d7468e8bc38345eb411259",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "input_tokens": 25294,
+        "output_tokens": 1944,
+        "total_tokens": 27238,
+        "latency_ms": 11579.405,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      {
+        "attempt_id": "fb0ee2b240324c62be515723bf17a649",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "input_tokens": 23669,
+        "output_tokens": 600,
+        "total_tokens": 24269,
+        "latency_ms": 4151.64,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    ],
+    "refusals": []
+  },
+  "pr_play_79b": {
+    "path": "artifacts\\pr_play_79b\\live_data\\provider_usage.jsonl",
+    "exists": true,
+    "events": 70,
+    "completed_rows": 23,
+    "sent": 23,
+    "unsent_completed": 0,
+    "input_tokens": 36556,
+    "output_tokens": 3055,
+    "total_tokens": 39611,
+    "output_exactly_600": 0,
+    "purposes": {
+      "contract_interpretation": {
+        "requests": 3,
+        "sent": 3,
+        "input_tokens": 3381,
+        "output_tokens": 339,
+        "total_tokens": 3720,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 3
+        },
+        "tokens_per_request": 1240.0,
+        "input_per_request": 1127.0,
+        "latency_median_ms": 1197.121,
+        "latency_p95_ms": null,
+        "latency_samples": 3
+      },
+      "expression": {
+        "requests": 17,
+        "sent": 17,
+        "input_tokens": 3188,
+        "output_tokens": 575,
+        "total_tokens": 3763,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 17
+        },
+        "tokens_per_request": 221.4,
+        "input_per_request": 187.5,
+        "latency_median_ms": 870.734,
+        "latency_p95_ms": 1248.23,
+        "latency_samples": 17
+      },
+      "interpretation": {
+        "requests": 2,
+        "sent": 2,
+        "input_tokens": 4693,
+        "output_tokens": 479,
+        "total_tokens": 5172,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 2
+        },
+        "tokens_per_request": 2586.0,
+        "input_per_request": 2346.5,
+        "latency_median_ms": 1936.07,
+        "latency_p95_ms": null,
+        "latency_samples": 2
+      },
+      "primary_turn": {
+        "requests": 1,
+        "sent": 1,
+        "input_tokens": 25294,
+        "output_tokens": 1662,
+        "total_tokens": 26956,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 1
+        },
+        "tokens_per_request": 26956.0,
+        "input_per_request": 25294.0,
+        "latency_median_ms": 11334.169,
+        "latency_p95_ms": null,
+        "latency_samples": 1
+      }
+    },
+    "over_20000_input": [
+      {
+        "attempt_id": "fcb878a3c0b14cf8ad3dae34d5dbf7ff",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "input_tokens": 25294,
+        "output_tokens": 1662,
+        "total_tokens": 26956,
+        "latency_ms": 11334.169,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    ],
+    "refusals": []
+  },
+  "pr_play_79c": {
+    "path": "artifacts\\pr_play_79c\\live_data\\provider_usage.jsonl",
+    "exists": true,
+    "events": 61,
+    "completed_rows": 20,
+    "sent": 20,
+    "unsent_completed": 0,
+    "input_tokens": 34003,
+    "output_tokens": 2279,
+    "total_tokens": 36282,
+    "output_exactly_600": 0,
+    "purposes": {
+      "contract_interpretation": {
+        "requests": 3,
+        "sent": 3,
+        "input_tokens": 3340,
+        "output_tokens": 314,
+        "total_tokens": 3654,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 3
+        },
+        "tokens_per_request": 1218.0,
+        "input_per_request": 1113.3,
+        "latency_median_ms": 1527.069,
+        "latency_p95_ms": null,
+        "latency_samples": 3
+      },
+      "expression": {
+        "requests": 15,
+        "sent": 15,
+        "input_tokens": 2979,
+        "output_tokens": 417,
+        "total_tokens": 3396,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 15
+        },
+        "tokens_per_request": 226.4,
+        "input_per_request": 198.6,
+        "latency_median_ms": 765.073,
+        "latency_p95_ms": 1218.363,
+        "latency_samples": 15
+      },
+      "interpretation": {
+        "requests": 1,
+        "sent": 1,
+        "input_tokens": 2390,
+        "output_tokens": 185,
+        "total_tokens": 2575,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 1
+        },
+        "tokens_per_request": 2575.0,
+        "input_per_request": 2390.0,
+        "latency_median_ms": 1564.256,
+        "latency_p95_ms": null,
+        "latency_samples": 1
+      },
+      "primary_turn": {
+        "requests": 1,
+        "sent": 1,
+        "input_tokens": 25294,
+        "output_tokens": 1363,
+        "total_tokens": 26657,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 1
+        },
+        "tokens_per_request": 26657.0,
+        "input_per_request": 25294.0,
+        "latency_median_ms": 11866.995,
+        "latency_p95_ms": null,
+        "latency_samples": 1
+      }
+    },
+    "over_20000_input": [
+      {
+        "attempt_id": "f49dbc8eea004c81abc8f3e5ff09968b",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "input_tokens": 25294,
+        "output_tokens": 1363,
+        "total_tokens": 26657,
+        "latency_ms": 11866.995,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    ],
+    "refusals": []
+  },
+  "pr_play_79d_browser": {
+    "path": "artifacts\\pr_play_79d\\browser_provider_usage.jsonl",
+    "exists": true,
+    "events": 10,
+    "completed_rows": 3,
+    "sent": 3,
+    "unsent_completed": 0,
+    "input_tokens": 1775,
+    "output_tokens": 173,
+    "total_tokens": 1948,
+    "output_exactly_600": 0,
+    "purposes": {
+      "contract_interpretation": {
+        "requests": 1,
+        "sent": 1,
+        "input_tokens": 1136,
+        "output_tokens": 120,
+        "total_tokens": 1256,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 1
+        },
+        "tokens_per_request": 1256.0,
+        "input_per_request": 1136.0,
+        "latency_median_ms": 2612.502,
+        "latency_p95_ms": null,
+        "latency_samples": 1
+      },
+      "expression": {
+        "requests": 2,
+        "sent": 2,
+        "input_tokens": 639,
+        "output_tokens": 53,
+        "total_tokens": 692,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 2
+        },
+        "tokens_per_request": 346.0,
+        "input_per_request": 319.5,
+        "latency_median_ms": 1162.046,
+        "latency_p95_ms": null,
+        "latency_samples": 2
+      }
+    },
+    "over_20000_input": [],
+    "refusals": []
+  },
+  "pr_play_79d_browser_final": {
+    "path": "artifacts\\pr_play_79d\\browser_provider_usage_final.jsonl",
+    "exists": true,
+    "events": 25,
+    "completed_rows": 8,
+    "sent": 8,
+    "unsent_completed": 0,
+    "input_tokens": 5204,
+    "output_tokens": 545,
+    "total_tokens": 5749,
+    "output_exactly_600": 0,
+    "purposes": {
+      "contract_interpretation": {
+        "requests": 4,
+        "sent": 4,
+        "input_tokens": 4431,
+        "output_tokens": 459,
+        "total_tokens": 4890,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 4
+        },
+        "tokens_per_request": 1222.5,
+        "input_per_request": 1107.8,
+        "latency_median_ms": 1426.318,
+        "latency_p95_ms": null,
+        "latency_samples": 4
+      },
+      "expression": {
+        "requests": 4,
+        "sent": 4,
+        "input_tokens": 773,
+        "output_tokens": 86,
+        "total_tokens": 859,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 4
+        },
+        "tokens_per_request": 214.8,
+        "input_per_request": 193.2,
+        "latency_median_ms": 996.911,
+        "latency_p95_ms": null,
+        "latency_samples": 4
+      }
+    },
+    "over_20000_input": [],
+    "refusals": []
+  },
+  "pr_play_79d_browser_boundary": {
+    "path": "artifacts\\pr_play_79d\\browser_provider_usage_boundary.jsonl",
+    "exists": true,
+    "events": 4,
+    "completed_rows": 1,
+    "sent": 1,
+    "unsent_completed": 0,
+    "input_tokens": 276,
+    "output_tokens": 20,
+    "total_tokens": 296,
+    "output_exactly_600": 0,
+    "purposes": {
+      "expression": {
+        "requests": 1,
+        "sent": 1,
+        "input_tokens": 276,
+        "output_tokens": 20,
+        "total_tokens": 296,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 1
+        },
+        "tokens_per_request": 296.0,
+        "input_per_request": 276.0,
+        "latency_median_ms": 1282.688,
+        "latency_p95_ms": null,
+        "latency_samples": 1
+      }
+    },
+    "over_20000_input": [],
+    "refusals": []
+  },
+  "pr_play_79df": {
+    "path": "artifacts\\pr_play_79df\\browser_provider_usage.jsonl",
+    "exists": true,
+    "events": 16,
+    "completed_rows": 5,
+    "sent": 5,
+    "unsent_completed": 0,
+    "input_tokens": 3666,
+    "output_tokens": 378,
+    "total_tokens": 4044,
+    "output_exactly_600": 0,
+    "purposes": {
+      "contract_interpretation": {
+        "requests": 3,
+        "sent": 3,
+        "input_tokens": 3442,
+        "output_tokens": 352,
+        "total_tokens": 3794,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 3
+        },
+        "tokens_per_request": 1264.7,
+        "input_per_request": 1147.3,
+        "latency_median_ms": 1692.886,
+        "latency_p95_ms": null,
+        "latency_samples": 3
+      },
+      "expression": {
+        "requests": 2,
+        "sent": 2,
+        "input_tokens": 224,
+        "output_tokens": 26,
+        "total_tokens": 250,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 2
+        },
+        "tokens_per_request": 125.0,
+        "input_per_request": 112.0,
+        "latency_median_ms": 1433.973,
+        "latency_p95_ms": null,
+        "latency_samples": 2
+      }
+    },
+    "over_20000_input": [],
+    "refusals": []
+  },
+  "pr_play_79df2": {
+    "path": "artifacts\\pr_play_79df2\\browser_provider_usage.jsonl",
+    "exists": true,
+    "events": 10,
+    "completed_rows": 3,
+    "sent": 3,
+    "unsent_completed": 0,
+    "input_tokens": 1580,
+    "output_tokens": 171,
+    "total_tokens": 1751,
+    "output_exactly_600": 0,
+    "purposes": {
+      "contract_interpretation": {
+        "requests": 1,
+        "sent": 1,
+        "input_tokens": 1160,
+        "output_tokens": 122,
+        "total_tokens": 1282,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 1
+        },
+        "tokens_per_request": 1282.0,
+        "input_per_request": 1160.0,
+        "latency_median_ms": 2797.26,
+        "latency_p95_ms": null,
+        "latency_samples": 1
+      },
+      "expression": {
+        "requests": 2,
+        "sent": 2,
+        "input_tokens": 420,
+        "output_tokens": 49,
+        "total_tokens": 469,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 2
+        },
+        "tokens_per_request": 234.5,
+        "input_per_request": 210.0,
+        "latency_median_ms": 1341.783,
+        "latency_p95_ms": null,
+        "latency_samples": 2
+      }
+    },
+    "over_20000_input": [],
+    "refusals": []
+  },
+  "pr_play_79df2_final": {
+    "path": "artifacts\\pr_play_79df2\\browser_provider_usage_final.jsonl",
+    "exists": true,
+    "events": 4,
+    "completed_rows": 1,
+    "sent": 1,
+    "unsent_completed": 0,
+    "input_tokens": 273,
+    "output_tokens": 34,
+    "total_tokens": 307,
+    "output_exactly_600": 0,
+    "purposes": {
+      "expression": {
+        "requests": 1,
+        "sent": 1,
+        "input_tokens": 273,
+        "output_tokens": 34,
+        "total_tokens": 307,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 1
+        },
+        "tokens_per_request": 307.0,
+        "input_per_request": 273.0,
+        "latency_median_ms": 1938.267,
+        "latency_p95_ms": null,
+        "latency_samples": 1
+      }
+    },
+    "over_20000_input": [],
+    "refusals": []
+  },
+  "pr_play_79df3_http": {
+    "path": "artifacts\\pr_play_79df3\\http_data\\provider_usage.jsonl",
+    "exists": true,
+    "events": 4,
+    "completed_rows": 1,
+    "sent": 1,
+    "unsent_completed": 0,
+    "input_tokens": 22777,
+    "output_tokens": 600,
+    "total_tokens": 23377,
+    "output_exactly_600": 1,
+    "purposes": {
+      "primary_turn": {
+        "requests": 1,
+        "sent": 1,
+        "input_tokens": 22777,
+        "output_tokens": 600,
+        "total_tokens": 23377,
+        "models": {
+          "gpt-4.1-mini-2025-04-14": 1
+        },
+        "tokens_per_request": 23377.0,
+        "input_per_request": 22777.0,
+        "latency_median_ms": 5339.716,
+        "latency_p95_ms": null,
+        "latency_samples": 1
+      }
+    },
+    "over_20000_input": [
+      {
+        "attempt_id": "12e9b94b02cb49cf984cf975b5e58d5e",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "input_tokens": 22777,
+        "output_tokens": 600,
+        "total_tokens": 23377,
+        "latency_ms": 5339.716,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    ],
+    "refusals": []
+  },
+  "pr_play_79df3_browser": {
+    "path": "artifacts\\pr_play_79df3\\browser_provider_usage.jsonl",
+    "exists": true,
+    "events": 1,
+    "completed_rows": 0,
+    "sent": 0,
+    "unsent_completed": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "output_exactly_600": 0,
+    "purposes": {},
+    "over_20000_input": [],
+    "refusals": []
+  }
+}

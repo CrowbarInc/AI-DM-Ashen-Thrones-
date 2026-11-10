@@ -1,6 +1,7 @@
 const API = '/api';
 let state = null; // Legacy local cache for public lane only (player mode helpers).
 let startCampaignBusy = false;
+let newCampaignBusy = false;
 
 /** Developer-facing copy for blocked new campaign (infra/billing/preflight — not narrative). */
 function formatBlockedNewCampaignMessage(data){
@@ -574,18 +575,38 @@ async function loadLog(){
 
 async function reloadAll(){ await loadState(); await loadLog(); }
 
+// Local browser diagnostics: elapsed time ends on the next rendered frame.
+// No player text or campaign data is logged.
+function recordPlayerReady(operation, started){
+  requestAnimationFrame(()=>console.info('ASHEN_UI_READY '+JSON.stringify({operation, elapsed_ms:performance.now()-started})));
+}
+
+let chatBusy = false;
 async function sendChat(){
-  if(currentUIMode !== "player") return;
+  const readinessStarted = performance.now();
+  if(currentUIMode !== "player" || chatBusy) return;
   const text = $('chatInput').value.trim();
   if(!text) return;
+  chatBusy = true;
+  const sendButton = $('sendChatBtn');
+  if(sendButton) sendButton.disabled = true;
+  $('chatInput').disabled = true;
   $('chatInput').value = '';
   const playerName = state?.player_name || state?.character?.name || 'You';
   addMessage('player', playerName, text);
   const thinking = addMessage('system','System','GM is thinking...');
-  const data = await fetchJSON(apiUrl('/chat', {ui_mode: currentUIMode}), {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({text, ui_mode: currentUIMode})});
-  if(!data.ok){ replaceMessage(thinking,'error','Error',data.error || 'Unknown error'); return; }
-  replaceMessage(thinking,'gm','GM',data.gm_output?.player_facing_text || '(no narration)');
-  await reloadAll();
+  const clientRequestId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now());
+  try {
+    const data = await fetchJSON(apiUrl('/chat', {ui_mode: currentUIMode}), {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({text, ui_mode: currentUIMode, client_request_id: clientRequestId})});
+    if(!data.ok){ replaceMessage(thinking,'error','Error',data.error || 'Unknown error'); return; }
+    replaceMessage(thinking,'gm','GM',data.gm_output?.player_facing_text || '(no narration)');
+    await reloadAll();
+    recordPlayerReady('chat', readinessStarted);
+  } finally {
+    chatBusy = false;
+    if(sendButton) sendButton.disabled = false;
+    $('chatInput').disabled = false;
+  }
 }
 
 async function submitAction(){
@@ -635,6 +656,10 @@ $('resetCombatBtn').addEventListener('click', async ()=>{
   await loadState();
 });
 $('newCampaignBtn').addEventListener('click', async ()=>{
+  if(newCampaignBusy || startCampaignBusy) return;
+  newCampaignBusy = true;
+  $('newCampaignBtn').disabled = true;
+  try {
   const data = await fetchJSON(apiUrl('/new_campaign', {ui_mode: currentUIMode}), {method:'POST'});
   if (!data || data.ok === false || data.status === 'blocked' || data.status !== 'ok'){
     const msg = formatBlockedNewCampaignMessage(data);
@@ -644,20 +669,28 @@ $('newCampaignBtn').addEventListener('click', async ()=>{
   console.log('Campaign reset complete', data.campaign_run_id || '');
   state = null;
   location.reload();
+  } finally {
+    newCampaignBusy = false;
+    $('newCampaignBtn').disabled = false;
+  }
 });
 
 const startCampaignBtn = $('startCampaignBtn');
 if(startCampaignBtn){
   startCampaignBtn.addEventListener('click', async ()=>{
+    const readinessStarted = performance.now();
     if(currentUIMode !== "player") return;
     if(startCampaignBusy) return;
     if(!state?.ui?.campaign_can_start) return;
     startCampaignBusy = true;
     startCampaignBtn.disabled = true;
+    $('newCampaignBtn').disabled = true;
+    const controller = new AbortController();
+    const deadline = setTimeout(()=>controller.abort(), 90000);
     const thinking = addMessage('system','System','Preparing opening…');
     const openingFailure = 'Campaign opening could not be completed. Your campaign has not started, and no gameplay progress was committed. You can try again.';
     try {
-      const res = await fetch(apiUrl('/start_campaign', {ui_mode: currentUIMode}), {method:'POST'});
+      const res = await fetch(apiUrl('/start_campaign', {ui_mode: currentUIMode}), {method:'POST', signal:controller.signal});
       const data = await res.json();
       if(res.status === 503 || data.status === 'blocked'){
         replaceMessage(thinking,'error','System', formatBlockedNewCampaignMessage(data), newCampaignBlockedDetails(data));
@@ -676,11 +709,14 @@ if(startCampaignBtn){
       }
       replaceMessage(thinking,'gm','GM', data.gm_output?.player_facing_text || '(no narration)', data.resolution);
       await reloadAll();
+      recordPlayerReady('start_campaign', readinessStarted);
     } catch (_error) {
       replaceMessage(thinking,'error','System', 'The opening request could not be confirmed. Refresh campaign state before trying again.');
       try { await loadState(); } catch (_refreshError) { /* Keep visible feedback. */ }
     } finally {
+      clearTimeout(deadline);
       startCampaignBusy = false;
+      $('newCampaignBtn').disabled = false;
       if(state) updateCampaignBootstrapUI(state);
     }
   });
@@ -706,8 +742,9 @@ if (snapListEl) {
     if(currentUIMode !== "player") return;
     const btn = e.target.closest('.load-snapshot-btn');
     if (!btn || !btn.dataset.id) return;
+    const readinessStarted = performance.now();
     const data = await fetchJSON(apiUrl('/snapshots/load', {ui_mode: currentUIMode}), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ snapshot_id: btn.dataset.id, ui_mode: currentUIMode }) });
-    if (data.ok) { addMessage('system', 'System', 'Snapshot restored.'); await loadState(); }
+    if (data.ok) { await reloadAll(); addMessage('system', 'System', 'Snapshot restored.'); recordPlayerReady('resume', readinessStarted); }
     else addMessage('error', 'Error', data.error || 'Failed to load snapshot.');
   });
 }
@@ -726,6 +763,7 @@ async function submitDirect(payload, label){
 
 /** Submit a structured exploration action (affordance) to /api/action. Uses same log/error pattern as submitDirect. */
 async function submitExplorationAction(affordance){
+  const readinessStarted = performance.now();
   if(currentUIMode !== "player") return;
   const label = affordance.label || (affordance.metadata && affordance.metadata.prompt) || 'Action';
   const prompt = (affordance.metadata && affordance.metadata.prompt) || affordance.prompt || label;
@@ -760,6 +798,7 @@ async function submitExplorationAction(affordance){
   if(!data.ok){ replaceMessage(thinking,'error','Error',data.error || 'Unknown error'); return; }
   replaceMessage(thinking,'gm','GM',data.gm_output?.player_facing_text || '(no narration)', data.resolution);
   await reloadAll();
+  recordPlayerReady('exploration_action', readinessStarted);
 }
 
 async function saveCampaign(){

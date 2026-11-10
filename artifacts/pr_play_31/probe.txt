@@ -1,0 +1,133 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______ test_application_conversation_clarification_and_staged_control ________
+
+opening_world = {'calls': [], 'state': {'text': '{"declared_claims": [], "narration": "You stand at Cinderwatch\'s eastern gate. Rain ...', 'raise': False}, 'before': {'campaign_started': False, 'turn_counter': 0, 'time_pressure': 0, 'log_length': 0, ...}}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000026553A18110>
+
+    def test_application_conversation_clarification_and_staged_control(opening_world, monkeypatch):
+        root, manifest = load_baseline(Path.cwd())
+        for name in manifest['files']:
+            dest = st.DATA_DIR/name
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(root/name, dest)
+        monkeypatch.setenv('ASHEN_OPENING_RENDERER', '1')
+        opening_calls = []
+        _transport(monkeypatch, opening_calls, lambda kw: plan_selecting_required(kw['input']))
+        calls, rows, resolver_traces = [], [], []
+        skips = []
+        skip_original = api.deterministic_provider_skip_line
+        def skip_observer(**kw):
+            result = skip_original(**kw)
+            skips.append(dict(result=result, context=copy.deepcopy((kw.get('session') or {}).get('conversational_context'))))
+            save('skip_trace.json', skips)
+            return result
+        monkeypatch.setattr(api, 'deterministic_provider_skip_line', skip_observer)
+        import game.exploration as ex
+        original = ex.resolve_exploration_action
+        def observe(*args, **kwargs):
+            result = original(*args, **kwargs)
+            resolver_traces.append(copy.deepcopy(result))
+            return result
+        monkeypatch.setattr(ex, 'resolve_exploration_action', observe)
+        if hasattr(api, 'resolve_exploration_action'):
+            monkeypatch.setattr(api, 'resolve_exploration_action', observe)
+        with TestClient(api.app) as client:
+            opening = client.post('/api/start_campaign?ui_mode=player')
+            assert opening.status_code == 200
+            save('opening.json', dict(response=opening.json(), after=state(), mocked_selector_requests=opening_calls))
+            _enable_live(monkeypatch)
+            monkeypatch.setenv('ASHEN_DISABLE_EXPRESSION_GENERATION', '1')
+            narration = {'text': 'You arrive at the Old Milestone beside the northwest mud track.'}
+            def gm(*args, **kwargs):
+                return dict(player_facing_text=narration['text'], tags=[], scene_update=None,
+                            activate_scene_id=None, new_scene_draft=None, world_updates=None,
+                            suggested_action=None, debug_notes='PR-PLAY-31 deterministic narration mock')
+            monkeypatch.setattr(api, 'call_gpt', gm)
+            texts = ["I approach the tavern runner and ask what they're offering.",
+                     'What sort of rumors have you heard?', TEXT,
+                     'I go to Follow the missing patrol rumor.', 'I examine the footprints.',
+                     'I examine the footprints.']
+            for i, text in enumerate(texts):
+                if i < 2:
+                    record = captured(2 if i == 0 else 4)
+                else:
+                    record = _payload('IN_WORLD_ACTION', 'INTERPRETED', [('INSPECT', 'prints')])
+                    record['player_intent']['summary'] = text
+                    record['action_components'][0]['description'] = text
+                _install_interpretation(monkeypatch, record, calls)
+                if i >= 4:
+                    narration['text'] = ('Faint overlapping prints mark the mud around the old milestone, '
+                                         'but their number, origin, and direction stay unclear.')
+                before = state(); logs_before = st.load_log(); scene = st.load_active_scene()
+                decision = deterministic_conversational_decision(player_text=text, scene=scene, world=before['world'], session=before['session'], log=logs_before)
+                count = len(calls); started = time.perf_counter()
+                reply = client.post('/api/chat?ui_mode=player', json={'text': text})
+                after = state(); internal = st.load_log()[-1]
+                def docs(s, logs):
+                    return {**{k+'.json': v for k, v in s.items()}, 'session_log.jsonl': logs,
+                            'scenes/'+scene['scene']['id']+'.json': scene}
+                a = action(); a.update(player_input=text, subject_terms=[], requires_substantive_answer=i < 2,
+                                      interaction_category='interaction' if i < 2 else 'investigate')
+                evaluation = g.evaluate(a, reply.status_code, reply.json(), docs(before, logs_before), docs(after, st.load_log()), [])
+                row = dict(turn=i+1, player=text, response=reply.json(), status=reply.status_code,
+                           before=before, after=after, internal=internal, mock_interpretation=record,
+                           router=decision.to_public_dict() if decision else None,
+                           mocked_interpretation_calls=len(calls)-count, evaluation=evaluation,
+                           state_diff=g.diff(docs(before, logs_before), docs(after, st.load_log())),
+                           elapsed_seconds=time.perf_counter()-started)
+                rows.append(row)
+                save('integration.json', dict(turns=rows, resolver_traces=resolver_traces, live_provider_requests=0))
+                assert reply.status_code == 200
+                if i == 1:
+                    assert internal['resolution']['social']['topic_revealed']['id'] == 'patrol_rumor'
+                    assert 'muddy_footprints_northwest' in after['session']['clue_knowledge']
+                if i == 2:
+                    assert decision.reason == 'clue_route_clarification'
+                    assert row['mocked_interpretation_calls'] == 0
+                    assert 'Follow the missing patrol rumor' in reply.json()['gm_output']['player_facing_text']
+                    assert before['character'] == after['character']
+                    assert before['world'] == after['world']
+                    assert before['session']['turn_counter'] == after['session']['turn_counter']
+                    assert before['session']['clue_knowledge'] == after['session']['clue_knowledge']
+                if i == 3:
+                    assert after['session']['active_scene_id'] == 'old_milestone'
+                    assert 'milestone_mud_prints' not in after['session']['clue_knowledge']
+                    assert after['session']['conversational_context']['pending_clarification']['steps'][0]['text'] == 'investigate the muddy footprints'
+                    assert 'pending' in reply.json()['gm_output']['player_facing_text']
+                if i >= 4:
+                    assert after['session']['active_scene_id'] == 'old_milestone'
+                    assert 'milestone_mud_prints' in after['session']['clue_knowledge']
+                    assert 'muddy_footprints_northwest' in after['session']['clue_knowledge']
+                if i != 2:
+                    assert after['session']['turn_counter'] == before['session']['turn_counter'] + 1
+                    assert after['session']['clocks']['time_pressure'] == before['session']['clocks']['time_pressure'] + 1
+>           assert any(t['kind'] == 'investigate' and t.get('clue_id') == 'milestone_mud_prints' for t in resolver_traces)
+E           assert False
+E            +  where False = any(<generator object test_application_conversation_clarification_and_staged_control.<locals>.<genexpr> at 0x00000265541A5490>)
+
+tests\test_pr_play_31_purpose_routing.py:242: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 1fc8e98e34018b726c999c26
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[CLUE DISCOVERED] muddy_footprints_northwest
+[CLUE DISCOVERED] minlead_exit_frontier_gate_old_milestone
+[CLUE DISCOVERED] muddy_footprints_northwest
+[CLUE DISCOVERED] minlead_exit_frontier_gate_old_milestone
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_31_purpose_routing.py::test_application_conversation_clarification_and_staged_control
+1 failed, 1 warning in 4.98s

@@ -1,0 +1,57 @@
+[
+  {
+    "identifier": "tests.test_pr_play_61_player_facing::test_four_actions_keep_authority_and_recover",
+    "original_baseline": "PASS: absent from PR78A failures",
+    "pr79c": "FAIL: archived initial historical run",
+    "current_preimplementation": "reproduced",
+    "assertion": "ROUTE in played[2][\"gm_output\"][\"player_facing_text\"]",
+    "actual_before": "ROUTE absent from repeat final engine sentence",
+    "root_cause": "source-bound knowledge was discarded",
+    "final_result": "PASS",
+    "evidence": "renderer_before.xml / single.xml / repro_s.xml; final_source_development.xml"
+  },
+  {
+    "identifier": "tests.test_pr_play_66_publication::test_publication_http[no_new]",
+    "original_baseline": "PASS: absent from PR78A failures",
+    "pr79c": "FAIL: archived initial historical run",
+    "current_preimplementation": "reproduced",
+    "assertion": "trace['publication']['invariant'] == 'PASS'",
+    "actual_before": "KeyError: 'publication'",
+    "root_cause": "direct engine finalizer returned before request-local verifier",
+    "final_result": "PASS",
+    "evidence": "renderer_before.xml / single.xml / repro_s.xml; final_source_development.xml"
+  },
+  {
+    "identifier": "tests.test_pr_play_66_publication::test_publication_http[continuity]",
+    "original_baseline": "PASS: absent from PR78A failures",
+    "pr79c": "FAIL: archived initial historical run",
+    "current_preimplementation": "reproduced",
+    "assertion": "trace['publication']['invariant'] == 'PASS'",
+    "actual_before": "KeyError: 'publication'",
+    "root_cause": "same finalizer early return",
+    "final_result": "PASS",
+    "evidence": "renderer_before.xml / single.xml / repro_s.xml; final_source_development.xml"
+  },
+  {
+    "identifier": "tests.test_pr_play_66_publication::test_publication_http[fast_path]",
+    "original_baseline": "PASS: absent from PR78A failures",
+    "pr79c": "FAIL: archived initial historical run",
+    "current_preimplementation": "reproduced",
+    "assertion": "trace['publication']['invariant'] == 'PASS'",
+    "actual_before": "KeyError: 'publication'",
+    "root_cause": "same finalizer early return",
+    "final_result": "PASS",
+    "evidence": "renderer_before.xml / single.xml / repro_s.xml; final_source_development.xml"
+  },
+  {
+    "identifier": "tests.test_pr_play_47_controlled_renderer::test_matrix[5]",
+    "original_baseline": "PASS: absent from PR78A failures",
+    "pr79c": "FAIL: archived initial historical run",
+    "current_preimplementation": "reproduced",
+    "assertion": "row == original",
+    "actual_before": "resolution metadata changed during selector",
+    "root_cause": "read-only repeat selector stamped publication metadata",
+    "final_result": "PASS",
+    "evidence": "renderer_before.xml / single.xml / repro_s.xml; final_source_development.xml"
+  }
+]

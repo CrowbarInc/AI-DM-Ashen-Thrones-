@@ -1,0 +1,21 @@
+# PR-PLAY-25 test results
+
+Zero live-provider requests. Pytest's autouse guard blocks OpenAI constructors, interpretation and expression calls unless a deterministic test explicitly replaces the transport. All provider-shaped request counters in new HTTP evidence are mocks, not external requests. No live gameplay was run. Tests enable the live adapter only to exercise parsing with mocked transport.
+
+Final focused result: **38 passed, zero failed/errors** (`focused.xml`, `focused.txt`). Six real opening-to-HTTP cases: supported generated offering, host-only offering, unsupported price question, no relevant authority, rejected price embellishment, and secret inquiry. Each checks publication, state integrity and Player projection; offering expression adoption/rejection is asserted explicitly.
+
+Coverage A–O: original captured runner reproduction; merchant and innkeeper; unrelated registered guard; hidden allegiance question; unsupported price and reward; authored topic preservation; conflicting/restricted source precedence; no facts; accepted natural paraphrase; rejected price/reward/map embellishment and negation; unchanged inventory/currency/campaign/NPC relationships/scene/world authority; public confidentiality; five NPC generalization fixtures. Additional negatives cover duplicate identities/facts, cross-scene/inaccessible NPCs, conditional/quoted/negated prose, multiple questions, provider-evidence-only claims and mismatched resolved IDs.
+
+| Existing group (new tests excluded) | Passed | Failed | Errors |
+| --- | ---: | ---: | ---: |
+| existing | 821 | 88 | 0 |
+| authority | 591 | 14 | 0 |
+| historical_extension | 65 | 7 | 0 |
+
+The broad XML includes the new test file because its name contains dialogue: initial raw `existing.xml` is 945 tests, 857 passed / 88 failed. Of those, 36 were the then-current new focused tests; the existing-only result is 909 tests, 821 passed / 88 failed. The final focused suite has 38 cases. Exact-baseline raw `existing_baseline.xml` contains those final 38 new tests as well: 947 tests / 100 failures. Twelve failures belong to new tests intentionally exercising features absent from the old modules (one checks newly added diagnostic metadata). These are not historical regressions. Compare the identical 909 existing test IDs separately in `test_comparison.json`.
+
+Baseline method: `baseline_plugin.py` loads the exact two pre-pass production modules before collection; production files on disk are untouched. Full existing and authority suites use the same test lists/order. Current and baseline have identical existing failure sets, including the directly relevant expression-semantics and authored-answer failures. None was fixed or reclassified obsolete. The 7 historical physical-action failures also repeat under the exact pre-pass modules. Two lead tests pass in the failing-only baseline but fail in both full suites, indicating suite-order sensitivity; these are explicitly retained as preexisting failures, not new regressions or resolved bugs.
+
+Historical comparison: all **25** previously documented functional failures remain (17 original plus 8 expanded). This larger scope identifies **109** failing existing cases total, all present with pre-repair modules: 25 previously documented and 84 additional baseline failures. Zero newly failing existing tests, zero resolved preexisting failures, zero obsolete assertions claimed. The repository-wide suite is not green. IDs, assertion messages and classifications are retained in `test_comparison.json`; raw logs/XML include blocked live-call attempts, which fail before network access.
+
+Commands: `.venv/Scripts/python.exe -m pytest <files> -q --tb=short --junitxml=<evidence.xml>`; full file lists are `existing_test_files.json` and `authority_test_files.json`. Historical files: physical compound/perception, PR-DU player pipeline, PR-EA orchestration, PR-EC movement. Baselines add `-p artifacts.pr_play_25.baseline_plugin`. Distinct `--basetemp` directories isolate runs. Focused evidence uses `ASHEN_PR_PLAY_25_EVIDENCE=1`. The last focused rerun follows the final scoped prompt/validation changes. `git diff --check` passed for the modified tracked production files.

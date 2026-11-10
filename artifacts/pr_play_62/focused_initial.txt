@@ -1,0 +1,89 @@
+...................................F.................................... [  9%]
+.......FFFFFF........................................................... [ 19%]
+........................................................................ [ 28%]
+........................................................................ [ 38%]
+........................................................................ [ 48%]
+........................................................................ [ 57%]
+........................................................................ [ 67%]
+........................................................................ [ 76%]
+........................................................................ [ 86%]
+........................................................................ [ 96%]
+..F.................F...F....                                            [100%]
+================================== FAILURES ===================================
+E   assert False
+     +  where False = all(<generator object test_action_specific_fallback_and_recovery.<locals>.<genexpr> at 0x000002181FE9BD80>)
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[CLUE DISCOVERED] notice_patrol_route
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_62_investigation_quality.py:38: assert False
+E   AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+      
+      - You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. Rain falls around the notice board.
+      ?                 ^^ ---                                                                                    ------------------------------------
+      + You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.
+      ?                 ^^^   ++++++
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_60_inventory_projection.py:56: AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+E   AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+      
+      - You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. Rain falls around the notice board.
+      ?                 ^^ ---                                                                                    ------------------------------------
+      + You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.
+      ?                 ^^^   ++++++
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_60_inventory_projection.py:56: AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+E   AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+      
+      - You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. Rain falls around the notice board.
+      ?                 ^^ ---                                                                                    ------------------------------------
+      + You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.
+      ?                 ^^^   ++++++
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_60_inventory_projection.py:56: AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+E   AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+      
+      - You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. Rain falls around the notice board.
+      ?                 ^^ ---                                                                                    ------------------------------------
+      + You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.
+      ?                 ^^^   ++++++
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_60_inventory_projection.py:56: AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+E   AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+      
+      - You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. Rain falls around the notice board.
+      ?                 ^^ ---                                                                                    ------------------------------------
+      + You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.
+      ?                 ^^^   ++++++
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_60_inventory_projection.py:56: AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+E   AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+      
+      - You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. Rain falls around the notice board.
+      ?                 ^^ ---                                                                                    ------------------------------------
+      + You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.
+      ?                 ^^^   ++++++
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_60_inventory_projection.py:56: AssertionError: assert 'You examine ...t the crates.' == 'You examine ...notice board.'
+E   assert False
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py:308: assert False
+E   assert set()
+     +  where set() = get_all_known_clue_ids({})
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_narration_state_consistency.py:75: assert set()
+E   assert set()
+     +  where set() = get_all_known_clue_ids({})
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_narration_state_consistency.py:172: assert set()
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_62_investigation_quality.py::test_action_specific_fallback_and_recovery
+FAILED tests/test_pr_play_60_inventory_projection.py::test_quarantine_failure_preserves_input_and_fallback[The missing patrol was last seen taking the northwest mud track past the crates. You acquire a ruby.]
+FAILED tests/test_pr_play_60_inventory_projection.py::test_quarantine_failure_preserves_input_and_fallback[The missing patrol was last seen taking the northwest mud track past the crates. The gate is permanently open.]
+FAILED tests/test_pr_play_60_inventory_projection.py::test_quarantine_failure_preserves_input_and_fallback[Rain falls.]
+FAILED tests/test_pr_play_60_inventory_projection.py::test_quarantine_failure_preserves_input_and_fallback[]
+FAILED tests/test_pr_play_60_inventory_projection.py::test_quarantine_failure_preserves_input_and_fallback[text4]
+FAILED tests/test_pr_play_60_inventory_projection.py::test_quarantine_failure_preserves_input_and_fallback[unfinished]
+FAILED tests/test_provider_accounting_integrity.py::test_readiness_acceptance_is_not_live_execution
+FAILED tests/test_narration_state_consistency.py::test_refusal_text_with_location_repair_updates_state_and_clues
+FAILED tests/test_narration_state_consistency.py::test_usable_location_in_text_updates_structured_topic_and_clues
+10 failed, 739 passed, 1 warning in 287.74s (0:04:47)

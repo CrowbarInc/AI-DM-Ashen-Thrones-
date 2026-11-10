@@ -1,0 +1,123 @@
+{
+  "validator_results": [
+    {
+      "request_id": "A1",
+      "word_count": 56,
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validator_decision": "pass",
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      },
+      "unsupported_claims": [],
+      "hidden_information_reasons": [],
+      "fallback_output": "You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "assembled_preview": "The notice board stands weathered and crowded, its surface plastered with official decrees and hastily scrawled warnings. Nearby, the murmur of the gate serjeant and the clatter of the tavern runner\u2019s calls mingle with the restless shifting of watchers and refugees. The board\u2019s messages draw a wary crowd, each line hinting at unease and unanswered questions.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchor_exact": true,
+      "independent_mechanically_safe": true,
+      "disagreement_class": "correct_acceptance",
+      "review_required": true,
+      "player_facing": false
+    },
+    {
+      "request_id": "A2",
+      "word_count": 52,
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validator_decision": "pass",
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      },
+      "unsupported_claims": [],
+      "hidden_information_reasons": [],
+      "fallback_output": "You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "assembled_preview": "The notice board stands weathered and worn, its surface crowded with official decrees and hastily scrawled warnings. Nearby, the murmur of the gate serjeant and the clatter of the tavern runner\u2019s trade blend with the restless shifting of watchers and refugees. The board\u2019s messages seem to pulse with urgency, inviting closer scrutiny.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+      "anchor_exact": true,
+      "independent_mechanically_safe": true,
+      "disagreement_class": "correct_acceptance",
+      "review_required": true,
+      "player_facing": false
+    },
+    {
+      "request_id": "B1",
+      "word_count": 41,
+      "diagnostic": "heuristic_pass_pending_review",
+      "used_fallback": false,
+      "validator_decision": "pass",
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      },
+      "unsupported_claims": [],
+      "hidden_information_reasons": [],
+      "fallback_output": "You examine the evidence. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+      "assembled_preview": "The damp earth near the leaning milestone bears the faint impression of footsteps, their edges softened by recent rain. The muddied ground tells a story of passage, yet the details remain elusive, leaving the trail\u2019s origin and direction shrouded in uncertainty.\n\nFaint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "anchor_exact": true,
+      "independent_mechanically_safe": true,
+      "disagreement_class": "correct_acceptance",
+      "review_required": true,
+      "player_facing": false
+    },
+    {
+      "request_id": "B2",
+      "word_count": 41,
+      "diagnostic": "semantic_rejection",
+      "used_fallback": true,
+      "validator_decision": "reject",
+      "hard_valid": false,
+      "reasons": [
+        "ungrounded_authoritative_rule"
+      ],
+      "soft_flags": [],
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      },
+      "unsupported_claims": [],
+      "hidden_information_reasons": [],
+      "fallback_output": "You examine the evidence. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+      "assembled_preview": "You examine the evidence. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+      "anchor_exact": true,
+      "independent_mechanically_safe": true,
+      "disagreement_class": "false_rejection",
+      "review_required": true,
+      "player_facing": false
+    }
+  ],
+  "passes": 3,
+  "rejections": 1,
+  "disagreement_counts": {
+    "correct_acceptance": 3,
+    "correct_rejection": 0,
+    "false_acceptance": 0,
+    "false_rejection": 1
+  },
+  "wall_clock_latency_ms": {
+    "values": [
+      3212.535,
+      1800.05,
+      1735.375,
+      2143.352
+    ],
+    "mean": 2222.828,
+    "median": 1971.701,
+    "min": 1735.375,
+    "max": 3212.535
+  },
+  "provider_requests_during_evaluation": 0
+}

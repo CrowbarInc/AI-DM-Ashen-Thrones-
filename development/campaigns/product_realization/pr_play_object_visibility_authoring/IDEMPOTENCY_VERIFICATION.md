@@ -1,0 +1,5 @@
+# Idempotency Verification
+
+Milestone: `pr_play_object_visibility_authoring`. Date: 2026-11-09.
+
+Shared ledger remains character.object_marking_receipts v1. Add/remove receipt shapes remain unchanged. Classification result adds operation and complete canonical request; status applied increments exactly once, no_change increments zero. Validator checks historical semantic digests, mark-to-object linkage, revision bounds/types, revision uniqueness for actual changes, complete ledger coverage and malformed receipts. Same request/digest returns detached original committed result before current revision or active mark checks, even after later transitions/removal/reload. Different digest conflicts, including all tested add/remove/classification request-ID reuse directions. Current classification is read solely from row metadata; receipts never drive observation or reconstruct current classification. Snapshot rollback restores that timeline receipt set; no global exactly-once claim. Evidence: visibility_idempotency_controls.json, no_change_and_restricted.json, classification_timeline.json, ambiguous_reconciliation.json and evidence_authoring_junit.xml.

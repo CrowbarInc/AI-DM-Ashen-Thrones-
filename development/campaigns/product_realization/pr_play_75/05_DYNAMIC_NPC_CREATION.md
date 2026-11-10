@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 05 DYNAMIC NPC CREATION
+
+Creation requires explicit introduction intent, feature enrollment, matching current campaign/scene and affirmative public population support. Empty/deserted/abandoned/inaccessible/no-people contexts reject. Old Milestone cannot be populated just for the test; campaigns return to the existing gate crowd. Harbor/quay fixtures demonstrate vocabulary independent of Cinderwatch and stone. The provider proposes structured name/role/appearance/demeanor; engine code creates identity, location, label, provenance, creation turn and interaction scope. Extra fields and consequential attributes fail closed. Six ordinary roles and four clothing choices are deliberate current limits.

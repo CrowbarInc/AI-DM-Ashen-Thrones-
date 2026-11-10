@@ -1,0 +1,3 @@
+# PR-PLAY-74 — 04 WORLD STATE ARCHITECTURE
+
+Player initiative read-only planning -> stored interpretation bridge revalidation -> existing exploration resolver -> existing bounded_improvisation ledger in session -> existing transaction/persistence/snapshot -> resolver engine_publication. Existing PR73 physical_search resolves inspection and no-discovery behavior. Stable identity hashes campaign, scene, family and public anchor. Existing incidental_entity NPC support was considered but does not provide the required full proposal/persistence/publication contract for this slice; NPC creation is deferred. No parallel world store or action engine.

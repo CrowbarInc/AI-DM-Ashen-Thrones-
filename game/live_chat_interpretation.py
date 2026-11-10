@@ -438,7 +438,11 @@ def interpret_production_turn(
             reason,
             PLAYTEST_STOP_MESSAGE if sdk_retry_options() and reason == "request ceiling" else "I couldn't interpret that just now, so no gameplay action was taken.",
             tags=["interpretation_rejected", "non_mutating"],
-            extra={"provider_requests": provider_requests, "provider_error": call.get("error")},
+            extra={
+                "provider_requests": provider_requests,
+                "provider_error": call.get("error"),
+                "provider_request_sent": call.get("sent") is True,
+            },
         )
 
     raw = redact(str(call.get("text") or ""))

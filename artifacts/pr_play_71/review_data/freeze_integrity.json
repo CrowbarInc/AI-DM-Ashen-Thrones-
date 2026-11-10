@@ -1,0 +1,21 @@
+{
+  "evaluated_source_preserved": {
+    "game/api.py": true,
+    "game/authored_consequences.py": true,
+    "game/campaign_reset.py": true,
+    "static/app.js": true,
+    "tests/test_pr_play_71_lifecycle.py": true,
+    "artifacts/pr_play_71/cases.py": true,
+    "artifacts/pr_play_71/holdout.py": true
+  },
+  "final_source_matches_original_freeze": {
+    "game/api.py": false,
+    "game/authored_consequences.py": true,
+    "game/campaign_reset.py": false,
+    "static/app.js": true,
+    "tests/test_pr_play_71_lifecycle.py": false,
+    "artifacts/pr_play_71/cases.py": true,
+    "artifacts/pr_play_71/holdout.py": true
+  },
+  "explanation": "After frozen run completion, targeted regression/persistence repairs changed API/reset and storage/quarantine helper. No frozen rerun."
+}

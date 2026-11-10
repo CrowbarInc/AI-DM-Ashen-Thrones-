@@ -1,0 +1,267 @@
+{
+  "campaign_id": "pr_play_grounded_marking_removal",
+  "campaign_name": "PR-PLAY \u2014 Grounded Marking Removal and Lifecycle Closure",
+  "campaign_date": "2026-11-09",
+  "purpose": "Player-facing removal of one established visible marking through the existing chat turn and removal service",
+  "objective_status": "A/PASS",
+  "executive_summary": "**A/PASS.** A player can create a visible marking, read it, wipe that one marking off in ordinary language, and read its absence. The removal commits through prepare_removal. Save, reload, and snapshot restore keep it removed. An exact retry does not remove it again. Concealed, restricted, and a second identical marking are not selected. A contradictory seal is replaced by the committed sentence. Twelve-turn text matches the immediate predecessor. Focused modules 611 passed. Combined before and after: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests), same identities. Live provider calls 0. The marking lifecycle can close as a bounded subsystem. Next milestone: pr_play_broad_gameplay_evaluation. Do not begin automatically.",
+  "changes": {
+    "production": [
+      "game/api.py",
+      "game/marking_removal.py"
+    ],
+    "validation": [
+      "15 removal tests passed inside a 611-passed focused run."
+    ],
+    "tooling": [
+      "Cycle-local twelve-turn comparison and removal timing"
+    ],
+    "documentation": [
+      "20 milestone reports; historical NEXT_SESSION retained"
+    ],
+    "generated_artifacts": [
+      "Controlled lifecycle evidence, regression junit, twelve-turn comparison, and a fresh review archive"
+    ]
+  },
+  "testing": {
+    "focused": "Removal 15 passed. Observation 10 passed. Grounded marking 12 passed. Focused command 611 passed / 0 failed.",
+    "broader": "Combined before and after: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). New failing identities: none. Newly passing: none.",
+    "runtime_validation": "Controlled HTTP mark, observe, wipe, observe, reload, retry, and snapshot restore. Twelve-turn HTTP run. Publication and feasibility tests.",
+    "full_suite": "Not run",
+    "model_runtime_boundary": "Zero provider calls; providers disabled.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "The same 20 combined identities before and after. Seventeen match the predecessor. Three classification tests had already failed in this cycle's before run. See REGRESSION_RESULTS.md."
+  },
+  "decisions_requiring_human_review": [
+    "No further authorization required for this bounded implementation."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Original T06 stays unresolved because no garment or medium is established. A pronoun does not select an object. Required consumption and required mechanics stay unresolved. Ordinary observation does not certify that concealed markings are absent."
+    ],
+    "pre_existing": [
+      "Combined 20 failure identities. See REGRESSION_RESULTS.md."
+    ]
+  },
+  "missing_concepts": [
+    "A broader gameplay evaluation of the remaining twelve-turn gaps."
+  ],
+  "does_not_prove": [
+    "Environmental material inference, consumption, mechanical skill checks, bulk removal, a full suite, live-model play, or all object interaction."
+  ],
+  "recommended_next_step": "Exactly one recommended next milestone: pr_play_broad_gameplay_evaluation \u2014 one provider-free pass over the remaining twelve-turn gaps that names a single later integration target. Do not begin automatically.",
+  "self_contained_review_test": "Reopen the archive and confirm milestone identity, the controlled HTTP lifecycle, target and marking resolution, physical feasibility, authoritative removal, publication integrity, confidentiality, save/reload and snapshots, regressions, the twelve-turn comparison, subsystem closure, and the updated handoff.",
+  "primary_report": "development/campaigns/product_realization/pr_play_grounded_marking_removal/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\AUTHORITY_AND_IDEMPOTENCY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\BASELINE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\CONFIDENTIALITY_VERIFICATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\CONTROLLED_HTTP_LIFECYCLE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\INTEGRITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\INTENT_RECOGNITION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\NEXT_STEP_DECISION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\PARAPHRASE_CONTROLS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\PERFORMANCE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\PERSISTENCE_VERIFICATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\PHYSICAL_FEASIBILITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\PUBLICATION_INTEGRITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\REGRESSION_RESULTS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\REMOVAL_INTEGRATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\RULESET_PORTABILITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\SUBSYSTEM_CLOSURE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\SUMMARY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\TARGET_RESOLUTION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\TURN_ATOMICITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_grounded_marking_removal\\TWELVE_TURN_COMPARISON.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/controlled_http_lifecycle.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/mixed_marking_controls.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/paraphrase_results.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/publication_and_feasibility.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/twelve_turn_after.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/performance.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/regression_results.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/source_changes.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/before_new_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/before_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/after_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "artifacts/pr_play_grounded_marking_removal/after_focused_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "game/marking_removal.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "tests/test_grounded_marking_removal.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Milestone report or evidence for grounded marking removal."
+    }
+  ]
+}

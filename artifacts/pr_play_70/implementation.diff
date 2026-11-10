@@ -1,0 +1,347 @@
+--- entry/game/api.py
++++ game/api.py
+@@ -4493,6 +4493,13 @@
+ 
+ def _finalize_investigation_publication(gm, canonical_gm, response_payload, resolution, session, player_text):
+     """Shared post-persistence PR66 boundary for chat and structured actions."""
++    from game.authored_consequences import trusted_text
++    text = trusted_text(resolution)
++    if text:
++        for item in (gm, canonical_gm, response_payload.get('gm_output')):
++            if isinstance(item, dict):
++                item['player_facing_text'] = text
++        return
+     publication = None
+     if os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1':
+         from game.quarantined_investigation_narration import prepare_authoritative_publication
+@@ -4626,6 +4633,13 @@
+         route_choice=route_choice,
+         directed_social_entry=directed_social_entry,
+     )
++    from game.authored_consequences import trusted_text
++    consequence_text = trusted_text(resolution)
++    if consequence_text:
++        gm = {'player_facing_text': consequence_text, 'tags': [], 'scene_update': None,
++              'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None,
++              'suggested_action': None, 'debug_notes': 'engine_authored_consequence'}
++        return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
+     gm = _build_gpt_narration_from_authoritative_state(
+         campaign=campaign,
+         world=world,
+--- entry/game/storage.py
++++ game/storage.py
+@@ -348,7 +348,8 @@
+ 
+ def get_effective_scene(session: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
+     """Load canon and merge the session runtime overlay; required for gameplay logic."""
+-    return build_effective_scene(load_scene(scene_id), get_runtime_scene_overlay(session, scene_id))
++    from game.authored_consequences import overlay
++    return overlay(build_effective_scene(load_scene(scene_id), get_runtime_scene_overlay(session, scene_id)), session)
+ 
+ 
+ def activate_scene(scene_id: str) -> Dict[str, Any]:
+--- entry/game/exploration.py
++++ game/exploration.py
+@@ -117,6 +117,7 @@
+     scene_id = str(scene.get("id") or "").strip()
+     scene_runtime = get_scene_runtime(session, scene_id) if scene_id else {}
+     action_id = str(normalized_action.get("id") or "").strip() or "action"
++
+     character_id = (character or {}).get("id", "")
+     turn_counter = session.get("turn_counter", 0)
+     return {
+@@ -221,6 +222,11 @@
+     if target_scene_id is not None:
+         target_scene_id = str(target_scene_id).strip() or None
+     action_id = str(normalized_action.get("id") or "").strip() or "action"
++
++    from game.authored_consequences import resolve as resolve_consequence
++    consequence = resolve_consequence(scene, session, world, normalized_action)
++    if consequence is not None:
++        return consequence
+ 
+     known_ids: List[str] = []
+     if list_scene_ids is not None:
+@@ -706,6 +712,10 @@
+         transition_candidate=transition_candidate,
+     )
+ 
++    # These keys belong exclusively to the server-authored consequence resolver.
++    # Transition metadata otherwise preserves legacy client fields.
++    res_metadata.pop('authored_consequence', None)
++    res_metadata.pop('trusted_text', None)
+     result = ExplorationEngineResult(
+         kind=action_type,
+         action_id=action_id,
+--- /dev/null
++++ game/authored_consequences.py
+@@ -0,0 +1,55 @@
++"""Finite server-authored consequences, using existing conditions and world flags."""
++import copy
++import json
++import os
++from pathlib import Path
++
++GATE = 'ASHEN_EXPERIMENTAL_BRANCHING'
++SESSION = 'ASHEN_EXPERIMENTAL_BRANCHING_SESSION'
++FIXTURE = Path(__file__).resolve().parents[1] / 'experiments/pr_play_70/scene_actions.json'
++
++
++def overlay(scene, session):
++    sid = str(session.get('campaign_run_id') or session.get('session_id') or '')
++    if os.environ.get(GATE) != '1' or not sid or os.environ.get(SESSION) != sid:
++        return scene
++    actions = json.loads(FIXTURE.read_text(encoding='utf-8')).get(scene.get('scene', {}).get('id'), [])
++    result = copy.deepcopy(scene)
++    result['scene'].setdefault('actions', []).extend(actions)
++    return result
++
++
++def resolve(scene, session, world, action):
++    """No mutations: only current server scene definitions can supply effects."""
++    from game.affordances import _affordance_passes_conditions
++    from game.models import ExplorationEngineResult
++    aid = str(action.get('id') or '')
++    definitions = [a for a in scene.get('actions', []) if isinstance(a, dict) and a.get('id') == aid]
++    authored = definitions[0] if len(definitions) == 1 else None
++    if not authored or 'consequence' not in authored:
++        return None
++    effect = authored['consequence']
++    conditions = authored.get('conditions', {})
++    allowed_conditions = {'requires_flags', 'excludes_flags', 'requires_clues', 'excludes_clues'}
++    valid = (isinstance(effect, dict) and set(effect) == {'set_flags', 'text'}
++             and isinstance(effect.get('text'), str) and bool(effect['text'].strip())
++             and isinstance(effect.get('set_flags'), dict) and bool(effect['set_flags'])
++             and all(isinstance(k, str) and k and not k.startswith('_') and v is True
++                     for k, v in effect['set_flags'].items())
++             and authored.get('type') == 'custom'
++             and isinstance(conditions, dict) and set(conditions) <= allowed_conditions
++             and all(isinstance(v, list) and all(isinstance(k, str) and k for k in v)
++                     for v in conditions.values())
++             and set(effect['set_flags']) <= set(conditions.get('excludes_flags', [])))
++    available = valid and _affordance_passes_conditions(authored, scene.get('id', ''), session, world)
++    text = effect['text'] if available else 'That choice is not available here. No consequence was applied.'
++    return ExplorationEngineResult(
++        kind='custom', action_id=aid, label=authored['label'], prompt=authored.get('prompt') or authored['label'],
++        success=bool(available), resolved_transition=False, target_scene_id=None, clue_id=None,
++        world_updates={'set_flags': copy.deepcopy(effect['set_flags'])} if available else None,
++        hint=text, metadata={'authored_consequence': True, 'trusted_text': text}).to_dict()
++
++
++def trusted_text(resolution):
++    meta = (resolution or {}).get('metadata') or {}
++    return meta.get('trusted_text') if (resolution or {}).get('kind') == 'custom' and meta.get('authored_consequence') is True else None
+--- /dev/null
++++ experiments/pr_play_70/scene_actions.json
+@@ -0,0 +1,92 @@
++{
++  "old_milestone": [
++    {
++      "id": "patrol_survey",
++      "label": "Survey the uncertain trail yourself",
++      "prompt": "Survey the uncertain trail yourself",
++      "type": "custom",
++      "conditions": {
++        "requires_clues": [
++          "notice_patrol_route",
++          "milestone_mud_prints"
++        ],
++        "excludes_flags": [
++          "patrol_survey",
++          "patrol_report"
++        ]
++      },
++      "consequence": {
++        "set_flags": {
++          "patrol_survey": true
++        },
++        "text": "You commit to surveying the ground beyond the milestone yourself. Reporting to the watch is no longer your response to this discovery. You can now record the limits of your survey here."
++      }
++    },
++    {
++      "id": "patrol_report",
++      "label": "Return to report the uncertain trail to the watch",
++      "prompt": "Return to report the uncertain trail to the watch",
++      "type": "custom",
++      "conditions": {
++        "requires_clues": [
++          "notice_patrol_route",
++          "milestone_mud_prints"
++        ],
++        "excludes_flags": [
++          "patrol_survey",
++          "patrol_report"
++        ]
++      },
++      "consequence": {
++        "set_flags": {
++          "patrol_report": true
++        },
++        "text": "You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report."
++      }
++    },
++    {
++      "id": "patrol_record_survey",
++      "label": "Record the limits of your survey",
++      "prompt": "Record the limits of your survey",
++      "type": "custom",
++      "conditions": {
++        "requires_flags": [
++          "patrol_survey"
++        ],
++        "excludes_flags": [
++          "patrol_report",
++          "patrol_survey_recorded"
++        ]
++      },
++      "consequence": {
++        "set_flags": {
++          "patrol_survey_recorded": true
++        },
++        "text": "You record your survey: the overlapping prints remain inconclusive. Your survey is now recorded; you have not warned the watch. You can return to the gate or continue investigating here."
++      }
++    }
++  ],
++  "frontier_gate": [
++    {
++      "id": "patrol_warn_watch",
++      "label": "Give the watch your patrol report",
++      "prompt": "Give the watch your patrol report",
++      "type": "custom",
++      "conditions": {
++        "requires_flags": [
++          "patrol_report"
++        ],
++        "excludes_flags": [
++          "patrol_survey",
++          "patrol_guards_warned"
++        ]
++      },
++      "consequence": {
++        "set_flags": {
++          "patrol_guards_warned": true
++        },
++        "text": "The watch receives your report that the patrol trail becomes unclear at the milestone. The watch has now been warned; no private survey was conducted. You can continue your inquiry at the gate or return to the milestone."
++      }
++    }
++  ]
++}--- /dev/null
++++ tests/test_pr_play_70_branching.py
+@@ -0,0 +1,117 @@
++"""PR70 branch development checks through the supported HTTP action boundary."""
++import copy,json
++from pathlib import Path
++import pytest
++from fastapi.testclient import TestClient
++from game import api,storage,authored_consequences as c
++from tests.test_pr_play_66_publication import setup as prior_setup
++from game import integrated_investigation_narration as i,quarantined_investigation_narration as q
++
++ROOT=Path(__file__).resolve().parents[1]
++DEFS=json.loads(c.FIXTURE.read_text())
++
++def setup(tmp_path,mp,ready=True):
++    prior_setup(tmp_path,mp)
++    mp.setenv(c.GATE,'1');mp.setenv(c.SESSION,storage.load_session()['campaign_run_id'])
++    original=i.run_integrated_hook
++    mp.setattr(i,'run_integrated_hook',lambda h,**kw:original(h,generator=q._Replay('', '')))
++    if ready:
++        from tests.test_pr_play_52_quarantined_integration import NOTICE_CLUE,PRINT_CLUE
++        s=storage.load_session()
++        for sid,text in [('frontier_gate',NOTICE_CLUE),('old_milestone',PRINT_CLUE)]:
++            from game.clues import apply_authoritative_clue_discovery
++            apply_authoritative_clue_discovery(s,sid,clue_id='notice_patrol_route' if sid=='frontier_gate' else 'milestone_mud_prints',clue_text=text,world=storage.load_world())
++        storage.save_session(s)
++
++def payload(a):return dict(action_type='exploration',intent=a['label'],exploration_action=dict(id=a['id'],type='custom',label=a['label'],metadata={'consequence':{'set_flags':{'CANARY_CLIENT_EFFECT':True}},'trusted_text':'CANARY_CLIENT_TEXT'}))
++def flags():return storage.load_world().get('world_state',{}).get('flags',{})
++def act(client,a):
++    r=client.post('/api/action',json=payload(a));assert r.status_code==200,r.text
++    assert 'CANARY_' not in r.text
++    return r.json()
++def actions():return [a['id'] for a in api.compose_state()['ui']['affordances']]
++def move(sid):
++    s=storage.load_session();s['active_scene_id']=sid;storage.save_session(s)
++
++@pytest.mark.parametrize('branch',['survey','report'])
++@pytest.mark.parametrize('narration',[False,True])
++def test_branch_loop(tmp_path,monkeypatch,branch,narration):
++    setup(tmp_path,monkeypatch);monkeypatch.setenv(q.PUBLICATION_ENV,'1' if narration else '0')
++    index=0 if branch=='survey' else 1;a=DEFS['old_milestone'][index];other=DEFS['old_milestone'][1-index]
++    assert a['id'] in actions() and other['id'] in actions()
++    with TestClient(api.app) as client:
++        result=act(client,a);assert a['consequence']['text']==result['gm_output']['player_facing_text']
++        before=copy.deepcopy(flags());assert before[a['id']] is True and not before.get(other['id'])
++        for attempted in [a,other]:
++            act(client,attempted);assert flags()==before
++        assert a['id'] not in actions() and other['id'] not in actions()
++        if branch=='report':move('frontier_gate')
++        follow=DEFS['old_milestone'][2] if branch=='survey' else DEFS['frontier_gate'][0]
++        assert follow['id'] in actions()
++        result=act(client,follow);assert result['gm_output']['player_facing_text']==follow['consequence']['text']
++        assert all(flags()[k] for k in follow['consequence']['set_flags'])
++        before=copy.deepcopy(flags());act(client,follow);assert flags()==before
++        assert follow['id'] not in actions()
++        assert client.get('/api/state').status_code==200
++        assert flags()==before
++        assert not flags().get('CANARY_CLIENT_EFFECT')
++
++@pytest.mark.parametrize('branch',[0,1])
++@pytest.mark.parametrize('fault',['prerequisite','wrong_scene','disabled','wrong_session'])
++def test_unavailable(tmp_path,monkeypatch,branch,fault):
++    setup(tmp_path,monkeypatch,ready=fault!='prerequisite')
++    if fault=='wrong_scene':move('frontier_gate')
++    if fault=='disabled':monkeypatch.setenv(c.GATE,'0')
++    if fault=='wrong_session':monkeypatch.setenv(c.SESSION,'other')
++    a=DEFS['old_milestone'][branch];assert a['id'] not in actions();before=copy.deepcopy(flags())
++    with TestClient(api.app) as client:act(client,a)
++    assert flags()==before
++
++@pytest.mark.parametrize('fault',['unavailable','timeout','empty','malformed','FAIL','REVIEW_REQUIRED','VALIDATION_ERROR','wrong_branch','both','inventory','route','hidden'])
++def test_provider_cannot_affect_branch(tmp_path,monkeypatch,fault):
++    setup(tmp_path,monkeypatch)
++    def forbidden(*args,**kwargs):raise AssertionError('Consequence must be provider-free: '+fault)
++    monkeypatch.setattr(api,'call_gpt',forbidden);monkeypatch.setattr(i,'run_integrated_hook',forbidden)
++    with TestClient(api.app) as client:r=act(client,DEFS['old_milestone'][0])
++    assert r['gm_output']['player_facing_text']==DEFS['old_milestone'][0]['consequence']['text']
++    assert flags().get('patrol_survey') and not flags().get('patrol_report')
++
++@pytest.mark.parametrize('kind',['custom','scene_transition','observe','investigate','travel'])
++def test_forged_publication_marker(tmp_path,monkeypatch,kind):
++    setup(tmp_path,monkeypatch)
++    a={'id':'invented','label':'Wait','type':kind,'targetSceneId':'frontier_gate','metadata':{'authored_consequence':True,'trusted_text':'CANARY_FORGED_PUBLICATION'}}
++    with TestClient(api.app) as client:
++        r=client.post('/api/action',json=dict(action_type='exploration',intent='Wait',exploration_action=a))
++    assert r.status_code==200 and 'CANARY_FORGED_PUBLICATION' not in r.text
++
++@pytest.mark.parametrize('raw',['The watch has been warned.','Both choices are complete.','You gain a silver key.','A secret road opens.','CANARY_HIDDEN_DESTINATION','',None,{}])
++def test_publication_recovers_exact_outcome(tmp_path,monkeypatch,raw):
++    setup(tmp_path,monkeypatch)
++    from game.exploration import resolve_exploration_action
++    a=DEFS['old_milestone'][0]
++    resolution=resolve_exploration_action(storage.load_active_scene(),storage.load_session(),storage.load_world(),a)
++    gm={'player_facing_text':raw};payload={'gm_output':{'player_facing_text':raw}}
++    before=copy.deepcopy(flags())
++    api._finalize_investigation_publication(gm,gm,payload,resolution,storage.load_session(),a['label'])
++    assert gm['player_facing_text']==payload['gm_output']['player_facing_text']==a['consequence']['text']
++    assert flags()==before
++
++@pytest.mark.parametrize('fault',['none','unknown_condition','bad_flags','bad_text','non_idempotent'])
++def test_unrelated_authored_content(fault):
++    from game.exploration import resolve_exploration_action
++    from game.world import apply_resolution_world_updates
++    from game.defaults import default_world,default_session
++    a={'id':'seal_archive','label':'Seal the archive','type':'custom','conditions':{'excludes_flags':['archive_sealed']},'consequence':{'set_flags':{'archive_sealed':True},'text':'You seal the archive.'}}
++    if fault=='unknown_condition':a['conditions']['unknown_condition']=['hidden']
++    if fault=='bad_flags':a['consequence']['set_flags']={'archive_sealed':'yes'}
++    if fault=='bad_text':a['consequence']['text']={}
++    if fault=='non_idempotent':a['conditions']={}
++    scene={'scene':{'id':'archive','actions':[a]}};session=default_session();world=default_world()
++    before=copy.deepcopy(world);result=resolve_exploration_action(scene,session,world,a)
++    assert world==before
++    assert result['success']==(fault=='none')
++    if fault=='none':
++        apply_resolution_world_updates(world,result['world_updates'])
++        assert world['world_state']['flags']['archive_sealed'] is True
++        assert resolve_exploration_action(scene,session,world,a)['world_updates'] is None
++    else:assert result['world_updates'] is None

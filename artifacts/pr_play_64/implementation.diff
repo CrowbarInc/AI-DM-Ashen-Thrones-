@@ -1,0 +1,64 @@
+--- entry/game/consequential_narration_validation.py
++++ game/consequential_narration_validation.py
+@@ -494,7 +494,8 @@
+     match = re.search(
+         r"\byou\s+(?:now\s+)?(?:receive|acquire|obtain|collect|pocket|stash|claim)\s+"
+         r"(?!a\s+(?:moment|look|breath|sense|glimpse)\b)(.+)$"
+-        r"|\byou\s+take\s+(?:the|a|an)\s+(?!moment\b|look\b|breath\b|step\b)(.+)$"
++        r"|\byou\s+take\s+(?:the|a|an)\s+"
++        r"(?!moment\b|(?:(?:careful|closer)\s+)?look\b|breath\b|step\b)(.+)$"
+         r"|\byou\s+are\s+(?:now\s+)?(?:\w+\s+){0,4}richer\b",
+         clause,
+         re.IGNORECASE,
+@@ -711,7 +712,20 @@
+         return []
+     if re.search(r"\bbelong\b|\blead", clause, re.IGNORECASE) and not _relation_supported(clause, authority):
+         return [_claim("discovery", "unauthorized_discovery", clause)]
+-    if not _covered(clause, authority):
++    # PR-PLAY-63 checked introductory observation words as part of the route
++    # itself. Remove only finite information-carrier prefixes, retaining the
++    # entire asserted content (subject, path, landmarks and any additions).
++    # This is local to reported movement; other claim extractors still inspect
++    # the original clause and mandatory coverage still checks the full fact.
++    content = re.sub(
++        r"^(?:you\s+(?:now\s+)?(?:learn|read|recognize|realize|understand)\s+that\s+"
++        r"|you\s+(?:study|examine|read)\s+the\s+notice(?:\s+board)?\s+and\s+"
++        r"(?:learn|read|recognize|realize|understand)\s+that\s+"
++        r"|studying\s+the\s+notice(?:\s+board)?\s+reveals\s+that\s+"
++        r"|the\s+notice(?:\s+board)?\s+(?:reveals|records)\s+that\s+)",
++        "", clause, count=1, flags=re.IGNORECASE,
++    ) if re.search(r"\bwas\s+last\s+(?:seen|spotted|observed)\s+(?:taking|heading|following)\b", clause, re.IGNORECASE) else clause
++    if not _covered(content, authority):
+         return [_claim("discovery", "unauthorized_discovery", clause)]
+     return []
+ 
+--- entry/game/integrated_investigation_narration.py
++++ game/integrated_investigation_narration.py
+@@ -101,6 +101,10 @@
+     if any(ord(c) < 32 and c not in '\n\t\r' for c in raw) or raw.rstrip()[-1] not in '.!?\u201d"':
+         raise ValueError('integrated_response_incomplete_or_control_character')
+     r = anchored._resolution(contract)
++    # Legacy discovery assertions also need already disclosed authorization.
++    # Keep this separate from resolver-selected discoveries: it grants no new
++    # disclosure and does not add a mandatory outcome to the current action.
++    r['previously_disclosed_information'] = list(contract.outcome.known)
+     audit = validate_generated_response(raw, resolution=r, contract=contract_mapping_from_resolution(r))
+     decision = semantic.validate_consequential_narration(raw, semantic.authority_from_anchored(contract))
+     audit = semantic.apply_consequential_gate(audit, decision)
+--- entry/game/mechanical_claims.py
++++ game/mechanical_claims.py
+@@ -226,6 +226,14 @@
+                     claim = match[1] or ''
+                     value = effects.get(key)
+                     ok = bool(value) if not claim else _supported(claim, value)
++                    if key == 'revealed':
++                        # "learn that <fact>" asserts the same fact as <fact>.
++                        # Compare the entire complement, retaining additions.
++                        # Prior disclosure is optional authority, never a delta.
++                        prior = resolution.get('previously_disclosed_information', []) if isinstance(resolution, Mapping) else []
++                        prior = [v for v in prior if isinstance(v, str)] if isinstance(prior, list) else []
++                        content = re.sub(r'^that\s+', '', claim, count=1, flags=re.I)
++                        ok = _supported(content, list(effects.get('revealed') or []) + prior)
+                     if key in {'damage_taken', 'health_recovered'} and claim:
+                         ok = _norm(claim) == _norm(value)
+                     claims.append((key, claim, ok))

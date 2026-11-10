@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="37.952" timestamp="2026-11-02T19:14:41.329823-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="" name="tests.test_pr_bu_narration_claim_composition" time="0.000"><error message="collection failure">tests\test_pr_bu_narration_claim_composition.py:142: in &lt;module&gt;
+    @pytest.mark.parametrize("case_id", _matrix_ids())
+                                        ^^^^^^^^^^^^^
+tests\test_pr_bu_narration_claim_composition.py:138: in _matrix_ids
+    payload = json.loads(MATRIX.read_text(encoding="utf-8"))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_47_workspace\\PR-BU_validator_semantic_matrix.json'</error></testcase></testsuite></testsuites>

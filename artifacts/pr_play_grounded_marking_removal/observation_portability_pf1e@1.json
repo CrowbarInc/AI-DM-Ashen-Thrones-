@@ -1,0 +1,261 @@
+{
+  "before": {
+    "id": "hero",
+    "inventory": [
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "legacy": {
+          "nested": [
+            1,
+            2
+          ]
+        },
+        "instance_id": "a1991005-93dc-4bb8-a1be-41b615c3bcec",
+        "revision": 1,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        },
+        "markings": [
+          {
+            "version": 1,
+            "type": "add_marking",
+            "modification_id": "f8c616a3-acb3-4a9d-baf8-ffe0d1b849c9",
+            "content": "same inscription",
+            "source": {
+              "kind": "explicit_literal",
+              "reference": "controlled-fixture"
+            },
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "approval-1",
+              "content_sha256": "fb0e5f5d29f7d1c82d3f673d9a37268d6da79e94d30b4128c5169f75f3cc9ddb",
+              "preconditions": {
+                "capability": "fixture-evidence:capability",
+                "source_disclosed": "fixture-evidence:source_disclosed",
+                "writable_surface": "fixture-evidence:writable_surface",
+                "medium_compatible": "fixture-evidence:medium_compatible",
+                "rights": "fixture-evidence:rights",
+                "target_exists": "fixture-evidence:target_exists",
+                "accessible": "fixture-evidence:accessible",
+                "medium_available": "fixture-evidence:medium_available"
+              },
+              "mechanics": "not_applicable"
+            },
+            "request_id": "same",
+            "request_digest": "ec4147afb8a32068633f447686a4afd20249b6304c6858f191bb701248d57aea",
+            "applied_revision": 1
+          }
+        ],
+        "marking_visibility": {
+          "version": 1,
+          "markings": {
+            "f8c616a3-acb3-4a9d-baf8-ffe0d1b849c9": {
+              "classification": "visible"
+            }
+          }
+        },
+        "extensions": {
+          "pf1e@1": {
+            "ac": 4,
+            "perception_dc": 99
+          }
+        }
+      },
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "instance_id": "27044aa7-fdbd-4ae9-88e7-728c96cf1a55",
+        "revision": 0,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        }
+      }
+    ],
+    "unknown_character": {
+      "keep": true
+    },
+    "object_marking_receipts": {
+      "version": 1,
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "entries": {
+        "same": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "a1991005-93dc-4bb8-a1be-41b615c3bcec",
+          "request_id": "same",
+          "request_digest": "ec4147afb8a32068633f447686a4afd20249b6304c6858f191bb701248d57aea",
+          "modification_id": "f8c616a3-acb3-4a9d-baf8-ffe0d1b849c9",
+          "previous_revision": 0,
+          "resulting_revision": 1
+        }
+      }
+    }
+  },
+  "after": {
+    "id": "hero",
+    "inventory": [
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "legacy": {
+          "nested": [
+            1,
+            2
+          ]
+        },
+        "instance_id": "a1991005-93dc-4bb8-a1be-41b615c3bcec",
+        "revision": 1,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        },
+        "markings": [
+          {
+            "version": 1,
+            "type": "add_marking",
+            "modification_id": "f8c616a3-acb3-4a9d-baf8-ffe0d1b849c9",
+            "content": "same inscription",
+            "source": {
+              "kind": "explicit_literal",
+              "reference": "controlled-fixture"
+            },
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "approval-1",
+              "content_sha256": "fb0e5f5d29f7d1c82d3f673d9a37268d6da79e94d30b4128c5169f75f3cc9ddb",
+              "preconditions": {
+                "capability": "fixture-evidence:capability",
+                "source_disclosed": "fixture-evidence:source_disclosed",
+                "writable_surface": "fixture-evidence:writable_surface",
+                "medium_compatible": "fixture-evidence:medium_compatible",
+                "rights": "fixture-evidence:rights",
+                "target_exists": "fixture-evidence:target_exists",
+                "accessible": "fixture-evidence:accessible",
+                "medium_available": "fixture-evidence:medium_available"
+              },
+              "mechanics": "not_applicable"
+            },
+            "request_id": "same",
+            "request_digest": "ec4147afb8a32068633f447686a4afd20249b6304c6858f191bb701248d57aea",
+            "applied_revision": 1
+          }
+        ],
+        "marking_visibility": {
+          "version": 1,
+          "markings": {
+            "f8c616a3-acb3-4a9d-baf8-ffe0d1b849c9": {
+              "classification": "visible"
+            }
+          }
+        },
+        "extensions": {
+          "pf1e@1": {
+            "ac": 4,
+            "perception_dc": 99
+          }
+        }
+      },
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "instance_id": "27044aa7-fdbd-4ae9-88e7-728c96cf1a55",
+        "revision": 0,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        }
+      }
+    ],
+    "unknown_character": {
+      "keep": true
+    },
+    "object_marking_receipts": {
+      "version": 1,
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "entries": {
+        "same": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "a1991005-93dc-4bb8-a1be-41b615c3bcec",
+          "request_id": "same",
+          "request_digest": "ec4147afb8a32068633f447686a4afd20249b6304c6858f191bb701248d57aea",
+          "modification_id": "f8c616a3-acb3-4a9d-baf8-ffe0d1b849c9",
+          "previous_revision": 0,
+          "resulting_revision": 1
+        }
+      }
+    }
+  },
+  "result": {
+    "version": 1,
+    "status": "observed",
+    "target": {
+      "campaign_run_id": "identity-test-campaign",
+      "instance_id": "a1991005-93dc-4bb8-a1be-41b615c3bcec"
+    },
+    "properties": [
+      {
+        "category": "markings",
+        "knowledge": "known_present",
+        "coverage": "subset",
+        "values": [
+          {
+            "content": "same inscription",
+            "presentation": "inscription",
+            "evidence_ref": "observation:markings:0",
+            "content_sha256": "fb0e5f5d29f7d1c82d3f673d9a37268d6da79e94d30b4128c5169f75f3cc9ddb"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      "partial_observation_scope"
+    ],
+    "evidence": [
+      {
+        "reference": "observation:markings:0",
+        "category": "markings",
+        "content_sha256": "fb0e5f5d29f7d1c82d3f673d9a37268d6da79e94d30b4128c5169f75f3cc9ddb"
+      }
+    ]
+  }
+}

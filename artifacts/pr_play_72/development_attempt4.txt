@@ -1,0 +1,42 @@
+.....................F.........                                          [100%]
+================================== FAILURES ===================================
+_ test_natural_one_time_followup[report-Please give the watch my patrol report.] _
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr72_dev_final/test_natural_one_time_followup1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021677102810>
+branch = 'report', text = 'Please give the watch my patrol report.'
+
+    @pytest.mark.parametrize("branch,text", [("survey", "I want to record my survey."), ("report", "Please give the watch my patrol report.")])
+    def test_natural_one_time_followup(tmp_path, monkeypatch, branch, text):
+        from tests.test_pr_play_71_lifecycle import act
+        configure(tmp_path, monkeypatch); monkeypatch.setenv(GATE, "1")
+        with TestClient(api.app) as cl:
+            create(cl); start(cl); reach(cl); act(cl, "patrol_" + branch)
+            if branch == "report":
+                safe(cl.post("/api/chat", json={"text": "I return to Cinderwatch Gate."}))
+            body = safe(cl.post("/api/chat", json={"text": text}))
+            flag = "patrol_survey_recorded" if branch == "survey" else "patrol_guards_warned"
+>           assert storage.load_world()["world_state"]["flags"][flag]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'patrol_guards_warned'
+
+tests\test_pr_play_72_initiative.py:139: KeyError
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 0bb96d0e6a58103b6c7cd12e
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_72_initiative.py::test_natural_one_time_followup[report-Please give the watch my patrol report.]
+1 failed, 30 passed, 1 warning in 45.93s

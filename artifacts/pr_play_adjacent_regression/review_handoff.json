@@ -1,0 +1,77 @@
+{
+  "campaign_id": "pr_play_adjacent_regression",
+  "campaign_name": "PR-PLAY Adjacent Regression Reconciliation",
+  "campaign_date": "2026-11-08",
+  "purpose": "Classify the twelve adjacent HTTP failures from the post-NPC handoff repair without changing production behavior.",
+  "objective_status": "A/PASS",
+  "executive_summary": "Audit verdict A/PASS. The targeted handoff repair is accepted. The game is not playable. Live provider calls: 0. PR-PLAY-80 was not opened. The same 176-test selection failed the same 12 assertions. All 12 match a pre-handoff package that keeps authored travel and removes the handoff symbols. Zero are new regressions. Eight fail because the player body empties resolution while the log still has the kind or transition. Three publish stubs: Glassport crews, pocketing the brass token, and four new overseers. The roster case still publishes the observe stock. The seven handoff tests passed. T05 still appends the stock jab sentence.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "No test expectation or fixture was changed. The existing 176-test selection was rerun: 12 failed, 0 errors, 0 skipped. The seven handoff tests passed."
+    ],
+    "tooling": [],
+    "documentation": [
+      "Added the reports under development/campaigns/product_realization/pr_play_adjacent_regression/.",
+      "Prepended the audit result to docs/NEXT_SESSION.md. Prior handoff history remains."
+    ],
+    "generated_artifacts": [
+      "Added the classification matrix, the current and pre-handoff captures, and the junit files under artifacts/pr_play_adjacent_regression/.",
+      "Generated this review handoff."
+    ]
+  },
+  "testing": {
+    "focused": "7 passed, 0 failed. Provider-free /api/chat handoff controls.",
+    "broader": "176 adjacent tests, 12 failed, 0 errors, 0 skipped. All 12 are preexisting. The known provider_context_projection, gm_only, and social_context KeyErrors were not in this selection and were not rerun.",
+    "full_suite": "Not run.",
+    "runtime_validation": "The notice approach, read, sleeve copy, and recall were printed again with provider calls disabled. T04 stays local. T05 publishes the clue and the jab sentence. T06 declines. T09 recalls the disclosed clue. Travel reaches Old Milestone. The glass observatory stays unestablished. The retreat stays unsupported.",
+    "model_runtime_boundary": "Live provider calls: 0. OpenAI construction was blocked. No Gameplay Benchmark was run.",
+    "new_regressions": "None. The twelve failures match the pre-handoff package.",
+    "pre_existing_failures": "All 12 adjacent HTTP assertions. The three baseline KeyErrors remain outside this selection. The worktree was already dirty."
+  },
+  "decisions_requiring_human_review": [
+    "No product decision is required to accept the four route corrections.",
+    "Do not treat A/PASS as a claim that the game is playable.",
+    "Do not open PR-PLAY-80 from this handoff.",
+    "The brass-token stub is a preexisting publication defect. It is deferred, not folded into the next sentence edit."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "T05 publishes the authorized clue and then the stock sentence about someone jabbing at the board."
+    ],
+    "pre_existing": [
+      "Twelve HTTP assertions fail. Eight are an empty public resolution object. Three publish model stubs. The roster inspection publishes the observe stock.",
+      "Naming the hidden brass token publishes a sentence that the player pockets it. The sealed fact is not added to revealed state.",
+      "The worktree was already dirty. HEAD does not uniquely identify the executable source."
+    ]
+  },
+  "missing_concepts": [
+    "A byte-for-byte saved copy of the dirty tree from the moment before the handoff edit. The comparison package was reconstructed outside the repository.",
+    "An Ashen Thrones Gameplay Benchmark. None was run."
+  ],
+  "does_not_prove": [
+    "It does not prove the game is playable.",
+    "It does not retire the twelve tests.",
+    "It does not prove the reconstructed orchestration file is a byte-for-byte pre-edit copy. The twelve HTTP captures on that package match the current captures.",
+    "The seven handoff tests were authored with the repair. They are not an independent holdout.",
+    "It does not authorize PR-PLAY-80, AT-OPT-07, or a live-play session."
+  ],
+  "recommended_next_step": "Remove the stock diegetic sentence that follows an authorized clue publication. Do not start that repair from this handoff. Do not open PR-PLAY-80. Do not start AT-OPT-07. Do not launch live play from this result.",
+  "self_contained_review_test": "The bundle contains the audit reports, the classification matrix, and the current and pre-handoff captures. No live play was produced.",
+  "primary_report": "development/campaigns/product_realization/pr_play_adjacent_regression/SUMMARY.md",
+  "supporting_files": [
+    {"path": "development/campaigns/product_realization/pr_play_adjacent_regression/FAILURE_INVENTORY.md", "role": "audit_report", "why": "Individual record for each of the twelve assertions.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "development/campaigns/product_realization/pr_play_adjacent_regression/BASELINE_RECONSTRUCTION.md", "role": "audit_report", "why": "How the pre-handoff package was built without touching the worktree.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "development/campaigns/product_realization/pr_play_adjacent_regression/CONTRACT_ANALYSIS.md", "role": "audit_report", "why": "Player DTO, inspection, and travel contracts against the assertions.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "development/campaigns/product_realization/pr_play_adjacent_regression/TARGETED_REPAIR_VERIFICATION.md", "role": "audit_report", "why": "T04, T05, T06, T09, and the negative controls.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "development/campaigns/product_realization/pr_play_adjacent_regression/NEXT_STEP_DECISION.md", "role": "audit_report", "why": "Acceptance of the handoff repair and the single next action.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "development/campaigns/product_realization/pr_play_adjacent_regression/INTEGRITY.md", "role": "integrity", "why": "Branch, worktree preservation, and zero live calls.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/pr_play_adjacent_regression/classification_matrix.json", "role": "analysis_table", "why": "Machine-readable classification of every failed assertion.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/pr_play_adjacent_regression/current_capture.json", "role": "analysis_table", "why": "Raw engine fields and projected HTTP bodies on the current tree.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/pr_play_adjacent_regression/historical_capture.json", "role": "analysis_table", "why": "The same capture on the pre-handoff package.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/pr_play_adjacent_regression/overlay_manifest.json", "role": "provenance", "why": "Which source versions the comparison package executed.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/pr_play_adjacent_regression/adjacent_focus_junit.xml", "role": "analysis_table", "why": "176 tests, 12 failures, 0 errors, 0 skipped.", "behavioral_evidence": true, "human_review_required": false},
+    {"path": "artifacts/pr_play_adjacent_regression/handoff_junit.xml", "role": "analysis_table", "why": "Seven handoff controls passed.", "behavioral_evidence": true, "human_review_required": false},
+    {"path": "docs/NEXT_SESSION.md", "role": "session_handoff", "why": "Authoritative orientation after this audit. Prior sections are preserved.", "behavioral_evidence": false, "human_review_required": true}
+  ]
+}

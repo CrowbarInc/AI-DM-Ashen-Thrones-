@@ -1,0 +1,1508 @@
+diff --git a/development/tmp/pr79d_entry_source/game/api.py b/development/tmp/pr79d_entry_source/game/api.py
+index d9adda17..0dc17062 100644
+--- a/development/tmp/pr79d_entry_source/game/api.py
++++ b/development/tmp/pr79d_entry_source/game/api.py
+@@ -26,6 +26,7 @@ from pathlib import Path
+ import copy
+ import inspect
+ import json
++import os
+ import re
+ import time
+ from contextvars import ContextVar
+@@ -33,6 +34,8 @@ from fastapi import FastAPI, Request, UploadFile, File
+ from fastapi.middleware.cors import CORSMiddleware
+ from fastapi.staticfiles import StaticFiles
+ from fastapi.responses import FileResponse, JSONResponse
++from game.player_http_boundary import PlayerHTTPRoute
++from game.player_http_projection import project_player_state, project_player_response
+ 
+ from game.models import (
+     ActionRequest,
+@@ -46,6 +49,7 @@ from game.models import (
+ )
+ from game.storage import (
+     BASE_DIR,
++    DATA_DIR,
+     create_snapshot,
+     ensure_data_files_exist,
+     get_save_summary,
+@@ -72,6 +76,7 @@ from game.storage import (
+     load_log,
+     append_log,
+     clear_log,
++    runtime_commit_scope,
+     assert_canon_immutable,
+     build_effective_scene,
+     get_runtime_scene_overlay,
+@@ -303,6 +308,7 @@ async def lifespan(app: FastAPI):
+ 
+ 
+ app = FastAPI(title='Ashen Thrones AI GM', lifespan=lifespan)  # noqa: E302
++app.router.route_class = PlayerHTTPRoute
+ app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=False, allow_methods=['*'], allow_headers=['*'])
+ 
+ STATIC_DIR = BASE_DIR / 'static'
+@@ -836,7 +842,7 @@ def _nonmutating_conversational_decision_response(
+     }
+     session = load_session()
+     context_changed = _apply_conversational_context_update(session, decision)
+-    if decision.intent_family != "ooc_help":
++    if decision.intent_family not in {"ooc_help", "player_initiative"}:
+         from game.expressive_dialogue import attach_expression_audit, maybe_reword_continuity_line
+         from game.immutable_valid_response import seal_host_speech
+ 
+@@ -874,7 +880,7 @@ def _nonmutating_conversational_decision_response(
+         context_changed = context_changed or remembered is not None
+     from game.conversational_continuity import record_delivered_exchange
+ 
+-    if decision.intent_family != "ooc_help" and record_delivered_exchange(
++    if decision.intent_family not in {"ooc_help", "player_initiative"} and record_delivered_exchange(
+         session,
+         player_text=original_text,
+         delivered_text=gm["player_facing_text"],
+@@ -885,7 +891,7 @@ def _nonmutating_conversational_decision_response(
+         social=_semantic_decision_social(decision),
+     ):
+         context_changed = True
+-    if decision.intent_family != "ooc_help":
++    if decision.intent_family not in {"ooc_help", "player_initiative"}:
+         context = session.setdefault("conversational_context", {})
+         context["last_gm_exchange"] = {
+             "category": category, "owner": decision.communication_owner,
+@@ -1070,6 +1076,18 @@ def deterministic_provider_skip_line(
+     """
+     if not isinstance(resolution, dict):
+         return None
++    # The publication contract decides ownership. A nonempty sentence is not
++    # enough. Completed investigation and adjudication results do not pay for
++    # the large primary narration prompt after their sentence exists.
++    from game.publication_contract import narration_skip
++
++    owned = narration_skip(
++        resolution,
++        scene=scene if isinstance(scene, dict) else None,
++        session=session if isinstance(session, dict) else None,
++    )
++    if owned is not None:
++        return owned
+     kind = str(resolution.get("kind") or "").strip().lower()
+     meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+@@ -4415,6 +4433,190 @@ def _build_gpt_narration_from_authoritative_state(
+     return gm
+ 
+ 
++def _publish_experimental_integrated_narration(
++    gm,
++    canonical_gm,
++    response_payload,
++    resolution,
++    session,
++    player_text: str,
++    publication=None,
++) -> None:
++    """Copy a passed investigation sentence into the response after state is saved.
++
++    The flag is off unless it is exactly ``1``. Rejected narration is not read
++    into the response. A miss leaves the deterministic sentence in place.
++    """
++    if os.environ.get("ASHEN_EXPERIMENTAL_INTEGRATED_NARRATION", "").strip() != "1":
++        return
++    if publication is not None:
++        for target in (gm, canonical_gm, response_payload.get('gm_output')):
++            if isinstance(target, dict):
++                target['player_facing_text'] = publication['text']
++        return
++    try:
++        from game.quarantined_investigation_narration import (
++            deterministic_fallback_text,
++            note_player_facing_publication,
++            validated_player_text,
++        )
++
++        kind = resolution.get("kind") if isinstance(resolution, dict) else None
++        session_id = ""
++        if isinstance(session, dict):
++            session_id = str(session.get("campaign_run_id") or session.get("session_id") or "")
++        player_text = str(player_text or "")
++        text = validated_player_text(player_text, session_id=session_id, kind=kind)
++        mode = "published" if text else ""
++        targets = []
++        if isinstance(gm, dict):
++            targets.append(gm)
++        if isinstance(canonical_gm, dict) and canonical_gm is not gm:
++            targets.append(canonical_gm)
++        payload_gm = response_payload.get("gm_output") if isinstance(response_payload, dict) else None
++        if isinstance(payload_gm, dict) and all(payload_gm is not item for item in targets):
++            targets.append(payload_gm)
++        if not text:
++            # A disabled provider leaves an infrastructure sentence. The engine
++            # fallback is the player-facing recovery; rejected prose stays out.
++            stub = "Provider calls are disabled for this run, so no live narration was generated."
++            fallback = deterministic_fallback_text(player_text, session_id=session_id, kind=kind)
++            if not fallback or not any(str(item.get("player_facing_text") or "") == stub for item in targets):
++                return
++            text = fallback
++            mode = "fallback"
++        for target in targets:
++            if mode == "fallback" and str(target.get("player_facing_text") or "") != (
++                "Provider calls are disabled for this run, so no live narration was generated."
++            ):
++                continue
++            target["player_facing_text"] = text
++            metadata = target.get("metadata")
++            if isinstance(metadata, dict):
++                metadata["experimental_integrated_narration"] = mode
++        if mode == "published":
++            note_player_facing_publication()
++    except Exception:
++        return
++
++
++def _quarantine_investigation_narration_enabled() -> bool:
++    """Explicit opt-in. The string is the gate documented on the quarantine module."""
++    return os.environ.get("ASHEN_QUARANTINE_INVESTIGATION_NARRATION", "").strip() == "1"
++
++
++def _reject_foreign_scene_narration(gm, canonical_gm, response_payload, resolution, session) -> None:
++    """Keep player-facing scene prose on the scene the engine actually committed."""
++    from game.authored_action_language import scene_publication_replacement
++    targets = []
++    for item in (gm, canonical_gm, response_payload.get("gm_output") if isinstance(response_payload, dict) else None):
++        if isinstance(item, dict) and item not in targets:
++            targets.append(item)
++    if not targets:
++        return
++    current = str(targets[0].get("player_facing_text") or "")
++    replacement = scene_publication_replacement(current, session=session if isinstance(session, dict) else {}, resolution=resolution)
++    if not replacement or replacement == current:
++        return
++    for item in targets:
++        item["player_facing_text"] = replacement
++    if isinstance(resolution, dict):
++        meta = resolution.setdefault("metadata", {})
++        if isinstance(meta, dict):
++            meta["scene_publication_rejected"] = True
++
++
++def _finalize_investigation_publication(gm, canonical_gm, response_payload, resolution, session, player_text):
++    """Shared post-persistence PR66 boundary for chat and structured actions."""
++    engine_text = ""
++    if isinstance(resolution, dict):
++        meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
++        engine_text = str(meta.get("engine_publication") or "").strip()
++    if engine_text:
++        # Resolver-authored text is the committed outcome. A later narration
++        # pass still has to clear the same consistency boundary.
++        for item in (gm, canonical_gm, response_payload.get("gm_output") if isinstance(response_payload, dict) else None):
++            if isinstance(item, dict):
++                item["player_facing_text"] = engine_text
++        return
++    from game.authored_consequences import trusted_text, enabled_for_session
++    text = trusted_text(resolution)
++    from game.quarantined_investigation_narration import experimental_publication_enabled
++    optional_publication = (os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1'
++                            and experimental_publication_enabled(
++                                str(session.get('campaign_run_id') or session.get('session_id') or '')))
++    if not text and enabled_for_session(session) and not optional_publication:
++        # The enrolled branch lifecycle requires its prerequisite discovery to
++        # reach the player even when optional AI presentation is disabled.
++        # Reuse the existing current-resolver-only disclosure contract.
++        from game.quarantined_investigation_narration import current_lifecycle_disclosure
++        text = current_lifecycle_disclosure(resolution, player_text)
++    if not text and enabled_for_session(session) and os.environ.get('ASHEN_EXPERIMENTAL_PLAYER_INITIATIVE') == '1':
++        # A newly revealed social clue is also a mandatory current outcome.
++        # Optional presentation cannot replace it with unrelated scene prose.
++        social = (resolution or {}).get('social') or {}
++        topic = social.get('topic_revealed')
++        fact = str(topic.get('text') or '').strip() if isinstance(topic, dict) else ''
++        if (social.get('target_resolved') is True and (resolution or {}).get('success') is True
++                and fact and fact in ((resolution or {}).get('discovered_clues') or [])):
++            from game.social import format_authored_knowledge_realization_line
++            text = format_authored_knowledge_realization_line(resolution, fact)
++    if text:
++        for item in (gm, canonical_gm, response_payload.get('gm_output')):
++            if isinstance(item, dict):
++                item['player_facing_text'] = text
++        _reject_foreign_scene_narration(gm, canonical_gm, response_payload, resolution, session)
++        return
++    publication = None
++    if os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1':
++        from game.quarantined_investigation_narration import prepare_authoritative_publication
++        publication = prepare_authoritative_publication(
++            resolution, str(session.get('campaign_run_id') or session.get('session_id') or ''), player_text)
++    publication_failure = None
++    try:
++        args = (gm, canonical_gm, response_payload, resolution, session, player_text)
++        if publication is None:
++            _publish_experimental_integrated_narration(*args)
++        else:
++            _publish_experimental_integrated_narration(*args, publication=publication)
++    except Exception as exc:
++        if publication is None:
++            raise
++        publication_failure = 'publication_helper_' + type(exc).__name__
++    if publication is not None:
++        from game.quarantined_investigation_narration import verify_authoritative_publication
++        verify_authoritative_publication(
++            publication, [item for item in (gm, canonical_gm, response_payload.get('gm_output'))
++                          if isinstance(item, dict)], failure=publication_failure)
++    _reject_foreign_scene_narration(gm, canonical_gm, response_payload, resolution, session)
++
++
++def _observe_quarantined_investigation_narration(resolution, scene, session, player_text: str) -> None:
++    """After the player-facing narration object exists. Never replaces it.
++
++    The disabled path does not import the quarantine module. Every failure is
++    swallowed so a narration experiment cannot roll back a committed action.
++    """
++    if not _quarantine_investigation_narration_enabled():
++        return
++    try:
++        from game.quarantined_investigation_narration import (
++            observe_completed_investigation, bind_authoritative_publication,
++        )
++
++        known = tuple(sorted(get_all_known_clue_texts(session))) if isinstance(session, dict) else ()
++        evidence = observe_completed_investigation(
++            resolution=resolution if isinstance(resolution, dict) else None,
++            scene=scene if isinstance(scene, dict) else None,
++            known_clue_texts=known,
++            player_text=str(player_text or ""),
++        )
++        session_id = str(session.get('campaign_run_id') or session.get('session_id') or '')
++        bind_authoritative_publication(evidence, resolution, session_id)
++    except Exception:
++        return
++
++
+ def _run_resolved_turn_pipeline(
+     *,
+     campaign: dict,
+@@ -4499,6 +4701,13 @@ def _run_resolved_turn_pipeline(
+         route_choice=route_choice,
+         directed_social_entry=directed_social_entry,
+     )
++    from game.authored_consequences import trusted_text
++    consequence_text = trusted_text(resolution)
++    if consequence_text:
++        gm = {'player_facing_text': consequence_text, 'tags': [], 'scene_update': None,
++              'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None,
++              'suggested_action': None, 'debug_notes': 'engine_authored_consequence'}
++        return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
+     gm = _build_gpt_narration_from_authoritative_state(
+         campaign=campaign,
+         world=world,
+@@ -4517,6 +4726,9 @@ def _run_resolved_turn_pipeline(
+         latency_sink=latency_sink,
+         normalized_action=normalized_action,
+     )
++    # Quarantine sits after authoritative mutation and after the deterministic
++    # player-facing object is built. It is not consulted by finalization.
++    _observe_quarantined_investigation_narration(resolution, scene, session, user_text)
+     return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
+ 
+ 
+@@ -4842,7 +5054,7 @@ def _opening_response_rejection(
+     return None
+ 
+ 
+-def _opening_failure_response(reason: str) -> JSONResponse:
++def _opening_failure_response(reason: str, recovery: dict | None = None) -> JSONResponse:
+     if reason == "provider_budget_refused":
+         from game.provider_budget import PLAYTEST_STOP_MESSAGE
+ 
+@@ -4853,17 +5065,28 @@ def _opening_failure_response(reason: str) -> JSONResponse:
+         message = _OPENING_FAILURE_MESSAGE
+         status_code = 422
+         status = "opening_failed"
+-    return JSONResponse(
+-        status_code=status_code,
+-        content={
+-            "ok": False,
+-            "status": status,
+-            "error": message,
+-            "opening_failure_reason": reason,
+-            "campaign_started": False,
+-            "gameplay_committed": False,
+-        },
+-    )
++    content = {
++        "ok": False,
++        "status": status,
++        "error": message,
++        "opening_failure_reason": reason,
++        "campaign_started": False,
++        "gameplay_committed": False,
++    }
++    if (
++        isinstance(recovery, dict)
++        and recovery.get("fallback_attempted")
++        and not recovery.get("fallback_succeeded")
++    ):
++        content["opening_recovery_error"] = _stable_opening_reason(
++            recovery.get("fallback_error"),
++            "opening_recovery_failed",
++        )
++        content["opening_recovery_class"] = _stable_opening_reason(
++            recovery.get("recovery_eligibility"),
++            "uncertain_rejection",
++        )
++    return JSONResponse(status_code=status_code, content=content)
+ 
+ 
+ def _capture_opening_baseline(session: dict, world: dict, combat: dict) -> dict:
+@@ -5023,7 +5246,7 @@ def _ui_mode_error_response(err: UiModePolicyError) -> JSONResponse:
+ 
+ def _project_state_for_ui_mode(full_state: dict, ui_mode: str) -> dict:
+     # Always compute projections from the single internal snapshot.
+-    public_state = deep_project_public_payload(full_state)
++    public_state = project_player_state(full_state)
+     out: dict = {"ui_mode": ui_mode, "public_state": public_state}
+     if ui_mode == "author":
+         out["author_state"] = deep_project_author_payload(full_state)
+@@ -5032,6 +5255,22 @@ def _project_state_for_ui_mode(full_state: dict, ui_mode: str) -> dict:
+     return out
+ 
+ 
++def _project_player_runtime_response(response):
++    """Project the complete runtime result after all internal response enrichment.
++
++    Runtime endpoints admit only player mode. Keep their flat client contract,
++    applying the same recursive visibility rules as /api/state to every field,
++    including GM output, resolution and rejected-response state. Internal turn
++    helpers and persisted engine documents retain their full representations.
++    """
++    if isinstance(response, JSONResponse):
++        content = project_player_response(json.loads(response.body))
++        headers = {k: v for k, v in response.headers.items() if k != "content-length"}
++        return JSONResponse(content=content, status_code=response.status_code,
++                            headers=headers, background=response.background)
++    return project_player_response(response)
++
++
+ def _extract_log_player_input(entry: dict | None) -> str:
+     if not isinstance(entry, dict):
+         return ""
+@@ -5091,10 +5330,12 @@ def _project_log_entry_for_ui_mode(entry: dict, ui_mode: str) -> dict:
+ 
+ @app.get('/api/state')
+ def get_state(request: Request):
++    from game.integrated_play import ordered_turn
+     try:
+         ui_mode = resolve_requested_ui_mode(request)
+-        st = compose_state()
+-        return _project_state_for_ui_mode(st, ui_mode)
++        with ordered_turn(str(DATA_DIR), mutating=False):
++            st = compose_state()
++            return _project_state_for_ui_mode(st, ui_mode)
+     except UiModePolicyError as e:
+         return _ui_mode_error_response(e)
+ 
+@@ -5313,14 +5554,16 @@ def api_list_snapshots(request: Request):
+ @app.post('/api/snapshots')
+ def api_create_snapshot(request: Request, req: SnapshotCreateRequest):
+     """Create a snapshot of current runtime state. Optional label for playtesting."""
++    from game.integrated_play import ordered_turn
+     try:
+         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+         assert_mode_allows_runtime_action(ui_mode)
+     except UiModePolicyError as e:
+         return _ui_mode_error_response(e)
+-    meta = create_snapshot(label=req.label)
+-    st = compose_state()
+-    return {'ok': True, 'ui_mode': ui_mode, 'snapshot': meta, **_project_state_for_ui_mode(st, ui_mode)}
++    with ordered_turn(str(DATA_DIR), mutating=True):
++        meta = create_snapshot(label=req.label)
++        st = compose_state()
++        return {'ok': True, 'ui_mode': ui_mode, 'snapshot': meta, **_project_state_for_ui_mode(st, ui_mode)}
+ 
+ 
+ @app.post('/api/snapshots/load')
+@@ -5334,6 +5577,12 @@ def api_load_snapshot(request: Request, payload: dict):
+     snapshot_id = (payload.get('snapshot_id') or payload.get('id') or '').strip()
+     if not snapshot_id:
+         return {'ok': False, 'error': 'snapshot_id required'}
++    from game.integrated_play import ordered_turn
++    with ordered_turn(str(DATA_DIR), mutating=True):
++        return _load_snapshot_body(snapshot_id, ui_mode)
++
++
++def _load_snapshot_body(snapshot_id, ui_mode):
+     meta = load_snapshot(snapshot_id)
+     if meta is None:
+         return {'ok': False, 'error': 'Snapshot not found'}
+@@ -5346,9 +5595,16 @@ def api_load_snapshot(request: Request, payload: dict):
+ 
+ @app.post('/api/action')
+ def api_action(request: Request, req: ActionRequest):
++    from game.integrated_play import ordered_turn
+     try:
+         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+-        return action(req, ui_mode=ui_mode)
++        with ordered_turn(str(DATA_DIR), mutating=True, text=str(getattr(req, "intent", "") or req.action_type or "action")) as turn:
++            if turn.duplicate:
++                return turn.result
++            with runtime_commit_scope():
++                result = _project_player_runtime_response(action(req, ui_mode=ui_mode))
++            turn.result = result
++            return result
+     except UiModePolicyError as e:
+         return _ui_mode_error_response(e)
+ 
+@@ -5588,7 +5844,11 @@ def action(req: ActionRequest, ui_mode: str = "player"):
+             resolution=resolution,
+             raw_player_text=fallback_user_text,
+         )
++        from game.general_purpose_actions import resolve_social_check_publication
++        social_text = resolve_social_check_publication(resolution, character, session)
+         gm = _build_check_prompt_gm_output(resolution)
++        if social_text:
++            gm["player_facing_text"] = social_text
+         annotate_narration_path_kind(
+             gm,
+             path_kind="engine_check_required_prompt",
+@@ -5862,6 +6122,8 @@ def action(req: ActionRequest, ui_mode: str = "player"):
+             'scene_transition_occurred': bool(resolution.get('resolved_transition')),
+         }
+ 
++    response_payload = _build_turn_response_payload(gm=gm, resolution=resolution, include_resolution=True)
++    _finalize_investigation_publication(gm, gm, response_payload, resolution, session, fallback_user_text)
+     append_log(
+         {
+             'timestamp': utc_iso_now(),
+@@ -5887,7 +6149,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
+             },
+         }
+     )
+-    return _build_turn_response_payload(gm=gm, resolution=resolution, include_resolution=True)
++    return response_payload
+ 
+ 
+ def _complete_opening_turn_persistence_like_chat(
+@@ -5990,6 +6252,41 @@ def _complete_opening_turn_persistence_like_chat(
+             directed_social_entry=canonical_entry,
+             attach_to_resolution=bool(isinstance(resolution, dict)),
+         )
++    opening_recovery_record = None
++    if mark_campaign_started:
++        from game.opening_initialization_recovery import (
++            apply_opening_initialization_recovery,
++            diagnostic_opening_recovery,
++        )
++        from game.provider_budget import observe_opening_validation
++
++        gm, opening_recovery_record = apply_opening_initialization_recovery(
++            gm if isinstance(gm, dict) else None,
++            resolution if isinstance(resolution, dict) else None,
++            response_type_contract if isinstance(response_type_contract, dict) else None,
++            scene=scene if isinstance(scene, dict) else None,
++            world=world if isinstance(world, dict) else None,
++            session=session if isinstance(session, dict) else None,
++        )
++        if opening_recovery_record.get("initialization_outcome") == "failed":
++            observe_opening_validation(
++                rejection=_stable_opening_reason(
++                    opening_recovery_record.get("original_rejection_code"),
++                    "opening_recovery_failed",
++                ),
++                recovery=_stable_opening_reason(
++                    opening_recovery_record.get("recovery_eligibility"),
++                    "uncertain_rejection",
++                ),
++                opening_recovery=diagnostic_opening_recovery(opening_recovery_record),
++            )
++            return _opening_failure_response(
++                _stable_opening_reason(
++                    opening_recovery_record.get("original_rejection_code"),
++                    "opening_recovery_failed",
++                ),
++                opening_recovery_record,
++            )
+     remember_recent_contextual_leads(
+         session,
+         scene["scene"]["id"],
+@@ -6121,17 +6418,50 @@ def _complete_opening_turn_persistence_like_chat(
+     synchronize_scene_addressability(session, scene, world)
+     scene["scene_state"] = session.get("scene_state")
+     if mark_campaign_started:
++        from game.opening_presentation_renderer import enforce_rendered_publication
++
++        gm = enforce_rendered_publication(gm)
++        canonical_gm = gm
+         opening_rejection = _opening_response_rejection(gm, resolution, response_type_contract)
++        from game.opening_initialization_recovery import (
++            diagnostic_opening_recovery,
++            stamp_opening_recovery_debug,
++        )
+         from game.provider_budget import observe_opening_validation
+-        observe_opening_validation(
+-            rejection=opening_rejection,
+-            recovery=_stable_opening_reason(
++
++        if opening_rejection and isinstance(opening_recovery_record, dict) and opening_recovery_record.get("fallback_succeeded"):
++            opening_recovery_record["initialization_outcome"] = "failed"
++            opening_recovery_record["fallback_succeeded"] = False
++            opening_recovery_record["fallback_error"] = opening_rejection
++            opening_recovery_record["state_integrity"] = "not_committed"
++        elif opening_rejection is None and isinstance(opening_recovery_record, dict):
++            opening_recovery_record["initialization_outcome"] = "started"
++            if opening_recovery_record.get("opening_source") == "deterministic_fallback":
++                opening_recovery_record["state_integrity"] = "authorized_initialization_only"
++            stamp_opening_recovery_debug(gm, opening_recovery_record)
++            canonical_gm = gm
++        if (
++            isinstance(opening_recovery_record, dict)
++            and opening_recovery_record.get("opening_source") == "deterministic_fallback"
++            and opening_recovery_record.get("fallback_succeeded")
++            and opening_rejection is None
++        ):
++            recovery_name = "deterministic_opening_recovery"
++        else:
++            recovery_name = _stable_opening_reason(
+                 ((gm.get("metadata") or {}).get("accepted_response") or {}).get("provenance"),
+                 "rejected_without_recovery" if opening_rejection else "unavailable",
+-            ),
++            )
++        observe_opening_validation(
++            rejection=opening_rejection,
++            recovery=recovery_name,
++            opening_recovery=diagnostic_opening_recovery(opening_recovery_record),
+         )
+         if opening_rejection:
+-            return _opening_failure_response(opening_rejection)
++            return _opening_failure_response(
++                opening_rejection,
++                opening_recovery_record if isinstance(opening_recovery_record, dict) and opening_recovery_record.get("fallback_attempted") else None,
++            )
+     save_world(world)
+ 
+     leads_inspection = _lead_debug_trace_around_authoritative_reconcile(session)
+@@ -6295,6 +6625,9 @@ def _complete_opening_turn_persistence_like_chat(
+         resolution=resolution if _include_res_chat else None,
+         include_resolution=_include_res_chat,
+     )
++    # State, clues, and clocks are already saved. This only selects response text.
++    _finalize_investigation_publication(
++        gm, canonical_gm, response_payload, resolution, session, player_text_for_eval)
+     final_text = str(canonical_gm.get("player_facing_text") or "")
+     payload_gm = response_payload.get("gm_output") if isinstance(response_payload, dict) else None
+     if mark_campaign_started and isinstance(response_payload, dict):
+@@ -6340,6 +6673,11 @@ def _complete_opening_turn_persistence_like_chat(
+ 
+ @app.post('/api/start_campaign')
+ def start_campaign(request: Request):
++    with runtime_commit_scope():
++        return _project_player_runtime_response(_start_campaign_response(request))
++
++
++def _start_campaign_response(request: Request):
+     """First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path)."""
+     from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
+     if playtest_stop_reason():
+@@ -6598,9 +6936,17 @@ def _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope:
+ 
+ @app.post('/api/chat')
+ def api_chat(request: Request, req: ChatRequest):
++    from game.integrated_play import ordered_turn
+     try:
+         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+-        return chat(req, ui_mode=ui_mode)
++        key = (req.client_request_id or "").strip() or None
++        with ordered_turn(str(DATA_DIR), mutating=True, request_key=key, text=req.text or "") as turn:
++            if turn.duplicate:
++                return turn.result
++            with runtime_commit_scope():
++                result = _project_player_runtime_response(chat(req, ui_mode=ui_mode))
++            turn.result = result
++            return result
+     except UiModePolicyError as e:
+         return _ui_mode_error_response(e)
+ 
+@@ -6858,34 +7204,91 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
+             context["pending_intention"] = None
+ 
+     from game.ordinary_semantic_ownership import (
++        _NON_ADDRESSEE_OPERATIONS,
++        addressee_authority_applies,
+         assess_addressee_grounding,
+         conversational_authorization_record,
+         pending_addressee_clarification,
++        player_text_addresses_someone,
+     )
+ 
+-    if _confirmed_addressee_target(execution_decision) is None:
++    bridged_operation = ""
++    if isinstance(stored_bridge_meta, dict):
++        bridged_operation = str(stored_bridge_meta.get("operation") or "")
++    if not bridged_operation and isinstance(bridged_from_stored_interpretation, dict):
++        bridged_operation = str(
++            (
++                (bridged_from_stored_interpretation.get("metadata") or {}).get("stored_interpretation") or {}
++            ).get("operation")
++            or ""
++        )
++    # Movement replaces req.text with an internal route summary. Addressee
++    # authority stays on the original player line and on the accepted operation.
++    gate_text = original_player_text or req.text or ""
++    if bridged_operation.upper() != "MOVE":
++        gate_text = req.text or gate_text
++    grounded_authored_choice = bool(
++        isinstance(stored_bridge_meta, dict) and stored_bridge_meta.get("accepted") is True
++        and stored_bridge_meta.get("reason") == "grounded_authored_choice"
++        and bridged_operation == "CUSTOM"
++    )
++    # A general-purpose persuasion already names one visible NPC. The social
++    # resolver still has to accept that target; this only skips a second
++    # clarification of a target the bridge already checked.
++    grounded_general_social = bool(
++        isinstance(stored_bridge_meta, dict) and stored_bridge_meta.get("accepted") is True
++        and stored_bridge_meta.get("operation") == "PERSUADE"
++    )
++    # ELABORATE background speech already crossed the read-only planner and
++    # bridge. Revalidate that exact NPC target before skipping duplicate authored
++    # roster grounding; an arbitrary provider target cannot set this condition.
++    from game.bounded_improvisation import controlled_request as _npc_target_plan
++    _npc_plan = _npc_target_plan(gate_text, session=session, scene=scene, world=world)
++    grounded_background_social = bool(
++        isinstance(stored_bridge_meta, dict) and stored_bridge_meta.get('accepted') is True
++        and stored_bridge_meta.get('reason') == 'controlled_detail'
++        and _npc_plan and _npc_plan.get('npc_mode') == 'conversation'
++        and isinstance(bridged_from_stored_interpretation, dict)
++        and _npc_plan.get('id') == bridged_from_stored_interpretation.get('target_id')
++    )
++    if not grounded_authored_choice and not grounded_general_social and not grounded_background_social and _confirmed_addressee_target(execution_decision) is None and addressee_authority_applies(
++        operation=bridged_operation,
++        player_text=gate_text,
++    ):
+         proposed_target = None
+         if isinstance(bridged_from_stored_interpretation, dict):
+             proposed_target = (
+                 (bridged_from_stored_interpretation.get("metadata") or {}).get("stored_interpretation") or {}
+             ).get("target_ref")
+         addressee = assess_addressee_grounding(
+-            req.text or "",
++            gate_text,
+             scene=scene,
+             world=world,
+             session=session,
+             proposed_target_id=str(proposed_target or "") or None,
+         )
+-        if addressee.get("direct_address") and addressee.get("operation_eligibility") == "requires_clarification":
+-            pending = pending_addressee_clarification(addressee, req.text or "", scene)
++        speech_on_noncommunication = (
++            bridged_operation.upper() in _NON_ADDRESSEE_OPERATIONS
++            and player_text_addresses_someone(gate_text)
++        )
++        unresolved = addressee.get("direct_address") and addressee.get("operation_eligibility") == "requires_clarification"
++        if unresolved or speech_on_noncommunication:
++            pending = pending_addressee_clarification(addressee, gate_text, scene)
+             blocked = ConversationalDecision(
+                 category=ConversationalDecisionCategory.CLARIFY,
+-                primary_intention=req.text or "",
++                primary_intention=gate_text,
+                 intent_family="clarification",
+                 communication_owner="GM",
+                 communication_purpose="CLARIFICATION",
+-                reason="unresolved_addressee",
+-                player_facing_text=str(addressee.get("clarification") or "Which person do you mean? Nothing has been attempted."),
++                reason="unresolved_addressee" if unresolved and not speech_on_noncommunication else "communication_act_not_object_or_route",
++                player_facing_text=str(
++                    addressee.get("clarification")
++                    or (
++                        "Which person do you mean? Nothing has been attempted."
++                        if unresolved
++                        else "That request addresses someone. Nothing has been attempted."
++                    )
++                ),
+                 context_update={
+                     "conversational_context": {
+                         "pending_clarification": pending,
+@@ -6894,11 +7297,11 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
+                 },
+                 execution_policy="answer_only",
+                 proposed_operation="ASK",
+-                proposed_target=str(proposed_target or "") or None,
++                proposed_target=None if speech_on_noncommunication else (str(proposed_target or "") or None),
+                 missing_information=["interlocutor"],
+                 authorization=conversational_authorization_record(
+                     addressee,
+-                    player_text=req.text or "",
++                    player_text=gate_text,
+                     authority_provenance="pre_tick_addressee_gate",
+                 ),
+             )
+@@ -6974,13 +7377,22 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
+     committed["pending_intention"] = None
+     session['turn_counter'] += 1
+ 
+-    tick = advance_world_tick(world, campaign)
+-    if not campaign_start:
++    # A revalidated background exchange or routine posture change consumes a
++    # transcript turn, but does not advance factions or pressure clocks.
++    from game.bounded_improvisation import controlled_request as _controlled_plan
++    _routine_plan = _controlled_plan(req.text or '', session=session, scene=scene, world=world)
++    _routine_turn = bool(
++        bridged_from_stored_interpretation is not None
++        and (bridged_from_stored_interpretation.get('metadata') or {}).get('controlled_world_fact')
++        and _routine_plan and _routine_plan.get('id') == bridged_from_stored_interpretation.get('target_id')
++        and (_routine_plan.get('npc_mode') in {'creation', 'conversation'} or _routine_plan.get('routine') in {'sit', 'stand', 'open', 'close', 'move', 'push', 'pull', 'lift', 'place', 'approach', 'retreat', 'establish', 'inspect_result'} or _routine_plan.get('physical') is True)
++    )
++    tick = {'events': []} if _routine_turn else advance_world_tick(world, campaign)
++    if not campaign_start and not _routine_turn:
+         save_world(world)
+ 
+-    # Advance a simple time pressure clock each chat turn.
+     clocks_before = dict(get_or_init_clocks(session))
+-    time_pressure_after = advance_clock(session, "time_pressure", 1)
++    time_pressure_after = clocks_before.get('time_pressure', 0) if _routine_turn else advance_clock(session, "time_pressure", 1)
+ 
+     scene_rt = get_scene_runtime(session, scene['scene']['id'])
+ 
+@@ -7493,7 +7905,11 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
+                 route_choice=route_choice,
+                 directed_social_entry=canonical_entry,
+             )
++            from game.general_purpose_actions import resolve_social_check_publication
++            social_text = resolve_social_check_publication(resolution, character, session)
+             gm = _build_check_prompt_gm_output(resolution)
++            if social_text:
++                gm["player_facing_text"] = social_text
+             gm = stamp_downstream_provenance(gm, resolution, kind="pending_check")
+             annotate_narration_path_kind(
+                 gm,
+@@ -7749,6 +8165,11 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
+             "mode_source": mode_decision.source,
+         },
+     }
++    # A travel purpose is explanation-only; it never runs a second resolver.
++    deferred = (session.get("conversational_context") or {}).get("pending_clarification") or {}
++    if (execution_decision is not None and execution_decision.proposed_operation == "MOVE"
++            and deferred.get("kind") == "deferred_intentions" and isinstance(gm, dict)):
++        resolution.setdefault("metadata", {})["deferred_intentions"] = deferred.get("steps") or []
+     result = _complete_opening_turn_persistence_like_chat(
+         turn_started=turn_started,
+         campaign=campaign,
+diff --git a/development/tmp/pr79d_entry_source/game/exploration.py b/development/tmp/pr79d_entry_source/game/exploration.py
+index 78e98b8f..f181790c 100644
+--- a/development/tmp/pr79d_entry_source/game/exploration.py
++++ b/development/tmp/pr79d_entry_source/game/exploration.py
+@@ -31,6 +31,38 @@ from game.scene_destination_binding import (
+ EXPLORATION_KINDS = ("scene_transition", "travel", "observe", "investigate", "interact", "custom", "discover_clue", "already_searched")
+ 
+ 
++def _repeat_publication(metadata: Dict[str, Any] | None, valid_repeat: bool, player_text: str = "") -> Dict[str, Any]:
++    """A repeated search names the examined thing and the no-new result."""
++    import re
++
++    from game.publication_contract import KNOWN_REPEAT_LINE, stamp
++    from game.referenced_surface import extract_inspection_target
++
++    base = dict(metadata or {})
++    if valid_repeat:
++        base["action_outcome"] = "valid_no_new_information"
++    target = re.sub(r"\s+", " ", re.sub(r"\bagain$", "", extract_inspection_target(player_text) or "", flags=re.I)).strip(" ,.")
++    if target and not re.match(r"^(?:the|a|an)\b", target, re.I):
++        target = "the " + target
++    line = f"You examine {target} again. {KNOWN_REPEAT_LINE}" if target else KNOWN_REPEAT_LINE
++    return stamp(base, "FINAL_ENGINE_RESPONSE", publication=line)
++
++
++def _accessible_repeat(scene, world, session, target_id):
++    """An enrolled, still-visible examination can complete without discovery.
++
++    Called only after the resolver has established an already-searched target.
++    Keep the legacy success contract outside the initiative experiment.
++    """
++    import os
++    from game.authored_consequences import enabled_for_session
++    from game.player_interpretation_bridge import visible_catalog
++    return (os.environ.get("ASHEN_EXPERIMENTAL_PLAYER_INITIATIVE") == "1"
++            and enabled_for_session(session)
++            and visible_catalog({"scene": scene}, world).get(target_id, {}).get("kind")
++            in {"inspect_target", "perceive_target"})
++
++
+ def _norm_hidden_fact_lines(values: Any) -> List[str]:
+     if not isinstance(values, list):
+         return []
+@@ -117,6 +149,7 @@ def _build_skill_check_context(
+     scene_id = str(scene.get("id") or "").strip()
+     scene_runtime = get_scene_runtime(session, scene_id) if scene_id else {}
+     action_id = str(normalized_action.get("id") or "").strip() or "action"
++
+     character_id = (character or {}).get("id", "")
+     turn_counter = session.get("turn_counter", 0)
+     return {
+@@ -222,6 +255,32 @@ def resolve_exploration_action(
+         target_scene_id = str(target_scene_id).strip() or None
+     action_id = str(normalized_action.get("id") or "").strip() or "action"
+ 
++    from game.authored_consequences import resolve as resolve_consequence
++    consequence = resolve_consequence(scene, session, world, normalized_action)
++    if consequence is not None:
++        return consequence
++
++    action_meta = normalized_action.get("metadata") if isinstance(normalized_action.get("metadata"), dict) else {}
++    if action_meta.get('controlled_world_fact'):
++        from game.bounded_improvisation import resolve_controlled_fact
++        controlled = resolve_controlled_fact(scene_envelope, session, world, normalized_action,
++                                             prompt=prompt, action_id=action_id, label=label)
++        if controlled is not None:
++            return controlled
++            return ExplorationEngineResult(kind='observe', action_id=action_id, label=label, prompt=prompt,
++            success=False, resolved_transition=False, target_scene_id=None, clue_id=None, discovered_clues=[], metadata={'engine_publication': 'That detail is not accessible. Nothing has been added.',
++            'publication_contract': 'UNSUPPORTED_ACTION', 'skip_primary_narration': True,
++            'skip_unrelated_clue_discovery': True}).to_dict()
++    if action_meta.get("general_purpose_family") in {"environmental_observation", "physical_search"}:
++        from game.general_purpose_actions import exploration_outcome
++        general = exploration_outcome(
++            scene_envelope, normalized_action, prompt=prompt, action_id=action_id, label=label,
++        )
++        if general is not None:
++            from game.general_purpose_actions import remember_general_resolution
++            remember_general_resolution(session, scene_envelope, prompt, general)
++            return general
++
+     known_ids: List[str] = []
+     if list_scene_ids is not None:
+         known_ids = list(list_scene_ids())
+@@ -353,12 +412,13 @@ def resolve_exploration_action(
+             if bound_by_classifier or (i_id_slug and i_id_slug in prompt_slug):
+                 scene_id = scene.get("id") or ""
+                 if scene_id and is_interactable_resolved(session, scene_id, i_id):
++                    valid_repeat = _accessible_repeat(scene, world, session, i_id)
+                     result = ExplorationEngineResult(
+                         kind="already_searched",
+                         action_id=action_id,
+                         label=label,
+                         prompt=prompt,
+-                        success=False,
++                        success=valid_repeat,
+                         resolved_transition=False,
+                         target_scene_id=None,
+                         clue_id=None,
+@@ -367,7 +427,7 @@ def resolve_exploration_action(
+                         state_changes={"already_searched": True, "interactable_id": i_id},
+                         hint=f"Player has already searched [{i_id}]. Narrate that they find nothing new.",
+                         interactable_id=i_id,
+-                        metadata=dict(classified_meta),
++                        metadata=_repeat_publication(classified_meta, valid_repeat, raw_player_text or prompt),
+                     )
+                     return result.to_dict()
+                 # Skill check authority: engine decides when to roll
+@@ -468,12 +528,13 @@ def resolve_exploration_action(
+         classified_authority = str(classified.get("authority") or "")
+         scene_id = scene.get("id") or ""
+         if scene_id and is_target_searched(session, scene_id, action_id):
++            valid_repeat = _accessible_repeat(scene, world, session, action_id)
+             result = ExplorationEngineResult(
+                 kind="already_searched",
+                 action_id=action_id,
+                 label=label,
+                 prompt=prompt,
+-                success=False,
++                success=valid_repeat,
+                 resolved_transition=False,
+                 target_scene_id=None,
+                 clue_id=None,
+@@ -481,7 +542,7 @@ def resolve_exploration_action(
+                 world_updates=None,
+                 state_changes={"already_searched": True},
+                 hint="Player has already searched this. Narrate that they find nothing new.",
+-                metadata=dict(classified_meta),
++                metadata=_repeat_publication(classified_meta, valid_repeat, raw_player_text or prompt),
+             )
+             return result.to_dict()
+         if classified_authority in {
+@@ -544,7 +605,7 @@ def resolve_exploration_action(
+                 world_updates=None,
+                 state_changes={"already_searched": True},
+                 hint="Player has already searched this. Narrate that they find nothing new.",
+-                metadata={},
++                metadata=_repeat_publication({}, False, raw_player_text or prompt),
+             )
+             return result.to_dict()
+ 
+@@ -706,6 +767,10 @@ def resolve_exploration_action(
+         transition_candidate=transition_candidate,
+     )
+ 
++    # These keys belong exclusively to the server-authored consequence resolver.
++    # Transition metadata otherwise preserves legacy client fields.
++    res_metadata.pop('authored_consequence', None)
++    res_metadata.pop('trusted_text', None)
+     result = ExplorationEngineResult(
+         kind=action_type,
+         action_id=action_id,
+diff --git a/development/tmp/pr79d_entry_source/game/bounded_improvisation.py b/development/tmp/pr79d_entry_source/game/bounded_improvisation.py
+index 0d945066..35b07c2d 100644
+--- a/development/tmp/pr79d_entry_source/game/bounded_improvisation.py
++++ b/development/tmp/pr79d_entry_source/game/bounded_improvisation.py
+@@ -481,3 +481,565 @@ def prompt_projection_for_bounded_improvisation(
+             "Reject contradictions, mechanical outcomes, hidden information, and consequential world changes.",
+         ],
+     }
++
++# PR-PLAY-74: persistent public facts use the existing bounded ledger. The
++# constrained proposal vocabulary is intentional: arbitrary provider prose
++# cannot be made safe by a keyword blacklist.
++WORLD_FACT_GATE = 'ASHEN_EXPERIMENTAL_WORLD_IMPROVISATION'
++WORLD_FACT_FIELDS = frozenset({'family', 'campaign_id', 'scene_id', 'anchor', 'quality', 'visibility'})
++
++
++def controlled_enabled(session):
++    import os
++    from game.authored_consequences import enabled_for_session
++    return (os.environ.get(WORLD_FACT_GATE) == '1'
++            and os.environ.get('ASHEN_EXPERIMENTAL_PLAYER_INITIATIVE') == '1'
++            and enabled_for_session(session or {}))
++
++
++def controlled_facts(session, scene_id=None):
++    campaign = str((session or {}).get('campaign_run_id') or '')
++    return [e for e in _existing_entries(session)
++            if e.get('authority') == 'controlled_world_fact'
++            and e.get('campaign_id') == campaign and e.get('visibility') == 'public'
++            and e.get('status') == 'accepted'
++            and (scene_id is None or e.get('scene_id') == scene_id)]
++
++
++def validate_world_fact(raw, *, session, scene, world):
++    """Pure validation. Text/properties/identity come from engine policy only."""
++    def reject(reason, category='E'):
++        return {'accepted': False, 'reason': reason, 'category': category}
++    if not isinstance(raw, dict) or set(raw) != WORLD_FACT_FIELDS:
++        return reject('schema')
++    if (type(raw['anchor']) is not int or not all(isinstance(raw[k], str) for k in WORLD_FACT_FIELDS - {'anchor'})
++            or raw['visibility'] != 'public'):
++        return reject('schema')
++    inner = scene.get('scene', scene) if isinstance(scene, dict) else {}
++    campaign = str((session or {}).get('campaign_run_id') or '')
++    sid = str(inner.get('id') or '')
++    if not campaign or not sid or raw['campaign_id'] != campaign or raw['scene_id'] != sid or (session or {}).get('active_scene_id') != sid:
++        return reject('context')
++    family, quality = raw['family'], raw['quality']
++    if (family, quality) not in {('environment', 'rough'), ('object', 'seat')}:
++        return reject('unsupported', 'D')
++    facts = inner.get('visible_facts') or []
++    index = raw['anchor']
++    if not 0 <= index < len(facts) or not isinstance(facts[index], str):
++        return reject('anchor')
++    anchor = facts[index]
++    # Only public, affirmative stone/furniture support. Never infer from hidden
++    # state, journal history, a destination, or a negated scene feature.
++    if re.search(r'\b(no|not|without|empty|absent|imagined|painted|picture|dead)\b', anchor, re.I):
++        return reject('scene_support')
++    if not re.search(r'\b(stone|stonework|rock|rocks|boulder|boulders)\b', anchor, re.I):
++        return reject('scene_support')
++    category = 'B' if family == 'environment' else 'C'
++    label = 'rough stone surface' if family == 'environment' else 'ordinary stone seat'
++    description = ('The stone has a rough, uneven surface.' if family == 'environment'
++                   else 'An ordinary low stone beside the established stonework offers a place to sit.')
++    basis = f'{campaign}|{sid}|{family}|{anchor}'
++    eid = 'wf_' + hashlib.sha256(basis.encode()).hexdigest()[:20]
++    existing = controlled_facts(session)
++    for e in existing:
++        if e['id'] == eid:
++            return {'accepted': True, 'reason': 'established', 'category': 'A', 'entry': dict(e)}
++        if e.get('scene_id') == sid and e.get('family') == family:
++            return reject('duplicate_identity')
++    for item in inner.get('interactables') or []:
++        if isinstance(item, dict) and label.casefold() in {str(item.get('label', '')).casefold(), *[str(a).casefold() for a in item.get('aliases', [])]}:
++            return reject('authored_identity')
++    entry = {'id': eid, 'campaign_id': campaign, 'scene_id': sid, 'category': category,
++             'family': family, 'entity_type': 'surface' if family == 'environment' else 'object',
++             'label': label, 'content': description, 'canonical_description': description,
++             'properties': {'material': 'stone', 'texture': 'rough'} if family == 'environment' else {'material': 'stone', 'use': 'seat'},
++             'anchor': anchor, 'provenance': 'accepted_improvisation', 'source': 'validated_proposal',
++             'creation_turn': int((session or {}).get('turn_counter') or 0), 'visibility': 'public',
++             'status': 'accepted', 'authority': 'controlled_world_fact', 'truth_status': 'runtime_incidental',
++             'scope': 'scene', 'persistence_status': 'campaign', 'interactions': []}
++    return {'accepted': True, 'reason': 'accepted', 'category': category, 'entry': entry}
++
++
++def controlled_request(text, *, session, scene, world):
++    """Read-only planning for the existing initiative/bridge/exploration path."""
++    if not controlled_enabled(session):
++        return None
++    inner = scene.get('scene', scene)
++    sid = inner.get('id')
++    low = text.casefold()
++    entries = controlled_facts(session, sid)
++    if entries and re.search(r'\b(?:move|take|lift|sit on|climb|destroy|break)\s+(?:it|that|this)\b', low):
++        return {'mode': 'decline', 'message': 'That interaction has no configured mechanic or authority. Nothing has been attempted.'}
++    # A reference never grants authority, movement, treasure or NPC knowledge.
++    named = [e for e in entries if (('seat' in low and e['family'] == 'object')
++             or ('surface' in low and e['family'] == 'environment') or e['label'] in low)]
++    pronoun = bool(re.search(
++        r'\b(?:inspect|examine|check|search|study|look at|sit on|move|take|lift)\s+'
++        r'(?:it|that|this)(?:\s+again)?[.!?]*$', low
++    ) or re.fullmatch(r'\s*(?:is|was)\s+(?:it|that|this)\s+(?:still there|magical)[.!?]*', low))
++    if not named and pronoun:
++        focus = (session or {}).get('bounded_improvisation', {}).get('focus')
++        named = [e for e in entries if e['id'] == focus]
++    if named:
++        if len(named) != 1:
++            return {'mode': 'clarify', 'message': 'Which established detail do you mean?'}
++        e = named[0]
++        if re.search(r'\b(secret|treasure|quest|magic|magical|weapon|move|take|lift|sit|climb|destroy|break)\b', low):
++            return {'mode': 'decline', 'message': 'That interaction has no configured mechanic or authority. The established detail is unchanged.'}
++        if re.match(r'\s*(is|are|what|where|does|do|was|were)\b', low):
++            return {'mode': 'answer', 'message': e['content'], 'id': e['id']}
++        if re.search(r'\b(inspect|examine|check|search|look|study)\b', low):
++            if re.search(r'\b(if|unless|then|and|never|not)\b', low):
++                return {'mode': 'clarify', 'message': 'What single action do you want to attempt?'}
++            return {'mode': 'interact', 'id': e['id']}
++    family = None
++    if re.search(r'\b(anything|something|place|object)\b.*\b(sit|seat|rest)\b', low):
++        family = 'object'
++    elif re.search(r'\b(describe|texture|surface detail|environmental detail)\b', low):
++        family = 'environment'
++    if family is None:
++        return None
++    if re.search(r'\b(secret|hidden|treasure|quest|magic|weapon|passage|tunnel|if|unless|then)\b', low):
++        return {'mode': 'decline', 'message': 'That proposal exceeds the permitted ordinary detail policy.'}
++    if family == 'environment' and re.match(r'\s*(what|is|are|do|does)\b', low):
++        return {'mode': 'answer', 'message': ' '.join(e['content'] for e in entries) or 'No additional detail has been established.'}
++    existing = [e for e in entries if e['family'] == family]
++    if existing:
++        return {'mode': 'answer', 'message': existing[0]['content'], 'id': existing[0]['id']}
++    for index, _fact in enumerate(inner.get('visible_facts') or []):
++        raw = {'family': family, 'campaign_id': session.get('campaign_run_id'), 'scene_id': sid,
++               'anchor': index, 'quality': 'rough' if family == 'environment' else 'seat', 'visibility': 'public'}
++        verdict = validate_world_fact(raw, session=session, scene=scene, world=world)
++        if verdict['accepted']:
++            return {'mode': 'propose', 'id': verdict['entry']['id'], 'proposal': raw}
++    return {'mode': 'decline', 'message': 'The public scene does not support that ordinary detail. Nothing has been added.'}
++
++
++def resolve_controlled_fact(scene, session, world, action, *, prompt, action_id, label):
++    """Called only by the exploration resolver; session persists in its transaction."""
++    import copy
++    from game.models import ExplorationEngineResult
++    plan = controlled_request(prompt, session=session, scene=scene, world=world)
++    if not plan or plan.get('mode') not in {'propose', 'interact'} or plan.get('id') != action.get('target_id'):
++        return None
++    if plan['mode'] == 'propose':
++        verdict = validate_world_fact(plan['proposal'], session=session, scene=scene, world=world)
++        if not verdict['accepted']:
++            return None
++        entry = copy.deepcopy(verdict['entry'])
++        ledger = ensure_bounded_improvisation_ledger(session)
++        if not any(e.get('id') == entry['id'] for e in ledger['entries']):
++            ledger['entries'].append(entry)
++        ledger['focus'] = entry['id']
++        publication = entry['content']
++    else:
++        entry = next(e for e in session[LEDGER_KEY]['entries'] if e.get('id') == plan['id'])
++        # Reuse PR73 physical-search result; no discovery, loot, movement or DC.
++        from game.general_purpose_actions import exploration_outcome, FAMILY_SEARCH
++        projected = copy.deepcopy(scene)
++        inner = projected.get('scene', projected)
++        inner.setdefault('interactables', []).append({'id': entry['id'], 'label': entry['label']})
++        search = dict(action, metadata={'general_purpose_family': FAMILY_SEARCH})
++        result = exploration_outcome(projected, search, prompt=prompt, action_id=action_id, label=label)
++        event = {'turn': int(session.get('turn_counter') or 0), 'action': 'physical_search'}
++        if event not in entry['interactions']:
++            entry['interactions'].append(event)
++        session[LEDGER_KEY]['focus'] = entry['id']
++        result['metadata']['engine_publication'] = entry['content'] + ' ' + result['metadata']['engine_publication']
++        result['metadata']['controlled_entity_id'] = entry['id']
++        result['metadata']['publication_contract'] = 'FINAL_ENGINE_RESPONSE'
++        result['metadata']['skip_primary_narration'] = True
++        return result
++    return ExplorationEngineResult(kind='observe', action_id=action_id, label=label, prompt=prompt,
++        success=True, resolved_transition=False, target_scene_id=None, clue_id=None, discovered_clues=[], state_changes={'controlled_entity_id': entry['id']},
++        metadata={'engine_publication': publication, 'controlled_entity_id': entry['id'],
++                  'publication_contract': 'FINAL_ENGINE_RESPONSE',
++                  'skip_unrelated_clue_discovery': True, 'skip_primary_narration': True}).to_dict()
++
++
++def provider_world_fact_proposal(*, session, scene, world, family, invoke=None):
++    """Single bounded shadow proposal using the existing provider/accounting stack.
++
++    No retries, no state mutation, no automatic publication. Callers can pass a
++    deterministic transport for development. Normal gameplay uses local policy.
++    """
++    import json
++    import time
++    started = time.perf_counter()
++    inner = scene.get('scene', scene)
++    schema = {'type': 'object', 'additionalProperties': False, 'required': sorted(WORLD_FACT_FIELDS),
++              'properties': {'family': {'type': 'string', 'enum': [family]},
++                'campaign_id': {'type': 'string'}, 'scene_id': {'type': 'string'},
++                'anchor': {'type': 'integer'}, 'quality': {'type': 'string', 'enum': ['rough' if family == 'environment' else 'seat']},
++                'visibility': {'type': 'string', 'enum': ['public']}}}
++    messages = [{'role': 'system', 'content': 'Propose one ordinary detail using only public stone support. Return the constrained proposal. Do not invent effects.'},
++                {'role': 'user', 'content': json.dumps({'family': family, 'campaign_id': session.get('campaign_run_id'),
++                  'scene_id': inner.get('id'), 'visible_facts': inner.get('visible_facts', [])})}]
++    try:
++        if invoke is not None:
++            raw = invoke(messages, schema)
++        else:
++            from openai import OpenAI
++            from game.config import DEFAULT_MODEL_NAME, get_openai_api_key
++            from game.provider_budget import admit_request, sdk_retry_options
++            attempt = admit_request(purpose='controlled_improvisation', owner='bounded_improvisation',
++                        model=DEFAULT_MODEL_NAME, estimated_input=len(json.dumps(messages)) // 4 + 250, max_output=300)
++            if attempt.refusal:
++                raise RuntimeError('provider_admission_refused')
++            client = OpenAI(api_key=get_openai_api_key(), timeout=30, **sdk_retry_options())
++            response = attempt.dispatch(client.responses.create, model=DEFAULT_MODEL_NAME, input=messages,
++                       max_output_tokens=300, text={'format': {'type': 'json_schema', 'name': 'world_fact_proposal',
++                                                              'strict': True, 'schema': schema}})
++            raw = response.output_text
++        proposal = json.loads(raw) if isinstance(raw, str) else raw
++        verdict = validate_world_fact(proposal, session=session, scene=scene, world=world)
++        return {'proposal': proposal, 'validation': verdict, 'committed': False, 'published_text': '',
++                'latency_ms': (time.perf_counter()-started)*1000, 'retries': 0}
++    except Exception as exc:
++        return {'proposal': None, 'validation': {'accepted': False, 'reason': type(exc).__name__},
++                'committed': False, 'published_text': '', 'latency_ms': (time.perf_counter()-started)*1000, 'retries': 0}
++
++# PR-PLAY-75: NPC proposals share the bounded world-fact ledger and resolver.
++NPC_GATE = 'ASHEN_EXPERIMENTAL_DYNAMIC_NPCS'
++NPC_FIELDS = frozenset({'campaign_id', 'scene_id', 'anchor', 'role', 'name', 'appearance', 'demeanor', 'visibility'})
++NPC_ROLES = ('traveler', 'resident', 'merchant', 'bystander', 'laborer', 'patron')
++NPC_APPEARANCES = ('plain wool coat', 'weathered cloak', 'simple linen clothes', 'patched work clothes')
++NPC_DEMEANORS = ('reserved', 'friendly', 'tired', 'matter-of-fact')
++
++
++def dynamic_npcs(session, scene_id=None):
++    return [e for e in _existing_entries(session)
++            if e.get('authority') == 'accepted_background_npc' and e.get('status') == 'accepted'
++            and e.get('campaign_id') == (session or {}).get('campaign_run_id')
++            and e.get('visibility') == 'public' and (scene_id is None or e.get('scene_id') == scene_id)]
++
++
++def _population_anchor(scene):
++    inner = scene.get('scene', scene)
++    facts = inner.get('visible_facts') or []
++    # Absence anywhere in the public scene wins over positive snippets.
++    if re.search(r'\b(empty|deserted|uninhabited|inaccessible|abandoned|no people|nobody|no one)\b', ' '.join(str(f) for f in facts), re.I):
++        return None
++    for i, fact in enumerate(facts):
++        if isinstance(fact, str) and re.search(r'\b(crowd|refugees|travelers|travellers|patrons|residents|workers|customers|people|marketplace)\b', fact, re.I):
++            return i
++    return None
++
++
++def validate_npc_proposal(raw, *, session, scene, world):
++    """Pure, fail-closed authority. Provider wording is never an NPC record."""
++    def reject(reason):
++        return dict(accepted=False, reason=reason)
++    if not isinstance(raw, dict) or set(raw) != NPC_FIELDS:
++        return reject('schema')
++    if type(raw['anchor']) is not int or any(type(raw[k]) is not str for k in NPC_FIELDS - {'anchor'}):
++        return reject('schema')
++    inner = scene.get('scene', scene); sid = inner.get('id'); cid = session.get('campaign_run_id')
++    if not cid or not sid or raw['campaign_id'] != cid or raw['scene_id'] != sid or session.get('active_scene_id') != sid:
++        return reject('context')
++    anchor = _population_anchor(scene)
++    if anchor is None or raw['anchor'] != anchor:
++        return reject('population')
++    if raw['visibility'] != 'public' or raw['role'] not in NPC_ROLES or raw['appearance'] not in NPC_APPEARANCES or raw['demeanor'] not in NPC_DEMEANORS:
++        return reject('ordinary_scope')
++    name = raw['name']
++    if name and (not re.fullmatch(r'[A-Z][a-z]{1,17}', name) or _consequential_name(name)):
++        return reject('name')
++    # One background identity per scene in this bounded cycle, regardless of aliases.
++    existing = dynamic_npcs(session, sid)
++    if existing:
++        return dict(accepted=True, reason='existing_identity', entry=existing[0])
++    for npc in world.get('npcs') or []:
++        if isinstance(npc, dict) and name and str(npc.get('name', '')).casefold() == name.casefold():
++            return reject('authored_identity')
++    label = 'ordinary ' + raw['role']
++    roster = inner.get('addressables') or []
++    if any(isinstance(n, dict) and (str(n.get('name', '')).casefold() in {name.casefold(), label}
++           or str(n.get('label', '')).casefold() == label) for n in roster):
++        return reject('authored_identity')
++    eid = 'npc_' + hashlib.sha256(f'{cid}|{sid}|background'.encode()).hexdigest()[:20]
++    entry = dict(id=eid, campaign_id=cid, scene_id=sid, location=sid, entity_type='npc', family='npc',
++        label=label, name=name, role=raw['role'], appearance=raw['appearance'], demeanor=raw['demeanor'],
++        visibility='public', provenance='accepted_improvisation', source='validated_provider_proposal',
++        creation_turn=int(session.get('turn_counter') or 0), status='accepted', authority='accepted_background_npc',
++        scope='scene', persistence_status='campaign', interaction_available=True, knowledge=[], social_receipts=[],
++        content=f"An {label} in {raw['appearance']} is among the people here.")
++    return dict(accepted=True, reason='accepted', entry=entry)
++
++
++def _consequential_name(name):
++    return bool(CONSEQUENTIAL_TERMS.search(name) or MECHANICAL_TERMS.search(name) or name.lower() in
++                {'sentinel', 'canary', 'system', 'admin', 'god', 'emperor', 'queen', 'prince', 'questgiver'})
++
++
++def provider_npc_proposal(*, session, scene, world, invoke=None):
++    """One proposal through the existing SDK admission/usage owner; no writes/retry."""
++    import json, time
++    started = time.perf_counter(); inner = scene.get('scene', scene)
++    properties = {k: {'type': 'string'} for k in NPC_FIELDS - {'anchor'}}
++    properties['anchor'] = {'type': 'integer'}
++    for key, values in [('role', NPC_ROLES), ('appearance', NPC_APPEARANCES), ('demeanor', NPC_DEMEANORS), ('visibility', ['public'])]:
++        properties[key]['enum'] = list(values)
++    schema = dict(type='object', additionalProperties=False, required=sorted(NPC_FIELDS), properties=properties)
++    view = dict(campaign_id=session.get('campaign_run_id'), scene_id=inner.get('id'), anchor=_population_anchor(scene),
++                visible_facts=inner.get('visible_facts', []))
++    messages = [{'role':'system','content':'Propose one ordinary background person supported by this public population. Use a short ordinary first name or empty name. No authority, biography, knowledge, quest, effects or secrets.'},
++                {'role':'user','content':json.dumps(view)}]
++    attempt = None
++    try:
++        if view['anchor'] is None:
++            raise ValueError('population')
++        if invoke is not None:
++            raw = invoke(messages, schema)
++        else:
++            from openai import OpenAI
++            from game.config import DEFAULT_MODEL_NAME, get_openai_api_key
++            from game.provider_budget import admit_request, sdk_retry_options
++            attempt = admit_request(purpose='background_npc_proposal', owner='bounded_improvisation', model=DEFAULT_MODEL_NAME,
++                                    estimated_input=len(json.dumps(messages))//4+400, max_output=250)
++            if attempt.refusal:
++                raise RuntimeError('provider_admission_refused')
++            response = attempt.dispatch(OpenAI(api_key=get_openai_api_key(), timeout=30, **sdk_retry_options()).responses.create,
++                model=DEFAULT_MODEL_NAME, input=messages, max_output_tokens=250,
++                text={'format':{'type':'json_schema','name':'background_npc','strict':True,'schema':schema}})
++            raw = response.output_text
++            usage = response.usage
++            attempt.finish(dict(purpose='background_npc_proposal',sent=True,model=response.model,
++                request_id=response.id,input_tokens=usage.input_tokens,output_tokens=usage.output_tokens,total_tokens=usage.total_tokens))
++            attempt = None
++        proposal = json.loads(raw) if isinstance(raw, str) else raw
++        verdict = validate_npc_proposal(proposal, session=session, scene=scene, world=world)
++        return dict(proposal=proposal, validation=verdict, latency_ms=(time.perf_counter()-started)*1000,retries=0)
++    except Exception as exc:
++        if attempt is not None:
++            attempt.finish(dict(purpose='background_npc_proposal',sent=not bool(attempt.refusal),error=type(exc).__name__,
++                                input_tokens=None,output_tokens=None,total_tokens=None))
++        return dict(proposal=None,validation=dict(accepted=False,reason=type(exc).__name__),latency_ms=(time.perf_counter()-started)*1000,retries=0)
++
++
++_NOT_NPC_TURN = re.compile(
++    r"\b(?:notice board|where am i|where are we|what do i see|what can i see|what is here|"
++    r"what (?:do|did|have) (?:i|we) know|remind me|my (?:inventory|journal))\b",
++    re.I,
++)
++
++
++def focused_present_npc(session, scene, world):
++    """The focused NPC only while that person is still in this scene and campaign."""
++    ledger = session.get(LEDGER_KEY) if isinstance(session, dict) else None
++    focus = (ledger or {}).get("npc_focus") if isinstance(ledger, dict) else None
++    if not focus or not isinstance(scene, dict):
++        return None
++    inner = scene.get("scene", scene)
++    sid = inner.get("id") if isinstance(inner, dict) else None
++    campaign = session.get("campaign_run_id")
++
++    def usable(row):
++        if not isinstance(row, dict) or row.get("id") != focus:
++            return False
++        marked = row.get("campaign_id")
++        if marked and marked != campaign:
++            return False
++        scene_id = str(row.get("scene_id") or "")
++        location = str(row.get("location") or "")
++        if scene_id and sid and scene_id != sid:
++            return False
++        if location and sid and location != sid:
++            return False
++        return True
++
++    found = None
++    for entry in dynamic_npcs(session, sid):
++        if usable(entry):
++            found = entry
++            break
++    addressed = (ledger or {}).get("addressed_npcs") if isinstance(ledger, dict) else None
++    if found is None and isinstance(addressed, dict) and usable(addressed.get(focus)):
++        found = addressed.get(focus)
++    if found is None:
++        for npc in (world or {}).get("npcs") or []:
++            if usable(npc):
++                found = npc
++                break
++    if found is None and isinstance(inner, dict):
++        for item in inner.get("addressables") or []:
++            if isinstance(item, dict) and item.get("id") == focus:
++                found = item
++                break
++    conv = session.get("conversational_context") if isinstance(session, dict) else None
++    slot = conv.get("active_interlocutor") if isinstance(conv, dict) else None
++    if isinstance(slot, dict):
++        marked_campaign = slot.get("campaign_id")
++        if marked_campaign and campaign and marked_campaign != campaign:
++            found = None
++    if found is not None:
++        return found
++    if isinstance(ledger, dict):
++        ledger["npc_focus"] = None
++    conv = session.get("conversational_context") if isinstance(session, dict) else None
++    slot = conv.get("active_interlocutor") if isinstance(conv, dict) else None
++    if isinstance(slot, dict) and slot.get("npc_id") == focus:
++        slot["status"] = "inactive"
++        slot["npc_id"] = None
++    return None
++
++
++def npc_request(text, *, session, scene, world):
++    import os
++    if os.environ.get(NPC_GATE) != '1' or not controlled_enabled(session):
++        return None
++    low = text.casefold().replace('’', "'"); sid = scene.get('scene', scene).get('id')
++    if sid != session.get('active_scene_id'):
++        return None
++    if _NOT_NPC_TURN.search(low):
++        return None
++    focused = bool((session.get(LEDGER_KEY) or {}).get("npc_focus"))
++    if not focused and re.search(r'\b(?:what (?:have|did|do) (?:i|we)|my (?:inventory|journal|spells|character)|what happened|remind me)\b', low):
++        return None
++    entries = dynamic_npcs(session, sid)
++    request = bool(re.search(r'\b(introduce|find|meet|look for|speak (?:with|to)|talk (?:with|to))\b', low)
++                   and re.search(r'\b(ordinary|background|someone|local resident)\b', low))
++    # Authored names always retain the existing social route.
++    if any(isinstance(n, dict) and n.get('name') and str(n['name']).casefold() in low for n in world.get('npcs') or []):
++        return None
++    def mentions(value):
++        return bool(value and re.search(r'(?<!\w)' + re.escape(value.casefold()) + r'(?!\w)', low))
++    named = [e for e in entries if mentions(e.get('name')) or mentions(e['role']) or mentions(e['label'])]
++    if not named and len(entries) == 1 and re.search(r"\boffer\b", low):
++        named = entries
++    focus = (session.get(LEDGER_KEY) or {}).get('npc_focus')
++    reference = bool(re.search(r'\b(that traveler|person by|person i spoke|ask (?:her|him|them)|talk to (?:her|him|them)|speak with (?:her|him|them))\b', low)
++                     or (focus and re.search(r'\b(?:does|do)\s+(?:he|she|they)\b', low)))
++    direct = bool(focus and re.match(r'^(?:hello|hi\b|greetings|who\b|what\b|why\b|have you\b|can you\b|could you\b|thanks\b|thank you\b|tell me\b|i tell\b|give me\b|offer me\b|promise\b|when\b|do you\b|goodbye\b|farewell\b)', low))
++    if named or reference or direct or (request and entries):
++        person = focused_present_npc(session, scene, world) if (direct or reference) and not named else None
++        if (direct or reference) and not named:
++            if person is None:
++                return None
++            targets = [person]
++        else:
++            targets = named or [e for e in entries if e.get('id') == focus] or entries
++        if len(targets) != 1:
++            return dict(mode='clarify', message='Which available person do you mean?')
++        npc = targets[0]
++        if re.search(r'\b(?:seem|nervous|worried|demeanor|manner)\b', low):
++            return dict(mode='answer', message=f"{npc.get('name') or npc['label']} seems {npc.get('demeanor') or 'ordinary'}. Nothing establishes a hidden motive.")
++        if re.match(r'^(?:is|was|where is|who is|what is|does)\b', low) and not re.search(r'\byou\b',low) and npc.get('content'):
++            return dict(mode='answer',message=npc['content'])
++        if re.search(r'\b(bribe|persuade|bluff|intimidate|threaten|attack|steal|force|command)\b', low):
++            return dict(mode='decline',message='That requires an established social or combat mechanic; this background conversation cannot grant compliance.')
++        return dict(mode='interact',id=npc['id'],npc_mode='conversation')
++    if request:
++        if re.search(r'\b(secret|quest|treasure|noble|spy|hidden|captain|king|soldier|passage|magic)\b', low):
++            return dict(mode='decline',message='No person with that knowledge or authority is established here.')
++        if _population_anchor(scene) is None:
++            return dict(mode='decline',message='The established public scene does not support introducing another person here.')
++        eid = 'npc_' + hashlib.sha256(f"{session.get('campaign_run_id')}|{sid}|background".encode()).hexdigest()[:20]
++        return dict(mode='propose',id=eid,npc_mode='creation')
++    if reference:
++        return dict(mode='clarify',message='Which available person do you mean?')
++    return None
++
++
++_ordinary_detail_request = controlled_request
++
++def controlled_request(text, *, session, scene, world):
++    from game.integrated_play import plan_integrated
++    mixed = plan_integrated(text, session=session, scene=scene, world=world)
++    if mixed is not None:
++        return mixed
++    plan = npc_request(text,session=session,scene=scene,world=world)
++    if plan is not None:
++        return plan
++    from game.physical_adjudication import plan_physical
++    physical = plan_physical(text, session=session, scene=scene, world=world)
++    if physical is not None:
++        return physical
++    # Routine sitting reuses an accepted seat, without a check or an invented object.
++    if __import__('os').environ.get(NPC_GATE) == '1' and controlled_enabled(session) and re.search(r'\b(?:sit|rest)\s+(?:on\s+)?', text, re.I):
++        sid = scene.get('scene',scene).get('id')
++        seats = [e for e in controlled_facts(session,sid) if e.get('properties',{}).get('use')=='seat']
++        if len(seats)==1 and re.search(r'\b(seat|it|that|this)\b',text,re.I) and not re.search(r'\b(if|unless|and|throne|imaginary|magic)\b',text,re.I):
++            return dict(mode='interact',id=seats[0]['id'],routine='sit')
++    return _ordinary_detail_request(text,session=session,scene=scene,world=world)
++
++
++_resolve_ordinary_detail = resolve_controlled_fact
++
++def resolve_controlled_fact(scene, session, world, action, *, prompt, action_id, label):
++    from game.models import ExplorationEngineResult
++    plan = controlled_request(prompt,session=session,scene=scene,world=world)
++    if plan and plan.get('integrated') and plan.get('mode') == 'interact':
++        if plan.get('id') != action.get('target_id'):
++            return None
++        from game.integrated_play import commit_integrated
++        return commit_integrated(scene, session, world, action, prompt=prompt, action_id=action_id, label=label)
++    if not plan or plan.get('id') != action.get('target_id'):
++        return None
++    publication = ''; success = True
++    if plan.get('npc_mode') == 'creation':
++        proposed = provider_npc_proposal(session=session,scene=scene,world=world)
++        verdict = proposed['validation']
++        ledger = ensure_bounded_improvisation_ledger(session)
++        # Private bounded diagnostics, never in the publication DTO.
++        ledger['npc_last_proposal'] = proposed
++        if not verdict['accepted']:
++            ledger['rejected'] = (ledger['rejected'] + [dict(kind='background_npc',reason=verdict['reason'],turn=session.get('turn_counter'))])[-24:]
++            publication = 'No additional person could be established here. You can still speak to the people already present.'
++            success = False
++        else:
++            import copy
++            entry = copy.deepcopy(verdict['entry'])
++            if not any(e.get('id')==entry['id'] for e in ledger['entries']):
++                ledger['entries'].append(entry)
++            ledger['npc_focus'] = entry['id']
++            publication = entry['content']
++    elif plan.get('npc_mode') == 'conversation':
++        from game.expressive_dialogue import background_conversation
++        from game.integrated_play import _npc_from_text, remember_interlocutor
++        entry = next((e for e in session[LEDGER_KEY]['entries'] if e.get('id')==plan['id']), None)
++        npc = _npc_from_text(prompt, session, scene, world) or entry or focused_present_npc(session, scene, world)
++        if npc is None:
++            publication = 'That person is not here. The conversation has ended.'
++            success = False
++        else:
++            publication = background_conversation(npc,session=session,scene=scene,player_text=prompt)
++            remember_interlocutor(session, npc, scene, prompt, publication)
++            adopted = bool((session.get('last_background_expression') or {}).get('adopted'))
++            session['last_narration'] = {
++                'adopted': False, 'requested': False, 'reasons': ['dialogue_already_final'], 'candidate': '',
++            }
++            session['last_publication'] = {
++                'owner': 'bounded_improvisation.conversation',
++                'contract': 'FINAL_ENGINE_RESPONSE',
++                'final': True,
++                'dialogue_generated': bool(publication),
++                'dialogue_accepted': adopted,
++                'dialogue_composed': bool(publication),
++                'dialogue_published': bool(publication),
++                'narration_requested': False,
++                'narration_accepted': False,
++                'narration_published': False,
++                'visible': publication,
++            }
++    elif plan.get('physical'):
++        from game.physical_adjudication import commit_physical
++        result = commit_physical(scene, session, world, action, prompt=prompt, action_id=action_id, label=label)
++        if result and __import__('os').environ.get('ASHEN_EXPERIMENTAL_INTEGRATED_NARRATION') == '1':
++            from game.integrated_play import maybe_narrate
++            narrated = maybe_narrate(result['metadata'].get('engine_publication') or '', session=session, scene=scene)
++            if narrated:
++                result['metadata']['engine_publication'] = narrated['text']
++                result['metadata']['live_narration'] = True
++        return result
++    elif plan.get('routine') == 'sit':
++        ledger = ensure_bounded_improvisation_ledger(session)
++        # A posture receipt, not a movement/inventory or social effect.
++        ledger['posture'] = {'kind':'sitting','seat_id':plan['id'],'scene_id':session.get('active_scene_id')}
++        publication = 'You sit on the accessible ordinary stone seat.'
++    else:
++        return _resolve_ordinary_detail(scene,session,world,action,prompt=prompt,action_id=action_id,label=label)
++    return ExplorationEngineResult(kind='interact',action_id=action_id,label=label,prompt=prompt,success=success,
++        resolved_transition=False,target_scene_id=None,clue_id=None,discovered_clues=[],
++        metadata={'engine_publication':publication,'publication_contract':'FINAL_ENGINE_RESPONSE','skip_unrelated_clue_discovery':True,'skip_primary_narration':True}).to_dict()
++

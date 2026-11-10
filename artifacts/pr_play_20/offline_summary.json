@@ -1,0 +1,64 @@
+{
+  "mode": "player",
+  "endpoint": "/api/start_campaign",
+  "status": 200,
+  "sentinel_in_http": false,
+  "sentinel_in_public_state": false,
+  "sentinel_in_authority": true,
+  "mock_dispatches": 1,
+  "live_provider_requests": 0,
+  "before": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "time_pressure": 0,
+    "log_length": 0,
+    "can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  },
+  "after": {
+    "campaign_started": true,
+    "turn_counter": 1,
+    "time_pressure": 1,
+    "log_length": 1,
+    "can_start": false,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 3,
+        "agenda_progress": 1
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 3,
+        "agenda_progress": 1
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 2,
+        "agenda_progress": 1
+      }
+    ],
+    "event_types": [
+      "faction_pressure",
+      "faction_pressure"
+    ]
+  },
+  "repeat_status": 409
+}

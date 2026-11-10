@@ -1,0 +1,64 @@
+F.F.FF.F.F.....F..........................                               [100%]
+================================== FAILURES ===================================
+________________________ test_A_hidden_clue_isolation _________________________
+tests\test_pr_play_45_narration_authority.py:71: in test_A_hidden_clue_isolation
+    assert 'CANARY_' not in json.dumps(ms)
+E   assert 'CANARY_' not in '[{"role": "...": false}"}]'
+E     
+E     'CANARY_' is contained here:
+E       ics\": [\"CANARY_PRESSURE\"], \"forbid_topic_hijack\": true, \"forbid_pressure_answer_substitution\": true, \"forbid_unearned_tone_shift_from_background_pressure\": true, \"allow_brief_pressure_coloring\": true, \"allow_optional_consequence_signposting\": true, \"max_pressure_sentences_without_player_prompt\": 2, \"tone_escalation_contract\": {\"enabled\": true, \"scene_id\": \"observatory\", \"active_speaker_id\": null, \"base_tone\": \"neutral\", \"max_allowed_tone\": \"guarded\", \"allow_guarded_refusal\": true, \"allow_verbal_pressure\": false, \"allow_ex...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________________________ test_C_newly_revealed_clue __________________________
+tests\test_pr_play_45_narration_authority.py:86: in test_C_newly_revealed_clue
+    output = fallback('You receive a jeweled cup.', discovery())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_play_45_narration_authority.py:61: in fallback
+    output = run_preserve_if_valid({'player_facing_text': text, 'metadata': {}},
+E   TypeError: run_preserve_if_valid() missing 1 required keyword-only argument: 'player_text'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______________________ test_E_unsupported_inventory_gain ______________________
+tests\test_pr_play_45_narration_authority.py:98: in test_E_unsupported_inventory_gain
+    assert 'silver key' not in fallback('You receive a silver key.', result())['player_facing_text']
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_play_45_narration_authority.py:61: in fallback
+    output = run_preserve_if_valid({'player_facing_text': text, 'metadata': {}},
+E   TypeError: run_preserve_if_valid() missing 1 required keyword-only argument: 'player_text'
+______________________ test_F_unsupported_currency_gain _______________________
+tests\test_pr_play_45_narration_authority.py:103: in test_F_unsupported_currency_gain
+    assert 'fifty gold' not in fallback('You collect fifty gold coins.', result())['player_facing_text']
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_play_45_narration_authority.py:61: in fallback
+    output = run_preserve_if_valid({'player_facing_text': text, 'metadata': {}},
+E   TypeError: run_preserve_if_valid() missing 1 required keyword-only argument: 'player_text'
+__________________________ test_H_unsupported_damage __________________________
+tests\test_pr_play_45_narration_authority.py:112: in test_H_unsupported_damage
+    fallback('You suffer 4 damage.', result())
+tests\test_pr_play_45_narration_authority.py:61: in fallback
+    output = run_preserve_if_valid({'player_facing_text': text, 'metadata': {}},
+E   TypeError: run_preserve_if_valid() missing 1 required keyword-only argument: 'player_text'
+__________________________ test_J_unsupported_travel __________________________
+tests\test_pr_play_45_narration_authority.py:122: in test_J_unsupported_travel
+    fallback('You arrive at the glass hall.', r)
+tests\test_pr_play_45_narration_authority.py:61: in fallback
+    output = run_preserve_if_valid({'player_facing_text': text, 'metadata': {}},
+E   TypeError: run_preserve_if_valid() missing 1 required keyword-only argument: 'player_text'
+______________________ test_P_mixed_claims_preserve_clue ______________________
+tests\test_pr_play_45_narration_authority.py:147: in test_P_mixed_claims_preserve_clue
+    output = fallback(text, discovery())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_play_45_narration_authority.py:61: in fallback
+    output = run_preserve_if_valid({'player_facing_text': text, 'metadata': {}},
+E   TypeError: run_preserve_if_valid() missing 1 required keyword-only argument: 'player_text'
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_45_narration_authority.py::test_A_hidden_clue_isolation
+FAILED tests/test_pr_play_45_narration_authority.py::test_C_newly_revealed_clue
+FAILED tests/test_pr_play_45_narration_authority.py::test_E_unsupported_inventory_gain
+FAILED tests/test_pr_play_45_narration_authority.py::test_F_unsupported_currency_gain
+FAILED tests/test_pr_play_45_narration_authority.py::test_H_unsupported_damage
+FAILED tests/test_pr_play_45_narration_authority.py::test_J_unsupported_travel
+FAILED tests/test_pr_play_45_narration_authority.py::test_P_mixed_claims_preserve_clue
+7 failed, 35 passed in 3.04s

@@ -1,0 +1,9 @@
+# BASELINE AND SCOPE
+
+Commit: d40f1ed198236c604085f1c842ead267a8104ce2. The entry tree was extensively dirty; baseline.json retains exact status and source hashes. No applicable AGENTS.md found. No delegation, commit, push, campaign-data edits, resolver changes, frontend changes, HTTP-projection changes or default flag changes. Read the Constitution, current-session handoff, state-authority doctrine, validation-evidence standard, review-handoff standard, Product Realization bootstrap and scoped PR68 reports/evidence. Protected roots: data, artifacts/atgb, PR65–PR68 evidence. 42115 protected entry files remain unchanged.
+
+Production edits: game/quarantined_investigation_narration.py (current-target projection) and game/integrated_investigation_narration.py (finite frames, scoped overlap and repeat fallback). Tests: new tests/test_pr_play_69_target_references.py and the PR62 repeat wording assertion. Session orientation: docs/NEXT_SESSION.md. New evidence/tooling lives under artifacts/pr_play_69 and twenty reports under this directory.
+
+Experimental flags remain default off: ASHEN_QUARANTINE_INVESTIGATION_NARRATION; mode integrated; ASHEN_EXPERIMENTAL_INTEGRATED_NARRATION plus campaign_run_id session gate; ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE; explicit live-provider gate. ASHEN_INTEGRATED_REPEAT_FAST_PATH remains optional; this experiment exercises repeats without enabling it.
+
+Player action → deterministic noncombat seam → resolved-turn pipeline → quarantined hook build_hook_input/current outcome projection → optional generator → semantic+legacy validation → composition overlap/bounded attention checks → composed validation → persistence → _finalize_investigation_publication → request-local provenance and mandatory verification → project_player_response → gm_output.player_facing_text → browser replaceMessage. Structured and chat share the post-persistence publisher. Browser display was not executed this cycle.

@@ -1,0 +1,113 @@
+{
+  "historical_exact": {
+    "decision": "FAIL",
+    "semantic": {
+      "decision": "PASS",
+      "reasons": [],
+      "claims": [],
+      "provider_requests": 0,
+      "coverage": "deterministic_frames_not_semantic_proof"
+    },
+    "legacy": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:items_added"
+      ],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": false,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [
+          {
+            "category": "items_added",
+            "claim": "the key",
+            "supported": false
+          }
+        ],
+        "reasons": [
+          "unsupported_mechanical_claim:items_added"
+        ]
+      },
+      "consequential_validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      }
+    },
+    "coverage": {
+      "decision": "PASS",
+      "facts": [],
+      "scope": "bounded_deterministic_coverage_not_semantic_proof"
+    }
+  },
+  "historical_projection": {
+    "kind": "investigate",
+    "success": null,
+    "discovered_clues": [],
+    "state_changes": {}
+  },
+  "explicit_delta_control": {
+    "decision": "PASS",
+    "semantic": {
+      "decision": "PASS",
+      "reasons": [],
+      "claims": [],
+      "provider_requests": 0,
+      "coverage": "deterministic_frames_not_semantic_proof"
+    },
+    "legacy": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [
+          {
+            "category": "items_added",
+            "claim": "the key",
+            "supported": true
+          }
+        ],
+        "reasons": []
+      },
+      "consequential_validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      }
+    },
+    "coverage": {
+      "decision": "PASS",
+      "facts": [],
+      "scope": "bounded_deterministic_coverage_not_semantic_proof"
+    }
+  },
+  "explicit_projection": {
+    "kind": "investigate",
+    "success": null,
+    "discovered_clues": [],
+    "state_changes": {
+      "items_added": [
+        "key"
+      ]
+    }
+  },
+  "limitation": "Original historical fixture has no resolver record/delta. Explicit-delta control is separately labeled, never inferred by runtime from prose."
+}

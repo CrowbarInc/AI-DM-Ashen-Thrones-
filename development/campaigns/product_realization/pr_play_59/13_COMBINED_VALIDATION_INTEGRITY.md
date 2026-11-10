@@ -1,0 +1,3 @@
+# COMBINED VALIDATION INTEGRITY
+
+Existing validate_integrated precedence is unchanged. Semantic FAIL remains FAIL regardless of coverage; semantic REVIEW_REQUIRED blocks; validation exceptions yield VALIDATION_ERROR. Legacy rejection blocks semantic PASS. Missing mandatory facts remain REVIEW_REQUIRED under established semantics. H41 has complete coverage yet now fails. Combined development matches 45/46; 20/20 unauthorized blocked, 10/10 harmless PASS, 5/6 authorized PASS; one pre-existing key-acquisition rejection. All individual layers are retained in combined_development_results.json. Empty mandatory facts in these synthetic controls isolate consequence authority; real required-fact behavior is tested in PR58 replays.

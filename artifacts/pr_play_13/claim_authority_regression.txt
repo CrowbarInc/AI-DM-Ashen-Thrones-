@@ -1,0 +1,113 @@
+........................................................................ [ 53%]
+......................F........F.......FF.FF.......F........F.           [100%]
+================================== FAILURES ===================================
+E   AssertionError: The damage alone doesn't identify who worked on the lock.
+    assert False is True
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_br_claim_control_slice2.py:146: AssertionError: The damage alone doesn't identify who worked on the lock.
+E   tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.
+    site: game.gm.call_gpt
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\_pytest\main.py", line 372, in _main
+        config.hook.pytest_runtestloop(session=session)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+        res = hook_impl.function(*args)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\_pytest\main.py", line 396, in pytest_runtestloop
+        item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+        res = hook_impl.function(*args)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\_pytest\runner.py", line 118, in pytest_runtest_protocol
+        runtestprotocol(item, nextitem=nextitem)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\_pytest\runner.py", line 137, in runtestprotocol
+        reports.append(call_and_report(item, "call", log))
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\_pytest\runner.py", line 244, in call_and_report
+        call = CallInfo.from_call(
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\_pytest\runner.py", line 353, in from_call
+        result: TResult | None = func()
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\_pytest\runner.py", line 245, in <lambda>
+        lambda: runtest_hook(item=item, **kwds),
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+        res = hook_impl.function(*args)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\_pytest\runner.py", line 179, in pytest_runtest_call
+        item.runtest()
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\_pytest\python.py", line 1720, in runtest
+        self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+        res = hook_impl.function(*args)
+      File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\_pytest\python.py", line 166, in pytest_pyfunc_call
+        result = testfunction(**testargs)
+      File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_realization_provenance.py", line 105, in test_call_gpt_provider_failure_metadata_has_provider_family
+        out = gm.call_gpt([{"role": "user", "content": "hello"}])
+      File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 73, in _blocked_call
+        raise LiveModelCallForbidden("game.gm.call_gpt")
+      File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 30, in __init__
+        stack = "".join(traceback.format_stack(limit=25))
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py:73: tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.
+E   assert None == 'discover_clue'
+     +  where None = <built-in method get of dict object at 0x000001BCCC873A40>('kind')
+     +    where <built-in method get of dict object at 0x000001BCCC873A40> = ({'metadata': {'adjudication_resolver_family': None, 'communication_mode': 'AUTO', 'contract_before_resolver': True, 'c...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': "The Ash Cowl's pressure mounts.", 'type': 'faction_pressure'}]}).get
+     +      where {'metadata': {'adjudication_resolver_family': None, 'communication_mode': 'AUTO', 'contract_before_resolver': True, 'c...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': "The Ash Cowl's pressure mounts.", 'type': 'faction_pressure'}]} = <built-in method get of dict object at 0x000001BCCC8F5C40>('resolution')
+     +        where <built-in method get of dict object at 0x000001BCCC8F5C40> = {'campaign': {'campaign_structure': 'A sandbox political world where the player gradually establishes a locus of power..., 'combat': {'active_actor_id': None, 'in_combat': False, 'initiative_order': [], 'player_turn_used': False, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_investigation_result_provenance_non_invention.py:259: assert None == 'discover_clue'
+E   AssertionError: assert ('cooper' in 'a silver locket names the night buyer.' or 'bench' in 'a silver locket names the night buyer.')
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_investigation_result_provenance_non_invention.py:269: AssertionError: assert ('cooper' in 'a silver locket names the night buyer.' or 'bench' in 'a silver locket names the night buyer.')
+E   AssertionError: assert 'details on ... assignment.' not in 'details on ... assignment.'
+      
+      'details on the exa... patrol assignment.' is contained here:
+        details on the exact timing and personnel of the missing patrol assignment.
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_investigation_result_provenance_non_invention.py:304: AssertionError: assert 'details on ... assignment.' not in 'details on ... assignment.'
+E   AssertionError: assert 'cooper hale' not in 'the last us... at dusk. []'
+      
+      'cooper hale' is contained here:
+        the last user was cooper hale, who left at dusk. []
+      ?                   +++++++++++
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_investigation_result_provenance_non_invention.py:316: AssertionError: assert 'cooper hale' not in 'the last us... at dusk. []'
+E   assert 'duke' not in "a sealed do...ke's killer."
+      
+      'duke' is contained here:
+        a sealed dossier names the duke's killer.
+      ?                            ++++
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_investigation_result_provenance_non_invention.py:443: assert 'duke' not in "a sealed do...ke's killer."
+E   AssertionError: assert 'exact timing' not in 'details on ... assignment.'
+      
+      'exact timing' is contained here:
+        details on the exact timing and personnel of the missing patrol assignment.
+      ?                ++++++++++++
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] notice_patrol_route
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_investigation_result_provenance_non_invention.py:578: AssertionError: assert 'exact timing' not in 'details on ... assignment.'
+=========================== short test summary info ===========================
+FAILED tests/test_pr_br_claim_control_slice2.py::test_false_positive_controls_remain_speakable
+FAILED tests/test_realization_provenance.py::test_call_gpt_provider_failure_metadata_has_provider_family
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_written_surface_question_discovers_authored_clue
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_visible_evidence_may_be_reported
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_valid_target_no_evidence_is_grounded_absence
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_requested_identity_absent_does_not_mint_person
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_observe_empty_target_does_not_invent
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing
+

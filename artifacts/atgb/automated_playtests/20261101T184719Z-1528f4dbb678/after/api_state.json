@@ -1,0 +1,3052 @@
+{
+  "ui_mode": "player",
+  "public_state": {
+    "campaign": {
+      "title": "Ashen Thrones",
+      "premise": "A grimdark political sandbox where fractured powers, ancient mysteries, and ruthless factions compete for dominance in a dangerous world. Survival, intrigue, and warfare shape the rise or destruction of new rulers.",
+      "tone": "grimdark political intrigue with survival and horror elements",
+      "player_character": "Galinor",
+      "character_role": "A wandering wizard seeking to establish a stronghold of power in a fractured and hostile world.",
+      "starting_context": "Galinor arrives in a struggling frontier city at the edge of rival territories, where noble houses scheme, criminal syndicates rule the shadows, and whispers spread of an abandoned fortress nearby\u2014one said to rest atop ancient and dangerous magical foundations.",
+      "character_secret": {
+        "title": "The Betrayed Loyalist",
+        "description": "Galinor once served faithfully as a trusted court mage. When he uncovered evidence of a conspiracy and brought it to his ruler, he discovered the conspiracy was orchestrated by the throne itself.",
+        "implications": [
+          "The ruler cannot allow Galinor to live if his identity becomes known.",
+          "Agents of the throne may hunt surviving witnesses of the purge.",
+          "Galinor holds knowledge capable of destabilizing an entire realm."
+        ]
+      },
+      "world_pressures": [
+        "Rival noble houses competing for territory and influence.",
+        "Religious orders attempting to control or suppress dangerous magic.",
+        "Criminal syndicates dominating trade, smuggling, and urban power.",
+        "Invading armies exploiting political instability.",
+        "Eldritch cults pursuing forgotten rituals and ancient powers."
+      ],
+      "environmental_threats": [
+        "harsh seasons and famine",
+        "disease and plague",
+        "dangerous wilderness and monsters",
+        "war-torn lands and refugee movements",
+        "cursed ruins and unstable magical sites"
+      ],
+      "magic_style": "rare, mysterious, feared, and poorly understood. Magical knowledge is fragmented and often tied to ancient relics, ruins, or forbidden traditions.",
+      "campaign_structure": "A sandbox political world where the player gradually establishes a locus of power through alliances, conquest, intrigue, and exploration.",
+      "long_term_goals": [
+        "Establish a fortified stronghold",
+        "Build a network of agents and allies",
+        "Acquire rare magical knowledge",
+        "Manipulate regional politics"
+      ],
+      "gm_guidance": [
+        "Emphasize faction intrigue, shifting alliances, and fragile political balance.",
+        "Make survival and logistics meaningful pressures.",
+        "Allow the player to acquire land, followers, and influence gradually.",
+        "Let the world react dynamically as the player's influence grows."
+      ]
+    },
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "class": "Wizard",
+      "level": 1,
+      "ancestry": "Human",
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "ac": {
+        "normal": 12,
+        "touch": 12,
+        "flat_footed": 10
+      },
+      "initiative_bonus": 2,
+      "speed": 30,
+      "ability_scores": {
+        "str": 10,
+        "dex": 14,
+        "con": 12,
+        "int": 18,
+        "wis": 12,
+        "cha": 10
+      },
+      "saves": {
+        "fort": 1,
+        "ref": 2,
+        "will": 3
+      },
+      "bab": 0,
+      "cmb": 0,
+      "cmd": 12,
+      "skills": {
+        "knowledge_arcana": 8,
+        "spellcraft": 8,
+        "perception": 4,
+        "sense_motive": 4,
+        "stealth": 4,
+        "diplomacy": 4,
+        "intimidate": 2,
+        "bluff": 2
+      },
+      "attacks": [
+        {
+          "id": "quarterstaff",
+          "name": "Quarterstaff",
+          "attack_bonus": 0,
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 6,
+            "bonus": 0,
+            "type": "bludgeoning"
+          },
+          "type": "melee"
+        },
+        {
+          "id": "crossbow",
+          "name": "Light Crossbow",
+          "attack_bonus": 2,
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 8,
+            "bonus": 0,
+            "type": "piercing"
+          },
+          "type": "ranged"
+        }
+      ],
+      "conditions": [],
+      "inventory": [
+        {
+          "id": "spellbook",
+          "name": "Spellbook",
+          "quantity": 1,
+          "usable": false
+        }
+      ],
+      "spells": {
+        "prepared": [
+          {
+            "id": "daze",
+            "name": "Daze",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "detect_magic",
+            "name": "Detect Magic",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "magic_missile",
+            "name": "Magic Missile",
+            "cast": false,
+            "level": 1
+          },
+          {
+            "id": "shield",
+            "name": "Shield",
+            "cast": false,
+            "level": 1
+          }
+        ],
+        "slots": {
+          "0": 3,
+          "1": 1
+        }
+      },
+      "notes": "Default template character. Import a custom sheet for campaign play."
+    },
+    "session": {
+      "active_scene_id": "frontier_gate",
+      "visited_scene_ids": [
+        "frontier_gate"
+      ],
+      "current_date": "Day 1",
+      "turn_counter": 1,
+      "response_mode": "standard",
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 1
+      },
+      "interaction_context": {
+        "active_interaction_target_id": null,
+        "active_interaction_kind": null,
+        "interaction_mode": "none",
+        "engagement_level": "none",
+        "conversation_privacy": null,
+        "player_position_context": null
+      },
+      "scene_state": {
+        "active_scene_id": "frontier_gate",
+        "active_entities": [
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner",
+          "guard_captain",
+          "refugee",
+          "threadbare_watcher"
+        ],
+        "entity_presence": {
+          "gate_guard": "active",
+          "gate_serjeant": "active",
+          "tavern_runner": "active",
+          "threadbare_watcher": "active",
+          "refugee": "active",
+          "guard_captain": "active"
+        },
+        "current_interlocutor": null,
+        "emergent_addressables": [],
+        "promoted_actor_npc_map": {}
+      },
+      "runtime_scene_overlays": {
+        "old_milestone": {
+          "scene_id": "old_milestone",
+          "visible_facts_add": [],
+          "discovered_clues": [],
+          "state_flags": {},
+          "runtime_entities": [],
+          "mutations": {}
+        },
+        "market_quarter": {
+          "scene_id": "market_quarter",
+          "visible_facts_add": [],
+          "discovered_clues": [],
+          "state_flags": {},
+          "runtime_entities": [],
+          "mutations": {}
+        },
+        "frontier_gate": {
+          "scene_id": "frontier_gate",
+          "visible_facts_add": [],
+          "discovered_clues": [],
+          "state_flags": {},
+          "runtime_entities": [],
+          "mutations": {}
+        }
+      },
+      "scene_runtime": {
+        "frontier_gate": {
+          "discovered_clues": [],
+          "discovered_clue_ids": [],
+          "pending_leads": [],
+          "revealed_hidden_facts": [],
+          "suspicion_flags": [],
+          "searched_targets": [],
+          "resolved_interactables": [],
+          "last_exploration_action_key": "campaign_start_opening_scene",
+          "repeated_action_count": 1,
+          "last_resolution_kind": "scene_opening",
+          "last_description_hash": null,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "consumed_action_ids": [],
+          "momentum_exchanges_since": 1,
+          "momentum_next_due_in": 2,
+          "momentum_last_kind": null,
+          "passive_action_streak": 0,
+          "recent_player_actions": [
+            {
+              "text": "",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 1
+            }
+          ],
+          "last_player_action_text": "",
+          "last_player_action_passive": false,
+          "recent_contextual_leads": [
+            {
+              "key": "active_event_refugees_wagons_and_foot_traffic_clog_the_muddy_approach_guards_hold_the_choke_while_the_crowd_presses_in",
+              "kind": "active_event",
+              "subject": "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            },
+            {
+              "key": "active_event_tavern_runner_shouts_offers_of_hot_stew_and_paid_rumor",
+              "kind": "active_event",
+              "subject": "tavern runner shouts offers of hot stew and paid rumor",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            },
+            {
+              "key": "notice_board_notice_board",
+              "kind": "notice_board",
+              "subject": "notice board",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            },
+            {
+              "key": "scene_npc_tavern_runner",
+              "kind": "scene_npc",
+              "subject": "Tavern Runner",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            }
+          ]
+        }
+      },
+      "clue_knowledge": {},
+      "lead_registry": {},
+      "npc_runtime": {
+        "gate_guard": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        },
+        "gate_serjeant": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        },
+        "tavern_runner": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        }
+      },
+      "flags": {},
+      "character_name": "Galinor",
+      "campaign_run_id": "3480e92349bebac07d1745cb",
+      "session_id": "3480e92349bebac07d1745cb",
+      "campaign_started": true,
+      "last_saved_at": "2026-11-01T18:47:26.174587Z",
+      "_runtime_canonical_ctir_v1": {
+        "version": 1,
+        "turn_id": 1,
+        "scene_id": "frontier_gate",
+        "player_input": "",
+        "intent": {
+          "raw_text": null,
+          "normalized_kind": "scene_opening",
+          "mode": "scene_opening",
+          "classified_action": "scene_opening",
+          "requires_check": false,
+          "check_request": null,
+          "targets": [
+            "frontier_gate",
+            "frontier_gate"
+          ],
+          "labels": []
+        },
+        "resolution": {
+          "kind": "scene_opening",
+          "outcome_type": null,
+          "success_state": "success",
+          "consequences": [
+            "arrived_at_scene",
+            "new_scene_context_available",
+            "opening_scene_turn"
+          ],
+          "authoritative_outputs": {
+            "action_id": "campaign_start_opening_scene",
+            "resolved_transition": false,
+            "target_scene_id": "frontier_gate"
+          },
+          "state_changes": {
+            "arrived_at_scene": true,
+            "new_scene_context_available": true
+          },
+          "action_id": "campaign_start_opening_scene",
+          "resolved_transition": false,
+          "target_scene_id": "frontier_gate"
+        },
+        "noncombat": {},
+        "state_mutations": {
+          "scene": {
+            "scene_id": "frontier_gate"
+          },
+          "session": {
+            "scene_id": "frontier_gate"
+          },
+          "combat": {
+            "combat_active": false,
+            "round": 0
+          },
+          "clues_leads": {}
+        },
+        "interaction": {
+          "active_target_id": null,
+          "interaction_mode": "none",
+          "interaction_kind": null,
+          "continuity_snapshot": {},
+          "responder_target": {},
+          "speaker_target": {}
+        },
+        "world": {
+          "progression": {
+            "changed_node_ids": [],
+            "active_projects": [],
+            "faction_pressure": [
+              {
+                "id": "ash_cowl",
+                "status": "active",
+                "value": 3
+              },
+              {
+                "id": "house_verevin",
+                "status": "active",
+                "value": 3
+              },
+              {
+                "id": "ordo_pyric",
+                "status": "active",
+                "value": 2
+              }
+            ],
+            "faction_agenda": [
+              {
+                "id": "ash_cowl",
+                "status": "active",
+                "value": 1
+              },
+              {
+                "id": "house_verevin",
+                "status": "active",
+                "value": 1
+              },
+              {
+                "id": "ordo_pyric",
+                "status": "active",
+                "value": 1
+              }
+            ],
+            "world_clocks": [],
+            "set_flags": []
+          }
+        },
+        "narrative_anchors": {
+          "scene_framing": [],
+          "actors_speakers": [],
+          "outcomes": [],
+          "uncertainty": [],
+          "next_leads_affordances": []
+        },
+        "provenance": {
+          "builder_source": "game.api._build_gpt_narration_from_authoritative_state",
+          "source_modules": [
+            "game.api",
+            "game.ctir_runtime"
+          ],
+          "signals_used": [],
+          "retry_safe_flags": {},
+          "extras": {}
+        }
+      },
+      "_runtime_canonical_ctir_stamp_v1": "1:10bf8f37400:0",
+      "_runtime_narration_plan_bundle_v1": {
+        "plan_metadata": {
+          "ctir_stamp": "1:10bf8f37400:0",
+          "narrative_plan_bundle_version": 1,
+          "narrative_plan_version": 1,
+          "narration_plan_bundle_error": null,
+          "semantic_bypass_blocked": false,
+          "ctir_backed_bundle_required": true,
+          "fallback_visible_failure": false,
+          "legacy_no_ctir_only": false,
+          "non_ctir_semantic_path": false,
+          "planning_session_interaction": {}
+        },
+        "narrative_plan": {
+          "version": 1,
+          "scene_anchors": {
+            "scene_id": "frontier_gate",
+            "scene_name": null,
+            "location_anchors": [
+              "board",
+              "cinderwatch gate",
+              "cinderwatch gate district",
+              "curfew",
+              "frontier gate",
+              "frontier_gate",
+              "gate district",
+              "lists",
+              "missing",
+              "notice",
+              "patrol",
+              "rules",
+              "taxes",
+              "warning"
+            ],
+            "active_interlocutor": null,
+            "active_target": null,
+            "relevant_actors": []
+          },
+          "active_pressures": {
+            "pending_lead_ids": [],
+            "context_codes": [],
+            "interaction_pressure": "none",
+            "scene_tension_codes": [],
+            "world_pressure": null,
+            "clock_summaries": []
+          },
+          "required_new_information": [
+            {
+              "kind": "authoritative_output_keys",
+              "keys": [
+                "action_id",
+                "resolved_transition",
+                "target_scene_id"
+              ]
+            },
+            {
+              "kind": "consequence_atoms",
+              "values": [
+                "arrived_at_scene",
+                "new_scene_context_available",
+                "opening_scene_turn"
+              ]
+            },
+            {
+              "kind": "resolution_kind",
+              "value": "scene_opening"
+            },
+            {
+              "kind": "state_change",
+              "flag": "arrived_at_scene"
+            },
+            {
+              "kind": "state_change",
+              "flag": "new_scene_context_available"
+            },
+            {
+              "kind": "success_state",
+              "value": "success"
+            },
+            {
+              "kind": "transition",
+              "target_scene_id": "frontier_gate"
+            }
+          ],
+          "allowable_entity_references": [
+            {
+              "entity_id": "gate_guard",
+              "descriptor": "gate guard"
+            },
+            {
+              "entity_id": "gate_serjeant",
+              "descriptor": "gate serjeant"
+            },
+            {
+              "entity_id": "guard_captain",
+              "descriptor": "guard captain"
+            },
+            {
+              "entity_id": "refugee",
+              "descriptor": "ragged stranger"
+            },
+            {
+              "entity_id": "tavern_runner",
+              "descriptor": "tavern runner"
+            },
+            {
+              "entity_id": "threadbare_watcher",
+              "descriptor": "threadbare watcher"
+            }
+          ],
+          "transition_node": {
+            "transition_required": true,
+            "transition_type": "scene_entry",
+            "before_anchor": {
+              "scene_id": "frontier_gate",
+              "location_id": null,
+              "location_label": "frontier_gate",
+              "time_anchor": null
+            },
+            "after_anchor": {
+              "scene_id": "frontier_gate",
+              "location_id": null,
+              "location_label": null,
+              "time_anchor": null
+            },
+            "continuity_anchor_ids": [],
+            "derivation_codes": [
+              "signal:resolution.state_changes.arrived_at_scene",
+              "signal:resolution.state_changes.new_scene_context_available",
+              "signal:resolution.target_scene_id",
+              "signal:state_mutations.scene",
+              "transition_node:before_location:public_slice",
+              "transition_node:derive"
+            ],
+            "source_fields": [
+              "resolution.state_changes.arrived_at_scene",
+              "resolution.state_changes.new_scene_context_available",
+              "resolution.target_scene_id",
+              "state_mutations.scene.(scene_id|activate_scene_id)"
+            ]
+          },
+          "answer_exposition_plan": {
+            "enabled": false,
+            "answer_required": false,
+            "answer_intent": "none",
+            "source": {
+              "derived_from_ctir": true,
+              "ctir_sections": [],
+              "derivation_codes": [
+                "answer_exposition_plan:derive"
+              ]
+            },
+            "facts": [],
+            "constraints": {
+              "forbid_invention": true,
+              "forbid_hidden_truth_leak": true,
+              "forbid_prompt_layer_reasoning": true,
+              "allowed_partial_reasons": []
+            },
+            "voice": {
+              "expected_voice": "either",
+              "delivery_mode": "plain_answer"
+            },
+            "delivery": {
+              "answer_must_come_first": false,
+              "max_sentences_hint": null,
+              "must_include_fact_ids": [],
+              "optional_fact_ids": [],
+              "forbidden_moves": [
+                "no_generic_fallback",
+                "no_opening_tableau_reuse"
+              ]
+            }
+          },
+          "narrative_mode": "opening",
+          "narrative_mode_contract": {
+            "version": 1,
+            "enabled": true,
+            "mode": "opening",
+            "mode_family": "framing",
+            "source_signals": [
+              "mode:opening:narration_obligations.is_opening_scene"
+            ],
+            "prompt_obligations": {
+              "require_first_impression_framing": true,
+              "require_scene_grounding": true,
+              "suppress_mid_conversation_answer_shape": true
+            },
+            "forbidden_moves": [
+              "no_generic_fallback",
+              "no_opening_tableau_reuse"
+            ]
+          },
+          "role_allocation": {
+            "dialogue": 12,
+            "exposition": 62,
+            "outcome_forward": 14,
+            "transition": 12
+          },
+          "narrative_roles": {
+            "location_anchor": {
+              "emphasis_band": "high",
+              "signals": [
+                "exposition_axis_elevated",
+                "has_location_tokens",
+                "has_scene_id",
+                "mode_biases_scene_setting",
+                "multi_location_token"
+              ],
+              "location_token_n": 14,
+              "scene_id_present": true,
+              "scene_label_present": false
+            },
+            "actor_anchor": {
+              "emphasis_band": "low",
+              "signals": [
+                "multi_visible_entity_handles"
+              ],
+              "relevant_actor_n": 0,
+              "interlocutor_present": false,
+              "visible_entity_handle_n": 6
+            },
+            "pressure": {
+              "emphasis_band": "minimal",
+              "signals": [],
+              "interaction_pressure": "none",
+              "pending_lead_n": 0,
+              "context_code_n": 0,
+              "tension_code_n": 0,
+              "world_pressure_present": false,
+              "clock_summary_n": 0
+            },
+            "hook": {
+              "emphasis_band": "high",
+              "signals": [
+                "multi_information_kinds",
+                "prompt_obligations_nonempty",
+                "required_information_nonempty"
+              ],
+              "required_new_information_n": 7,
+              "distinct_information_kind_n": 6,
+              "information_kind_tags": [
+                "authoritative_output_keys",
+                "consequence_atoms",
+                "resolution_kind",
+                "state_change",
+                "success_state",
+                "transition"
+              ],
+              "narrative_mode_contract_enabled": true,
+              "prompt_obligation_key_n": 3
+            },
+            "consequence": {
+              "emphasis_band": "high",
+              "signals": [
+                "consequence_information_present",
+                "state_or_mutation_information_present",
+                "transition_information_present"
+              ],
+              "outcome_forward_tier": "low",
+              "has_consequence_information": true,
+              "has_state_or_mutation_information": true,
+              "has_transition_information": true
+            }
+          },
+          "action_outcome": {
+            "present": false,
+            "source_kind": "unknown",
+            "result": {
+              "result_kind": "scene_opening",
+              "success_state": "success",
+              "actor_id": null,
+              "target_id": null,
+              "action_id": "campaign_start_opening_scene",
+              "roll_summary": {}
+            },
+            "effects": {
+              "damage_dealt": 0,
+              "healing_applied": 0,
+              "conditions_applied": [],
+              "conditions_removed": [],
+              "combat_ended": false,
+              "winner": null,
+              "state_delta_keys": []
+            },
+            "framing": {
+              "emphasis": "standard",
+              "reveal_policy": "respect_visibility",
+              "allowed_certainty": "engine_only",
+              "prohibited_codes": [
+                "no_raw_roll_text",
+                "no_hint_prompt_prose",
+                "no_mechanics_interpretation"
+              ]
+            },
+            "derivation_codes": [
+              "action_outcome:derive"
+            ]
+          },
+          "scene_opening": {
+            "opening_required": true,
+            "opening_reason": "campaign_start",
+            "scene_id": "frontier_gate",
+            "location_anchors": [
+              "board",
+              "cinderwatch gate",
+              "cinderwatch gate district",
+              "curfew",
+              "frontier gate",
+              "frontier_gate",
+              "gate district",
+              "lists",
+              "missing",
+              "notice",
+              "patrol",
+              "rules",
+              "taxes",
+              "warning"
+            ],
+            "actor_anchors": [],
+            "active_pressures": {
+              "clock_summaries": [],
+              "context_codes": [],
+              "interaction_pressure": "none",
+              "pending_lead_ids": [],
+              "scene_tension_codes": [],
+              "world_pressure": null
+            },
+            "visible_fact_categories": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "visible_fact_anchor_ids": [
+              "vf_slot:0",
+              "vf_slot:1",
+              "vf_slot:2",
+              "vf_slot:3",
+              "vf_slot:4"
+            ],
+            "prohibited_content_codes": [
+              "no_backstage_plot_briefings",
+              "no_engine_role_label_as_proper_name",
+              "no_hidden_gm_facts_as_immediate_perception",
+              "no_unfounded_faction_control_claims",
+              "no_unintroduced_offscene_npc_names"
+            ],
+            "derivation_codes": [
+              "opening_reason:campaign_start",
+              "visible_fact:cat:A",
+              "visible_fact:cat:B",
+              "visible_fact:cat:C",
+              "visible_fact:cat:D"
+            ],
+            "validator": {
+              "ok": true,
+              "issues": []
+            }
+          },
+          "recent_compressed_events": [],
+          "resolution_meta": {}
+        },
+        "renderer_inputs": {
+          "response_policy": {
+            "rule_priority_order": [
+              "ANSWER THE PLAYER",
+              "DO NOT CONTRADICT AUTHORITATIVE STATE",
+              "DO NOT LEAK HIDDEN FACTS / SECRETS",
+              "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
+              "PRESERVE PLAYER AGENCY \u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS",
+              "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
+              "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
+              "KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY",
+              "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
+              "KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING",
+              "PRESERVE SCENE MOMENTUM",
+              "ADD SPECIFICITY / FLAVOR / POLISH"
+            ],
+            "must_answer": true,
+            "forbid_state_invention": true,
+            "forbid_secret_leak": true,
+            "allow_partial_answer": true,
+            "response_delta": {
+              "enabled": false,
+              "delta_required": false,
+              "delta_must_come_early": false,
+              "trigger_source": "none",
+              "topic_tokens": [],
+              "press_depth": 0,
+              "previous_player_input": null,
+              "previous_answer_snippet": null,
+              "overlap_ratio": null,
+              "allowed_delta_kinds": [],
+              "forbid_semantic_restatement": false,
+              "forbid_repackaged_nonanswer": false,
+              "allow_short_bridge_before_delta": false,
+              "require_delta_when_answer_required": false,
+              "expected_delta_shape": "none",
+              "trace": {
+                "question_detected_from_player_text": false,
+                "follow_up_pressure_detected": false,
+                "follow_up_press_depth": 0,
+                "follow_up_overlap_ratio": null,
+                "prior_answer_available": false,
+                "answer_completeness_required": false,
+                "social_lock": false,
+                "active_target_id": null,
+                "answer_pressure_followup_detected": false,
+                "strict_social_answer_seek_override": false,
+                "same_interlocutor_followup": false,
+                "answer_pressure_suppressed_because": [
+                  "empty_player_input"
+                ],
+                "answer_pressure_family": null,
+                "answer_pressure_anchor_kind": null,
+                "contradiction_followup_detected": false,
+                "explanation_followup_detected": false,
+                "insufficiency_followup_detected": false,
+                "short_followup_anchor_detected": false,
+                "anchor_tokens_extracted": [],
+                "anchor_token_matched": null,
+                "anchor_followup_detected": false,
+                "explanation_of_recent_anchor_followup": false,
+                "recent_reference_clarification_detected": false,
+                "recent_reference_kind": null,
+                "recent_reference_phrase_matched": null,
+                "clarification_prompt_shape": null,
+                "correction_reask_followup_detected": false,
+                "answer_pressure_reasons": [],
+                "trigger_source": "none",
+                "resolution_kind": "scene_opening",
+                "uncertainty_suggests_partial": false,
+                "suppressed_because": [
+                  "no_follow_up_pressure",
+                  "not_answer_seeking_turn",
+                  "opening_scene"
+                ]
+              }
+            },
+            "diegetic_only": true,
+            "prefer_scene_momentum": true,
+            "prefer_specificity": true,
+            "no_validator_voice": {
+              "enabled": true,
+              "applies_to": "standard_narration",
+              "rule": "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the system. If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, distance, darkness, rumor, missing access, or incomplete observation.",
+              "prohibited_perspectives": [
+                "canon_validation",
+                "evidence_review",
+                "system_limitation",
+                "tool_access",
+                "model_identity",
+                "rules_explanation_outside_oc_or_adjudication"
+              ],
+              "rules_explanation_only_in": [
+                "oc",
+                "adjudication"
+              ]
+            },
+            "scene_momentum_due": false,
+            "uncertainty": {
+              "enabled": true,
+              "categories": [
+                "unknown_identity",
+                "unknown_location",
+                "unknown_motive",
+                "unknown_method",
+                "unknown_quantity",
+                "unknown_feasibility"
+              ],
+              "sources": [
+                "npc_ignorance",
+                "scene_ambiguity",
+                "procedural_insufficiency"
+              ],
+              "answer_shape": [
+                "known_edge",
+                "unknown_edge",
+                "next_lead"
+              ],
+              "context_inputs": [
+                "turn_context",
+                "speaker",
+                "scene_snapshot"
+              ]
+            },
+            "answer_completeness": {
+              "enabled": false,
+              "trace": {
+                "trigger_source": "none",
+                "active_target_id": null,
+                "active_npc_reply_kind": null,
+                "question_detected_from_player_text": false,
+                "answer_pressure_followup_detected": false,
+                "strict_social_answer_seek_override": false,
+                "same_interlocutor_followup": false,
+                "answer_pressure_suppressed_because": [
+                  "empty_player_input"
+                ],
+                "answer_pressure_family": null,
+                "answer_pressure_anchor_kind": null,
+                "contradiction_followup_detected": false,
+                "explanation_followup_detected": false,
+                "insufficiency_followup_detected": false,
+                "short_followup_anchor_detected": false,
+                "anchor_tokens_extracted": [],
+                "anchor_token_matched": null,
+                "anchor_followup_detected": false,
+                "explanation_of_recent_anchor_followup": false,
+                "recent_reference_clarification_detected": false,
+                "recent_reference_kind": null,
+                "recent_reference_phrase_matched": null,
+                "clarification_prompt_shape": null,
+                "correction_reask_followup_detected": false,
+                "answer_pressure_reasons": [],
+                "partial_answer_permitted": false
+              },
+              "player_direct_question": false,
+              "answer_required": false,
+              "answer_must_come_first": false,
+              "expected_voice": "either",
+              "expected_answer_shape": "direct",
+              "allowed_partial_reasons": [],
+              "forbid_deflection": false,
+              "forbid_generic_nonanswer": false,
+              "require_concrete_payload": false,
+              "concrete_payload_any_of": []
+            },
+            "response_type_contract": {
+              "required_response_type": "scene_opening",
+              "source_route": "exploration",
+              "allow_escalation": false,
+              "escalation_block_reason": "non_hostile_world_action_guard",
+              "strict_target_id": null,
+              "strict_answer_expected": false,
+              "strict_dialogue_expected": false,
+              "action_must_preserve_agency": false
+            }
+          },
+          "narration_visibility": {
+            "visible_entities": [
+              "gate guard",
+              "gate serjeant",
+              "guard captain",
+              "ragged stranger",
+              "tavern runner",
+              "threadbare watcher"
+            ],
+            "active_interlocutor_id": null,
+            "visible_facts": [
+              "rain spatters soot-dark stone; frayed banners hang above cinderwatch's eastern gate",
+              "a well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor",
+              "one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue",
+              "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
+              "a notice board lists new taxes, curfews, and a posted warning about a missing patrol"
+            ],
+            "rules": {
+              "no_unseen_entities": true,
+              "no_hidden_facts": true,
+              "no_undiscovered_facts": true
+            }
+          },
+          "scene_state_anchor_contract": {
+            "enabled": true,
+            "required_any_of": [
+              "location",
+              "actor",
+              "player_action"
+            ],
+            "minimum_anchor_hits": 1,
+            "scene_id": "frontier_gate",
+            "scene_location_label": "Cinderwatch Gate District",
+            "location_tokens": [
+              "frontier_gate",
+              "frontier gate",
+              "cinderwatch gate district",
+              "cinderwatch gate",
+              "gate district",
+              "notice",
+              "board",
+              "lists",
+              "taxes",
+              "curfew",
+              "rules",
+              "warning",
+              "missing",
+              "patrol"
+            ],
+            "actor_tokens": [
+              "gate guard",
+              "gate serjeant",
+              "guard captain",
+              "ragged stranger",
+              "tavern runner",
+              "threadbare watcher",
+              "guard",
+              "serjeant",
+              "runner"
+            ],
+            "player_action_tokens": [
+              "scene_opening",
+              "campaign_start_opening_scene",
+              "campaign start opening scene"
+            ],
+            "preferred_repair_order": [
+              "actor",
+              "player_action",
+              "location"
+            ]
+          },
+          "narration_obligations": {
+            "is_opening_scene": true,
+            "must_advance_scene": false,
+            "should_answer_active_npc": false,
+            "avoid_input_echo": true,
+            "avoid_player_action_restatement": true,
+            "prefer_structured_turn_summary": true,
+            "active_npc_reply_expected": false,
+            "active_npc_reply_kind": null,
+            "scene_momentum_due": false,
+            "scene_momentum_exchanges_since": 0,
+            "scene_momentum_next_due_in": 2,
+            "suppress_non_social_emitters": false
+          },
+          "turn_packet": {
+            "version": 1,
+            "turn_id": null,
+            "scene_id": "frontier_gate",
+            "player_text": null,
+            "resolution_kind": "scene_opening",
+            "route": {
+              "interaction_mode": "none",
+              "active_target_id": null,
+              "active_reply_kind": null,
+              "strict_social_expected": false
+            },
+            "response_policy": {
+              "rule_priority_order": [
+                "ANSWER THE PLAYER",
+                "DO NOT CONTRADICT AUTHORITATIVE STATE",
+                "DO NOT LEAK HIDDEN FACTS / SECRETS",
+                "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
+                "PRESERVE PLAYER AGENCY \u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS",
+                "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
+                "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
+                "KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY",
+                "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
+                "KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING",
+                "PRESERVE SCENE MOMENTUM",
+                "ADD SPECIFICITY / FLAVOR / POLISH"
+              ],
+              "must_answer": true,
+              "forbid_state_invention": true,
+              "forbid_secret_leak": true,
+              "allow_partial_answer": true,
+              "response_delta": {
+                "enabled": false,
+                "delta_required": false,
+                "delta_must_come_early": false,
+                "trigger_source": "none",
+                "topic_tokens": [],
+                "press_depth": 0,
+                "previous_player_input": null,
+                "previous_answer_snippet": null,
+                "overlap_ratio": null,
+                "allowed_delta_kinds": [],
+                "forbid_semantic_restatement": false,
+                "forbid_repackaged_nonanswer": false,
+                "allow_short_bridge_before_delta": false,
+                "require_delta_when_answer_required": false,
+                "expected_delta_shape": "none",
+                "trace": {
+                  "question_detected_from_player_text": false,
+                  "follow_up_pressure_detected": false,
+                  "follow_up_press_depth": 0,
+                  "follow_up_overlap_ratio": null,
+                  "prior_answer_available": false,
+                  "answer_completeness_required": false,
+                  "social_lock": false,
+                  "active_target_id": null,
+                  "answer_pressure_followup_detected": false,
+                  "strict_social_answer_seek_override": false,
+                  "same_interlocutor_followup": false,
+                  "answer_pressure_suppressed_because": [
+                    "empty_player_input"
+                  ],
+                  "answer_pressure_family": null,
+                  "answer_pressure_anchor_kind": null,
+                  "contradiction_followup_detected": false,
+                  "explanation_followup_detected": false,
+                  "insufficiency_followup_detected": false,
+                  "short_followup_anchor_detected": false,
+                  "anchor_tokens_extracted": [],
+                  "anchor_token_matched": null,
+                  "anchor_followup_detected": false,
+                  "explanation_of_recent_anchor_followup": false,
+                  "recent_reference_clarification_detected": false,
+                  "recent_reference_kind": null,
+                  "recent_reference_phrase_matched": null,
+                  "clarification_prompt_shape": null,
+                  "correction_reask_followup_detected": false,
+                  "answer_pressure_reasons": [],
+                  "trigger_source": "none",
+                  "resolution_kind": "scene_opening",
+                  "uncertainty_suggests_partial": false,
+                  "suppressed_because": [
+                    "no_follow_up_pressure",
+                    "not_answer_seeking_turn",
+                    "opening_scene"
+                  ]
+                }
+              },
+              "diegetic_only": true,
+              "prefer_scene_momentum": true,
+              "prefer_specificity": true,
+              "no_validator_voice": {
+                "enabled": true,
+                "applies_to": "standard_narration",
+                "rule": "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the system. If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, distance, darkness, rumor, missing access, or incomplete observation.",
+                "prohibited_perspectives": [
+                  "canon_validation",
+                  "evidence_review",
+                  "system_limitation",
+                  "tool_access",
+                  "model_identity",
+                  "rules_explanation_outside_oc_or_adjudication"
+                ],
+                "rules_explanation_only_in": [
+                  "oc",
+                  "adjudication"
+                ]
+              },
+              "scene_momentum_due": false,
+              "uncertainty": {
+                "enabled": true,
+                "categories": [
+                  "unknown_identity",
+                  "unknown_location",
+                  "unknown_motive",
+                  "unknown_method",
+                  "unknown_quantity",
+                  "unknown_feasibility"
+                ],
+                "sources": [
+                  "npc_ignorance",
+                  "scene_ambiguity",
+                  "procedural_insufficiency"
+                ],
+                "answer_shape": [
+                  "known_edge",
+                  "unknown_edge",
+                  "next_lead"
+                ],
+                "context_inputs": [
+                  "turn_context",
+                  "speaker",
+                  "scene_snapshot"
+                ]
+              },
+              "answer_completeness": {
+                "enabled": false,
+                "trace": {
+                  "trigger_source": "none",
+                  "active_target_id": null,
+                  "active_npc_reply_kind": null,
+                  "question_detected_from_player_text": false,
+                  "answer_pressure_followup_detected": false,
+                  "strict_social_answer_seek_override": false,
+                  "same_interlocutor_followup": false,
+                  "answer_pressure_suppressed_because": [
+                    "empty_player_input"
+                  ],
+                  "answer_pressure_family": null,
+                  "answer_pressure_anchor_kind": null,
+                  "contradiction_followup_detected": false,
+                  "explanation_followup_detected": false,
+                  "insufficiency_followup_detected": false,
+                  "short_followup_anchor_detected": false,
+                  "anchor_tokens_extracted": [],
+                  "anchor_token_matched": null,
+                  "anchor_followup_detected": false,
+                  "explanation_of_recent_anchor_followup": false,
+                  "recent_reference_clarification_detected": false,
+                  "recent_reference_kind": null,
+                  "recent_reference_phrase_matched": null,
+                  "clarification_prompt_shape": null,
+                  "correction_reask_followup_detected": false,
+                  "answer_pressure_reasons": [],
+                  "partial_answer_permitted": false
+                },
+                "player_direct_question": false,
+                "answer_required": false,
+                "answer_must_come_first": false,
+                "expected_voice": "either",
+                "expected_answer_shape": "direct",
+                "allowed_partial_reasons": [],
+                "forbid_deflection": false,
+                "forbid_generic_nonanswer": false,
+                "require_concrete_payload": false,
+                "concrete_payload_any_of": []
+              },
+              "response_type_contract": {
+                "required_response_type": "scene_opening",
+                "source_route": "exploration",
+                "allow_escalation": false,
+                "escalation_block_reason": "non_hostile_world_action_guard",
+                "strict_target_id": null,
+                "strict_answer_expected": false,
+                "strict_dialogue_expected": false,
+                "action_must_preserve_agency": false
+              }
+            },
+            "contracts": {
+              "answer_completeness": {
+                "enabled": false,
+                "trace": {
+                  "trigger_source": "none",
+                  "active_target_id": null,
+                  "active_npc_reply_kind": null,
+                  "question_detected_from_player_text": false,
+                  "answer_pressure_followup_detected": false,
+                  "strict_social_answer_seek_override": false,
+                  "same_interlocutor_followup": false,
+                  "answer_pressure_suppressed_because": [
+                    "empty_player_input"
+                  ],
+                  "answer_pressure_family": null,
+                  "answer_pressure_anchor_kind": null,
+                  "contradiction_followup_detected": false,
+                  "explanation_followup_detected": false,
+                  "insufficiency_followup_detected": false,
+                  "short_followup_anchor_detected": false,
+                  "anchor_tokens_extracted": [],
+                  "anchor_token_matched": null,
+                  "anchor_followup_detected": false,
+                  "explanation_of_recent_anchor_followup": false,
+                  "recent_reference_clarification_detected": false,
+                  "recent_reference_kind": null,
+                  "recent_reference_phrase_matched": null,
+                  "clarification_prompt_shape": null,
+                  "correction_reask_followup_detected": false,
+                  "answer_pressure_reasons": [],
+                  "partial_answer_permitted": false
+                },
+                "player_direct_question": false,
+                "answer_required": false,
+                "answer_must_come_first": false,
+                "expected_voice": "either",
+                "expected_answer_shape": "direct",
+                "allowed_partial_reasons": [],
+                "forbid_deflection": false,
+                "forbid_generic_nonanswer": false,
+                "require_concrete_payload": false,
+                "concrete_payload_any_of": []
+              },
+              "response_delta": {
+                "enabled": false,
+                "delta_required": false,
+                "delta_must_come_early": false,
+                "trigger_source": "none",
+                "topic_tokens": [],
+                "press_depth": 0,
+                "previous_player_input": null,
+                "previous_answer_snippet": null,
+                "overlap_ratio": null,
+                "allowed_delta_kinds": [],
+                "forbid_semantic_restatement": false,
+                "forbid_repackaged_nonanswer": false,
+                "allow_short_bridge_before_delta": false,
+                "require_delta_when_answer_required": false,
+                "expected_delta_shape": "none",
+                "trace": {
+                  "question_detected_from_player_text": false,
+                  "follow_up_pressure_detected": false,
+                  "follow_up_press_depth": 0,
+                  "follow_up_overlap_ratio": null,
+                  "prior_answer_available": false,
+                  "answer_completeness_required": false,
+                  "social_lock": false,
+                  "active_target_id": null,
+                  "answer_pressure_followup_detected": false,
+                  "strict_social_answer_seek_override": false,
+                  "same_interlocutor_followup": false,
+                  "answer_pressure_suppressed_because": [
+                    "empty_player_input"
+                  ],
+                  "answer_pressure_family": null,
+                  "answer_pressure_anchor_kind": null,
+                  "contradiction_followup_detected": false,
+                  "explanation_followup_detected": false,
+                  "insufficiency_followup_detected": false,
+                  "short_followup_anchor_detected": false,
+                  "anchor_tokens_extracted": [],
+                  "anchor_token_matched": null,
+                  "anchor_followup_detected": false,
+                  "explanation_of_recent_anchor_followup": false,
+                  "recent_reference_clarification_detected": false,
+                  "recent_reference_kind": null,
+                  "recent_reference_phrase_matched": null,
+                  "clarification_prompt_shape": null,
+                  "correction_reask_followup_detected": false,
+                  "answer_pressure_reasons": [],
+                  "trigger_source": "none",
+                  "resolution_kind": "scene_opening",
+                  "uncertainty_suggests_partial": false,
+                  "suppressed_because": [
+                    "no_follow_up_pressure",
+                    "not_answer_seeking_turn",
+                    "opening_scene"
+                  ]
+                }
+              },
+              "fallback_behavior": null,
+              "tone_escalation": null,
+              "anti_railroading": null,
+              "context_separation": null,
+              "response_type": {
+                "required_response_type": "scene_opening",
+                "source_route": "exploration",
+                "allow_escalation": false,
+                "escalation_block_reason": "non_hostile_world_action_guard",
+                "strict_target_id": null,
+                "strict_answer_expected": false,
+                "strict_dialogue_expected": false,
+                "action_must_preserve_agency": false
+              }
+            },
+            "continuity": {
+              "last_human_adjacent_continuity": null
+            },
+            "fallback": {
+              "fallback_provenance": null
+            },
+            "referent_tracking_compact": {
+              "referent_artifact_version": 1,
+              "active_interaction_target": null,
+              "referential_ambiguity_class": "ambiguous_plural",
+              "ambiguity_risk": 58
+            }
+          },
+          "referent_tracking": {
+            "version": 1,
+            "active_entities": [
+              {
+                "entity_id": "gate_guard",
+                "display_name": "gate guard",
+                "entity_kind": "npc",
+                "roles": []
+              },
+              {
+                "entity_id": "gate_serjeant",
+                "display_name": "gate serjeant",
+                "entity_kind": "npc",
+                "roles": []
+              },
+              {
+                "entity_id": "guard_captain",
+                "display_name": "guard captain",
+                "entity_kind": "npc",
+                "roles": [
+                  "captain",
+                  "guard",
+                  "guardsman",
+                  "sentry",
+                  "watchman"
+                ]
+              },
+              {
+                "entity_id": "refugee",
+                "display_name": "ragged stranger",
+                "entity_kind": "scene_actor",
+                "roles": [
+                  "refugee",
+                  "stranger"
+                ]
+              },
+              {
+                "entity_id": "tavern_runner",
+                "display_name": "tavern runner",
+                "entity_kind": "npc",
+                "roles": [
+                  "informant",
+                  "runner"
+                ]
+              },
+              {
+                "entity_id": "threadbare_watcher",
+                "display_name": "threadbare watcher",
+                "entity_kind": "scene_actor",
+                "roles": [
+                  "watcher"
+                ]
+              }
+            ],
+            "active_entity_order": [
+              "gate_guard",
+              "gate_serjeant",
+              "guard_captain",
+              "refugee",
+              "tavern_runner",
+              "threadbare_watcher"
+            ],
+            "active_interaction_target": null,
+            "active_speaker_candidates": [],
+            "continuity_subject": null,
+            "continuity_object": null,
+            "pronoun_resolution": {
+              "strategy": "unresolved",
+              "buckets_by_entity": {
+                "gate_guard": [
+                  "they_them"
+                ],
+                "gate_serjeant": [
+                  "they_them"
+                ],
+                "guard_captain": [
+                  "they_them"
+                ],
+                "refugee": [
+                  "they_them"
+                ],
+                "tavern_runner": [
+                  "they_them"
+                ],
+                "threadbare_watcher": [
+                  "they_them"
+                ]
+              },
+              "explicit_sources": [],
+              "notes": "elevated_to_unresolved_multi_person_like_without_explicit_buckets"
+            },
+            "ambiguity_risk": 58,
+            "allowed_named_references": [
+              {
+                "entity_id": "gate_guard",
+                "display_name": "gate guard"
+              },
+              {
+                "entity_id": "gate_serjeant",
+                "display_name": "gate serjeant"
+              },
+              {
+                "entity_id": "guard_captain",
+                "display_name": "guard captain"
+              },
+              {
+                "entity_id": "refugee",
+                "display_name": "ragged stranger"
+              },
+              {
+                "entity_id": "tavern_runner",
+                "display_name": "tavern runner"
+              },
+              {
+                "entity_id": "threadbare_watcher",
+                "display_name": "threadbare watcher"
+              }
+            ],
+            "forbidden_or_unresolved_patterns": [
+              {
+                "kind": "gendered_pronoun_uncertainty",
+                "detail": "multiple_person_like_visible_without_explicit_pronoun_buckets"
+              },
+              {
+                "kind": "pronoun_anchor_conservative",
+                "referential_ambiguity_class": "ambiguous_plural"
+              }
+            ],
+            "safe_explicit_fallback_labels": [
+              {
+                "entity_id": "gate_guard",
+                "safe_explicit_label": "gate guard"
+              },
+              {
+                "entity_id": "gate_serjeant",
+                "safe_explicit_label": "gate serjeant"
+              },
+              {
+                "entity_id": "guard_captain",
+                "safe_explicit_label": "guard captain"
+              },
+              {
+                "entity_id": "refugee",
+                "safe_explicit_label": "ragged stranger"
+              },
+              {
+                "entity_id": "tavern_runner",
+                "safe_explicit_label": "tavern runner"
+              },
+              {
+                "entity_id": "threadbare_watcher",
+                "safe_explicit_label": "threadbare watcher"
+              }
+            ],
+            "single_unambiguous_entity": null,
+            "referential_ambiguity_class": "ambiguous_plural",
+            "interaction_target_continuity": {
+              "prior_target_id": null,
+              "current_target_id": null,
+              "signal_target_id": null,
+              "target_visible": false,
+              "drift_detected": false,
+              "signal_sources": []
+            }
+          },
+          "dialogue_social_plan": {
+            "version": 1,
+            "applies": false,
+            "speaker_id": null,
+            "speaker_name": null,
+            "speaker_source": "unresolved",
+            "dialogue_intent": null,
+            "reply_kind": "unknown",
+            "reply_plan_kind": null,
+            "incidental_subjective_allowed": false,
+            "absence_of_authored_topic_forces_refusal": false,
+            "npc_speech_authority": null,
+            "objective_world_fact_authority": null,
+            "declared_claims_expected": false,
+            "durable_state_mutation_allowed": false,
+            "pressure_state": "none",
+            "relationship_codes": [
+              "unknown"
+            ],
+            "tone_bounds": [
+              "neutral"
+            ],
+            "prohibited_content_codes": [
+              "no_narrator_override",
+              "no_ooc_instructions",
+              "no_player_agency_override",
+              "no_prompt_text"
+            ],
+            "derivation_codes": [
+              "dialogue_social_plan:v1",
+              "intent:ctir_only",
+              "referent_tracking:consumed",
+              "session_hints:bounded",
+              "speaker:unresolved"
+            ],
+            "validator": {
+              "validated": true,
+              "errors": [],
+              "reject_field_names": [
+                "dialogue",
+                "dialogue_line",
+                "gm_guidance",
+                "instructions",
+                "message",
+                "narration",
+                "player_facing_text",
+                "prompt",
+                "system_prompt",
+                "text"
+              ],
+              "allowed_reply_kinds": [
+                "answer",
+                "explanation",
+                "reaction",
+                "refusal",
+                "unknown"
+              ],
+              "allowed_reply_plan_kinds": [
+                "authoritative_answer_available",
+                "consequential_information_request",
+                "genuine_refusal",
+                "genuine_uncertainty",
+                "harmless_subjective_response_permitted"
+              ],
+              "allowed_npc_speech_authority_codes": [
+                "claim_only",
+                "none"
+              ],
+              "allowed_objective_world_fact_authority_codes": [
+                "authored_context_required",
+                "none"
+              ],
+              "allowed_pressure_states": [
+                "high",
+                "low",
+                "moderate",
+                "none"
+              ],
+              "allowed_tone_codes": [
+                "cold",
+                "deferential",
+                "direct",
+                "evasive",
+                "guarded",
+                "hostile",
+                "neutral",
+                "threatening",
+                "warm"
+              ],
+              "allowed_relationship_codes": [
+                "engagement_engaged",
+                "engagement_focused",
+                "engagement_none",
+                "fear_high",
+                "fear_low",
+                "friendly",
+                "hostile",
+                "neutral",
+                "suspicion_high",
+                "suspicion_low",
+                "trust_high",
+                "trust_low",
+                "unfriendly",
+                "unknown"
+              ],
+              "allowed_speaker_alias_resolution_sources": [
+                "continuity_snapshot",
+                "interaction_continuity_contract",
+                "manual_bundle_override",
+                "referent_tracking"
+              ]
+            },
+            "bounded_session_hints": {
+              "active_interaction_target_id": null,
+              "active_interaction_target_name": null,
+              "active_interaction_kind": null,
+              "interaction_mode": "none",
+              "engagement_level": "none",
+              "conversation_privacy": null,
+              "player_position_context": null
+            }
+          }
+        }
+      },
+      "_runtime_narration_plan_bundle_stamp_v1": "1:10bf8f37400:0",
+      "last_turn_response_policy": {
+        "rule_priority_order": [
+          "ANSWER THE PLAYER",
+          "DO NOT CONTRADICT AUTHORITATIVE STATE",
+          "DO NOT LEAK HIDDEN FACTS / SECRETS",
+          "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
+          "PRESERVE PLAYER AGENCY \u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS",
+          "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
+          "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
+          "KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY",
+          "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
+          "KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING",
+          "PRESERVE SCENE MOMENTUM",
+          "ADD SPECIFICITY / FLAVOR / POLISH"
+        ],
+        "must_answer": true,
+        "forbid_state_invention": true,
+        "forbid_secret_leak": true,
+        "allow_partial_answer": true,
+        "response_delta": {
+          "enabled": false,
+          "delta_required": false,
+          "delta_must_come_early": false,
+          "trigger_source": "none",
+          "topic_tokens": [],
+          "press_depth": 0,
+          "previous_player_input": null,
+          "previous_answer_snippet": null,
+          "overlap_ratio": null,
+          "allowed_delta_kinds": [],
+          "forbid_semantic_restatement": false,
+          "forbid_repackaged_nonanswer": false,
+          "allow_short_bridge_before_delta": false,
+          "require_delta_when_answer_required": false,
+          "expected_delta_shape": "none",
+          "trace": {
+            "question_detected_from_player_text": false,
+            "follow_up_pressure_detected": false,
+            "follow_up_press_depth": 0,
+            "follow_up_overlap_ratio": null,
+            "prior_answer_available": false,
+            "answer_completeness_required": false,
+            "social_lock": false,
+            "active_target_id": null,
+            "answer_pressure_followup_detected": false,
+            "strict_social_answer_seek_override": false,
+            "same_interlocutor_followup": false,
+            "answer_pressure_suppressed_because": [
+              "empty_player_input"
+            ],
+            "answer_pressure_family": null,
+            "answer_pressure_anchor_kind": null,
+            "contradiction_followup_detected": false,
+            "explanation_followup_detected": false,
+            "insufficiency_followup_detected": false,
+            "short_followup_anchor_detected": false,
+            "anchor_tokens_extracted": [],
+            "anchor_token_matched": null,
+            "anchor_followup_detected": false,
+            "explanation_of_recent_anchor_followup": false,
+            "recent_reference_clarification_detected": false,
+            "recent_reference_kind": null,
+            "recent_reference_phrase_matched": null,
+            "clarification_prompt_shape": null,
+            "correction_reask_followup_detected": false,
+            "answer_pressure_reasons": [],
+            "trigger_source": "none",
+            "resolution_kind": "scene_opening",
+            "uncertainty_suggests_partial": false,
+            "suppressed_because": [
+              "no_follow_up_pressure",
+              "not_answer_seeking_turn",
+              "opening_scene"
+            ]
+          }
+        },
+        "diegetic_only": true,
+        "prefer_scene_momentum": true,
+        "prefer_specificity": true,
+        "no_validator_voice": {
+          "enabled": true,
+          "applies_to": "standard_narration",
+          "rule": "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the system. If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, distance, darkness, rumor, missing access, or incomplete observation.",
+          "prohibited_perspectives": [
+            "canon_validation",
+            "evidence_review",
+            "system_limitation",
+            "tool_access",
+            "model_identity",
+            "rules_explanation_outside_oc_or_adjudication"
+          ],
+          "rules_explanation_only_in": [
+            "oc",
+            "adjudication"
+          ]
+        },
+        "scene_momentum_due": false,
+        "uncertainty": {
+          "enabled": true,
+          "categories": [
+            "unknown_identity",
+            "unknown_location",
+            "unknown_motive",
+            "unknown_method",
+            "unknown_quantity",
+            "unknown_feasibility"
+          ],
+          "sources": [
+            "npc_ignorance",
+            "scene_ambiguity",
+            "procedural_insufficiency"
+          ],
+          "answer_shape": [
+            "known_edge",
+            "unknown_edge",
+            "next_lead"
+          ],
+          "context_inputs": [
+            "turn_context",
+            "speaker",
+            "scene_snapshot"
+          ]
+        },
+        "answer_completeness": {
+          "enabled": false,
+          "trace": {
+            "trigger_source": "none",
+            "active_target_id": null,
+            "active_npc_reply_kind": null,
+            "question_detected_from_player_text": false,
+            "answer_pressure_followup_detected": false,
+            "strict_social_answer_seek_override": false,
+            "same_interlocutor_followup": false,
+            "answer_pressure_suppressed_because": [
+              "empty_player_input"
+            ],
+            "answer_pressure_family": null,
+            "answer_pressure_anchor_kind": null,
+            "contradiction_followup_detected": false,
+            "explanation_followup_detected": false,
+            "insufficiency_followup_detected": false,
+            "short_followup_anchor_detected": false,
+            "anchor_tokens_extracted": [],
+            "anchor_token_matched": null,
+            "anchor_followup_detected": false,
+            "explanation_of_recent_anchor_followup": false,
+            "recent_reference_clarification_detected": false,
+            "recent_reference_kind": null,
+            "recent_reference_phrase_matched": null,
+            "clarification_prompt_shape": null,
+            "correction_reask_followup_detected": false,
+            "answer_pressure_reasons": [],
+            "partial_answer_permitted": false
+          },
+          "player_direct_question": false,
+          "answer_required": false,
+          "answer_must_come_first": false,
+          "expected_voice": "either",
+          "expected_answer_shape": "direct",
+          "allowed_partial_reasons": [],
+          "forbid_deflection": false,
+          "forbid_generic_nonanswer": false,
+          "require_concrete_payload": false,
+          "concrete_payload_any_of": [],
+          "answer_exposition_plan": {
+            "enabled": false,
+            "answer_required": false,
+            "answer_intent": "none",
+            "source": {
+              "derived_from_ctir": true,
+              "ctir_sections": [],
+              "derivation_codes": [
+                "answer_exposition_plan:derive"
+              ]
+            },
+            "facts": [],
+            "constraints": {
+              "forbid_invention": true,
+              "forbid_hidden_truth_leak": true,
+              "forbid_prompt_layer_reasoning": true,
+              "allowed_partial_reasons": []
+            },
+            "voice": {
+              "expected_voice": "either",
+              "delivery_mode": "plain_answer"
+            },
+            "delivery": {
+              "answer_must_come_first": false,
+              "max_sentences_hint": null,
+              "must_include_fact_ids": [],
+              "optional_fact_ids": [],
+              "forbidden_moves": [
+                "no_generic_fallback",
+                "no_opening_tableau_reuse"
+              ]
+            }
+          }
+        },
+        "response_type_contract": {
+          "required_response_type": "scene_opening",
+          "source_route": "exploration",
+          "allow_escalation": false
+        },
+        "tone_escalation": {
+          "enabled": true,
+          "scene_id": "frontier_gate",
+          "active_speaker_id": null,
+          "base_tone": "guarded",
+          "max_allowed_tone": "tense",
+          "allow_guarded_refusal": true,
+          "allow_verbal_pressure": true,
+          "allow_explicit_threat": false,
+          "allow_physical_hostility": false,
+          "allow_combat_initiation": false,
+          "justification_flags": {
+            "player_used_aggressive_action": false,
+            "player_used_coercive_social_action": false,
+            "player_persisted_after_refusal": false,
+            "scene_has_active_tension": true,
+            "scene_has_authority_pressure": true,
+            "scene_has_visible_hostile_actor": false,
+            "combat_active": false,
+            "resolution_is_risky": false,
+            "npc_already_hostile_in_state": false
+          },
+          "justification_reasons": [
+            "visible_facts_engagement_or_moderate_topic_pressure",
+            "visible_entity_roles_include_authority_guardship"
+          ],
+          "preferred_deescalations": [
+            "Tighten diction and body language without 'or else' phrasing.",
+            "Use deadlines, policy, or reputation risk as leverage."
+          ]
+        },
+        "narrative_authority": {
+          "enabled": true,
+          "authoritative_outcome_available": false,
+          "resolution_kind": "scene_opening",
+          "success_state_available": false,
+          "mechanical_result_available": false,
+          "active_speaker_id": null,
+          "active_target_id": null,
+          "visible_fact_strings": [
+            "the notice board lists taxes, curfew rules, and a warning about a missing patrol",
+            "a gate serjeant manages the crowd and keeps one eye on the roster board",
+            "a tavern runner trades hot stew and rumors near the rain barrel",
+            "threadbare watchers and refugees cluster along the muddy gate line",
+            "ash compact census delays have tightened the eastern caravan choke point"
+          ],
+          "discoverable_hinting_allowed": true,
+          "forbid_unresolved_outcome_assertions": true,
+          "forbid_hidden_fact_assertions": true,
+          "forbid_npc_intent_assertions_without_basis": true,
+          "allow_bounded_intent_reading_only_when_player_asked": false,
+          "allowed_deferrals": [
+            "ask_for_roll",
+            "bounded_uncertainty",
+            "branch_outcome"
+          ],
+          "preferred_deferral_order": [
+            "bounded_uncertainty",
+            "branch_outcome",
+            "ask_for_roll"
+          ]
+        },
+        "forbid_unjustified_narrative_authority": true,
+        "anti_railroading": {
+          "enabled": true,
+          "forbid_player_decision_override": true,
+          "forbid_forced_direction": true,
+          "forbid_exclusive_path_claims_without_basis": true,
+          "forbid_lead_to_plot_gravity_upgrade": true,
+          "allow_directional_language_from_resolved_transition": false,
+          "allow_exclusivity_from_authoritative_resolution": false,
+          "allow_commitment_language_when_player_explicitly_committed": false,
+          "surfaced_lead_ids": [],
+          "surfaced_lead_labels": [],
+          "allowed_lead_roles": [
+            "option",
+            "hook",
+            "rumor",
+            "pressure",
+            "opportunity",
+            "constraint"
+          ],
+          "forbidden_lead_roles": [
+            "destiny",
+            "required_path",
+            "main_plot",
+            "only_real_way_forward"
+          ]
+        },
+        "context_separation": {
+          "enabled": true,
+          "scene_focus_summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. scene opening scene_opening Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+          "interaction_kind": "scene_opening",
+          "player_intent_summary": "(no player text)",
+          "primary_topics": [
+            "frontier_gate",
+            "frontier gate",
+            "cinderwatch gate district",
+            "cinderwatch gate",
+            "gate district",
+            "notice",
+            "board",
+            "lists",
+            "taxes",
+            "curfew",
+            "rules",
+            "warning",
+            "missing",
+            "patrol",
+            "gate guard",
+            "gate serjeant",
+            "guard captain",
+            "ragged stranger",
+            "tavern runner",
+            "threadbare watcher",
+            "guard",
+            "serjeant",
+            "runner",
+            "scene_opening",
+            "campaign_start_opening_scene",
+            "campaign start opening scene"
+          ],
+          "allowed_contextual_topics": [],
+          "ambient_pressure_topics": [
+            "Rival noble houses competing for territory and influence.",
+            "Religious orders attempting to control or suppress dangerous magic.",
+            "Criminal syndicates dominating trade, smuggling, and urban power."
+          ],
+          "forbid_topic_hijack": true,
+          "forbid_pressure_answer_substitution": true,
+          "forbid_unearned_tone_shift_from_background_pressure": true,
+          "allow_brief_pressure_coloring": true,
+          "allow_optional_consequence_signposting": true,
+          "max_pressure_sentences_without_player_prompt": 2,
+          "tone_escalation_contract": {
+            "enabled": true,
+            "scene_id": "frontier_gate",
+            "active_speaker_id": null,
+            "base_tone": "guarded",
+            "max_allowed_tone": "tense",
+            "allow_guarded_refusal": true,
+            "allow_verbal_pressure": true,
+            "allow_explicit_threat": false,
+            "allow_physical_hostility": false,
+            "allow_combat_initiation": false,
+            "justification_flags": {
+              "player_used_aggressive_action": false,
+              "player_used_coercive_social_action": false,
+              "player_persisted_after_refusal": false,
+              "scene_has_active_tension": true,
+              "scene_has_authority_pressure": true,
+              "scene_has_visible_hostile_actor": false,
+              "combat_active": false,
+              "resolution_is_risky": false,
+              "npc_already_hostile_in_state": false
+            },
+            "justification_reasons": [
+              "visible_facts_engagement_or_moderate_topic_pressure",
+              "visible_entity_roles_include_authority_guardship"
+            ],
+            "preferred_deescalations": [
+              "Tighten diction and body language without 'or else' phrasing.",
+              "Use deadlines, policy, or reputation risk as leverage."
+            ]
+          }
+        },
+        "player_facing_narration_purity": {
+          "enabled": true,
+          "diegetic_only": true,
+          "allow_structured_choice_labels": false,
+          "allow_explicit_ui_references": false,
+          "allow_meta_transition_bridges": false,
+          "forbid_scaffold_headers": true,
+          "forbid_coaching_language": true,
+          "forbid_engine_choice_framing": true,
+          "forbid_non_diegetic_action_prompting": true,
+          "response_type_required": null,
+          "interaction_kind": null
+        },
+        "social_response_structure": {
+          "enabled": false,
+          "applies_to_response_type": "dialogue",
+          "require_spoken_dialogue_shape": false,
+          "discourage_expository_monologue": false,
+          "require_natural_cadence": false,
+          "allow_brief_action_beats": true,
+          "allow_brief_refusal_or_uncertainty": true,
+          "max_contiguous_expository_lines": null,
+          "max_dialogue_paragraphs_before_break": null,
+          "prefer_single_speaker_turn": false,
+          "forbid_bulleted_or_list_like_dialogue": false,
+          "required_response_type": "scene_opening"
+        },
+        "interaction_continuity": {
+          "enabled": false,
+          "continuity_strength": "none",
+          "preserve_conversational_thread": false,
+          "preserve_context_continuity": false,
+          "drop_interlocutor_requires_explicit_break": false,
+          "speaker_switch_requires_explicit_cue": false,
+          "allow_narrator_bridge": true,
+          "interaction_mode": "none",
+          "interaction_kind": "",
+          "active_interaction_target_id": "",
+          "current_interlocutor": "",
+          "anchored_interlocutor_id": "",
+          "conversation_privacy": "",
+          "engagement_level": "none",
+          "speaker_selection_contract": {
+            "primary_speaker_id": null,
+            "primary_speaker_name": null,
+            "primary_speaker_source": null,
+            "allowed_speaker_ids": [],
+            "continuity_locked": false,
+            "continuity_lock_reason": null,
+            "speaker_switch_allowed": true,
+            "speaker_switch_reason": "no_authoritative_pin",
+            "generic_fallback_forbidden": true,
+            "forbidden_fallback_labels": [
+              "ragged stranger",
+              "stranger",
+              "someone nearby",
+              "someone in the crowd",
+              "a voice nearby",
+              "a passerby",
+              "a bystander",
+              "an onlooker",
+              "a figure nearby",
+              "someone anonymous"
+            ],
+            "interruption_allowed": false,
+            "interruption_requires_scene_event": false,
+            "offscene_speakers_forbidden": true
+          },
+          "continuity_reasons": [],
+          "break_signals_present": []
+        },
+        "fallback_behavior": {
+          "enabled": true,
+          "uncertainty_active": false,
+          "uncertainty_sources": [],
+          "uncertainty_mode": null,
+          "allowed_behaviors": {
+            "ask_clarifying_question": false,
+            "hedge_appropriately": false,
+            "provide_partial_information": false
+          },
+          "disallowed_behaviors": {
+            "invented_certainty": true,
+            "fabricated_authority": true,
+            "meta_system_explanations": true
+          },
+          "diegetic_only": true,
+          "max_clarifying_questions": 1,
+          "prefer_partial_over_question": false,
+          "require_partial_to_state_known_edge": false,
+          "require_partial_to_state_unknown_edge": false,
+          "require_partial_to_offer_next_lead": false,
+          "allowed_hedge_forms": [
+            "I can't swear to it, but",
+            "From what I saw,",
+            "As far as rumor goes,",
+            "Looks like",
+            "Hard to tell, but"
+          ],
+          "forbidden_hedge_forms": [
+            "I lack enough information to answer confidently.",
+            "The system cannot confirm that.",
+            "Canon proves it.",
+            "As an AI, I don't know.",
+            "There is insufficient context available."
+          ],
+          "allowed_authority_bases": [
+            "direct_observation",
+            "established_report",
+            "rumor_marked_as_rumor",
+            "visible_evidence"
+          ],
+          "forbidden_authority_bases": [
+            "unsupported_named_culprit",
+            "unsupported_exact_location",
+            "unsupported_motive_as_fact",
+            "unsupported_procedural_certainty",
+            "system_or_canon_claims"
+          ]
+        },
+        "narrative_authenticity": {
+          "enabled": true,
+          "version": 1,
+          "mode": "advisory_prompt_with_gate_enforcement",
+          "allow_restate_for_continuity": true,
+          "max_anchor_reuse_clauses": 1,
+          "forbid_scene_narration_echo_as_dialogue": true,
+          "forbid_low_signal_generic_reply": true,
+          "forbid_adjacent_phrase_reuse": true,
+          "require_meaningful_change_on_followup": true,
+          "signal_sources": [
+            "new_information",
+            "new_perspective",
+            "new_reaction",
+            "new_boundary_of_uncertainty",
+            "new_actionable_next_step"
+          ],
+          "anti_goals": {
+            "do_not_force_verbosity": true,
+            "do_not_invent_facts": true,
+            "do_not_override_fallback_correctness": true
+          },
+          "fallback_compatibility": {
+            "may_be_brief_under_uncertainty": true,
+            "may_refuse_or_partially_answer_if_other_contracts_require": true,
+            "brevity_alone_is_not_failure": true
+          },
+          "rumor_realism": {
+            "enabled": true,
+            "apply_on_secondhand_or_rumor_turns": true,
+            "forbid_verbatim_scene_to_rumor_reuse": true,
+            "forbid_recent_narration_to_dialogue_reuse": true,
+            "require_one_of": [
+              "source_limitation",
+              "uncertainty_or_distortion",
+              "perspective_or_bias",
+              "net_new_detail"
+            ],
+            "allow_partial_fact_overlap": true,
+            "forbid_identical_phrasing_even_when_overlap_allowed": true,
+            "fallback_compatibility": {
+              "allow_brief_bounded_partial_under_uncertainty": true,
+              "do_not_fail_for_brevity_alone": true,
+              "allow_source_limited_refusal": true
+            }
+          },
+          "trace": {
+            "response_delta_contract_active": false,
+            "topic_follow_up_active": false,
+            "answer_completeness_required": false,
+            "dialogue_shape_expected": false,
+            "prior_turn_gm_snippet_for_overlap": null,
+            "player_text_len": 0,
+            "rumor_turn_active": false,
+            "rumor_turn_reason_codes": [],
+            "rumor_trigger_spans": []
+          }
+        },
+        "conversational_memory_window": {
+          "enabled": true,
+          "window_version": "v1",
+          "prioritize_recent_turns": true,
+          "prioritize_active_scene_entities": true,
+          "deprioritize_stale_inactive_elements": true,
+          "allow_explicit_reintroduction": true,
+          "recent_turn_window": 6,
+          "soft_memory_limit": 12,
+          "stale_after_turns": 18,
+          "active_scene_entity_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "guard_captain",
+            "refugee",
+            "tavern_runner",
+            "threadbare_watcher"
+          ],
+          "anchored_interlocutor_id": "",
+          "active_interaction_target_id": "",
+          "explicit_reintroduced_entity_ids": [],
+          "explicit_reintroduced_topics": []
+        }
+      },
+      "_runtime_progression_nodes_fingerprint_v1": {
+        "faction_agenda:ash_cowl": "active|1|10",
+        "faction_agenda:house_verevin": "active|1|10",
+        "faction_agenda:ordo_pyric": "active|1|10",
+        "faction_pressure:ash_cowl": "active|3|10",
+        "faction_pressure:house_verevin": "active|3|10",
+        "faction_pressure:ordo_pyric": "active|2|10"
+      },
+      "discourse_focus": {
+        "version": 1,
+        "scene_id": "frontier_gate",
+        "active_interlocutor": null,
+        "active_claim": null,
+        "active_actionable_lead": null,
+        "active_inspected": null,
+        "last_attempted_action": null,
+        "last_committed_turn": 1,
+        "last_committed_contract_id": "rc_dd89a2b89c62"
+      },
+      "narration_temporal_provenance": {
+        "version": 1,
+        "gm_inferences": [],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "You can read the notice board, approach the tavern runner, or watch the crowd.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "frontier_gate",
+            "source_turn": 1
+          }
+        ],
+        "rejected_consequential": []
+      },
+      "bounded_improvisation": {
+        "version": 1,
+        "entries": [],
+        "rejected": []
+      },
+      "last_bounded_improvisation_promotion": {
+        "promoted_count": 0,
+        "rejected_count": 0,
+        "accepted_count": 0,
+        "promoted_ids": []
+      },
+      "conversational_context": {
+        "delivered_exchanges": [
+          {
+            "speaker_id": "",
+            "speaker_name": "",
+            "addressee": "player",
+            "ownership": "gm",
+            "player_text": "",
+            "delivered_text": "You stand at Cinderwatch's eastern gate. Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and paid rumor. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. You can read the notice board, approach the tavern runner, or watch the crowd.",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "frontier_gate",
+            "turn": 1,
+            "active": false,
+            "authorized_proposition": "",
+            "answer_sufficiency": "",
+            "proposition_id": "",
+            "response_integrity_digest": "fcbb0e6c1fe3fc832c2ab64ec0aecc6d19f664d99b9b09b4b74c8ec7c8660649",
+            "authorization_source": "initial_generation",
+            "adoption_turn_identity": "rc_dd89a2b89c62"
+          },
+          {
+            "speaker_id": "",
+            "speaker_name": "",
+            "addressee": "player",
+            "ownership": "gm",
+            "player_text": "I take a moment to look around the gate district. What do I notice?",
+            "delivered_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "frontier_gate",
+            "turn": 1,
+            "active": false,
+            "authorized_proposition": "",
+            "answer_sufficiency": "",
+            "proposition_id": "",
+            "response_integrity_digest": "1fb5b9da538c7e273c33ce1cfbcd66ea1e07e43e5831d57f282b71b6500dd25d",
+            "authorization_source": "conversational_decision:communication_before_execution",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "",
+            "speaker_name": "",
+            "addressee": "player",
+            "ownership": "gm",
+            "player_text": "I approach the gate serjeant and ask what happened to the missing patrol.",
+            "delivered_text": "I cannot tell who that is addressed to. Nothing has been attempted.",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "",
+            "uncertain": true,
+            "commitment": false,
+            "scene_id": "frontier_gate",
+            "turn": 1,
+            "active": true,
+            "authorized_proposition": "",
+            "answer_sufficiency": "",
+            "proposition_id": "",
+            "response_integrity_digest": "3773881738384e9050cb27e0b39f2fd3f519aa0357be753338b025dde763838f",
+            "authorization_source": "conversational_decision:ungrounded_provider_target",
+            "adoption_turn_identity": ""
+          }
+        ],
+        "last_gm_exchange": {
+          "category": "CLARIFY",
+          "owner": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "I approach the gate serjeant and ask what happened to the missing patrol.",
+          "response": "I cannot tell who that is addressed to. Nothing has been attempted.",
+          "refusal_reason": null,
+          "scene_id": "frontier_gate"
+        },
+        "pending_clarification": {
+          "kind": "ambiguous_addressee",
+          "operation": "ASK",
+          "status": "pending",
+          "scene_id": "frontier_gate",
+          "original_text": "I approach the gate serjeant and ask what happened to the missing patrol.",
+          "choices": [
+            {
+              "entity_id": "gate_guard",
+              "label": "Gate Guard"
+            },
+            {
+              "entity_id": "gate_serjeant",
+              "label": "Gate Serjeant"
+            },
+            {
+              "entity_id": "tavern_runner",
+              "label": "Tavern Runner"
+            }
+          ],
+          "clarification": "",
+          "target_resolution": "none_required"
+        },
+        "pending_intention": {
+          "kind": "ambiguous_addressee",
+          "operation": "ASK",
+          "status": "pending",
+          "scene_id": "frontier_gate",
+          "original_text": "I approach the gate serjeant and ask what happened to the missing patrol.",
+          "choices": [
+            {
+              "entity_id": "gate_guard",
+              "label": "Gate Guard"
+            },
+            {
+              "entity_id": "gate_serjeant",
+              "label": "Gate Serjeant"
+            },
+            {
+              "entity_id": "tavern_runner",
+              "label": "Tavern Runner"
+            }
+          ],
+          "clarification": "",
+          "target_resolution": "none_required"
+        }
+      }
+    },
+    "world": {
+      "settlements": [
+        {
+          "id": "cinderwatch",
+          "name": "Cinderwatch",
+          "type": "frontier_city",
+          "tags": [
+            "frontier",
+            "trade",
+            "unstable"
+          ],
+          "status": "strained",
+          "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 3,
+          "goal": "Expand territory",
+          "current_plan": "Gathering influence",
+          "agenda_progress": 1,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 3,
+          "goal": "Control black market",
+          "current_plan": "Establishing smuggling routes",
+          "agenda_progress": 1,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 2,
+          "goal": "Suppress dangerous magic",
+          "current_plan": "Watching newcomers",
+          "agenda_progress": 1,
+          "assets": []
+        }
+      ],
+      "assets": [],
+      "projects": [],
+      "world_flags": [],
+      "event_log": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        }
+      ],
+      "inference_rules": [],
+      "clues": {},
+      "npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "location": "frontier_gate",
+          "aliases": [
+            "guard",
+            "watch",
+            "watch guard"
+          ],
+          "topics": [
+            {
+              "id": "watch_command",
+              "text": "Captain Thoran commands the gate watch tonight.",
+              "clue_id": "captain_thoran_watch"
+            }
+          ],
+          "role": "",
+          "affiliation": "",
+          "availability": "available",
+          "current_agenda": "",
+          "disposition": "neutral",
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "location": "frontier_gate",
+          "aliases": [
+            "serjeant",
+            "watch serjeant",
+            "gate serjeant"
+          ],
+          "topics": [
+            {
+              "id": "route_change",
+              "text": "The patrol route changed after the Ash Compact census choke worsened.",
+              "clue_id": "patrol_route_change"
+            }
+          ],
+          "role": "",
+          "affiliation": "",
+          "availability": "available",
+          "current_agenda": "",
+          "disposition": "neutral",
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "aliases": [
+            "runner",
+            "tavern runner"
+          ],
+          "topics": [
+            {
+              "id": "patrol_rumor",
+              "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+              "clue_id": "muddy_footprints_northwest"
+            }
+          ],
+          "role": "",
+          "affiliation": "",
+          "availability": "available",
+          "current_agenda": "sell_rumors",
+          "disposition": "friendly",
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        }
+      ],
+      "world_state": {
+        "flags": {},
+        "counters": {},
+        "clocks": {}
+      }
+    },
+    "combat": {
+      "in_combat": false,
+      "round": 0,
+      "initiative_order": [],
+      "turn_index": 0,
+      "active_actor_id": null,
+      "player_turn_used": false
+    },
+    "conditions": {
+      "dazed": {
+        "name": "Dazed",
+        "kind": "condition",
+        "default_effects": {
+          "no_actions": true
+        }
+      },
+      "shaken": {
+        "name": "Shaken",
+        "kind": "condition",
+        "default_effects": {
+          "attack_penalty": 2,
+          "save_penalty": 2,
+          "skill_penalty": 2
+        }
+      },
+      "sickened": {
+        "name": "Sickened",
+        "kind": "condition",
+        "default_effects": {
+          "attack_penalty": 2,
+          "damage_penalty": 2,
+          "save_penalty": 2,
+          "skill_penalty": 2
+        }
+      },
+      "blinded": {
+        "name": "Blinded",
+        "kind": "condition",
+        "default_effects": {
+          "ac_penalty": 2,
+          "lose_dex_to_ac": true
+        }
+      },
+      "stunned": {
+        "name": "Stunned",
+        "kind": "condition",
+        "default_effects": {
+          "no_actions": true,
+          "ac_penalty": 2,
+          "lose_dex_to_ac": true
+        }
+      },
+      "risky_strike": {
+        "name": "Risky Strike",
+        "kind": "combat_toggle",
+        "default_effects": {}
+      },
+      "defensive_stance": {
+        "name": "Defensive Stance",
+        "kind": "combat_toggle",
+        "default_effects": {}
+      },
+      "shield": {
+        "name": "Shield",
+        "kind": "spell_effect",
+        "default_effects": {
+          "ac_bonus": 4
+        }
+      }
+    },
+    "scene": {
+      "scene": {
+        "id": "frontier_gate",
+        "location": "Cinderwatch Gate District",
+        "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+        "mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "opening_seed_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+        ],
+        "journal_seed_facts": [
+          "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+          "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+          "A notice board announces new taxes and curfews, and names a missing patrol.",
+          "A tavern runner is hawking hot stew and rumor for coin.",
+          "A ragged stranger hangs back, watching the crowd more than the queue."
+        ],
+        "discoverable_clues": [
+          {
+            "id": "notice_patrol_route",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "enemies": [],
+        "actions": [],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "scene_id": "frontier_gate",
+            "kind": "npc",
+            "addressable": true,
+            "address_priority": 0,
+            "address_roles": [
+              "guard",
+              "watchman",
+              "sentry",
+              "guardsman",
+              "captain"
+            ],
+            "aliases": []
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "scene_id": "frontier_gate",
+            "kind": "npc",
+            "addressable": true,
+            "address_priority": 1,
+            "address_roles": [
+              "runner",
+              "informant"
+            ],
+            "aliases": []
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "scene_id": "frontier_gate",
+            "kind": "scene_actor",
+            "addressable": true,
+            "address_priority": 2,
+            "address_roles": [
+              "stranger",
+              "refugee"
+            ],
+            "aliases": [
+              "ragged stranger"
+            ]
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "scene_id": "frontier_gate",
+            "kind": "scene_actor",
+            "addressable": true,
+            "address_priority": 3,
+            "address_roles": [
+              "watcher"
+            ],
+            "aliases": []
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "aliases": [
+              "notice",
+              "board",
+              "curfew notice",
+              "missing patrol warning"
+            ],
+            "type": "investigate",
+            "reveals_clue": "notice_patrol_route"
+          }
+        ],
+        "objects": [],
+        "discovered_clues": [],
+        "runtime_entities": []
+      },
+      "scene_state": {
+        "active_scene_id": "frontier_gate",
+        "active_entities": [
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner",
+          "guard_captain",
+          "refugee",
+          "threadbare_watcher"
+        ],
+        "entity_presence": {
+          "gate_guard": "active",
+          "gate_serjeant": "active",
+          "tavern_runner": "active",
+          "threadbare_watcher": "active",
+          "refugee": "active",
+          "guard_captain": "active"
+        },
+        "current_interlocutor": null,
+        "emergent_addressables": [],
+        "promoted_actor_npc_map": {}
+      }
+    },
+    "ui": {
+      "player_can_act": true,
+      "living_enemies": [],
+      "scene_ids": [
+        "frontier_gate",
+        "market_quarter",
+        "old_milestone"
+      ],
+      "affordances": [
+        {
+          "id": "question_gate_guard",
+          "type": "question",
+          "label": "Talk to Gate Guard",
+          "prompt": "I talk to Gate Guard.",
+          "target_id": "gate_guard",
+          "target_kind": null,
+          "target_scene_id": null,
+          "target_location_id": null,
+          "conditions": {},
+          "metadata": {}
+        },
+        {
+          "id": "question_gate_serjeant",
+          "type": "question",
+          "label": "Talk to Gate Serjeant",
+          "prompt": "I talk to Gate Serjeant.",
+          "target_id": "gate_serjeant",
+          "target_kind": null,
+          "target_scene_id": null,
+          "target_location_id": null,
+          "conditions": {},
+          "metadata": {}
+        },
+        {
+          "id": "question_tavern_runner",
+          "type": "question",
+          "label": "Talk to Tavern Runner",
+          "prompt": "I talk to Tavern Runner.",
+          "target_id": "tavern_runner",
+          "target_kind": null,
+          "target_scene_id": null,
+          "target_location_id": null,
+          "conditions": {},
+          "metadata": {}
+        },
+        {
+          "id": "notice_board",
+          "type": "investigate",
+          "label": "Examine the Notice board",
+          "prompt": "I examine the Notice board.",
+          "target_id": "notice_board",
+          "target_kind": null,
+          "target_scene_id": null,
+          "target_location_id": null,
+          "conditions": {},
+          "metadata": {}
+        },
+        {
+          "id": "examine_the_notice_board_lists_taxes",
+          "type": "investigate",
+          "label": "Examine The notice board lists taxes",
+          "prompt": "I examine The notice board lists taxes.",
+          "target_id": null,
+          "target_kind": null,
+          "target_scene_id": null,
+          "target_location_id": null,
+          "conditions": {},
+          "metadata": {}
+        }
+      ],
+      "clues": {
+        "known": [],
+        "implicit": [],
+        "explicit": [],
+        "actionable": []
+      },
+      "scene_npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "disposition": "neutral",
+          "role": "",
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "topics_revealed": 0,
+          "last_interaction_turn": null
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "disposition": "neutral",
+          "role": "",
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "topics_revealed": 0,
+          "last_interaction_turn": null
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "disposition": "friendly",
+          "role": "",
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "topics_revealed": 0,
+          "last_interaction_turn": null
+        }
+      ],
+      "interaction": {
+        "active_interaction_target_id": null,
+        "active_interaction_kind": null,
+        "interaction_mode": "none",
+        "engagement_level": "none",
+        "conversation_privacy": null,
+        "player_position_context": null
+      },
+      "campaign_started": true,
+      "campaign_can_start": false
+    },
+    "player_name": "Galinor",
+    "journal": {
+      "known_facts": [
+        "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+        "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+        "A notice board announces new taxes and curfews, and names a missing patrol.",
+        "A tavern runner is hawking hot stew and rumor for coin.",
+        "A ragged stranger hangs back, watching the crowd more than the queue."
+      ],
+      "discovered_clues": [],
+      "unresolved_leads": [],
+      "active_leads": [],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 0,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0,
+        "nonterminal": 0,
+        "total": 0
+      },
+      "status_effects": [],
+      "suspicion_flags": [],
+      "npcs": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 3,
+          "goal": "Expand territory",
+          "current_plan": "Gathering influence",
+          "agenda_progress": 1,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 3,
+          "goal": "Control black market",
+          "current_plan": "Establishing smuggling routes",
+          "agenda_progress": 1,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 2,
+          "goal": "Suppress dangerous magic",
+          "current_plan": "Watching newcomers",
+          "agenda_progress": 1,
+          "assets": []
+        }
+      ],
+      "recent_events": [
+        {
+          "type": "faction_pressure",
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
+        }
+      ],
+      "projects": []
+    },
+    "save_summary": {
+      "saved_at": "2026-11-01T18:47:26.174587Z",
+      "active_scene_id": "frontier_gate",
+      "chat_messages": 3,
+      "discovered_clues": 0,
+      "world_flags_count": 0,
+      "world_counters_count": 0,
+      "world_clocks_count": 0,
+      "player_name": "Galinor",
+      "save_data_exists": true
+    },
+    "snapshots": [],
+    "campaign_run_id": "3480e92349bebac07d1745cb"
+  }
+}

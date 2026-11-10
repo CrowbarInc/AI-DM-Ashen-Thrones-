@@ -1,0 +1,242 @@
+{
+  "focused": {
+    "same_failed_nodeids": [
+      "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+      "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+      "tests.test_pr_play_71_lifecycle::test_duplicate_start",
+      "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[no_optin]",
+      "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[off]",
+      "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[other_identity]",
+      "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[report]",
+      "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[survey]",
+      "tests.test_pr_play_71_persistence_recovery::test_new_campaign_failure_restores_prior_runtime",
+      "tests.test_pr_play_71v_verification::test_chat_permanent_rename_does_not_publish_success",
+      "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[1]",
+      "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[3]",
+      "tests.test_pr_play_71v_verification::test_duplicate_request_does_not_duplicate_branch",
+      "tests.test_pr_play_71v_verification::test_mandatory_disclosure_survives_rejected_narration",
+      "tests.test_pr_play_71v_verification::test_new_campaign_identifier_failure_changes_nothing",
+      "tests.test_pr_play_71v_verification::test_new_campaign_rollback_on_each_runtime_file",
+      "tests.test_pr_play_71v_verification::test_opening_persistence_failure_does_not_publish_start",
+      "tests.test_pr_play_71v_verification::test_player_safe_projection_across_lifecycle",
+      "tests.test_pr_play_71v_verification::test_transcript_and_authoritative_isolation",
+      "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution"
+    ],
+    "new_failed_nodeids": [
+      "tests.test_pr_play_54_consequential_validation::test_corpus_validation_stays_fast_and_local"
+    ],
+    "prior_not_seen": [],
+    "retained_messages": {
+      "tests.test_pr_play_54_consequential_validation::test_corpus_validation_stays_fast_and_local": {
+        "current": "assert 2.452388699981384 < 2.0",
+        "prior": null
+      },
+      "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution": {
+        "current": "assert False",
+        "prior": "assert False"
+      },
+      "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues": {
+        "current": "assert set()\n +  where set() = get_all_known_clue_ids({})",
+        "prior": "assert set()\n +  where set() = get_all_known_clue_ids({})"
+      },
+      "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues": {
+        "current": "assert set()\n +  where set() = get_all_known_clue_ids({})",
+        "prior": "assert set()\n +  where set() = get_all_known_clue_ids({})"
+      },
+      "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[survey]": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[report]": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[off]": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[no_optin]": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[other_identity]": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71_lifecycle::test_duplicate_start": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71_persistence_recovery::test_new_campaign_failure_restores_prior_runtime": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71v_verification::test_new_campaign_rollback_on_each_runtime_file": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71v_verification::test_new_campaign_identifier_failure_changes_nothing": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71v_verification::test_opening_persistence_failure_does_not_publish_start": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[1]": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[3]": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71v_verification::test_chat_permanent_rename_does_not_publish_success": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71v_verification::test_transcript_and_authoritative_isolation": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71v_verification::test_player_safe_projection_across_lifecycle": {
+        "current": "assert 'Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.' in '{\"ok\":true,\"ui_mode\":\"player\",\"entries\":[{\"timestamp\":\"2026-11-06T22:57:23.808398Z\",\"player_input\":\"I examine the not...can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"}}]}'\n +  where '{\"ok\":true,\"ui_mode\":\"player\",\"entries\":[{\"timestamp\":\"2026-11-06T22:57:23.808398Z\",\"player_input\":\"I examine the not...can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"}}]}' = <Response [200 OK]>.text\n +    where <Response [200 OK]> = get('/api/log')\n +      where get = <starlette.testclient.TestClient object at 0x0000023494F63D70>.get",
+        "prior": "assert 'Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.' in '{\"ok\":true,\"ui_mode\":\"player\",\"entries\":[{\"timestamp\":\"2026-11-06T04:27:50.825786Z\",\"player_input\":\"I examine the not...can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"}}]}'\n +  where '{\"ok\":true,\"ui_mode\":\"player\",\"entries\":[{\"timestamp\":\"2026-11-06T04:27:50.825786Z\",\"player_input\":\"I examine the not...can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"}}]}' = <Response [200 OK]>.text\n +    where <Response [200 OK]> = get('/api/log')\n +      where get = <starlette.testclient.TestClient object at 0x000001E613AD2450>.get"
+      },
+      "tests.test_pr_play_71v_verification::test_mandatory_disclosure_survives_rejected_narration": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      },
+      "tests.test_pr_play_71v_verification::test_duplicate_request_does_not_duplicate_branch": {
+        "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+        "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+      }
+    }
+  },
+  "boundary": {
+    "same_failed_nodeids": [
+      "tests.test_pr_play_37_opening_recovery::test_http_composer_failure_does_not_commit",
+      "tests.test_pr_play_37_opening_recovery::test_http_invalid_declaration_discards_provider_text",
+      "tests.test_start_campaign_api::test_failed_start_campaign_does_not_mark_started",
+      "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+      "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+      "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text"
+    ],
+    "new_failed_nodeids": [],
+    "prior_not_seen": [],
+    "retained_messages": {
+      "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started": {
+        "current": "AssertionError: assert None == 'scene_opening'\n +  where None = <built-in method get of dict object at 0x00000294C0B0ACC0>('kind')\n +    where <built-in method get of dict object at 0x00000294C0B0ACC0> = {}.get\n +      where {} = <built-in method get of dict object at 0x00000294BD587C00>('resolution', {})\n +        where <built-in method get of dict object at 0x00000294BD587C00> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...he brittle discipline of men who expect trouble, while old banners rot above the walls.', 'mode': 'social', ...}}, ...}.get",
+        "prior": "AssertionError: assert None == 'scene_opening'\n +  where None = <built-in method get of dict object at 0x00000276C5DB3DC0>('kind')\n +    where <built-in method get of dict object at 0x00000276C5DB3DC0> = {}.get\n +      where {} = <built-in method get of dict object at 0x00000276C8EA4400>('resolution', {})\n +        where <built-in method get of dict object at 0x00000276C8EA4400> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...he brittle discipline of men who expect trouble, while old banners rot above the walls.', 'mode': 'social', ...}}, ...}.get"
+      },
+      "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text": {
+        "current": "AssertionError: assert 781 > 800\n +  where 781 = <built-in method get of dict object at 0x00000294C0A7CB80>('post_final_emission_gate_text_len', 0)\n +    where <built-in method get of dict object at 0x00000294C0A7CB80> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get",
+        "prior": "AssertionError: assert 781 > 800\n +  where 781 = <built-in method get of dict object at 0x00000276C92CBF80>('post_final_emission_gate_text_len', 0)\n +    where <built-in method get of dict object at 0x00000276C92CBF80> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get"
+      },
+      "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening": {
+        "current": "assert \"You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.\" in \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"",
+        "prior": "assert \"You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.\" in \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\""
+      },
+      "tests.test_start_campaign_api::test_failed_start_campaign_does_not_mark_started": {
+        "current": "Failed: DID NOT RAISE RuntimeError",
+        "prior": "Failed: DID NOT RAISE RuntimeError"
+      },
+      "tests.test_pr_play_37_opening_recovery::test_http_invalid_declaration_discards_provider_text": {
+        "current": "AssertionError: assert None == 'safe_nonresolution'\n +  where None = <built-in method get of dict object at 0x00000294C0A17E40>('opening_failure_reason')\n +    where <built-in method get of dict object at 0x00000294C0A17E40> = {'ok': False, 'campaign_started': False, 'gameplay_committed': False, 'status': 'opening_failed', ...}.get",
+        "prior": "AssertionError: assert None == 'safe_nonresolution'\n +  where None = <built-in method get of dict object at 0x00000276C9316140>('opening_failure_reason')\n +    where <built-in method get of dict object at 0x00000276C9316140> = {'ok': False, 'campaign_started': False, 'gameplay_committed': False, 'status': 'opening_failed', ...}.get"
+      },
+      "tests.test_pr_play_37_opening_recovery::test_http_composer_failure_does_not_commit": {
+        "current": "AssertionError: assert None == 'safe_nonresolution'\n +  where None = <built-in method get of dict object at 0x00000294C084EB80>('opening_failure_reason')\n +    where <built-in method get of dict object at 0x00000294C084EB80> = {'ok': False, 'campaign_started': False, 'gameplay_committed': False, 'status': 'opening_failed', ...}.get",
+        "prior": "AssertionError: assert None == 'safe_nonresolution'\n +  where None = <built-in method get of dict object at 0x00000276C612E080>('opening_failure_reason')\n +    where <built-in method get of dict object at 0x00000276C612E080> = {'ok': False, 'campaign_started': False, 'gameplay_committed': False, 'status': 'opening_failed', ...}.get"
+      }
+    }
+  },
+  "broader": {
+    "same_failed_nodeids": [
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]"
+    ],
+    "new_failed_nodeids": [],
+    "prior_not_seen": [],
+    "retained_messages": {
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]": {
+        "current": "KeyError: 'hard_validation_attempt_1'",
+        "prior": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]": {
+        "current": "KeyError: 'hard_validation_attempt_1'",
+        "prior": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]": {
+        "current": "KeyError: 'hard_validation_attempt_1'",
+        "prior": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]": {
+        "current": "KeyError: 'hard_validation_attempt_1'",
+        "prior": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]": {
+        "current": "KeyError: 'hard_validation_attempt_1'",
+        "prior": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]": {
+        "current": "KeyError: 'hard_validation_attempt_1'",
+        "prior": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]": {
+        "current": "KeyError: 'hard_validation_attempt_1'",
+        "prior": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]": {
+        "current": "KeyError: 'hard_validation_attempt_1'",
+        "prior": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]": {
+        "current": "KeyError: 'hard_validation_attempt_1'",
+        "prior": "KeyError: 'hard_validation_attempt_1'"
+      }
+    }
+  },
+  "scope": "Focused combined suite began before the final two routing repairs. Boundary, broader, clean lifecycle and post-repair owner tests run in separate fresh processes. This is not a full-suite claim.",
+  "post_repair_failed_nodeids": [
+    "tests.test_pr_ef_gm_authority::test_production_ten_turn_sequence",
+    "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[confirm_single_candidate]",
+    "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[direct_ask_conflicting_owner]",
+    "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[distinguishing_fact]",
+    "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[explicit_named_ask]",
+    "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[explicit_role_ask]",
+    "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[gm_about_npc]",
+    "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[incidental_glance]",
+    "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[npc_followup]",
+    "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[save_load_pending]",
+    "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[unique_pronoun]",
+    "tests.test_pr_ef_r4_authorization::test_third_person_question_is_not_an_active_npc_continuation"
+  ],
+  "owner_comparison": {
+    "new_failed_nodeids": [],
+    "same_failed_nodeids": [
+      "tests.test_pr_ef_gm_authority::test_production_ten_turn_sequence",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[confirm_single_candidate]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[direct_ask_conflicting_owner]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[distinguishing_fact]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[explicit_named_ask]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[explicit_role_ask]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[gm_about_npc]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[incidental_glance]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[npc_followup]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[save_load_pending]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[unique_pronoun]",
+      "tests.test_pr_ef_r4_authorization::test_third_person_question_is_not_an_active_npc_continuation"
+    ],
+    "limits": "Targeted pre-repair owner loaded in memory; other current files remain current. See entry_owner_provenance.json."
+  },
+  "clean_lifecycle_failed_nodeids": [],
+  "timing_classification": "Newly observed combined-run timing assertion; not called historical. See isolated final rerun for reproducibility. Passed in the fresh post-repair process."
+}

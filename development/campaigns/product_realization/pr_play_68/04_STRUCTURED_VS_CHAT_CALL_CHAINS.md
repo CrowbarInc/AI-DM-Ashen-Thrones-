@@ -1,0 +1,3 @@
+# STRUCTURED VS CHAT CALL CHAINS
+
+See call_chains.json and incremental source diff. Both supported paths already share deterministic resolution and observation hook; their postprocessing diverged. Structured action() returned _build_turn_response_payload directly, while chat's persistence completion invoked prepare/publish/verify. Frontend submitExplorationAction and chat consumers both use gm_output.player_facing_text; journal uses projected state. New shared _finalize_investigation_publication serves both paths at the post-persistence boundary, before response log append. Equivalent discoveries must have equivalent disclosure guarantees, without requiring identical prose or resolver metadata.

@@ -1,0 +1,583 @@
+{
+  "before": {
+    "positive_class": "clearly unsupported mechanical assertion",
+    "ambiguous_excluded": 4,
+    "TP": 18,
+    "TN": 31,
+    "FP": 0,
+    "FN": 16,
+    "precision": 1.0,
+    "recall": 0.5294117647058824,
+    "false_rejection_rate": 0.0,
+    "false_acceptance_rate": 0.47058823529411764,
+    "by_group": {
+      "ambiguous": {
+        "total": 4,
+        "accepted": 4,
+        "rejected": 0
+      },
+      "authorized": {
+        "total": 16,
+        "accepted": 16,
+        "rejected": 0
+      },
+      "harmless": {
+        "total": 15,
+        "accepted": 15,
+        "rejected": 0
+      },
+      "unsupported": {
+        "total": 34,
+        "accepted": 16,
+        "rejected": 18
+      }
+    },
+    "by_category": {
+      "atmosphere": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "certainty": {
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "conditional": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "conditions": {
+        "authorized": {
+          "total": 2,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 2,
+          "rejected": 2
+        }
+      },
+      "context_dependent": {
+        "ambiguous": {
+          "total": 4,
+          "rejected": 0
+        }
+      },
+      "currency": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "damage": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "dialogue": {
+        "harmless": {
+          "total": 2,
+          "rejected": 0
+        }
+      },
+      "discovery": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "emotion": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "environmental_texture": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "figurative": {
+        "harmless": {
+          "total": 2,
+          "rejected": 0
+        }
+      },
+      "gesture": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "healing": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "inventory": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "investigation_texture": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "location_result": {
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "mixed": {
+        "unsupported": {
+          "total": 6,
+          "rejected": 3
+        }
+      },
+      "negation": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "npc_result": {
+        "unsupported": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "npc_state": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "objective": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "objective_result": {
+        "unsupported": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "resource": {
+        "authorized": {
+          "total": 2,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 2,
+          "rejected": 2
+        }
+      },
+      "resulting_currency": {
+        "authorized": {
+          "total": 2,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 4,
+          "rejected": 0
+        }
+      },
+      "resulting_inventory": {
+        "authorized": {
+          "total": 2,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 5,
+          "rejected": 0
+        }
+      },
+      "sensory": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "speculation": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "status_result": {
+        "unsupported": {
+          "total": 2,
+          "rejected": 0
+        }
+      },
+      "travel": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 2,
+          "rejected": 2
+        }
+      },
+      "travel_atmosphere": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "uncertain_observation": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      }
+    },
+    "false_negatives": [
+      "original_item",
+      "original_currency",
+      "other_item",
+      "container_item",
+      "other_currency",
+      "total_balance",
+      "indirect_heal",
+      "indirect_condition",
+      "indirect_quest",
+      "indirect_npc",
+      "unfamiliar_possession",
+      "hedge_launder",
+      "synonym_balance",
+      "mixed_clue",
+      "mixed_air",
+      "merchant_bonus"
+    ],
+    "false_positives": []
+  },
+  "after": {
+    "positive_class": "clearly unsupported mechanical assertion",
+    "ambiguous_excluded": 4,
+    "TP": 28,
+    "TN": 31,
+    "FP": 0,
+    "FN": 6,
+    "precision": 1.0,
+    "recall": 0.8235294117647058,
+    "false_rejection_rate": 0.0,
+    "false_acceptance_rate": 0.17647058823529413,
+    "by_group": {
+      "ambiguous": {
+        "total": 4,
+        "accepted": 2,
+        "rejected": 2
+      },
+      "authorized": {
+        "total": 16,
+        "accepted": 16,
+        "rejected": 0
+      },
+      "harmless": {
+        "total": 15,
+        "accepted": 15,
+        "rejected": 0
+      },
+      "unsupported": {
+        "total": 34,
+        "accepted": 6,
+        "rejected": 28
+      }
+    },
+    "by_category": {
+      "atmosphere": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "certainty": {
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "conditional": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "conditions": {
+        "authorized": {
+          "total": 2,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 2,
+          "rejected": 2
+        }
+      },
+      "context_dependent": {
+        "ambiguous": {
+          "total": 4,
+          "rejected": 2
+        }
+      },
+      "currency": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "damage": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "dialogue": {
+        "harmless": {
+          "total": 2,
+          "rejected": 0
+        }
+      },
+      "discovery": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "emotion": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "environmental_texture": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "figurative": {
+        "harmless": {
+          "total": 2,
+          "rejected": 0
+        }
+      },
+      "gesture": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "healing": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "inventory": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "investigation_texture": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "location_result": {
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "mixed": {
+        "unsupported": {
+          "total": 6,
+          "rejected": 6
+        }
+      },
+      "negation": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "npc_result": {
+        "unsupported": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "npc_state": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "objective": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 1,
+          "rejected": 1
+        }
+      },
+      "objective_result": {
+        "unsupported": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "resource": {
+        "authorized": {
+          "total": 2,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 2,
+          "rejected": 2
+        }
+      },
+      "resulting_currency": {
+        "authorized": {
+          "total": 2,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 4,
+          "rejected": 3
+        }
+      },
+      "resulting_inventory": {
+        "authorized": {
+          "total": 2,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 5,
+          "rejected": 4
+        }
+      },
+      "sensory": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "speculation": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "status_result": {
+        "unsupported": {
+          "total": 2,
+          "rejected": 0
+        }
+      },
+      "travel": {
+        "authorized": {
+          "total": 1,
+          "rejected": 0
+        },
+        "unsupported": {
+          "total": 2,
+          "rejected": 2
+        }
+      },
+      "travel_atmosphere": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      },
+      "uncertain_observation": {
+        "harmless": {
+          "total": 1,
+          "rejected": 0
+        }
+      }
+    },
+    "false_negatives": [
+      "indirect_heal",
+      "indirect_condition",
+      "indirect_quest",
+      "indirect_npc",
+      "unfamiliar_possession",
+      "synonym_balance"
+    ],
+    "false_positives": []
+  },
+  "method": "Full validator decisions on hand-labeled controlled cases; not a random sample or production accuracy estimate."
+}

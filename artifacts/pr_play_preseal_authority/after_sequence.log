@@ -1,0 +1,30 @@
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+{"id": "T01", "status": 200, "ms": 376.855, "scene": "frontier_gate", "turn": 5, "class": null, "calls": 1, "visible": "Provider calls are disabled for this run, so no live narration was generated."}
+{"id": "T02", "status": 200, "ms": 250.561, "scene": "frontier_gate", "turn": 6, "class": null, "calls": 0, "visible": "Guard Captain says, \"I couldn't tell you.\""}
+[CLUE DISCOVERED] social_frontier_gate_guard_captain_patrol
+[CLUE DISCOVERED] lead_frontier_gate_old_milestone
+[CLUE DUPLICATE IGNORED] lead_frontier_gate_old_milestone
+{"id": "T03", "status": 200, "ms": 210.93, "scene": "frontier_gate", "turn": 7, "class": null, "calls": 0, "visible": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\""}
+{"id": "T04", "status": 200, "ms": 49.896, "scene": "frontier_gate", "turn": 7, "class": null, "calls": 0, "visible": "Notice board is here. Approaching or touching it is not a supported action, and you have not moved."}
+[CLUE DISCOVERED] notice_patrol_route
+{"id": "T05", "status": 200, "ms": 291.704, "scene": "frontier_gate", "turn": 8, "class": null, "calls": 0, "visible": "The missing patrol was last seen taking the northwest mud track past the crates. Someone jabs at the board in Cinderwatch Gate District, impatient with anyone who reads too long."}
+{"id": "T06", "status": 200, "ms": 61.076, "scene": "frontier_gate", "turn": 8, "class": null, "calls": 0, "visible": "That part is not supported here. It was not carried out."}
+{"id": "T07", "status": 200, "ms": 370.633, "scene": "frontier_gate", "turn": 9, "class": null, "calls": 1, "visible": "Provider calls are disabled for this run, so no live narration was generated."}
+{"id": "T08", "status": 200, "ms": 350.027, "scene": "frontier_gate", "turn": 10, "class": null, "calls": 2, "visible": "The action stands, and no further narration request was sent."}
+{"id": "T09", "status": 200, "ms": 510.403, "scene": "frontier_gate", "turn": 11, "class": null, "calls": 0, "visible": "You examine the notice again. Previously disclosed here: The missing patrol was last seen taking the northwest mud track past the crates. The examination adds nothing new to what y"}
+{"id": "T10", "status": 200, "ms": 359.925, "scene": "frontier_gate", "turn": 12, "class": null, "calls": 0, "visible": "No nearby tavern is currently established in this scene."}
+[ENGINE] Scene transition -> old_milestone
+{"id": "T11", "status": 200, "ms": 331.398, "scene": "old_milestone", "turn": 13, "class": null, "calls": 0, "visible": "You arrive at Old Milestone."}
+{"id": "T12", "status": 200, "ms": 31.501, "scene": "old_milestone", "turn": 13, "class": "operational_refusal", "calls": 0, "visible": "That part is not supported here. It was not carried out."}
+{
+  "turns": 12,
+  "live_provider_calls": 0,
+  "call_gpt_entries": 4,
+  "provider_requests": 0,
+  "network_blocks": []
+}

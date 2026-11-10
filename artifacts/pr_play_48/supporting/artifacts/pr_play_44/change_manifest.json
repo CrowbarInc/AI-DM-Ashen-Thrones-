@@ -1,0 +1,22 @@
+{
+  "game/authorized_information.py": {
+    "sha256": "b9098d474ab98b216d94ed5f48ee9401fdc2d3b50d196d86dab0389034bcfe8b",
+    "purpose": "Bounded resolver-selected information and conservative pre-validation supplementation."
+  },
+  "game/upstream_response_repairs.py": {
+    "sha256": "ea0f68b1b79c0e8cfe3b9a8a9491d41064ceaff9c65d9d59dca8d41e11b29156",
+    "purpose": "Preserve all authorized discoveries in response-policy fallback; failure must not announce stale clues."
+  },
+  "game/api_turn_support.py": {
+    "sha256": "1ab4aea97b5a0a7e6458ebd5c500190d2bd53e4d694b0de3f477d35b1a13a6e5",
+    "purpose": "Use all selected information instead of only the first discovery in host speech."
+  },
+  "game/immutable_valid_response.py": {
+    "sha256": "7ab3cb1f63b5022392c90d6ea8860038e0f51e9d58232cac41eb0c1660e8ab22",
+    "purpose": "Preserve information before validation/sealing, cover retries and safe fallback, reject omissions without weakening semantic checks."
+  },
+  "tests/test_pr_play_44_information_delivery.py": {
+    "sha256": "907d1e4eb3bd30ffcf4187c9885f0b2aba7736bcbcf27fe98b9d10a5eef74221",
+    "purpose": "Offline saved-state replay, synthetic cases, and two unsuppressed legacy contract-gap probes."
+  }
+}

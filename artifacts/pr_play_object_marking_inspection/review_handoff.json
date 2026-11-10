@@ -1,0 +1,705 @@
+{
+  "campaign_id": "pr_play_object_marking_inspection",
+  "campaign_name": "PR-PLAY \u2014 Object Marking Inspection and Removal",
+  "campaign_date": "2026-11-09",
+  "purpose": "Bounded production implementation, current/history separation, atomic persistence and regression verification",
+  "objective_status": "A/PASS \u2014 bounded internal inspection/removal",
+  "executive_summary": "**A/PASS for bounded internal inspection and ID-specific marking removal.**\n\n72 inspection/removal tests passed. Separate predecessor controls: 76 marking/atomic, 52 identity, 50 inventory/snapshot and 143 preservation passed before and after.\n\nCombined before: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). After: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). New failures: []; newly passing: [].\n\nCurrent inspection returns active object state, never receipt history. Removal and its receipt commit through the existing API state-authority coordinator and atomic character save. Identity unchanged; successful removal advances revision once; exact replay returns the original receipt without allocation/save. Full two-object, two-add, inspect/remove/reinspect/reload/S0-S1-S2 sequence verified. All twelve player-visible turns unchanged; live provider calls 0.\n\nSingle authoritative character inventory; single-process FIFO and persistence guard. No multi-process lost-update protection, multi-file crash transaction or global exactly-once across snapshot rollback. File fsync is required; Windows directory sync remains best effort/unavailable. Existing permission-bit preservation does not promise custom Windows ACL/ownership/inode metadata preservation. Authorization and prerequisite references are trusted internal assertions, not public authentication or physical adjudication. Receipts grow O(committed operations) for the saved timeline lifetime; validation scans this character inventory/receipts, not the world. No player observation policy, natural-language inspection/removal, T06 completion, equipment/material inference, transfer or crafting. No full-suite, held-out generalization, live-model or gameplay-improvement claim.",
+  "changes": {
+    "production": [
+      "game/api.py",
+      "game/object_marking.py"
+    ],
+    "validation": [
+      "72 inspection/removal tests passed. Separate predecessor controls: 76 marking/atomic, 52 identity, 50 inventory/snapshot and 143 preservation passed before and after."
+    ],
+    "tooling": [
+      "Cycle-local provider-free runner, evidence assembly and archive verification."
+    ],
+    "documentation": [
+      "15 reports; NEXT_SESSION prepended with historical bytes preserved."
+    ],
+    "generated_artifacts": [
+      "Evidence and fresh standard review exports."
+    ]
+  },
+  "testing": {
+    "focused": "72 inspection/removal tests passed. Separate predecessor controls: 76 marking/atomic, 52 identity, 50 inventory/snapshot and 143 preservation passed before and after.",
+    "broader": "Combined before: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). After: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). New failures: []; newly passing: [].",
+    "full_suite": "Not run.",
+    "runtime_validation": "Real save/reload/S0-S1-S2 snapshots, atomic removal failure controls; twelve unchanged HTTP turns.",
+    "model_runtime_boundary": "Zero live provider calls; provider/network guards and runtime isolation.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_unknown_player_named_object_is_not_instantiated\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_narration_only_object_does_not_gain_authority\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_then_observe_uses_current_scene\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_alias_binds\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock\n- tests/test_referenced_surface_grounding_inspection_resolution.py::test_observe_stock_replacement_keeps_notice_board_working\n- tests/test_pr_play_39_action_admission.py::test_sequence_patrol_travel_reaches_the_movement_resolver\n- tests/test_pr_play_39_action_admission.py::test_sequence_unsupported_actions_invent_nothing\n- tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid\n- tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_whisper_does_not_create_one\n- tests/test_perception_narration_authority_audible_non_invention.py::test_http_empty_listen_complete_and_grounded\n- tests/test_perception_narration_authority_audible_non_invention.py::test_http_authorized_speech_can_survive\n- tests/test_pr_play_79df3_classification.py::test_duplicate_refusal_does_not_publish\n- tests/test_pr_play_79df3_classification.py::test_two_refusals_then_gameplay_advances\n- tests/test_pr_play_79df3_classification.py::test_save_reload_keeps_the_preceding_publication\n- tests/test_pr_play_79df3_classification.py::test_http_fallback_is_not_an_operational_refusal\n- tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context\n- tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop\n- tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload"
+  },
+  "decisions_requiring_human_review": [
+    "No additional authorization required; review bounded internal capability."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Single authoritative character inventory; single-process FIFO and persistence guard. No multi-process lost-update protection, multi-file crash transaction or global exactly-once across snapshot rollback. File fsync is required; Windows directory sync remains best effort/unavailable. Existing permission-bit preservation does not promise custom Windows ACL/ownership/inode metadata preservation. Authorization and prerequisite references are trusted internal assertions, not public authentication or physical adjudication. Receipts grow O(committed operations) for the saved timeline lifetime; validation scans this character inventory/receipts, not the world. No player observation policy, natural-language inspection/removal, T06 completion, equipment/material inference, transfer or crafting. No full-suite, held-out generalization, live-model or gameplay-improvement claim."
+    ],
+    "pre_existing": [
+      "Twenty established combined-selection failure identities; exact before/after traces retained."
+    ]
+  },
+  "missing_concepts": [
+    "Player observation disclosure/access policy and later gameplay integration remain deferred."
+  ],
+  "does_not_prove": [
+    "Public observation rights, T06 completion, physical erasing, broad gameplay generalization, full-suite or multi-process guarantees."
+  ],
+  "recommended_next_step": "Exactly one recommended next milestone: `pr_play_object_marking_disclosure_policy` \u2014 define and test the disclosure/access contract for a future player observation projection over internal marking inspection. Do not activate player routing or begin automatically.",
+  "self_contained_review_test": "Independent fresh ZIP reopen, CRC/member and all canonical/evidence hashes; internal timeline, failures, portability, regression, twelve-turn and handoff claims.",
+  "primary_report": "development/campaigns/product_realization/pr_play_object_marking_inspection/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/BASELINE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/IDEMPOTENCY_VERIFICATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/IMPLEMENTATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/INSPECTION_CONTRACT.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/INTEGRITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/NEGATIVE_CONTROLS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/NEXT_STEP_DECISION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/PERFORMANCE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/PERSISTENCE_VERIFICATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/REGRESSION_RESULTS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/REMOVAL_CONTRACT.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/RULESET_PORTABILITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/STATE_HISTORY_SEPARATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/SUMMARY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_inspection/TWELVE_TURN_COMPARISON.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "docs/state_authority_model.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "game/api.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "game/object_marking.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "game/object_instances.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "game/storage.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "tests/test_object_marking_inspection.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "tests/test_object_marking.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "tests/test_atomic_character_save.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "tests/test_object_instances.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "tests/helpers/storage_isolation.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "tests/pr_play_79df3_harness.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/entry_identity.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/entry_git_status.txt",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/entry_next_session.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/entry_current_review.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/source_changes.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/production.diff",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/milestone_identity.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/inspection_removal_timeline.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/idempotency_controls.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/performance.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/regression_results.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/twelve_turn_comparison.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/twelve_turn_state_evidence.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/final_git_status.txt",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/run_checks.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/finalize.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/seal_review.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_sequence.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_sequence.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/removal_failure_post_save.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/removal_failure_replace.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/removal_failure_save.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/removal_failure_sync.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/portability_pf1e@1.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/portability_rules_light@1.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/portability_scifi@1.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_combined_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_combined_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_combined.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_marking_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_marking_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_marking_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_marking.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_identity_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_identity_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_identity_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_identity.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_inventory_snapshot_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_inventory_snapshot_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_inventory_snapshot_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_inventory_snapshot.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_preservation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_preservation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_preservation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/before_preservation.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_combined_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_combined_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_combined.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_marking_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_marking_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_marking_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_marking.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_identity_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_identity_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_identity_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_identity.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_inventory_snapshot_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_inventory_snapshot_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_inventory_snapshot_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_inventory_snapshot.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_preservation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_preservation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_preservation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/after_preservation.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/final_inspection_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/final_inspection_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/final_inspection_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/final_inspection.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/bounded_performance_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/bounded_performance_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/bounded_performance_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/bounded_performance.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/entry_sources/game/api.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/entry_sources/game/object_marking.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/files_created.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_inspection/evidence_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Explicit bounded inspection/removal implementation, evidence or handoff provenance."
+    }
+  ]
+}

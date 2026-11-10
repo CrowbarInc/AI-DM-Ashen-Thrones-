@@ -1,0 +1,35 @@
+{
+  "provider_calls": 0,
+  "f3_after": {
+    "text": "I step back from the notice board.",
+    "operation": "retreat",
+    "simple_retreat": true,
+    "disabled_skip": "That part is not supported here. It was not carried out.",
+    "contract_operation": "unresolved",
+    "conversational": null,
+    "skip_reason": "unresolved_retreat_without_adjudication",
+    "primary_narration_eligible": false,
+    "http_call_gpt_entries": 0,
+    "turn_changed": false,
+    "position_kind_back": false,
+    "completed_gameplay_publication": false,
+    "publication_events": 0,
+    "pointer_unchanged": true
+  },
+  "routes": [
+    {"text": "I step back from the notice board.", "simple": true, "primary_eligible": false, "skip_reason": "unresolved_retreat_without_adjudication"},
+    {"text": "I back away from the notice board.", "simple": true, "primary_eligible": false, "skip_reason": "unresolved_retreat_without_adjudication"},
+    {"text": "I move back from the notice board.", "simple": true, "primary_eligible": false, "skip_reason": "unresolved_retreat_without_adjudication"},
+    {"text": "I step back.", "simple": true, "primary_eligible": false, "skip_reason": "unresolved_retreat_without_adjudication"},
+    {"text": "I step back to the tavern runner.", "simple": false, "primary_eligible": true, "skip_reason": null},
+    {"text": "I step back from the board and look around.", "simple": false, "primary_eligible": true, "skip_reason": null},
+    {"text": "They step back from the notice board.", "simple": false, "primary_eligible": true, "skip_reason": null},
+    {"text": "What if I step back from the notice board?", "simple": false, "primary_eligible": true, "conversational": "ANSWER", "skip_reason": null},
+    {"text": "I was thinking about stepping back from the notice board.", "simple": false, "primary_eligible": true, "conversational": "ANSWER", "skip_reason": null},
+    {"text": "Hello, Gate Guard.", "simple": false, "primary_eligible": true, "skip_reason": null},
+    {"text": "What can I see?", "simple": false, "primary_eligible": true, "conversational": "ANSWER", "skip_reason": null},
+    {"text": "I examine the notice board.", "simple": false, "primary_eligible": true, "skip_reason": null},
+    {"text": "I whistle at the clouds.", "simple": false, "primary_eligible": true, "skip_reason": null},
+    {"text": "The notice mentions stepping back from the road.", "simple": false, "primary_eligible": true, "skip_reason": null}
+  ]
+}

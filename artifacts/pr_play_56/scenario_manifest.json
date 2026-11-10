@@ -1,0 +1,52 @@
+{
+  "time": "2026-11-04T00:03:38.957021+00:00",
+  "selection_rule": "Existing deterministic investigations from the PR-PLAY-52 through PR-PLAY-53 fixtures. No new campaign facts.",
+  "request_plan": "Two generations for authorized discovery and incidental detail. One generation for the repeat search and the footprint paraphrase. Total planned live requests: 6, the existing hook ceiling.",
+  "scenarios": [
+    {
+      "id": "A",
+      "category": "authorized_discovery",
+      "scene_id": "frontier_gate",
+      "player_text": "I examine the notice board.",
+      "expected_outcome": "discover_clue success, clue text is the northwest mud track sentence",
+      "generations": 2,
+      "supports_category": true
+    },
+    {
+      "id": "B",
+      "category": "unsuccessful_investigation",
+      "scene_id": "frontier_gate",
+      "player_text": "I examine the notice board.",
+      "setup": "The same action is resolved once with the provider off, then repeated.",
+      "expected_outcome": "already_searched, success false, no new clue",
+      "generations": 1,
+      "supports_category": true,
+      "limitation": "These scenes have no authored skill-check failure. A dice failure would not be deterministic. The repeat search is the existing unsuccessful outcome."
+    },
+    {
+      "id": "C",
+      "category": "incidental_environmental_detail",
+      "scene_id": "frontier_gate",
+      "player_text": "I examine the rain barrel.",
+      "expected_outcome": "investigate success true, no discovered clue, status observed",
+      "generations": 2,
+      "supports_category": true
+    },
+    {
+      "id": "D",
+      "category": "authorized_paraphrase",
+      "scene_id": "old_milestone",
+      "player_text": "I examine the footprints.",
+      "expected_outcome": "discover_clue success, hedged print sentence appended by the engine",
+      "generations": 1,
+      "supports_category": true,
+      "limitation": "The live prompt tells the provider not to repeat the discovery. The engine appends the authorized sentence. A paraphrase inside the prelude is what this generation measures."
+    },
+    {
+      "id": "E",
+      "category": "ambiguous_discovery",
+      "supports_category": false,
+      "limitation": "No separate live fixture states a visible detail that the engine itself leaves ambiguous between scenery and a clue. The milestone prints are already the authorized discovery in scenario D. The PR-PLAY-55 ambiguous lines are authored sentences, not resolvable player actions. This category is not executed."
+    }
+  ]
+}

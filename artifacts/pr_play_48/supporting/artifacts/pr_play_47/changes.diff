@@ -1,0 +1,968 @@
+--- /dev/null
++++ game/controlled_investigation_renderer.py
+@@ -0,0 +1,220 @@
++"""Opt-in OFFLINE investigation presentation experiment, with no gameplay wiring.
++
++Only engine callers construct the authorized view. Selectors receive JSON copies
++and return enums, never prose, identifiers, or mutation proposals. The resulting
++artifact is deliberately not a GM response and has no legacy adoption fields.
++"""
++from __future__ import annotations
++
++from dataclasses import asdict, dataclass
++import json
++from typing import Protocol
++
++from game.authorized_information import revealed_information
++from game.mechanical_claims import mechanical_fallback
++from game.narration_authorization import project_narration_payload
++
++
++CONTROLS = {
++    'structure': ('action_first', 'evidence_first', 'setting_first'),
++    'pace': ('clipped', 'flowing', 'measured'),
++    'tone': ('spare', 'reflective', 'intent'),
++    'sensory_focus': ('none', 'visual', 'texture', 'listening'),
++    'detail': ('lean', 'standard', 'extended'),
++    'perspective': ('second_person', 'close_observation'),
++    'transition': ('direct', 'pause', 'question'),
++    'information_order': ('new_first', 'known_first'),
++}
++PLAN_SCHEMA = {
++    'type': 'object', 'additionalProperties': False,
++    'required': list(CONTROLS),
++    'properties': {key: {'type': 'string', 'enum': list(values)}
++                   for key, values in CONTROLS.items()},
++}
++DEFAULT_PLAN = {key: values[0] for key, values in CONTROLS.items()}
++MAX_PLAN_BYTES = 2048
++
++
++@dataclass(frozen=True)
++class AuthorizedInvestigation:
++    """Ephemeral read model, derived from the existing authority, not state.
++
++    Text slots are trusted engine projections. Never construct this type from a
++    selector response. Failure excludes stale resolution clues. Known clues must
++    come from the established player-knowledge projection, never a clue catalog.
++    """
++    status: str
++    success: bool | None
++    target_id: str | None
++    revealed: tuple[str, ...]
++    known: tuple[str, ...]
++    observations: tuple[str, ...]
++    consequences: str
++
++
++def _strings(rows):
++    return tuple(dict.fromkeys(x.strip() for x in rows
++                              if type(x) is str and x.strip()))
++
++
++def authorize_investigation(resolution: dict, narration_payload: dict) -> AuthorizedInvestigation:
++    """Engine-side adapter; no scene catalog, world, hints or private metadata escapes."""
++    if resolution.get('kind') not in {'investigate', 'observe', 'discover_clue', 'already_searched'}:
++        raise ValueError('Only resolved investigations are supported')
++    projected = project_narration_payload(narration_payload, resolution)
++    scene = projected['scene']
++    new = tuple(item['text'] for item in revealed_information(resolution))
++    known = _strings([row.get('text') for row in scene['discovered_clues']])
++    known = tuple(x for x in known if x not in new)
++    changes = resolution.get('state_changes') or {}
++    status = ('known' if resolution.get('kind') == 'already_searched' or changes.get('already_searched')
++              else 'failed' if resolution.get('success') is False
++              else 'discovered' if new else 'observed')
++    # Reuse the existing consequence adapter. Private NPC/faction updates are
++    # excluded by the existing projection. Disclosure has its own exact slot.
++    effects = dict(projected['authorized_mechanical_outcome'])
++    effects.pop('revealed', None)
++    unsupported = set(effects) - {
++        'items_added', 'items_removed', 'currency_gained', 'currency_spent',
++        'damage_taken', 'health_recovered', 'conditions_applied', 'conditions_removed',
++        'routes_unlocked', 'objectives_completed', 'time_advanced', 'destination'}
++    if unsupported:
++        raise ValueError('Unsupported investigation consequence')
++    # Effects remain engine text, with no second writable consequence store.
++    effect_resolution = {'kind': 'investigate', 'state_changes': effects}
++    if effects.get('destination'):
++        effect_resolution.update(resolved_transition=True, target_scene_id=effects['destination'])
++    consequences = mechanical_fallback(effect_resolution)
++    target = resolution.get('interactable_id') or resolution.get('action_id')
++    target = target if type(target) is str else None
++    success = resolution.get('success')
++    success = success if type(success) is bool else None
++    return AuthorizedInvestigation(status, success, target, new, known,
++        _strings(scene['public'].get('visible_facts') or []), consequences)
++
++
++class OfflinePlanSelector(Protocol):
++    def select(self, payload: dict) -> object:
++        """Return a JSON plan; offline implementations only for this experiment."""
++
++
++def selection_payload(view: AuthorizedInvestigation) -> dict:
++    # Round trip makes a detached, JSON-only request, with no engine references.
++    return json.loads(json.dumps({'authorized_investigation': asdict(view),
++                                'available_controls': PLAN_SCHEMA}))
++
++
++def validate_plan(raw: object) -> dict[str, str]:
++    if type(raw) is str:
++        if len(raw.encode('utf-8')) > MAX_PLAN_BYTES:
++            raise ValueError('plan_too_large')
++        def unique(pairs):
++            obj = {}
++            for key, value in pairs:
++                if key in obj: raise ValueError('duplicate_field')
++                obj[key] = value
++            return obj
++        raw = json.loads(raw, object_pairs_hook=unique)
++    if type(raw) is not dict or set(raw) != set(CONTROLS):
++        raise ValueError('exact_fields_required')
++    # Type checks precede membership: nested objects, booleans, lists and
++    # custom coercible objects never become narrative strings.
++    if any(type(raw[k]) is not str or raw[k] not in values for k, values in CONTROLS.items()):
++        raise ValueError('unsupported_control')
++    return dict(raw)
++
++
++def deterministic_fallback(view: AuthorizedInvestigation) -> str:
++    status = {
++        'discovered': 'You examine the evidence.',
++        'known': 'You examine the evidence again; nothing new is established.',
++        'failed': 'You inspect the target, but nothing new is established.',
++        'observed': 'You examine what is visible; no new clue is established.',
++    }[view.status]
++    return ' '.join(filter(None, (status, *view.revealed, *view.known,
++                                *view.observations, view.consequences)))
++
++
++def render_investigation(view: AuthorizedInvestigation, raw_plan: object) -> str:
++    p = validate_plan(raw_plan)  # Also enforce the boundary for direct callers.
++    opening = {
++        'second_person': {
++            'spare': 'You examine the evidence.',
++            'reflective': 'You take a closer look, letting the details settle into place.',
++            'intent': 'You narrow your attention to the evidence before you.',
++        },
++        'close_observation': {
++            'spare': 'A closer examination follows.',
++            'reflective': 'The examination moves from the whole to the smallest details.',
++            'intent': 'Each detail receives close attention.',
++        },
++    }[p['perspective']][p['tone']]
++    # These are approved, transient shifts of attention, not invented weather,
++    # objects, gestures by absent NPCs, discoveries, hazards, or persistent leads.
++    texture = {
++        'none': '', 'visual': 'Your gaze moves slowly across what is visible.',
++        'texture': 'You attend to surface and texture, as well as shape.',
++        'listening': 'You listen as you look, keeping your attention on the search.',
++    }[p['sensory_focus']]
++    transition = {'direct': '', 'pause': 'You pause over the details.',
++                  'question': 'What does the evidence actually establish?'}[p['transition']]
++    status = {
++        'discovered': '',
++        'known': 'The examination adds nothing new to what you already know.',
++        'failed': 'The attempt establishes nothing new.',
++        'observed': 'No new clue is established by this examination.',
++    }[view.status]
++    new = ' '.join(view.revealed)
++    known = ('Already established: ' + ' '.join(view.known)) if view.known else ''
++    facts = [new, known] if p['information_order'] == 'new_first' else [known, new]
++    # Detail only changes optional public observation and approved texture;
++    # discoveries, previous knowledge, status and consequences are mandatory.
++    count = {'lean': 0, 'standard': 1, 'extended': 2}[p['detail']]
++    setting = ' '.join(view.observations[:count])
++    action = ' '.join(filter(None, (opening, texture if count else '')))
++    if p['pace'] == 'flowing' and count and texture:
++        action = opening.rstrip('.') + '; ' + texture[0].lower() + texture[1:]
++    evidence = ' '.join(filter(None, (transition, *facts, status, view.consequences)))
++    blocks = {'action_first': [action, setting, evidence],
++              'evidence_first': [evidence, action, setting],
++              'setting_first': [setting, action, evidence]}[p['structure']]
++    blocks = [x for x in blocks if x]
++    # Source fact sentences remain intact; cadence operates only between blocks.
++    separator = {'clipped': ' ', 'flowing': ' ', 'measured': '\n\n'}[p['pace']]
++    return separator.join(blocks)
++
++
++@dataclass(frozen=True)
++class InvestigationPreview:
++    text: str
++    plan_json: str
++    diagnostic: str
++    used_fallback: bool
++
++    def to_json(self) -> str:
++        # Explicit surface: cannot serialize a selector's scene/world proposals
++        # into a legacy GM response or a metadata/context-adoption field.
++        return json.dumps({'preview_text': self.text, 'plan': json.loads(self.plan_json),
++                           'diagnostic': self.diagnostic, 'used_fallback': self.used_fallback})
++
++
++def preview_investigation(view: AuthorizedInvestigation, selector: OfflinePlanSelector,
++                         *, enabled: bool = False) -> InvestigationPreview:
++    """Explicitly opt in; return a review artifact, never a gameplay response.
++
++    Selectors are trusted offline code, with untrusted output. This is not a
++    sandbox for arbitrary Python providers. TimeoutError is simulated offline;
++    real timeout enforcement and live adapters are intentionally not implemented.
++    """
++    if enabled is not True:
++        raise ValueError('offline_prototype_not_enabled')
++    try:
++        plan = validate_plan(selector.select(selection_payload(view)))
++        text = render_investigation(view, plan)
++        return InvestigationPreview(text, json.dumps(plan), 'accepted', False)
++    except Exception as exc:
++        # Retain a safe diagnostic code, never arbitrary exception/provider prose.
++        diagnostic = ('plan_timeout' if isinstance(exc, TimeoutError) else
++                      'invalid_plan' if isinstance(exc, ValueError) else 'selection_or_render_error')
++        return InvestigationPreview(deterministic_fallback(view), json.dumps(DEFAULT_PLAN),
++                                    diagnostic, True)
+--- /dev/null
++++ tests/test_pr_play_47_controlled_renderer.py
+@@ -0,0 +1,393 @@
++"""Offline presentation experiment. All provider transports blocked by conftest."""
++import copy
++from dataclasses import asdict
++import inspect
++import json
++from pathlib import Path
++import statistics
++import time
++import tracemalloc
++
++import pytest
++
++from game import controlled_investigation_renderer as cr
++from game.authorized_information import revealed_information
++from game.api_turn_support import _authoritative_resolution_fact_text
++from game.defaults import default_character, default_session, default_world
++from game.exploration import resolve_exploration_action
++from game.immutable_valid_response import validate_generated_response
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT/'artifacts/pr_play_47'
++STYLES = {
++    'concise': dict(cr.DEFAULT_PLAN),
++    'atmospheric': {**cr.DEFAULT_PLAN, 'structure': 'setting_first', 'pace': 'flowing',
++        'tone': 'reflective', 'sensory_focus': 'visual', 'detail': 'extended',
++        'perspective': 'close_observation', 'transition': 'pause'},
++    'investigative': {**cr.DEFAULT_PLAN, 'structure': 'evidence_first', 'pace': 'measured',
++        'tone': 'intent', 'sensory_focus': 'texture', 'detail': 'standard',
++        'transition': 'question', 'information_order': 'known_first'},
++}
++SECRETS = ['CANARY_UNDISCOVERED', 'CANARY_GM_NOTE', 'CANARY_NPC_MOTIVE',
++           'CANARY_FACTION_ACTIVITY', 'CANARY_DESTINATION', 'CANARY_WORLD_STATE']
++
++
++def write(name, value):
++    OUT.mkdir(exist_ok=True)
++    (OUT/('evidence_'+name+'.json')).write_text(json.dumps(value, indent=2)+'\n', encoding='utf-8')
++
++
++class Stub:
++    def __init__(self, response): self.response, self.calls, self.payload = response, 0, None
++    def select(self, payload):
++        self.calls += 1
++        self.payload = copy.deepcopy(payload)
++        return copy.deepcopy(self.response)
++
++
++def payload(scene, known=()):
++    # Reuse GM's existing public-scene extraction, then the production disclosure
++    # projection inside the adapter. The clue catalog is deliberately supplied
++    # as a hostile convenience field, never as player knowledge.
++    from game.gm import _scene_layers
++    public, _, _ = _scene_layers(scene)
++    return {'scene': {'public': public, 'discovered_clues': [{'text': t} for t in known],
++                      'discoverable_clues': scene['scene'].get('discoverable_clues', [])},
++            'world': {'private': SECRETS[-1]}, 'metadata': {'gm_notes': SECRETS[1]}}
++
++
++def synthetic_scene(target, text=None):
++    return {'scene': {'id': 'unfamiliar_site', 'location': 'Unfamiliar Site',
++        'visible_facts': [('Loose fibres lie in plain view.' if target == 'fibres' else f'A {target} lies in plain view.'),
++                          'Light catches the uneven surface.'],
++        'summary': 'A quiet place for a closer look.',
++        'interactables': [{'id': target, 'label': target, 'type': 'investigate',
++                           **({'reveals_clue': 'selected'} if text else {})}],
++        'discoverable_clues': ([{'id': 'selected', 'text': text}] if text else []) +
++                             [{'id': 'hidden', 'text': SECRETS[0]}],
++        'hidden_facts': [SECRETS[4]], 'gm_notes': [SECRETS[1]],
++        'npcs': [{'hidden_motivation': SECRETS[2]}], 'hidden_faction': SECRETS[3],
++        'exits': []}}
++
++
++def resolve(scene, target, player=None):
++    session = default_session()
++    session['active_scene_id'] = scene['scene']['id']
++    return resolve_exploration_action(copy.deepcopy(scene), session, default_world(),
++        {'id': target, 'type': 'investigate', 'target_id': target,
++         'label': target, 'prompt': player or f'I examine the {target}.'},
++        raw_player_text=player or f'I examine the {target}.', character=default_character())
++
++
++def scenarios():
++    rows = []
++    for sid, target, player in [('frontier_gate', 'notice_board', 'I examine the notice board.'),
++                                ('old_milestone', 'prints', 'I examine the footprints.')]:
++        scene = json.loads((ROOT/f'data/scenes/{sid}.json').read_text(encoding='utf-8'))
++        rows.append({'id': sid, 'category': 'canonical', 'scene': scene,
++                     'resolution': resolve(scene, target, player), 'known': [], 'player': player})
++    cases = [
++        ('success', 'successful discovery', 'ledger', 'The ledger records twelve ingots arriving, but only nine entered stock.'),
++        ('partial', 'partial discovery', 'cipher', 'Only the first symbol can be read: a crescent. The rest remains illegible.'),
++        ('failed', 'failed investigation', 'seal', 'CANARY_UNDISCOVERED opening sequence'),
++        ('known', 'previously discovered clue', 'rubbing', 'The rubbing bears the mason\'s mark; its date is unknown.'),
++        ('uncertain', 'uncertain evidence', 'fibres', 'The fibres may be wool or flax; their source cannot be determined.'),
++        ('mundane', 'mundane observation', 'basin', None),
++        ('npc', 'NPC-related evidence', 'receipt', 'The receipt names porter Iven as the recipient, without explaining his involvement.'),
++        ('no_clue', 'no significant clue', 'tile', None),
++    ]
++    for sid, category, target, text in cases:
++        scene = synthetic_scene(target, text)
++        r = resolve(scene, target)
++        known = []
++        origin = 'actual exploration resolver on synthetic scene'
++        if sid == 'failed':
++            # The actual failed-check resolver is separately exercised below.
++            r = {**r, 'kind': 'investigate', 'success': False,
++                 'discovered_clues': [], 'clue_text': text,
++                 'state_changes': {'skill_check_failed': True}}
++            origin = 'explicit failed-check outcome fixture; actual failed resolver separately tested'
++        if sid == 'known':
++            known = [text]
++            r = {**r, 'kind': 'already_searched', 'success': False,
++                 'discovered_clues': [], 'state_changes': {'already_searched': True}}
++            origin = 'explicit repeat-search outcome fixture; actual repeat resolver separately tested'
++        rows.append({'id': sid, 'category': category, 'scene': scene, 'resolution': r,
++                     'known': known, 'origin': origin, 'player': f'I examine the {target}.'})
++    return rows
++
++
++@pytest.mark.parametrize('case', range(10))
++def test_matrix(case):
++    row = scenarios()[case]
++    original = copy.deepcopy(row)
++    view = cr.authorize_investigation(row['resolution'], payload(row['scene'], row['known']))
++    fact_text, fact_source = _authoritative_resolution_fact_text(resolution=row['resolution'], scene=row['scene'], world={})
++    from game.api import deterministic_provider_skip_line
++    from game.immutable_valid_response import safe_nonresolution
++    from game.resolution_contract import contract_mapping_from_resolution
++    selected = deterministic_provider_skip_line(resolution=row['resolution'], scene=row['scene'],
++        world={}, session=default_session(), player_text=row['player'])
++    if selected:
++        host, source = selected
++    elif fact_text:
++        host, source = fact_text, fact_source
++    else:
++        host = safe_nonresolution(contract_mapping_from_resolution(row['resolution']),
++                                 resolution=row['resolution'], player_text=row['player'])
++        source = 'existing safe_nonresolution; deterministic fallback comparison, not claimed provider skip'
++    variants = []
++    for style, plan in STYLES.items():
++        stub = Stub(plan)
++        artifact = cr.preview_investigation(view, stub, enabled=True)
++        assert not artifact.used_fallback
++        assert stub.calls == 1
++        assert all(text in artifact.text for text in view.revealed + view.known)
++        assert all(s not in artifact.to_json() + json.dumps(stub.payload) for s in SECRETS)
++        assert all(s not in artifact.to_json() + json.dumps(stub.payload)
++                   for s in row['scene']['scene'].get('hidden_facts', []))
++        audit = validate_generated_response(artifact.text, resolution=row['resolution'])
++        assert audit['hard_valid'], audit
++        assert cr.validate_plan(json.loads(artifact.to_json())['plan']) == plan
++        variants.append({'style': style, 'plan': plan, 'narration': artifact.text,
++                         'mechanical_validator': audit,
++                         'information_complete': all(x in artifact.text for x in view.revealed + view.known)})
++    assert len({v['narration'] for v in variants}) == 3
++    assert row == original
++    write('scenario_'+row['id'], {**row, 'authorized_view': asdict(view),
++        'hidden_information': SECRETS if row['category'] != 'canonical' else row['scene']['scene'].get('hidden_facts', []),
++        'selection_payload': stub.payload, 'host_speech': host, 'host_source': source,
++        'host_fact_emitter': {'text': fact_text, 'source': fact_source},
++        'variants': variants, 'state_unchanged': row == original})
++
++
++def test_canonical_resolver_clues():
++    notice, prints = scenarios()[:2]
++    assert notice['resolution']['success'] is True
++    assert notice['resolution']['clue_id'] == 'notice_patrol_route'
++    assert 'northwest mud track past the crates' in notice['resolution']['clue_text']
++    assert prints['resolution']['success'] is True
++    assert prints['resolution']['clue_id'] == 'milestone_mud_prints'
++    assert 'number, origin, and direction stay unclear' in prints['resolution']['clue_text']
++
++
++PROHIBITED = ('items_added', 'currency_gained', 'damage_taken', 'health_recovered',
++    'conditions_applied', 'destination', 'revealed', 'objectives_completed', 'npc_changes',
++    'scene_update', 'world_updates', 'remembered_contextual_leads', 'improvised_details')
++
++
++@pytest.mark.parametrize('field', PROHIBITED)
++@pytest.mark.parametrize('nested', [False, True])
++def test_no_proposal_capabilities(field, nested):
++    row = scenarios()[2]
++    view = cr.authorize_investigation(row['resolution'], payload(row['scene']))
++    before = copy.deepcopy((row, view))
++    bad = {**STYLES['atmospheric'], field: {'text': 'Your wealth has increased by fifty gold coins.'}}
++    if nested:
++        bad = {**cr.DEFAULT_PLAN, 'tone': {field: {'scene_update': {'summary': SECRETS[1]}}}}
++    stub = Stub(bad)
++    output = cr.preview_investigation(view, stub, enabled=True)
++    assert output.used_fallback and stub.calls == 1
++    assert row['resolution']['clue_text'] in output.text
++    assert field not in json.loads(output.to_json())
++    assert 'wealth' not in output.to_json() and 'CANARY_' not in output.to_json()
++    assert (row, view) == before
++    with pytest.raises(ValueError): cr.render_investigation(view, bad)
++    write('authority_'+field+('_nested' if nested else ''),
++          {'input': bad, 'output': json.loads(output.to_json()), 'state_unchanged': True, 'calls': stub.calls})
++
++
++INVALID = [None, {}, [], '', 'not json', '{', {'tone': 'spare'},
++    {**cr.DEFAULT_PLAN, 'detail': 'unlimited'}, {**cr.DEFAULT_PLAN, 'structure': 'CANARY_DESTINATION'},
++    {**cr.DEFAULT_PLAN, 'sensory_focus': ['visual']},
++    {**cr.DEFAULT_PLAN, 'detail': True}, {**cr.DEFAULT_PLAN, 'prose': 'Your wounds have healed.'},
++    ' '*2049, '{"tone":"spare","tone":"intent"}']
++
++
++@pytest.mark.parametrize('bad', INVALID)
++def test_invalid_plan_falls_back(bad):
++    row = scenarios()[0]
++    view = cr.authorize_investigation(row['resolution'], payload(row['scene']))
++    stub = Stub(bad)
++    out = cr.preview_investigation(view, stub, enabled=True)
++    assert out.used_fallback and stub.calls == 1
++    assert row['resolution']['clue_text'] in out.text
++    assert out.text == cr.deterministic_fallback(view)
++    write('invalid_'+str(INVALID.index(bad)), {'input': bad, 'output': json.loads(out.to_json()), 'calls': stub.calls})
++
++
++def test_json_plan_and_mutation_sinks_not_called(monkeypatch):
++    from game import api, storage
++    calls = []
++    def forbidden(*_a, **_kw):
++        calls.append(True)
++        raise AssertionError('A persistent adoption sink was reached')
++    for name in ('remember_recent_contextual_leads', 'promote_accepted_bounded_improvisation',
++                 '_validate_gm_scene_update_for_legacy_adoption',
++                 '_validate_gm_world_updates_for_legacy_adoption', 'apply_normalized_world_updates'):
++        monkeypatch.setattr(api, name, forbidden)
++    for name in ('save_session', 'save_world', 'save_character', 'save_scene'):
++        if hasattr(storage, name): monkeypatch.setattr(storage, name, forbidden)
++    row = scenarios()[0]
++    before = copy.deepcopy(row)
++    view = cr.authorize_investigation(row['resolution'], payload(row['scene']))
++    good = cr.preview_investigation(view, Stub(json.dumps(STYLES['atmospheric'])), enabled=True)
++    bad = cr.preview_investigation(view, Stub({**cr.DEFAULT_PLAN, 'world_updates': {'secret': SECRETS[5]}}), enabled=True)
++    assert not good.used_fallback and bad.used_fallback
++    assert calls == [] and row == before
++    assert set(json.loads(bad.to_json())) == {'preview_text', 'plan', 'diagnostic', 'used_fallback'}
++    write('mutation_sinks', {'calls': calls, 'state_unchanged': row == before,
++        'accepted': json.loads(good.to_json()), 'rejected': json.loads(bad.to_json()),
++        'scope': 'No preview is wired into the API; legacy sinks instrumented to fail if called.'})
++
++
++def test_empty_default_and_transport_failure(monkeypatch):
++    row = scenarios()[0]
++    view = cr.authorize_investigation(row['resolution'], payload(row['scene']))
++    stub = Stub(cr.DEFAULT_PLAN)
++    with pytest.raises(ValueError): cr.preview_investigation(view, stub)
++    assert stub.calls == 0
++    rows = []
++    for error in (TimeoutError, RuntimeError, type('CANARY_EXCEPTION_CLASS', (RuntimeError,), {})):
++        class Broken:
++            calls = 0
++            def select(self, _):
++                self.calls += 1
++                raise error('CANARY_PRIVATE_EXCEPTION')
++        broken = Broken()
++        out = cr.preview_investigation(view, broken, enabled=True)
++        assert out.used_fallback and broken.calls == 1
++        assert 'CANARY_' not in out.to_json()
++        rows.append({'failure': error.__name__, 'output': json.loads(out.to_json()), 'calls': broken.calls})
++    def fail(*_): raise RuntimeError('CANARY_RENDERER_EXCEPTION')
++    monkeypatch.setattr(cr, 'render_investigation', fail)
++    out = cr.preview_investigation(view, stub, enabled=True)
++    assert out.used_fallback and view.revealed[0] in out.text
++    rows.append({'failure': 'renderer_exception', 'output': json.loads(out.to_json()), 'calls': stub.calls})
++    write('exception_fallbacks', rows)
++
++
++def test_selector_detached_and_hidden_inputs_absent():
++    row = scenarios()[3]
++    original = copy.deepcopy(row)
++    view = cr.authorize_investigation(row['resolution'], payload(row['scene']))
++    class Mutating:
++        def select(self, context):
++            assert 'CANARY_' not in json.dumps(context)
++            context['authorized_investigation']['revealed'] = ['Your wounds have healed.']
++            return cr.DEFAULT_PLAN
++    out = cr.preview_investigation(view, Mutating(), enabled=True)
++    assert 'wounds' not in out.text and row == original
++    assert view.revealed[0] in out.text
++    # No hidden input even reaches the final renderer: only immutable view + enums.
++    assert 'CANARY_' not in json.dumps(asdict(view))
++    write('isolation', {'original_private_inputs': row, 'renderer_inputs': asdict(view),
++                        'output': json.loads(out.to_json()), 'state_unchanged': True})
++
++
++def test_actual_failed_and_repeat_resolvers(monkeypatch):
++    import game.exploration as exploration
++    scene = synthetic_scene('seal', 'CANARY_UNDISCOVERED opening sequence')
++    monkeypatch.setattr(exploration, 'should_trigger_check', lambda *_a, **_kw:
++                        {'requires_check': True, 'skill': 'investigation', 'difficulty': 18})
++    monkeypatch.setattr(exploration, 'resolve_skill_check', lambda *_a, **_kw:
++                        {'success': False, 'roll': 2, 'modifier': 0, 'total': 2, 'difficulty': 18})
++    failed = resolve(scene, 'seal')
++    assert failed['success'] is False
++    view = cr.authorize_investigation(failed, payload(scene))
++    assert view.revealed == () and view.status == 'failed'
++    assert 'CANARY_' not in cr.preview_investigation(view, Stub(STYLES['investigative']), enabled=True).to_json()
++    monkeypatch.setattr(exploration, 'should_trigger_check', lambda *_a, **_kw: {'requires_check': False})
++    scene = synthetic_scene('seal', 'The wax bears a crescent stamp.')
++    session = default_session()
++    session['active_scene_id'] = 'unfamiliar_site'
++    # Production runtime resolution marker, not a second knowledge store.
++    from game.storage import mark_interactable_resolved
++    mark_interactable_resolved(session, 'unfamiliar_site', 'seal')
++    repeated = resolve_exploration_action(scene, session, default_world(),
++        {'id': 'seal', 'type': 'investigate', 'target_id': 'seal', 'prompt': 'I examine the seal.'},
++        character=default_character())
++    assert repeated['kind'] == 'already_searched'
++    known_view = cr.authorize_investigation(repeated, payload(scene, ['The wax bears a crescent stamp.']))
++    assert known_view.status == 'known' and known_view.known
++    write('actual_failed_repeat', {'failed_resolution': failed, 'failed_view': asdict(view),
++                                  'repeat_resolution': repeated, 'repeat_view': asdict(known_view)})
++
++
++def test_trusted_effects_are_rendered_once():
++    row = scenarios()[2]
++    r = row['resolution']
++    r['state_changes']['damage_taken'] = 2
++    before = copy.deepcopy(r)
++    view = cr.authorize_investigation(r, payload(row['scene']))
++    for plan in STYLES.values():
++        out = cr.preview_investigation(view, Stub(plan), enabled=True)
++        assert out.text.count('You suffer 2 damage.') == 1
++        assert r == before
++    # A resolved transition, if supplied by the authoritative investigation
++    # result, remains an engine consequence rather than a selectable proposal.
++    transitioned = {**r, 'resolved_transition': True, 'target_scene_id': 'courtyard'}
++    moved_view = cr.authorize_investigation(transitioned, payload(row['scene']))
++    assert 'You arrive at courtyard.' in cr.deterministic_fallback(moved_view)
++    with pytest.raises(ValueError): cr.authorize_investigation({'kind': 'travel'}, {})
++
++
++def test_no_legacy_wiring_or_capabilities():
++    # Verify actual imports/references, not just a decorative permissions label.
++    source = inspect.getsource(cr)
++    import ast
++    module = ast.parse(source)
++    imports = [n.module for n in ast.walk(module) if isinstance(n, ast.ImportFrom)]
++    assert not set(imports) & {'game.storage', 'game.api', 'game.world', 'game.gm', 'game.contextual_leads'}
++    for path in (ROOT/'game').glob('*.py'):
++        if path.name != 'controlled_investigation_renderer.py':
++            assert 'controlled_investigation_renderer' not in path.read_text(encoding='utf-8')
++    artifact = cr.InvestigationPreview('text', json.dumps(cr.DEFAULT_PLAN), 'accepted', False)
++    serialized = json.loads(artifact.to_json())
++    assert set(serialized) == {'preview_text', 'plan', 'diagnostic', 'used_fallback'}
++    assert not set(serialized) & {'player_facing_text', 'metadata', 'scene_update', 'world_updates'}
++
++
++def test_ten_plan_stress_and_performance():
++    row = scenarios()[1]
++    view = cr.authorize_investigation(row['resolution'], payload(row['scene']))
++    plans = list(STYLES.values()) + [
++        {**STYLES['atmospheric'], 'structure': 'action_first', 'pace': 'measured'},
++        {**STYLES['investigative'], 'perspective': 'close_observation', 'tone': 'reflective'},
++        {**STYLES['concise'], 'perspective': 'close_observation', 'detail': 'lean'},
++        {**STYLES['atmospheric'], 'sensory_focus': 'listening', 'structure': 'evidence_first'},
++        {**STYLES['investigative'], 'sensory_focus': 'visual', 'structure': 'setting_first'},
++        {**STYLES['concise'], 'tone': 'intent', 'pace': 'measured', 'detail': 'extended'},
++        {**STYLES['atmospheric'], 'perspective': 'second_person', 'transition': 'question', 'tone': 'intent'},
++    ]
++    assert len({json.dumps(p, sort_keys=True) for p in plans}) == 10
++    outputs = [cr.render_investigation(view, p) for p in plans]
++    assert len(set(outputs)) == 10
++    assert all(view.revealed[0] in text for text in outputs)
++    assert all(validate_generated_response(text, resolution=row['resolution'])['hard_valid'] for text in outputs)
++    write('stress', [{'plan': p, 'narration': text} for p, text in zip(plans, outputs)])
++    def timing(fn):
++        samples = []
++        for _ in range(500):
++            start = time.perf_counter_ns(); fn(); samples.append((time.perf_counter_ns()-start)/1000)
++        return {'median_us': statistics.median(samples), 'p95_us': sorted(samples)[474], 'iterations': 500}
++    tracemalloc.start()
++    start_current, _ = tracemalloc.get_traced_memory()
++    for _ in range(100): cr.preview_investigation(view, Stub(plans[1]), enabled=True)
++    current, peak = tracemalloc.get_traced_memory()
++    tracemalloc.stop()
++    sizes = {'schema_bytes': len(json.dumps(cr.PLAN_SCHEMA).encode()),
++             'plan_bytes': len(json.dumps(plans[1]).encode()),
++             'authorized_context_bytes': len(json.dumps(asdict(view)).encode()),
++             'full_selection_payload_bytes': len(json.dumps(cr.selection_payload(view)).encode())}
++    write('performance', {**sizes,
++        'render': timing(lambda: cr.render_investigation(view, plans[1])),
++        'validate': timing(lambda: cr.validate_plan(plans[1])),
++        'fallback_end_to_end': timing(lambda: cr.preview_investigation(view, Stub({}), enabled=True)),
++        'preview_end_to_end': timing(lambda: cr.preview_investigation(view, Stub(plans[1]), enabled=True)),
++        'traced_peak_bytes': peak-start_current, 'traced_retained_bytes': current-start_current,
++        'estimated_input_tokens_bytes_div_4': sizes['full_selection_payload_bytes']/4,
++        'estimated_output_tokens_bytes_div_4': sizes['plan_bytes']/4,
++        'cost_method': 'Rough UTF-8 bytes/4 estimate; not measured tokenizer usage or live billing.',
++        'latency_method': 'Sequential local Python wall time, warm process; not a deployment guarantee.'})
++    write('schema', cr.PLAN_SCHEMA)
+--- /dev/null
++++ artifacts/pr_play_47/run_regression.py
+@@ -0,0 +1,68 @@
++"""Offline replay in a disposable copy; never overwrite predecessor evidence."""
++import os
++os.environ['ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT'] = '1'
++os.environ['ASHEN_DISABLE_LIVE_INTERPRETATION'] = '1'
++os.environ['ASHEN_DISABLE_EXPRESSION_GENERATION'] = '1'
++import hashlib
++import json
++from pathlib import Path
++import shutil
++import subprocess
++import sys
++
++ROOT = Path(__file__).resolve().parents[2]
++OUT = ROOT / 'artifacts/pr_play_47'
++WORK = ROOT / 'development/tmp/pr_play_47_workspace'
++
++def hashes(directory):
++    return {p.relative_to(directory).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
++            for p in directory.rglob('*') if p.is_file() and '__pycache__' not in p.parts}
++
++def main():
++    phase = sys.argv[1]
++    if phase == 'baseline' and not WORK.exists():
++        OUT.mkdir(exist_ok=True)
++        (OUT/'data_before.json').write_text(json.dumps(hashes(ROOT/'data'), indent=2))
++        predecessor = OUT/'predecessor'
++        predecessor.mkdir(exist_ok=True)
++        for name in ('CURRENT_REVIEW.md', 'CURRENT_REVIEW.zip'):
++            shutil.copy2(ROOT/'handoff'/name, predecessor/name)
++        for name in ('game', 'tests', 'data', 'static', 'tools'):
++            shutil.copytree(ROOT/name, WORK/name, ignore=shutil.ignore_patterns('__pycache__'))
++        for name in ('pytest.ini', 'requirements.txt'):
++            shutil.copy2(ROOT/name, WORK/name)
++        # Existing tests read these saved fixtures and write their own evidence.
++        for name in ('pr_play_44', 'pr_play_45', 'pr_play_46', 'atgb/pr_play_43'):
++            shutil.copytree(ROOT/'artifacts'/name, WORK/'artifacts'/name)
++        for p in (ROOT/'artifacts').iterdir():
++            if p.is_dir(): (WORK/'artifacts'/p.name).mkdir(exist_ok=True)
++    elif phase != 'baseline':
++        shutil.copy2(ROOT/'game/controlled_investigation_renderer.py', WORK/'game/controlled_investigation_renderer.py')
++        shutil.copy2(ROOT/'tests/test_pr_play_47_controlled_renderer.py', WORK/'tests/test_pr_play_47_controlled_renderer.py')
++        shutil.copytree(OUT, WORK/'artifacts/pr_play_47', dirs_exist_ok=True,
++                        ignore=shutil.ignore_patterns('predecessor', 'source_after'))
++    for p in ROOT.iterdir():
++        if p.is_file() and p.suffix in {'.json', '.md'}: shutil.copy2(p, WORK/p.name)
++    (WORK/'development/tmp').mkdir(parents=True, exist_ok=True)
++    for name in ('atgb/pr_play_35', 'atgb/pr_play_38', 'atgb/pr_play_41', 'atgb/atgb_r2_01',
++                 'pr_bv_turn_operation_projection_micro_live', 'pr_co_gameplay_viability',
++                 'pr_cq_live_finalization', 'pr_bt_selective_epistemic_restoration_final_micro_live'):
++        if not (WORK/'artifacts'/name).exists() or not any((WORK/'artifacts'/name).iterdir()):
++            shutil.copytree(ROOT/'artifacts'/name, WORK/'artifacts'/name, dirs_exist_ok=True)
++    args0 = json.loads((ROOT/'artifacts/pr_play_46/final_command.json').read_text())
++    suites = [a for a in args0 if a.startswith('tests/')]
++    if phase != 'baseline': suites.append('tests/test_pr_play_47_controlled_renderer.py')
++    args = [sys.executable, '-m', 'pytest', *suites, '--tb=short',
++            '--basetemp=development/tmp/pr_play_47_'+phase,
++            '--junitxml='+str(OUT/(phase+'.xml'))]
++    (OUT/(phase+'_command.json')).write_text(json.dumps(args, indent=2))
++    with (OUT/(phase+'.txt')).open('w', encoding='utf-8') as log:
++        run = subprocess.run(args, cwd=WORK, stdout=log, stderr=subprocess.STDOUT)
++    print((OUT/(phase+'.txt')).read_text(encoding='utf-8')[-2800:])
++    print('Exit:', run.returncode)
++    if phase != 'baseline':
++        for p in (WORK/'artifacts/pr_play_47').glob('*.json'):
++            if p.name.startswith('evidence_'): shutil.copy2(p, OUT/p.name)
++    return run.returncode
++
++if __name__ == '__main__': sys.exit(main())
+--- /dev/null
++++ artifacts/pr_play_47/evaluate.py
+@@ -0,0 +1,120 @@
++"""Aggregate measured evidence and explicit provisional editorial judgments.
++
++Scores below are the implementing agent's review of the complete responses,
++not a live model judge, automated prose metric, blinded review, or player study.
++"""
++from pathlib import Path
++import json
++import statistics
++
++OUT = Path(__file__).resolve().parent
++CATEGORIES = ['information_completeness', 'mechanical_consistency', 'naturalness',
++              'expressive_range', 'atmosphere', 'investigative_clarity', 'repetition', 'cohesion']
++RUBRIC = {
++    'information_completeness': ['Omits the result', 'Partial result or missing relevant known information', 'Result and relevant information complete'],
++    'mechanical_consistency': ['Contradicts outcome', 'Ambiguous agreement', 'Agrees without extra consequences'],
++    'naturalness': ['Fragmented or incoherent', 'Readable but formulaic or awkward', 'Fluent and economical'],
++    'expressive_range': ['No selectable presentation variation', 'Limited compositional variation', 'Broad, outcome-appropriate variation'],
++    'atmosphere': ['Absent or distracting', 'Some useful mood or sensory attention', 'Specific and well integrated'],
++    'investigative_clarity': ['Result/uncertainty unclear', 'Some ambiguity or weak focus', 'Actionable result and limits clear'],
++    'repetition': ['Conspicuous repeated wording/structure across corpus', 'Some repeated scaffolding', 'Little distracting repetition'],
++    'cohesion': ['Disconnected fragments', 'Understandable but loosely joined', 'Details and outcome form a unified response'],
++}
++
++
++def dump(name, value):
++    (OUT/name).write_text(json.dumps(value, indent=2)+'\n', encoding='utf-8')
++
++
++def main():
++    scored = []
++    matrix = []
++    for path in sorted(OUT.glob('evidence_scenario_*.json')):
++        row = json.loads(path.read_text(encoding='utf-8'))
++        sid = row['id']
++        # A/B correctness are separate from the six prose-related dimensions.
++        # The same rubric applies to the host emitter/fallback and every variant.
++        host = [2, 2, 1, 0, 0, 2, 1, 2]
++        host_note = 'Exact clue delivered clearly; missing article in target phrase; economical but fixed scaffolding.'
++        if sid == 'failed':
++            host = [2, 2, 2, 0, 0, 2, 1, 2]
++            host_note = 'Clear, fluent failed-result sentence; no atmosphere or selectable presentation.'
++        elif sid == 'known':
++            host = [1, 2, 2, 0, 0, 1, 1, 2]
++            host_note = 'Clearly adds nothing new, but does not restate available prior knowledge.'
++        elif sid in ('mundane', 'no_clue'):
++            host = [0, 2, 0, 0, 0, 0, 1, 0]
++            host_note = 'Actual visible-surface emitter returns only the target label. Weak baseline; do not generalize improvement from this artifact.'
++        responses = [('host', row['host_speech'], host, host_note)]
++        for v in row['variants']:
++            if v['style'] == 'concise':
++                scores = [2, 2, 2, 1, 0, 2, 0, 2]
++                note = 'Readable and complete; generic evidence opener repeated throughout corpus; no specific atmosphere.'
++                if sid == 'known':
++                    scores = [2, 2, 1, 1, 0, 2, 0, 1]
++                    note = 'Prior clue preserved, but the Already established label and repeated examination framing feel assembled.'
++            elif v['style'] == 'atmospheric':
++                scores = [2, 2, 1, 1, 1, 2, 0, 1]
++                note = 'Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic.'
++                if sid == 'old_milestone':
++                    scores[4] = 2
++                    note += ' Existing milestone/mud observations provide useful, specific investigative mood.'
++            else:
++                scores = [2, 2, 1, 1, 1, 2, 0, 1]
++                note = 'Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion.'
++            responses.append((v['style'], v['narration'], scores, note))
++        for style, text, scores, note in responses:
++            scored.append({'scenario': sid, 'style': style, 'text': text,
++                'scores': dict(zip(CATEGORIES, scores)), 'total_of_16': sum(scores),
++                'mechanical_of_2': scores[1], 'information_of_2': scores[0],
++                'narrative_of_12': sum(scores[2:]), 'editorial_reason': note})
++        matrix.append({'scenario': sid, 'category': row['category'],
++            'resolution_kind': row['resolution']['kind'], 'success': row['resolution'].get('success'),
++            'origin': row.get('origin', 'actual resolver on unmodified campaign scene'),
++            'clues': row['authorized_view']['revealed'], 'known': row['authorized_view']['known'],
++            'variants': len(row['variants']), 'complete_variants': sum(v['information_complete'] for v in row['variants']),
++            'valid_variants': sum(v['mechanical_validator']['hard_valid'] for v in row['variants']),
++            'state_unchanged': row['state_unchanged']})
++    means = {}
++    for style in ('host', 'concise', 'atmospheric', 'investigative'):
++        rows = [r for r in scored if r['style'] == style]
++        means[style] = {key: statistics.mean(r[key] for r in rows)
++                       for key in ('total_of_16', 'mechanical_of_2', 'information_of_2', 'narrative_of_12')}
++        canonical = [r for r in rows if r['scenario'] in ('frontier_gate', 'old_milestone')]
++        means[style]['canonical_narrative_of_12'] = statistics.mean(r['narrative_of_12'] for r in canonical)
++    dump('quality_comparison.json', {'provisional': True,
++        'assessor': 'Implementing agent, unblinded editorial review; scores are judgments, not measured player preference.',
++        'rubric': RUBRIC, 'category_order': CATEGORIES, 'responses': scored, 'means': means,
++        'limitations': ['Only ten fixed outcomes; eight synthetic', 'No live-model creativity measured',
++            'Weak one-word mundane host baselines inflate aggregate improvement',
++            'Expressive range scored as family capability; repetition judged across corpus',
++            'No blinded independent review or player experience measurements']})
++    dump('scenario_matrix.json', matrix)
++    lines = ['# Full narrative comparison', '',
++        'Provisional, unblinded implementing-agent editorial judgments. A/B correctness is reported separately from C-H prose quality.', '',
++        'Scores: A information, B mechanics, C naturalness, D range, E atmosphere, F clarity, G repetition, H cohesion; each 0-2.', '']
++    for r in scored:
++        lines += [f"## {r['scenario']} / {r['style']}", '', r['text'], '',
++                  'Scores A-H: '+', '.join(str(r['scores'][k]) for k in CATEGORIES)+
++                  f". Total {r['total_of_16']}/16; prose {r['narrative_of_12']}/12.", '', r['editorial_reason'], '']
++    (OUT/'NARRATIVE_COMPARISON.md').write_text('\n'.join(lines), encoding='utf-8')
++    stress = json.loads((OUT/'evidence_stress.json').read_text())
++    repeated = {phrase: sum(phrase in r['narration'] for r in stress) for phrase in
++                ('evidence', 'examination', 'Your gaze moves slowly', 'What does the evidence actually establish?', 'You pause over the details.')}
++    dump('expressive_range.json', {'valid_plans': len(stress), 'unique_texts': len({r['narration'] for r in stress}),
++        'block_order_families': len({r['plan']['structure'] for r in stress}),
++        'cadences': sorted({r['plan']['pace'] for r in stress}),
++        'sensory_attention_modes': sorted({r['plan']['sensory_focus'] for r in stress}),
++        'word_count_range': [min(len(r['narration'].split()) for r in stress), max(len(r['narration'].split()) for r in stress)],
++        'repeated_phrase_output_counts': repeated,
++        'assessment': {'structure': 'Three recognizable block permutations, not ten independent narrative structures.',
++            'sentence_variety': 'Finite engine openings plus optional semicolon join; source clue sentence never changes.',
++            'ordering': 'Result-first versus context-first is meaningful; known/new order is inert in this fixed result with no prior clue.',
++            'pacing': 'Lean versus extended blocks and paragraph pauses vary reading pace; long generic attention clauses can drag.',
++            'sensory': 'Attention to sight, texture or listening is bounded and subjective; no invented physical atmosphere.',
++            'repetition': 'High recurrence of evidence/examination and the exact source clue; textual uniqueness overstates range.',
++            'readability': 'Readable throughout, but rhetorical framing and generic joins are recognizably assembled.'},
++        'verdict': 'Limited expressive range; insufficient evidence of worthwhile broad narrative improvement.'})
++    print(json.dumps(means, indent=2))
++
++if __name__ == '__main__': main()
+--- /dev/null
++++ artifacts/pr_play_47/package_review.py
+@@ -0,0 +1,152 @@
++"""Package the completed offline review; verify state, sources and archive hashes."""
++from datetime import datetime, timedelta, timezone
++import difflib
++import hashlib
++import json
++from pathlib import Path
++import shutil
++import xml.etree.ElementTree as ET
++import zipfile
++
++from run_regression import ROOT, OUT, WORK, hashes
++
++SOURCES = ['game/controlled_investigation_renderer.py',
++           'tests/test_pr_play_47_controlled_renderer.py',
++           'artifacts/pr_play_47/run_regression.py', 'artifacts/pr_play_47/evaluate.py',
++           'artifacts/pr_play_47/package_review.py']
++
++
++def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++def dump(name, data):
++    (OUT/name).write_text(json.dumps(data, indent=2)+'\n', encoding='utf-8')
++
++
++def results(name):
++    return {c.attrib['classname']+'::'+c.attrib['name']:
++            'failed' if c.find('failure') is not None else
++            'error' if c.find('error') is not None else
++            'skipped' if c.find('skipped') is not None else 'passed'
++            for c in ET.parse(OUT/name).iter('testcase')}
++
++
++def main():
++    before, after = results('baseline.xml'), results('final.xml')
++    def counts(rows):
++        return {'collected': len(rows), **{s: list(rows.values()).count(s)
++                for s in ('passed', 'failed', 'error', 'skipped')}}
++    regressions = [k for k in before if before[k] != after.get(k)]
++    new = {k:v for k,v in after.items() if k not in before}
++    comparison = {'baseline': counts(before), 'final': counts(after),
++        'changed_existing_results': regressions, 'new_regressions': [k for k in regressions if before[k]=='passed'],
++        'preexisting_failures': [k for k,v in before.items() if v=='failed'],
++        'final_failures': [k for k,v in after.items() if v=='failed'], 'new_tests': new}
++    dump('regression_comparison.json', comparison)
++    assert not regressions and len(new) == 58 and set(new.values()) == {'passed'}
++    assert counts(before) == {'collected':640, 'passed':617, 'failed':23, 'error':0, 'skipped':0}
++    old_data = json.loads((OUT/'data_before.json').read_text())
++    current_data = hashes(ROOT/'data')
++    integrity = {'unchanged': old_data == current_data, 'before_count': len(old_data),
++        'after_count': len(current_data), 'changed': [k for k in old_data if old_data[k] != current_data.get(k)],
++        'added': sorted(set(current_data)-set(old_data)), 'after_hashes': current_data,
++        'method': 'SHA256 of every data file before task execution and after regression verification; Python caches excluded.'}
++    dump('user_campaign_integrity.json', integrity)
++    assert integrity['unchanged']
++    source_integrity = {}
++    for dirname in ('game', 'tests'):
++        original, isolated = hashes(ROOT/dirname), hashes(WORK/dirname)
++        excluded = {'controlled_investigation_renderer.py', 'test_pr_play_47_controlled_renderer.py'}
++        differences = [k for k,v in original.items() if k not in excluded and isolated.get(k) != v]
++        source_integrity[dirname] = {'existing_files_compared': len(set(original)-excluded),
++                                    'differences': differences}
++        assert not differences
++    dump('existing_source_integrity.json', source_integrity)
++    dump('state_integrity.json', {'campaign_data_unchanged': True,
++        'existing_source_unchanged': True,
++        'tests': {k:v for k,v in new.items() if any(s in k for s in ('matrix','proposal','mutation','detached','effects','fallback'))},
++        'scope': 'Read-only preview. Legacy update sinks instrumented but no production integration is implemented.'})
++    dump('provider_usage.json', {'real_provider_requests':0, 'real_provider_tokens':0,
++        'live_gameplay_experiments':0, 'provider_retries':0,
++        'preflight_skip_before_imports':True, 'model_changes':False, 'budget_increases':False,
++        'transport_guard':'tests/conftest.py and tests/helpers/live_model_guard.py',
++        'mode':'Deterministic offline selectors only; no live adapter', 'github_pushes':0})
++    baseline = OUT/'baseline_46'; baseline.mkdir(exist_ok=True)
++    for name in ('PR_PLAY_46_REPORT.md','BASELINE.md','metrics.json','corpus.json',
++                 'corpus_before.json','corpus_after.json','residual_failures.json','regression_comparison.json'):
++        shutil.copy2(ROOT/'artifacts/pr_play_46'/name, baseline/name)
++    shutil.copy2(ROOT/'tests/helpers/live_model_guard.py', OUT/'live_model_guard.py')
++    changes = {}; diff = []
++    for name in SOURCES:
++        path = ROOT/name
++        snapshot = OUT/'source_after'/name
++        snapshot.parent.mkdir(parents=True, exist_ok=True)
++        shutil.copy2(path, snapshot)
++        changes[name] = {'change':'new file', 'before_sha256':None, 'after_sha256':sha(path),
++                         'bytes':path.stat().st_size, 'lines':len(path.read_text(encoding='utf-8').splitlines())}
++        diff.extend(difflib.unified_diff([], path.read_text(encoding='utf-8').splitlines(True),
++                                        fromfile='/dev/null', tofile=name))
++    dump('source_change_manifest.json', changes)
++    (OUT/'changes.diff').write_text(''.join(diff), encoding='utf-8')
++    # Refresh report timings from the final measured run, retaining noisy tails.
++    perf = json.loads((OUT/'evidence_performance.json').read_text())
++    report = (OUT/'PR_PLAY_47_REPORT.md').read_text(encoding='utf-8')
++    import re
++    replacements = {
++        'Validation median / p95': f"{perf['validate']['median_us']} / {perf['validate']['p95_us']} microseconds",
++        'Rendering including validation median / p95': f"{perf['render']['median_us']} / {perf['render']['p95_us']} microseconds",
++        'Fallback including selection-payload/stub overhead median / p95': f"{perf['fallback_end_to_end']['median_us']} microseconds / {perf['fallback_end_to_end']['p95_us']/1000} ms",
++        'Accepted preview median / p95': f"{perf['preview_end_to_end']['median_us']} microseconds / {perf['preview_end_to_end']['p95_us']/1000} ms",
++        'Traced allocation peak / retained after 100 calls': f"{perf['traced_peak_bytes']:,} / {perf['traced_retained_bytes']:,} bytes",
++    }
++    for key, value in replacements.items():
++        report = re.sub(r'\| '+re.escape(key)+r' \|[^\n]*', '| '+key+' | '+value+' |', report)
++    (OUT/'PR_PLAY_47_REPORT.md').write_text(report, encoding='utf-8')
++    quality = json.loads((OUT/'quality_comparison.json').read_text())
++    dump('summary.json', {'verdict':'B — PARTIAL', 'new_tests':len(new),
++        'regression_counts':comparison['final'], 'new_regressions':[], 'provider_requests':0,
++        'campaign_data_unchanged':True, 'matrix_cases':10, 'synthetic_scenarios':8,
++        'matrix_renderings':30, 'stress_renderings':10, 'quality_means':quality['means'],
++        'next_step':'Further bounded offline quality evaluation; defer live-provider trial.',
++        'limitation':'Three recognizable structural families; no evidence of live creativity or player preference.'})
++    now = datetime.now(timezone(timedelta(hours=-5)))
++    archive = ROOT/'handoff'/f'CURRENT_REVIEW({now:%Y%m%d-%H%M%S}).zip'
++    (OUT/'archive_path.txt').write_text(str(archive)+'\n', encoding='utf-8')
++    excluded = {'MANIFEST.json', 'archive_verification.json', 'credential_scan.json'}
++    included = [p for p in OUT.rglob('*') if p.is_file() and '__pycache__' not in p.parts
++                and 'predecessor' not in p.parts and p.name not in excluded]
++    # Only inspect environment values for matches; never emit credential data.
++    from dotenv import dotenv_values
++    import os
++    env = {**dotenv_values(ROOT/'.env'), **os.environ}
++    credentials = [v.encode() for k,v in env.items() if isinstance(v,str) and len(v)>8 and
++                   any(s in k.lower() for s in ('key','token','secret','password','credential'))]
++    hits = [p.relative_to(OUT).as_posix() for p in included if any(v in p.read_bytes() for v in credentials)]
++    dump('credential_scan.json', {'files_scanned':len(included), 'credential_hits':hits, 'passed':not hits})
++    assert not hits, 'Credential match; archive creation stopped'
++    included.append(OUT/'credential_scan.json')
++    dump('MANIFEST.json', {p.relative_to(OUT).as_posix(): {'sha256':sha(p), 'bytes':p.stat().st_size} for p in included})
++    included.append(OUT/'MANIFEST.json')
++    with zipfile.ZipFile(archive, 'x', zipfile.ZIP_DEFLATED) as z:
++        for p in included: z.write(p, p.relative_to(OUT).as_posix())
++        z.writestr('CURRENT_REVIEW.md', report)
++    with zipfile.ZipFile(archive) as z:
++        assert z.testzip() is None
++        manifest = json.loads(z.read('MANIFEST.json'))
++        assert all(hashlib.sha256(z.read(k)).hexdigest() == v['sha256'] for k,v in manifest.items())
++    # Windows may memory-map the current ZIP in a preview. Replace the directory
++    # entry atomically rather than truncating the mapped destination in place.
++    pending = ROOT/'handoff/CURRENT_REVIEW_PR_PLAY_47_pending.zip'
++    shutil.copy2(archive, pending)
++    pending.replace(ROOT/'handoff/CURRENT_REVIEW.zip')
++    pending_report = ROOT/'handoff/CURRENT_REVIEW_PR_PLAY_47_pending.md'
++    pending_report.write_text(report, encoding='utf-8')
++    pending_report.replace(ROOT/'handoff/CURRENT_REVIEW.md')
++    dump('archive_verification.json', {'path':str(archive), 'sha256':sha(archive),
++        'stable_archive_matches':sha(archive)==sha(ROOT/'handoff/CURRENT_REVIEW.zip'),
++        'zip_integrity_verified':True, 'manifest_hashes_verified':True,
++        'files':len(included)+1, 'bytes':archive.stat().st_size})
++    print(json.dumps({'archive':str(archive), 'bytes':archive.stat().st_size,
++                      'campaign_files_unchanged':len(current_data), 'regressions':comparison['final']}, indent=2))
++
++if __name__ == '__main__': main()

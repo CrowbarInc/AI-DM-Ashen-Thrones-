@@ -1,0 +1,5 @@
+# PUBLICATION HTTP 500
+
+Exact tests.test_pr_play_66_publication::test_publication_http[rejected] passed on the first isolated attempt and in the broad focused regression; it did not naturally reproduce this cycle. PR70 retained WinError 5 on atomic session replacement. This cycle independently reproduced that persistence class in frozen H32 (/api/new_campaign, session_log.jsonl replacement) and H35 (/api/chat, session.json replacement). Complete server tracebacks are in holdout_run.txt. This is real lifecycle impact, not harmless fixture noise; which Windows reader denied replacement is unknown.
+
+Final repair stays in storage._atomic_write_bytes: same temp file, at most four rename attempts, only PermissionError.winerror==5, delays 10/30/90 ms, no turn/provider replay. Other errors and exhausted locks propagate to safe HTTP failure. A failed New Campaign additionally restores changed prior runtime bytes. Fault-injected rejected publication checks one committed turn, exact mandatory disclosure and no rejected prose. post_holdout_repair.* records verification. This does not prove all possible causes of HTTP 500 are fixed.

@@ -1,0 +1,454 @@
+[
+  {
+    "action": "I examine the notice board.",
+    "original_ai_text": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+    "authoritative_outcome": {
+      "player_action": "I examine the notice board.",
+      "resolved_outcome": {
+        "status": "discovered",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": []
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+      ]
+    },
+    "trusted_disclosure": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "extracted_claims": [],
+    "legacy_claims": [
+      {
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "kind": "incidental_fact",
+        "epistemic_status": "world_truth",
+        "grounded": false,
+        "consequential": false,
+        "family": "incidental"
+      }
+    ],
+    "validation": {
+      "decision": "REVIEW_REQUIRED",
+      "semantic": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "legacy": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [
+          {
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "kind": "incidental_fact",
+            "epistemic_status": "world_truth",
+            "grounded": false,
+            "consequential": false,
+            "family": "incidental"
+          }
+        ],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        },
+        "consequential_validation": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        }
+      },
+      "coverage": {
+        "decision": "PASS",
+        "facts": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "decision": "PASS",
+            "classification": "covered",
+            "evidence": "the missing patrol was last seen taking the northwest mud track past the crates.",
+            "relation": {
+              "subject": "missing patrol",
+              "path": "northwest mud track",
+              "landmark": "crates"
+            }
+          }
+        ],
+        "scope": "bounded_deterministic_coverage_not_semantic_proof"
+      },
+      "composition_reason": "optional_disclosure_overlap"
+    },
+    "category": "B: correct duplicate-content rejection",
+    "duplicated": true,
+    "contradicted": false,
+    "unsupported_consequences": false,
+    "hidden_information": false,
+    "wholly_harmless_atmosphere": false,
+    "safely_publishable_whole_under_new_contract": false,
+    "explanation": "Candidate repeats the current engine-owned discovery or status verbatim. Its opening can be safe, but the whole optional segment should still be omitted. No evidence of a safety false rejection here."
+  },
+  {
+    "action": "I examine the rain barrel.",
+    "original_ai_text": "You examine the rain barrel. No new clue is established by this examination.",
+    "authoritative_outcome": {
+      "player_action": "I examine the rain barrel.",
+      "resolved_outcome": {
+        "status": "observed",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:status",
+          "source": "engine_status",
+          "status": "observed",
+          "text": "No new clue is established by this examination."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ]
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+      ]
+    },
+    "trusted_disclosure": "No new clue is established by this examination.",
+    "extracted_claims": [],
+    "legacy_claims": [
+      {
+        "text": "You examine the rain barrel.",
+        "kind": "incidental_fact",
+        "epistemic_status": "world_truth",
+        "grounded": false,
+        "consequential": false,
+        "family": "incidental"
+      }
+    ],
+    "validation": {
+      "decision": "REVIEW_REQUIRED",
+      "semantic": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "legacy": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [
+          {
+            "text": "You examine the rain barrel.",
+            "kind": "incidental_fact",
+            "epistemic_status": "world_truth",
+            "grounded": false,
+            "consequential": false,
+            "family": "incidental"
+          }
+        ],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        },
+        "consequential_validation": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        }
+      },
+      "coverage": {
+        "decision": "PASS",
+        "facts": [
+          {
+            "id": "outcome:status",
+            "source": "engine_status",
+            "status": "observed",
+            "text": "No new clue is established by this examination.",
+            "decision": "PASS",
+            "classification": "covered",
+            "evidence": "No new clue is established by this examination."
+          }
+        ],
+        "scope": "bounded_deterministic_coverage_not_semantic_proof"
+      },
+      "composition_reason": "optional_disclosure_overlap"
+    },
+    "category": "B: correct duplicate-content rejection",
+    "duplicated": true,
+    "contradicted": false,
+    "unsupported_consequences": false,
+    "hidden_information": false,
+    "wholly_harmless_atmosphere": false,
+    "safely_publishable_whole_under_new_contract": false,
+    "explanation": "Candidate repeats the current engine-owned discovery or status verbatim. Its opening can be safe, but the whole optional segment should still be omitted. No evidence of a safety false rejection here."
+  },
+  {
+    "action": "I examine the notice board again.",
+    "original_ai_text": "You examine the notice board again. The examination adds nothing new to what you already know.",
+    "authoritative_outcome": {
+      "player_action": "I examine the notice board again.",
+      "resolved_outcome": {
+        "status": "known",
+        "success": false
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "engine_status",
+          "status": "known",
+          "text": "The examination adds nothing new to what you already know."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ]
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+      ]
+    },
+    "trusted_disclosure": "The examination adds nothing new to what you already know.",
+    "extracted_claims": [],
+    "legacy_claims": [],
+    "validation": {
+      "decision": "REVIEW_REQUIRED",
+      "semantic": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "legacy": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        },
+        "consequential_validation": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        }
+      },
+      "coverage": {
+        "decision": "PASS",
+        "facts": [
+          {
+            "id": "outcome:0",
+            "source": "engine_status",
+            "status": "known",
+            "text": "The examination adds nothing new to what you already know.",
+            "decision": "PASS",
+            "classification": "covered",
+            "evidence": "The examination adds nothing new to what you already know."
+          }
+        ],
+        "scope": "bounded_deterministic_coverage_not_semantic_proof"
+      },
+      "composition_reason": "optional_disclosure_overlap"
+    },
+    "category": "B: correct duplicate-content rejection",
+    "duplicated": true,
+    "contradicted": false,
+    "unsupported_consequences": false,
+    "hidden_information": false,
+    "wholly_harmless_atmosphere": false,
+    "safely_publishable_whole_under_new_contract": false,
+    "explanation": "Candidate repeats the current engine-owned discovery or status verbatim. Its opening can be safe, but the whole optional segment should still be omitted. No evidence of a safety false rejection here."
+  },
+  {
+    "action": "I examine the weathered milestone.",
+    "original_ai_text": "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "authoritative_outcome": {
+      "player_action": "I examine the weathered milestone.",
+      "resolved_outcome": {
+        "status": "discovered",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "A weathered stone milestone leans beside the northwest mud track.",
+          "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+          "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+        ],
+        "continuity": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ]
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+      ]
+    },
+    "trusted_disclosure": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "extracted_claims": [],
+    "legacy_claims": [
+      {
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "kind": "incidental_fact",
+        "epistemic_status": "world_truth",
+        "grounded": false,
+        "consequential": false,
+        "family": "incidental"
+      }
+    ],
+    "validation": {
+      "decision": "REVIEW_REQUIRED",
+      "semantic": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "legacy": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [
+          {
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "kind": "incidental_fact",
+            "epistemic_status": "world_truth",
+            "grounded": false,
+            "consequential": false,
+            "family": "incidental"
+          }
+        ],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        },
+        "consequential_validation": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        }
+      },
+      "coverage": {
+        "decision": "PASS",
+        "facts": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "decision": "PASS",
+            "classification": "covered",
+            "evidence": "faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "uncertainty_facets": [
+              "direction",
+              "number",
+              "origin"
+            ]
+          }
+        ],
+        "scope": "bounded_deterministic_coverage_not_semantic_proof"
+      },
+      "composition_reason": "optional_disclosure_overlap"
+    },
+    "category": "B: correct duplicate-content rejection",
+    "duplicated": true,
+    "contradicted": false,
+    "unsupported_consequences": false,
+    "hidden_information": false,
+    "wholly_harmless_atmosphere": false,
+    "safely_publishable_whole_under_new_contract": false,
+    "explanation": "Candidate repeats the current engine-owned discovery or status verbatim. Its opening can be safe, but the whole optional segment should still be omitted. No evidence of a safety false rejection here."
+  }
+]

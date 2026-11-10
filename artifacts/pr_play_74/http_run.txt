@@ -1,0 +1,58 @@
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+[SESSION RESET] runtime state cleared
+[API] New campaign started 1ab507cebae9e8b3f86c8567
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[SESSION RESET] runtime state cleared
+[API] New campaign started 76ac19d7f7ff49b062a2b0af
+[SESSION RESET] runtime state cleared
+[API] New campaign started 13d00cb2a8280a199f03985c
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+[ENGINE] Scene transition -> old_milestone
+[SESSION RESET] runtime state cleared
+[API] New campaign started 89e8d23a6dc290231b9f4a1c
+{
+  "campaigns": [
+    {
+      "branch": "survey",
+      "identity": "1ab507cebae9e8b3f86c8567",
+      "snapshot_id": "2026-11-07T15-07-51_ed8998cb",
+      "entity_id": "wf_692b88c23af503da00e7",
+      "resumed": true,
+      "texts": {
+        "Describe the stone surface.": "The stone has a rough, uneven surface.",
+        "Is there anything nearby I could sit on?": "An ordinary low stone beside the established stonework offers a place to sit.",
+        "I examine the stone seat.": "An ordinary low stone beside the established stonework offers a place to sit. You check ordinary stone seat. Nothing concealed is established there. No passage, treasure, or new evidence is revealed."
+      },
+      "npc_creation": "not requested"
+    },
+    {
+      "branch": "report",
+      "identity": "13d00cb2a8280a199f03985c",
+      "snapshot_id": "2026-11-07T15-09-05_ac41090f",
+      "entity_id": "wf_46b649503655cfa7a361",
+      "resumed": true,
+      "texts": {
+        "npc_attempt": "Guard Captain says, \"I couldn't tell you.\"",
+        "Describe the stone surface.": "The stone has a rough, uneven surface.",
+        "Is there anything nearby I could sit on?": "An ordinary low stone beside the established stonework offers a place to sit.",
+        "I examine the stone seat.": "An ordinary low stone beside the established stonework offers a place to sit. You check ordinary stone seat. Nothing concealed is established there. No passage, treasure, or new evidence is revealed."
+      },
+      "npc_creation": "deferred"
+    }
+  ],
+  "requests": 37,
+  "mean_http_ms": 1659.513132420142,
+  "median_http_ms": 1623.4288999112323,
+  "max_http_ms": 4512.76680000592,
+  "provider_requests": 0,
+  "provider_tokens": 0,
+  "hidden_exposures": 0
+}

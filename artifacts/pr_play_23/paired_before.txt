@@ -1,0 +1,144 @@
+.................F.FFFF.FF....F......................................... [ 87%]
+..........                                                               [100%]
+================================== FAILURES ===================================
+_____________________ test_http_local_walk_stays_in_scene _____________________
+tests\test_physical_action_typing_compound_perception_realization.py:357: in test_http_local_walk_stays_in_scene
+    assert _kind(data) == "custom"
+E   AssertionError: assert 'conversational_clarify' == 'custom'
+E     
+E     - custom
+E     + conversational_clarify
+____________________ test_http_walk_listen_authored_sound _____________________
+tests\test_physical_action_typing_compound_perception_realization.py:381: in test_http_walk_listen_authored_sound
+    assert _kind(data) == "observe"
+E   AssertionError: assert 'conversational_clarify' == 'observe'
+E     
+E     - observe
+E     + conversational_clarify
+__________________ test_http_unresolved_travel_stays_travel ___________________
+tests\test_physical_action_typing_compound_perception_realization.py:392: in test_http_unresolved_travel_stays_travel
+    assert _kind(data) == "travel"
+E   AssertionError: assert 'conversational_decline' == 'travel'
+E     
+E     - travel
+E     + conversational_decline
+_______________________ test_http_explicit_exit_travel ________________________
+tests\test_physical_action_typing_compound_perception_realization.py:400: in test_http_explicit_exit_travel
+    assert kind in {"travel", "scene_transition"}
+E   AssertionError: assert 'conversational_decline' in {'scene_transition', 'travel'}
+______________ test_social_then_walk_listen_is_not_stale_social _______________
+tests\test_physical_action_typing_compound_perception_realization.py:423: in test_social_then_walk_listen_is_not_stale_social
+    assert _kind(data) == "observe"
+E   AssertionError: assert 'conversational_clarify' == 'observe'
+E     
+E     - observe
+E     + conversational_clarify
+________________ test_http_repeated_local_walk_does_not_drift _________________
+tests\test_physical_action_typing_compound_perception_realization.py:447: in test_http_repeated_local_walk_does_not_drift
+    assert _kind(data) == "custom"
+E   AssertionError: assert '' == 'custom'
+E     
+E     - custom
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[RETRY] selected_strategy= echo_or_repetition attempt= 1 reasons= ['echo_or_repetition:opening_overlap']
+[RETRY SKIPPED: UNCHANGED OR UNSENT OUTPUT]
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+_______________ test_frontier_t16_calibration_is_typed_observe ________________
+tests\test_physical_action_typing_compound_perception_realization.py:460: in test_frontier_t16_calibration_is_typed_observe
+    assert _kind(data) == "observe"
+E   AssertionError: assert 'conversational_clarify' == 'observe'
+E     
+E     - observe
+E     + conversational_clarify
+__________________ test_pr_dy_clarification_does_not_mutate ___________________
+tests\test_pr_dy_live_gameplay.py:179: in test_pr_dy_clarification_does_not_mutate
+    data = chat(ChatRequest(text="Look at that.", ui_mode="player"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6636: in chat
+    return _chat_turn(req, ui_mode=ui_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:7154: in _chat_turn
+    ordinary_contract = establish_ordinary_gameplay_contract(
+game\ordinary_semantic_ownership.py:266: in establish_ordinary_gameplay_contract
+    _attach(True)
+game\ordinary_semantic_ownership.py:172: in _attach
+    attach_interaction_obligation(
+game\live_resolution.py:441: in attach_interaction_obligation
+    contract = construct_resolution_contract(
+game\resolution_contract.py:1750: in construct_resolution_contract
+    interpreted = model_interpreter(
+game\semantic_interpreter.py:262: in interpret_for_contract
+    text = _invoke_interpretation_model(messages)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\helpers\live_model_guard.py:76: in _blocked_interpretation
+    raise LiveModelCallForbidden("game.semantic_interpreter._invoke_interpretation_model")
+E   tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.
+E   site: game.semantic_interpreter._invoke_interpretation_model
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E       res = hook_impl.function(*args)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 118, in pytest_runtest_protocol
+E       runtestprotocol(item, nextitem=nextitem)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 139, in runtestprotocol
+E       reports.append(call_and_report(item, "call", log))
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 249, in call_and_report
+E       call = CallInfo.from_call(
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 361, in from_call
+E       result: TResult | None = func()
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 250, in <lambda>
+E       lambda: runtest_hook(item=item, **kwds),
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E       res = hook_impl.function(*args)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 184, in pytest_runtest_call
+E       item.runtest()
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 1707, in runtest
+E       self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E       res = hook_impl.function(*args)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 167, in pytest_pyfunc_call
+E       result = testfunction(**testargs)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_dy_live_gameplay.py", line 179, in test_pr_dy_clarification_does_not_mutate
+E       data = chat(ChatRequest(text="Look at that.", ui_mode="player"))
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6636, in chat
+E       return _chat_turn(req, ui_mode=ui_mode)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 7154, in _chat_turn
+E       ordinary_contract = establish_ordinary_gameplay_contract(
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\ordinary_semantic_ownership.py", line 266, in establish_ordinary_gameplay_contract
+E       _attach(True)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\ordinary_semantic_ownership.py", line 172, in _attach
+E       attach_interaction_obligation(
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\live_resolution.py", line 441, in attach_interaction_obligation
+E       contract = construct_resolution_contract(
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\resolution_contract.py", line 1750, in construct_resolution_contract
+E       interpreted = model_interpreter(
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\semantic_interpreter.py", line 262, in interpret_for_contract
+E       text = _invoke_interpretation_model(messages)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 76, in _blocked_interpretation
+E       raise LiveModelCallForbidden("game.semantic_interpreter._invoke_interpretation_model")
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 30, in __init__
+E       stack = "".join(traceback.format_stack(limit=25))
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_http_local_walk_stays_in_scene
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_http_walk_listen_authored_sound
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_http_unresolved_travel_stays_travel
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_http_explicit_exit_travel
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_social_then_walk_listen_is_not_stale_social
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_http_repeated_local_walk_does_not_drift
+FAILED tests/test_physical_action_typing_compound_perception_realization.py::test_frontier_t16_calibration_is_typed_observe
+FAILED tests/test_pr_dy_live_gameplay.py::test_pr_dy_clarification_does_not_mutate
+8 failed, 74 passed, 1 warning in 25.26s

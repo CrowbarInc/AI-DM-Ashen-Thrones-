@@ -1,0 +1,683 @@
+{
+  "live_provider_calls": 0,
+  "call_gpt_entries": [
+    "strict_social",
+    "primary_turn",
+    "primary_turn",
+    "retry_escalation"
+  ],
+  "turns": [
+    {
+      "id": "T01",
+      "player_text": "I stop under the gate and look around. What is actually in front of me?",
+      "status": 200,
+      "visible": "Provider calls are disabled for this run, so no live narration was generated.",
+      "elapsed_ms": 251.093,
+      "scene_id": "frontier_gate",
+      "turn_counter": 5,
+      "publication": "Provider calls are disabled for this run, so no live narration was generated.",
+      "kind": "observe",
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T01",
+          "stage": "planning_decision",
+          "text": "I stop under the gate and look around. What is actually in front of me?",
+          "decision": null
+        },
+        {
+          "turn": "T01",
+          "stage": "continuity_directive",
+          "text": "I stop under the gate and look around. What is actually in front of me?",
+          "directive": null
+        },
+        {
+          "turn": "T01",
+          "stage": "deterministic_conversational_decision",
+          "text": "I stop under the gate and look around. What is actually in front of me?",
+          "clause": {
+            "operation": "",
+            "destination": "",
+            "consequential": false,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": null,
+          "delivered_count": 0,
+          "decision": null
+        },
+        {
+          "turn": "T01",
+          "stage": "interpret_production_turn",
+          "text": "I stop under the gate and look around. What is actually in front of me?",
+          "status": "skipped",
+          "reason": "provider_calls_disabled",
+          "components": []
+        }
+      ]
+    },
+    {
+      "id": "T02",
+      "player_text": "Gate Guard, do you have a moment?",
+      "status": 200,
+      "visible": "Guard Captain says, \"I couldn't tell you.\"",
+      "elapsed_ms": 193.016,
+      "scene_id": "frontier_gate",
+      "turn_counter": 6,
+      "publication": "Guard Captain says, \"I couldn't tell you.\"",
+      "kind": "question",
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T02",
+          "stage": "planning_decision",
+          "text": "Gate Guard, do you have a moment?",
+          "decision": null
+        },
+        {
+          "turn": "T02",
+          "stage": "continuity_directive",
+          "text": "Gate Guard, do you have a moment?",
+          "directive": null
+        },
+        {
+          "turn": "T02",
+          "stage": "deterministic_conversational_decision",
+          "text": "Gate Guard, do you have a moment?",
+          "clause": {
+            "operation": "",
+            "destination": "",
+            "consequential": false,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": null,
+          "delivered_count": 1,
+          "decision": null
+        },
+        {
+          "turn": "T02",
+          "stage": "interpret_production_turn",
+          "text": "Gate Guard, do you have a moment?",
+          "status": "skipped",
+          "reason": "provider_calls_disabled",
+          "components": []
+        }
+      ]
+    },
+    {
+      "id": "T03",
+      "player_text": "You mentioned the patrol. What have you heard?",
+      "status": 200,
+      "visible": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\"",
+      "elapsed_ms": 165.442,
+      "scene_id": "frontier_gate",
+      "turn_counter": 7,
+      "publication": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\"",
+      "kind": "question",
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T03",
+          "stage": "planning_decision",
+          "text": "You mentioned the patrol. What have you heard?",
+          "decision": null
+        },
+        {
+          "turn": "T03",
+          "stage": "continuity_directive",
+          "text": "You mentioned the patrol. What have you heard?",
+          "directive": null
+        },
+        {
+          "turn": "T03",
+          "stage": "continuity_directive",
+          "text": "You mentioned the patrol. What have you heard?",
+          "directive": null
+        },
+        {
+          "turn": "T03",
+          "stage": "deterministic_conversational_decision",
+          "text": "You mentioned the patrol. What have you heard?",
+          "clause": {
+            "operation": "",
+            "destination": "",
+            "consequential": false,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": "guard_captain",
+          "delivered_count": 2,
+          "decision": {
+            "category": "EXECUTE",
+            "reason": "active_interlocutor_followup",
+            "family": "world_operation",
+            "operation": "ASK",
+            "target": "guard_captain",
+            "facing": "",
+            "policy": "",
+            "references": [
+              "active_interlocutor:guard_captain"
+            ]
+          }
+        },
+        {
+          "turn": "T03",
+          "stage": "normalized_action_from_interpretation",
+          "text": "You mentioned the patrol. What have you heard?",
+          "components": [
+            {
+              "operation": "ASK",
+              "target": "guard_captain"
+            }
+          ],
+          "accepted": true,
+          "reason": null,
+          "operation": "ASK",
+          "target_ref": "guard_captain",
+          "engine_type": "question",
+          "action_type": "question",
+          "action_id": "guard_captain"
+        }
+      ]
+    },
+    {
+      "id": "T04",
+      "player_text": "I walk over to the notice board and put a hand on the frame.",
+      "status": 200,
+      "visible": "Notice board is here. Approaching or touching it is not a supported action, and you have not moved.",
+      "elapsed_ms": 40.935,
+      "scene_id": "frontier_gate",
+      "turn_counter": 7,
+      "publication": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\"",
+      "kind": "conversational_decline",
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T04",
+          "stage": "planning_decision",
+          "text": "I walk over to the notice board and put a hand on the frame.",
+          "decision": null
+        },
+        {
+          "turn": "T04",
+          "stage": "continuity_directive",
+          "text": "I walk over to the notice board and put a hand on the frame.",
+          "directive": null
+        },
+        {
+          "turn": "T04",
+          "stage": "deterministic_conversational_decision",
+          "text": "I walk over to the notice board and put a hand on the frame.",
+          "clause": {
+            "operation": "MOVE",
+            "destination": "the notice board",
+            "consequential": true,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [
+            {
+              "id": "notice_board",
+              "kind": "inspect_target"
+            }
+          ],
+          "active_interaction_target": "guard_captain",
+          "delivered_count": 3,
+          "decision": {
+            "category": "DECLINE",
+            "reason": "local_object_not_a_destination",
+            "family": "local_interaction",
+            "operation": null,
+            "target": null,
+            "facing": "Notice board is here. Approaching or touching it is not a supported action, and you have not moved.",
+            "policy": "decline_unadjudicated_contact",
+            "references": [
+              "notice_board"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T05",
+      "player_text": "Read me the missing-patrol notice, not the tax lines.",
+      "status": 200,
+      "visible": "The missing patrol was last seen taking the northwest mud track past the crates. Someone jabs at the board in Cinderwatch Gate District, impatient with anyone who reads too long.",
+      "elapsed_ms": 225.661,
+      "scene_id": "frontier_gate",
+      "turn_counter": 8,
+      "publication": "The missing patrol was last seen taking the northwest mud track past the crates. Someone jabs at the board in Cinderwatch Gate District, impatient with anyone who reads too long.",
+      "kind": "discover_clue",
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T05",
+          "stage": "planning_decision",
+          "text": "Read me the missing-patrol notice, not the tax lines.",
+          "decision": null
+        },
+        {
+          "turn": "T05",
+          "stage": "continuity_directive",
+          "text": "Read me the missing-patrol notice, not the tax lines.",
+          "directive": null
+        },
+        {
+          "turn": "T05",
+          "stage": "deterministic_conversational_decision",
+          "text": "Read me the missing-patrol notice, not the tax lines.",
+          "clause": {
+            "operation": "INSPECT",
+            "destination": "",
+            "consequential": true,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": "guard_captain",
+          "delivered_count": 4,
+          "decision": null
+        },
+        {
+          "turn": "T05",
+          "stage": "interpret_production_turn",
+          "text": "Read me the missing-patrol notice, not the tax lines.",
+          "status": "skipped",
+          "reason": "provider_calls_disabled",
+          "components": []
+        }
+      ]
+    },
+    {
+      "id": "T06",
+      "player_text": "I try to copy the patrol warning onto my sleeve with a bit of mud so I won't forget the wording.",
+      "status": 200,
+      "visible": "That part is not supported here. It was not carried out.",
+      "elapsed_ms": 76.787,
+      "scene_id": "frontier_gate",
+      "turn_counter": 8,
+      "publication": "The missing patrol was last seen taking the northwest mud track past the crates. Someone jabs at the board in Cinderwatch Gate District, impatient with anyone who reads too long.",
+      "kind": "conversational_decline",
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T06",
+          "stage": "planning_decision",
+          "text": "I try to copy the patrol warning onto my sleeve with a bit of mud so I won't forget the wording.",
+          "decision": null
+        },
+        {
+          "turn": "T06",
+          "stage": "continuity_directive",
+          "text": "I try to copy the patrol warning onto my sleeve with a bit of mud so I won't forget the wording.",
+          "directive": null
+        },
+        {
+          "turn": "T06",
+          "stage": "deterministic_conversational_decision",
+          "text": "I try to copy the patrol warning onto my sleeve with a bit of mud so I won't forget the wording.",
+          "clause": {
+            "operation": "",
+            "destination": "copy the patrol warning onto my sleeve with a bit of mud so I won't forget the wording",
+            "consequential": false,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": null,
+          "delivered_count": 5,
+          "decision": {
+            "category": "DECLINE",
+            "reason": "unsupported_physical_manipulation",
+            "family": "physical_action",
+            "operation": null,
+            "target": null,
+            "facing": "That part is not supported here. It was not carried out.",
+            "policy": "decline_unadjudicated_contact",
+            "references": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "T07",
+      "player_text": "Handle it.",
+      "status": 200,
+      "visible": "Provider calls are disabled for this run, so no live narration was generated.",
+      "elapsed_ms": 213.578,
+      "scene_id": "frontier_gate",
+      "turn_counter": 9,
+      "publication": "Provider calls are disabled for this run, so no live narration was generated.",
+      "kind": null,
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T07",
+          "stage": "planning_decision",
+          "text": "Handle it.",
+          "decision": null
+        },
+        {
+          "turn": "T07",
+          "stage": "continuity_directive",
+          "text": "Handle it.",
+          "directive": null
+        },
+        {
+          "turn": "T07",
+          "stage": "deterministic_conversational_decision",
+          "text": "Handle it.",
+          "clause": {
+            "operation": "",
+            "destination": "",
+            "consequential": false,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": null,
+          "delivered_count": 6,
+          "decision": null
+        },
+        {
+          "turn": "T07",
+          "stage": "interpret_production_turn",
+          "text": "Handle it.",
+          "status": "skipped",
+          "reason": "provider_calls_disabled",
+          "components": []
+        }
+      ]
+    },
+    {
+      "id": "T08",
+      "player_text": "Don't send me anywhere yet. I'll choose after I know what the board actually says.",
+      "status": 200,
+      "visible": "The action stands, and no further narration request was sent.",
+      "elapsed_ms": 209.111,
+      "scene_id": "frontier_gate",
+      "turn_counter": 10,
+      "publication": "The action stands, and no further narration request was sent.",
+      "kind": "question",
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T08",
+          "stage": "planning_decision",
+          "text": "Don't send me anywhere yet. I'll choose after I know what the board actually says.",
+          "decision": null
+        },
+        {
+          "turn": "T08",
+          "stage": "continuity_directive",
+          "text": "Don't send me anywhere yet. I'll choose after I know what the board actually says.",
+          "directive": null
+        },
+        {
+          "turn": "T08",
+          "stage": "deterministic_conversational_decision",
+          "text": "Don't send me anywhere yet. I'll choose after I know what the board actually says.",
+          "clause": {
+            "operation": "",
+            "destination": "",
+            "consequential": false,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": null,
+          "delivered_count": 7,
+          "decision": null
+        },
+        {
+          "turn": "T08",
+          "stage": "interpret_production_turn",
+          "text": "Don't send me anywhere yet. I'll choose after I know what the board actually says.",
+          "status": "skipped",
+          "reason": "provider_calls_disabled",
+          "components": []
+        }
+      ]
+    },
+    {
+      "id": "T09",
+      "player_text": "What did that notice say about where the patrol was last seen?",
+      "status": 200,
+      "visible": "You examine the notice again. Previously disclosed here: The missing patrol was last seen taking the northwest mud track past the crates. The examination adds nothing new to what you already know.",
+      "elapsed_ms": 313.159,
+      "scene_id": "frontier_gate",
+      "turn_counter": 11,
+      "publication": "You examine the notice again. Previously disclosed here: The missing patrol was last seen taking the northwest mud track past the crates. The examination adds nothing new to what you already know.",
+      "kind": "already_searched",
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T09",
+          "stage": "planning_decision",
+          "text": "What did that notice say about where the patrol was last seen?",
+          "decision": null
+        },
+        {
+          "turn": "T09",
+          "stage": "continuity_directive",
+          "text": "What did that notice say about where the patrol was last seen?",
+          "directive": null
+        },
+        {
+          "turn": "T09",
+          "stage": "continuity_directive",
+          "text": "What did that notice say about where the patrol was last seen?",
+          "directive": null
+        },
+        {
+          "turn": "T09",
+          "stage": "deterministic_conversational_decision",
+          "text": "What did that notice say about where the patrol was last seen?",
+          "clause": {
+            "operation": "",
+            "destination": "",
+            "consequential": false,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": null,
+          "delivered_count": 8,
+          "decision": {
+            "category": "EXECUTE",
+            "reason": "single_authoritative_component",
+            "family": "world_operation",
+            "operation": "INSPECT",
+            "target": "notice_board",
+            "facing": "",
+            "policy": "execute_primary",
+            "references": []
+          }
+        },
+        {
+          "turn": "T09",
+          "stage": "normalized_action_from_interpretation",
+          "text": "What did that notice say about where the patrol was last seen?",
+          "components": [
+            {
+              "operation": "INSPECT",
+              "target": "notice_board"
+            }
+          ],
+          "accepted": true,
+          "reason": null,
+          "operation": "INSPECT",
+          "target_ref": "notice_board",
+          "engine_type": "investigate",
+          "action_type": "investigate",
+          "action_id": "notice_board"
+        }
+      ]
+    },
+    {
+      "id": "T10",
+      "player_text": "Can I trade my dry cloak for the tavern runner's stew?",
+      "status": 200,
+      "visible": "No nearby tavern is currently established in this scene.",
+      "elapsed_ms": 343.681,
+      "scene_id": "frontier_gate",
+      "turn_counter": 12,
+      "publication": "No nearby tavern is currently established in this scene.",
+      "kind": "adjudication_query",
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T10",
+          "stage": "planning_decision",
+          "text": "Can I trade my dry cloak for the tavern runner's stew?",
+          "decision": null
+        },
+        {
+          "turn": "T10",
+          "stage": "continuity_directive",
+          "text": "Can I trade my dry cloak for the tavern runner's stew?",
+          "directive": null
+        },
+        {
+          "turn": "T10",
+          "stage": "deterministic_conversational_decision",
+          "text": "Can I trade my dry cloak for the tavern runner's stew?",
+          "clause": {
+            "operation": "",
+            "destination": "the tavern runner's stew",
+            "consequential": false,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": null,
+          "delivered_count": 9,
+          "decision": null
+        },
+        {
+          "turn": "T10",
+          "stage": "interpret_production_turn",
+          "text": "Can I trade my dry cloak for the tavern runner's stew?",
+          "status": "skipped",
+          "reason": "provider_calls_disabled",
+          "components": []
+        }
+      ]
+    },
+    {
+      "id": "T11",
+      "player_text": "I follow the missing patrol rumor toward the northwest track.",
+      "status": 200,
+      "visible": "You arrive at Old Milestone.",
+      "elapsed_ms": 450.699,
+      "scene_id": "old_milestone",
+      "turn_counter": 13,
+      "publication": "You arrive at Old Milestone.",
+      "kind": "scene_transition",
+      "response_class": null,
+      "refusal_category": null,
+      "stages": [
+        {
+          "turn": "T11",
+          "stage": "planning_decision",
+          "text": "I follow the missing patrol rumor toward the northwest track.",
+          "decision": null
+        },
+        {
+          "turn": "T11",
+          "stage": "continuity_directive",
+          "text": "I follow the missing patrol rumor toward the northwest track.",
+          "directive": null
+        },
+        {
+          "turn": "T11",
+          "stage": "deterministic_conversational_decision",
+          "text": "I follow the missing patrol rumor toward the northwest track.",
+          "clause": {
+            "operation": "",
+            "destination": "the northwest track",
+            "consequential": false,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": null,
+          "delivered_count": 10,
+          "decision": {
+            "category": "EXECUTE",
+            "reason": "grounded_movement_destination",
+            "family": "movement",
+            "operation": "MOVE",
+            "target": "leave_for_follow_the_missing_patrol_rumor",
+            "facing": "",
+            "policy": "execute_primary",
+            "references": []
+          }
+        },
+        {
+          "turn": "T11",
+          "stage": "normalized_action_from_interpretation",
+          "text": "Go to Follow the missing patrol rumor.",
+          "components": [
+            {
+              "operation": "MOVE",
+              "target": "leave_for_follow_the_missing_patrol_rumor"
+            }
+          ],
+          "accepted": true,
+          "reason": null,
+          "operation": "MOVE",
+          "target_ref": "leave_for_follow_the_missing_patrol_rumor",
+          "engine_type": "scene_transition",
+          "action_type": "scene_transition",
+          "action_id": "leave_for_follow_the_missing_patrol_rumor"
+        }
+      ]
+    },
+    {
+      "id": "T12",
+      "player_text": "I step back from the notice board.",
+      "status": 200,
+      "visible": "That part is not supported here. It was not carried out.",
+      "elapsed_ms": 139.177,
+      "scene_id": "old_milestone",
+      "turn_counter": 13,
+      "publication": "You arrive at Old Milestone.",
+      "kind": "interact",
+      "response_class": "operational_refusal",
+      "refusal_category": "unresolved_retreat_without_adjudication",
+      "stages": [
+        {
+          "turn": "T12",
+          "stage": "planning_decision",
+          "text": "I step back from the notice board.",
+          "decision": null
+        },
+        {
+          "turn": "T12",
+          "stage": "continuity_directive",
+          "text": "I step back from the notice board.",
+          "directive": null
+        },
+        {
+          "turn": "T12",
+          "stage": "deterministic_conversational_decision",
+          "text": "I step back from the notice board.",
+          "clause": {
+            "operation": "",
+            "destination": "",
+            "consequential": false,
+            "purpose": null
+          },
+          "destination_grounded_as_local": [],
+          "active_interaction_target": null,
+          "delivered_count": 11,
+          "decision": null
+        }
+      ]
+    }
+  ]
+}

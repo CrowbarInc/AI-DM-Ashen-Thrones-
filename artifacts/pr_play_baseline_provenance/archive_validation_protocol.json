@@ -1,0 +1,22 @@
+{
+  "milestone": "pr_play_baseline_provenance",
+  "phase": "pre-seal protocol; final outcome is in external archive_verification.json",
+  "required_checks": [
+    "open exact new timestamped and stable ZIP",
+    "internal campaign identity",
+    "nine required reports",
+    "source/evidence manifest hashes",
+    "packaged NEXT_SESSION current cycle and preserved suffix",
+    "every canonical member byte/hash",
+    "no unexplained omissions (identical-content deduplication allowed)",
+    "entry source and historical ZIP preservation",
+    "stable ZIP identity",
+    "external SHA-256 seal"
+  ],
+  "source_snapshot": {
+    "path": "artifacts/pr_play_baseline_provenance/current_source_snapshot.zip",
+    "sha256": "77b551a3ab7b9f2e22a5e243d15e53814b51563e21f541216429cf7609be73e5",
+    "scope": "Executable game, tests, static, prompts and dependency/test configs. Data is hash-only in source_manifest.json; synthetic test fixtures construct runtime state. Not a full campaign backup.",
+    "verified_members": 1143
+  }
+}

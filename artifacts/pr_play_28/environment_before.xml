@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="7.176" timestamp="2026-11-01T17:30:27.590091-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_by3_strict_social_semantic_mutation" name="test_by3_generate_repo_artifacts" time="4.107"><failure message="assert False is True">tests\test_by3_strict_social_semantic_mutation.py:152: in test_by3_generate_repo_artifacts
+    assert by3_report["before_after_coverage"]["gap_closed"] is True
+E   assert False is True</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_active_target_direct_command_routes_to_social_exchange" time="0.045"><failure message="AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'">tests\test_turn_pipeline_shared.py:1309: in test_chat_active_target_direct_command_routes_to_social_exchange
+    assert_dialogue_lock_social_route_smoke(
+tests\helpers\emission_smoke_assertions.py:377: in assert_dialogue_lock_social_route_smoke
+    assert kind in allowed, (
+E   AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'</failure></testcase></testsuite></testsuites>

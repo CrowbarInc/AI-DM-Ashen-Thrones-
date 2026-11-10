@@ -1,0 +1,37 @@
+{
+  "method": "POST",
+  "path": "/api/new_campaign",
+  "http_status": 200,
+  "api_latency_seconds": 0.052,
+  "response": {
+    "status": "ok",
+    "ok": true,
+    "ui_mode": "player",
+    "upstream_dependent_run_gate": {
+      "upstream_runtime_healthy": null,
+      "preflight_available": false,
+      "startup_run_valid": false,
+      "manual_testing_blocked": false,
+      "block_reason": "preflight_skipped_by_env",
+      "preflight_health_class": null,
+      "preflight_checked_at": null
+    },
+    "upstream_dependent_run_gate_operator": {
+      "upstream_gate_disposition": "preflight_skipped_by_env",
+      "startup_run_valid": false,
+      "manual_testing_blocked": false,
+      "upstream_runtime_healthy": null,
+      "preflight_available": false,
+      "preflight_health_class": null,
+      "preflight_checked_at": null,
+      "block_reason": "preflight_skipped_by_env",
+      "gameplay_conclusions_valid": false,
+      "action_hint": "Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.",
+      "compact_banner": "UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established"
+    },
+    "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+    "session_id": "5d7040aa8eb9b4e6f6b7c933",
+    "transcript_entry_count_after_reset": 0,
+    "silent_reset_no_implicit_transcript": true
+  }
+}

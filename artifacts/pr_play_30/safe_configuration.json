@@ -1,0 +1,20 @@
+{
+  "provider": "OpenAI Responses",
+  "model_configuration": {
+    "MODEL_NAME": "gpt-4.1-mini",
+    "DEFAULT_MODEL_NAME": null,
+    "HIGH_PRECISION_MODEL_NAME": null,
+    "RETRY_ESCALATION_MODEL_NAME": null,
+    "ENABLE_MODEL_ROUTING": null
+  },
+  "credentials_present": true,
+  "opening_renderer": "ASHEN_OPENING_RENDERER=1 in harness",
+  "live_requests": 0,
+  "live_gate": "NO-GO",
+  "external_network": "Not probed: offline gate failed",
+  "production_api": "FastAPI TestClient HTTP 200 for opening and three actions",
+  "budget_ceiling": 7,
+  "retries": 0,
+  "fallback_models": 0,
+  "ai_judges": 0
+}

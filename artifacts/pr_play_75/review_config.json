@@ -1,0 +1,831 @@
+{
+  "campaign_id": "pr_play_75",
+  "campaign_name": "PR-PLAY-75: Dynamic NPC interaction and social consequence continuity",
+  "campaign_date": "2026-11-07",
+  "purpose": "Verify bounded live NPC creation, authoritative continuity and player-safe conversation.",
+  "objective_status": "B/PARTIAL",
+  "executive_summary": "B — PARTIAL / DYNAMIC NPC PATHWAY DEMONSTRATED. Six live provider NPC proposals were validated and committed across the retained runs; four NPCs completed final HTTP/browser lifecycle verification. The first two live HTTP NPCs persisted but their resumed references clarified incorrectly. Final HTTP A/B and browser A/B pass after the target-gate repair. All 150 protected files match. Twelve live requests, 3,398 tokens, zero retries. All six sampled live dialogue rewordings were rejected; grounded host fallbacks carried conversation. This is bounded conversational functionality, not demonstrated broad AI dialogue competence. No commit or push.",
+  "primary_report": "development\\campaigns\\product_realization\\pr_play_75\\01_EXECUTIVE_SUMMARY.md",
+  "max_file_bytes": 100663296,
+  "warn_bundle_bytes": 20971520,
+  "changes": {
+    "production": [
+      "Four existing runtime owners extended; same storage/ledger/provider/publication interfaces."
+    ],
+    "validation": [
+      "70 final NPC, 234 safety, 105 inherited, single frozen 85/90; exact historical regression comparison."
+    ],
+    "tooling": [
+      "Isolated HTTP/browser capture, usage and review aggregation."
+    ],
+    "documentation": [
+      "24 requested reports and NEXT_SESSION update."
+    ],
+    "generated_artifacts": [
+      "Source freezes/diff, original failures, GM-redacted authoritative traces, screenshots, metrics."
+    ]
+  },
+  "testing": {
+    "focused": "Final NPC 70/70; broader safety 234/234; inherited 105/105 (overlap, not additive).",
+    "broader": "Focused 1065/20; boundary 101/6; broader authority 0/9; lifecycle 39/39.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Both final normal HTTP campaigns and both typed browser campaigns pass; final-source cross-load continuation verified.",
+    "model_runtime_boundary": "Six actual live proposals committed; all six sampled dialogue candidates rejected, grounded fallback published. 12 requests / 3398 tokens / zero retries.",
+    "new_regressions": "0 new failure identities in bounded lanes; final guards verified separately.",
+    "pre_existing_failures": "Exact PR74 failure identity sets preserved."
+  },
+  "decisions_requiring_human_review": [],
+  "known_problems": {
+    "campaign_specific": [
+      "One ordinary background identity per populated scene; six roles and four ordinary appearance choices.",
+      "Host chooses bounded meaning; all sampled live conversational rewordings rejected and fell back. Broad provider-driven dialogue competence is unproven.",
+      "Only greeting/thanks social receipts; no compliance, promises or dynamic-NPC skill adjudication.",
+      "Original holdout retains five checker KeyErrors and ran before target-gate/player-inquiry refinements; it does not establish final-source conversational generalization.",
+      "Both browser campaigns were additionally cross-loaded and continued on a hash-recorded final-source host; live requests were disabled for those continuations.",
+      "Browser paint latency and separate commit-only timing not measured."
+    ],
+    "pre_existing": [
+      "Historical 20 focused, 6 boundary and 9 broader authority failures remain."
+    ]
+  },
+  "missing_concepts": [
+    "Broader dialogue semantics, richer modest social mechanics, general physical interaction."
+  ],
+  "does_not_prove": [
+    "Broad natural conversational competence; all sampled live wording rejected.",
+    "Final-source frozen holdout, external independent validation, official ATGB or full-suite green.",
+    "Browser paint timing or autonomous NPC/faction/quest simulation."
+  ],
+  "recommended_next_step": "Proceed toward PR-PLAY-76 with existing authority boundaries; do not implement it here.",
+  "self_contained_review_test": "Required reports, final runtime/test source, originals/failures, redacted full authority traces, hashes and screenshots explicitly selected; bundle verification follows generation.",
+  "supporting_files": [
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\01_EXECUTIVE_SUMMARY.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\02_REPOSITORY_BASELINE.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\03_TEST_DATA_ISOLATION.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\04_NPC_ARCHITECTURE.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\05_DYNAMIC_NPC_CREATION.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\06_NPC_AUTHORITY_AND_PROVENANCE.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\07_LIVE_PROVIDER_PROPOSALS.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\08_NATURAL_CONVERSATION.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\09_NPC_KNOWLEDGE_BOUNDARIES.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\10_CONVERSATIONAL_MEMORY.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\11_SOCIAL_CONSEQUENCES.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\12_ROUTINE_INTERACTION_POLICY.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\13_REFERENCE_AND_IDENTITY.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\14_CONTRADICTION_AND_ESCALATION.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\15_PERSISTENCE_AND_RESUME.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\16_PLAYER_SAFE_PUBLICATION.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\17_DEVELOPMENT_TESTS.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\18_FROZEN_HOLDOUT.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\19_REAL_HTTP_GAMEPLAY.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\20_BROWSER_GAMEPLAY.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\21_REGRESSION_RESULTS.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\22_LATENCY_AND_PROVIDER_USAGE.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\23_LIMITATIONS_AND_OPEN_RISKS.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development\\campaigns\\product_realization\\pr_play_75\\24_NEXT_SESSION.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\review_evidence\\browser_network.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_75\\review_evidence\\holdout_results.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_75\\review_evidence\\http_before_reference_repair_http_traces.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_75\\review_evidence\\http_traces.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_75\\accepted_rejected_proposals.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\aggregate.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\baseline.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\boundary.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\boundary.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\broader.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\broader.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_A_resume.png",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_A_resume_full.png",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_B_escalation_full.png",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_B_final_resume.png",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_B_resume_full.png",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_final_host.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_final_source_host.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_final_verified_host.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_host.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_results.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\browser_typed_transcript.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\conversation_transcripts.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\development.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\development.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\development_final.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\development_final.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\development_final2.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\development_final2.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\development_repaired.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\development_repaired.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\dialogue_authority_after_initial.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\final_npc.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\final_npc.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\final_safety.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\final_safety.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\final_source.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\final_source_before_alias_guard.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\focused.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\focused.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\frozen_holdout.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\frozen_holdout_manifest.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\holdout.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\holdout_run.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\holdout_started.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\holdout_summary.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\http_before_reference_repair_http_summary.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\http_final_run.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\http_final_source_run.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\http_gameplay.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\http_initial_offline_run.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\http_initial_offline_summary.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\http_ledger_refusal_http_summary.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\http_run.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\http_summary.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\http_verified_run.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\inherited_final.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\inherited_final.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\inherited_ledger.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\inherited_ledger.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\latency.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\lifecycle_isolated.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\lifecycle_isolated.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\live_provider_proposals.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\metrics.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\npc_identity_records.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\npc_proposal_schema.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\performance.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\performance_run.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\performance_supplement.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\persistence_faults.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\persistence_faults.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\post_freeze_development.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\post_freeze_development.xml",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\prepare.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\protected_before.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\protected_integrity.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\provider_usage.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\publication_scan.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\redaction_manifest.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\regression.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\regression_comparison.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\regression_results.json",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\regression_run.txt",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\runtime.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_task.diff",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game\\api.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game\\bounded_improvisation.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game\\expressive_dialogue.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game\\dialogue_authority.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests\\test_pr_play_75_dynamic_npcs.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests\\test_pr_play_75_persistence.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "docs\\NEXT_SESSION.md",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_before\\game\\api.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_before\\game\\bounded_improvisation.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_before\\game\\dialogue_authority.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_before\\game\\exploration.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_before\\game\\expressive_dialogue.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_before\\game\\player_initiative.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_before\\game\\player_interpretation_bridge.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_at_holdout\\game\\api.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_at_holdout\\game\\bounded_improvisation.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_at_holdout\\game\\dialogue_authority.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts\\pr_play_75\\source_at_holdout\\game\\expressive_dialogue.py",
+      "role": "source_or_evidence",
+      "why": "Explicit PR-PLAY-75 review evidence.",
+      "behavioral_evidence": false
+    }
+  ]
+}

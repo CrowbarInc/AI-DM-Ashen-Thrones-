@@ -1,0 +1,125 @@
+{
+  "rumor": {
+    "before": {
+      "active_scene_id": "frontier_gate",
+      "visited_scene_ids": [
+        "frontier_gate"
+      ],
+      "turn_counter": 1,
+      "time_pressure": 1
+    },
+    "after": {
+      "active_scene_id": "frontier_gate",
+      "visited_scene_ids": [
+        "frontier_gate"
+      ],
+      "turn_counter": 2,
+      "time_pressure": 2
+    },
+    "calls": {
+      "interpretation": [
+        "Have you heard any interesting rumors lately?"
+      ],
+      "narration": [],
+      "social": [
+        true
+      ],
+      "exploration": []
+    },
+    "turns": [
+      {
+        "player_text": "Have you heard any interesting rumors lately?",
+        "player_facing_text": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+        "resolution_kind": "question",
+        "resolved_transition": false,
+        "target_scene_id": null
+      }
+    ]
+  },
+  "patrol": {
+    "before": {
+      "active_scene_id": "frontier_gate",
+      "visited_scene_ids": [
+        "frontier_gate"
+      ],
+      "turn_counter": 1,
+      "time_pressure": 1
+    },
+    "after": {
+      "active_scene_id": "old_milestone",
+      "visited_scene_ids": [
+        "frontier_gate",
+        "old_milestone"
+      ],
+      "turn_counter": 2,
+      "time_pressure": 2
+    },
+    "calls": {
+      "interpretation": [],
+      "narration": [],
+      "social": [],
+      "exploration": [
+        true
+      ]
+    },
+    "turns": [
+      {
+        "player_text": "I want to follow the trail connected to the missing patrol.",
+        "player_facing_text": "You arrive at Old Milestone.",
+        "resolution_kind": "scene_transition",
+        "resolved_transition": true,
+        "target_scene_id": "old_milestone"
+      }
+    ]
+  },
+  "unsupported": {
+    "before": {
+      "active_scene_id": "frontier_gate",
+      "visited_scene_ids": [
+        "frontier_gate"
+      ],
+      "turn_counter": 1,
+      "time_pressure": 1
+    },
+    "after": {
+      "active_scene_id": "frontier_gate",
+      "visited_scene_ids": [
+        "frontier_gate"
+      ],
+      "turn_counter": 1,
+      "time_pressure": 1
+    },
+    "calls": {
+      "interpretation": [
+        "I ask Captain Voss what he knows about the gate.",
+        "I want to investigate the footprints."
+      ],
+      "narration": [],
+      "social": [],
+      "exploration": []
+    },
+    "turns": [
+      {
+        "player_text": "I ask Captain Voss what he knows about the gate.",
+        "player_facing_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+        "resolution_kind": "conversational_clarify",
+        "resolved_transition": false,
+        "target_scene_id": null
+      },
+      {
+        "player_text": "I want to follow the trail to the glass observatory.",
+        "player_facing_text": "You want to reach follow the trail to the glass observatory, but that is not an established destination from here. You stay where you are.",
+        "resolution_kind": "conversational_decline",
+        "resolved_transition": false,
+        "target_scene_id": null
+      },
+      {
+        "player_text": "I want to investigate the footprints.",
+        "player_facing_text": "Nothing here matches footprints. Nothing has been attempted.",
+        "resolution_kind": "conversational_decline",
+        "resolved_transition": false,
+        "target_scene_id": null
+      }
+    ]
+  }
+}

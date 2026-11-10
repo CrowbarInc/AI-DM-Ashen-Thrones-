@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.632" timestamp="2026-11-07T12:07:17.858222-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_76_holdout" name="test_frozen_holdout_once" time="0.152"><failure message="AssertionError: [&#10;    {&#10;      &quot;id&quot;: &quot;H93&quot;,&#10;      &quot;group&quot;: &quot;isolation&quot;,&#10;      &quot;error&quot;: &quot;F :: Which seat do you mean? Nothing has been attempted.&quot;&#10;    }&#10;  ]&#10;assert not [{'error': 'F :: Which seat do you mean? Nothing has been attempted.', 'group': 'isolation', 'id': 'H93'}]">tests\test_pr_play_76_holdout.py:76: in test_frozen_holdout_once
+    assert not failures, json.dumps(failures[:12], indent=2)
+E   AssertionError: [
+E       {
+E         "id": "H93",
+E         "group": "isolation",
+E         "error": "F :: Which seat do you mean? Nothing has been attempted."
+E       }
+E     ]
+E   assert not [{'error': 'F :: Which seat do you mean? Nothing has been attempted.', 'group': 'isolation', 'id': 'H93'}]</failure></testcase></testsuite></testsuites>

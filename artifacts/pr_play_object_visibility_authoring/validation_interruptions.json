@@ -1,0 +1,63 @@
+{
+  "attempt": "sealed_after_preservation",
+  "exit_code": -1073741819,
+  "windows_status": "0xC0000005",
+  "kind": "Native access violation during scene read; cause not established",
+  "completed_pytest_result": false,
+  "log": "sealed_after_preservation.log",
+  "command": {
+    "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "args": [
+      "tests/test_pr_play_76_physical.py",
+      "tests/test_pr_play_71_persistence_recovery.py",
+      "tests/test_pr_play_75_persistence.py",
+      "tests/test_state_authority.py",
+      "tests/test_pr_play_t06_persistent_manipulation.py",
+      "tests/test_pr_play_t04_local_action.py",
+      "tests/test_pr_play_t05_composition.py",
+      "tests/test_pr_play_preseal_authority.py",
+      "-q",
+      "--tb=short",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_visibility_authoring\\sealed_after_preservation_junit.xml",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\visibility_authoring_sealed_after_preservation_pytest"
+    ]
+  },
+  "unchanged_selection_retry": "retry_sealed_after_preservation",
+  "retry_result": {
+    "total": 143,
+    "passed": 143,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_pr_play_76_physical.py",
+        "tests/test_pr_play_71_persistence_recovery.py",
+        "tests/test_pr_play_75_persistence.py",
+        "tests/test_state_authority.py",
+        "tests/test_pr_play_t06_persistent_manipulation.py",
+        "tests/test_pr_play_t04_local_action.py",
+        "tests/test_pr_play_t05_composition.py",
+        "tests/test_pr_play_preseal_authority.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_visibility_authoring\\retry_sealed_after_preservation_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\visibility_authoring_retry_sealed_after_preservation_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 238.00576219998766,
+      "network_blocks": [],
+      "live_provider_calls": 0,
+      "observation_imported": false,
+      "feature_absent_control": false
+    }
+  }
+}

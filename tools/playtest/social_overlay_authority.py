@@ -1,0 +1,74 @@
+"""Offline reconstruction of authored social overlay effects from persisted turn evidence."""
+import copy
+from tools.playtest.overlays import payload
+
+
+def social_overlay_projection(before, after, action, response):
+    """Return an exact projection, never trust a mutation's name as permission."""
+    from game.dialogue_authority import authorize_npc_disclosure
+    from game.social import _next_topic_to_reveal
+    from game.clues import apply_socially_revealed_leads, ensure_scene_has_minimum_actionable_lead
+
+    a, b = (payload(d.get('session.json', {})) or {} for d in (before, after))
+    if not isinstance(a, dict) or not isinstance(b, dict):
+        return None
+    sid = a.get('active_scene_id')
+    logs_a, logs_b = (d.get('session_log.jsonl') or [] for d in (before, after))
+    if (not isinstance(logs_a, list) or not isinstance(logs_b, list)
+            or not isinstance(a.get('turn_counter'), int)
+            or not isinstance(b.get('turn_counter'), int)
+            or not action or not action.get('player_input') or a.get('campaign_started') is not True
+            or b.get('campaign_started') is not True or b.get('active_scene_id') != sid
+            or b.get('turn_counter') != a.get('turn_counter', 0) + 1
+            or logs_b[:-1] != logs_a or len(logs_b) != len(logs_a) + 1):
+        return None
+    turn = logs_b[-1]
+    if not isinstance(turn, dict) or not isinstance(turn.get('resolution'), dict):
+        return None
+    res = turn['resolution']
+    social = res.get('social') or {}
+    if not isinstance(social, dict):
+        return None
+    clue_texts = res.get('discovered_clues') or []
+    if not isinstance(clue_texts, list) or not all(isinstance(t, str) for t in clue_texts):
+        return None
+    topic = social.get('topic_revealed')
+    if (turn.get('player_input') != action['player_input'] or not res.get('action_id')
+            or res.get('kind') not in {'question', 'social_probe'} or res.get('success') is not True
+            or res.get('requires_check') or not social.get('target_resolved')
+            or social.get('actor_addressable') is not True or social.get('offscene_target')
+            or not isinstance(topic, dict)
+            or (response.get('resolution') or {}).get('action_id') != res['action_id']):
+        return None
+    world = payload(before.get('world.json', {})) or {}
+    npc = next((n for n in world.get('npcs', []) if n.get('id') == social.get('npc_id')), None)
+    scene = payload(before.get('scenes/'+str(sid)+'.json', {})) or {}
+    if not npc or npc.get('location') != sid or (scene.get('scene') or {}).get('id') != sid:
+        return None
+    grant = authorize_npc_disclosure(npc, topic)
+    selected = _next_topic_to_reveal(npc, (a.get('npc_runtime') or {}).get(npc['id'], {}),
+                                   player_text=action['player_input'], allow_revealed=True)
+    if (not grant['permission'] or not selected or selected['id'] != topic.get('id')
+            or topic.get('clue_id') != grant.get('authorized_clue_id')
+            or topic.get('disclosure_authorization') != grant
+            or any(topic.get(k) != selected.get(k) for k in
+                   ('text', 'clue_text', 'leads_to_scene', 'leads_to_npc', 'leads_to_rumor'))
+            or res.get('clue_id') != grant.get('authorized_clue_id')
+            or any(t not in {grant['authorized_proposition'], grant['authorized_clue_text']}
+                   for t in clue_texts)):
+        return None
+    # Replay only host-owned sources, with no generated prose. The minimum-lead
+    # rule may additionally use this scene's authored discoverable clues/exits.
+    session, expected_world, resolution = copy.deepcopy((a, world, res))
+    apply_socially_revealed_leads(session, sid, expected_world, resolution, scene=scene)
+    ensure_scene_has_minimum_actionable_lead(scene_id=sid, session=session, scene=scene,
+                                           resolution=resolution, gm_output=None, world=expected_world)
+    old_events = world.get('event_log', [])
+    new_world = payload(after.get('world.json', {})) or {}
+    if new_world.get('event_log', []) != expected_world.get('event_log', []):
+        return None
+    evidence = dict(operation='authored_social_clue_projection', action_id=res['action_id'],
+                    player_input=action['player_input'], source_id=grant['source_id'],
+                    disclosure=grant, events=expected_world.get('event_log', [])[len(old_events):],
+                    minimum_lead=resolution.get('metadata', {}).get('minimum_actionable_lead'))
+    return session.get('runtime_scene_overlays', {}), evidence

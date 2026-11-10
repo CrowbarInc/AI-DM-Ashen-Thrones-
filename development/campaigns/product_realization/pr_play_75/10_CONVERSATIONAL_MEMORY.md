@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 10 CONVERSATIONAL MEMORY
+
+Existing conversational_context.dialogue_commitments stores campaign, player/session identity, NPC ID, turn, original utterance, published response and modest social receipt. Eight exchanges per NPC / 24 overall; duplicate same-turn receipt is idempotent. History is not world truth. Ephemeral phrasing remains transcript memory; this cycle does not promote additional biographies or freeform facts. Prior delivered speech supplies contextual explanations. Final tests and browser/HTTP traces verify restored history plus a fresh same-NPC response after loading.

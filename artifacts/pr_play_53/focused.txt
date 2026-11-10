@@ -1,0 +1,20 @@
+........................................................................ [ 16%]
+........................................................................ [ 33%]
+........................................................................ [ 50%]
+........................................................................ [ 67%]
+........................................................................ [ 84%]
+.......................................F.................F...F....       [100%]
+================================== FAILURES ===================================
+E   assert False
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py:308: assert False
+E   assert set()
+     +  where set() = get_all_known_clue_ids({})
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_narration_state_consistency.py:75: assert set()
+E   assert set()
+     +  where set() = get_all_known_clue_ids({})
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_narration_state_consistency.py:172: assert set()
+=========================== short test summary info ===========================
+FAILED tests/test_provider_accounting_integrity.py::test_readiness_acceptance_is_not_live_execution
+FAILED tests/test_narration_state_consistency.py::test_refusal_text_with_location_repair_updates_state_and_clues
+FAILED tests/test_narration_state_consistency.py::test_usable_location_in_text_updates_structured_topic_and_clues
+3 failed, 423 passed in 26.92s

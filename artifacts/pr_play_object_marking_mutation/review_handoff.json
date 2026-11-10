@@ -1,0 +1,610 @@
+{
+  "campaign_id": "pr_play_object_marking_mutation",
+  "campaign_name": "PR-PLAY \u2014 Validated Persistent Object Marking",
+  "campaign_date": "2026-11-09",
+  "purpose": "Bounded production marking, atomic persistence and durable idempotency verification",
+  "objective_status": "A/PASS \u2014 bounded internal marking",
+  "executive_summary": "**A/PASS for bounded validated persistent marking.**\n\n76 new marking/atomic tests; 52 identity tests; 50 inventory/snapshot controls; 143 preservation controls passed, separately selected.\n\nCombined before: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). After: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). New failures: []; resolved: [].\n\nAn authorized add_marking targets one durable singleton; marking/revision/receipt commit in one atomic character replacement. Reload, exact/conflicting replay and historical snapshots verified. All twelve published turns and authoritative characters unchanged. Zero live provider calls.\n\nSingle authoritative character inventory and single-process ordered turn lane; no multi-process lost-update protection, multi-file crash transaction or global exactly-once across timeline rollback. File fsync is required; directory sync is best effort and unavailable on this Windows host. Permission bits are preserved; custom Windows ACLs, ownership and inode metadata are not portably copied by the standard-library writer. Read-only Get-Acl audit confirmed current character.json has zero explicit access rules and inherited directory ACLs (permission_audit.json); no custom-file-ACL durability/security guarantee. Authorization/evidence are trusted internal caller assertions, not gameplay adjudication or a public authentication boundary. No conversational marking, inspection/removal, equipment/material inference or T06 completion.",
+  "changes": {
+    "production": [
+      "game/storage.py",
+      "game/api.py",
+      "game/object_marking.py"
+    ],
+    "validation": [
+      "76 new marking/atomic tests; existing fixtures unchanged."
+    ],
+    "documentation": [
+      "13 reports; NEXT_SESSION prepended."
+    ],
+    "tooling": [
+      "Cycle-local runners, metrics, comparison and archive sealing."
+    ],
+    "generated_artifacts": [
+      "Evidence and fresh review archives."
+    ]
+  },
+  "testing": {
+    "focused": "76 new marking/atomic tests; 52 identity tests; 50 inventory/snapshot controls; 143 preservation controls passed, separately selected.",
+    "broader": "Combined before: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). After: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests). New failures: []; resolved: [].",
+    "full_suite": "Not run.",
+    "runtime_validation": "Real save/reload/snapshots and unchanged 12-turn HTTP harness.",
+    "model_runtime_boundary": "Zero live provider calls; network/data guards.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "Twenty exact IDs in REGRESSION_RESULTS and regression_results.json."
+  },
+  "decisions_requiring_human_review": [
+    "Review bounded implementation; no additional authorization needed."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Single authoritative character inventory and single-process ordered turn lane; no multi-process lost-update protection, multi-file crash transaction or global exactly-once across timeline rollback. File fsync is required; directory sync is best effort and unavailable on this Windows host. Permission bits are preserved; custom Windows ACLs, ownership and inode metadata are not portably copied by the standard-library writer. Read-only Get-Acl audit confirmed current character.json has zero explicit access rules and inherited directory ACLs (permission_audit.json); no custom-file-ACL durability/security guarantee. Authorization/evidence are trusted internal caller assertions, not gameplay adjudication or a public authentication boundary. No conversational marking, inspection/removal, equipment/material inference or T06 completion."
+    ],
+    "pre_existing": [
+      "Twenty baseline assertion identities; one import-time Windows access violation rerun."
+    ]
+  },
+  "missing_concepts": [
+    "Player-facing inspection/removal and later T06 integration."
+  ],
+  "does_not_prove": [
+    "Multi-process or cross-timeline exactly-once, custom ACL preservation, general physical adjudication, full-suite or improved gameplay."
+  ],
+  "recommended_next_step": "Exactly one next milestone: `pr_play_object_marking_inspection` \u2014 approved phase 3 current-state, disclosure-safe marking inspection and compatible removal, with explicit receipt/history semantics before exposing any action. Do not begin automatically. Defer T06, transfer, equipment, ruleset loader, crafting and baseline repairs.",
+  "self_contained_review_test": "Reopen stable/dated ZIPs; verify all canonical/evidence hashes and implementation, atomic/marking/snapshot/regression/twelve-turn/handoff claims.",
+  "primary_report": "development/campaigns/product_realization/pr_play_object_marking_mutation/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/ATOMIC_PERSISTENCE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/BASELINE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/IDEMPOTENCY_CONTRACT.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/IMPLEMENTATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/INTEGRITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/MARKING_CONTRACT.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/NEGATIVE_CONTROLS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/NEXT_STEP_DECISION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/PERFORMANCE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/PERSISTENCE_VERIFICATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/REGRESSION_RESULTS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_marking_mutation/TWELVE_TURN_COMPARISON.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_combined_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_identity_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_identity_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_identity_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_inventory_snapshot_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_inventory_snapshot_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_inventory_snapshot_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_marking_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_marking_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_marking_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_preservation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_preservation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_preservation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/atomic_failure_create.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/atomic_failure_flush.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/atomic_failure_partial_write.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/atomic_failure_replace.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/atomic_failure_serialization.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/atomic_failure_sync.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/atomic_postcommit_open_directory.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/atomic_postcommit_sync_directory.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/atomic_save_traces.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/atomic_success.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_combined_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_combined_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_identity_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_identity_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_identity_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_inventory_snapshot_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_inventory_snapshot_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_inventory_snapshot_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_preservation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_preservation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/before_preservation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/entry_identity.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/evidence_marking_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/evidence_marking_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/evidence_marking_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/files_created.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/finalize.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_combined_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_combined_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_identity_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_identity_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_identity_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_inventory_snapshot_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_inventory_snapshot_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_inventory_snapshot_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_marking_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_marking_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/final_marking_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/marking_round_trip.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/marking_snapshots.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/measure.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/milestone_identity.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/performance.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/permission_audit.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/persistence_round_trip.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/production.diff",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/regression_results.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/run_checks.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/seal_review.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/source_changes.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/twelve_turn_comparison.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/twelve_turn_state_evidence.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/verified_marking_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/verified_marking_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/verified_marking_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/after_combined.log",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "game/api.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "game/storage.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "game/object_marking.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "tests/test_object_marking.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "tests/test_atomic_character_save.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    },
+    {
+      "path": "artifacts/pr_play_object_marking_mutation/evidence_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded marking implementation, exact verification or handoff provenance."
+    }
+  ]
+}

@@ -1561,6 +1561,29 @@ def _authored_topic_hay(rec: Any) -> str:
     return " ".join(parts)
 
 
+def broad_topic_discovery_category(player_text: str) -> str | None:
+    """Recognize bounded category asks, preserving specific subjects and ellipsis."""
+    text = " ".join(str(player_text or "").lower().replace("’", "'").split()).rstrip("?!. ")
+    if re.fullmatch(
+        r"(?:what (?:sort of |kind of )?rumou?rs (?:have you heard|do you know)|"
+        r"have you heard (?:any )?(?:interesting |local |new |recent |good )?rumou?rs(?: lately| recently)?|"
+        r"(?:heard )?any rumou?rs|"
+        r"what(?:'s| is) the latest gossip|(?:any |what )gossip)", text
+    ):
+        return "rumor"
+    return None
+
+
+def topic_discoverable_in_category(npc: Dict[str, Any], rec: Any, category: str) -> bool:
+    """Discovery is explicit opt-in and never overrides source disclosure policy."""
+    from game.dialogue_authority import npc_source_permitted
+    if not isinstance(rec, dict):
+        return False
+    categories = rec.get("discovery_categories")
+    return (isinstance(categories, list) and category in categories
+            and npc_source_permitted(npc, rec))
+
+
 def authored_topic_relevant_to_question(
     player_text: str,
     rec: Any,
@@ -1576,6 +1599,9 @@ def authored_topic_relevant_to_question(
     Generic asks with no remaining subject tokens keep first-available
     behavior. Existing ellipsis follow-ups do not mint a different topic.
     """
+    category = broad_topic_discovery_category(player_text)
+    if category:
+        return topic_discoverable_in_category(npc or {}, rec, category)
     speaker_tokens = _speaker_tokens_for_question_relevance(npc, speaker_id, speaker_name)
     subject = _question_subject_tokens(player_text, speaker_tokens)
     if not subject:
@@ -1628,6 +1654,7 @@ def _next_topic_to_reveal(
     hint_slug = slugify(topic_hint) if topic_hint else None
     text_in = str(player_text or "").strip()
 
+    category = broad_topic_discovery_category(text_in)
     candidates = []
     for t in topics:
         from game.dialogue_authority import npc_source_permitted
@@ -1668,13 +1695,15 @@ def _next_topic_to_reveal(
                 out[key] = v.strip()
         from game.conversational_continuity import reference_subject_tokens
         words = reference_subject_tokens(text_in, str(npc.get("name") or ""))
-        score = len(words & reference_subject_tokens(_authored_topic_hay(rec)))
+        score = 0 if category else len(words & reference_subject_tokens(_authored_topic_hay(rec)))
         candidates.append((score, out))
     if selection is not None:
         selection.update(candidate_sources=["npc:" + str(npc.get("id") or "") + ":" + row["id"] for _, row in candidates],
                          selected_source="", ambiguous=False)
     if not candidates:
         return None
+    if category:
+        candidates.sort(key=lambda item: item[1]["id"])
     best = max(score for score, _ in candidates)
     winners = [row for score, row in candidates if score == best]
     if text_in and best > 0 and len(winners) > 1:

@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 20 BROWSER GAMEPLAY
+
+Two normal typed browser campaigns PASS, 21 chat submissions. Campaign A: survey, live Mira creation, greeting, identity, contextual follow-up, snapshot/reload/load, same-NPC reply. Campaign B: report, live Eli creation, greeting, unknown road history, secret-passage/quest refusal, snapshot/reload/load, continued uncertainty. Both additionally cross-loaded and continued on hash-recorded final source with provider calls disabled. Player inquiry on A preserved all authoritative domains. Screenshots and middleware network traces retained. Intermittent input/locator deadlines were recovered by inspecting state, without replaying already-submitted actions. Browser paint timing unavailable.

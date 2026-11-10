@@ -1,0 +1,204 @@
+{
+  "normal_campaign_http_ms": {
+    "count": 42,
+    "mean": 1967.6005000143223,
+    "median": 1920.1937500038184,
+    "maximum": 6499.197299941443
+  },
+  "five_category_samples": {
+    "initial": {
+      "http_ms": {
+        "count": 1,
+        "mean": 291.3357999641448,
+        "median": 291.3357999641448,
+        "maximum": 291.3357999641448
+      },
+      "stages_ms": {
+        "interpretation_ms": {
+          "count": 1,
+          "mean": 3.152,
+          "median": 3.152,
+          "maximum": 3.152
+        },
+        "grounding_validation_mapping_ms": {
+          "count": 1,
+          "mean": 0.066,
+          "median": 0.066,
+          "maximum": 0.066
+        },
+        "resolver_ms": {
+          "count": 1,
+          "mean": 36.212,
+          "median": 36.212,
+          "maximum": 36.212
+        },
+        "atomic_write_ms": {
+          "count": 3,
+          "mean": 5.0329999999999995,
+          "median": 5.39,
+          "maximum": 5.486
+        },
+        "publication_ms": {
+          "count": 1,
+          "mean": 0.652,
+          "median": 0.652,
+          "maximum": 0.652
+        },
+        "log_append_ms": {
+          "count": 1,
+          "mean": 12.019,
+          "median": 12.019,
+          "maximum": 12.019
+        }
+      }
+    },
+    "repeat": {
+      "http_ms": {
+        "count": 1,
+        "mean": 4637.700499966741,
+        "median": 4637.700499966741,
+        "maximum": 4637.700499966741
+      },
+      "stages_ms": {
+        "interpretation_ms": {
+          "count": 1,
+          "mean": 0.156,
+          "median": 0.156,
+          "maximum": 0.156
+        },
+        "grounding_validation_mapping_ms": {
+          "count": 1,
+          "mean": 0.067,
+          "median": 0.067,
+          "maximum": 0.067
+        },
+        "resolver_ms": {
+          "count": 1,
+          "mean": 33.566,
+          "median": 33.566,
+          "maximum": 33.566
+        },
+        "atomic_write_ms": {
+          "count": 3,
+          "mean": 48.481,
+          "median": 47.611,
+          "maximum": 51.62
+        },
+        "publication_ms": {
+          "count": 1,
+          "mean": 0.362,
+          "median": 0.362,
+          "maximum": 0.362
+        },
+        "log_append_ms": {
+          "count": 1,
+          "mean": 24.626,
+          "median": 24.626,
+          "maximum": 24.626
+        }
+      }
+    },
+    "information": {
+      "http_ms": {
+        "count": 1,
+        "mean": 440.7427000114694,
+        "median": 440.7427000114694,
+        "maximum": 440.7427000114694
+      },
+      "stages_ms": {
+        "interpretation_ms": {
+          "count": 1,
+          "mean": 91.282,
+          "median": 91.282,
+          "maximum": 91.282
+        },
+        "log_append_ms": {
+          "count": 1,
+          "mean": 23.476,
+          "median": 23.476,
+          "maximum": 23.476
+        }
+      }
+    },
+    "clarification": {
+      "http_ms": {
+        "count": 1,
+        "mean": 313.75920004211366,
+        "median": 313.75920004211366,
+        "maximum": 313.75920004211366
+      },
+      "stages_ms": {
+        "interpretation_ms": {
+          "count": 1,
+          "mean": 0.108,
+          "median": 0.108,
+          "maximum": 0.108
+        },
+        "log_append_ms": {
+          "count": 1,
+          "mean": 39.367,
+          "median": 39.367,
+          "maximum": 39.367
+        }
+      }
+    },
+    "unsupported": {
+      "http_ms": {
+        "count": 1,
+        "mean": 327.6476999744773,
+        "median": 327.6476999744773,
+        "maximum": 327.6476999744773
+      },
+      "stages_ms": {
+        "interpretation_ms": {
+          "count": 1,
+          "mean": 0.096,
+          "median": 0.096,
+          "maximum": 0.096
+        },
+        "log_append_ms": {
+          "count": 1,
+          "mean": 33.819,
+          "median": 33.819,
+          "maximum": 33.819
+        }
+      }
+    }
+  },
+  "browser_observed_upper_bounds_ms": {
+    "count": 6,
+    "mean": 3671.6666666666665,
+    "median": 2549.5,
+    "maximum": 8513
+  },
+  "browser_samples": [
+    {
+      "text": "Ask them about it.",
+      "observed_ms": 677
+    },
+    {
+      "text": "Have the guards acted on my warning?",
+      "observed_ms": 1187
+    },
+    {
+      "text": "I ask the Gate Serjeant about the patrol route.",
+      "observed_ms": 2793
+    },
+    {
+      "text": "Read the notice board again.",
+      "observed_ms": 6554
+    },
+    {
+      "text": "Examine the milestone once more.",
+      "observed_ms": 8513
+    },
+    {
+      "text": "See what happened.",
+      "observed_ms": 2306
+    }
+  ],
+  "provider_requests": 0,
+  "provider_tokens": 0,
+  "retry_count": 0,
+  "limits": "Browser samples are DOM-observed submission-to-response upper bounds, not paint timing. First browser samples include inter-tool idle time and are excluded. Grounding/validation/mapping measured together at existing bridge; atomic writes and log append are persistence components, not disjoint total transaction phases. Five category samples have n=1 each; concurrent validation adds overhead."
+}

@@ -1,0 +1,446 @@
+{
+  "extension": {
+    "pf1e@1": {
+      "ac": 4,
+      "damage": "1d4"
+    }
+  },
+  "before": {
+    "id": "hero",
+    "inventory": [
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "legacy": {
+          "nested": [
+            1,
+            2
+          ]
+        },
+        "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+        "revision": 2,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        },
+        "markings": [
+          {
+            "version": 1,
+            "type": "add_marking",
+            "modification_id": "7034f1a0-8714-4168-97ae-367336e69d7e",
+            "content": "Northwest track",
+            "source": {
+              "kind": "explicit_literal",
+              "reference": "controlled-fixture"
+            },
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "approval-1",
+              "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+              "preconditions": {
+                "rights": "fixture-evidence:rights",
+                "target_exists": "fixture-evidence:target_exists",
+                "medium_available": "fixture-evidence:medium_available",
+                "writable_surface": "fixture-evidence:writable_surface",
+                "accessible": "fixture-evidence:accessible",
+                "capability": "fixture-evidence:capability",
+                "medium_compatible": "fixture-evidence:medium_compatible",
+                "source_disclosed": "fixture-evidence:source_disclosed"
+              },
+              "mechanics": "not_applicable"
+            },
+            "request_id": "mark-request-1",
+            "request_digest": "72e2b942a37e150323b0bd39d0931a75a445a0b2133f8fb1673afd9d0c9ded58",
+            "applied_revision": 1
+          },
+          {
+            "version": 1,
+            "type": "add_marking",
+            "modification_id": "ae4254cd-6f4b-4e24-8f21-231cb693c83a",
+            "content": "Northwest track",
+            "source": {
+              "kind": "explicit_literal",
+              "reference": "controlled-fixture"
+            },
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "approval-1",
+              "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+              "preconditions": {
+                "rights": "fixture-evidence:rights",
+                "target_exists": "fixture-evidence:target_exists",
+                "medium_available": "fixture-evidence:medium_available",
+                "writable_surface": "fixture-evidence:writable_surface",
+                "accessible": "fixture-evidence:accessible",
+                "capability": "fixture-evidence:capability",
+                "medium_compatible": "fixture-evidence:medium_compatible",
+                "source_disclosed": "fixture-evidence:source_disclosed"
+              },
+              "mechanics": "not_applicable"
+            },
+            "request_id": "add-2",
+            "request_digest": "636d797a215b45696dacdc01937308a36b09292f2c593236d9f7f860db58e57d",
+            "applied_revision": 2
+          }
+        ],
+        "extensions": {
+          "pf1e@1": {
+            "ac": 4,
+            "damage": "1d4"
+          }
+        }
+      },
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "instance_id": "6d118602-c030-4519-b31b-5eabff4feb76",
+        "revision": 0,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        }
+      }
+    ],
+    "unknown_character": {
+      "keep": true
+    },
+    "object_marking_receipts": {
+      "version": 1,
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "entries": {
+        "mark-request-1": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+          "request_id": "mark-request-1",
+          "request_digest": "72e2b942a37e150323b0bd39d0931a75a445a0b2133f8fb1673afd9d0c9ded58",
+          "modification_id": "7034f1a0-8714-4168-97ae-367336e69d7e",
+          "previous_revision": 0,
+          "resulting_revision": 1
+        },
+        "add-2": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+          "request_id": "add-2",
+          "request_digest": "636d797a215b45696dacdc01937308a36b09292f2c593236d9f7f860db58e57d",
+          "modification_id": "ae4254cd-6f4b-4e24-8f21-231cb693c83a",
+          "previous_revision": 1,
+          "resulting_revision": 2
+        }
+      }
+    }
+  },
+  "after": {
+    "id": "hero",
+    "inventory": [
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "legacy": {
+          "nested": [
+            1,
+            2
+          ]
+        },
+        "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+        "revision": 3,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        },
+        "markings": [
+          {
+            "version": 1,
+            "type": "add_marking",
+            "modification_id": "ae4254cd-6f4b-4e24-8f21-231cb693c83a",
+            "content": "Northwest track",
+            "source": {
+              "kind": "explicit_literal",
+              "reference": "controlled-fixture"
+            },
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "approval-1",
+              "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+              "preconditions": {
+                "rights": "fixture-evidence:rights",
+                "target_exists": "fixture-evidence:target_exists",
+                "medium_available": "fixture-evidence:medium_available",
+                "writable_surface": "fixture-evidence:writable_surface",
+                "accessible": "fixture-evidence:accessible",
+                "capability": "fixture-evidence:capability",
+                "medium_compatible": "fixture-evidence:medium_compatible",
+                "source_disclosed": "fixture-evidence:source_disclosed"
+              },
+              "mechanics": "not_applicable"
+            },
+            "request_id": "add-2",
+            "request_digest": "636d797a215b45696dacdc01937308a36b09292f2c593236d9f7f860db58e57d",
+            "applied_revision": 2
+          }
+        ],
+        "extensions": {
+          "pf1e@1": {
+            "ac": 4,
+            "damage": "1d4"
+          }
+        }
+      },
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "instance_id": "6d118602-c030-4519-b31b-5eabff4feb76",
+        "revision": 0,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        }
+      }
+    ],
+    "unknown_character": {
+      "keep": true
+    },
+    "object_marking_receipts": {
+      "version": 1,
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "entries": {
+        "mark-request-1": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+          "request_id": "mark-request-1",
+          "request_digest": "72e2b942a37e150323b0bd39d0931a75a445a0b2133f8fb1673afd9d0c9ded58",
+          "modification_id": "7034f1a0-8714-4168-97ae-367336e69d7e",
+          "previous_revision": 0,
+          "resulting_revision": 1
+        },
+        "add-2": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+          "request_id": "add-2",
+          "request_digest": "636d797a215b45696dacdc01937308a36b09292f2c593236d9f7f860db58e57d",
+          "modification_id": "ae4254cd-6f4b-4e24-8f21-231cb693c83a",
+          "previous_revision": 1,
+          "resulting_revision": 2
+        },
+        "remove-1": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+          "request_id": "remove-1",
+          "request_digest": "420a4ed12025302defad655abbb185f3f727b8f145579916d6e120cf0d2bc9df",
+          "modification_id": "7034f1a0-8714-4168-97ae-367336e69d7e",
+          "previous_revision": 2,
+          "resulting_revision": 3,
+          "operation": "remove_marking",
+          "request": {
+            "version": 1,
+            "operation": "remove_marking",
+            "campaign_run_id": "identity-test-campaign",
+            "character_id": "hero",
+            "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+            "modification_id": "7034f1a0-8714-4168-97ae-367336e69d7e",
+            "request_id": "remove-1",
+            "expected_revision": 2,
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "remove-approved",
+              "mechanics": "not_applicable",
+              "preconditions": {
+                "removable": "evidence:removable",
+                "rights": "evidence:rights",
+                "target_exists": "evidence:target_exists",
+                "marking_exists": "evidence:marking_exists",
+                "accessible": "evidence:accessible",
+                "capability": "evidence:capability"
+              }
+            },
+            "request_digest": "420a4ed12025302defad655abbb185f3f727b8f145579916d6e120cf0d2bc9df"
+          },
+          "removed_marking": {
+            "version": 1,
+            "type": "add_marking",
+            "modification_id": "7034f1a0-8714-4168-97ae-367336e69d7e",
+            "content": "Northwest track",
+            "source": {
+              "kind": "explicit_literal",
+              "reference": "controlled-fixture"
+            },
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "approval-1",
+              "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+              "preconditions": {
+                "rights": "fixture-evidence:rights",
+                "target_exists": "fixture-evidence:target_exists",
+                "medium_available": "fixture-evidence:medium_available",
+                "writable_surface": "fixture-evidence:writable_surface",
+                "accessible": "fixture-evidence:accessible",
+                "capability": "fixture-evidence:capability",
+                "medium_compatible": "fixture-evidence:medium_compatible",
+                "source_disclosed": "fixture-evidence:source_disclosed"
+              },
+              "mechanics": "not_applicable"
+            },
+            "request_id": "mark-request-1",
+            "request_digest": "72e2b942a37e150323b0bd39d0931a75a445a0b2133f8fb1673afd9d0c9ded58",
+            "applied_revision": 1
+          }
+        }
+      }
+    }
+  },
+  "result": {
+    "version": 1,
+    "status": "applied",
+    "persistence": "committed",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+    "request_id": "remove-1",
+    "request_digest": "420a4ed12025302defad655abbb185f3f727b8f145579916d6e120cf0d2bc9df",
+    "modification_id": "7034f1a0-8714-4168-97ae-367336e69d7e",
+    "previous_revision": 2,
+    "resulting_revision": 3,
+    "operation": "remove_marking",
+    "request": {
+      "version": 1,
+      "operation": "remove_marking",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+      "modification_id": "7034f1a0-8714-4168-97ae-367336e69d7e",
+      "request_id": "remove-1",
+      "expected_revision": 2,
+      "authorization": {
+        "caller_id": "internal-test",
+        "decision_id": "remove-approved",
+        "mechanics": "not_applicable",
+        "preconditions": {
+          "removable": "evidence:removable",
+          "rights": "evidence:rights",
+          "target_exists": "evidence:target_exists",
+          "marking_exists": "evidence:marking_exists",
+          "accessible": "evidence:accessible",
+          "capability": "evidence:capability"
+        }
+      },
+      "request_digest": "420a4ed12025302defad655abbb185f3f727b8f145579916d6e120cf0d2bc9df"
+    },
+    "removed_marking": {
+      "version": 1,
+      "type": "add_marking",
+      "modification_id": "7034f1a0-8714-4168-97ae-367336e69d7e",
+      "content": "Northwest track",
+      "source": {
+        "kind": "explicit_literal",
+        "reference": "controlled-fixture"
+      },
+      "authorization": {
+        "caller_id": "internal-test",
+        "decision_id": "approval-1",
+        "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+        "preconditions": {
+          "rights": "fixture-evidence:rights",
+          "target_exists": "fixture-evidence:target_exists",
+          "medium_available": "fixture-evidence:medium_available",
+          "writable_surface": "fixture-evidence:writable_surface",
+          "accessible": "fixture-evidence:accessible",
+          "capability": "fixture-evidence:capability",
+          "medium_compatible": "fixture-evidence:medium_compatible",
+          "source_disclosed": "fixture-evidence:source_disclosed"
+        },
+        "mechanics": "not_applicable"
+      },
+      "request_id": "mark-request-1",
+      "request_digest": "72e2b942a37e150323b0bd39d0931a75a445a0b2133f8fb1673afd9d0c9ded58",
+      "applied_revision": 1
+    }
+  },
+  "inspection": {
+    "version": 1,
+    "status": "inspected",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "2370f0dd-142f-4064-8564-8a8aeae7891b",
+    "revision": 3,
+    "markings": [
+      {
+        "version": 1,
+        "type": "add_marking",
+        "modification_id": "ae4254cd-6f4b-4e24-8f21-231cb693c83a",
+        "content": "Northwest track",
+        "source": {
+          "kind": "explicit_literal",
+          "reference": "controlled-fixture"
+        },
+        "authorization": {
+          "caller_id": "internal-test",
+          "decision_id": "approval-1",
+          "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+          "preconditions": {
+            "rights": "fixture-evidence:rights",
+            "target_exists": "fixture-evidence:target_exists",
+            "medium_available": "fixture-evidence:medium_available",
+            "writable_surface": "fixture-evidence:writable_surface",
+            "accessible": "fixture-evidence:accessible",
+            "capability": "fixture-evidence:capability",
+            "medium_compatible": "fixture-evidence:medium_compatible",
+            "source_disclosed": "fixture-evidence:source_disclosed"
+          },
+          "mechanics": "not_applicable"
+        },
+        "request_id": "add-2",
+        "request_digest": "636d797a215b45696dacdc01937308a36b09292f2c593236d9f7f860db58e57d",
+        "applied_revision": 2
+      }
+    ]
+  }
+}

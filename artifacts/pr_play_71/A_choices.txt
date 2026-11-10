@@ -1,0 +1,89 @@
+- complementary:
+  - generic: UI Mode
+  - combobox "UI Mode":
+    - option "Player" [selected]
+    - option "Author"
+    - option "Debug"
+  - button "Play"
+  - button "Character"
+  - button "World"
+  - heading "Play" [level=2]
+  - strong: Galinor
+  - text: — Level 1 Wizard
+  - text: "HP: 8/8"
+  - text: "AC: 12 | Touch 12 | Flat-Footed 10"
+  - text: "Conditions: none"
+  - heading "Save Status" [level=3]
+  - strong: "Last saved:"
+  - text: 11/5/2026, 7:40:31 PM
+  - strong: "Active scene at save:"
+  - text: old_milestone
+  - strong: "Save data exists:"
+  - text: "Yes"
+  - generic: Auto-saves on each action/chat. 2 clues, 4 log entries.
+  - heading "Scene & Mode" [level=3]
+  - strong: "Scene:"
+  - text: Old Milestone
+  - strong: "Mode:"
+  - text: exploration
+  - generic: Narration Mode
+  - combobox "Narration Mode":
+    - option "Terse"
+    - option "Standard" [selected]
+    - option "Vivid"
+    - option "Tactical"
+    - option "Investigative"
+  - generic: Modes change narration style only — mechanics stay the same.
+  - heading "Combat" [level=3]
+  - generic: Combat inactive.
+  - generic: No living enemies.
+  - button "Roll Initiative"
+  - button "End Turn"
+  - heading "Action Helper" [level=3]
+  - generic: Target
+  - combobox
+  - generic: Action Type
+  - combobox:
+    - option "Attack" [selected]
+    - option "Spell"
+    - option "Skill"
+    - option "Freeform"
+  - generic: Attack
+  - combobox:
+    - option "Quarterstaff (+0)" [selected]
+    - option "Light Crossbow (+2)"
+  - checkbox "Risky Strike"
+  - text: Risky Strike
+  - checkbox "Defensive Stance"
+  - text: Defensive Stance
+  - button "Submit Attack"
+  - heading "Controls" [level=3]
+  - button "Clear Log"
+  - button "Reset Combat"
+  - button "New Campaign"
+  - generic "Save Slots"
+- main:
+  - heading "Old Milestone" [level=1]
+  - generic: A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.
+  - generic: "Suggested Actions:"
+  - button "Survey the uncertain trail yourself"
+  - button "Return to report the uncertain trail to the watch"
+  - button "Examine the Weathered milestone (already searched)"
+  - button "Examine the Mud prints"
+  - button "Examine A weathered stone milestone leans bes"
+  - generic: GM
+  - generic: Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. Threadbare watchers and refugees cluster along the muddy gate line, while a gate serjeant manages the crowd and keeps one eye on the roster board. Nearby, a tavern runner trades hot stew and rumors near a rain barrel. A notice board lists taxes, curfew rules, and a warning about a missing patrol. Ash Compact census delays have tightened the eastern caravan choke point.
+  - generic: Galinor
+  - generic: I examine the Notice board.
+  - generic: GM
+  - generic: You examine the Notice board. The missing patrol was last seen taking the northwest mud track past the crates.
+  - generic: Galinor
+  - generic: I follow the missing patrol rumor.
+  - generic: GM
+  - generic: You arrive at Old Milestone.
+  - generic: Galinor
+  - generic: I examine the Weathered milestone.
+  - generic: GM
+  - generic: I cannot provide a validated response to that request.
+  - textbox "Play by chat here. Describe what Galinor says or does."
+  - button "Send"

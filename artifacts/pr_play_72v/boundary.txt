@@ -1,0 +1,110 @@
+........................................................................ [ 67%]
+............FFF......F.........F.F.                                      [100%]
+================================== FAILURES ===================================
+E   AssertionError: assert None == 'scene_opening'
+     +  where None = <built-in method get of dict object at 0x0000026CFF0EE480>('kind')
+     +    where <built-in method get of dict object at 0x0000026CFF0EE480> = {}.get
+     +      where {} = <built-in method get of dict object at 0x0000026C82240340>('resolution', {})
+     +        where <built-in method get of dict object at 0x0000026C82240340> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...he brittle discipline of men who expect trouble, while old banners rot above the walls.', 'mode': 'social', ...}}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started c85b2292466ecbe955ed53f4
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_start_campaign_api.py:157: AssertionError: assert None == 'scene_opening'
+E   AssertionError: assert 781 > 800
+     +  where 781 = <built-in method get of dict object at 0x0000026C826B4600>('post_final_emission_gate_text_len', 0)
+     +    where <built-in method get of dict object at 0x0000026C826B4600> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 2fc94962863780cbef8512da
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_start_campaign_api.py:258: AssertionError: assert 781 > 800
+E   assert "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke." in "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush."
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started dc0dfc49063b74b2bbcac4bd
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_start_campaign_api.py:287: assert "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke." in "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush."
+E   Failed: DID NOT RAISE RuntimeError
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started eb0094d746e011c4b37a38b2
+------------------------------ Captured log call ------------------------------
+ERROR    game.player_http_boundary:player_http_boundary.py:35 Player HTTP request failed: /api/start_campaign
+Traceback (most recent call last):
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\player_http_boundary.py", line 20, in handle
+    response = await original(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\routing.py", line 698, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6610, in start_campaign
+    return _project_player_runtime_response(_start_campaign_response(request))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6648, in _start_campaign_response
+    return _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6790, in _start_campaign_after_admission
+    scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
+                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_start_campaign_api.py", line 450, in _boom
+    raise RuntimeError("simulated pipeline failure")
+RuntimeError: simulated pipeline failure
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_start_campaign_api.py:456: Failed: DID NOT RAISE RuntimeError
+E   AssertionError: assert None == 'safe_nonresolution'
+     +  where None = <built-in method get of dict object at 0x0000026C826B7740>('opening_failure_reason')
+     +    where <built-in method get of dict object at 0x0000026C826B7740> = {'ok': False, 'campaign_started': False, 'gameplay_committed': False, 'status': 'opening_failed', ...}.get
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started efeb019a731776a39955d424
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_37_opening_recovery.py:406: AssertionError: assert None == 'safe_nonresolution'
+E   AssertionError: assert None == 'safe_nonresolution'
+     +  where None = <built-in method get of dict object at 0x0000026C826F7D00>('opening_failure_reason')
+     +    where <built-in method get of dict object at 0x0000026C826F7D00> = {'ok': False, 'campaign_started': False, 'gameplay_committed': False, 'status': 'opening_failed', ...}.get
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 63d9f64caac89951d728878e
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_37_opening_recovery.py:454: AssertionError: assert None == 'safe_nonresolution'
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_start_campaign_api.py::test_start_campaign_emits_opening_and_sets_started
+FAILED tests/test_start_campaign_api.py::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text
+FAILED tests/test_start_campaign_api.py::test_start_campaign_promotes_valid_upstream_prepared_scene_opening
+FAILED tests/test_start_campaign_api.py::test_failed_start_campaign_does_not_mark_started
+FAILED tests/test_pr_play_37_opening_recovery.py::test_http_invalid_declaration_discards_provider_text
+FAILED tests/test_pr_play_37_opening_recovery.py::test_http_composer_failure_does_not_commit
+6 failed, 101 passed, 1 warning in 105.83s (0:01:45)

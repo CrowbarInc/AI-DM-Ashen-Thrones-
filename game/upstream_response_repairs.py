@@ -117,7 +117,7 @@ def _action_result_summary(resolution: Dict[str, Any] | None) -> str:
         if kind in {"investigate", "observe", "search"}:
             return "the search turns up nothing new"
         return "the attempt turns up nothing new"
-    if state_changes.get("clue_revealed") or resolution.get("clue_id") or resolution.get("discovered_clues"):
+    if resolution.get("success") is True and (state_changes.get("clue_revealed") or resolution.get("clue_id") or resolution.get("discovered_clues")):
         return "you turn up a concrete clue"
     if state_changes.get("skill_check_failed"):
         return "the attempt catches and fails to land cleanly"
@@ -176,6 +176,12 @@ def build_minimal_action_outcome_contract_repair_text(
     player_input: str,
     resolution: Dict[str, Any] | None,
 ) -> str:
+    from game.authorized_information import revealed_information
+
+    information = revealed_information(resolution)
+    if information:
+        action_clause = _to_second_person_action_clause(player_input, resolution)
+        return _normalize_terminal_punctuation(action_clause) + " " + " ".join(item['text'] for item in information)
     action_clause = _to_second_person_action_clause(player_input, resolution)
     result_clause = _action_result_summary(resolution)
     return _normalize_terminal_punctuation(f"{action_clause}, and {result_clause}")

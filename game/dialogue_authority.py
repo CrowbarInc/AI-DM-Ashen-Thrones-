@@ -490,15 +490,14 @@ def visible_supporting_sentence(scene: Mapping[str, Any] | None, player_text: st
     if pattern is None or kind in {"hidden", "promise", "mystery", "relationship", "rumor", "general"}:
         return ""
     try:
-        from game.incidental_entity import public_scene_text
+        from game.incidental_entity import public_evidence_units
     except Exception:
         return ""
-    blob = public_scene_text(scene if isinstance(scene, Mapping) else None)
     subject_words = [word for word in subject_phrase(player_text).split() if word not in {"the", "that"}]
     if not subject_words:
         return ""
-    for sentence in re.split(r"[.!?]", blob):
-        piece = " ".join(sentence.split())
+    for unit in public_evidence_units(scene if isinstance(scene, Mapping) else None):
+        piece = " ".join(unit.split())
         if not piece or not pattern.search(piece):
             continue
         if any(word in piece.lower() for word in subject_words):
@@ -543,6 +542,17 @@ def build_dialogue_authority(
                     validation="source_or_policy_denied",
                 )}
     topic_text = str(topic.get("text") or topic.get("clue_text") or "").strip()
+    from game.public_fact_dialogue import select_public_offering
+
+    public_selection = select_public_offering(scene, person, player_text)
+    public_fact = public_selection.get("fact") if (
+        not topic_text and not (payload.get("topic_selection") or {}).get("ambiguous")
+        and payload.get("reply_plan_kind") != "genuine_refusal"
+        and payload.get("target_resolved") is True
+        and str(payload.get("npc_id") or "") == str(person.get("id") or "")
+    ) else None
+    if public_fact:
+        topic_text = public_fact["text"]
     kind = requested_information(player_text)
     plan = str(payload.get("reply_plan_kind") or "")
     if topic_text and plan == "authoritative_answer_available":
@@ -616,6 +626,9 @@ def build_dialogue_authority(
             line = str(prior[-1].get("text") or "")
         if not line:
             line = _player_line(name, posture, subject)
+    if public_fact and not quoted and not reused:
+        determined = True
+        line = f'{name} says, "{topic_text}"'
     from game.expressive_dialogue import proposition_identity
 
     resolved_proposition = inherited_proposition or proposition_identity(
@@ -656,6 +669,8 @@ def build_dialogue_authority(
             "selected_source": (history_source if quoted else "npc:" + npc_id + ":" + str(topic.get("id") or "") if topic_text else ""),
             "ambiguous": "Which earlier remark" in quoted, "ownership": "npc",
             **dict(payload.get("topic_selection") or {}),
+            **({"candidate_sources": public_selection["candidate_sources"],
+                "selected_source": public_fact["source_id"], "ambiguous": False} if public_fact else {}),
             **({"selected_source": history_source,
                 "ambiguous": "Which earlier remark" in quoted} if quoted else {}),
         },
@@ -676,6 +691,8 @@ def build_dialogue_authority(
         ),
         "proposition_id": resolved_proposition,
         "authorized_proposition": authorized_proposition,
+        "public_fact_selection": public_selection,
+        "public_fact_source": public_fact if not quoted and not reused else None,
         "improvisation_permitted": incidental,
         "improvisation_scope": "incidental_speech" if incidental else "none",
         "narration_determined": determined,
@@ -697,8 +714,8 @@ def build_dialogue_authority(
             speaker_id=npc_id,
             operation=provenance_operation,
             proposition=authorized_proposition,
-            source_id=str((history_source if quoted else ("npc:" + npc_id + ":" + str(topic.get("id") or "")) if topic_text else "")),
-            epistemic_status=str(topic.get("epistemic") or topic.get("epistemic_status") or "none"),
+            source_id=str((history_source if quoted else public_fact["source_id"] if public_fact else ("npc:" + npc_id + ":" + str(topic.get("id") or "")) if topic_text else "")),
+            epistemic_status="established_public" if public_fact else str(topic.get("epistemic") or topic.get("epistemic_status") or "none"),
             validation=provenance_validation,
         ),
     }
@@ -718,7 +735,7 @@ def attach_dialogue_authority(
     topic = social.get("topic_revealed") if isinstance(social.get("topic_revealed"), Mapping) else None
     if (
         str(social.get("reply_plan_kind") or "") == "authoritative_answer_available"
-        and not topic
+        and not topic and not record.get("public_fact_source")
     ):
         social["reply_plan_kind"] = "genuine_uncertainty"
         social["npc_speech_authority"] = "none"
@@ -746,6 +763,10 @@ def attach_dialogue_authority(
         social["objective_world_fact_authority"] = "none"
         social["durable_state_mutation_allowed"] = False
     social["dialogue_authority"] = record
+    if record.get("public_fact_source"):
+        social.update(reply_plan_kind="authoritative_answer_available", reply_kind="answer",
+                      npc_speech_authority="source_bound", objective_world_fact_authority="none",
+                      incidental_subjective_allowed=False, durable_state_mutation_allowed=False)
     return record
 
 
@@ -812,6 +833,8 @@ def select_host_speech(
     line = str(record.get("player_line") or "").strip()
     if record.get("reuse_prior_speech") and line:
         return line, "dialogue_authority.reuse_prior_speech"
+    if record.get("public_fact_source") and line:
+        return line, "dialogue_authority.public_fact:" + record["public_fact_source"]["source_id"]
     grounding = social.get("topic_selection") or {}
     if grounding.get("ambiguous"):
         return f'{name} says, "Which subject do you mean?"', "social.topic_selection.ambiguous"
@@ -980,3 +1003,28 @@ def remember_dialogue_commitment(
         else:
             del rows[stale]
     return entry
+
+# Background exchanges use the existing bounded dialogue memory, not an NPC DB.
+def background_history(session, npc_id):
+    return [r for r in _bucket(session) if r.get('npc_id') == npc_id
+            and r.get('campaign_id') == session.get('campaign_run_id')
+            and r.get('kind') == 'background_exchange'][-MAX_PER_NPC:]
+
+
+def remember_background_exchange(session, *, npc_id, player_text, response, social_receipt=None):
+    rows = session.setdefault("conversational_context", {}).setdefault(COMMITMENT_KEY, [])
+    turn = int(session.get('turn_counter') or 0)
+    identity = (session.get('campaign_run_id'), npc_id, turn, player_text)
+    for row in rows:
+        if (row.get('campaign_id'),row.get('npc_id'),row.get('turn'),row.get('player_utterance')) == identity:
+            return row
+    row = dict(kind='background_exchange',npc_id=npc_id,campaign_id=identity[0],
+        player_id=str(session.get('session_id') or identity[0]),turn=turn,player_utterance=player_text,
+        text=response,published_response=response,status='active',canonical=False,social_receipt=social_receipt)
+    rows.append(row)
+    own = [r for r in rows if r.get('npc_id')==npc_id and r.get('kind')=='background_exchange']
+    for old in own[:-MAX_PER_NPC]:
+        rows.remove(old)
+    if len(rows)>MAX_COMMITMENTS:
+        del rows[:-MAX_COMMITMENTS]
+    return row

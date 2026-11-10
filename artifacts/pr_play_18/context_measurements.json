@@ -1,0 +1,351 @@
+{
+  "method": "Content character counts; estimated tokens = characters / 4. No local tiktoken. Excludes provider framing; schema counted separately.",
+  "observed_pr_play_17": {
+    "input_tokens": 26986,
+    "output_tokens": 2050,
+    "total_tokens": 29036
+  },
+  "reconstructed_before": {
+    "message_content_characters": 113280,
+    "estimated_tokens": 28320.0,
+    "schema_characters": 0,
+    "categories": [
+      {
+        "category": "user.response_policy",
+        "characters": 21665,
+        "estimated_tokens": 5416.2,
+        "percent": 19.13
+      },
+      {
+        "category": "user.instructions",
+        "characters": 14519,
+        "estimated_tokens": 3629.8,
+        "percent": 12.82
+      },
+      {
+        "category": "user.gm_resolution_decision",
+        "characters": 10750,
+        "estimated_tokens": 2687.5,
+        "percent": 9.49
+      },
+      {
+        "category": "user.scene",
+        "characters": 10353,
+        "estimated_tokens": 2588.2,
+        "percent": 9.14
+      },
+      {
+        "category": "system 1: legacy narration",
+        "characters": 9564,
+        "estimated_tokens": 2391.0,
+        "percent": 8.44
+      },
+      {
+        "category": "user.turn_packet",
+        "characters": 8674,
+        "estimated_tokens": 2168.5,
+        "percent": 7.66
+      },
+      {
+        "category": "user.decision_facing_answer_recipe",
+        "characters": 7287,
+        "estimated_tokens": 1821.8,
+        "percent": 6.43
+      },
+      {
+        "category": "user.narrative_plan",
+        "characters": 6697,
+        "estimated_tokens": 1674.2,
+        "percent": 5.91
+      },
+      {
+        "category": "user.opening_scene_realization",
+        "characters": 3582,
+        "estimated_tokens": 895.5,
+        "percent": 3.16
+      },
+      {
+        "category": "user.referent_tracking",
+        "characters": 2671,
+        "estimated_tokens": 667.8,
+        "percent": 2.36
+      },
+      {
+        "category": "user.dialogue_social_plan",
+        "characters": 2269,
+        "estimated_tokens": 567.2,
+        "percent": 2.0
+      },
+      {
+        "category": "user.mechanical_resolution",
+        "characters": 1431,
+        "estimated_tokens": 357.8,
+        "percent": 1.26
+      },
+      {
+        "category": "user.speaker_selection",
+        "characters": 1163,
+        "estimated_tokens": 290.8,
+        "percent": 1.03
+      },
+      {
+        "category": "user.character",
+        "characters": 1072,
+        "estimated_tokens": 268.0,
+        "percent": 0.95
+      },
+      {
+        "category": "user.campaign",
+        "characters": 1069,
+        "estimated_tokens": 267.2,
+        "percent": 0.94
+      },
+      {
+        "category": "user.scene_state_anchor_contract",
+        "characters": 1026,
+        "estimated_tokens": 256.5,
+        "percent": 0.91
+      },
+      {
+        "category": "system 2: selection instruction",
+        "characters": 920,
+        "estimated_tokens": 230.0,
+        "percent": 0.81
+      },
+      {
+        "category": "user.transition",
+        "characters": 828,
+        "estimated_tokens": 207.0,
+        "percent": 0.73
+      },
+      {
+        "category": "user.narration_visibility",
+        "characters": 788,
+        "estimated_tokens": 197.0,
+        "percent": 0.7
+      },
+      {
+        "category": "user.opening_selector_selected_facts",
+        "characters": 622,
+        "estimated_tokens": 155.5,
+        "percent": 0.55
+      },
+      {
+        "category": "user.opening_curated_facts",
+        "characters": 612,
+        "estimated_tokens": 153.0,
+        "percent": 0.54
+      },
+      {
+        "category": "user.opening_narration_obligations",
+        "characters": 484,
+        "estimated_tokens": 121.0,
+        "percent": 0.43
+      },
+      {
+        "category": "user.narration_obligations",
+        "characters": 426,
+        "estimated_tokens": 106.5,
+        "percent": 0.38
+      },
+      {
+        "category": "user.response_type_contract",
+        "characters": 416,
+        "estimated_tokens": 104.0,
+        "percent": 0.37
+      },
+      {
+        "category": "user.resolution_contract",
+        "characters": 387,
+        "estimated_tokens": 96.8,
+        "percent": 0.34
+      },
+      {
+        "category": "user.bounded_improvisation",
+        "characters": 384,
+        "estimated_tokens": 96.0,
+        "percent": 0.34
+      },
+      {
+        "category": "user.turn_summary",
+        "characters": 374,
+        "estimated_tokens": 93.5,
+        "percent": 0.33
+      },
+      {
+        "category": "user.world",
+        "characters": 358,
+        "estimated_tokens": 89.5,
+        "percent": 0.32
+      },
+      {
+        "category": "user.lead_context",
+        "characters": 353,
+        "estimated_tokens": 88.2,
+        "percent": 0.31
+      },
+      {
+        "category": "user.session",
+        "characters": 351,
+        "estimated_tokens": 87.8,
+        "percent": 0.31
+      },
+      {
+        "category": "user.interlocutor_lead_context",
+        "characters": 299,
+        "estimated_tokens": 74.8,
+        "percent": 0.26
+      },
+      {
+        "category": "user.interaction_continuity",
+        "characters": 256,
+        "estimated_tokens": 64.0,
+        "percent": 0.23
+      },
+      {
+        "category": "user.player_expression_contract",
+        "characters": 240,
+        "estimated_tokens": 60.0,
+        "percent": 0.21
+      },
+      {
+        "category": "user.world_progression_summary",
+        "characters": 229,
+        "estimated_tokens": 57.2,
+        "percent": 0.2
+      },
+      {
+        "category": "user.social_context",
+        "characters": 193,
+        "estimated_tokens": 48.2,
+        "percent": 0.17
+      },
+      {
+        "category": "user.first_mention_contract",
+        "characters": 185,
+        "estimated_tokens": 46.2,
+        "percent": 0.16
+      },
+      {
+        "category": "user.scene_advancement",
+        "characters": 120,
+        "estimated_tokens": 30.0,
+        "percent": 0.11
+      },
+      {
+        "category": "user.active_topic_anchor",
+        "characters": 98,
+        "estimated_tokens": 24.5,
+        "percent": 0.09
+      },
+      {
+        "category": "user JSON separators",
+        "characters": 98,
+        "estimated_tokens": 24.5,
+        "percent": 0.09
+      },
+      {
+        "category": "user.clues",
+        "characters": 72,
+        "estimated_tokens": 18.0,
+        "percent": 0.06
+      },
+      {
+        "category": "user.world_state",
+        "characters": 66,
+        "estimated_tokens": 16.5,
+        "percent": 0.06
+      },
+      {
+        "category": "user.opening_selector_source_used",
+        "characters": 52,
+        "estimated_tokens": 13.0,
+        "percent": 0.05
+      },
+      {
+        "category": "user.interlocutor_lead_behavior_hints",
+        "characters": 38,
+        "estimated_tokens": 9.5,
+        "percent": 0.03
+      },
+      {
+        "category": "user.selected_conversational_memory",
+        "characters": 36,
+        "estimated_tokens": 9.0,
+        "percent": 0.03
+      },
+      {
+        "category": "user.opening_inputs_are_curated",
+        "characters": 34,
+        "estimated_tokens": 8.5,
+        "percent": 0.03
+      },
+      {
+        "category": "user.combat",
+        "characters": 30,
+        "estimated_tokens": 7.5,
+        "percent": 0.03
+      },
+      {
+        "category": "user.discoverable_hinting",
+        "characters": 28,
+        "estimated_tokens": 7.0,
+        "percent": 0.02
+      },
+      {
+        "category": "user.active_interlocutor",
+        "characters": 27,
+        "estimated_tokens": 6.8,
+        "percent": 0.02
+      },
+      {
+        "category": "user.follow_up_pressure",
+        "characters": 26,
+        "estimated_tokens": 6.5,
+        "percent": 0.02
+      },
+      {
+        "category": "user.uncertainty_hint",
+        "characters": 24,
+        "estimated_tokens": 6.0,
+        "percent": 0.02
+      },
+      {
+        "category": "user.player_input",
+        "characters": 18,
+        "estimated_tokens": 4.5,
+        "percent": 0.02
+      },
+      {
+        "category": "user.recent_log",
+        "characters": 16,
+        "estimated_tokens": 4.0,
+        "percent": 0.01
+      }
+    ]
+  },
+  "reconstructed_after": {
+    "message_content_characters": 1967,
+    "schema_characters": 1642,
+    "total_context_characters": 3609,
+    "estimated_tokens": 902.25,
+    "categories": [
+      {
+        "name": "system",
+        "characters": 920
+      },
+      {
+        "name": "user",
+        "characters": 1047
+      }
+    ]
+  },
+  "confirmed_duplicate": {
+    "fields": [
+      "opening_curated_facts",
+      "opening_selector_selected_facts"
+    ],
+    "equal": true,
+    "value_characters_each": 587
+  }
+}

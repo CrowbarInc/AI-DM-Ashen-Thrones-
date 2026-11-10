@@ -1,0 +1,50 @@
+{
+  "patched_sinks": [
+    "game.api._apply_post_gm_updates",
+    "game.api.remember_recent_contextual_leads",
+    "game.api.promote_accepted_bounded_improvisation",
+    "game.api._validate_gm_scene_update_for_legacy_adoption",
+    "game.api._validate_gm_world_updates_for_legacy_adoption",
+    "game.api.apply_normalized_world_updates",
+    "game.gm.remember_recent_contextual_leads",
+    "game.world.apply_resolution_world_updates",
+    "game.world.apply_normalized_world_updates",
+    "game.storage.save_session",
+    "game.storage.save_world",
+    "game.storage.save_character",
+    "game.storage.save_scene",
+    "game.bounded_improvisation.promote_accepted_bounded_improvisation"
+  ],
+  "sink_calls": [],
+  "detached_mutation_output": {
+    "preview_text": "You look closely.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+    "anchors": [
+      {
+        "order": 0,
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "diagnostic": "heuristic_pass_pending_review",
+    "used_fallback": false,
+    "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}, \"consequential_validation\": {\"decision\": \"PASS\", \"reasons\": [], \"claims\": [], \"provider_requests\": 0, \"coverage\": \"deterministic_frames_not_semantic_proof\"}}",
+    "review_required": true
+  },
+  "duplicate_output": {
+    "preview_text": "You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+    "anchors": [
+      {
+        "order": 0,
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "diagnostic": "invalid_prelude",
+    "used_fallback": true,
+    "validation_json": "{}",
+    "review_required": true
+  },
+  "no_state_handles_or_gameplay_adapter": true
+}

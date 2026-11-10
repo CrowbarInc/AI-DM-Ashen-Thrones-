@@ -1,0 +1,297 @@
+{
+  "before": {
+    "id": "hero",
+    "inventory": [
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "legacy": {
+          "nested": [
+            1,
+            2
+          ]
+        },
+        "instance_id": "04e6bdfa-7fca-470e-95a9-4e938c003cd1",
+        "revision": 0,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        }
+      },
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "instance_id": "da59414b-a5f8-4470-8050-ddf6650d0c29",
+        "revision": 0,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        }
+      }
+    ],
+    "unknown_character": {
+      "keep": true
+    }
+  },
+  "committed": {
+    "id": "hero",
+    "inventory": [
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "legacy": {
+          "nested": [
+            1,
+            2
+          ]
+        },
+        "instance_id": "04e6bdfa-7fca-470e-95a9-4e938c003cd1",
+        "revision": 1,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        },
+        "markings": [
+          {
+            "version": 1,
+            "type": "add_marking",
+            "modification_id": "4f923f97-5171-4d26-bb7e-e4cc2a8f9dce",
+            "content": "Northwest track",
+            "source": {
+              "kind": "explicit_literal",
+              "reference": "controlled-fixture"
+            },
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "approval-1",
+              "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+              "preconditions": {
+                "medium_compatible": "fixture-evidence:medium_compatible",
+                "rights": "fixture-evidence:rights",
+                "capability": "fixture-evidence:capability",
+                "accessible": "fixture-evidence:accessible",
+                "writable_surface": "fixture-evidence:writable_surface",
+                "medium_available": "fixture-evidence:medium_available",
+                "source_disclosed": "fixture-evidence:source_disclosed",
+                "target_exists": "fixture-evidence:target_exists"
+              },
+              "mechanics": "not_applicable"
+            },
+            "request_id": "mark-request-1",
+            "request_digest": "740a3e05febe259279f480005daeba0e8734ca2cc97c4241e6dad37912787187",
+            "applied_revision": 1
+          }
+        ]
+      },
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "instance_id": "da59414b-a5f8-4470-8050-ddf6650d0c29",
+        "revision": 0,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        }
+      }
+    ],
+    "unknown_character": {
+      "keep": true
+    },
+    "object_marking_receipts": {
+      "version": 1,
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "entries": {
+        "mark-request-1": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "04e6bdfa-7fca-470e-95a9-4e938c003cd1",
+          "request_id": "mark-request-1",
+          "request_digest": "740a3e05febe259279f480005daeba0e8734ca2cc97c4241e6dad37912787187",
+          "modification_id": "4f923f97-5171-4d26-bb7e-e4cc2a8f9dce",
+          "previous_revision": 0,
+          "resulting_revision": 1
+        }
+      }
+    }
+  },
+  "pre_snapshot": {
+    "id": "2026-11-10T03-12-30_11e1d59f",
+    "created_at": "2026-11-10T03:12:30.032498Z",
+    "label": "pre marking"
+  },
+  "post_snapshot": {
+    "id": "2026-11-10T03-12-30_c95b9c19",
+    "created_at": "2026-11-10T03:12:30.430567Z",
+    "label": "post marking"
+  },
+  "restored": {
+    "id": "hero",
+    "inventory": [
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "legacy": {
+          "nested": [
+            1,
+            2
+          ]
+        },
+        "instance_id": "04e6bdfa-7fca-470e-95a9-4e938c003cd1",
+        "revision": 1,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        },
+        "markings": [
+          {
+            "version": 1,
+            "type": "add_marking",
+            "modification_id": "4f923f97-5171-4d26-bb7e-e4cc2a8f9dce",
+            "content": "Northwest track",
+            "source": {
+              "kind": "explicit_literal",
+              "reference": "controlled-fixture"
+            },
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "approval-1",
+              "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+              "preconditions": {
+                "medium_compatible": "fixture-evidence:medium_compatible",
+                "rights": "fixture-evidence:rights",
+                "capability": "fixture-evidence:capability",
+                "accessible": "fixture-evidence:accessible",
+                "writable_surface": "fixture-evidence:writable_surface",
+                "medium_available": "fixture-evidence:medium_available",
+                "source_disclosed": "fixture-evidence:source_disclosed",
+                "target_exists": "fixture-evidence:target_exists"
+              },
+              "mechanics": "not_applicable"
+            },
+            "request_id": "mark-request-1",
+            "request_digest": "740a3e05febe259279f480005daeba0e8734ca2cc97c4241e6dad37912787187",
+            "applied_revision": 1
+          }
+        ]
+      },
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "instance_id": "da59414b-a5f8-4470-8050-ddf6650d0c29",
+        "revision": 0,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        }
+      }
+    ],
+    "unknown_character": {
+      "keep": true
+    },
+    "object_marking_receipts": {
+      "version": 1,
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "entries": {
+        "mark-request-1": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "04e6bdfa-7fca-470e-95a9-4e938c003cd1",
+          "request_id": "mark-request-1",
+          "request_digest": "740a3e05febe259279f480005daeba0e8734ca2cc97c4241e6dad37912787187",
+          "modification_id": "4f923f97-5171-4d26-bb7e-e4cc2a8f9dce",
+          "previous_revision": 0,
+          "resulting_revision": 1
+        }
+      }
+    }
+  },
+  "original_result": {
+    "version": 1,
+    "status": "applied",
+    "persistence": "committed",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "04e6bdfa-7fca-470e-95a9-4e938c003cd1",
+    "request_id": "mark-request-1",
+    "request_digest": "740a3e05febe259279f480005daeba0e8734ca2cc97c4241e6dad37912787187",
+    "modification_id": "4f923f97-5171-4d26-bb7e-e4cc2a8f9dce",
+    "previous_revision": 0,
+    "resulting_revision": 1
+  },
+  "post_restore_replay": {
+    "version": 1,
+    "status": "applied",
+    "persistence": "committed",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "04e6bdfa-7fca-470e-95a9-4e938c003cd1",
+    "request_id": "mark-request-1",
+    "request_digest": "740a3e05febe259279f480005daeba0e8734ca2cc97c4241e6dad37912787187",
+    "modification_id": "4f923f97-5171-4d26-bb7e-e4cc2a8f9dce",
+    "previous_revision": 0,
+    "resulting_revision": 1
+  },
+  "rolled_back_timeline_result": {
+    "version": 1,
+    "status": "applied",
+    "persistence": "committed",
+    "campaign_run_id": "identity-test-campaign",
+    "character_id": "hero",
+    "instance_id": "04e6bdfa-7fca-470e-95a9-4e938c003cd1",
+    "request_id": "mark-request-1",
+    "request_digest": "740a3e05febe259279f480005daeba0e8734ca2cc97c4241e6dad37912787187",
+    "modification_id": "d2ebb620-2b4a-4864-b333-886ef378697e",
+    "previous_revision": 0,
+    "resulting_revision": 1
+  }
+}

@@ -1,0 +1,47 @@
+PR-PLAY-42 baseline, captured before the repair.
+Command: ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT=1 PYTHONPATH=. .venv/Scripts/python.exe artifacts/pr_play_41/replay_grounding.py
+Source state: artifacts/atgb/pr_play_41/live/20261102T110016Z-47c71d381798
+No provider call.
+
+==== turns/T2/before
+TEXT Have you heard any interesting rumors lately?
+TOKENS ['rumors', 'rumor']
+PUBLIC_LEN 1975
+ HIT gate_serjeant ['rumors', 'rumor']
+ HIT tavern_runner ['rumors', 'rumor']
+PUBLIC ambiguous ['gate_serjeant', 'tavern_runner']
+GROUND ambiguous None requires_clarification True Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.
+TRAVEL none
+
+==== turns/T3/before
+TEXT I examine the notice board.
+TOKENS ['examine', 'notice', 'board']
+PUBLIC_LEN 1975
+ HIT gate_serjeant ['notice', 'board']
+ HIT tavern_runner ['notice', 'board']
+PUBLIC ambiguous ['gate_serjeant', 'tavern_runner']
+GROUND ambiguous None requires_clarification True Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.
+TRAVEL none
+
+==== turns/T4/before
+TEXT I want to follow the trail connected to the missing patrol.
+TOKENS ['follow', 'trail', 'connected', 'missing', 'patrol']
+PUBLIC_LEN 1975
+ HIT gate_serjeant ['missing', 'patrol']
+ HIT tavern_runner ['missing', 'patrol']
+PUBLIC ambiguous ['gate_serjeant', 'tavern_runner']
+GROUND ambiguous None requires_clarification True Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.
+TRAVEL EXECUTE grounded_movement_destination Go to Follow the missing patrol rumor. leave_for_follow_the_missing_patrol_rumor
+
+==== turns/T4/before
+TEXT Go to Follow the missing patrol rumor.
+TOKENS ['follow', 'missing', 'patrol', 'rumor']
+PUBLIC_LEN 1975
+ HIT gate_serjeant ['missing', 'patrol', 'rumor']
+ HIT tavern_runner ['missing', 'patrol', 'rumor']
+PUBLIC ambiguous ['gate_serjeant', 'tavern_runner']
+GROUND ambiguous None requires_clarification True Which person do you mean: Gate Serjeant or Tavern Runner? Nothing has been attempted.
+TRAVEL none
+
+The travel selector had already accepted leave_for_follow_the_missing_patrol_rumor.
+The pre-tick gate then assessed the rewritten summary and rejected it as an ambiguous person.

@@ -285,18 +285,21 @@ def _authoritative_resolution_fact_text(
         location = str(scene_obj.get("location") or "").strip()
         summary = str(scene_obj.get("summary") or "").strip()
         destination = location or str(resolution.get("target_scene_id") or "").replace("_", " ").strip()
+        continuation = ""
+        if (resolution.get("metadata") or {}).get("deferred_intentions"):
+            continuation = " Your intended follow-up is still pending. Choose a visible target here when you are ready."
+            if destination:
+                return f"You arrive at {destination}.{continuation}", {"kind": kind, "source": "scene_transition"}
         if summary and destination and destination.lower() not in summary.lower():
-            return f"You arrive at {destination}. {summary}", {"kind": kind, "source": "scene_transition"}
+            return f"You arrive at {destination}. {summary}{continuation}", {"kind": kind, "source": "scene_transition"}
         if summary:
-            return f"You arrive. {summary}", {"kind": kind, "source": "scene_transition"}
+            return f"You arrive. {summary}{continuation}", {"kind": kind, "source": "scene_transition"}
         if destination:
-            return f"You arrive at {destination}.", {"kind": kind, "source": "scene_transition"}
+            return f"You arrive at {destination}.{continuation}", {"kind": kind, "source": "scene_transition"}
     if kind in {"discover_clue", "investigate", "observe"}:
-        clue_text = str(resolution.get("clue_text") or "").strip()
-        if not clue_text:
-            clues = resolution.get("discovered_clues")
-            if isinstance(clues, list):
-                clue_text = next((str(c).strip() for c in clues if isinstance(c, str) and str(c).strip()), "")
+        from game.authorized_information import revealed_information
+
+        clue_text = " ".join(item['text'] for item in revealed_information(resolution))
         if clue_text:
             target = str(resolution.get("interactable_id") or resolution.get("action_id") or "").strip()
             if target:

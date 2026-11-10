@@ -1,0 +1,36 @@
+{
+  "steps": [
+    {
+      "action": "initialize_campaign",
+      "ok": true,
+      "http_status": 200
+    },
+    {
+      "action": "capture_baseline",
+      "ok": true,
+      "http_status": null
+    },
+    {
+      "action": "start_campaign",
+      "ok": true,
+      "http_status": 200
+    },
+    {
+      "action": "player_turn",
+      "ok": true,
+      "http_status": 200
+    },
+    {
+      "action": "player_turn",
+      "ok": false,
+      "http_status": 200
+    }
+  ],
+  "cleanup": {
+    "owned": true,
+    "pid": 24188,
+    "stopped": true,
+    "exit_code": 1,
+    "shutdown_seconds": 0.016
+  }
+}

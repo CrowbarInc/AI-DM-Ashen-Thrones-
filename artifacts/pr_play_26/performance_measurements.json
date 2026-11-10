@@ -1,0 +1,58 @@
+{
+  "requests": [
+    {
+      "sequence": 1,
+      "purpose": "primary_turn",
+      "configured_model": "gpt-4.1-mini",
+      "returned_model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 1378,
+      "output_tokens": 120,
+      "total_tokens": 1498,
+      "provider_seconds": 3.4798658000072464,
+      "api_seconds": 4.35899999999674,
+      "api_duration_shared": false,
+      "status": "completed",
+      "retries": 0
+    },
+    {
+      "sequence": 2,
+      "purpose": "interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "returned_model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 2306,
+      "output_tokens": 235,
+      "total_tokens": 2541,
+      "provider_seconds": 2.322300500003621,
+      "api_seconds": 3.7189999999973224,
+      "api_duration_shared": true,
+      "status": "completed",
+      "retries": 0
+    },
+    {
+      "sequence": 3,
+      "purpose": "expression",
+      "configured_model": "gpt-4.1-mini",
+      "returned_model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 221,
+      "output_tokens": 10,
+      "total_tokens": 231,
+      "provider_seconds": 0.9882380000053672,
+      "api_seconds": 3.7189999999973224,
+      "api_duration_shared": true,
+      "status": "completed",
+      "retries": 0
+    }
+  ],
+  "totals": {
+    "dispatched_requests": 3,
+    "input_tokens": 3905,
+    "output_tokens": 365,
+    "total_tokens": 4270
+  },
+  "opening_seconds": 4.35899999999674,
+  "first_interaction_seconds": 3.7189999999973224,
+  "followup_seconds": null,
+  "live_duration_seconds": 30.360000000000582,
+  "offline_duration_seconds": 3.625,
+  "duration_scope": "Live startup to cleanup, including manual evidence review wait; packaging excluded"
+}

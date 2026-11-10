@@ -1,0 +1,44 @@
+--- before/tools/playtest/runner.py
++++ after/tools/playtest/runner.py
+@@ -149,6 +149,25 @@
+                 dest.flush()
+                 size += len(text)
+     pipe.close()
++
++
++def start_worker(run, env, *, script=None):
++    """Launch the interpreter whose PID must match the worker's attestation.
++
++    Windows venv redirectors create another process. Use the base interpreter,
++    retaining this environment's packages, for both module and observer workers.
++    Never fall back to a redirector when the expected base interpreter is missing.
++    """
++    executable = getattr(sys, '_base_executable', sys.executable)
++    if not executable or not Path(executable).is_file():
++        raise FileNotFoundError('Harness base interpreter unavailable')
++    child_env = dict(env)
++    child_env['PYTHONPATH'] = os.pathsep.join(dict.fromkeys([
++        str(ROOT), *[p for p in sys.path if p and 'site-packages' in p], env.get('PYTHONPATH', '')]))
++    target = [str(script)] if script is not None else ['-m', 'tools.playtest.worker']
++    return subprocess.Popen([executable, '-u', *target, str(run)],
++        cwd=ROOT, env=child_env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
++        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+ 
+ 
+ def stop_owned(process, timeout):
+@@ -370,14 +389,7 @@
+         if time.monotonic()-started > s['timeouts']['preflight']:
+             raise TimeoutError('Preflight deadline')
+         infrastructure = 'application_startup_failure'
+-        # Windows venv python.exe may redirect to another PID. Launch the real
+-        # interpreter and retain this environment's packages so the PID we own
+-        # is the process holding the listening socket.
+-        executable = getattr(sys, '_base_executable', sys.executable)
+-        env['PYTHONPATH'] = os.pathsep.join(dict.fromkeys([str(ROOT), *[p for p in sys.path if p and 'site-packages' in p], env.get('PYTHONPATH', '')]))
+-        process = subprocess.Popen([executable, '-u', '-m', 'tools.playtest.worker', str(run)],
+-            cwd=ROOT, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+-            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
++        process = start_worker(run, env)
+         secrets = [v for k, v in env.items() if v and len(v)>6 and any(part in k.lower() for part in ('key', 'secret', 'password', 'credential', 'token'))]
+         logger = threading.Thread(target=bounded_log, args=(process.stdout, run/'diagnostics/application.log', secrets), daemon=True)
+         logger.start()

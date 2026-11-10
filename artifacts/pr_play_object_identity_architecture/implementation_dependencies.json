@@ -1,0 +1,55 @@
+[
+  {
+    "phase": 1,
+    "cycle": "pr_play_object_instance_identity",
+    "depends_on": [],
+    "risk": "low-medium",
+    "t06": "unchanged refusal"
+  },
+  {
+    "phase": 2,
+    "cycle": "one established-object marking",
+    "depends_on": [
+      1
+    ],
+    "risk": "medium-high",
+    "t06": "service capability only"
+  },
+  {
+    "phase": 3,
+    "cycle": "inspection and removal",
+    "depends_on": [
+      2
+    ],
+    "risk": "medium-high",
+    "t06": "controlled end-to-end only"
+  },
+  {
+    "phase": 4,
+    "cycle": "equipment/affordances/T06 binding",
+    "depends_on": [
+      3
+    ],
+    "risk": "high",
+    "t06": "original conditional on established facts"
+  },
+  {
+    "phase": 5,
+    "cycle": "scene/transfer/physical delegation",
+    "depends_on": [
+      4
+    ],
+    "risk": "high",
+    "t06": "state follows transfer"
+  },
+  {
+    "phase": 6,
+    "cycle": "specific later adapter/lifecycle capability",
+    "depends_on": [
+      2,
+      3
+    ],
+    "risk": "capability-dependent",
+    "t06": "not needed for mundane mark"
+  }
+]

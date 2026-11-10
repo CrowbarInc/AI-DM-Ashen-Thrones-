@@ -1,0 +1,123 @@
+Browser tab: 1, Title: "Ashen Thrones AI GM", URL: "http://127.0.0.1:50906/".
+1 AXWebArea Ashen Thrones AI GM, URL: 127.0.0.1:50906/
+	2 container
+		3 text UI Mode
+		4 pop up button (collapsed, settable) UI Mode, Value: Player, ID: uiModeSelect, Secondary Actions: Expand
+			5 menu
+				6 (selected) Player
+				7 Author
+				8 Debug
+		9 button Play
+		10 button Character
+		11 button World
+		12 container tab-play
+			13 heading Play, Value: 2
+				14 text Play
+			62 container charSummary
+				63 text Galinor
+				64 text  — Level 1 Wizard
+				65 text HP: 8/8
+				66 text AC: 12 | Touch 12 | Flat-Footed 10
+				67 text Conditions: none
+			15 container saveSummaryCard
+				16 heading Save Status, Value: 3
+					17 text Save Status
+				68 container saveSummaryContent
+					69 container
+						70 text Last saved:  11/5/2026, 6:59:31 PM
+					71 container
+						72 text Active scene at save:  frontier_gate
+					73 container
+						74 text Save data exists:  Yes
+					75 text Auto-saves on each action/chat. 2 clues, 6 log entries.
+			19 heading Scene & Mode, Value: 3
+				20 text Scene & Mode
+			21 container
+				22 text Scene:
+				76 text Cinderwatch Gate District
+			23 container
+				24 text Mode:
+				77 text social
+			25 text Narration Mode
+			26 pop up button (collapsed, settable) Narration Mode, Value: Standard, ID: responseModeSelect, Secondary Actions: Expand
+				27 menu
+					28 Terse
+					29 (selected) Standard
+					30 Vivid
+					31 Tactical
+					32 Investigative
+			33 text Modes change narration style only — mechanics stay the same.
+			34 heading Combat, Value: 3
+				35 text Combat
+			78 text Combat inactive.
+			79 text No living enemies.
+			36 button Roll Initiative, ID: rollInitBtn
+			37 button End Turn, ID: endTurnBtn
+			38 heading Action Helper, Value: 3
+				39 text Action Helper
+			40 text Target
+			41 pop up button (collapsed, settable) ID: targetSelect, Secondary Actions: Expand
+			42 text Action Type
+			43 pop up button (collapsed, settable) Value: Attack, ID: actionType, Secondary Actions: Expand
+				44 menu
+					45 (selected) Attack
+					46 Spell
+					47 Skill
+					48 Freeform
+			80 container composerBody
+				81 text Attack
+				82 pop up button (collapsed, settable) Value: Quarterstaff (+0), ID: attackSelect, Secondary Actions: Expand
+					83 menu
+						84 (selected) Quarterstaff (+0)
+						85 Light Crossbow (+2)
+				86 checkbox (settable, integer) Description: Risky Strike, Value: 0, ID: modRisky
+				87 checkbox (settable, integer) Description: Defensive Stance, Value: 0, ID: modDefensive
+				88 button Submit Attack, ID: submitActionBtn
+			49 heading Controls, Value: 3
+				50 text Controls
+			51 button Clear Log, ID: clearLogBtn
+			52 button Reset Combat, ID: resetCombatBtn
+			53 button New Campaign, ID: newCampaignBtn
+			55 button (collapsed) Save Slots, Secondary Actions: Expand
+				56 text Save Slots
+	57 container
+		58 heading Cinderwatch Gate District, Value: 1, ID: sceneHeader
+			89 text Cinderwatch Gate District
+		90 text Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.
+		91 container affordanceBar
+			92 text Suggested Actions:
+			93 container affordanceButtons
+				94 button Talk to Guard Captain, Help: I talk to Guard Captain.
+				95 button Talk to Tavern Runner, Help: I talk to Tavern Runner.
+				96 button Examine the Notice board (already searched), Help: I examine the Notice board.
+				97 button Examine The notice board lists taxes, Help: I examine The notice board lists taxes.
+				98 button Leave for A gate serjeant manages the crowd and, Help: I head toward A gate serjeant manages the crowd and.
+		99 container chatLog
+			100 text Galinor
+			101 text I examine the Notice board.
+			102 text GM
+			103 text You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.
+			104 text Galinor
+			105 text I follow the missing patrol rumor.
+			106 text GM
+			107 text You arrive at Old Milestone.
+			108 text Galinor
+			109 text I examine the Weathered milestone.
+			110 text GM
+			111 text You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.
+			112 text Galinor
+			113 text Return to report the uncertain trail to the watch
+			114 text GM
+			115 text You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report.
+			116 text Galinor
+			117 text I return to Cinderwatch Gate.
+			118 text GM
+			119 text You arrive at frontier gate.
+			120 text Galinor
+			121 text Give the watch your patrol report
+			122 text GM
+			123 text The watch receives your report that the patrol trail becomes unclear at the milestone. The watch has now been warned; no private survey was conducted. You can continue your inquiry at the gate or return to the milestone.
+		60 text entry area (settable) chatInput
+		61 button Send, ID: sendChatBtn
+
+The focused UI element is 1 AXWebArea Ashen Thrones AI GM, URL: 127.0.0.1:50906/

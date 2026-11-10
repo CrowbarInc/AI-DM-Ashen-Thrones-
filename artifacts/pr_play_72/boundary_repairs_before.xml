@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="6" time="13.337" timestamp="2026-11-06T17:55:11.281656-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_72_boundary_repairs" name="test_unknown_choice_subject_never_commits[I want to report a programming bug.]" time="7.853"><failure message="AssertionError: assert (ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='I want to repo...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None) is not None and not True)&#10; +  where True = ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='I want to repo...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None).requires_authoritative_execution">campaigns = (&lt;starlette.testclient.TestClient object at 0x000001C231BE47A0&gt;, {'survey': '2026-11-06T22-55-17_bfdd52b5', 'report': '2026-11-06T22-55-21_77b7ed2c'})
+text = 'I want to report a programming bug.'
+
+    @pytest.mark.parametrize("text", ["I want to report a programming bug.", "Survey the distant galaxy.", "Please report my inventory."])
+    def test_unknown_choice_subject_never_commits(campaigns, text):
+        restore(campaigns, "survey")
+        state = authority(); world = copy.deepcopy(state["world"])
+        for key in ("patrol_survey", "patrol_report", "patrol_survey_recorded", "patrol_guards_warned"):
+            world["world_state"]["flags"].pop(key, None)
+        decision = decide(text, scene=api.load_active_scene(), world=world, session=state["session"])
+&gt;       assert decision is not None and not decision.requires_authoritative_execution
+E       AssertionError: assert (ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='I want to repo...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None) is not None and not True)
+E        +  where True = ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='I want to repo...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None).requires_authoritative_execution
+
+tests\test_pr_play_72_boundary_repairs.py:18: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_72_boundary_repairs" name="test_unknown_choice_subject_never_commits[Survey the distant galaxy.]" time="0.312"><failure message="AssertionError: assert (ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='Survey the dis...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None) is not None and not True)&#10; +  where True = ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='Survey the dis...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None).requires_authoritative_execution">campaigns = (&lt;starlette.testclient.TestClient object at 0x000001C231BE47A0&gt;, {'survey': '2026-11-06T22-55-17_bfdd52b5', 'report': '2026-11-06T22-55-21_77b7ed2c'})
+text = 'Survey the distant galaxy.'
+
+    @pytest.mark.parametrize("text", ["I want to report a programming bug.", "Survey the distant galaxy.", "Please report my inventory."])
+    def test_unknown_choice_subject_never_commits(campaigns, text):
+        restore(campaigns, "survey")
+        state = authority(); world = copy.deepcopy(state["world"])
+        for key in ("patrol_survey", "patrol_report", "patrol_survey_recorded", "patrol_guards_warned"):
+            world["world_state"]["flags"].pop(key, None)
+        decision = decide(text, scene=api.load_active_scene(), world=world, session=state["session"])
+&gt;       assert decision is not None and not decision.requires_authoritative_execution
+E       AssertionError: assert (ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='Survey the dis...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None) is not None and not True)
+E        +  where True = ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='Survey the dis...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None).requires_authoritative_execution
+
+tests\test_pr_play_72_boundary_repairs.py:18: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_72_boundary_repairs" name="test_unknown_choice_subject_never_commits[Please report my inventory.]" time="0.455"><failure message="AssertionError: assert (ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='Please report ...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None) is not None and not True)&#10; +  where True = ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='Please report ...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None).requires_authoritative_execution">campaigns = (&lt;starlette.testclient.TestClient object at 0x000001C231BE47A0&gt;, {'survey': '2026-11-06T22-55-17_bfdd52b5', 'report': '2026-11-06T22-55-21_77b7ed2c'})
+text = 'Please report my inventory.'
+
+    @pytest.mark.parametrize("text", ["I want to report a programming bug.", "Survey the distant galaxy.", "Please report my inventory."])
+    def test_unknown_choice_subject_never_commits(campaigns, text):
+        restore(campaigns, "survey")
+        state = authority(); world = copy.deepcopy(state["world"])
+        for key in ("patrol_survey", "patrol_report", "patrol_survey_recorded", "patrol_guards_warned"):
+            world["world_state"]["flags"].pop(key, None)
+        decision = decide(text, scene=api.load_active_scene(), world=world, session=state["session"])
+&gt;       assert decision is not None and not decision.requires_authoritative_execution
+E       AssertionError: assert (ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='Please report ...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None) is not None and not True)
+E        +  where True = ConversationalDecision(category=&lt;ConversationalDecisionCategory.EXECUTE: 'EXECUTE'&gt;, primary_intention='Please report ...ntentions=[], execution_policy='', communication_owner='CHARACTER', communication_purpose='ACTION', authorization=None).requires_authoritative_execution
+
+tests\test_pr_play_72_boundary_repairs.py:18: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_72_boundary_repairs" name="test_exact_public_name_precedes_shared_gate_word[Gate Serjeant-gate_serjeant]" time="0.342"><failure message="AssertionError: assert ('requires_clarification' == 'executable'&#10;  &#10;  - executable&#10;  + requires_clarification)">campaigns = (&lt;starlette.testclient.TestClient object at 0x000001C231BE47A0&gt;, {'survey': '2026-11-06T22-55-17_bfdd52b5', 'report': '2026-11-06T22-55-21_77b7ed2c'})
+name = 'Gate Serjeant', target = 'gate_serjeant'
+
+    @pytest.mark.parametrize("name,target", [("Gate Serjeant", "gate_serjeant"), ("Gate Guard", "gate_guard")])
+    def test_exact_public_name_precedes_shared_gate_word(campaigns, name, target):
+        restore(campaigns, "report"); state = authority()
+        grounded = assess_addressee_grounding("I ask the " + name + " about the patrol route.", scene=api.load_active_scene(), world=state["world"], session=state["session"], proposed_target_id="invented")
+&gt;       assert grounded["operation_eligibility"] == "executable" and grounded["target_id"] == target
+E       AssertionError: assert ('requires_clarification' == 'executable'
+E         
+E         - executable
+E         + requires_clarification)
+
+tests\test_pr_play_72_boundary_repairs.py:26: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_72_boundary_repairs" name="test_exact_public_name_precedes_shared_gate_word[Gate Guard-gate_guard]" time="0.316"><failure message="AssertionError: assert ('requires_clarification' == 'executable'&#10;  &#10;  - executable&#10;  + requires_clarification)">campaigns = (&lt;starlette.testclient.TestClient object at 0x000001C231BE47A0&gt;, {'survey': '2026-11-06T22-55-17_bfdd52b5', 'report': '2026-11-06T22-55-21_77b7ed2c'})
+name = 'Gate Guard', target = 'gate_guard'
+
+    @pytest.mark.parametrize("name,target", [("Gate Serjeant", "gate_serjeant"), ("Gate Guard", "gate_guard")])
+    def test_exact_public_name_precedes_shared_gate_word(campaigns, name, target):
+        restore(campaigns, "report"); state = authority()
+        grounded = assess_addressee_grounding("I ask the " + name + " about the patrol route.", scene=api.load_active_scene(), world=state["world"], session=state["session"], proposed_target_id="invented")
+&gt;       assert grounded["operation_eligibility"] == "executable" and grounded["target_id"] == target
+E       AssertionError: assert ('requires_clarification' == 'executable'
+E         
+E         - executable
+E         + requires_clarification)
+
+tests\test_pr_play_72_boundary_repairs.py:26: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_72_boundary_repairs" name="test_plural_watch_stays_ambiguous" time="0.324" /></testsuite></testsuites>

@@ -1,0 +1,32 @@
+{
+  "hash": "556191b095698ead786b1feb9860ffd86c93f957378418ad7e7d302cae3d5fad",
+  "count": 110,
+  "passed": 106,
+  "failed": 4,
+  "multi_turn": 70,
+  "save_resume": 20,
+  "partial_marked": 15,
+  "blocked_marked": 15,
+  "failures": [
+    {
+      "id": "H017",
+      "group": "sequential",
+      "error": "A :: You lift the wooden cup. It is now raised in place. That is not established here. Nothing further was changed."
+    },
+    {
+      "id": "H068",
+      "group": "independent",
+      "error": "A :: Changing the guarded door would alter important state, and no authorized mechanic resolves it. It is unchanged.  You are already standing."
+    },
+    {
+      "id": "H073",
+      "group": "continuity",
+      "error": "A :: You sit on the wooden bench. You stand."
+    },
+    {
+      "id": "H089",
+      "group": "persistence",
+      "error": "A :: The wooden door is locked. It stays closed.  You are already standing."
+    }
+  ]
+}

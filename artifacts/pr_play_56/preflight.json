@@ -1,0 +1,41 @@
+{
+  "time": "2026-11-04T00:03:39.311429+00:00",
+  "provider": "openai",
+  "model": "gpt-4.1-mini",
+  "gameplay_provider_calls_disabled": true,
+  "player_facing_narration": "disabled; quarantine prelude is not written into player_facing_text",
+  "feature_flags": {
+    "ASHEN_DISABLE_LIVE_INTERPRETATION": "1",
+    "ASHEN_DISABLE_EXPRESSION_GENERATION": "1",
+    "ASHEN_DISABLE_PROVIDER_CALLS": "1",
+    "ASHEN_PLAYTEST_DISABLE_SDK_RETRIES": "1",
+    "ASHEN_DISABLE_PROVIDER_RETRIES": "1",
+    "ASHEN_QUARANTINE_INVESTIGATION_NARRATION": "set only on a live or fault turn",
+    "ASHEN_QUARANTINE_NARRATION_LIVE": "set only on a live turn"
+  },
+  "usage_ledger": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_56\\provider_usage.jsonl",
+  "key_present": true,
+  "dns_ok": true,
+  "generation": {
+    "adapter": "game.expressive_dialogue.request_expression",
+    "endpoint": "responses.create",
+    "temperature_in_source": true,
+    "max_output_tokens_constant": 80,
+    "timeout_seconds": 45.0,
+    "sdk_retry_options": {
+      "max_retries": 0
+    },
+    "host_retries_disabled": true,
+    "hook_forbids_second_generate": true,
+    "hook_request_ceiling": 6,
+    "hook_output_ceiling": 1000,
+    "hook_total_token_ceiling": 10000,
+    "cycle_request_ceiling": 8,
+    "cycle_output_ceiling": 700,
+    "cycle_total_token_ceiling": 12000
+  },
+  "system_prompt_sha256": "5cf4185434afd4e852d5b57d3ebb52c76d820745907ed8699e9c52c1b8519680",
+  "blockers": [],
+  "estimated_cost_supported": false,
+  "automatic_retries": "0. A timeout, authentication failure, or connection failure sets the hook stop flag. This script does not clear it."
+}

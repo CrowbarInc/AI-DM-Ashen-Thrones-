@@ -1,0 +1,60 @@
+{
+  "requests": [
+    {
+      "sequence": 1,
+      "purpose": "primary_turn",
+      "configured_model": "gpt-4.1-mini",
+      "returned_model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 1378,
+      "output_tokens": 120,
+      "total_tokens": 1498,
+      "provider_latency_seconds": 3.8970122000027914,
+      "ledger_dispatch_latency_ms": 3899.31,
+      "total_api_latency_seconds": 5.015999999988708,
+      "api_operation": "campaign opening",
+      "status": "completed",
+      "retry_count": 0
+    },
+    {
+      "sequence": 2,
+      "purpose": "interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "returned_model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 2306,
+      "output_tokens": 226,
+      "total_tokens": 2532,
+      "provider_latency_seconds": 2.298486600004253,
+      "ledger_dispatch_latency_ms": 2300.41,
+      "total_api_latency_seconds": 5.5,
+      "api_operation": "first NPC interaction (shared API duration, not additive)",
+      "status": "completed",
+      "retry_count": 0
+    },
+    {
+      "sequence": 3,
+      "purpose": "expression",
+      "configured_model": "gpt-4.1-mini",
+      "returned_model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 163,
+      "output_tokens": 15,
+      "total_tokens": 178,
+      "provider_latency_seconds": 1.0971276999916881,
+      "ledger_dispatch_latency_ms": 1099.503,
+      "total_api_latency_seconds": 5.5,
+      "api_operation": "first NPC interaction (shared API duration, not additive)",
+      "status": "completed",
+      "retry_count": 0
+    }
+  ],
+  "totals": {
+    "dispatched_requests": 3,
+    "input_tokens": 3847,
+    "output_tokens": 361,
+    "total_tokens": 4208
+  },
+  "opening_api_seconds": 5.015999999988708,
+  "first_interaction_api_seconds": 5.5,
+  "live_experiment_seconds": 13.921999999991385,
+  "offline_preflight_seconds": 2.4689999999973224,
+  "duration_definition": "Live controller start through snapshot capture, cleanup and port-release check; reporting/packaging excluded."
+}

@@ -1,0 +1,256 @@
+{
+  "sequence": 2,
+  "attempt_id": "f7632884c2e14fb0b7091d32fd028646",
+  "purpose": "interpretation",
+  "owner": "live_chat_interpretation.request_interpretation",
+  "request": {
+    "model": "gpt-4.1-mini",
+    "input": [
+      {
+        "role": "system",
+        "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Ordinary conversational correction supplies corrected meaning, subject, referent or description. Distinguish the player clarifying their own meaning from the AI-DM requesting clarification. When that meaning is established, use INTERPRETED, GM/CORRECTION and legacy OTHER; continue the corrected conversation without asking confirmation merely because it is corrective. Use correction.subject REFERENT for a conversational subject, referent or description correction. This does not itself revise a gameplay action; leave action_components empty. Mechanical revision modifies an actual eligible pending intention and remains subject to host checks; never invent pending work, revise executed actions or execute from a correction alone. Recover the underlying question from preceding context, including elliptical follow-ups and corrections. Keep a uniquely established subject; do not adopt a rejected interpretation or a nearby alternative. For information requests, subject identifies the requested detail (time, location, identity, cause, sequence, description, relationship or explanation), not just the topic; it never asserts a new fact. Select relevant authorized PUBLIC evidence_refs supporting that detail, not merely the same topic, person, place or event. Background may support a partial answer, but must not stand in for missing detail. Restricted or unestablished information in internal world state is not disclosure authority; do not select it or infer unsupported facts. An understood question with no answer-bearing evidence uses empty evidence_refs and an honest limitation, not clarification solely because the answer is unavailable; prefer a supported answer over redundant clarification. Ask a targeted question when meaningful ambiguity remains: competing subjects, people, a missing interlocutor or action parameter, or conflicting intentions. Clarify the unresolved subject separately from an established addressee; never guess to avoid clarification. Acknowledgments asserting no world facts may use empty evidence_refs. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes execution disposition. A player's answerable request for clarification or supplied correction need not use legacy CLARIFICATION. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+      },
+      {
+        "role": "user",
+        "content": "Utterance: I approach the tavern runner and ask what they're offering.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=character action or NPC speech; OUT_OF_CHARACTER_CORRECTION=explicit out-of-character correction; RULES_QUESTION=play procedure; CLARIFICATION=the AI-DM needs additional information; OTHER for resolved GM conversation, including ordinary conversational correction.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nPUBLIC answer evidence: {\"scene\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.\", \"visible:0\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"visible:1\": \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"visible:2\": \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"visible:3\": \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"visible:4\": \"Ash Compact census delays have tightened the eastern caravan choke point.\", \"reply:0\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. A tavern runner shouts offers of hot stew and paid rumor. A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"RESOLVED\", \"last_response_owner\": \"GM\", \"last_subject\": \"\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+      }
+    ],
+    "temperature": 0,
+    "max_output_tokens": 320,
+    "text": {
+      "format": {
+        "type": "json_schema",
+        "name": "pr_dr_interpretation",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "communication": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "recipient": {
+                  "type": "string",
+                  "enum": [
+                    "GM",
+                    "NPC",
+                    "CHARACTER",
+                    "SESSION",
+                    "MIXED",
+                    "AMBIGUOUS"
+                  ],
+                  "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+                },
+                "purpose": {
+                  "type": "string",
+                  "enum": [
+                    "QUESTION",
+                    "DESCRIPTION",
+                    "EXPLANATION",
+                    "RECALL",
+                    "RULES",
+                    "ACTION",
+                    "OBSERVATION",
+                    "CORRECTION",
+                    "WITHDRAWAL",
+                    "CONFIRMATION",
+                    "TENTATIVE",
+                    "CLARIFICATION"
+                  ],
+                  "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects conversational meaning, subject, referent or description, or revises an actual unexecuted intention. Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's request for explanation; it does not by itself mean the AI-DM needs more information. WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+                },
+                "subject": {
+                  "type": "string"
+                },
+                "evidence_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "recipient",
+                "purpose",
+                "subject",
+                "evidence_refs"
+              ]
+            },
+            "communication_mode": {
+              "enum": [
+                "CLARIFICATION",
+                "IN_WORLD_ACTION",
+                "OTHER",
+                "OUT_OF_CHARACTER_CORRECTION",
+                "RULES_QUESTION"
+              ]
+            },
+            "interpretation_status": {
+              "enum": [
+                "ABSTAIN",
+                "CLARIFICATION_REQUIRED",
+                "INTERPRETED",
+                "UNSUPPORTED_REQUEST"
+              ]
+            },
+            "player_intent": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "summary": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "summary"
+              ]
+            },
+            "asserted_premises": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            },
+            "requested_outcomes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            },
+            "action_components": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "order": {
+                    "type": "integer"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "target_ref": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "operation_class": {
+                    "enum": [
+                      "ASK",
+                      "ATTACK",
+                      "CANON_DECLARATION",
+                      "DICE_OVERRIDE",
+                      "FOLLOW",
+                      "HIDDEN_INFORMATION_REQUEST",
+                      "HP_ASSIGNMENT",
+                      "INSPECT",
+                      "INVENTORY_GRANT",
+                      "MOVE",
+                      "NPC_COMMITMENT",
+                      "PERCEIVE",
+                      "RETCON",
+                      "SOCIAL_SIGNAL",
+                      "STEALTH_MODE_TOGGLE",
+                      "TIME_CONTROL",
+                      "UNSUPPORTED_MECHANIC",
+                      "USE_VISIBLE_OBJECT"
+                    ]
+                  }
+                },
+                "required": [
+                  "order",
+                  "description",
+                  "target_ref",
+                  "operation_class"
+                ]
+              }
+            },
+            "references": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "permitted_entity_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "unresolved_references": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "permitted_entity_ids",
+                "unresolved_references"
+              ]
+            },
+            "clarification_question": {
+              "type": "string"
+            },
+            "correction": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "enum": [
+                    "COMMITTED_ACTION",
+                    "INTENTION",
+                    "NONE",
+                    "REFERENT"
+                  ]
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "subject",
+                "note"
+              ]
+            }
+          },
+          "required": [
+            "action_components",
+            "asserted_premises",
+            "clarification_question",
+            "communication_mode",
+            "correction",
+            "interpretation_status",
+            "player_intent",
+            "references",
+            "requested_outcomes",
+            "communication"
+          ]
+        }
+      }
+    }
+  },
+  "label": "INTERNAL DIAGNOSTIC EVIDENCE"
+}

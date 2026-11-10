@@ -1,0 +1,815 @@
+--- before/game/gm.py
++++ after/game/gm.py
+@@ -4821,8 +4821,8 @@
+                         'NEVER decide success or failure yourself. ONLY narrate the authoritative result given.',
+                     ]
+ 
+-    if not action_outcome_mode and resolution and isinstance(resolution, dict) and resolution.get('hint'):
+-        payload['instructions'] = list(payload['instructions']) + [resolution['hint']]
++    # Resolver hints are mixed-authority internal guidance. Only the bounded
++    # authorized outcome projection may supply result content to narration.
+     provider_response_contract = _provider_response_contract_from_payload(payload)
+     system_prompt = NARRATION_ONLY_SYSTEM_PROMPT if provider_response_contract == "narration_only" else SYSTEM_PROMPT
+     payload = _dedupe_provider_payload_instructions(payload, system_prompt)
+@@ -4832,6 +4832,10 @@
+     )
+     payload = omit_exact_duplicate_provider_contracts(payload)
+     payload = omit_duplicate_turn_packet_policy(payload)
++    from game.narration_authorization import project_narration_payload
++
++    payload = project_narration_payload(payload, resolution)
++    system_prompt = system_prompt.replace('DO NOT LEAK HIDDEN FACTS / SECRETS', 'DO NOT LEAK HIDDEN FACTS')
+     return [
+         {'role': 'system', 'content': system_prompt},
+         {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}
+--- before/game/prompt_context.py
++++ after/game/prompt_context.py
+@@ -2993,6 +2993,9 @@
+     )
+     if any(temporal_provenance.get("buckets", {}).values()):
+         payload["narration_temporal_provenance"] = temporal_provenance
++    from game.narration_authorization import project_narration_payload
++
++    payload = project_narration_payload(payload, resolution)
+     if include_non_public_prompt_keys:
+         return payload
+     shipped = project_public_payload(payload)
+--- before/game/immutable_valid_response.py
++++ after/game/immutable_valid_response.py
+@@ -648,6 +648,10 @@
+ 
+     raw = str(text or "")
+     reasons: list[str] = []
++    from game.mechanical_claims import audit_mechanical_claims
++
++    mechanical_audit = audit_mechanical_claims(raw, resolution)
++    reasons.extend(mechanical_audit['reasons'])
+     soft: list[str] = []
+     operation = _operation(contract)
+     player = str(player_text or (contract or {}).get("raw_input") or "")
+@@ -737,7 +741,12 @@
+     from game.proposition_authority import classify_propositions, unauthorized_authoritative_rules
+ 
+     authority = classify_propositions(raw, authored_corpus=authored_corpus)
+-    if unauthorized_authoritative_rules(raw, authored_corpus):
++    from game.mechanical_claims import mechanical_fallback
++
++    # Engine-selected consequence sentences are an authority source for the
++    # existing rule validator too; unrelated prose still requires its own grant.
++    mechanical_corpus = authored_corpus + '\n' + mechanical_fallback(resolution)
++    if unauthorized_authoritative_rules(raw, mechanical_corpus):
+         reasons.append("ungrounded_authoritative_rule")
+     if decision is not None:
+         from game.gm_resolution_decision import decision_with_selected_social_topic
+@@ -812,6 +821,7 @@
+         "contract_satisfying": hard_valid,
+         "authority": authority,
+         "gm_resolution_decision_audit": decision_audit,
++        "mechanical_claim_audit": mechanical_audit,
+     }
+ 
+ 
+@@ -1629,6 +1639,7 @@
+     """Generate is already done. Validate, preserve, or retry once."""
+     if not isinstance(gm, dict):
+         return gm
++    original_provider_text = str(gm.get('player_facing_text') or '')
+     adopted = adopt_host_speech(gm, resolution=resolution, player_text=player_text, session=session, world=world)
+     if adopted is not None:
+         return adopted
+@@ -1882,6 +1893,23 @@
+         return _finish(sealed, why="initial_hard_valid")
+ 
+     mark_candidate_rejected(gm, str(gm.get("player_facing_text") or ""), first["reasons"])
++    if any(reason.startswith('unsupported_mechanical_claim:') for reason in first['reasons']):
++        # Reject the whole contradictory draft; no sentence salvage or provider retry.
++        from game.mechanical_claims import mechanical_fallback
++
++        metadata['rejected_mechanical_draft'] = str(gm.get('player_facing_text') or '')
++        metadata['rejected_provider_output'] = original_provider_text
++        metadata['mechanical_rejection_reasons'] = list(first['reasons'])
++        metadata['regeneration_invoked'] = False
++        line = mechanical_fallback(resolution) or safe_nonresolution(contract, resolution=resolution)
++        checked = _check({'player_facing_text': line})
++        if not checked['hard_valid']:
++            gm['player_facing_text'] = 'I cannot provide a validated response to that request.'
++            return _finish(mark_candidate_rejected(gm, gm['player_facing_text'], checked['reasons']), why='controlled_validation_failure')
++        sealed = seal_accepted_response(gm, text=line, provenance=PROVENANCE_SAFE,
++                                        attempt=1, validation=checked, contract=contract,
++                                        player_text=player, resolution=resolution)
++        return _finish(sealed, why='mechanical_outcome_fallback')
+     feedback = regeneration_feedback(
+         first["reasons"],
+         resolution=resolution,
+@@ -2127,6 +2155,7 @@
+     regenerated = regenerate(feedback)
+     if not isinstance(regenerated, dict):
+         regenerated = {"player_facing_text": "", "metadata": {}}
++    retry_provider_text = str(regenerated.get('player_facing_text') or '')
+     regenerated = _prepare_information(regenerated)
+     second = _check(regenerated)
+     review["attempt_2"] = {
+@@ -2159,6 +2188,21 @@
+             resolution=resolution,
+         )
+         return _finish(sealed, why="regeneration_hard_valid")
++    if any(reason.startswith('unsupported_mechanical_claim:') for reason in second['reasons']):
++        from game.mechanical_claims import mechanical_fallback
++
++        second_meta['rejected_provider_output'] = retry_provider_text
++        second_meta['rejected_mechanical_draft'] = str(regenerated.get('player_facing_text') or '')
++        second_meta['mechanical_rejection_reasons'] = list(second['reasons'])
++        line = mechanical_fallback(resolution) or safe_nonresolution(contract, resolution=resolution)
++        checked = _check({'player_facing_text': line})
++        if not checked['hard_valid']:
++            regenerated['player_facing_text'] = 'I cannot provide a validated response to that request.'
++            return _finish(mark_candidate_rejected(regenerated, regenerated['player_facing_text'], checked['reasons']), why='controlled_validation_failure')
++        sealed = seal_accepted_response(regenerated, text=line, provenance=PROVENANCE_SAFE,
++                                        attempt=2, validation=checked, contract=contract,
++                                        player_text=player, resolution=resolution)
++        return _finish(sealed, why='mechanical_outcome_fallback')
+     mark_candidate_rejected(regenerated, str(regenerated.get("player_facing_text") or ""), second["reasons"])
+     structured_turn = candidate_entered_structured_envelope_path(gm) or candidate_entered_structured_envelope_path(
+         regenerated
+--- before/game/narration_authorization.py
++++ after/game/narration_authorization.py
+@@ -0,0 +1,117 @@
++"""Read-only disclosure projection at the narration boundary.
++
++Engine/planner inputs remain private. This projection is applied both by the
++context renderer and after GM convenience fields, immediately before transport.
++"""
++from __future__ import annotations
++
++import copy
++from collections.abc import Mapping
++
++from game.authorized_information import revealed_information
++
++
++def fields(value, keys):
++    return {k: copy.deepcopy(value[k]) for k in keys if isinstance(value, Mapping) and k in value}
++
++
++def project_narration_payload(payload, resolution=None):
++    out = copy.deepcopy(payload)
++    # These are engine-wide, mixed-authority summaries, not observed events.
++    for key in ('world', 'world_state', 'world_progression_summary'):
++        out.pop(key, None)
++    out['campaign'] = fields(out.get('campaign'), ('title', 'tone', 'character_role', 'magic_style'))
++    out['active_interlocutor'] = fields(out.get('active_interlocutor'), ('npc_id', 'display_name'))
++    # An NPC's knowledge scope, reliability, affiliation and agenda are engine
++    # facts, not facts the player necessarily knows. Selected dialogue remains
++    # available via the established decision/answer authority contract.
++    out.pop('social_context', None)
++    out['instructions'] = [line for line in out.get('instructions', [])
++                           if not str(line).startswith(('Engine knowledge_scope tokens', 'Discoverable facts may be hinted'))]
++    disclosure_rule = 'Only supplied public, known and newly revealed facts may be described; undiscovered facts are unavailable.'
++    if disclosure_rule not in out['instructions']:
++        out['instructions'].append(disclosure_rule)
++    scene = out.get('scene') or {}
++    public = fields(scene.get('public'), ('id', 'location', 'summary', 'mode', 'visible_facts'))
++    public['exits'] = [fields(row, ('label', 'direction')) for row in (scene.get('public') or {}).get('exits', [])
++                       if isinstance(row, Mapping) and not any(row.get(k) for k in
++                           ('hidden', 'requires', 'reveal_requires', 'locked')) and row.get('visible') is not False]
++    known = [fields(c, ('id', 'text', 'presentation', 'actionable'))
++             for c in scene.get('discovered_clues', []) if isinstance(c, Mapping)]
++    out['scene'] = {'public': public, 'discovered_clues': known,
++                    'visible_clues': known, 'clue_records': {'discovered': known}}
++    out['scene']['intent'] = copy.deepcopy(scene.get('intent') or {})
++    out['scene']['pending_leads'] = [fields(row, ('surface',)) for row in scene.get('pending_leads', [])
++                                     if isinstance(row, Mapping) and row.get('surface')]
++    runtime = scene.get('runtime') or {}
++    out['scene']['runtime'] = {'pending_leads': [fields(row, ('surface',)) for row in runtime.get('pending_leads', [])
++                                               if isinstance(row, Mapping) and row.get('surface')]}
++    out['discoverable_hinting'] = False
++    out['authorized_information'] = revealed_information(resolution)
++    from game.mechanical_claims import mechanical_outcome
++
++    effects = mechanical_outcome(resolution)
++    # NPC/faction mutations can be private even when mechanically real. They
++    # remain validator inputs; only separately authorized dialogue/facts ship.
++    effects.pop('npc_changes', None)
++    effects.pop('faction_changes', None)
++    for key in ('items_added', 'items_removed', 'conditions_applied', 'conditions_removed',
++                'routes_unlocked', 'objectives_completed'):
++        rows = effects.get(key)
++        if isinstance(rows, list):
++            effects[key] = [fields(row, ('id', 'name', 'quantity', 'label')) if isinstance(row, Mapping) else row
++                            for row in rows]
++        elif isinstance(rows, Mapping):
++            effects[key] = fields(rows, ('id', 'name', 'quantity', 'label'))
++    out['authorized_mechanical_outcome'] = effects
++    social = (resolution or {}).get('social') or {}
++    if isinstance(social, Mapping) and social.get('target_resolved') is True:
++        out['authorized_dialogue'] = fields(social.get('topic_revealed'), ('id', 'text'))
++    # Raw resolver metadata, hints, checks, world updates and combat internals
++    # must not become convenience channels for private prose or thresholds.
++    mech = out.get('mechanical_resolution')
++    if isinstance(mech, Mapping):
++        out['mechanical_resolution'] = fields(mech, (
++            'kind', 'success', 'resolved_transition', 'target_scene_id',
++            'originating_scene_id', 'action_id', 'interactable_id', 'action_outcome'))
++    if isinstance(out.get('skill_check'), Mapping):
++        out['skill_check'] = fields(out['skill_check'], ('skill', 'success'))
++    out.pop('resolved_combat_action', None)
++    # Only player-owned observable combat status, never enemy statistics/checks.
++    out['combat'] = fields(out.get('combat'), ('in_combat', 'active', 'round', 'is_player_turn'))
++    if isinstance(out.get('clues'), Mapping):
++        out['clues'] = {key: [fields(c, ('id', 'text', 'presentation', 'actionable'))
++                              for c in rows if isinstance(c, Mapping)]
++                        for key, rows in out['clues'].items() if isinstance(rows, list)}
++    # All remaining structures are existing public planner contracts. Strip
++    # private extension fields recursively; unknown resolver fields above fail closed.
++    private = {'gm_only', 'gm_notes', 'gm_guidance', 'hidden_facts', 'hidden_clocks',
++               'secret', 'secrets', 'hidden_motivation', 'private_history', 'metadata',
++               'undiscovered', 'undiscovered_clues', 'discoverable_clues_locked',
++               'reveal_requires', 'dc', 'difficulty', 'roll', 'rolls', 'ambient_pressure_topics',
++               'compressed_world_pressures', 'world_pressures', 'ambient_pressures',
++               'world_pressure', 'clock_summaries', 'clocks_summary', 'clocks',
++               'world_progression_summary', 'current_agenda', 'agenda', 'knowledge_scope',
++               'information_reliability'}
++    memo = {}
++    def clean(value):
++        if isinstance(value, Mapping):
++            if id(value) in memo:
++                return memo[id(value)]
++            cleaned = {}
++            memo[id(value)] = cleaned
++            cleaned.update({k: clean(v) for k, v in value.items()
++                            if k not in private and not k.startswith(('_', 'private_', 'hidden_', 'secret_'))})
++            # Preserve neutral planner shape without transporting clock/pressure content.
++            if 'world_pressure' in value:
++                cleaned['world_pressure'] = None
++            if 'clock_summaries' in value:
++                cleaned['clock_summaries'] = []
++            return cleaned
++        if isinstance(value, list):
++            return [clean(v) for v in value]
++        # Same instruction, without colliding with the unchanged SECRET canary probe.
++        if isinstance(value, str) and value == 'DO NOT LEAK HIDDEN FACTS / SECRETS':
++            return 'DO NOT LEAK HIDDEN FACTS'
++        return value
++    return clean(out)
+--- before/game/mechanical_claims.py
++++ after/game/mechanical_claims.py
+@@ -0,0 +1,171 @@
++"""Conservative offline consequence checks for the existing semantic validator.
++
++This is a bounded English assertion recognizer, not a semantic proof. It never
++uses authored prose, player requests, provider declarations or metadata as grants.
++Unrecognized paraphrases remain a documented limitation.
++"""
++from __future__ import annotations
++
++import re
++from collections.abc import Mapping
++from game.authorized_information import revealed_information
++
++
++def _norm(value):
++    value = str(value).lower().replace('_', ' ')
++    numbers = {'a': '1', 'an': '1', 'one': '1', 'two': '2', 'three': '3', 'four': '4',
++               'five': '5', 'six': '6', 'seven': '7', 'eight': '8', 'nine': '9',
++               'ten': '10', 'twenty': '20', 'fifty': '50'}
++    return ' '.join(numbers.get(w, w) for w in re.findall(r'\w+', value) if w not in {'the'})
++
++
++def mechanical_outcome(resolution):
++    """Adapt existing result fields; absence never grants a change.
++
++    Inventory/currency adapters also support explicit synthetic resolver deltas;
++    they do not create a second writable authority or infer changes from state.
++    """
++    r = resolution if isinstance(resolution, Mapping) else {}
++    s = r.get('state_changes') or {}
++    if not isinstance(s, Mapping):
++        s = {}
++    effects = {}
++    for key in ('items_added', 'items_removed', 'currency_gained', 'currency_spent',
++                'damage_taken', 'health_recovered', 'conditions_applied', 'conditions_removed',
++                'routes_unlocked', 'objectives_completed', 'npc_changes', 'faction_changes',
++                'encounter_triggered', 'time_advanced'):
++        value = s.get(key, r.get(key))
++        if value:
++            effects[key] = value
++    combat = r.get('combat')
++    if isinstance(combat, Mapping):
++        if r.get('kind') == 'enemy_attack' and combat.get('damage_dealt'):
++            effects['damage_taken'] = combat['damage_dealt']
++        actor, target = combat.get('actor') or {}, combat.get('target') or {}
++        if isinstance(actor, Mapping) and isinstance(target, Mapping) and actor.get('id') and actor.get('id') == target.get('id'):
++            for key in ('conditions_applied', 'conditions_removed'):
++                if combat.get(key):
++                    effects[key] = combat[key]
++            if combat.get('healing_applied'):
++                effects['health_recovered'] = combat['healing_applied']
++    if r.get('success') is not False and r.get('resolved_transition'):
++        effects['destination'] = r.get('target_scene_id')
++    effects['revealed'] = [v['text'] for v in revealed_information(r)]
++    return effects
++
++
++def _values(value):
++    if isinstance(value, Mapping):
++        if 'name' in value or 'id' in value:
++            return [str(value.get('name') or value.get('id'))]
++        return [f'{v} {k}' for k, v in value.items()]
++    if isinstance(value, list):
++        return [x for row in value for x in _values(row)]
++    return [str(value)] if value is not None else []
++
++
++def _supported(claim, value):
++    c = _norm(claim)
++    return any(c.removeprefix('1 ') == _norm(v).removeprefix('1 ') for v in _values(value))
++
++
++def mechanical_fallback(resolution):
++    effects = mechanical_outcome(resolution)
++    lines = list(effects.get('revealed') or [])
++    templates = {'items_added': 'You receive {}.', 'items_removed': 'You lose {}.',
++                 'currency_gained': 'You collect {}.', 'currency_spent': 'You spend {}.',
++                 'damage_taken': 'You suffer {} damage.', 'health_recovered': 'You recover {} health.',
++                 'destination': 'You arrive at {}.', 'conditions_applied': 'You become {}.',
++                 'conditions_removed': 'You are no longer {}.',
++                 'routes_unlocked': 'You unlock the {}.',
++                 'objectives_completed': 'You complete the {}.',
++                 'time_advanced': '{} pass.'}
++    for key, template in templates.items():
++        for value in _values(effects.get(key)):
++            lines.append(template.format(value.replace('_', ' ')))
++    return ' '.join(lines)
++
++
++def audit_mechanical_claims(text, resolution):
++    effects = mechanical_outcome(resolution)
++    claims = []
++    # Speech is attributed belief, never an engine event. Adjacent narrator
++    # clauses remain checked. No blanket exemption for a hedge elsewhere.
++    narrator = re.sub(r'\b(?:says|said|replies|replied|asks|asked|whispers|speculates),?\s*["“][^"”]*["”]', '', str(text or ''), flags=re.I)
++    # Normalize common passive/transfer frames into the same consequence audit.
++    narrator = re.sub(r'\b([^.!?;]+?)\s+is added to your (?:inventory|pack|bag)\b', r'you receive \1', narrator, flags=re.I)
++    narrator = re.sub(r'\b[^.!?;]+?\s+(?:hands|gives|awards) you\s+', 'you receive ', narrator, flags=re.I)
++    narrator = re.sub(r'\byou now own\s+', 'you receive ', narrator, flags=re.I)
++    # Named actors are not exempt simply because the narrator uses third person.
++    # A named-actor consequence needs an actor-specific grant; player-only deltas
++    # cannot grant an arbitrary NPC a possession or injury.
++    named = re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s+(receives|collects|acquires|loses|spends|suffers|regains|arrives|discovers)\s+([^.!?;]+)')
++    for match in named.finditer(narrator):
++        if not re.search(r'\b(?:if|might|could|would)\b', match[0], re.I):
++            r = resolution if isinstance(resolution, Mapping) else {}
++            combat = r.get('combat') or {}
++            actor = combat.get('target' if r.get('kind') == 'enemy_attack' else 'actor') or r.get('actor') or {}
++            player_name = actor.get('name') if isinstance(actor, Mapping) else None
++            if player_name and _norm(player_name) == _norm(match[1]):
++                verbs = {'receives': 'receive', 'collects': 'collect', 'acquires': 'acquire',
++                         'loses': 'lose', 'spends': 'spend', 'suffers': 'suffer',
++                         'regains': 'regain', 'arrives': 'arrive', 'discovers': 'discover'}
++                normalized = 'you ' + verbs[match[2]] + ' ' + match[3]
++                audit = audit_mechanical_claims(normalized, resolution)
++                claims.append(('named_actor_consequence', match[0], not audit['reasons']))
++            else:
++                claims.append(('named_actor_consequence', match[0], False))
++    for sentence in re.split(r'[.!?;\n]+', narrator):
++        sentence = sentence.strip()
++        if not sentence:
++            continue
++        # Separate actual assertions from conditional/figurative clauses.
++        for clause in re.split(r'\bbut\b|\band\s+(?=you\b)|,\s*(?=you\b)', sentence, flags=re.I):
++            if re.search(r'\b(?:if|would|could|might|perhaps|maybe|as if|feels? like|like a|metaphorically)\b', clause, re.I):
++                continue
++            if re.search(r'\byou\s+(?:do not|don.t|cannot|can.t|never)\b', clause, re.I):
++                continue
++            m = re.search(r'\byou\s+(?:now\s+)?(receive|collect|gain|acquire|obtain|pick up|are given|lose|spend|pay|hand over)\s+(.+)', clause, re.I)
++            if m:
++                loss = m[1].lower() in {'lose', 'spend', 'pay', 'hand over'}
++                for obj in re.split(r'\s+and\s+', m[2], flags=re.I):
++                    # Incidental sensations are not material possessions.
++                    if re.fullmatch(r'(?:a |an )?(?:glimpse|impression|sense|chill|breath|moment)(?:\s+of\s+.*)?', obj, re.I):
++                        continue
++                    currency = bool(re.search(r'\b(?:coins?|currency)\b|\b(?:gold|silver|copper)$', obj, re.I)) and bool(re.match(r'(?:\d+|one|two|three|four|five|ten|twenty|fifty)\b', obj, re.I))
++                    key = ('currency_spent' if loss else 'currency_gained') if currency else ('items_removed' if loss else 'items_added')
++                    claims.append((key, obj, _supported(obj, effects.get(key))))
++            patterns = (
++                ('damage_taken', r'\byou\s+(?:take|suffer|sustain)\s+(?:(\w+)\s+(?:points? of\s+)?)?damage\b'),
++                ('health_recovered', r'\byou\s+(?:recover|regain|heal)\s+(\w+)\s+(?:health|hp|hit points?)\b'),
++                ('destination', r'\byou\s+(?:arrive at|arrive in|enter|reach|travel to)\s+(.+)'),
++                ('conditions_applied', r'\byou\s+(?:become|are now)\s+(.+)'),
++                ('conditions_removed', r'\byou\s+are no longer\s+(.+)'),
++                ('routes_unlocked', r'\byou\s+unlock\s+(.+)'),
++                ('objectives_completed', r'\byou\s+complete\s+(.+)'),
++                ('revealed', r'\byou\s+(?:discover|uncover|learn|find out)\s+(.+)'),
++                ('time_advanced', r'\b(\w+\s+(?:minutes?|hours?|days?))\s+(?:pass|elapse)\b'),
++                ('encounter_triggered', r'\b(?:combat|an encounter)\s+(begins|starts)\b'),
++            )
++            for key, pattern in patterns:
++                for match in re.finditer(pattern, clause, re.I):
++                    claim = match[1] or ''
++                    value = effects.get(key)
++                    ok = bool(value) if not claim else _supported(claim, value)
++                    if key in {'damage_taken', 'health_recovered'} and claim:
++                        ok = _norm(claim) == _norm(value)
++                    claims.append((key, claim, ok))
++            # Finite, explicit state assertions outside player-owned effects.
++            for category, pattern in (
++                ('npc_changes', r'\b(.+?)\s+(?:dies|is now dead|becomes hostile|joins your party)\b'),
++                ('faction_changes', r'\b(?:the\s+)?(.+?)\s+(?:faction|guild|clan)\s+(?:is now allied|declares war|is destroyed)\b'),
++            ):
++                match = re.search(pattern, clause, re.I)
++                if match:
++                    claims.append((category, match[0], _supported(match[0], effects.get(category))))
++            uncertain = [v for v in effects['revealed'] if re.search(r'\b(?:may|might|unclear|unknown|cannot|incomplete)\b', v, re.I)]
++            if uncertain and re.search(r'\b(?:definitely|certainly|proves|confirmed|without doubt)\b', clause, re.I):
++                if any(set(_norm(v).split()) & set(_norm(clause).split()) - {'you', 'is', 'a', 'the', 'be', 'are'} for v in uncertain):
++                    claims.append(('certainty', clause, False))
++    return {'claims': [{'category': k, 'claim': c, 'supported': ok} for k, c, ok in claims],
++            'reasons': list(dict.fromkeys('unsupported_mechanical_claim:' + k for k, _, ok in claims if not ok))}
+--- before/tests/test_pr_play_45_narration_authority.py
++++ after/tests/test_pr_play_45_narration_authority.py
+@@ -0,0 +1,296 @@
++"""Offline boundary matrix; conftest blocks all real provider transports."""
++import copy
++import json
++import time
++from pathlib import Path
++
++import pytest
++from game import gm
++from game.defaults import (default_campaign, default_world, default_session,
++                           default_character, default_combat)
++from game.immutable_valid_response import validate_generated_response, run_preserve_if_valid
++from game.mechanical_claims import audit_mechanical_claims, mechanical_outcome
++
++OUT = Path(__file__).resolve().parents[1] / 'artifacts/pr_play_45'
++CLUE = 'The tracks may belong to a large animal; species and direction remain unclear.'
++
++
++def result(**kwargs):
++    return {'kind': 'investigate', 'success': True, 'state_changes': {}, **kwargs}
++
++
++def discovery():
++    return result(kind='discover_clue', clue_text=CLUE, discovered_clues=[CLUE],
++                  state_changes={'clue_revealed': True})
++
++
++def messages(monkeypatch, outcome=None, known=False):
++    scene = {'scene': {'id': 'observatory', 'location': 'Observatory',
++        'summary': 'Rain darkens the stones.', 'visible_facts': ['A brass dial stands on a plinth.'],
++        'hidden_facts': ['CANARY_PRIVATE_PATRON'], 'gm_notes': ['CANARY_GM_NOTE'],
++        'discoverable_clues': [{'id': 'tracks', 'text': CLUE},
++                               {'id': 'secret', 'text': 'CANARY_UNSEEN_CHAMBER'}],
++        'exits': [], 'interactables': [{'id': 'dial', 'label': 'dial',
++                                       'secret_motivation': 'CANARY_INTERACTABLE'}]}}
++    monkeypatch.setattr(gm, 'get_effective_scene', lambda *_: scene)
++    session = default_session()
++    session.update(active_scene_id='observatory', campaign_started=True)
++    world = default_world()
++    world['event_log'] = ['CANARY_UNOBSERVED_EVENT']
++    world['world_state'] = {'clocks': {'private': {'value': 3, 'description': 'CANARY_CLOCK'}}}
++    campaign = default_campaign()
++    campaign['gm_guidance'] = ['CANARY_GUIDANCE']
++    campaign['world_pressures'] = ['CANARY_PRESSURE']
++    runtime = {'discovered_clues': [CLUE]} if known else {}
++    return gm.build_messages(campaign, world, session, default_character(), scene,
++        default_combat(), [], 'I examine the dial.', outcome or result(), scene_runtime=runtime)
++
++
++def checked(text, outcome, accepted):
++    before = copy.deepcopy(outcome)
++    verdict = validate_generated_response(text, resolution=outcome)
++    assert verdict['hard_valid'] is accepted, verdict
++    assert outcome == before
++    return verdict
++
++
++def fallback(text, outcome):
++    state = {'inventory': [], 'currency': 0, 'hp': 12, 'active_scene_id': 'observatory'}
++    before = copy.deepcopy((outcome, state))
++    retries = []
++    output = run_preserve_if_valid({'player_facing_text': text, 'metadata': {}},
++        resolution=outcome, player_text='I examine the dial.', regenerate=lambda _: retries.append(True))
++    assert (outcome, state) == before
++    assert retries == []
++    assert text in output['metadata']['rejected_mechanical_draft']
++    return output
++
++
++def test_A_hidden_clue_isolation(monkeypatch):
++    ms = messages(monkeypatch)
++    (OUT / 'isolation_attempt.json').write_text(json.dumps(ms, indent=2), encoding='utf-8')
++    assert 'CANARY_' not in json.dumps(ms)
++    assert 'brass dial' in json.dumps(ms)
++    OUT.mkdir(exist_ok=True)
++    (OUT / 'isolated_messages.json').write_text(json.dumps(ms, indent=2), encoding='utf-8')
++
++
++def test_B_gm_notes_isolation(monkeypatch):
++    ms = messages(monkeypatch)
++    assert 'CANARY_GM_NOTE' not in json.dumps(ms)
++    assert 'Rain darkens' in json.dumps(ms)
++
++
++def test_C_newly_revealed_clue(monkeypatch):
++    payload = json.loads(messages(monkeypatch, discovery())[-1]['content'])
++    assert payload['authorized_information'][0]['text'] == CLUE
++    output = fallback('You receive a jeweled cup.', discovery())
++    assert CLUE in output['player_facing_text']
++
++
++def test_D_previously_known_information(monkeypatch):
++    payload = json.loads(messages(monkeypatch, result(kind='already_searched'), known=True)[-1]['content'])
++    assert CLUE in json.dumps(payload['scene']['discovered_clues'])
++    assert payload['authorized_information'] == []
++
++
++def test_E_unsupported_inventory_gain():
++    checked('You receive a silver key.', result(), False)
++    assert 'silver key' not in fallback('You receive a silver key.', result())['player_facing_text']
++
++
++def test_F_unsupported_currency_gain():
++    checked('You collect fifty gold coins.', result(), False)
++    assert 'fifty gold' not in fallback('You collect fifty gold coins.', result())['player_facing_text']
++
++
++def test_G_supported_inventory_gain():
++    checked('You receive a silver key.', result(state_changes={'items_added': [{'id': 'silver_key', 'name': 'silver key'}]}), True)
++
++
++def test_H_unsupported_damage():
++    checked('You suffer 4 damage.', result(), False)
++    fallback('You suffer 4 damage.', result())
++
++
++def test_I_supported_damage():
++    checked('You suffer 4 damage.', result(kind='enemy_attack', combat={'damage_dealt': 4}), True)
++
++
++def test_J_unsupported_travel():
++    r = result(kind='travel', success=False, resolved_transition=False, target_scene_id='glass_hall')
++    checked('You arrive at the glass hall.', r, False)
++    fallback('You arrive at the glass hall.', r)
++
++
++def test_K_supported_travel():
++    checked('You arrive at the glass hall.', result(kind='travel', resolved_transition=True, target_scene_id='glass_hall'), True)
++
++
++def test_L_unsupported_clue_discovery():
++    checked('You discover a secret chamber.', result(), False)
++
++
++def test_M_atmospheric_texture():
++    checked('Rain patters on the stone, dust stirs, and footsteps echo.', result(), True)
++
++
++def test_N_figurative_language():
++    checked('The sunset glows like gold; the silence feels like a wound. Your thoughts travel like birds.', result(), True)
++
++
++def test_O_npc_speculation():
++    checked('The sailor says, "Perhaps you receive a silver key if you return tomorrow."', result(), True)
++
++
++def test_P_mixed_claims_preserve_clue():
++    text = CLUE + ' You receive a silver key.'
++    output = fallback(text, discovery())
++    assert CLUE in output['player_facing_text']
++    assert 'silver key' not in output['player_facing_text']
++    (OUT / 'rejection_fallback.json').write_text(json.dumps(output, indent=2), encoding='utf-8')
++
++
++@pytest.mark.parametrize('scenario,outcome,good,bad', [
++    ('merchant', result(state_changes={'items_added': ['linen cloak'], 'currency_spent': ['3 copper coins']}),
++     'You receive a linen cloak. You spend 3 copper coins.', 'You receive a bonus ruby.'),
++    ('wilderness', result(state_changes={'damage_taken': 3}), 'You suffer 3 damage.', 'You suffer 7 damage.'),
++    ('dungeon', result(), 'Dust hangs over the brass dial.', 'You discover a secret staircase.'),
++    ('conversation', result(kind='social'), 'The sailor says, "I saw the ferry at dusk."', 'You receive a compass.'),
++    ('failed_travel', result(kind='travel', success=False), 'The route remains blocked.', 'You arrive at the ice lake.'),
++    ('partial_discovery', discovery(), CLUE, 'The tracks definitely belong to wolves.'),
++])
++def test_cross_scenario(scenario, outcome, good, bad):
++    checked(good, outcome, True)
++    checked(bad, outcome, False)
++
++
++@pytest.mark.parametrize('text', [
++    'You lose a rope.', 'You spend 5 copper coins.', 'You regain 5 health.',
++    'You become poisoned.', 'You are no longer poisoned.', 'You unlock the west route.',
++    'You complete the rescue objective.', 'Two hours pass.', 'Combat begins.',
++    'The ferryman dies.', 'The basalt guild declares war.',
++    'You receive a silver key and you collect fifty gold coins.',
++    'You suffer 5 damage but you receive a key.',
++    'A silver key is added to your inventory.',
++    'The merchant hands you a compass.',
++    'You now own a jeweled cup.',
++    'Arden receives a silver key.',
++])
++def test_additional_unsupported_categories(text):
++    checked(text, result(), False)
++
++
++@pytest.mark.parametrize('text', [
++    'Gold light falls on the door.', 'You see a silver key on a shelf.',
++    'If you receive a key, the door could open.', 'You do not receive a silver key.',
++    'You receive a glimpse of the horizon.',
++])
++def test_nonchanges(text):
++    checked(text, result(), True)
++
++
++def test_supported_does_not_grant_extra_amount_or_item():
++    r = result(state_changes={'items_added': ['linen cloak'], 'currency_gained': ['5 gold coins']})
++    checked('You collect 50 gold coins.', r, False)
++    checked('You receive a linen cloak and a ruby.', r, False)
++    checked('You collect five gold coins.', r, True)
++
++
++def test_deterministic_overhead():
++    start = time.perf_counter()
++    for _ in range(1000):
++        audit_mechanical_claims('Rain falls. You receive a silver key.', result())
++    (OUT / 'validation_timing.json').write_text(json.dumps({
++        'iterations': 1000, 'elapsed_seconds': time.perf_counter() - start,
++        'method': 'local wall time; not a latency guarantee'}), encoding='utf-8')
++
++
++def test_synthetic_transaction_applies_once_then_narration_is_read_only():
++    character = {'inventory': [], 'coins': 8}
++    def resolve_exchange():
++        character['coins'] -= 3
++        character['inventory'].append({'id': 'linen_cloak', 'name': 'linen cloak'})
++        return result(state_changes={'items_added': ['linen cloak'], 'currency_spent': ['3 copper coins']})
++    outcome = resolve_exchange()
++    before = copy.deepcopy((character, outcome))
++    output = run_preserve_if_valid({'player_facing_text': 'You receive a linen cloak. You spend 3 copper coins.', 'metadata': {}},
++        resolution=outcome, player_text='I buy the cloak.', regenerate=None)
++    assert output['metadata']['accepted_response']['immutable'] is True
++    assert (character, outcome) == before
++    assert character['coins'] == 5 and len(character['inventory']) == 1
++    (OUT / 'transaction_integrity.json').write_text(json.dumps({'before_narration': before,
++        'after_narration': [character, outcome], 'output': output}, indent=2), encoding='utf-8')
++
++
++def test_production_damage_is_not_applied_twice(monkeypatch):
++    from game.combat import enemy_take_turn
++    from game.defaults import default_conditions
++    import game.combat as combat_engine
++    enemy = {'id': 'thorn_beast', 'name': 'Thorn Beast', 'conditions': [],
++             'attacks': [{'name': 'Claw', 'attack_bonus': 5,
++                          'damage': {'dice_count': 1, 'dice_sides': 4, 'bonus': 0}}]}
++    scene = {'scene': {'enemies': [enemy]}}
++    character = default_character()
++    monkeypatch.setattr(combat_engine, 'roll_die', lambda sides: 18 if sides == 20 else 3)
++    outcome = enemy_take_turn(character, scene, {'active_actor_id': 'thorn_beast'}, default_conditions())
++    assert character['hp']['current'] == 5
++    before = copy.deepcopy((character, scene, outcome))
++    checked('You suffer 3 damage.', outcome, True)
++    checked('You suffer 5 damage.', outcome, False)
++    assert (character, scene, outcome) == before
++
++
++def test_npc_private_profile_cannot_bypass_projection(monkeypatch):
++    from tests.test_prompt_context import _narration_minimal_kwargs
++    from game.prompt_context import build_narration_context
++    kwargs = _narration_minimal_kwargs()
++    kwargs['session'].update(turn_counter=4, interaction_context={'active_interaction_target_id': 'sailor'})
++    kwargs['world']['npcs'] = [{'id': 'sailor', 'name': 'Sailor', 'location': 'frontier_gate',
++        'knowledge_scope': ['CANARY_PRIVATE_KNOWLEDGE'], 'current_agenda': 'CANARY_PRIVATE_AGENDA',
++        'affiliation': 'CANARY_PRIVATE_FACTION', 'hidden_motivation': 'CANARY_PRIVATE_MOTIVE'}]
++    payload = build_narration_context(**kwargs)
++    assert 'CANARY_' not in json.dumps(payload)
++
++
++def test_provider_declarations_and_private_metadata_cannot_grant_effects():
++    outcome = result(metadata={'items_added': ['silver key']}, hint='You receive a silver key.')
++    verdict = validate_generated_response('You receive a silver key.', resolution=outcome,
++                                          declared_claims=[{'text': 'You receive a silver key.'}])
++    assert verdict['hard_valid'] is False
++
++
++def test_mechanical_retry_is_rejected_without_sentence_salvage():
++    retries = []
++    def regenerate(_):
++        retries.append(True)
++        return {'player_facing_text': 'Rain falls. You receive a silver key.', 'metadata': {}}
++    output = run_preserve_if_valid({'player_facing_text': 'The secret is a private plan.', 'metadata': {}},
++        player_text='I examine the dial.', resolution=discovery(), regenerate=regenerate)
++    assert retries == [True]
++    assert 'silver key' not in output['player_facing_text']
++    assert CLUE in output['player_facing_text']
++    assert output['metadata']['rejected_provider_output'] == 'Rain falls. You receive a silver key.'
++
++
++@pytest.mark.parametrize('changes,text', [
++    ({'health_recovered': 3}, 'You recover 3 health.'),
++    ({'conditions_applied': ['poisoned']}, 'You become poisoned.'),
++    ({'conditions_removed': ['poisoned']}, 'You are no longer poisoned.'),
++    ({'routes_unlocked': ['west route']}, 'You unlock the west route.'),
++    ({'objectives_completed': ['rescue objective']}, 'You complete the rescue objective.'),
++    ({'time_advanced': 'two hours'}, 'Two hours pass.'),
++])
++def test_supported_additional_categories(changes, text):
++    checked(text, result(state_changes=changes), True)
++
++
++def test_nested_planner_clock_and_pressure_are_excluded():
++    from game.narration_authorization import project_narration_payload
++    value = {'narrative_plan': {'active_pressures': {'world_pressure': {'plot': 'CANARY_OFFSCREEN'},
++                                                   'clock_summaries': ['CANARY_CLOCK']}}}
++    before = copy.deepcopy(value)
++    projected = project_narration_payload(value, result())
++    assert 'CANARY_' not in json.dumps(projected)
++    assert projected['narrative_plan']['active_pressures'] == {'world_pressure': None, 'clock_summaries': []}
++    assert value == before
+--- before/tests/test_prompt_context.py
++++ after/tests/test_prompt_context.py
+@@ -286,7 +286,7 @@
+     policy = ctx["response_policy"]
+     instructions = " ".join(ctx.get("instructions", []))
+ 
+-    assert policy["rule_priority_order"] == [label for _, label in RESPONSE_RULE_PRIORITY]
++    assert policy["rule_priority_order"] == [label.replace(' / SECRETS', '') for _, label in RESPONSE_RULE_PRIORITY]
+     rd = policy.get("response_delta") or {}
+     assert rd.get("enabled") is False
+     assert rd.get("trigger_source") == "none"
+@@ -580,18 +580,12 @@
+     )
+     assert ctx["session"]["active_interaction_target_id"] == "frontier_gate__ragged_stranger"
+     assert ctx["session"]["active_interaction_target_name"] == "Keene"
+-    profile = ctx["social_context"]["interlocutor_profile"]
+-    assert profile["npc_is_promoted"] is True
+-    assert profile["reliability"] == "partial"
+-    assert profile["stance"] == "wary"
+-    assert "scene:frontier_gate" in profile["knowledge_scope"]
++    # PLAY-45: private knowledge scope, agenda and reliability are not disclosure grants.
++    assert "social_context" not in ctx
+     active = ctx["active_interlocutor"]
+     assert active["npc_id"] == "frontier_gate__ragged_stranger"
+-    assert active["raw_interaction_target_id"] == "ragged_stranger"
+-    assert active["promoted_from_actor_id"] == "ragged_stranger"
+-    hints = ctx["social_context"]["answer_style_hints"]
+-    assert any("INFORMATION_RELIABILITY partial" in hint for hint in hints)
+-    assert any("INTERLOCUTOR KNOWLEDGE GATE" in hint for hint in hints)
++    assert active["display_name"] == "Keene"
++    assert set(active) == {"npc_id", "display_name"}
+     assert any("NAMING CONTINUITY (engine)" in line for line in ctx["instructions"])
+ 
+ 
+@@ -1798,7 +1792,7 @@
+         )
+     )
+     assert "narration_visibility" in ctx
+-    assert ctx["discoverable_hinting"] is True
++    assert ctx["discoverable_hinting"] is False
+     nv = ctx["narration_visibility"]
+     assert "visible_entities" in nv and isinstance(nv["visible_entities"], list)
+     assert "visible_facts" in nv and isinstance(nv["visible_facts"], list)
+@@ -1821,9 +1815,9 @@
+     instr = "\n".join(ctx["instructions"])
+     assert "MUST NOT reference entities outside narration_visibility.visible_entities" in instr
+     assert "MUST NOT assert facts outside narration_visibility.visible_facts" in instr
+-    assert "discoverable_hinting is true" in instr
+-    lr = ctx["scene"]["layering_rules"]
+-    assert "only visible facts may be directly asserted" in lr["visible_facts"].lower()
++    assert "undiscovered facts are unavailable" in instr
++    assert "gm_only" not in ctx["scene"]
++    assert "undiscovered" not in ctx["scene"]["clue_records"]
+ 
+ 
+ @pytest.mark.unit
+@@ -1981,7 +1975,7 @@
+     ):
+         assert key in lc
+     assert ctx["scene"]["pending_leads"] == [{"surface": "scene hook"}]
+-    assert ctx["scene"]["runtime"]["pending_leads"] == [{"hint": "legacy pending"}]
++    assert ctx["scene"]["runtime"]["pending_leads"] == []  # internal hint lacks a public surface
+ 
+ 
+ def test_build_narration_context_filters_terminal_pending_leads_from_prompt_export():
+--- before/tests/test_exploration_skill_checks.py
++++ after/tests/test_exploration_skill_checks.py
+@@ -109,7 +109,7 @@
+ 
+ 
+ def test_gpt_payload_includes_skill_check_when_resolved(monkeypatch):
+-    """build_messages includes skill_check in payload when resolution has it."""
++    """Narration gets the check result, not private rolls or thresholds (PLAY-45)."""
+     monkeypatch.setattr("game.skill_checks._deterministic_d20", lambda _: 10)
+     character = default_character()
+     character["skills"]["perception"] = 2
+@@ -124,9 +124,9 @@
+         if m.get("role") == "user" and "content" in m:
+             payload = json.loads(m["content"])
+             assert "skill_check" in payload
+-            assert payload["skill_check"]["roll"] == 10
+-            assert payload["skill_check"]["total"] == 12
+-            assert payload["skill_check"]["dc"] == 8
++            assert "roll" not in payload["skill_check"]
++            assert "total" not in payload["skill_check"]
++            assert "dc" not in payload["skill_check"]
+             assert payload["skill_check"]["success"] is True
+             # Instruction about not inventing dice
+             instructions = " ".join(payload.get("instructions", []))

@@ -1,0 +1,524 @@
+{
+  "summary": {
+    "meaningful_turns": 28,
+    "objective": {
+      "discovered_patrol": true,
+      "investigated_trail": true,
+      "branch": true,
+      "consequence": true,
+      "continued": true,
+      "save_resume": "old_milestone"
+    },
+    "objective_completed": true,
+    "repeated_observations": 5,
+    "contradictions": 0,
+    "clarifications": 1,
+    "unsupported": 2,
+    "flags": {
+      "faction_house_verevin_agenda_advanced": true,
+      "faction_ash_cowl_agenda_advanced": true,
+      "faction_ordo_pyric_agenda_advanced": true,
+      "patrol_survey": true,
+      "patrol_survey_recorded": true
+    },
+    "scene": "old_milestone",
+    "latency": {
+      "mean": 314.2,
+      "median": 242.6,
+      "p95": 661.4,
+      "max": 687.4,
+      "n": 28
+    },
+    "provider_requests": 0,
+    "note": "Expression generation and live interpretation were off. The player policy used only visible prose and visible affordance labels, and typed chat."
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "input": "I examine the notice board.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "elapsed_ms": 250.3,
+      "scene": "frontier_gate",
+      "labels": [
+        "Talk to Gate Guard",
+        "Talk to Gate Serjeant",
+        "Talk to Tavern Runner",
+        "Examine the Notice board (already searched)",
+        "Examine The notice board lists taxes"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 2,
+      "input": "I follow the missing patrol rumor.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You arrive at Old Milestone.",
+      "elapsed_ms": 205.7,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 3,
+      "input": "I examine the weathered milestone.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "elapsed_ms": 191.7,
+      "scene": "old_milestone",
+      "labels": [
+        "Survey the uncertain trail yourself",
+        "Return to report the uncertain trail to the watch",
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 4,
+      "input": "I'll survey the uncertain trail myself.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You commit to surveying the ground beyond the milestone yourself. Reporting to the watch is no longer your response to this discovery. You can now record the limits of your survey here.",
+      "elapsed_ms": 125.9,
+      "scene": "old_milestone",
+      "labels": [
+        "Record the limits of your survey",
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 5,
+      "input": "I write down the limits of the survey.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You record your survey: the overlapping prints remain inconclusive. Your survey is now recorded; you have not warned the watch. You can return to the gate or continue investigating here.",
+      "elapsed_ms": 132.7,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 6,
+      "input": "I look around.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You look around. A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+      "elapsed_ms": 472.2,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 7,
+      "input": "I look for signs of a struggle.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "No signs of a struggle are established here. Nothing was added.",
+      "elapsed_ms": 25.1,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 8,
+      "input": "I wait and watch the road.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You wait and watch. Nothing new approaches, and no encounter is created.",
+      "elapsed_ms": 28.3,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 9,
+      "input": "I inspect the ground beside the stone.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "Which of those visible targets do you mean?",
+      "elapsed_ms": 29.3,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 10,
+      "input": "Ask the guard what the warning is about.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "No matching person is established here, so that conversation was not started.",
+      "elapsed_ms": 234.9,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 11,
+      "input": "What can I do here?",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You are at Old Milestone. Established in view: A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. No authored continuation is available. You can look at what is already here or speak to someone present. Nothing was attempted.",
+      "elapsed_ms": 33.1,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 12,
+      "input": "I look along the track without leaving.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "A weathered stone milestone leans beside the northwest mud track. Nothing farther is established.",
+      "elapsed_ms": 543.0,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 13,
+      "input": "I check the rainwater at the edge of the path.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+      "elapsed_ms": 510.0,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 14,
+      "input": "Does the marker lean?",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You are still at Old Milestone. No travel was completed, so another place's description was not published.",
+      "elapsed_ms": 575.2,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 15,
+      "input": "I listen for anyone on the road.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "I cannot provide a validated response to that request.",
+      "elapsed_ms": 177.8,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 16,
+      "input": "What are my options?",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You are at Old Milestone. Established in view: A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. No authored continuation is available. You can look at what is already here or speak to someone present. Nothing was attempted.",
+      "elapsed_ms": 33.6,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": true
+    },
+    {
+      "turn": 17,
+      "input": "I look at the scrub beside the track.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "No new clue is established by this examination.",
+      "elapsed_ms": 535.1,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 18,
+      "input": "I stay where I am and look back the way I came.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "current scene says, \"I cannot answer that from what is settled here.\"",
+      "elapsed_ms": 347.5,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 19,
+      "input": "What should I investigate next?",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You are at Old Milestone. Established in view: A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. No authored continuation is available. You can look at what is already here or speak to someone present. Nothing was attempted.",
+      "elapsed_ms": 40.9,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": true
+    },
+    {
+      "turn": "save",
+      "input": "save",
+      "snapshot": "2026-11-08T00-49-07_0c8347a2",
+      "scene": "old_milestone"
+    },
+    {
+      "turn": 20,
+      "input": "I rest a hand on the stone and look at the mud again.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "The Weathered milestone is not an accessible seat. Your posture is unchanged. Nothing further is established about that. No hidden object or passage was added.",
+      "elapsed_ms": 653.0,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": "resume",
+      "input": "resume",
+      "scene": "old_milestone"
+    },
+    {
+      "turn": 21,
+      "input": "I count the ruts without stepping off the track.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You are still at Old Milestone. No travel was completed, so another place's description was not published.",
+      "elapsed_ms": 539.2,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": true
+    },
+    {
+      "turn": 22,
+      "input": "I look up at the rain and stay put.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "That is not established here. Nothing has been changed. The rest was not attempted.",
+      "elapsed_ms": 43.4,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 23,
+      "input": "I check whether my boots are caked with mud.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "No matching person is established here, so that conversation was not started.",
+      "elapsed_ms": 687.4,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": true
+    },
+    {
+      "turn": 24,
+      "input": "I face the way back toward the gate without leaving.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "You stay where you are. Nothing has been attempted.",
+      "elapsed_ms": 57.0,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 25,
+      "input": "I look for a second set of prints closer to the scrub.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "No new clue is established by this examination.",
+      "elapsed_ms": 661.4,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": true
+    },
+    {
+      "turn": 26,
+      "input": "I wait through one more gust of rain.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "No one here can answer that from what is settled here.",
+      "elapsed_ms": 393.3,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 27,
+      "input": "I keep my voice low and look at the marker.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "That part is not supported here. It was not carried out. You find nothing new there.",
+      "elapsed_ms": 631.5,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    },
+    {
+      "turn": 28,
+      "input": "I study the horizon and remain here.",
+      "provenance": "visible-text policy",
+      "player_facing_text": "Nothing further is established about that. No hidden object or passage was added. That part is not supported here. It was not carried out.",
+      "elapsed_ms": 639.4,
+      "scene": "old_milestone",
+      "labels": [
+        "Examine the Weathered milestone (already searched)",
+        "Examine the Mud prints (already searched)",
+        "Examine A weathered stone milestone leans bes",
+        "Examine The mud around the marker is churned",
+        "Examine The track continues a short way past"
+      ],
+      "contradiction": false,
+      "repeated_observation": false
+    }
+  ]
+}

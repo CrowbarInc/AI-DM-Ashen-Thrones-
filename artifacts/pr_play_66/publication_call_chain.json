@@ -1,0 +1,8 @@
+{
+  "chain": "POST /api/chat?ui_mode=player → api_chat → chat → _run_resolved_turn_pipeline → _resolve_engine_noncombat_seam → game.noncombat_resolution / game.exploration (authority mutation) → _build_gpt_narration_from_authoritative_state (ordinary provider/validation/refusal choices) → _observe_quarantined_investigation_narration → quarantine.build_hook_input → integrated.run_integrated_hook → outcome_contract → trusted_disclosure → optional generator → compose_authoritative / validate_integrated → quarantine evidence and request-local binding → _complete_opening_turn_persistence_like_chat (normal state/clue/clock persistence and ordinary text finalization) → _build_turn_response_payload → prepare_authoritative_publication → _publish_experimental_integrated_narration → verify_authoritative_publication → final-text equality assertions / append_log → _project_player_runtime_response → state_channels.deep_project_public_payload → FastAPI JSON serialization → HTTP body.",
+  "selection_owners": [
+    "game/api.py::_publish_experimental_integrated_narration",
+    "game/quarantined_investigation_narration.py::prepare_authoritative_publication",
+    "game/quarantined_investigation_narration.py::verify_authoritative_publication"
+  ]
+}

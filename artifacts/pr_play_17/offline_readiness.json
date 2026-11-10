@@ -1,0 +1,82 @@
+{
+  "run": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_17\\offline_startup\\20261101T153612Z-cc63fdb16ae2",
+  "ready": {
+    "ready": {
+      "pid": 32340,
+      "port": 52724,
+      "phase": "configuration_initialized",
+      "time": "2026-11-01T15:36:15.931486+00:00",
+      "data_dir": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_17\\offline_startup\\20261101T153612Z-cc63fdb16ae2\\data",
+      "isolation_verified": true,
+      "model": "gpt-4.1-mini",
+      "opening_output_allowance": 3000,
+      "opening_renderer": {
+        "flag": "ASHEN_OPENING_RENDERER",
+        "mode": "enabled",
+        "selected": true
+      },
+      "limits": [
+        6,
+        200000,
+        20000,
+        220000
+      ],
+      "sdk_retries": 0,
+      "host_retries": 0,
+      "diagnostics_enabled": true,
+      "credentials_present": false,
+      "connectivity_diagnostics": false
+    },
+    "base": "http://127.0.0.1:52724"
+  },
+  "cleanup": {
+    "owned": true,
+    "pid": 32340,
+    "stopped": true,
+    "exit_code": 1,
+    "shutdown_seconds": 0.0
+  },
+  "steps": [],
+  "provider_usage": {
+    "version": "ATGB-03B-1",
+    "run_id": "f826743515314a4086e5ed14aa1fbf29",
+    "requests": 0,
+    "request_upper_bound": 0,
+    "dispatched_requests": 0,
+    "pending_requests": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [],
+    "events": [
+      {
+        "event": "initialized",
+        "version": "ATGB-03B-1",
+        "run_id": "f826743515314a4086e5ed14aa1fbf29",
+        "time": "2026-11-01T15:36:15.928481+00:00"
+      }
+    ],
+    "allowances": {
+      "input": 200000,
+      "output": 20000,
+      "total": 220000
+    },
+    "remaining_budget": {
+      "input": 200000,
+      "output": 20000,
+      "total": 220000
+    },
+    "budget_rejections": []
+  },
+  "passed": true,
+  "http": {
+    "pid": 32340,
+    "url": "http://127.0.0.1:52724/api/state",
+    "status": 200,
+    "time": "2026-11-01T15:36:16.115632+00:00",
+    "startup_seconds": 1.875
+  },
+  "port_released": true
+}

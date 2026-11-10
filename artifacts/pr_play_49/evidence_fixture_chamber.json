@@ -1,0 +1,186 @@
+{
+  "id": "chamber",
+  "category": "failed",
+  "scene": {
+    "scene": {
+      "id": "unfamiliar_site",
+      "location": "Unfamiliar Site",
+      "visible_facts": [
+        "A chamber lies in plain view.",
+        "Light catches the uneven surface."
+      ],
+      "summary": "A quiet place for a closer look.",
+      "interactables": [
+        {
+          "id": "chamber",
+          "label": "chamber",
+          "type": "investigate",
+          "reveals_clue": "selected"
+        }
+      ],
+      "discoverable_clues": [
+        {
+          "id": "selected",
+          "text": "The concealed release lies behind the lintel."
+        },
+        {
+          "id": "hidden",
+          "text": "CANARY_UNDISCOVERED"
+        },
+        {
+          "id": "UNSEEN_CLUE_K42",
+          "text": "UNSEEN_CLUE_K42"
+        }
+      ],
+      "hidden_facts": [
+        "HIDDEN_DESTINATION_K42"
+      ],
+      "gm_notes": [
+        "PRIVATE_GM_NOTE_K42"
+      ],
+      "npcs": [
+        {
+          "hidden_motivation": "NPC_MOTIVE_K42"
+        }
+      ],
+      "hidden_faction": "CANARY_FACTION_ACTIVITY",
+      "exits": []
+    }
+  },
+  "resolution": {
+    "kind": "investigate",
+    "action_id": "chamber",
+    "label": "chamber",
+    "prompt": "I examine the chamber.",
+    "success": false,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": "selected",
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {
+      "skill_check_failed": true
+    },
+    "hint": "Player investigated [chamber] and discovered clue [selected]. Narrate the discovery and its significance.",
+    "interactable_id": "chamber",
+    "clue_text": "The concealed release lies behind the lintel.",
+    "metadata": {
+      "referenced_surface_authority": "authored_interactable",
+      "referenced_surface_target": "chamber",
+      "referenced_surface_existence": true,
+      "referenced_surface_visibility": true,
+      "referenced_surface_inspectability": true,
+      "referenced_surface_interactable_id": "chamber",
+      "referenced_surface_visible_fact": "",
+      "referenced_surface_inspectable_text": "The concealed release lies behind the lintel.",
+      "skip_unrelated_clue_discovery": false
+    }
+  },
+  "known": [],
+  "origin": "explicit failed-check fixture; actual failed resolver independently tested",
+  "player": "I examine the chamber.",
+  "hidden_information": [
+    "UNSEEN_CLUE_K42",
+    "PRIVATE_GM_NOTE_K42",
+    "NPC_MOTIVE_K42",
+    "HIDDEN_DESTINATION_K42",
+    "PRIVATE_WORLD_K42",
+    "QUEST_TWIST_K42"
+  ],
+  "authoritative_projection": {
+    "outcome": {
+      "status": "failed",
+      "success": false,
+      "target_id": "chamber",
+      "revealed": [],
+      "known": [],
+      "observations": [
+        "A chamber lies in plain view.",
+        "Light catches the uneven surface."
+      ],
+      "consequences": "",
+      "inventory_effects_json": "{}"
+    },
+    "anchors": [
+      {
+        "order": 0,
+        "source": "engine_status",
+        "status": "failed",
+        "text": "The investigation establishes nothing new."
+      },
+      {
+        "order": 1,
+        "source": "public_observation",
+        "status": "observed",
+        "text": "A chamber lies in plain view."
+      },
+      {
+        "order": 2,
+        "source": "public_observation",
+        "status": "observed",
+        "text": "Light catches the uneven surface."
+      }
+    ]
+  },
+  "prelude_request": {
+    "authorized_investigation": {
+      "target": "chamber",
+      "status": "failed",
+      "success": false,
+      "newly_discovered": [],
+      "previously_known": []
+    },
+    "public_scene": {
+      "observations": [
+        "A chamber lies in plain view.",
+        "Light catches the uneven surface."
+      ]
+    },
+    "descriptive_constraints": [
+      "Write only a descriptive prelude to the examination, ending a complete sentence.",
+      "Do not repeat or reinterpret discoveries; the engine appends them verbatim.",
+      "Preserve uncertainty. Do not establish culprits, counts, links or destinations.",
+      "No possessions, rewards, health, conditions, travel, quests or persistent changes.",
+      "Compatible incidental texture is ephemeral and grants no world facts or mechanics."
+    ],
+    "max_output_utf8_bytes": 1600
+  },
+  "candidate_prelude": "You look closely, taking time over the examination.",
+  "final_response": {
+    "preview_text": "You look closely, taking time over the examination.\n\nThe investigation establishes nothing new. A chamber lies in plain view. Light catches the uneven surface.",
+    "anchors": [
+      {
+        "order": 0,
+        "source": "engine_status",
+        "status": "failed",
+        "text": "The investigation establishes nothing new."
+      },
+      {
+        "order": 1,
+        "source": "public_observation",
+        "status": "observed",
+        "text": "A chamber lies in plain view."
+      },
+      {
+        "order": 2,
+        "source": "public_observation",
+        "status": "observed",
+        "text": "Light catches the uneven surface."
+      }
+    ],
+    "diagnostic": "heuristic_pass_pending_review",
+    "used_fallback": false,
+    "validation_json": "{\"hard_valid\": true, \"reasons\": [], \"soft_flags\": [], \"speaker\": \"\", \"addressee\": \"\", \"operation\": \"\", \"interaction_complete\": true, \"contract_satisfying\": true, \"authority\": [], \"gm_resolution_decision_audit\": null, \"mechanical_claim_audit\": {\"coverage\": \"bounded_assertion_frames_not_semantic_proof\", \"claims\": [], \"reasons\": []}, \"consequential_validation\": {\"decision\": \"PASS\", \"reasons\": [], \"claims\": [], \"provider_requests\": 0, \"coverage\": \"deterministic_frames_not_semantic_proof\"}}",
+    "review_required": true
+  },
+  "fallback": "You examine the evidence. The investigation establishes nothing new. A chamber lies in plain view. Light catches the uneven surface.",
+  "state_unchanged": true,
+  "host": {
+    "text": "You inspect the target, but nothing new is established.",
+    "source": {
+      "kind": "investigate",
+      "source": "failed_inspection"
+    }
+  },
+  "controlled": "A chamber lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The attempt establishes nothing new."
+}

@@ -1,0 +1,2178 @@
+[
+  {
+    "lane": "initial_http",
+    "input": "Hello.",
+    "npc_id": "npc_1554b9892335865c6150",
+    "response": "Eli says, \"Hello.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_1554b9892335865c6150",
+        "speaker_name": "Eli",
+        "speaker_identity": {
+          "id": "npc_1554b9892335865c6150",
+          "name": "Eli"
+        },
+        "addressee": "player",
+        "player_question": "Hello.",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:fbd0c7e047f7"
+        },
+        "proposition_id": "statement:fbd0c7e047f7",
+        "authorized_propositions": [
+          "Hello."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Eli"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "675591a1b5c6d29a",
+        "fallback_response": "Hello.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Eli to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Hello.\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- Hello.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 992.1856001019478
+  },
+  {
+    "lane": "initial_http",
+    "input": "Who are you?",
+    "npc_id": "npc_1554b9892335865c6150",
+    "response": "Eli says, \"I am Eli, an ordinary laborer in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "missing_authorized_claim",
+          "unsupported_addition"
+        ],
+        "operation": "faithful_paraphrase",
+        "validation_ms": 0.392
+      },
+      "attempt": {
+        "ok": true,
+        "sent": true,
+        "text": "I'm Eli, just a regular laborer dressed in patched work clothes.",
+        "usage": {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "cff49aad0da64dde9d065124f48d623f",
+          "attempt_id": "2d62101886c049deb274c9829057be21",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-07T15:39:25.047917+00:00",
+          "time": "2026-11-07T15:39:26.503705+00:00",
+          "sent": true,
+          "request_id": "resp_092bb92bad8e7bad006aef462e103887d1bbd8ef7ba9993b0b",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 196,
+          "output_tokens": 15,
+          "total_tokens": 211,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1143.767
+        },
+        "latency_ms": 1456.795,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      "contract": {
+        "speaker_id": "npc_1554b9892335865c6150",
+        "speaker_name": "Eli",
+        "speaker_identity": {
+          "id": "npc_1554b9892335865c6150",
+          "name": "Eli"
+        },
+        "addressee": "player",
+        "player_question": "Who are you?",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:8d0fd968d089"
+        },
+        "proposition_id": "statement:8d0fd968d089",
+        "authorized_propositions": [
+          "I am Eli, an ordinary laborer in patched work clothes."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Eli"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "77f68d7b0a243e35",
+        "fallback_response": "I am Eli, an ordinary laborer in patched work clothes.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Eli to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Who are you?\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- I am Eli, an ordinary laborer in patched work clothes.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 2382.9167999792844
+  },
+  {
+    "lane": "initial_http",
+    "input": "What did you mean by that?",
+    "npc_id": "npc_1554b9892335865c6150",
+    "response": "Eli says, \"I am Eli, an ordinary laborer in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "missing_authorized_claim",
+          "unsupported_addition"
+        ],
+        "operation": "simple_explanation",
+        "validation_ms": 0.42
+      },
+      "attempt": {
+        "ok": true,
+        "sent": true,
+        "text": "I'm just Eli, a regular laborer dressed in patched work clothes, nothing more.",
+        "usage": {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "cff49aad0da64dde9d065124f48d623f",
+          "attempt_id": "b7a488a1779f41fbbabc92315bd8e722",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-07T15:39:27.739454+00:00",
+          "time": "2026-11-07T15:39:28.797880+00:00",
+          "sent": true,
+          "request_id": "resp_020eaacc25cb12a2006aef4630ba1c87d18c3176ca2434c7bb",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 198,
+          "output_tokens": 18,
+          "total_tokens": 216,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 765.86
+        },
+        "latency_ms": 1062.786,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      "contract": {
+        "speaker_id": "npc_1554b9892335865c6150",
+        "speaker_name": "Eli",
+        "speaker_identity": {
+          "id": "npc_1554b9892335865c6150",
+          "name": "Eli"
+        },
+        "addressee": "player",
+        "player_question": "What did you mean by that?",
+        "operation": "simple_explanation",
+        "authorized_source": "background.validated_history",
+        "source_identity": {
+          "ref": "background.validated_history",
+          "proposition_id": "statement:8d0fd968d089"
+        },
+        "proposition_id": "statement:8d0fd968d089",
+        "authorized_propositions": [
+          "I am Eli, an ordinary laborer in patched work clothes."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "restate_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "restate_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Eli"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "ed27458f86967a6a",
+        "fallback_response": "I am Eli, an ordinary laborer in patched work clothes.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Eli to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: What did you mean by that?\nOperation: simple_explanation\nAUTHORIZED FACTS:\n- I am Eli, an ordinary laborer in patched work clothes.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 2077.653900021687
+  },
+  {
+    "lane": "initial_http",
+    "input": "Have you traveled this road before?",
+    "npc_id": "npc_1554b9892335865c6150",
+    "response": "Eli says, \"I do not know about that.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_1554b9892335865c6150",
+        "speaker_name": "Eli",
+        "speaker_identity": {
+          "id": "npc_1554b9892335865c6150",
+          "name": "Eli"
+        },
+        "addressee": "player",
+        "player_question": "Have you traveled this road before?",
+        "operation": "uncertainty",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": ""
+        },
+        "proposition_id": "",
+        "authorized_propositions": [],
+        "knowledge_posture": "unknown",
+        "epistemic_posture": "unknown",
+        "answer_sufficiency": "not_applicable",
+        "disclosure_posture": "none",
+        "permitted_expression_scope": "state_lack_of_knowledge",
+        "permitted_meaning": {
+          "operation": "state_lack_of_knowledge",
+          "new_facts": false,
+          "commitment": false
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Eli"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "81158801801c7460",
+        "fallback_response": "I do not know about that.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Eli to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Have you traveled this road before?\nOperation: uncertainty\nAUTHORIZED FACTS:\n- (none)\nAUTHORIZED FACTS are empty. OPTIONAL NONCANONICAL EXPRESSION: say you do not know the answer. You may repeat the player's subject only to name what is unknown. Do not invent a maker, owner, place, time, or cause. Do not use because, but, or since."
+        }
+      }
+    },
+    "latency_ms": 968.0985000450164
+  },
+  {
+    "lane": "initial_http",
+    "input": "What do you know about this area?",
+    "npc_id": "npc_1554b9892335865c6150",
+    "response": "Eli says, \"A gate serjeant manages the crowd and keeps one eye on the roster board.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_1554b9892335865c6150",
+        "speaker_name": "Eli",
+        "speaker_identity": {
+          "id": "npc_1554b9892335865c6150",
+          "name": "Eli"
+        },
+        "addressee": "player",
+        "player_question": "What do you know about this area?",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:cb148a148580"
+        },
+        "proposition_id": "statement:cb148a148580",
+        "authorized_propositions": [
+          "A gate serjeant manages the crowd and keeps one eye on the roster board."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Eli"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "eb270897e91fc7ff",
+        "fallback_response": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Eli to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: What do you know about this area?\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- A gate serjeant manages the crowd and keeps one eye on the roster board.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 1057.691799942404
+  },
+  {
+    "lane": "initial_http",
+    "input": "Thanks. I will return later.",
+    "npc_id": "npc_1554b9892335865c6150",
+    "response": "Eli says, \"Thank you. Goodbye.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_1554b9892335865c6150",
+        "speaker_name": "Eli",
+        "speaker_identity": {
+          "id": "npc_1554b9892335865c6150",
+          "name": "Eli"
+        },
+        "addressee": "player",
+        "player_question": "Thanks. I will return later.",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:7ca563cb4df9"
+        },
+        "proposition_id": "statement:7ca563cb4df9",
+        "authorized_propositions": [
+          "Thank you. Goodbye."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Eli"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "09d383264f7e4d11",
+        "fallback_response": "Thank you. Goodbye.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Eli to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Thanks. I will return later.\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- Thank you. Goodbye.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 1140.9890999784693
+  },
+  {
+    "lane": "initial_http",
+    "input": "Hello.",
+    "npc_id": "npc_ed8f8b54f95c596465d2",
+    "response": "Mara says, \"Hello.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_ed8f8b54f95c596465d2",
+        "speaker_name": "Mara",
+        "speaker_identity": {
+          "id": "npc_ed8f8b54f95c596465d2",
+          "name": "Mara"
+        },
+        "addressee": "player",
+        "player_question": "Hello.",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:dafcbe8c8f4d"
+        },
+        "proposition_id": "statement:dafcbe8c8f4d",
+        "authorized_propositions": [
+          "Hello."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Mara"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "6914ca9e87ce2b2c",
+        "fallback_response": "Hello.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Mara to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Hello.\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- Hello.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 841.3157000904903
+  },
+  {
+    "lane": "initial_http",
+    "input": "Who are you?",
+    "npc_id": "npc_ed8f8b54f95c596465d2",
+    "response": "Mara says, \"I am Mara, an ordinary laborer in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "missing_authorized_claim",
+          "unsupported_addition"
+        ],
+        "operation": "faithful_paraphrase",
+        "validation_ms": 0.47
+      },
+      "attempt": {
+        "ok": true,
+        "sent": true,
+        "text": "I'm Mara, just a simple laborer dressed in patched work clothes.",
+        "usage": {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "cff49aad0da64dde9d065124f48d623f",
+          "attempt_id": "3add7e337f2d4635a1907be15c53be5c",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-07T15:39:54.081204+00:00",
+          "time": "2026-11-07T15:39:56.550891+00:00",
+          "sent": true,
+          "request_id": "resp_0e4ac7f8b8efbb65006aef464b588887d1a5d16695602a5342",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 196,
+          "output_tokens": 15,
+          "total_tokens": 211,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2143.473
+        },
+        "latency_ms": 2471.393,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      "contract": {
+        "speaker_id": "npc_ed8f8b54f95c596465d2",
+        "speaker_name": "Mara",
+        "speaker_identity": {
+          "id": "npc_ed8f8b54f95c596465d2",
+          "name": "Mara"
+        },
+        "addressee": "player",
+        "player_question": "Who are you?",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:e1301085e05f"
+        },
+        "proposition_id": "statement:e1301085e05f",
+        "authorized_propositions": [
+          "I am Mara, an ordinary laborer in patched work clothes."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Mara"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "364147c28d032671",
+        "fallback_response": "I am Mara, an ordinary laborer in patched work clothes.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Mara to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Who are you?\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- I am Mara, an ordinary laborer in patched work clothes.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 3377.9495001072064
+  },
+  {
+    "lane": "initial_http",
+    "input": "What did you mean by that?",
+    "npc_id": "npc_ed8f8b54f95c596465d2",
+    "response": "Mara says, \"I am Mara, an ordinary laborer in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "missing_authorized_claim",
+          "unsupported_addition"
+        ],
+        "operation": "simple_explanation",
+        "validation_ms": 0.268
+      },
+      "attempt": {
+        "ok": true,
+        "sent": true,
+        "text": "I'm Mara, just a simple laborer wearing patched work clothes.",
+        "usage": {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "cff49aad0da64dde9d065124f48d623f",
+          "attempt_id": "e4db911fa0c84a59a93c5c2b08ef0cd8",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-07T15:39:58.313234+00:00",
+          "time": "2026-11-07T15:39:59.904519+00:00",
+          "sent": true,
+          "request_id": "resp_0c51f3bd25434f73006aef464f4ee087d1b69af9e9acb54c81",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 198,
+          "output_tokens": 14,
+          "total_tokens": 212,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1321.851
+        },
+        "latency_ms": 1593.017,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      "contract": {
+        "speaker_id": "npc_ed8f8b54f95c596465d2",
+        "speaker_name": "Mara",
+        "speaker_identity": {
+          "id": "npc_ed8f8b54f95c596465d2",
+          "name": "Mara"
+        },
+        "addressee": "player",
+        "player_question": "What did you mean by that?",
+        "operation": "simple_explanation",
+        "authorized_source": "background.validated_history",
+        "source_identity": {
+          "ref": "background.validated_history",
+          "proposition_id": "statement:e1301085e05f"
+        },
+        "proposition_id": "statement:e1301085e05f",
+        "authorized_propositions": [
+          "I am Mara, an ordinary laborer in patched work clothes."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "restate_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "restate_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Mara"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "7b42476576b35ef8",
+        "fallback_response": "I am Mara, an ordinary laborer in patched work clothes.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Mara to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: What did you mean by that?\nOperation: simple_explanation\nAUTHORIZED FACTS:\n- I am Mara, an ordinary laborer in patched work clothes.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 2468.0007999995723
+  },
+  {
+    "lane": "initial_http",
+    "input": "Have you traveled this road before?",
+    "npc_id": "npc_ed8f8b54f95c596465d2",
+    "response": "Mara says, \"I do not know about that.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_ed8f8b54f95c596465d2",
+        "speaker_name": "Mara",
+        "speaker_identity": {
+          "id": "npc_ed8f8b54f95c596465d2",
+          "name": "Mara"
+        },
+        "addressee": "player",
+        "player_question": "Have you traveled this road before?",
+        "operation": "uncertainty",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": ""
+        },
+        "proposition_id": "",
+        "authorized_propositions": [],
+        "knowledge_posture": "unknown",
+        "epistemic_posture": "unknown",
+        "answer_sufficiency": "not_applicable",
+        "disclosure_posture": "none",
+        "permitted_expression_scope": "state_lack_of_knowledge",
+        "permitted_meaning": {
+          "operation": "state_lack_of_knowledge",
+          "new_facts": false,
+          "commitment": false
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Mara"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "5785318a761242e4",
+        "fallback_response": "I do not know about that.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Mara to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Have you traveled this road before?\nOperation: uncertainty\nAUTHORIZED FACTS:\n- (none)\nAUTHORIZED FACTS are empty. OPTIONAL NONCANONICAL EXPRESSION: say you do not know the answer. You may repeat the player's subject only to name what is unknown. Do not invent a maker, owner, place, time, or cause. Do not use because, but, or since."
+        }
+      }
+    },
+    "latency_ms": 947.1272999653593
+  },
+  {
+    "lane": "initial_http",
+    "input": "What do you know about this area?",
+    "npc_id": "npc_ed8f8b54f95c596465d2",
+    "response": "Mara says, \"A gate serjeant manages the crowd and keeps one eye on the roster board.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_ed8f8b54f95c596465d2",
+        "speaker_name": "Mara",
+        "speaker_identity": {
+          "id": "npc_ed8f8b54f95c596465d2",
+          "name": "Mara"
+        },
+        "addressee": "player",
+        "player_question": "What do you know about this area?",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:514bd8003453"
+        },
+        "proposition_id": "statement:514bd8003453",
+        "authorized_propositions": [
+          "A gate serjeant manages the crowd and keeps one eye on the roster board."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Mara"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "4bd0a7114f6fcd49",
+        "fallback_response": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Mara to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: What do you know about this area?\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- A gate serjeant manages the crowd and keeps one eye on the roster board.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 820.2739999396726
+  },
+  {
+    "lane": "initial_http",
+    "input": "Thanks. I will return later.",
+    "npc_id": "npc_ed8f8b54f95c596465d2",
+    "response": "Mara says, \"Thank you. Goodbye.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_ed8f8b54f95c596465d2",
+        "speaker_name": "Mara",
+        "speaker_identity": {
+          "id": "npc_ed8f8b54f95c596465d2",
+          "name": "Mara"
+        },
+        "addressee": "player",
+        "player_question": "Thanks. I will return later.",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:73b727d046c2"
+        },
+        "proposition_id": "statement:73b727d046c2",
+        "authorized_propositions": [
+          "Thank you. Goodbye."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Mara"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "799c8c440d09c5f9",
+        "fallback_response": "Thank you. Goodbye.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Mara to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Thanks. I will return later.\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- Thank you. Goodbye.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 1124.8856999445707
+  },
+  {
+    "lane": "final_http",
+    "input": "Hello.",
+    "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+    "response": "Elan says, \"Hello.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "faithful_paraphrase"
+    },
+    "latency_ms": 3231.8857999052852
+  },
+  {
+    "lane": "final_http",
+    "input": "Who are you?",
+    "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+    "response": "Elan says, \"I am Elan, an ordinary laborer in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "faithful_paraphrase"
+    },
+    "latency_ms": 3359.2685000039637
+  },
+  {
+    "lane": "final_http",
+    "input": "What did you mean by that?",
+    "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+    "response": "Elan says, \"I am Elan, an ordinary laborer in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "simple_explanation"
+    },
+    "latency_ms": 3548.3314000302926
+  },
+  {
+    "lane": "final_http",
+    "input": "Have you traveled this road before?",
+    "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+    "response": "Elan says, \"I do not know about that.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "uncertainty"
+    },
+    "latency_ms": 4143.084399984218
+  },
+  {
+    "lane": "final_http",
+    "input": "What do you know about this area?",
+    "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+    "response": "Elan says, \"A gate serjeant manages the crowd and keeps one eye on the roster board.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "faithful_paraphrase"
+    },
+    "latency_ms": 4849.107400048524
+  },
+  {
+    "lane": "final_http",
+    "input": "Thanks. I will return later.",
+    "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+    "response": "Elan says, \"Thank you. Goodbye.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "faithful_paraphrase"
+    },
+    "latency_ms": 4577.368100057356
+  },
+  {
+    "lane": "final_http",
+    "input": "Talk to that traveler again.",
+    "npc_id": "npc_35e4f5d0e2f5abfb34bc",
+    "response": "Elan says, \"Thank you. Goodbye.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "simple_explanation"
+    },
+    "latency_ms": 4607.8658000333235
+  },
+  {
+    "lane": "final_http",
+    "input": "Hello.",
+    "npc_id": "npc_7be83c620ecee6b08410",
+    "response": "Tom says, \"Hello.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "faithful_paraphrase"
+    },
+    "latency_ms": 5239.369199960493
+  },
+  {
+    "lane": "final_http",
+    "input": "Who are you?",
+    "npc_id": "npc_7be83c620ecee6b08410",
+    "response": "Tom says, \"I am Tom, an ordinary laborer in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "faithful_paraphrase"
+    },
+    "latency_ms": 3840.611799969338
+  },
+  {
+    "lane": "final_http",
+    "input": "What did you mean by that?",
+    "npc_id": "npc_7be83c620ecee6b08410",
+    "response": "Tom says, \"I am Tom, an ordinary laborer in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "simple_explanation"
+    },
+    "latency_ms": 2681.2103999545798
+  },
+  {
+    "lane": "final_http",
+    "input": "Have you traveled this road before?",
+    "npc_id": "npc_7be83c620ecee6b08410",
+    "response": "Tom says, \"I do not know about that.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "uncertainty"
+    },
+    "latency_ms": 1977.6050000218675
+  },
+  {
+    "lane": "final_http",
+    "input": "What do you know about this area?",
+    "npc_id": "npc_7be83c620ecee6b08410",
+    "response": "Tom says, \"A gate serjeant manages the crowd and keeps one eye on the roster board.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "faithful_paraphrase"
+    },
+    "latency_ms": 2841.1879999330267
+  },
+  {
+    "lane": "final_http",
+    "input": "Thanks. I will return later.",
+    "npc_id": "npc_7be83c620ecee6b08410",
+    "response": "Tom says, \"Thank you. Goodbye.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "faithful_paraphrase"
+    },
+    "latency_ms": 3201.557100052014
+  },
+  {
+    "lane": "final_http",
+    "input": "Tell that traveler to give me a quest and valuable treasure.",
+    "npc_id": "npc_7be83c620ecee6b08410",
+    "response": "Tom says, \"I do not know about that, and I cannot promise assistance.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "uncertainty"
+    },
+    "latency_ms": 4029.264000011608
+  },
+  {
+    "lane": "final_http",
+    "input": "Ask that traveler to promise unsupported assistance.",
+    "npc_id": "npc_7be83c620ecee6b08410",
+    "response": "Tom says, \"I do not know about that, and I cannot promise assistance.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "uncertainty"
+    },
+    "latency_ms": 4117.355599999428
+  },
+  {
+    "lane": "final_http",
+    "input": "Talk to that traveler again.",
+    "npc_id": "npc_7be83c620ecee6b08410",
+    "response": "Tom says, \"I do not know about that, and I cannot promise assistance.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "simple_explanation"
+    },
+    "latency_ms": 5028.769199969247
+  },
+  {
+    "lane": "browser",
+    "input": "Hello.",
+    "npc_id": "npc_ee97a3a4b21fbae0da91",
+    "response": "Mira says, \"Hello.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_ee97a3a4b21fbae0da91",
+        "speaker_name": "Mira",
+        "speaker_identity": {
+          "id": "npc_ee97a3a4b21fbae0da91",
+          "name": "Mira"
+        },
+        "addressee": "player",
+        "player_question": "Hello.",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:32403f4ca6a7"
+        },
+        "proposition_id": "statement:32403f4ca6a7",
+        "authorized_propositions": [
+          "Hello."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Mira"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "f50b58e399ebe9c4",
+        "fallback_response": "Hello.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Mira to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Hello.\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- Hello.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 3078.946
+  },
+  {
+    "lane": "browser",
+    "input": "Who are you?",
+    "npc_id": "npc_ee97a3a4b21fbae0da91",
+    "response": "Mira says, \"I am Mira, an ordinary traveler in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "unsupported_addition"
+        ],
+        "operation": "faithful_paraphrase",
+        "validation_ms": 0.412
+      },
+      "attempt": {
+        "ok": true,
+        "sent": true,
+        "text": "I'm Mira, just an ordinary traveler dressed in patched work clothes.",
+        "usage": {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "bb4cc884f84f4cd09d4afaa6a5524242",
+          "attempt_id": "6a436c71b5884ef08cd73accc1059979",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-07T15:48:03.362184+00:00",
+          "time": "2026-11-07T15:48:05.871400+00:00",
+          "sent": true,
+          "request_id": "resp_0585f13b0cbd1256006aef4835748c87d1be5497c6a082714a",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 195,
+          "output_tokens": 14,
+          "total_tokens": 209,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1136.413
+        },
+        "latency_ms": 2510.581,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      "contract": {
+        "speaker_id": "npc_ee97a3a4b21fbae0da91",
+        "speaker_name": "Mira",
+        "speaker_identity": {
+          "id": "npc_ee97a3a4b21fbae0da91",
+          "name": "Mira"
+        },
+        "addressee": "player",
+        "player_question": "Who are you?",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:1b18e04619d8"
+        },
+        "proposition_id": "statement:1b18e04619d8",
+        "authorized_propositions": [
+          "I am Mira, an ordinary traveler in patched work clothes."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Mira"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "3de77fcefbb9fcdb",
+        "fallback_response": "I am Mira, an ordinary traveler in patched work clothes.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Mira to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Who are you?\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- I am Mira, an ordinary traveler in patched work clothes.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 6359.542
+  },
+  {
+    "lane": "browser",
+    "input": "What did you mean by that?",
+    "npc_id": "npc_ee97a3a4b21fbae0da91",
+    "response": "Mira says, \"I am Mira, an ordinary traveler in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "missing_authorized_claim",
+          "unsupported_addition"
+        ],
+        "operation": "simple_explanation",
+        "validation_ms": 0.423
+      },
+      "attempt": {
+        "ok": true,
+        "sent": true,
+        "text": "I'm Mira, just a simple traveler dressed in patched work clothes.",
+        "usage": {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "bb4cc884f84f4cd09d4afaa6a5524242",
+          "attempt_id": "10e37d69d8384aed820cfb5a427a706c",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-07T15:48:22.194156+00:00",
+          "time": "2026-11-07T15:48:24.298722+00:00",
+          "sent": true,
+          "request_id": "resp_08e3b763b9f6dfe2006aef4848430487d193e0172f5b8f5373",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 197,
+          "output_tokens": 14,
+          "total_tokens": 211,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 752.019
+        },
+        "latency_ms": 2097.836,
+        "model": "gpt-4.1-mini-2025-04-14"
+      },
+      "contract": {
+        "speaker_id": "npc_ee97a3a4b21fbae0da91",
+        "speaker_name": "Mira",
+        "speaker_identity": {
+          "id": "npc_ee97a3a4b21fbae0da91",
+          "name": "Mira"
+        },
+        "addressee": "player",
+        "player_question": "What did you mean by that?",
+        "operation": "simple_explanation",
+        "authorized_source": "background.validated_history",
+        "source_identity": {
+          "ref": "background.validated_history",
+          "proposition_id": "statement:1b18e04619d8"
+        },
+        "proposition_id": "statement:1b18e04619d8",
+        "authorized_propositions": [
+          "I am Mira, an ordinary traveler in patched work clothes."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "restate_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "restate_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Mira"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "5a7e109b915b1b67",
+        "fallback_response": "I am Mira, an ordinary traveler in patched work clothes.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Mira to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: What did you mean by that?\nOperation: simple_explanation\nAUTHORIZED FACTS:\n- I am Mira, an ordinary traveler in patched work clothes.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 6071.904
+  },
+  {
+    "lane": "browser",
+    "input": "Talk to that traveler again.",
+    "npc_id": "npc_ee97a3a4b21fbae0da91",
+    "response": "Mira says, \"I am Mira, an ordinary traveler in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_ee97a3a4b21fbae0da91",
+        "speaker_name": "Mira",
+        "speaker_identity": {
+          "id": "npc_ee97a3a4b21fbae0da91",
+          "name": "Mira"
+        },
+        "addressee": "player",
+        "player_question": "Talk to that traveler again.",
+        "operation": "simple_explanation",
+        "authorized_source": "background.validated_history",
+        "source_identity": {
+          "ref": "background.validated_history",
+          "proposition_id": "statement:1b18e04619d8"
+        },
+        "proposition_id": "statement:1b18e04619d8",
+        "authorized_propositions": [
+          "I am Mira, an ordinary traveler in patched work clothes."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "restate_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "restate_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Mira"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "567f43b85da46537",
+        "fallback_response": "I am Mira, an ordinary traveler in patched work clothes.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Mira to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Talk to that traveler again.\nOperation: simple_explanation\nAUTHORIZED FACTS:\n- I am Mira, an ordinary traveler in patched work clothes.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 2615.845
+  },
+  {
+    "lane": "browser",
+    "input": "Hello. Who are you?",
+    "npc_id": "npc_69b20b7bf0113eae9c12",
+    "response": "Eli says, \"Hello.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_69b20b7bf0113eae9c12",
+        "speaker_name": "Eli",
+        "speaker_identity": {
+          "id": "npc_69b20b7bf0113eae9c12",
+          "name": "Eli"
+        },
+        "addressee": "player",
+        "player_question": "Hello. Who are you?",
+        "operation": "faithful_paraphrase",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": "statement:bb3edf09eab3"
+        },
+        "proposition_id": "statement:bb3edf09eab3",
+        "authorized_propositions": [
+          "Hello."
+        ],
+        "knowledge_posture": "delivered",
+        "epistemic_posture": "delivered",
+        "answer_sufficiency": "directly_answers",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "reword_authorized_proposition",
+        "permitted_meaning": {
+          "operation": "reword_authorized_proposition",
+          "preserve_entities": true,
+          "preserve_epistemic_posture": true,
+          "answer_sufficiency": "directly_answers"
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Eli"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "ef261c29f39e4936",
+        "fallback_response": "Hello.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Eli to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Hello. Who are you?\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- Hello.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger."
+        }
+      }
+    },
+    "latency_ms": 1055.848
+  },
+  {
+    "lane": "browser",
+    "input": "Have you traveled this road before?",
+    "npc_id": "npc_69b20b7bf0113eae9c12",
+    "response": "Eli says, \"I do not know about that.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_69b20b7bf0113eae9c12",
+        "speaker_name": "Eli",
+        "speaker_identity": {
+          "id": "npc_69b20b7bf0113eae9c12",
+          "name": "Eli"
+        },
+        "addressee": "player",
+        "player_question": "Have you traveled this road before?",
+        "operation": "uncertainty",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": ""
+        },
+        "proposition_id": "",
+        "authorized_propositions": [],
+        "knowledge_posture": "unknown",
+        "epistemic_posture": "unknown",
+        "answer_sufficiency": "not_applicable",
+        "disclosure_posture": "none",
+        "permitted_expression_scope": "state_lack_of_knowledge",
+        "permitted_meaning": {
+          "operation": "state_lack_of_knowledge",
+          "new_facts": false,
+          "commitment": false
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Eli"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "0c11fababd934503",
+        "fallback_response": "I do not know about that.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Eli to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Have you traveled this road before?\nOperation: uncertainty\nAUTHORIZED FACTS:\n- (none)\nAUTHORIZED FACTS are empty. OPTIONAL NONCANONICAL EXPRESSION: say you do not know the answer. You may repeat the player's subject only to name what is unknown. Do not invent a maker, owner, place, time, or cause. Do not use because, but, or since."
+        }
+      }
+    },
+    "latency_ms": 578.606
+  },
+  {
+    "lane": "browser",
+    "input": "Tell that traveler where the secret passage is and give me a quest.",
+    "npc_id": "npc_69b20b7bf0113eae9c12",
+    "response": "Eli says, \"I do not know about that, and I cannot promise assistance.\"",
+    "audit": {
+      "adopted": false,
+      "validation": {
+        "adopt": false,
+        "reasons": [
+          "provider_unavailable"
+        ]
+      },
+      "attempt": {
+        "ok": false,
+        "sent": false,
+        "text": "",
+        "reason": "harness_live_budget_reserved"
+      },
+      "contract": {
+        "speaker_id": "npc_69b20b7bf0113eae9c12",
+        "speaker_name": "Eli",
+        "speaker_identity": {
+          "id": "npc_69b20b7bf0113eae9c12",
+          "name": "Eli"
+        },
+        "addressee": "player",
+        "player_question": "Tell that traveler where the secret passage is and give me a quest.",
+        "operation": "uncertainty",
+        "authorized_source": "background.authorized_identity_or_public",
+        "source_identity": {
+          "ref": "background.authorized_identity_or_public",
+          "proposition_id": ""
+        },
+        "proposition_id": "",
+        "authorized_propositions": [],
+        "knowledge_posture": "unknown",
+        "epistemic_posture": "unknown",
+        "answer_sufficiency": "not_applicable",
+        "disclosure_posture": "none",
+        "permitted_expression_scope": "state_lack_of_knowledge",
+        "permitted_meaning": {
+          "operation": "state_lack_of_knowledge",
+          "new_facts": false,
+          "commitment": false
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Eli"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "f975d389975f131f",
+        "fallback_response": "I do not know about that, and I cannot promise assistance.",
+        "canonical": false,
+        "delivery_frame": "",
+        "prompt": {
+          "system": "You write one sentence spoken by Eli to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+          "user": "Player question: Tell that traveler where the secret passage is and give me a quest.\nOperation: uncertainty\nAUTHORIZED FACTS:\n- (none)\nAUTHORIZED FACTS are empty. OPTIONAL NONCANONICAL EXPRESSION: say you do not know the answer. You may repeat the player's subject only to name what is unknown. Do not invent a maker, owner, place, time, or cause. Do not use because, but, or since."
+        }
+      }
+    },
+    "latency_ms": 592.134
+  },
+  {
+    "lane": "browser",
+    "input": "Talk to that traveler again.",
+    "npc_id": "npc_69b20b7bf0113eae9c12",
+    "response": "Eli says, \"I do not know about that, and I cannot promise assistance.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "simple_explanation"
+    },
+    "latency_ms": 4062.988
+  },
+  {
+    "lane": "browser",
+    "input": "Talk to that traveler again.",
+    "npc_id": "npc_ee97a3a4b21fbae0da91",
+    "response": "Mira says, \"I am Mira, an ordinary traveler in patched work clothes.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "simple_explanation"
+    },
+    "latency_ms": 477.122
+  },
+  {
+    "lane": "browser",
+    "input": "Talk to that traveler again.",
+    "npc_id": "npc_69b20b7bf0113eae9c12",
+    "response": "Eli says, \"I do not know about that, and I cannot promise assistance.\"",
+    "audit": {
+      "adopted": false,
+      "reason": "disabled",
+      "operation": "simple_explanation"
+    },
+    "latency_ms": 657.017
+  }
+]

@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "campaign_id",
+    "scene_id",
+    "anchor",
+    "quality",
+    "visibility"
+  ],
+  "properties": {
+    "family": {
+      "enum": [
+        "environment",
+        "object"
+      ]
+    },
+    "campaign_id": {
+      "type": "string"
+    },
+    "scene_id": {
+      "type": "string"
+    },
+    "anchor": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "quality": {
+      "enum": [
+        "rough",
+        "seat"
+      ]
+    },
+    "visibility": {
+      "const": "public"
+    }
+  },
+  "engine_constraints": [
+    "environment pairs only with rough",
+    "object pairs only with seat",
+    "affirmative public stone anchor required",
+    "matching campaign and active scene required",
+    "canonical descriptions and properties are engine owned"
+  ]
+}

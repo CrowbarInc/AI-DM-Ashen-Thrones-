@@ -1,0 +1,61 @@
+{
+  "experiment": "PR-PLAY-41",
+  "revision": "d40f1ed198236c604085f1c842ead267a8104ce2",
+  "worktree_status_game_playtest_atgb": " M game/api.py\n M game/api_turn_support.py\n M game/api_ui_mode.py\n M game/conversational_orchestration.py\n M game/dialogue_authority.py\n M game/expressive_dialogue.py\n M game/gm.py\n M game/gm_resolution_decision.py\n M game/intent_parser.py\n M game/ordinary_semantic_ownership.py\n M game/player_interpretation_bridge.py\n M game/provider_budget.py\n M game/social.py\n M tools/atgb/baseline.py\n M tools/playtest/gameplay.py\n M tools/playtest/overlays.py\n M tools/playtest/runner.py\n M tools/playtest/worker.py\n?? game/local_interaction.py\n?? game/opening_initialization_recovery.py\n?? game/opening_presentation_renderer.py\n?? game/public_fact_dialogue.py\n?? game/route_authority.py\n?? tools/playtest/investigation_overlay_authority.py\n?? tools/playtest/social_overlay_authority.py\n?? tools/playtest/validate_startup.py\n",
+  "runner_sha256": "2fbb17638653180f04e4995e0399f72e061a38a5506ef472e1c5e90cfc841181",
+  "process_launch_uses_base_executable": true,
+  "preserved_corrections": {
+    "pr_play_33_process_launch": true,
+    "pr_play_34_readiness_non_interpreter_child": true,
+    "pr_play_36_realization_texture": true,
+    "pr_play_37_opening_recovery": true,
+    "pr_play_39_npc_grounding": true,
+    "pr_play_39_authored_travel_admission": true,
+    "pr_play_40_pursuit_departure_recognition": true
+  },
+  "fixture": "frontier-gate-v1",
+  "fixture_manifest_sha256": "9c390c78f3fcf7507793e1037eb0add59e5e373050d1996f29f0c26f3b7bf0ea",
+  "scenario_id": "FiveTurnGameplay",
+  "scenario_file_ceiling": 6,
+  "mission_request_ceiling": 10,
+  "effective_request_ceiling": 10,
+  "turn_start_reserve": "interpretation plus optional narration; remaining requests must be at least 2",
+  "token_limits": {
+    "input": "200000",
+    "output": "20000",
+    "total": "220000"
+  },
+  "models": {
+    "MODEL_NAME": "gpt-4.1-mini",
+    "DEFAULT_MODEL_NAME": null,
+    "HIGH_PRECISION_MODEL_NAME": null,
+    "RETRY_ESCALATION_MODEL_NAME": null,
+    "ENABLE_MODEL_ROUTING": null
+  },
+  "credentials_present": true,
+  "live_interpretation_disabled": [],
+  "pinned_model_override": false,
+  "opening_renderer_set": false,
+  "sdk_retries_disabled": "1",
+  "host_retries_disabled": "1",
+  "upstream_preflight_skipped": true,
+  "health_probe_issued_by_controller": false,
+  "http_timeout_seconds": 90,
+  "player_inputs": [
+    "What is available here?",
+    "Have you heard any interesting rumors lately?",
+    "I examine the notice board.",
+    "I want to follow the trail connected to the missing patrol.",
+    "I examine the footprints."
+  ],
+  "turn5_stop": "submit only when the post-turn-4 authoritative scene is old_milestone",
+  "user_campaign": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\data",
+  "isolated_run": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_41\\live\\20261102T110016Z-47c71d381798",
+  "user_campaign_fingerprint": {
+    "path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\data",
+    "exists": true,
+    "file_count": 150,
+    "fingerprint_sha256": "2e006ba7e3387f32bf6180c2b335b5d208624a9ef5de3c4a67f32f946e3e9371"
+  },
+  "fixture_manifest_matches_pinned_constant": true
+}

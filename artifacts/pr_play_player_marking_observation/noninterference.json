@@ -1,0 +1,36 @@
+{
+  "result": {
+    "version": 1,
+    "status": "observed",
+    "target": {
+      "campaign_run_id": "identity-test-campaign",
+      "instance_id": "12c73297-0821-4a9b-bedd-73cc021cbbaf"
+    },
+    "properties": [
+      {
+        "category": "markings",
+        "knowledge": "known_present",
+        "coverage": "subset",
+        "values": [
+          {
+            "content": "visible-one",
+            "presentation": "inscription",
+            "evidence_ref": "observation:markings:0",
+            "content_sha256": "be9e34c496c1588371c322a3c3b95f8ec2bde04cf6505dbca57bb57ba506df0c"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      "partial_observation_scope"
+    ],
+    "evidence": [
+      {
+        "reference": "observation:markings:0",
+        "category": "markings",
+        "content_sha256": "be9e34c496c1588371c322a3c3b95f8ec2bde04cf6505dbca57bb57ba506df0c"
+      }
+    ]
+  },
+  "hidden_variants_equal": true
+}

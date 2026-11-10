@@ -1,0 +1,596 @@
+{
+  "campaign_id": "PR-PLAY-70",
+  "campaign_name": "Meaningful Player Choice and Branching Consequences",
+  "campaign_date": "2026-11-05",
+  "purpose": "Review deterministic exclusive branch gameplay with persistent and observable follow-ups.",
+  "objective_status": "B — PARTIAL / CORE BRANCHING DEMONSTRATED; QUALIFIED EVIDENCE",
+  "executive_summary": "Both branches demonstrated through real HTTP and actual existing browser UI. Qualified evidence: seeded browser sessions, clipped viewport captures, shadow-only provider experiment, incomplete latency attribution. No commit/push.",
+  "primary_report": "development/campaigns/product_realization/pr_play_70/01_EXECUTIVE_SUMMARY.md",
+  "evidence_packets": [
+    "artifacts/validation_evidence/pr_play_70"
+  ],
+  "max_file_bytes": 25000000,
+  "changes": {
+    "production": [
+      "Finite authored consequence schema over existing world flags, action conditions, persistence and trusted HTTP publication.",
+      "Default-off/session-bound Old Milestone scenario with survey/report branches and distinct follow-ups."
+    ],
+    "validation": [
+      "42 development tests; frozen once-only 50-case holdout."
+    ],
+    "tooling": [
+      "Isolated HTTP/browser and bounded provider harnesses."
+    ],
+    "documentation": [
+      "23 campaign reports and current session orientation."
+    ],
+    "generated_artifacts": [
+      "Full sanitized requests/responses, before/after authority, frozen holdout, original provider candidates, browser traces, exact regression failures."
+    ]
+  },
+  "testing": {
+    "focused": "42 development passed; see regression_summary for established lanes.",
+    "broader": "See exact broader failed node IDs and comparison.",
+    "full_suite": "Not run; no official ATGB or independent external validation claim.",
+    "runtime_validation": "19 TCP gameplay actions; 13 browser actions.",
+    "model_runtime_boundary": "Four configured provider shadow calls, 1287 tokens, zero AI publications.",
+    "new_regressions": "See regression summary.",
+    "pre_existing_failures": "Three focused and nine broader in historical baseline."
+  },
+  "decisions_requiring_human_review": [
+    "No approval requested. No commit/push."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Browser starts from clean prestarted isolated campaigns.",
+      "Clipped viewport captures; browser-visible latency unmeasured.",
+      "Provider study shadow-only; deterministic branch text published.",
+      "Modest scripted stakes; no broad free-text initiative or concurrent-choice guarantee."
+    ],
+    "pre_existing": [
+      "Historical regression failures retained."
+    ]
+  },
+  "missing_concepts": [
+    "Normal browser campaign startup/save-slot resume evidence."
+  ],
+  "does_not_prove": [
+    "Independent external holdout, official ATGB, full suite, open-world agency, concurrent persistence atomicity, live AI publication."
+  ],
+  "recommended_next_step": "Complete the existing two-branch experiment through normal New Campaign/Start Campaign and browser save-slot resume, with readable viewport captures and measured browser-visible latency.",
+  "self_contained_review_test": "23 requested reports and explicit source/evidence selection with complete player-facing branch text and machine traces.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_70/boundary_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/broader_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/browser_report_choices.png",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/browser_report_continuation.txt",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/browser_report_full.png",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/browser_report_reload.png",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/browser_report_reload.txt",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/browser_survey_continuation.txt",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/browser_survey_reload.png",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/browser_survey_reload.txt",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/development.xml",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/development_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/gameplay.py",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/holdout.py",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/implementation.diff",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/live_provider.py",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/package_review.py",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/regression.py",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/regression_diagnose.txt",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/report.py",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/baseline.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/browser_report_network.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/browser_results.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/browser_survey_network.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/complete_payload_scan.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/failure_injection.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/freeze_integrity.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/frozen_holdout.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/frozen_holdout_manifest.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/holdout_results.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/holdout_summary.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/http_report.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/http_summary.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/http_survey.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/implementation_freeze.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/live_provider_results.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/metrics.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/protected_integrity.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/provenance.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/regression_comparison.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/regression_summary.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/snapshot_relocation.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/state_integrity.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_70/review_data/verdict.json",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/01_EXECUTIVE_SUMMARY.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/02_BASELINE_AND_SCOPE.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/03_EXISTING_CONSEQUENCE_ARCHITECTURE.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/04_SCENARIO_SELECTION.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/05_CHOICE_AND_CONSEQUENCE_CONTRACT.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/06_IMPLEMENTATION.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/07_BRANCH_A_GAMEPLAY.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/08_BRANCH_B_GAMEPLAY.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/09_BRANCH_COMPARISON.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/10_PERSISTENCE_AND_EXCLUSIVITY.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/11_FOLLOW_UP_RECOGNITION.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/12_DEVELOPMENT_TESTS.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/13_FROZEN_HOLDOUT.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/14_LIVE_HTTP_GAMEPLAY.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/15_LIVE_PROVIDER_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/16_BROWSER_GAMEPLAY.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/17_FAILURE_INJECTION.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/18_STATE_AND_DISCLOSURE.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/19_PLAYER_SAFE_PROJECTION.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/20_PERFORMANCE_AND_QUALITY.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/21_REGRESSION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/22_LIMITATIONS_AND_OPEN_RISKS.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_70/23_NEXT_SESSION.md",
+      "role": "campaign_evidence",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "source",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "experiments/pr_play_70/scene_actions.json",
+      "role": "source",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "game/api.py",
+      "role": "source",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/authored_consequences.py",
+      "role": "source",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/exploration.py",
+      "role": "source",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/player_http_projection.py",
+      "role": "source",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/storage.py",
+      "role": "source",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_70_branching.py",
+      "role": "source",
+      "why": "PR70 selected implementation or retained review evidence.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    }
+  ]
+}

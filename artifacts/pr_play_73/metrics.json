@@ -1,0 +1,116 @@
+{
+  "verdict": "B \u2014 PARTIAL / GENERAL-PURPOSE PATHWAY DEMONSTRATED",
+  "branch": "feature/product-realization",
+  "head": "d40f1ed198236c604085f1c842ead267a8104ce2",
+  "protected": {
+    "entries": 150,
+    "preserved": 150,
+    "changed": []
+  },
+  "inherited_safety_file_sha256": "70f0c2cffa24ab2b632d38879ced46aaa99b975ff956e5330b01c9019e07f548",
+  "development": {
+    "cases": 100,
+    "passed": 100,
+    "failed": 0
+  },
+  "holdout": {
+    "passed": 69,
+    "cases": 70,
+    "sha256": "4cf2c89b7c0b33d9ef85bc40529e714d4bb1bd9515ecf72cdbbf5ed734f0cf13",
+    "failed": [
+      {
+        "id": "RO08",
+        "text": "Ask them.",
+        "checks": [
+          "reason",
+          "pub:Which visible"
+        ],
+        "reason": "initiative_ambiguous_reference",
+        "published": "Which person, place, or piece of evidence do you mean?",
+        "proposal_category": "E"
+      }
+    ]
+  },
+  "http": {
+    "requests": 33,
+    "mean_http_ms": 287.88236969602156,
+    "median_http_ms": 240.34669995307922,
+    "max_http_ms": 1248.8325000740588,
+    "hidden_exposures": 0,
+    "provider_requests": 0
+  },
+  "http_latency": {
+    "count": 33,
+    "mean": 287.88236969602156,
+    "median": 240.34669995307922,
+    "maximum": 1248.8325000740588
+  },
+  "browser": {
+    "campaign_A": "PASS",
+    "campaign_B": "PASS",
+    "typed_chat_requests": 16,
+    "hidden_exposures": 0,
+    "screenshots": [
+      "browser_A_survey.png",
+      "browser_B_report.png",
+      "browser_B_resume.png"
+    ],
+    "save_reload_resume": true,
+    "notes": "Player UI New Campaign, Start, branch buttons, and the chat composer were used. General-purpose, observation, read-only, social, manipulation, ambiguity, and resume follow-ups were entered in the chat box and sent. Paint timing was not instrumented; request durations below are server times from the isolated browser host.",
+    "server_ms": {
+      "count": 16,
+      "mean": 323.8128125,
+      "median": 334.488,
+      "maximum": 854.739
+    }
+  },
+  "regression": {
+    "focused": {
+      "passed": 1065,
+      "failed": 20,
+      "new_failures": [],
+      "resolved": [
+        "tests.test_pr_play_46_mechanical_boundary::test_record_adversarial_census",
+        "tests.test_pr_play_60_gameplay_readiness::test_investigation_then_repeat_preserves_persisted_state"
+      ]
+    },
+    "boundary": {
+      "passed": 101,
+      "failed": 6,
+      "new_failures": [],
+      "resolved": []
+    },
+    "broader": {
+      "passed": 0,
+      "failed": 9,
+      "new_failures": [],
+      "resolved": []
+    },
+    "lifecycle_isolated": {
+      "passed": 39,
+      "failed": 0,
+      "new_failures": [],
+      "resolved": [
+        "tests.test_pr_play_71v_verification::test_atomic_replace_succeeds_within_budget[0]"
+      ]
+    }
+  },
+  "new_regression_identities": [],
+  "provider": {
+    "requests": 0,
+    "tokens": 0,
+    "retries": 0,
+    "accepted": 0,
+    "rejected": 0,
+    "mode": "validation_only",
+    "reason": "Gameplay runs kept ASHEN_DISABLE_PROVIDER_CALLS=1 and ASHEN_GP_PROVIDER_INTERPRETATION=0. The provider may only propose a family hint; validate_provider_proposal rejects outcomes, dice, hidden fields, and unknown targets. No live request was issued, so no live gameplay success is claimed."
+  },
+  "unauthorized_fact_promotions": 0,
+  "bounded_improvisation": "classified and refused; promotion disabled",
+  "families": [
+    "environmental_observation",
+    "physical_search",
+    "social_initiative"
+  ],
+  "missing_mechanic": "climb/jump/balance have no configured check; no difficulty class was invented"
+}

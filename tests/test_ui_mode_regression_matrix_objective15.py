@@ -16,7 +16,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from game import storage
-from game.api import app
+from game.api import app, compose_state, _project_state_for_ui_mode
 from game.defaults import (
     default_campaign,
     default_character,
@@ -115,17 +115,17 @@ def test_state_envelope_keys_exact_per_mode(tmp_path, monkeypatch) -> None:
     assert set(p.keys()) == {"ui_mode", "public_state"}
     assert p["ui_mode"] == "player"
 
-    # author: exact shipped keys
+    # HTTP privilege fails closed; exact internal projection keys are preserved.
     r_a = client.get("/api/state?ui_mode=author")
-    assert r_a.status_code == 200
-    a = r_a.json()
+    assert r_a.status_code == 403
+    a = _project_state_for_ui_mode(compose_state(), "author")
     assert set(a.keys()) == {"ui_mode", "public_state", "author_state"}
     assert a["ui_mode"] == "author"
 
     # debug: exact shipped keys
     r_d = client.get("/api/state?ui_mode=debug")
-    assert r_d.status_code == 200
-    d = r_d.json()
+    assert r_d.status_code == 403
+    d = _project_state_for_ui_mode(compose_state(), "debug")
     assert set(d.keys()) == {"ui_mode", "public_state", "debug_state"}
     assert d["ui_mode"] == "debug"
 
@@ -138,7 +138,9 @@ def test_unknown_ui_mode_fails_closed(tmp_path, monkeypatch) -> None:
     assert r.status_code == 400
     body = r.json()
     assert body.get("ok") is False
-    assert "unknown ui mode" in (body.get("error") or "").lower()
+    # PR67 deliberately avoids echoing diagnostic text or the supplied mode.
+    assert body.get("error") == "Unable to complete this request. Refresh your session and try again."
+    assert "not_a_real_mode" not in r.text
 
 
 def test_public_state_deep_projection_strips_nested_author_and_debug_leakage(tmp_path, monkeypatch) -> None:
@@ -195,8 +197,8 @@ def _request(client: TestClient, case: _EndpointCase):
         _EndpointCase("debug forbids POST /api/action", "POST", "/api/action", "debug", {"action_type": "freeform", "intent": "x"}, 403),
         _EndpointCase("debug forbids POST /api/chat", "POST", "/api/chat", "debug", {"text": "hello"}, 403),
         # --- allowed seams (sanity checks) ---
-        _EndpointCase("author allows POST /api/scene", "POST", "/api/scene", "author", {"scene": {"id": "test_scene"}}, 200),
-        _EndpointCase("debug allows GET /api/debug_trace", "GET", "/api/debug_trace", "debug", None, 200),
+        _EndpointCase("untrusted author denied POST /api/scene", "POST", "/api/scene", "author", {"scene": {"id": "test_scene"}}, 403),
+        _EndpointCase("untrusted debug denied GET /api/debug_trace", "GET", "/api/debug_trace", "debug", None, 403),
         _EndpointCase("player allows GET /api/log", "GET", "/api/log", "player", None, 200),
     ],
     ids=lambda c: c.name,

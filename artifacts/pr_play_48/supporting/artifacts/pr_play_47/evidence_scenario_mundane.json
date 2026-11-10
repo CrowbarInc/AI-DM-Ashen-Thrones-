@@ -1,0 +1,293 @@
+{
+  "id": "mundane",
+  "category": "mundane observation",
+  "scene": {
+    "scene": {
+      "id": "unfamiliar_site",
+      "location": "Unfamiliar Site",
+      "visible_facts": [
+        "A basin lies in plain view.",
+        "Light catches the uneven surface."
+      ],
+      "summary": "A quiet place for a closer look.",
+      "interactables": [
+        {
+          "id": "basin",
+          "label": "basin",
+          "type": "investigate"
+        }
+      ],
+      "discoverable_clues": [
+        {
+          "id": "hidden",
+          "text": "CANARY_UNDISCOVERED"
+        }
+      ],
+      "hidden_facts": [
+        "CANARY_DESTINATION"
+      ],
+      "gm_notes": [
+        "CANARY_GM_NOTE"
+      ],
+      "npcs": [
+        {
+          "hidden_motivation": "CANARY_NPC_MOTIVE"
+        }
+      ],
+      "hidden_faction": "CANARY_FACTION_ACTIVITY",
+      "exits": []
+    }
+  },
+  "resolution": {
+    "kind": "investigate",
+    "action_id": "basin",
+    "label": "basin",
+    "prompt": "I examine the basin.",
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "hint": "Player inspected an authored interactable that has no further authored contents.",
+    "metadata": {
+      "referenced_surface_authority": "authored_interactable",
+      "referenced_surface_target": "basin",
+      "referenced_surface_existence": true,
+      "referenced_surface_visibility": true,
+      "referenced_surface_inspectability": true,
+      "referenced_surface_interactable_id": "basin",
+      "referenced_surface_visible_fact": "",
+      "referenced_surface_inspectable_text": "",
+      "skip_unrelated_clue_discovery": true
+    }
+  },
+  "known": [],
+  "origin": "actual exploration resolver on synthetic scene",
+  "player": "I examine the basin.",
+  "authorized_view": {
+    "status": "observed",
+    "success": true,
+    "target_id": "basin",
+    "revealed": [],
+    "known": [],
+    "observations": [
+      "A basin lies in plain view.",
+      "Light catches the uneven surface."
+    ],
+    "consequences": ""
+  },
+  "hidden_information": [
+    "CANARY_UNDISCOVERED",
+    "CANARY_GM_NOTE",
+    "CANARY_NPC_MOTIVE",
+    "CANARY_FACTION_ACTIVITY",
+    "CANARY_DESTINATION",
+    "CANARY_WORLD_STATE"
+  ],
+  "selection_payload": {
+    "authorized_investigation": {
+      "status": "observed",
+      "success": true,
+      "target_id": "basin",
+      "revealed": [],
+      "known": [],
+      "observations": [
+        "A basin lies in plain view.",
+        "Light catches the uneven surface."
+      ],
+      "consequences": ""
+    },
+    "available_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "structure",
+        "pace",
+        "tone",
+        "sensory_focus",
+        "detail",
+        "perspective",
+        "transition",
+        "information_order"
+      ],
+      "properties": {
+        "structure": {
+          "type": "string",
+          "enum": [
+            "action_first",
+            "evidence_first",
+            "setting_first"
+          ]
+        },
+        "pace": {
+          "type": "string",
+          "enum": [
+            "clipped",
+            "flowing",
+            "measured"
+          ]
+        },
+        "tone": {
+          "type": "string",
+          "enum": [
+            "spare",
+            "reflective",
+            "intent"
+          ]
+        },
+        "sensory_focus": {
+          "type": "string",
+          "enum": [
+            "none",
+            "visual",
+            "texture",
+            "listening"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "enum": [
+            "lean",
+            "standard",
+            "extended"
+          ]
+        },
+        "perspective": {
+          "type": "string",
+          "enum": [
+            "second_person",
+            "close_observation"
+          ]
+        },
+        "transition": {
+          "type": "string",
+          "enum": [
+            "direct",
+            "pause",
+            "question"
+          ]
+        },
+        "information_order": {
+          "type": "string",
+          "enum": [
+            "new_first",
+            "known_first"
+          ]
+        }
+      }
+    }
+  },
+  "host_speech": "basin",
+  "host_source": {
+    "kind": "investigate",
+    "source": "visible_surface_text"
+  },
+  "host_fact_emitter": {
+    "text": "basin",
+    "source": {
+      "kind": "investigate",
+      "source": "visible_surface_text"
+    }
+  },
+  "variants": [
+    {
+      "style": "concise",
+      "plan": {
+        "structure": "action_first",
+        "pace": "clipped",
+        "tone": "spare",
+        "sensory_focus": "none",
+        "detail": "lean",
+        "perspective": "second_person",
+        "transition": "direct",
+        "information_order": "new_first"
+      },
+      "narration": "You examine the evidence. No new clue is established by this examination.",
+      "mechanical_validator": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        }
+      },
+      "information_complete": true
+    },
+    {
+      "style": "atmospheric",
+      "plan": {
+        "structure": "setting_first",
+        "pace": "flowing",
+        "tone": "reflective",
+        "sensory_focus": "visual",
+        "detail": "extended",
+        "perspective": "close_observation",
+        "transition": "pause",
+        "information_order": "new_first"
+      },
+      "narration": "A basin lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. No new clue is established by this examination.",
+      "mechanical_validator": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        }
+      },
+      "information_complete": true
+    },
+    {
+      "style": "investigative",
+      "plan": {
+        "structure": "evidence_first",
+        "pace": "measured",
+        "tone": "intent",
+        "sensory_focus": "texture",
+        "detail": "standard",
+        "perspective": "second_person",
+        "transition": "question",
+        "information_order": "known_first"
+      },
+      "narration": "What does the evidence actually establish? No new clue is established by this examination.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nA basin lies in plain view.",
+      "mechanical_validator": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        }
+      },
+      "information_complete": true
+    }
+  ],
+  "state_unchanged": true
+}

@@ -1,0 +1,8 @@
+# PR-PLAY-30 state integrity
+PASS for observed opening/conversation/decline scope; this is not investigation success. Complete snapshots are in opening.json and offline_run.json; per-turn diffs and evaluations are separate T1/T2/T3 JSON files. state_integrity_checks.json records reconstructed world ticks and source-bound social event additions.
+
+Turn 1/2 ordinary evaluators have no findings; overlay_comparison passes. Character (including inventory/currency), campaign/quest state, combat, conditions remain unchanged. World mutations match advance_world_tick; Turn 2 additionally adds exactly two authorized social events. Rumor/topic discovery, lead registry and overlay updates have existing source authorization. No unsupported rewards, NPC relationship edits, physical evidence or location creation.
+
+Turn 3 preserves world, character, campaign, combat, conditions, active scene, clue knowledge, lead state, overlays, search state and turn/time counters. Session changes are confined to conversation context, interaction context, scene_state context and last_saved_at. The decline clears active interlocutor, records delivered response/context and appends a log entry. It does not claim examination. turn_counter and time_pressure stay 3; world tick does not advance.
+
+Confidentiality: all four player API responses scanned against exact authored hidden facts and protected author keys; no matches. Native evaluator reports no hidden disclosure. 29/29 response/privileged-read regression controls pass. Manual prose review finds no protected leakage. Exact matching alone does not prove absence of arbitrary paraphrases. Full internal diagnostic evidence is intentionally separate from player transcript.

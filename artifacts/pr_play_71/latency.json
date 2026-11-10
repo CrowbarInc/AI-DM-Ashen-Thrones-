@@ -1,0 +1,54 @@
+{
+  "browser_individual": [
+    {
+      "operation": "exploration_action",
+      "elapsed_ms": 12607.699999988079,
+      "timestamp": "2026-11-06T00:52:41.843Z"
+    },
+    {
+      "operation": "resume",
+      "elapsed_ms": 3492.099999964237,
+      "timestamp": "2026-11-06T00:53:12.748Z"
+    },
+    {
+      "operation": "exploration_action",
+      "elapsed_ms": 12470.699999988079,
+      "timestamp": "2026-11-06T00:53:33.455Z"
+    },
+    {
+      "operation": "resume",
+      "elapsed_ms": 3861.400000035763,
+      "timestamp": "2026-11-06T00:54:08.747Z"
+    },
+    {
+      "operation": "exploration_action",
+      "elapsed_ms": 6330.899999976158,
+      "timestamp": "2026-11-06T00:54:21.802Z"
+    },
+    {
+      "operation": "resume",
+      "elapsed_ms": 3000.5,
+      "timestamp": "2026-11-06T00:55:34.833Z"
+    }
+  ],
+  "browser_measured_groups": {
+    "resume": {
+      "count": 3,
+      "mean_ms": 3451.3333333333335,
+      "median_ms": 3492.099999964237,
+      "maximum_ms": 3861.400000035763
+    },
+    "exploration_action": {
+      "count": 3,
+      "mean_ms": 10469.766666650772,
+      "median_ms": 12470.699999988079,
+      "maximum_ms": 12607.699999988079
+    }
+  },
+  "HTTP": {
+    "mean_ms": 1857.6261148167152,
+    "max_ms": 4956.657200003974
+  },
+  "limits": "Browser console timings cover refreshed-context resumes and continuations. Initial A start and individual HTTP/network/render substage splits unavailable; cached-context tool timings are upper bounds only.",
+  "startup_observation": "B start completion occurred within a 17.712 second tool call including screenshot/automation overhead. A exact start measurement unavailable."
+}

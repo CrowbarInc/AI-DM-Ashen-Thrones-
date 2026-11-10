@@ -1,0 +1,77 @@
+[
+  {
+    "path": "game/storage.py",
+    "line": 65,
+    "text": "CHARACTER_PATH = DATA_DIR / 'character.json'"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 172,
+    "text": "_RUNTIME_COMMIT_PATHS = ("
+  },
+  {
+    "path": "game/storage.py",
+    "line": 176,
+    "text": "\"CHARACTER_PATH\","
+  },
+  {
+    "path": "game/storage.py",
+    "line": 181,
+    "text": "def _runtime_commit_paths() -> tuple[Path, ...]:"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 182,
+    "text": "return tuple(globals()[name] for name in _RUNTIME_COMMIT_PATHS)"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 190,
+    "text": "state[\"originals\"] = {path: _read_bytes_if_exists(path) for path in _runtime_commit_paths()}"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 285,
+    "text": "def load_character() -> Dict[str, Any]:"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 286,
+    "text": "return _load_json(CHARACTER_PATH, default_character())"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 289,
+    "text": "def save_character(data: Dict[str, Any]) -> None:"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 291,
+    "text": "_save_json(CHARACTER_PATH, data)"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 1182,
+    "text": "def create_snapshot(label: Optional[str] = None) -> Dict[str, Any]:"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 1231,
+    "text": "def load_snapshot(snapshot_id: str) -> Optional[Dict[str, Any]]:"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 1280,
+    "text": "targets: list[Path] = [SESSION_PATH, WORLD_PATH, COMBAT_PATH, CHARACTER_PATH, SESSION_LOG_PATH]"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 1290,
+    "text": "_atomic_save_json(CHARACTER_PATH, character)"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 1291,
+    "text": "applied.append(CHARACTER_PATH)"
+  }
+]

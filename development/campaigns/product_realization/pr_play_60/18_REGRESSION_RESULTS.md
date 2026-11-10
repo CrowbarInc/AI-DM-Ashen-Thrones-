@@ -1,0 +1,5 @@
+# 18 REGRESSION RESULTS
+
+Final source focused: collected 735, passed 732, failed 3, errors 0, skipped 0. New failures: []. Known failures: provider accounting readiness acceptance and two narration-state clue-ownership assertions. PR55 wrapper: 1/1. Broader authority assurance: 9/9 failures involving hard_validation_attempt_1, unchanged from prior evidence. Full repository suite not executed. No separate PR56 test module exists in this selection; saved narration lineage is covered by PR57 samples and quarantine tests.
+
+Initial collection failed on a copied nonexistent test filename (0 tests; retained logs). A pre-freeze source run collected 733 and had three temporary historical legacy-miss assertion failures plus the three known failures; explicit-delta scoping fixed the three without weakening assertions. Final-source run includes the added development source case and gameplay sequence. Initial targeted/HTTP failures and diagnostic runs remain retained, not substituted for final evidence. Test artifact rewrites under protected evidence owners are restored from entry bytes; logs list restored files.

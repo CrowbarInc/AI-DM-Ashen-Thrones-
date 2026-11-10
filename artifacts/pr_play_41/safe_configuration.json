@@ -1,0 +1,23 @@
+{
+  "provider": "configured OpenAI client",
+  "models": {
+    "MODEL_NAME": "gpt-4.1-mini",
+    "DEFAULT_MODEL_NAME": null,
+    "HIGH_PRECISION_MODEL_NAME": null,
+    "RETRY_ESCALATION_MODEL_NAME": null,
+    "ENABLE_MODEL_ROUTING": null
+  },
+  "credentials_present": true,
+  "request_ceiling": 10,
+  "token_limits": {
+    "input": "200000",
+    "output": "20000",
+    "total": "220000"
+  },
+  "sdk_retries": 0,
+  "host_retries": 0,
+  "upstream_preflight_skipped": true,
+  "opening_renderer_override": false,
+  "opening_response_capture": true,
+  "turn_start_reserve": 2
+}

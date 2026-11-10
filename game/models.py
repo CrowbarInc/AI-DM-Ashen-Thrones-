@@ -246,6 +246,7 @@ class ChatRequest(BaseModel):
     ui_mode: Optional[str] = None
     communication_mode: Optional[str] = None
     mode_override: Optional[str] = None
+    client_request_id: Optional[str] = None
 
 
 class CampaignUpdate(BaseModel):

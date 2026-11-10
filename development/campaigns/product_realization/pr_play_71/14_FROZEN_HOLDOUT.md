@@ -1,0 +1,5 @@
+# FROZEN HOLDOUT
+
+Developer-authored 50 cases frozen before production edits. SHA-256 3718f7f51200f162acb854a7f9cdb495815a863a144246fcf2eed5a170a732bb. Distribution 10 start, 10 persistence, 10 continuity, five isolation, five publication, five projection, five recovery. One execution only: 46 passed, 4 failed. H06/H07 require an error for empty/malformed opening, but the existing deterministic renderer validly returned a started opening; separate opening_diagnostics.json retains those actual responses without changing the frozen evaluator. H32/H35 are genuine Windows rename HTTP 500s with full tracebacks. Frozen results were neither tuned nor rerun.
+
+After this run completed, new persistence recovery and dependency cleanup were implemented. frozen_source/ and implementation_freeze.json preserve the evaluated version. Final repair tests are separate evidence; the final source has NO fresh frozen holdout. This limitation is decisive for B/PARTIAL. The holdout is not independent external validation or official ATGB.

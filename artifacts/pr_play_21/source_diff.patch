@@ -1,0 +1,322 @@
+--- a/game/api_ui_mode.py
++++ b/game/api_ui_mode.py
+@@ -17,7 +17,7 @@
+     request: Request | None,
+     payload: Mapping[str, Any] | None = None,
+ ) -> str:
+-    """Resolve requested ui_mode from query params or request payload.
++    """Resolve and admit an HTTP UI mode from query params or payload.
+ 
+     Resolution order:
+     - query param: ?ui_mode=...
+@@ -25,6 +25,11 @@
+ 
+     Default is fail-safe ``player``.
+     Unknown modes fail closed using the canonical policy module.
++
++    UI mode is a visibility request, not authorization. The application has no
++    trusted HTTP author/debug identity, so privileged modes fail closed here,
++    before endpoint data access or serialization. Local Python projection and
++    storage tools retain their existing contracts outside this HTTP adapter.
+     """
+ 
+     mode = request.query_params.get("ui_mode") if request is not None else None
+@@ -37,6 +42,8 @@
+     mode = (mode or "").strip() or PLAYER_UI_MODE
+     # Canonical validation (raises UiModePolicyError for unknown).
+     get_ui_mode_policy(mode)
++    if mode != PLAYER_UI_MODE:
++        raise UiModePolicyError("privileged HTTP ui mode is not authorized")
+     return mode
+ 
+ 
+--- a/tests/test_ui_mode_backend_integration.py
++++ b/tests/test_ui_mode_backend_integration.py
+@@ -8,7 +8,7 @@
+ import pytest
+ from fastapi.testclient import TestClient
+ 
+-from game.api import app
++from game.api import app, compose_state, _project_state_for_ui_mode
+ from game import storage
+ from game.defaults import (
+     default_campaign,
+@@ -82,16 +82,18 @@
+         assert "debug_state" not in d0
+ 
+         r1 = client.get("/api/state?ui_mode=author")
+-        assert r1.status_code == 200
+-        d1 = r1.json()
++        assert r1.status_code == 403
++        # Privileged projections remain an internal Python tool; HTTP mode is
++        # not an authorized identity (PR-PLAY-21).
++        d1 = _project_state_for_ui_mode(compose_state(), "author")
+         assert d1.get("ui_mode") == "author"
+         assert "public_state" in d1
+         assert "author_state" in d1
+         assert "debug_state" not in d1
+ 
+         r2 = client.get("/api/state?ui_mode=debug")
+-        assert r2.status_code == 200
+-        d2 = r2.json()
++        assert r2.status_code == 403
++        d2 = _project_state_for_ui_mode(compose_state(), "debug")
+         assert d2.get("ui_mode") == "debug"
+         assert "public_state" in d2
+         assert "debug_state" in d2
+@@ -114,13 +116,15 @@
+         assert "_final_emission_meta" not in public_blob
+         assert "hidden_facts" not in (public_state.get("scene") or {}).get("scene", {})
+ 
+-        author = client.get("/api/state?ui_mode=author").json()
++        assert client.get("/api/state?ui_mode=author").status_code == 403
++        author = _project_state_for_ui_mode(compose_state(), "author")
+         author_blob = json.dumps(author.get("author_state") or {}, sort_keys=True)
+         assert "hidden_facts" in author_blob
+         assert "debug_traces" not in author_blob
+         assert "_final_emission_meta" not in author_blob
+ 
+-        debug = client.get("/api/state?ui_mode=debug").json()
++        assert client.get("/api/state?ui_mode=debug").status_code == 403
++        debug = _project_state_for_ui_mode(compose_state(), "debug")
+         debug_blob = json.dumps(debug.get("debug_state") or {}, sort_keys=True)
+         assert "debug_traces" in debug_blob
+         assert "_final_emission_meta" in debug_blob
+@@ -140,7 +144,7 @@
+         # Debug read endpoints: debug only
+         assert client.get("/api/debug_trace").status_code == 403
+         assert client.get("/api/debug_trace?ui_mode=author").status_code == 403
+-        assert client.get("/api/debug_trace?ui_mode=debug").status_code == 200
++        assert client.get("/api/debug_trace?ui_mode=debug").status_code == 403
+ 
+         # Runtime action endpoints: player only
+         assert client.post("/api/chat", json={"text": "hello", "ui_mode": "author"}).status_code == 403
+--- a/tests/test_ui_mode_regression_matrix_objective15.py
++++ b/tests/test_ui_mode_regression_matrix_objective15.py
+@@ -16,7 +16,7 @@
+ from fastapi.testclient import TestClient
+ 
+ from game import storage
+-from game.api import app
++from game.api import app, compose_state, _project_state_for_ui_mode
+ from game.defaults import (
+     default_campaign,
+     default_character,
+@@ -115,17 +115,17 @@
+     assert set(p.keys()) == {"ui_mode", "public_state"}
+     assert p["ui_mode"] == "player"
+ 
+-    # author: exact shipped keys
++    # HTTP privilege fails closed; exact internal projection keys are preserved.
+     r_a = client.get("/api/state?ui_mode=author")
+-    assert r_a.status_code == 200
+-    a = r_a.json()
++    assert r_a.status_code == 403
++    a = _project_state_for_ui_mode(compose_state(), "author")
+     assert set(a.keys()) == {"ui_mode", "public_state", "author_state"}
+     assert a["ui_mode"] == "author"
+ 
+     # debug: exact shipped keys
+     r_d = client.get("/api/state?ui_mode=debug")
+-    assert r_d.status_code == 200
+-    d = r_d.json()
++    assert r_d.status_code == 403
++    d = _project_state_for_ui_mode(compose_state(), "debug")
+     assert set(d.keys()) == {"ui_mode", "public_state", "debug_state"}
+     assert d["ui_mode"] == "debug"
+ 
+@@ -195,8 +195,8 @@
+         _EndpointCase("debug forbids POST /api/action", "POST", "/api/action", "debug", {"action_type": "freeform", "intent": "x"}, 403),
+         _EndpointCase("debug forbids POST /api/chat", "POST", "/api/chat", "debug", {"text": "hello"}, 403),
+         # --- allowed seams (sanity checks) ---
+-        _EndpointCase("author allows POST /api/scene", "POST", "/api/scene", "author", {"scene": {"id": "test_scene"}}, 200),
+-        _EndpointCase("debug allows GET /api/debug_trace", "GET", "/api/debug_trace", "debug", None, 200),
++        _EndpointCase("untrusted author denied POST /api/scene", "POST", "/api/scene", "author", {"scene": {"id": "test_scene"}}, 403),
++        _EndpointCase("untrusted debug denied GET /api/debug_trace", "GET", "/api/debug_trace", "debug", None, 403),
+         _EndpointCase("player allows GET /api/log", "GET", "/api/log", "player", None, 200),
+     ],
+     ids=lambda c: c.name,
+--- a/tests/test_pr_play_20_response_confidentiality.py
++++ b/tests/test_pr_play_20_response_confidentiality.py
+@@ -123,8 +123,12 @@
+         for mode in ("debug", "author"):
+             denied = client.post("/api/start_campaign?ui_mode=" + mode)
+             assert denied.status_code == 403 and SENTINEL not in denied.text
+-        debug = client.get("/api/state?ui_mode=debug").json()
+-        author = client.get("/api/state?ui_mode=author").json()
++        assert client.get("/api/state?ui_mode=debug").status_code == 403
++        assert client.get("/api/state?ui_mode=author").status_code == 403
++        # PR-PLAY-21 closes unauthenticated HTTP reads; the internal projection
++        # remains available to local author/developer code.
++        debug = api._project_state_for_ui_mode(api.compose_state(), "debug")
++        author = api._project_state_for_ui_mode(api.compose_state(), "author")
+     _record("failed_opening.json", bad.json())
+     assert bad.status_code == 422 and SENTINEL not in bad.text
+     assert not st.load_session()["campaign_started"] and not st.load_log()
+--- /dev/null
++++ b/tests/test_pr_play_21_privileged_reads.py
+@@ -0,0 +1,164 @@
++"""Privileged HTTP reads fail closed; internal projections stay available offline."""
++import copy
++import json
++import os
++import socket
++from pathlib import Path
++
++import pytest
++from fastapi.testclient import TestClient
++
++import game.api as api
++from game import storage as st
++from game.api_ui_mode import resolve_requested_ui_mode, UiModePolicyError
++from game.opening_presentation_renderer import plan_selecting_required
++from tests.test_ui_mode_backend_integration import _seed_minimal_with_spoilers
++from tests.test_pr_play_04_opening_integrity import opening_world
++from tests.test_pr_play_20_response_confidentiality import confidential_world
++from tests.test_pr_play_18_contract_alignment import _transport
++
++SENTINEL = "PR_PLAY_21_PRIVILEGED_SENTINEL"
++
++
++def _record(name, value):
++    if os.environ.get("ASHEN_PR_PLAY_21_EVIDENCE") == "1":
++        Path("artifacts/pr_play_21", name).write_text(json.dumps(value, indent=2), encoding="utf-8")
++
++
++@pytest.fixture
++def read_world(tmp_path, monkeypatch):
++    original_connect = socket.socket.connect
++    def no_network(sock, address):
++        if isinstance(address, tuple) and address[0] in ("127.0.0.1", "::1"):
++            return original_connect(sock, address)  # Windows asyncio socketpair
++        raise AssertionError("PR-PLAY-21 forbids external network")
++    monkeypatch.setattr(socket.socket, "connect", no_network)
++    _seed_minimal_with_spoilers(tmp_path, monkeypatch)
++    monkeypatch.setattr(st, "SNAPSHOTS_DIR", st.DATA_DIR / "snapshots")
++    scene = st.load_active_scene()
++    scene["scene"]["hidden_facts"] = [SENTINEL]
++    scene["scene"]["visible_facts"] = ["Public test fact"]
++    st._save_json(st.scene_path("test_scene"), scene)
++    session = st.load_session()
++    session["debug_traces"] = [{"detail": SENTINEL + "_DEBUG"}]
++    st.save_session(session)
++    st.append_log({"timestamp": "synthetic", "request": {"chat": "Public input"},
++                   "gm_output": {"player_facing_text": "Public narration"},
++                   "resolution": {"internal_state": SENTINEL + "_LOG"}})
++    monkeypatch.setattr(api, "log_upstream_api_preflight_at_startup", lambda: None)
++    with TestClient(api.app) as client:
++        api.compose_state()  # Complete the existing derived character-name sync.
++        yield client
++
++
++def _authority():
++    return copy.deepcopy([st.load_campaign(), st.load_world(), st.load_active_scene(),
++                          st.load_character(), st.load_combat(), st.load_session(), st.load_log()])
++
++
++def test_default_public_and_authority_preservation(read_world):
++    before = _authority()
++    state = read_world.get("/api/state")
++    log = read_world.get("/api/log")
++    assert state.status_code == log.status_code == 200
++    assert set(state.json()) == {"ui_mode", "public_state"}
++    assert state.json()["ui_mode"] == "player"
++    assert state.json()["public_state"]["scene"]["scene"]["visible_facts"]
++    assert log.json()["entries"][0]["gm_output"]["player_facing_text"] == "Public narration"
++    assert log.json()["entries"][0]["player_input"] == "Public input"
++    assert SENTINEL not in state.text + log.text
++    assert _authority() == before
++    assert SENTINEL in json.dumps(before)
++
++
++@pytest.mark.parametrize("path", ["/api/state", "/api/log", "/api/debug_trace", "/api/snapshots"])
++@pytest.mark.parametrize("mode", ["author", "debug"])
++def test_privileged_http_denied_before_data_access(read_world, monkeypatch, path, mode):
++    before = _authority()
++    def forbidden():
++        raise AssertionError("Privileged denial must precede state/log loading and projection")
++    with monkeypatch.context() as patch:
++        for name in ("compose_state", "load_log", "load_session", "list_snapshots"):
++            patch.setattr(api, name, forbidden)
++        response = read_world.get(path, params={"ui_mode": mode})
++    assert response.status_code == 403
++    assert response.json() == {"ok": False, "error": "privileged HTTP ui mode is not authorized"}
++    assert SENTINEL not in response.text
++    assert _authority() == before
++
++
++@pytest.mark.parametrize("path", ["/api/campaign", "/api/scene", "/api/world"])
++@pytest.mark.parametrize("selector", ["ui_mode", "uiMode"])
++def test_supported_body_selectors_fail_closed_without_writes(read_world, path, selector):
++    before = _authority()
++    response = read_world.post(path, json={selector: "author"})
++    assert response.status_code == 403 and SENTINEL not in response.text
++    assert _authority() == before
++
++
++@pytest.mark.parametrize("query,status", [
++    ("ui_mode=%20author%20", 403), ("ui_mode=debug", 403),
++    ("ui_mode=player&ui_mode=author", 403),
++    ("ui_mode=author&ui_mode=player", 200), ("ui_mode=unknown", 400),
++])
++def test_selector_normalization_and_duplicate_queries(read_world, query, status):
++    response = read_world.get("/api/state?" + query)
++    assert response.status_code == status and SENTINEL not in response.text
++    if status == 200:
++        assert response.json()["ui_mode"] == "player"
++        assert set(response.json()) == {"ui_mode", "public_state"}
++
++
++def test_origin_and_loopback_do_not_grant_privilege(read_world):
++    for origin in ("http://127.0.0.1:8000", "https://untrusted.example"):
++        response = read_world.get("/api/state?ui_mode=author", headers={"Origin": origin})
++        assert response.status_code == 403 and SENTINEL not in response.text
++        assert response.headers["access-control-allow-origin"] == "*"
++
++
++def test_internal_projection_access_is_preserved(read_world):
++    before = _authority()
++    state = api.compose_state()
++    author = api._project_state_for_ui_mode(state, "author")
++    debug = api._project_state_for_ui_mode(state, "debug")
++    assert author["author_state"]["scene"]["scene"]["hidden_facts"] == [SENTINEL]
++    assert {"detail": SENTINEL + "_DEBUG"} in debug["debug_state"]["debug_traces"]
++    assert SENTINEL not in json.dumps(author["public_state"])
++    assert _authority() == before
++
++
++def test_missing_request_is_not_an_authorization_context():
++    with pytest.raises(UiModePolicyError):
++        resolve_requested_ui_mode(None, {"uiMode": "author"})
++
++
++def test_offline_initialization_and_ordinary_action(confidential_world, monkeypatch):
++    # Reuse PR-PLAY-20's guarded, temporary opening fixture and SDK transport.
++    monkeypatch.setattr(st, "SNAPSHOTS_DIR", st.DATA_DIR / "snapshots")
++    seen = []
++    _transport(monkeypatch, seen, lambda kw: plan_selecting_required(kw["input"]))
++    authority = copy.deepcopy(st.load_campaign())
++    with TestClient(api.app) as client:
++        started = client.post("/api/start_campaign")
++        public = client.get("/api/state")
++        denied = client.get("/api/state?ui_mode=author")
++        action = client.post("/api/action", json={"action_type": "roll_initiative"})
++    assert started.status_code == public.status_code == action.status_code == 200
++    assert started.json()["ui"]["campaign_started"]
++    assert started.json()["gm_output"]["player_facing_text"] == st.load_log()[0]["gm_output"]["player_facing_text"]
++    assert started.json()["gm_output"]["player_facing_text"]
++    assert action.json()["ok"] and st.load_combat()["in_combat"]
++    assert denied.status_code == 403
++    assert st.load_campaign() == authority
++    for response in (started, public, denied, action):
++        assert "PR_PLAY_20_HIDDEN_SENTINEL" not in response.text
++    assert len(seen) == 1
++    _record("initialization_and_action.json", {
++        "start_status": started.status_code, "state_status": public.status_code,
++        "privileged_status": denied.status_code, "action_status": action.status_code,
++        "campaign_started": True, "opening_published": True, "initiative_started": True,
++        "authoritative_campaign_unchanged": True, "mock_dispatches": len(seen), "live_provider_requests": 0,
++        "start_response_text": started.text, "public_response_text": public.text,
++        "denial_response_text": denied.text, "action_response_text": action.text,
++        "public_response_keys": sorted(public.json()), "start_response_keys": sorted(started.json()),
++        "action_response_keys": sorted(action.json())})

@@ -1,0 +1,81 @@
+{
+  "enabled": true,
+  "player_text": "I examine the weathered milestone again.",
+  "provider_requests": 0,
+  "state_write_attempted": false,
+  "projection_build_ms": 0.257,
+  "hook_input": {
+    "eligible": true,
+    "player_text": "I examine the weathered milestone again.",
+    "target_id": "milestone",
+    "target_label": null,
+    "resolution": {
+      "kind": "already_searched",
+      "success": false,
+      "action_id": "milestone",
+      "interactable_id": "milestone",
+      "discovered_clues": [],
+      "clue_text": "",
+      "state_changes": {
+        "already_searched": true
+      }
+    },
+    "narration_payload": {
+      "scene": {
+        "public": {
+          "location": "Old Milestone",
+          "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+          "visible_facts": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ]
+        },
+        "discovered_clues": [
+          {
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ]
+      }
+    }
+  },
+  "eligible": true,
+  "diagnostic": "unexpected_experimental_hook_exception",
+  "error_type": "TypeError",
+  "error": "_Replay.__init__() missing 1 required positional argument: 'fault'",
+  "used_fallback": true,
+  "anchors": [
+    {
+      "order": 0,
+      "source": "engine_status",
+      "status": "known",
+      "text": "The examination adds nothing new to what you already know."
+    },
+    {
+      "order": 1,
+      "source": "player_knowledge",
+      "status": "previously_known",
+      "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    }
+  ],
+  "assembled": "You examine the evidence. The examination adds nothing new to what you already know. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+  "hook_work_ms": 0.467,
+  "evidence_write": "ok",
+  "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_67\\holdout_H29\\evidence\\record-005.json",
+  "serialization_ms": 0.136,
+  "evidence_write_ms": 0.676,
+  "total_hook_ms": 4.717,
+  "publication": {
+    "decision": "fallback",
+    "trusted_disclosure": "The examination adds nothing new to what you already know.",
+    "mandatory_disclosures": [
+      "The examination adds nothing new to what you already know."
+    ],
+    "final_text": "You examine what is visible again; nothing new is established. The examination adds nothing new to what you already know.",
+    "invariant": "PASS",
+    "recovery_reason": null,
+    "server_constructed": true,
+    "client_received": "unknown"
+  },
+  "player_facing_published": false
+}

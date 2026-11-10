@@ -1,0 +1,91 @@
+[
+  {
+    "nodeid": "tests/test_pr_play_t05_composition.py::test_selected_information_excludes_stock_component[discover_clue]",
+    "phase": "call",
+    "traceback": "momentum = [(({'scene': {'id': 'frontier_gate', 'location': 'Cinderwatch Gate District', 'visible_facts': ['The notice board lists taxes and a missing patrol warning.']}},), {'seed_key': 'frontier_gate'})]\nkind = 'discover_clue'\n\n    @pytest.mark.parametrize(\"kind\", [\"discover_clue\", \"investigate\", \"observe\"])\n    def test_selected_information_excludes_stock_component(momentum, kind):\n        result = compose(CLUE, {\"kind\": kind, \"success\": True, \"clue_text\": CLUE})\n>       assert result[\"player_facing_text\"] == CLUE\nE       AssertionError: assert 'The missing ...at the board.' == 'The missing ...t the crates.'\nE         \nE         Skipping 69 identical leading characters in diff, use -v to show\nE         - the crates.\nE         + the crates.\nE         ?            +\nE         + \nE         + A passerby demands room at the board.\n\ntests\\test_pr_play_t05_composition.py:37: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "momentum",
+      "kind"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_t05_composition.py::test_selected_information_excludes_stock_component[investigate]",
+    "phase": "call",
+    "traceback": "momentum = [(({'scene': {'id': 'frontier_gate', 'location': 'Cinderwatch Gate District', 'visible_facts': ['The notice board lists taxes and a missing patrol warning.']}},), {'seed_key': 'frontier_gate'})]\nkind = 'investigate'\n\n    @pytest.mark.parametrize(\"kind\", [\"discover_clue\", \"investigate\", \"observe\"])\n    def test_selected_information_excludes_stock_component(momentum, kind):\n        result = compose(CLUE, {\"kind\": kind, \"success\": True, \"clue_text\": CLUE})\n>       assert result[\"player_facing_text\"] == CLUE\nE       AssertionError: assert 'The missing ...at the board.' == 'The missing ...t the crates.'\nE         \nE         Skipping 69 identical leading characters in diff, use -v to show\nE         - the crates.\nE         + the crates.\nE         ?            +\nE         + \nE         + A passerby demands room at the board.\n\ntests\\test_pr_play_t05_composition.py:37: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "momentum",
+      "kind"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_t05_composition.py::test_selected_information_excludes_stock_component[observe]",
+    "phase": "call",
+    "traceback": "momentum = [(({'scene': {'id': 'frontier_gate', 'location': 'Cinderwatch Gate District', 'visible_facts': ['The notice board lists taxes and a missing patrol warning.']}},), {'seed_key': 'frontier_gate'})]\nkind = 'observe'\n\n    @pytest.mark.parametrize(\"kind\", [\"discover_clue\", \"investigate\", \"observe\"])\n    def test_selected_information_excludes_stock_component(momentum, kind):\n        result = compose(CLUE, {\"kind\": kind, \"success\": True, \"clue_text\": CLUE})\n>       assert result[\"player_facing_text\"] == CLUE\nE       AssertionError: assert 'The missing ...at the board.' == 'The missing ...t the crates.'\nE         \nE         Skipping 69 identical leading characters in diff, use -v to show\nE         - the crates.\nE         + the crates.\nE         ?            +\nE         + \nE         + A passerby demands room at the board.\n\ntests\\test_pr_play_t05_composition.py:37: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "momentum",
+      "kind"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_t05_composition.py::test_existing_contextual_elaboration_is_kept[Rain beads along the notice's lower edge. The missing patrol was last seen taking the northwest mud track past the crates.]",
+    "phase": "call",
+    "traceback": "momentum = [(({'scene': {'id': 'frontier_gate', 'location': 'Cinderwatch Gate District', 'visible_facts': ['The notice board lists taxes and a missing patrol warning.']}},), {'seed_key': 'frontier_gate'})]\ntext = \"Rain beads along the notice's lower edge. The missing patrol was last seen taking the northwest mud track past the crates.\"\n\n    @pytest.mark.parametrize(\"text\", [\n        \"Rain beads along the notice's lower edge. \" + CLUE,\n        \"The notice puts the route plainly: the patrol took the northwest mud track past the crates. The ink is still legible.\",\n        CLUE + ' The guard beside the board says, \"Read that line carefully.\"',\n    ])\n    def test_existing_contextual_elaboration_is_kept(momentum, text):\n>       assert compose(text, {\"kind\": \"discover_clue\", \"success\": True, \"clue_text\": CLUE})[\"player_facing_text\"] == text\nE       AssertionError: assert 'Rain beads a...at the board.' == 'Rain beads a...t the crates.'\nE         \nE         Skipping 111 identical leading characters in diff, use -v to show\nE         - the crates.\nE         + the crates.\nE         ?            +\nE         + \nE         + A passerby demands room at the board.\n\ntests\\test_pr_play_t05_composition.py:49: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "momentum",
+      "text"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_t05_composition.py::test_existing_contextual_elaboration_is_kept[The notice puts the route plainly: the patrol took the northwest mud track past the crates. The ink is still legible.]",
+    "phase": "call",
+    "traceback": "momentum = [(({'scene': {'id': 'frontier_gate', 'location': 'Cinderwatch Gate District', 'visible_facts': ['The notice board lists taxes and a missing patrol warning.']}},), {'seed_key': 'frontier_gate'})]\ntext = 'The notice puts the route plainly: the patrol took the northwest mud track past the crates. The ink is still legible.'\n\n    @pytest.mark.parametrize(\"text\", [\n        \"Rain beads along the notice's lower edge. \" + CLUE,\n        \"The notice puts the route plainly: the patrol took the northwest mud track past the crates. The ink is still legible.\",\n        CLUE + ' The guard beside the board says, \"Read that line carefully.\"',\n    ])\n    def test_existing_contextual_elaboration_is_kept(momentum, text):\n>       assert compose(text, {\"kind\": \"discover_clue\", \"success\": True, \"clue_text\": CLUE})[\"player_facing_text\"] == text\nE       AssertionError: assert 'The notice p...at the board.' == 'The notice p...till legible.'\nE         \nE         Skipping 106 identical leading characters in diff, use -v to show\nE         - ll legible.\nE         + ll legible.\nE         ?            +\nE         + \nE         + A passerby demands room at the board.\n\ntests\\test_pr_play_t05_composition.py:49: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "momentum",
+      "text"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_t05_composition.py::test_existing_contextual_elaboration_is_kept[The missing patrol was last seen taking the northwest mud track past the crates. The guard beside the board says, \"Read that line carefully.\"]",
+    "phase": "call",
+    "traceback": "momentum = [(({'scene': {'id': 'frontier_gate', 'location': 'Cinderwatch Gate District', 'visible_facts': ['The notice board lists taxes and a missing patrol warning.']}},), {'seed_key': 'frontier_gate'})]\ntext = 'The missing patrol was last seen taking the northwest mud track past the crates. The guard beside the board says, \"Read that line carefully.\"'\n\n    @pytest.mark.parametrize(\"text\", [\n        \"Rain beads along the notice's lower edge. \" + CLUE,\n        \"The notice puts the route plainly: the patrol took the northwest mud track past the crates. The ink is still legible.\",\n        CLUE + ' The guard beside the board says, \"Read that line carefully.\"',\n    ])\n    def test_existing_contextual_elaboration_is_kept(momentum, text):\n>       assert compose(text, {\"kind\": \"discover_clue\", \"success\": True, \"clue_text\": CLUE})[\"player_facing_text\"] == text\nE       assert 'The missing ...at the board.' == 'The missing ...e carefully.\"'\nE         \nE         Skipping 130 identical leading characters in diff, use -v to show\nE         - carefully.\"\nE         + carefully.\"\nE         ?            +\nE         + \nE         + A passerby demands room at the board.\n\ntests\\test_pr_play_t05_composition.py:49: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "momentum",
+      "text"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_t05_composition.py::test_multiple_authorized_facts_and_resolved_event_are_kept",
+    "phase": "call",
+    "traceback": "momentum = [(({'scene': {'id': 'frontier_gate', 'location': 'Cinderwatch Gate District', 'visible_facts': ['The notice board lists taxes and a missing patrol warning.']}},), {'seed_key': 'frontier_gate'})]\n\n    def test_multiple_authorized_facts_and_resolved_event_are_kept(momentum):\n        second = \"The patrol left before sunrise.\"\n        text = CLUE + \" \" + second + \" You unfold the posted sheet.\"\n        resolution = {\"kind\": \"investigate\", \"success\": True, \"clue_text\": CLUE,\n                      \"discovered_clues\": [CLUE, second],\n                      \"state_changes\": {\"physical_operation\": \"unfold\", \"mutation\": True}}\n>       assert compose(text, resolution)[\"player_facing_text\"] == text\nE       AssertionError: assert 'The missing ...at the board.' == 'The missing ...posted sheet.'\nE         \nE         Skipping 130 identical leading characters in diff, use -v to show\nE         - sted sheet.\nE         + sted sheet.\nE         ?            +\nE         + \nE         + A passerby demands room at the board.\n\ntests\\test_pr_play_t05_composition.py:59: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "momentum"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_t05_composition.py::test_original_t05_http_acceptance_and_publication",
+    "phase": "call",
+    "traceback": "client = <starlette.testclient.TestClient object at 0x00000223A490E5A0>\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000223A480F5F0>\n\n    def test_original_t05_http_acceptance_and_publication(client, monkeypatch):\n        accepted = []\n        original = ivr.seal_accepted_response\n        def seal(*args, **kwargs):\n            result = original(*args, **kwargs)\n            accepted.append(copy.deepcopy(result))\n            return result\n        monkeypatch.setattr(ivr, \"seal_accepted_response\", seal)\n        for text in [\n            \"I stop under the gate and look around. What is actually in front of me?\",\n            \"Gate Guard, do you have a moment?\",\n            \"You mentioned the patrol. What have you heard?\",\n            \"I walk over to the notice board and put a hand on the frame.\",\n        ]:\n            _say(client, text)\n        before = copy.deepcopy(storage.load_character())\n        scene = storage.load_session()[\"active_scene_id\"]\n        accepted.clear()\n        reading = _say(client, \"Read me the missing-patrol notice, not the tax lines.\")\n        assert CLUE in reading[\"visible\"]\n        assert \"notice_patrol_route\" in reading[\"clues\"]\n        assert reading[\"scene\"] == scene\n        assert storage.load_character() == before\n        assert accepted\n        gm = accepted[-1]\n        record = ivr.accepted_record(gm)\n        assert record[\"hard_validation\"][\"hard_valid\"] and record[\"immutable\"]\n        assert ivr.verify_delivery_record(record)\n        assert record[\"text\"] == gm[\"player_facing_text\"] == reading[\"visible\"] == reading[\"publication\"]\n>       assert gm[\"metadata\"][\"emission_debug\"][\"scene_momentum_composition\"][\"appended\"] is False\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       KeyError: 'scene_momentum_composition'\n\ntests\\test_pr_play_t05_composition.py:114: KeyError",
+    "fixtures": [
+      "tmp_path_factory",
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "client",
+      "tmp_path",
+      "request"
+    ]
+  }
+]

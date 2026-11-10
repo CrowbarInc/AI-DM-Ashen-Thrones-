@@ -1,0 +1,782 @@
+[
+  {
+    "path": "game/adjudication.py",
+    "line": 87,
+    "text": "def _resolve_target_hint(text: str, session: Dict[str, Any]) -> Optional[str]:"
+  },
+  {
+    "path": "game/adjudication.py",
+    "line": 458,
+    "text": "def resolve_adjudication_query("
+  },
+  {
+    "path": "game/anti_railroading.py",
+    "line": 144,
+    "text": "def _resolved_transition(res: Mapping[str, Any]) -> bool:"
+  },
+  {
+    "path": "game/api.py",
+    "line": 422,
+    "text": "def _resolve_communication_mode(req: ChatRequest) -> _CommunicationModeDecision:"
+  },
+  {
+    "path": "game/api.py",
+    "line": 4760,
+    "text": "def _run_resolved_turn_pipeline("
+  },
+  {
+    "path": "game/api.py",
+    "line": 4875,
+    "text": "def _resolve_engine_noncombat_seam("
+  },
+  {
+    "path": "game/api_turn_support.py",
+    "line": 407,
+    "text": "def _preserve_physical_action_resolution_after_gate("
+  },
+  {
+    "path": "game/api_ui_mode.py",
+    "line": 16,
+    "text": "def resolve_requested_ui_mode("
+  },
+  {
+    "path": "game/authored_action_language.py",
+    "line": 252,
+    "text": "def _physical_owns(text, session, scene, world) -> bool:"
+  },
+  {
+    "path": "game/authored_consequences.py",
+    "line": 30,
+    "text": "def resolve(scene, session, world, action):"
+  },
+  {
+    "path": "game/bounded_improvisation.py",
+    "line": 618,
+    "text": "def resolve_controlled_fact(scene, session, world, action, *, prompt, action_id, label):"
+  },
+  {
+    "path": "game/bounded_improvisation.py",
+    "line": 969,
+    "text": "def resolve_controlled_fact(scene, session, world, action, *, prompt, action_id, label):"
+  },
+  {
+    "path": "game/clues.py",
+    "line": 257,
+    "text": "def _resolve_known_clue_id("
+  },
+  {
+    "path": "game/combat.py",
+    "line": 20,
+    "text": "def resolve_enemy_id_from_hint(scene: Dict[str, Any], hint: Optional[str]) -> Optional[str]:"
+  },
+  {
+    "path": "game/combat.py",
+    "line": 197,
+    "text": "def resolve_attack(character: Dict[str, Any], scene: Dict[str, Any], attack_id: str, target_id: Optional[str], modifiers: List[str], conditions: Dict[str, Any]) -> Dict[str, Any]:"
+  },
+  {
+    "path": "game/combat.py",
+    "line": 277,
+    "text": "def resolve_skill(character: Dict[str, Any], skill_id: str, intent: str, conditions: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:"
+  },
+  {
+    "path": "game/combat.py",
+    "line": 319,
+    "text": "def resolve_spell(character: Dict[str, Any], scene: Dict[str, Any], spell_id: str, target_id: Optional[str], conditions: Dict[str, Any]) -> Dict[str, Any]:"
+  },
+  {
+    "path": "game/contract_adjudication_bridge.py",
+    "line": 379,
+    "text": "def resolve_subject_coherence("
+  },
+  {
+    "path": "game/contract_adjudication_bridge.py",
+    "line": 440,
+    "text": "def select_resolver_family(contract: Mapping[str, Any] | None) -> str | None:"
+  },
+  {
+    "path": "game/contract_adjudication_bridge.py",
+    "line": 455,
+    "text": "def resolve_selected_family("
+  },
+  {
+    "path": "game/conversational_orchestration.py",
+    "line": 1692,
+    "text": "from game.local_interaction import resolve_transient_local_action"
+  },
+  {
+    "path": "game/conversational_orchestration.py",
+    "line": 1694,
+    "text": "outcome = resolve_transient_local_action("
+  },
+  {
+    "path": "game/conversational_orchestration.py",
+    "line": 1799,
+    "text": "def _resolve_move_target("
+  },
+  {
+    "path": "game/conversational_orchestration.py",
+    "line": 2696,
+    "text": "from game.local_interaction import resolve_transient_local_action"
+  },
+  {
+    "path": "game/conversational_orchestration.py",
+    "line": 2698,
+    "text": "transient = resolve_transient_local_action("
+  },
+  {
+    "path": "game/conversational_orchestration.py",
+    "line": 2856,
+    "text": "def _unbound_physical_decline("
+  },
+  {
+    "path": "game/conversational_orchestration.py",
+    "line": 2895,
+    "text": "reason=\"unsupported_physical_manipulation\","
+  },
+  {
+    "path": "game/exploration.py",
+    "line": 110,
+    "text": "def resolve_interactable_hidden_fact_text("
+  },
+  {
+    "path": "game/exploration.py",
+    "line": 262,
+    "text": "def resolve_exploration_action("
+  },
+  {
+    "path": "game/exploration.py",
+    "line": 1109,
+    "text": "def apply_follow_lead_commitment_after_resolved_scene_transition("
+  },
+  {
+    "path": "game/final_emission_acceptance_quality.py",
+    "line": 56,
+    "text": "def _resolve_acceptance_quality_contract_for_gate(gm_output: Mapping[str, Any] | None) -> Dict[str, Any]:"
+  },
+  {
+    "path": "game/final_emission_anti_railroading.py",
+    "line": 37,
+    "text": "def resolve_anti_railroading_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/final_emission_context_separation.py",
+    "line": 36,
+    "text": "def resolve_context_separation_contract("
+  },
+  {
+    "path": "game/final_emission_gate_preflight_branch_flags.py",
+    "line": 19,
+    "text": "def resolve_gate_preflight_branch_flags("
+  },
+  {
+    "path": "game/final_emission_gate_preflight_interaction.py",
+    "line": 23,
+    "text": "def resolve_gate_preflight_interaction_metadata("
+  },
+  {
+    "path": "game/final_emission_gate_preflight_pregate_text.py",
+    "line": 20,
+    "text": "def resolve_gate_preflight_pregate_text(out: Dict[str, Any]) -> GatePreflightPregateText:"
+  },
+  {
+    "path": "game/final_emission_gate_preflight_strict_social.py",
+    "line": 33,
+    "text": "def resolve_gate_preflight_strict_social_routing("
+  },
+  {
+    "path": "game/final_emission_meta.py",
+    "line": 1577,
+    "text": "def resolve_narrative_authenticity_emission_status("
+  },
+  {
+    "path": "game/final_emission_narration_constraint_debug.py",
+    "line": 20,
+    "text": "def _resolve_narration_constraint_debug_visibility_contract("
+  },
+  {
+    "path": "game/final_emission_narrative_authority.py",
+    "line": 49,
+    "text": "def resolve_narrative_authority_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/final_emission_player_facing_narration_purity.py",
+    "line": 32,
+    "text": "def resolve_player_facing_narration_purity_contract("
+  },
+  {
+    "path": "game/final_emission_referential_clarity.py",
+    "line": 454,
+    "text": "def _resolve_grounded_person_entity_for_referential_repair("
+  },
+  {
+    "path": "game/final_emission_repairs.py",
+    "line": 1222,
+    "text": "def _resolve_referent_tracking_compact(gm_output: Dict[str, Any]) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/final_emission_repairs.py",
+    "line": 1250,
+    "text": "def _resolve_referent_tracking_inputs(gm_output: Dict[str, Any]) -> tuple[Dict[str, Any] | None, Dict[str, Any] | None]:"
+  },
+  {
+    "path": "game/final_emission_response_type.py",
+    "line": 150,
+    "text": "def _resolve_upstream_prepared_answer_action_repair("
+  },
+  {
+    "path": "game/final_emission_scene_state_anchor.py",
+    "line": 16,
+    "text": "def _resolve_scene_state_anchor_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/final_emission_scene_state_anchor.py",
+    "line": 42,
+    "text": "def _resolve_scene_state_anchor_debug(gm_output: Dict[str, Any] | None) -> Dict[str, Any]:"
+  },
+  {
+    "path": "game/final_emission_tone_escalation.py",
+    "line": 36,
+    "text": "def resolve_tone_escalation_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/final_emission_validators.py",
+    "line": 654,
+    "text": "def _resolve_answer_completeness_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/final_emission_validators.py",
+    "line": 1043,
+    "text": "def _resolve_fallback_behavior_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/final_emission_validators.py",
+    "line": 1366,
+    "text": "def _resolve_response_delta_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/final_emission_validators.py",
+    "line": 1599,
+    "text": "def _resolve_social_response_structure_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/general_purpose_actions.py",
+    "line": 529,
+    "text": "def resolve_social_check_publication(resolution, character, session) -> str:"
+  },
+  {
+    "path": "game/gm.py",
+    "line": 1170,
+    "text": "def _resolve_scene_id(scene_envelope: Dict[str, Any]) -> str:"
+  },
+  {
+    "path": "game/gm.py",
+    "line": 1175,
+    "text": "def _resolve_scene_location(scene_envelope: Dict[str, Any]) -> str:"
+  },
+  {
+    "path": "game/gm.py",
+    "line": 1717,
+    "text": "def _resolve_uncertainty_speaker("
+  },
+  {
+    "path": "game/gm.py",
+    "line": 3133,
+    "text": "def _resolve_known_fact_from_context(player_text: str, context: Dict[str, Any]) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/gm.py",
+    "line": 3300,
+    "text": "def _question_resolution_exempt_for_resolved_observe(resolution: Dict[str, Any] | None) -> bool:"
+  },
+  {
+    "path": "game/gm.py",
+    "line": 3307,
+    "text": "def _question_resolution_exempt_for_resolved_adjudication(resolution: Dict[str, Any] | None) -> bool:"
+  },
+  {
+    "path": "game/gm.py",
+    "line": 3333,
+    "text": "def resolve_known_fact_before_uncertainty("
+  },
+  {
+    "path": "game/gm.py",
+    "line": 3745,
+    "text": "def _resolve_npc_name(world: Dict[str, Any], npc_id: str, scene_id: str) -> str:"
+  },
+  {
+    "path": "game/gm.py",
+    "line": 5037,
+    "text": "def _resolve_model_escalation_trigger("
+  },
+  {
+    "path": "game/gm_resolution_decision.py",
+    "line": 1219,
+    "text": "def _marks_unresolved_status(text: str) -> bool:"
+  },
+  {
+    "path": "game/gm_resolution_decision.py",
+    "line": 1242,
+    "text": "def _causal_match_is_unresolved_cause(text: str, match: re.Match[str]) -> bool:"
+  },
+  {
+    "path": "game/gm_resolution_decision.py",
+    "line": 2115,
+    "text": "def _unresolved_qualifiers_for(contract: Mapping[str, Any], facts: Sequence[GMProposedFact]) -> list[str]:"
+  },
+  {
+    "path": "game/gm_retry.py",
+    "line": 83,
+    "text": "def _retry_resolve_turn_packet("
+  },
+  {
+    "path": "game/gm_retry.py",
+    "line": 201,
+    "text": "def _resolve_retry_tone_escalation_contract("
+  },
+  {
+    "path": "game/gm_retry.py",
+    "line": 273,
+    "text": "def _resolve_anti_railroading_contract_for_retry("
+  },
+  {
+    "path": "game/gm_retry.py",
+    "line": 399,
+    "text": "def _resolve_context_separation_contract_for_retry("
+  },
+  {
+    "path": "game/human_adjacent_focus.py",
+    "line": 117,
+    "text": "def is_physical_clue_inspection_intent(text: str | None) -> bool:"
+  },
+  {
+    "path": "game/human_adjacent_focus.py",
+    "line": 260,
+    "text": "def _fact_physical_score(fact: str) -> int:"
+  },
+  {
+    "path": "game/human_adjacent_focus.py",
+    "line": 278,
+    "text": "def resolve_implicit_human_adjacent_focus("
+  },
+  {
+    "path": "game/immutable_valid_response.py",
+    "line": 325,
+    "text": "def _unresolved_explicit_addressee(contract: Mapping[str, Any] | None) -> str:"
+  },
+  {
+    "path": "game/immutable_valid_response.py",
+    "line": 345,
+    "text": "def _unresolved_addressee_conflict(speaker: str, requested: str) -> bool:"
+  },
+  {
+    "path": "game/immutable_valid_response.py",
+    "line": 566,
+    "text": "def _unresolved_travel_arrival(text: str, resolution: Mapping[str, Any] | None) -> bool:"
+  },
+  {
+    "path": "game/incidental_entity.py",
+    "line": 730,
+    "text": "def resolve_proposed_interlocutor("
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 199,
+    "text": "def _social_or_physical(text, session, scene, world):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 534,
+    "text": "def _physical(text, session, scene, world, character):"
+  },
+  {
+    "path": "game/intent_parser.py",
+    "line": 881,
+    "text": "def looks_like_local_physical_movement(text: str | None) -> bool:"
+  },
+  {
+    "path": "game/intent_parser.py",
+    "line": 893,
+    "text": "def looks_like_explicit_physical_or_perception_action(text: str | None) -> bool:"
+  },
+  {
+    "path": "game/intent_parser.py",
+    "line": 1450,
+    "text": "def _pending_row_resolved_scene_id("
+  },
+  {
+    "path": "game/intent_parser.py",
+    "line": 1551,
+    "text": "def _resolve_qualified_pursuit_target_to_row("
+  },
+  {
+    "path": "game/intent_parser.py",
+    "line": 2225,
+    "text": "def _resolve_declared_travel_target_scene_id("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1201,
+    "text": "def update_after_resolved_action("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1519,
+    "text": "def _resolve_vocative_phrase_to_roster_id("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1561,
+    "text": "def resolve_spoken_vocative_target("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1698,
+    "text": "def _merged_text_has_resolvable_spoken_vocative(merged_text: str, roster: List[Dict[str, Any]]) -> bool:"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1768,
+    "text": "def _resolve_vocative_phrase_for_embedded_recovery("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1796,
+    "text": "def _resolve_unique_embedded_direct_address_target("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 2152,
+    "text": "def resolve_authoritative_social_target("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 3210,
+    "text": "def _unresolved_explicit_addressee_blocks_sole_npc("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 3513,
+    "text": "def resolve_dialogue_lock_action_target_id("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 4449,
+    "text": "def _resolve_social_address_phrase_to_roster_id("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 4490,
+    "text": "def resolve_declared_actor_switch("
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 5814,
+    "text": "def resolve_directed_social_entry("
+  },
+  {
+    "path": "game/interaction_continuity.py",
+    "line": 86,
+    "text": "def _resolve_continuity_anchor("
+  },
+  {
+    "path": "game/journal.py",
+    "line": 218,
+    "text": "def _compat_unresolved_lead_titles(lead_sections: Dict[str, Any]) -> List[str]:"
+  },
+  {
+    "path": "game/leads.py",
+    "line": 937,
+    "text": "def _is_lead_resolved_or_obsolete_lifecycle(row: Mapping[str, Any]) -> bool:"
+  },
+  {
+    "path": "game/leads.py",
+    "line": 1528,
+    "text": "def resolve_lead("
+  },
+  {
+    "path": "game/leads.py",
+    "line": 1909,
+    "text": "def resolve_session_lead("
+  },
+  {
+    "path": "game/leads.py",
+    "line": 2654,
+    "text": "def _apply_unlocks_from_resolved_sources("
+  },
+  {
+    "path": "game/local_interaction.py",
+    "line": 180,
+    "text": "def resolve_transient_local_action(player_text, *, scene, world, session=None):"
+  },
+  {
+    "path": "game/model_routing.py",
+    "line": 45,
+    "text": "def resolve_model_route("
+  },
+  {
+    "path": "game/narration_visibility.py",
+    "line": 161,
+    "text": "def _resolve_scene_id(scene_envelope: Dict[str, Any], session: Dict[str, Any] | None) -> str:"
+  },
+  {
+    "path": "game/narration_visibility.py",
+    "line": 573,
+    "text": "def _resolve_visible_player_entity_id(session: Dict[str, Any] | None, contract: Dict[str, Any]) -> str:"
+  },
+  {
+    "path": "game/narration_visibility.py",
+    "line": 1323,
+    "text": "def _resolve_active_interlocutor_id(session: Dict[str, Any] | None) -> Optional[str]:"
+  },
+  {
+    "path": "game/narrative_authenticity.py",
+    "line": 416,
+    "text": "def resolve_narrative_authenticity_contract(gm_output: Mapping[str, Any] | None) -> Dict[str, Any] | None:"
+  },
+  {
+    "path": "game/narrative_mode_contract.py",
+    "line": 111,
+    "text": "def _skill_check_mapping_shows_resolved_roll(sc: Mapping[str, Any]) -> bool:"
+  },
+  {
+    "path": "game/noncombat_resolution.py",
+    "line": 363,
+    "text": "def _deterministic_resolved("
+  },
+  {
+    "path": "game/noncombat_resolution.py",
+    "line": 489,
+    "text": "def resolve_noncombat_action("
+  },
+  {
+    "path": "game/npc_promotion.py",
+    "line": 297,
+    "text": "def _resolved_promotion_kind("
+  },
+  {
+    "path": "game/ordinary_semantic_ownership.py",
+    "line": 331,
+    "text": "def select_ordinary_resolver("
+  },
+  {
+    "path": "game/ordinary_semantic_ownership.py",
+    "line": 372,
+    "text": "def stage_permitted(resolver_name: str | None, stage: str, contract: Mapping[str, Any] | None = None) -> bool:"
+  },
+  {
+    "path": "game/physical_adjudication.py",
+    "line": 862,
+    "text": "def plan_physical(text, *, session, scene, world):"
+  },
+  {
+    "path": "game/physical_adjudication.py",
+    "line": 1203,
+    "text": "def commit_physical(scene, session, world, action, *, prompt, action_id, label, character=None):"
+  },
+  {
+    "path": "game/planner_ctir_projection.py",
+    "line": 1877,
+    "text": "def _resolve_active_interaction_target_name("
+  },
+  {
+    "path": "game/planner_seam_fencing.py",
+    "line": 42,
+    "text": "def resolve_response_type_contract_for_planner_seam("
+  },
+  {
+    "path": "game/playability_eval.py",
+    "line": 591,
+    "text": "def _nonanswer_resolves_request(player: str, gm: str) -> bool:"
+  },
+  {
+    "path": "game/post_emission_speaker_adoption.py",
+    "line": 206,
+    "text": "def _resolve_visible_grounded_opening_speaker_canon("
+  },
+  {
+    "path": "game/quarantined_investigation_narration.py",
+    "line": 202,
+    "text": "def _resolved_public_target_label(player_text, scene_body, resolution):"
+  },
+  {
+    "path": "game/resolution_contract.py",
+    "line": 915,
+    "text": "def _resolve_referent("
+  },
+  {
+    "path": "game/resolution_contract.py",
+    "line": 4058,
+    "text": "def retain_resolved_contract_text("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 103,
+    "text": "def _resolve_response_type_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 208,
+    "text": "def resolve_answer_completeness_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 215,
+    "text": "def resolve_response_delta_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 222,
+    "text": "def resolve_fallback_behavior_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 237,
+    "text": "def resolve_social_response_structure_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 278,
+    "text": "def _resolve_answer_completeness_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 284,
+    "text": "def _resolve_response_delta_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 290,
+    "text": "def _resolve_fallback_behavior_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 296,
+    "text": "def _resolve_social_response_structure_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 396,
+    "text": "def _resolve_interaction_continuity_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 438,
+    "text": "def resolve_interaction_continuity_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 464,
+    "text": "def _resolve_conversational_memory_window_contract("
+  },
+  {
+    "path": "game/response_policy_contracts.py",
+    "line": 507,
+    "text": "def resolve_conversational_memory_window_contract("
+  },
+  {
+    "path": "game/response_type_gating.py",
+    "line": 72,
+    "text": "def _resolve_source_route("
+  },
+  {
+    "path": "game/scenario_spine_eval.py",
+    "line": 263,
+    "text": "def _resolve_branch_id(spine: ScenarioSpine, branch_id: str) -> str | None:"
+  },
+  {
+    "path": "game/scene_destination_binding.py",
+    "line": 310,
+    "text": "def resolve_place_phrase_to_exit_target("
+  },
+  {
+    "path": "game/scene_destination_binding.py",
+    "line": 442,
+    "text": "def resolve_authored_exit_from_player_travel("
+  },
+  {
+    "path": "game/skill_checks.py",
+    "line": 41,
+    "text": "def resolve_skill_check("
+  },
+  {
+    "path": "game/social.py",
+    "line": 408,
+    "text": "def resolve_grounded_social_speaker("
+  },
+  {
+    "path": "game/social.py",
+    "line": 1351,
+    "text": "def _resolve_skill_for_kind(kind: str, character: Dict[str, Any]) -> Optional[str]:"
+  },
+  {
+    "path": "game/social.py",
+    "line": 3924,
+    "text": "def resolve_social_action("
+  },
+  {
+    "path": "game/social_exchange_emission.py",
+    "line": 1004,
+    "text": "def _strict_social_resolved_line_passes_legality("
+  },
+  {
+    "path": "game/social_exchange_emission.py",
+    "line": 1028,
+    "text": "def _prefer_resolved_social_answer_over_candidate("
+  },
+  {
+    "path": "game/social_exchange_policy.py",
+    "line": 202,
+    "text": "def resolve_strict_social_npc_target_id("
+  },
+  {
+    "path": "game/social_exchange_validation.py",
+    "line": 344,
+    "text": "def _sentence_opens_with_resolved_npc_beat(sentence: str, resolution: Dict[str, Any] | None) -> bool:"
+  },
+  {
+    "path": "game/stage_diff_telemetry.py",
+    "line": 52,
+    "text": "def resolve_gate_turn_packet(gm_output: Mapping[str, Any] | None) -> Optional[Dict[str, Any]]:"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 967,
+    "text": "def is_interactable_resolved(session: Dict[str, Any], scene_id: str, interactable_id: str) -> bool:"
+  },
+  {
+    "path": "game/storage.py",
+    "line": 987,
+    "text": "def mark_interactable_resolved(session: Dict[str, Any], scene_id: str, interactable_id: str) -> bool:"
+  },
+  {
+    "path": "game/turn_packet.py",
+    "line": 167,
+    "text": "def resolve_turn_packet_for_gate(gm_output: Mapping[str, Any] | None) -> Optional[Dict[str, Any]]:"
+  },
+  {
+    "path": "game/turn_packet.py",
+    "line": 198,
+    "text": "def resolve_turn_packet_contract(packet: Mapping[str, Any] | None, contract_name: str) -> Any:"
+  },
+  {
+    "path": "game/turn_packet.py",
+    "line": 208,
+    "text": "def resolve_turn_packet_field("
+  },
+  {
+    "path": "game/unified_semantic_planning.py",
+    "line": 1064,
+    "text": "def _addressee_id(named: list[dict[str, Any]], prior: Mapping[str, Any], plan: Mapping[str, Any], resolved: str) -> str:"
+  },
+  {
+    "path": "game/verification_budget.py",
+    "line": 35,
+    "text": "def resolve_verification_budget("
+  },
+  {
+    "path": "game/behavioral_evaluators/session_cohesion.py",
+    "line": 460,
+    "text": "def _resolve_turn_history_arg("
+  }
+]

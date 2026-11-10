@@ -1,0 +1,136 @@
+[
+  {
+    "request_id": "A1",
+    "before": {
+      "validator_decision": "pass",
+      "reasons": [],
+      "used_fallback": false
+    },
+    "after": {
+      "validator_decision": "pass",
+      "reasons": [],
+      "hard_valid": true,
+      "families": [],
+      "mechanical_reasons": []
+    },
+    "raw_preserved": true,
+    "anchor": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "anchor_unchanged": true,
+    "assembled_preview": "The notice board stands weathered and crowded, its surface plastered with official decrees and hastily scrawled warnings. Nearby, the murmur of the gate serjeant and the clatter of the tavern runner\u2019s calls mingle with the restless shifting of watchers and refugees. The board\u2019s messages draw a wary crowd, each line hinting at unease and unanswered questions.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+    "assembled_is_raw_plus_anchor": true,
+    "player_facing": false,
+    "review_required": true,
+    "mechanical_corpus": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "withheld_examples": [
+      "An agent of a noble house is watching new arrivals from the square's edge.",
+      "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+      "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+      "A spotter above the lane is matching faces to a written list paid for in silver.",
+      "market_quarter",
+      "old_milestone",
+      "Player investigated [notice_board] and discovered clue [notice_patrol_route]. Narrate the discovery and its significance."
+    ],
+    "leaks": [],
+    "provider_called": false
+  },
+  {
+    "request_id": "A2",
+    "before": {
+      "validator_decision": "pass",
+      "reasons": [],
+      "used_fallback": false
+    },
+    "after": {
+      "validator_decision": "pass",
+      "reasons": [],
+      "hard_valid": true,
+      "families": [
+        "incidental"
+      ],
+      "mechanical_reasons": []
+    },
+    "raw_preserved": true,
+    "anchor": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "anchor_unchanged": true,
+    "assembled_preview": "The notice board stands weathered and worn, its surface crowded with official decrees and hastily scrawled warnings. Nearby, the murmur of the gate serjeant and the clatter of the tavern runner\u2019s trade blend with the restless shifting of watchers and refugees. The board\u2019s messages seem to pulse with urgency, inviting closer scrutiny.\n\nThe missing patrol was last seen taking the northwest mud track past the crates.",
+    "assembled_is_raw_plus_anchor": true,
+    "player_facing": false,
+    "review_required": true,
+    "mechanical_corpus": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "withheld_examples": [
+      "An agent of a noble house is watching new arrivals from the square's edge.",
+      "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+      "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+      "A spotter above the lane is matching faces to a written list paid for in silver.",
+      "market_quarter",
+      "old_milestone",
+      "Player investigated [notice_board] and discovered clue [notice_patrol_route]. Narrate the discovery and its significance."
+    ],
+    "leaks": [],
+    "provider_called": false
+  },
+  {
+    "request_id": "B1",
+    "before": {
+      "validator_decision": "pass",
+      "reasons": [],
+      "used_fallback": false
+    },
+    "after": {
+      "validator_decision": "pass",
+      "reasons": [],
+      "hard_valid": true,
+      "families": [
+        "incidental"
+      ],
+      "mechanical_reasons": []
+    },
+    "raw_preserved": true,
+    "anchor": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "anchor_unchanged": true,
+    "assembled_preview": "The damp earth near the leaning milestone bears the faint impression of footsteps, their edges softened by recent rain. The muddied ground tells a story of passage, yet the details remain elusive, leaving the trail\u2019s origin and direction shrouded in uncertainty.\n\nFaint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "assembled_is_raw_plus_anchor": true,
+    "player_facing": false,
+    "review_required": true,
+    "mechanical_corpus": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "withheld_examples": [
+      "frontier_gate",
+      "Player investigated [prints] and discovered clue [milestone_mud_prints]. Narrate the discovery and its significance."
+    ],
+    "leaks": [],
+    "provider_called": false
+  },
+  {
+    "request_id": "B2",
+    "before": {
+      "validator_decision": "reject",
+      "reasons": [
+        "ungrounded_authoritative_rule"
+      ],
+      "used_fallback": true
+    },
+    "after": {
+      "validator_decision": "pass",
+      "reasons": [],
+      "hard_valid": true,
+      "families": [
+        "incidental"
+      ],
+      "mechanical_reasons": []
+    },
+    "raw_preserved": true,
+    "anchor": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "anchor_unchanged": true,
+    "assembled_preview": "The ground near the weathered milestone is soft and disturbed, bearing the faint impressions of footsteps that overlap and blur together. The muddied earth tells of recent passage, yet the details remain elusive beneath the shifting layers of soil and rain.\n\nFaint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "assembled_is_raw_plus_anchor": true,
+    "player_facing": false,
+    "review_required": true,
+    "mechanical_corpus": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "withheld_examples": [
+      "frontier_gate",
+      "Player investigated [prints] and discovered clue [milestone_mud_prints]. Narrate the discovery and its significance."
+    ],
+    "leaks": [],
+    "provider_called": false
+  }
+]

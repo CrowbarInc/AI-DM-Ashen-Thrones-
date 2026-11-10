@@ -1,0 +1,63 @@
+{
+  "baseline_primary": {
+    "tests": 211,
+    "passed": 210,
+    "failed": [],
+    "errors": [
+      "tests.test_pr_play_28_topic_authority::test_integration[False-What sort of rumors have you heard?]"
+    ],
+    "skipped": 0,
+    "seconds": 24.955
+  },
+  "baseline_extra": {
+    "tests": 82,
+    "passed": 75,
+    "failed": [
+      "tests.test_clue_idempotence::test_apply_socially_revealed_leads_twice_preserves_canonical_state",
+      "tests.test_investigation_result_provenance_non_invention::test_general_written_surface_question_discovers_authored_clue",
+      "tests.test_investigation_result_provenance_non_invention::test_general_visible_evidence_may_be_reported",
+      "tests.test_investigation_result_provenance_non_invention::test_general_valid_target_no_evidence_is_grounded_absence",
+      "tests.test_investigation_result_provenance_non_invention::test_general_requested_identity_absent_does_not_mint_person",
+      "tests.test_investigation_result_provenance_non_invention::test_general_observe_empty_target_does_not_invent",
+      "tests.test_investigation_result_provenance_non_invention::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing"
+    ],
+    "errors": [],
+    "skipped": 0,
+    "seconds": 8.422
+  },
+  "after_comparable": {
+    "tests": 292,
+    "passed": 285,
+    "failed": [
+      "tests.test_clue_idempotence::test_apply_socially_revealed_leads_twice_preserves_canonical_state",
+      "tests.test_investigation_result_provenance_non_invention::test_general_written_surface_question_discovers_authored_clue",
+      "tests.test_investigation_result_provenance_non_invention::test_general_visible_evidence_may_be_reported",
+      "tests.test_investigation_result_provenance_non_invention::test_general_valid_target_no_evidence_is_grounded_absence",
+      "tests.test_investigation_result_provenance_non_invention::test_general_requested_identity_absent_does_not_mint_person",
+      "tests.test_investigation_result_provenance_non_invention::test_general_observe_empty_target_does_not_invent",
+      "tests.test_investigation_result_provenance_non_invention::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing"
+    ],
+    "errors": [],
+    "skipped": 0,
+    "seconds": 41.88
+  },
+  "focused_and_additional_regressions": {
+    "tests": 99,
+    "passed": 99,
+    "failed": [],
+    "errors": [],
+    "skipped": 0,
+    "seconds": 15.449
+  },
+  "new_failures": [],
+  "unchanged_historical_failures": [
+    "tests.test_clue_idempotence::test_apply_socially_revealed_leads_twice_preserves_canonical_state",
+    "tests.test_investigation_result_provenance_non_invention::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing",
+    "tests.test_investigation_result_provenance_non_invention::test_general_observe_empty_target_does_not_invent",
+    "tests.test_investigation_result_provenance_non_invention::test_general_requested_identity_absent_does_not_mint_person",
+    "tests.test_investigation_result_provenance_non_invention::test_general_valid_target_no_evidence_is_grounded_absence",
+    "tests.test_investigation_result_provenance_non_invention::test_general_visible_evidence_may_be_reported",
+    "tests.test_investigation_result_provenance_non_invention::test_general_written_surface_question_discovers_authored_clue"
+  ],
+  "live_provider_requests": 0
+}

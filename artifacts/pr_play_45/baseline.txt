@@ -1,0 +1,31 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+__________ test_legacy_narrator_context_excludes_hidden_information ___________
+tests\test_pr_play_44_information_delivery.py:213: in test_legacy_narrator_context_excludes_hidden_information
+    assert 'SECRET' not in json.dumps(messages)
+E   assert 'SECRET' not in '[{"role": "...": false}"}]'
+E     
+E     'SECRET' is contained here:
+E        FACTS / SECRETS\n4. DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT\n5. PRESERVE PLAYER AGENCY \u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS\n6. IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER\n7. WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING\n8. KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY\n9. MAINTAIN DIEGETIC VOICE (no validator/system voice)\n10. KEEP NARRATION FREE OF INTERNAL SC...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__ test_contradictory_discovery_draft_falls_back_without_losing_information ___
+tests\test_pr_play_44_information_delivery.py:198: in test_contradictory_discovery_draft_falls_back_without_losing_information
+    assert 'fifty gold' not in output['player_facing_text']
+E   AssertionError: assert 'fifty gold' not in 'You receive...ree missing.'
+E     
+E     'fifty gold' is contained here:
+E       You receive fifty gold coins and a silver key. The ledger lists twelve ingots, with three missing.
+E     ?             ++++++++++
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_44_information_delivery.py::test_legacy_narrator_context_excludes_hidden_information
+FAILED tests/test_pr_play_44_information_delivery.py::test_contradictory_discovery_draft_falls_back_without_losing_information
+2 failed, 1 warning in 5.86s

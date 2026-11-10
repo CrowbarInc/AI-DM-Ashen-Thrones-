@@ -1,0 +1,125 @@
+--- entry/game/integrated_investigation_narration.py
++++ game/integrated_investigation_narration.py
+@@ -66,6 +66,25 @@
+     return ' '.join(dict.fromkeys(f['text'] for f in request['must_communicate']))
+ 
+ 
++def target_attention_sentence(contract, request, sentence):
++    """Full finite frame around the engine-projected current public target."""
++    label = request.get('authorized_target')
++    if not label or (contract.outcome.success is False and contract.outcome.status != 'known'):
++        return False
++    target = re.escape('the ' + label)
++    normal = sentence.strip().casefold().rstrip('.!?')
++    frames = (
++        rf'you (?:examine|inspect|study|focus on) {target}(?: carefully| again)?',
++        rf'you (?:take a moment to|pause to) (?:examine|inspect|study) {target}(?: again)?',
++        rf'you turn your attention to {target}',
++        rf'you look (?:more closely at|over) {target}',
++        rf'you give {target} your attention',
++        rf'your attention returns to {target}',
++        rf'you take another look at {target}',
++    )
++    return any(re.fullmatch(frame, normal, re.I) for frame in frames)
++
++
+ def presentation_within_boundary(contract, request, raw):
+     """Bounded experimental surface, additional to all existing safety gates.
+ 
+@@ -77,22 +96,9 @@
+     literals = {s.strip().casefold().rstrip('.!?') for s in (
+         *contract.outcome.observations, *contract.outcome.known,
+         *(f['text'] for f in request['must_communicate']))}
+-    action = re.fullmatch(r'(?:I|You)\s+(?:examine|inspect|study)\s+(.+?)[.!?]?',
+-                          request['player_action'].strip(), re.I)
+-    target = action.group(1).rstrip('.!?').strip() if action else None
+-    if target:
+-        target = re.sub(r'\s+again$', '', target, flags=re.I)
+-    intro = (rf'you (?:examine|inspect|study|focus on) {re.escape(target)}'
+-             rf'(?: carefully| again)?' if target else r'(?!)')
+-    # Finite, nonconsequential attention frames. The target is literal and the
+-    # whole sentence must match; suffix claims cannot ride an allowed opening.
+-    framing = (rf'you (?:(?:take a moment to|pause to) (?:examine|inspect|study) {re.escape(target)}'
+-               rf'|turn your attention to {re.escape(target)}'
+-               rf'|look more closely at {re.escape(target)}'
+-               rf'|give {re.escape(target)} your attention)' if target else r'(?!)')
+     for sentence in re.split(r'(?<=[.!?])\s+', raw.strip()):
+         normal = sentence.casefold().rstrip('.!?').strip()
+-        if normal in literals or re.fullmatch(intro, normal, re.I) or re.fullmatch(framing, normal, re.I):
++        if normal in literals or target_attention_sentence(contract, request, sentence):
+             continue
+         # An explicit no-new result is itself engine supplied, not an AI hint.
+         if not contract.outcome.revealed and normal in {
+@@ -122,8 +128,10 @@
+     # prelude also stays out, even when a paraphrase is not recognized.
+     duplicate = bool(trusted) and (
+         any(f['decision'] == 'PASS' for f in mandatory_coverage(raw, request)['facts'])
+-        or (contract.outcome.revealed and re.search(
+-            r'\b(?:patrol|route|track|trail|prints|footprints|discover\w*|learn\w*)\b', raw, re.I)))
++        or (contract.outcome.revealed and any(
++            not target_attention_sentence(contract, request, sentence) and re.search(
++                r'\b(?:patrol|route|track|trail|prints|footprints|discover\w*|learn\w*)\b', sentence, re.I)
++            for sentence in re.split(r'(?<=[.!?])\s+', raw.strip()))))
+     if duplicate:
+         return {**presentation, 'decision': 'REVIEW_REQUIRED',
+                 'composition_reason': 'optional_disclosure_overlap', 'coverage': coverage}, None
+@@ -162,6 +170,7 @@
+                       'status': 'resolved', 'text': v.consequences})
+     request = {
+         'player_action': str(hook_input.get('player_text') or '')[:1000],
++        'authorized_target': hook_input.get('target_label') if v.success is not False or v.status == 'known' else None,
+         'resolved_outcome': {'status': v.status, 'success': v.success},
+         'must_communicate': facts,
+         'may_reference': {'visible_scene': list(v.observations),
+@@ -186,12 +195,13 @@
+     target = 'the ' + label if isinstance(label, str) and label else 'what is visible'
+     opening = {
+         'discovered': f'You examine {target}.',
+-        'known': f'You examine {target} again; nothing new is established.',
++        'known': f'You examine {target} again.',
+         'failed': f'You examine {target}, but no new clue is established.',
+         'observed': f'You examine {target}; no new clue is established.',
+     }[view.status]
+     facts = [a.text for a in contract.anchors
+-             if a.source not in {'engine_status', 'public_observation', 'player_knowledge'}]
++             if a.source not in {'public_observation', 'player_knowledge'}
++             and (a.source != 'engine_status' or view.status == 'known')]
+     return ' '.join(filter(None, [opening, *facts, view.consequences]))
+ 
+ 
+--- entry/game/quarantined_investigation_narration.py
++++ game/quarantined_investigation_narration.py
+@@ -192,11 +192,32 @@
+         "eligible": True,
+         "player_text": player_text,
+         "target_id": stripped.get("interactable_id") or stripped.get("action_id"),
+-        "target_label": _public_target_label(player_text, body),
++        "target_label": _resolved_public_target_label(player_text, body, stripped),
+         "resolution": stripped,
+         "narration_payload": payload,
+     }))
+     return detached
++
++
++def _resolved_public_target_label(player_text, scene_body, resolution):
++    """Exact current resolver-selected public name; never a candidate grant."""
++    match = re.fullmatch(
++        r'(?:I|You)\s+(?:examine|inspect|study|investigate|look\s+(?:at|over|around))\s+'
++        r'(?:the\s+)?([\w -]{1,80}?)(?:\s+again)?[.!?]?', player_text.strip(), re.I)
++    if not match:
++        return None
++    label = match.group(1).strip().casefold()
++    target_id = resolution.get('interactable_id') or resolution.get('action_id')
++    for row in scene_body.get('interactables') or []:
++        if not isinstance(row, dict) or row.get('id') != target_id:
++            continue
++        if row.get('visible') is False or any(row.get(k) for k in
++                ('hidden', 'requires', 'reveal_requires', 'locked')):
++            return None
++        names = [row.get('label'), *(row.get('aliases') or [])]
++        return label if label in {n.strip().casefold() for n in names if isinstance(n, str)} else None
++    # Existing exact public observation handling, scoped to this action only.
++    return _public_target_label(player_text, scene_body)
+ 
+ 
+ def _public_target_label(player_text: str, scene_body: dict) -> str | None:

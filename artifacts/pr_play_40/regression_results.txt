@@ -1,0 +1,20 @@
+Clean regression command, preflight skipped, live interpretation disabled, ASHEN_DISABLE_PROVIDER_CALLS unset.
+
+.\.venv\Scripts\python.exe -m pytest tests/test_pr_play_40_scenario_generalization.py tests/test_pr_play_39_action_admission.py tests/test_atgb_r2_02_speech_participant_grounding.py tests/test_pr_play_28_topic_authority.py tests/test_generalized_destination_exit_resolution.py tests/test_stay_leave_social_lock_override.py tests/test_pr_play_31_purpose_routing.py tests/test_atgb_r2_04_question_evidence_contract.py tests/test_pr_eg_r2c_r2_reference_eligibility.py -q --tb=no --basetemp=artifacts/pr_play_40/pytest_regression2
+
+Collected 328. Passed 323. Failed 5. Skipped 0.
+
+Failures:
+- test_http_unresolved_unavailable_place_does_not_move
+- test_http_pursuit_while_socially_engaged_leaves_the_gate
+- test_http_explicit_leave_overrides_dialogue_lock
+- test_http_explicit_stay_does_not_enter_cinderwatch
+- test_http_unavailable_travel_does_not_invent_house_verevin
+
+test_heading_out_after_them_binds_authored_exit passed.
+Eight new generalization tests passed.
+No new failures relative to the PR-PLAY-39 six. One of those six now passes.
+
+An earlier command that also set ASHEN_DISABLE_PROVIDER_CALLS=1 produced four additional HTTP 422 failures on campaign start. Those four passed when the variable was unset and are not part of this count.
+
+PR-PLAY-37 opening and finalization failures were not re-run.

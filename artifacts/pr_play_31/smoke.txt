@@ -1,0 +1,652 @@
+........................F..........................FF.                   [100%]
+================================== FAILURES ===================================
+_ test_pr_ec_incomplete_movement_clarifies_without_context_and_uses_focused_destination _
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_smoke/test_pr_ec_incomplete_movement0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002B7FBD32C30>
+
+    def test_pr_ec_incomplete_movement_clarifies_without_context_and_uses_focused_destination(tmp_path, monkeypatch) -> None:
+        _install_routes(tmp_path, monkeypatch)
+        _no_provider(monkeypatch)
+    
+        unclear = chat(ChatRequest(text="I head out.", ui_mode="player"))
+>       assert unclear["resolution"]["kind"] == "conversational_clarify"
+E       AssertionError: assert 'conversational_decline' == 'conversational_clarify'
+E         
+E         - conversational_clarify
+E         ?                  -- ^^
+E         + conversational_decline
+E         ?                ++   ^^
+
+tests\test_pr_ec_movement_partial_intent.py:215: AssertionError
+_______________ test_opening_to_interaction_publication[False] ________________
+
+opening_world = {'calls': [], 'state': {'text': '{"declared_claims": [], "narration": "You stand at Cinderwatch\'s eastern gate. Rain ...', 'raise': False}, 'before': {'campaign_started': False, 'turn_counter': 0, 'time_pressure': 0, 'log_length': 0, ...}}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002B7FBCE0290>
+direct = False
+
+    @pytest.mark.parametrize('direct', [False, True])
+    def test_opening_to_interaction_publication(opening_world, monkeypatch, direct):
+        monkeypatch.setenv('ASHEN_OPENING_RENDERER', '1')
+        seen = []
+        _transport(monkeypatch, seen, lambda kw: plan_selecting_required(kw['input']))
+        secret = 'PR_PLAY_23_SYNTHETIC_HIDDEN_SENTINEL'
+        world = st.load_world()
+        world['internal_state'] = {'secret': secret}
+        st.save_world(world)
+        with TestClient(api.app) as client:
+>           opening = client.post('/api/start_campaign?ui_mode=player')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_pr_play_23_local_interaction.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:555: in post
+    return super().post(
+.venv\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:454: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:356: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:353: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:88: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2692: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1274: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:276: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:156: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:142: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:698: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:352: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2641: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1033: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6363: in start_campaign
+    return _project_player_runtime_response(_start_campaign_response(request))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6401: in _start_campaign_response
+    return _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+ui_mode = 'player', gate = {'manual_testing_blocked': False}, gate_operator = {}
+opening_scope = <game.api._OpeningScope object at 0x000002B7FBD33380>
+
+    def _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope: _OpeningScope):
+        campaign = load_campaign()
+        character = load_character()
+        session = load_session()
+        recent_log = load_log()
+        if not _session_allows_structured_start_campaign(session, recent_log):
+            from game.provider_budget import observe_opening_validation
+            observe_opening_validation(rejection="already_started", recovery="not_attempted")
+            st = compose_state()
+            return JSONResponse(
+                status_code=409,
+                content={
+                    "ok": False,
+                    "status": "already_started",
+                    "error": "Campaign has already started, or the transcript is not empty.",
+                    "upstream_dependent_run_gate": gate,
+                    "upstream_dependent_run_gate_operator": gate_operator,
+                    **_project_state_for_ui_mode(st, ui_mode),
+                },
+            )
+    
+        turn_started = _now_perf()
+        snapshot_turn_start_interlocutor(session)
+        world = load_world()
+        combat = load_combat()
+        conditions = load_conditions()
+        scene = load_active_scene()
+        synchronize_scene_addressability(session, scene, world)
+        scene["scene_state"] = session.get("scene_state")
+        scene_before_id = scene["scene"]["id"]
+    
+        trace: dict = {
+            "timestamp": utc_iso_now(),
+            "source": "start_campaign",
+            "action_type": "start_campaign",
+            "raw_input": "",
+            "turn_stage_order": list(AUTHORITATIVE_TURN_STAGE_ORDER),
+            "incoming_payload": {"start_campaign": True},
+            "parsed_intent": None,
+            "segmented_turn": None,
+            "normalized_action": None,
+            "resolution": None,
+            "scene_before": scene["scene"]["id"],
+            "scene_after": None,
+            "clue_updates": [],
+            "world_flag_updates": [],
+            "turn_trace": None,
+            "gpt_called": True,
+            "response_ok": True,
+            "error": None,
+        }
+        latency_ms: dict[str, int] = {}
+        clue_presentation_before = _snapshot_known_clue_presentations(session)
+    
+        opening_scope.track(session, world, combat)
+        if session.get("turn_counter") is None:
+            session["turn_counter"] = 0
+        session["turn_counter"] += 1
+    
+        tick = advance_world_tick(world, campaign)
+    
+        clocks_before = dict(get_or_init_clocks(session))
+        time_pressure_after = advance_clock(session, "time_pressure", 1)
+    
+        recent_log = load_log()
+        scene_rt = get_scene_runtime(session, scene["scene"]["id"])
+    
+        routed_via_exploration = True
+        routed_via_adjudication = False
+        route_choice = "action"
+        authoritative_clue_updates: list[str] = []
+    
+        classify_started = _now_perf()
+        segmented_turn = segment_mixed_player_turn("")
+        trace["segmented_turn"] = _compact_segmented_turn(segmented_turn)
+        canonical_entry = resolve_directed_social_entry(
+            session=session,
+            scene=scene,
+            world=world,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text="",
+        )
+        declared_switch_meta = resolve_declared_actor_switch(
+            session=session,
+            scene=scene,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text="",
+        )
+        trace["canonical_entry"] = {
+            "should_route_social": bool(canonical_entry.get("should_route_social")),
+            "target_actor_id": canonical_entry.get("target_actor_id"),
+            "target_source": canonical_entry.get("target_source"),
+            "reason": canonical_entry.get("reason"),
+            "spoken_text": canonical_entry.get("spoken_text"),
+            "declared_switch_detected": bool(declared_switch_meta.get("has_declared_switch")),
+            "declared_switch_target_actor_id": (
+                declared_switch_meta.get("target_actor_id")
+                if declared_switch_meta.get("has_declared_switch")
+                else None
+            ),
+            "continuity_overridden_by_declared_switch": bool(
+                canonical_entry.get("continuity_overridden_by_declared_switch")
+            ),
+            "spoken_vocative_detected": bool(canonical_entry.get("spoken_vocative_detected")),
+            "spoken_vocative_target_actor_id": canonical_entry.get("spoken_vocative_target_actor_id"),
+            "continuity_overridden_by_spoken_vocative": bool(
+                canonical_entry.get("continuity_overridden_by_spoken_vocative")
+            ),
+        }
+        for _k in (
+            "open_social_solicitation",
+            "broad_address_bid",
+            "broadcast_social_open_call",
+            "candidate_addressable_ids",
+            "candidate_addressable_count",
+            "broad_address_reason",
+            "broad_address_phrase_matched",
+        ):
+            if _k in canonical_entry:
+                trace["canonical_entry"][_k] = canonical_entry.get(_k)
+        trace["canonical_entry_path"] = (
+            "social" if canonical_entry.get("should_route_social") else "undecided"
+        )
+        trace["canonical_entry_reason"] = canonical_entry.get("reason")
+        trace["canonical_entry_target_actor_id"] = canonical_entry.get("target_actor_id")
+        implied_context = _prepare_interaction_from_turn_input(session, world, scene_before_id, "", scene=scene)
+        compact_segmented = _compact_segmented_turn(segmented_turn)
+    
+        normalized_chat, resolution = _opening_scene_normalized_action_and_resolution(
+            scene=scene,
+            player_text=None,
+            internal_bootstrap=True,
+        )
+        parsed = normalized_chat
+        _accumulate_latency(latency_ms, "intent_classification", _elapsed_ms(classify_started))
+    
+        try:
+            scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
+                campaign=campaign,
+                character=character,
+                session=session,
+                world=world,
+                combat=combat,
+                scene=scene,
+                recent_log=recent_log,
+                resolution=resolution,
+                normalized_action=normalized_chat,
+                fallback_user_text="",
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                route_choice="action",
+                directed_social_entry=canonical_entry,
+                latency_sink=latency_ms,
+            )
+        except Exception:
+            raise
+    
+        authoritative_clue_updates.extend(turn_clue_updates)
+        if isinstance(resolution, dict):
+            resolution["world_tick_events"] = tick.get("events", [])
+    
+        _record_scene_pressure_input(
+            session,
+            scene_before_id,
+            "",
+            normalized_action=parsed if isinstance(parsed, dict) else None,
+            resolution=None,
+        )
+    
+        request_log = {
+            "request": {"start_campaign": True, "action_type": "start_campaign"},
+            "log_meta": {
+                "bootstrap_intent": "start_campaign",
+                "player_input": "",
+            },
+        }
+    
+        # A travel purpose is explanation-only; it never runs a second resolver.
+        deferred = (session.get("conversational_context") or {}).get("pending_clarification") or {}
+>       if (execution_decision is not None and execution_decision.proposed_operation == "MOVE"
+            ^^^^^^^^^^^^^^^^^^
+                and deferred.get("kind") == "deferred_intentions" and isinstance(gm, dict)):
+E               NameError: name 'execution_decision' is not defined
+
+game\api.py:6584: NameError
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 92cc71e3455c9253416bbb5a
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+________________ test_opening_to_interaction_publication[True] ________________
+
+opening_world = {'calls': [], 'state': {'text': '{"declared_claims": [], "narration": "You stand at Cinderwatch\'s eastern gate. Rain ...', 'raise': False}, 'before': {'campaign_started': False, 'turn_counter': 0, 'time_pressure': 0, 'log_length': 0, ...}}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002B7F8B788C0>
+direct = True
+
+    @pytest.mark.parametrize('direct', [False, True])
+    def test_opening_to_interaction_publication(opening_world, monkeypatch, direct):
+        monkeypatch.setenv('ASHEN_OPENING_RENDERER', '1')
+        seen = []
+        _transport(monkeypatch, seen, lambda kw: plan_selecting_required(kw['input']))
+        secret = 'PR_PLAY_23_SYNTHETIC_HIDDEN_SENTINEL'
+        world = st.load_world()
+        world['internal_state'] = {'secret': secret}
+        st.save_world(world)
+        with TestClient(api.app) as client:
+>           opening = client.post('/api/start_campaign?ui_mode=player')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_pr_play_23_local_interaction.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:555: in post
+    return super().post(
+.venv\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:454: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:356: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:353: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:88: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2692: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1274: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:276: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:156: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:142: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:698: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:352: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2641: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1033: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6363: in start_campaign
+    return _project_player_runtime_response(_start_campaign_response(request))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6401: in _start_campaign_response
+    return _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+ui_mode = 'player', gate = {'manual_testing_blocked': False}, gate_operator = {}
+opening_scope = <game.api._OpeningScope object at 0x000002B7FBEA57F0>
+
+    def _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope: _OpeningScope):
+        campaign = load_campaign()
+        character = load_character()
+        session = load_session()
+        recent_log = load_log()
+        if not _session_allows_structured_start_campaign(session, recent_log):
+            from game.provider_budget import observe_opening_validation
+            observe_opening_validation(rejection="already_started", recovery="not_attempted")
+            st = compose_state()
+            return JSONResponse(
+                status_code=409,
+                content={
+                    "ok": False,
+                    "status": "already_started",
+                    "error": "Campaign has already started, or the transcript is not empty.",
+                    "upstream_dependent_run_gate": gate,
+                    "upstream_dependent_run_gate_operator": gate_operator,
+                    **_project_state_for_ui_mode(st, ui_mode),
+                },
+            )
+    
+        turn_started = _now_perf()
+        snapshot_turn_start_interlocutor(session)
+        world = load_world()
+        combat = load_combat()
+        conditions = load_conditions()
+        scene = load_active_scene()
+        synchronize_scene_addressability(session, scene, world)
+        scene["scene_state"] = session.get("scene_state")
+        scene_before_id = scene["scene"]["id"]
+    
+        trace: dict = {
+            "timestamp": utc_iso_now(),
+            "source": "start_campaign",
+            "action_type": "start_campaign",
+            "raw_input": "",
+            "turn_stage_order": list(AUTHORITATIVE_TURN_STAGE_ORDER),
+            "incoming_payload": {"start_campaign": True},
+            "parsed_intent": None,
+            "segmented_turn": None,
+            "normalized_action": None,
+            "resolution": None,
+            "scene_before": scene["scene"]["id"],
+            "scene_after": None,
+            "clue_updates": [],
+            "world_flag_updates": [],
+            "turn_trace": None,
+            "gpt_called": True,
+            "response_ok": True,
+            "error": None,
+        }
+        latency_ms: dict[str, int] = {}
+        clue_presentation_before = _snapshot_known_clue_presentations(session)
+    
+        opening_scope.track(session, world, combat)
+        if session.get("turn_counter") is None:
+            session["turn_counter"] = 0
+        session["turn_counter"] += 1
+    
+        tick = advance_world_tick(world, campaign)
+    
+        clocks_before = dict(get_or_init_clocks(session))
+        time_pressure_after = advance_clock(session, "time_pressure", 1)
+    
+        recent_log = load_log()
+        scene_rt = get_scene_runtime(session, scene["scene"]["id"])
+    
+        routed_via_exploration = True
+        routed_via_adjudication = False
+        route_choice = "action"
+        authoritative_clue_updates: list[str] = []
+    
+        classify_started = _now_perf()
+        segmented_turn = segment_mixed_player_turn("")
+        trace["segmented_turn"] = _compact_segmented_turn(segmented_turn)
+        canonical_entry = resolve_directed_social_entry(
+            session=session,
+            scene=scene,
+            world=world,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text="",
+        )
+        declared_switch_meta = resolve_declared_actor_switch(
+            session=session,
+            scene=scene,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text="",
+        )
+        trace["canonical_entry"] = {
+            "should_route_social": bool(canonical_entry.get("should_route_social")),
+            "target_actor_id": canonical_entry.get("target_actor_id"),
+            "target_source": canonical_entry.get("target_source"),
+            "reason": canonical_entry.get("reason"),
+            "spoken_text": canonical_entry.get("spoken_text"),
+            "declared_switch_detected": bool(declared_switch_meta.get("has_declared_switch")),
+            "declared_switch_target_actor_id": (
+                declared_switch_meta.get("target_actor_id")
+                if declared_switch_meta.get("has_declared_switch")
+                else None
+            ),
+            "continuity_overridden_by_declared_switch": bool(
+                canonical_entry.get("continuity_overridden_by_declared_switch")
+            ),
+            "spoken_vocative_detected": bool(canonical_entry.get("spoken_vocative_detected")),
+            "spoken_vocative_target_actor_id": canonical_entry.get("spoken_vocative_target_actor_id"),
+            "continuity_overridden_by_spoken_vocative": bool(
+                canonical_entry.get("continuity_overridden_by_spoken_vocative")
+            ),
+        }
+        for _k in (
+            "open_social_solicitation",
+            "broad_address_bid",
+            "broadcast_social_open_call",
+            "candidate_addressable_ids",
+            "candidate_addressable_count",
+            "broad_address_reason",
+            "broad_address_phrase_matched",
+        ):
+            if _k in canonical_entry:
+                trace["canonical_entry"][_k] = canonical_entry.get(_k)
+        trace["canonical_entry_path"] = (
+            "social" if canonical_entry.get("should_route_social") else "undecided"
+        )
+        trace["canonical_entry_reason"] = canonical_entry.get("reason")
+        trace["canonical_entry_target_actor_id"] = canonical_entry.get("target_actor_id")
+        implied_context = _prepare_interaction_from_turn_input(session, world, scene_before_id, "", scene=scene)
+        compact_segmented = _compact_segmented_turn(segmented_turn)
+    
+        normalized_chat, resolution = _opening_scene_normalized_action_and_resolution(
+            scene=scene,
+            player_text=None,
+            internal_bootstrap=True,
+        )
+        parsed = normalized_chat
+        _accumulate_latency(latency_ms, "intent_classification", _elapsed_ms(classify_started))
+    
+        try:
+            scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
+                campaign=campaign,
+                character=character,
+                session=session,
+                world=world,
+                combat=combat,
+                scene=scene,
+                recent_log=recent_log,
+                resolution=resolution,
+                normalized_action=normalized_chat,
+                fallback_user_text="",
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                route_choice="action",
+                directed_social_entry=canonical_entry,
+                latency_sink=latency_ms,
+            )
+        except Exception:
+            raise
+    
+        authoritative_clue_updates.extend(turn_clue_updates)
+        if isinstance(resolution, dict):
+            resolution["world_tick_events"] = tick.get("events", [])
+    
+        _record_scene_pressure_input(
+            session,
+            scene_before_id,
+            "",
+            normalized_action=parsed if isinstance(parsed, dict) else None,
+            resolution=None,
+        )
+    
+        request_log = {
+            "request": {"start_campaign": True, "action_type": "start_campaign"},
+            "log_meta": {
+                "bootstrap_intent": "start_campaign",
+                "player_input": "",
+            },
+        }
+    
+        # A travel purpose is explanation-only; it never runs a second resolver.
+        deferred = (session.get("conversational_context") or {}).get("pending_clarification") or {}
+>       if (execution_decision is not None and execution_decision.proposed_operation == "MOVE"
+            ^^^^^^^^^^^^^^^^^^
+                and deferred.get("kind") == "deferred_intentions" and isinstance(gm, dict)):
+E               NameError: name 'execution_decision' is not defined
+
+game\api.py:6584: NameError
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 266a48396d25b9424639b761
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_ec_movement_partial_intent.py::test_pr_ec_incomplete_movement_clarifies_without_context_and_uses_focused_destination
+FAILED tests/test_pr_play_23_local_interaction.py::test_opening_to_interaction_publication[False]
+FAILED tests/test_pr_play_23_local_interaction.py::test_opening_to_interaction_publication[True]
+3 failed, 51 passed, 1 warning in 6.42s

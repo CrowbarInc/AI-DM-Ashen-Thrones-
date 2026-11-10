@@ -1,0 +1,223 @@
+.................................................FF.F................... [ 11%]
+..............................................F..F.....F..F............. [ 22%]
+F...F...........FF...F.................................................. [ 33%]
+..........................................................F............. [ 45%]
+................................................FFF..F...FFF............ [ 56%]
+.......F......FF........................................................ [ 67%]
+........................................................................ [ 78%]
+........................................................................ [ 90%]
+................................................................         [100%]
+================================== FAILURES ===================================
+___________ test_preference_gesture_is_not_an_undeclared_world_fact ___________
+tests\test_pr_cp_authorized_finalization.py:130: in test_preference_gesture_is_not_an_undeclared_world_fact
+    assert "dry watch" in facing.lower()
+E   assert 'dry watch' in 'guard captain says, "i prefer the morning."'
+E    +  where 'guard captain says, "i prefer the morning."' = <built-in method lower of str object at 0x000001ED5AF21A70>()
+E    +    where <built-in method lower of str object at 0x000001ED5AF21A70> = 'Guard Captain says, "I prefer the morning."'.lower
+__________ test_authored_patrol_sentence_survives_and_extras_do_not ___________
+tests\test_pr_cp_authorized_finalization.py:148: in test_authored_patrol_sentence_survives_and_extras_do_not
+    assert sealed["metadata"]["decision_review"]["acceptance"]["why"] == "authored_answer_projection"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'decision_review'
+__ test_pr_cq_patrol_invalid_first_generation_projects_without_regeneration ___
+tests\test_pr_cp_authorized_finalization.py:188: in test_pr_cq_patrol_invalid_first_generation_projects_without_regeneration
+    assert accepted["provenance"] == "authored_answer_projection"
+E   AssertionError: assert 'authorized_host_speech' == 'authored_answer_projection'
+E     
+E     - authored_answer_projection
+E     + authorized_host_speech
+_________ test_chat_quarterstaff_attack_mechanical_resolution_absent __________
+tests\test_exploration_resolution.py:449: in test_chat_quarterstaff_attack_mechanical_resolution_absent
+    assert any(gpt_called_with_none_resolution)
+E   assert False
+E    +  where False = any([False])
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__________ test_chat_observe_area_resolution_kwarg_to_build_messages __________
+tests\test_exploration_resolution.py:497: in test_chat_observe_area_resolution_kwarg_to_build_messages
+    assert resolution.get("kind") == "observe"
+E   assert None == 'observe'
+E    +  where None = <built-in method get of dict object at 0x000001ED5E5D2400>('kind')
+E    +    where <built-in method get of dict object at 0x000001ED5E5D2400> = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__ test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution __
+tests\test_exploration_resolution.py:609: in test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution
+    assert build_messages_resolution[0].get("kind") == "observe"
+E   assert None == 'observe'
+E    +  where None = <built-in method get of dict object at 0x000001ED5E5D2540>('kind')
+E    +    where <built-in method get of dict object at 0x000001ED5E5D2540> = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+___________ test_chat_exploration_parsed_routes_through_exploration ___________
+tests\test_exploration_resolution.py:666: in test_chat_exploration_parsed_routes_through_exploration
+    assert "resolved_exploration_action" in last_payload
+E   AssertionError: assert 'resolved_exploration_action' in {'instructions': ['WORLD SIMULATION (bounded engine slice): World progression touched: faction_pressure:ash_cowl, fact..., 'after_anchor': {'scene_id': 'scene_a', 'location_id': None, 'location_label': None, 'time_anchor': None}, ...}, ...}
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_______ test_refusal_text_with_location_repair_updates_state_and_clues ________
+tests\test_narration_state_consistency.py:75: in test_refusal_text_with_location_repair_updates_state_and_clues
+    assert get_all_known_clue_ids(session)
+E   assert set()
+E    +  where set() = get_all_known_clue_ids({})
+_______ test_usable_location_in_text_updates_structured_topic_and_clues _______
+tests\test_narration_state_consistency.py:172: in test_usable_location_in_text_updates_structured_topic_and_clues
+    assert get_all_known_clue_ids(session)
+E   assert set()
+E    +  where set() = get_all_known_clue_ids({})
+________________ test_valid_authored_transition_mutates_scene _________________
+tests\test_unresolved_travel_narration_authority.py:252: in test_valid_authored_transition_mutates_scene
+    assert res.get("resolved_transition") is True
+E   AssertionError: assert False is True
+E    +  where False = <built-in method get of dict object at 0x000001ED5E550E40>('resolved_transition')
+E    +    where <built-in method get of dict object at 0x000001ED5E550E40> = {'kind': 'scene_transition', 'action_id': 'leave_for_take_the_pine_trail', 'label': 'Take the pine trail', 'prompt': 'Go to Take the pine trail.', ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_______ test_unknown_destination_does_not_change_scene_or_imply_arrival _______
+tests\test_unresolved_travel_narration_authority.py:269: in test_unknown_destination_does_not_change_scene_or_imply_arrival
+    assert res.get("kind") == "travel"
+E   AssertionError: assert 'conversational_decline' == 'travel'
+E     
+E     - travel
+E     + conversational_decline
+_____________ test_http_historical_t6_does_not_narrate_departure ______________
+tests\test_unresolved_travel_narration_authority.py:326: in test_http_historical_t6_does_not_narrate_departure
+    assert res.get("kind") == "travel"
+E   AssertionError: assert 'conversational_clarify' == 'travel'
+E     
+E     - travel
+E     + conversational_clarify
+____________ test_http_unresolved_unavailable_place_does_not_move _____________
+tests\test_generalized_destination_exit_resolution.py:362: in test_http_unresolved_unavailable_place_does_not_move
+    assert data.get("session", {}).get("active_scene_id") == "old_milestone"
+E   assert None == 'old_milestone'
+E    +  where None = <built-in method get of dict object at 0x000001ED5B16F3C0>('active_scene_id')
+E    +    where <built-in method get of dict object at 0x000001ED5B16F3C0> = {}.get
+E    +      where {} = <built-in method get of dict object at 0x000001ED5E0BDC40>('session', {})
+E    +        where <built-in method get of dict object at 0x000001ED5E0BDC40> = {'ok': True, 'gm_output': {'player_facing_text': 'You want to reach House Verevin, but that is not an established dest...ction_id': 'conversational_decline', 'label': "I'll go to House Verevin.", 'prompt': "I'll go to House Verevin.", ...}}.get
+__________ test_http_pursuit_while_socially_engaged_leaves_the_gate ___________
+tests\test_stay_leave_social_lock_override.py:293: in test_http_pursuit_while_socially_engaged_leaves_the_gate
+    assert any(token in low for token in ("leave", "path", "move", "position"))
+E   assert False
+E    +  where False = any(<generator object test_http_pursuit_while_socially_engaged_leaves_the_gate.<locals>.<genexpr> at 0x000001ED5E695560>)
+---------------------------- Captured stdout call -----------------------------
+[ENGINE] Scene transition -> old_milestone
+[PROMPT] fresh campaign prompt constructed
+______________ test_http_explicit_leave_overrides_dialogue_lock _______________
+tests\test_stay_leave_social_lock_override.py:306: in test_http_explicit_leave_overrides_dialogue_lock
+    assert res.get("kind") in {"scene_transition", "travel"}
+E   assert 'conversational_clarify' in {'scene_transition', 'travel'}
+E    +  where 'conversational_clarify' = <built-in method get of dict object at 0x000001ED5E7B2300>('kind')
+E    +    where <built-in method get of dict object at 0x000001ED5E7B2300> = {'kind': 'conversational_clarify', 'action_id': 'conversational_clarify', 'label': "I'm leaving. I'll head down the road after the patrol.", 'prompt': "I'm leaving. I'll head down the road after the patrol.", ...}.get
+_____________ test_http_explicit_stay_does_not_enter_cinderwatch ______________
+tests\test_stay_leave_social_lock_override.py:322: in test_http_explicit_stay_does_not_enter_cinderwatch
+    assert "enter cinderwatch" not in low
+E   AssertionError: assert 'enter cinderwatch' not in 'you leave t...cinderwatch.'
+E     
+E     'enter cinderwatch' is contained here:
+E       you leave the gate and enter cinderwatch.
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_http_unavailable_travel_does_not_invent_house_verevin __________
+tests\test_stay_leave_social_lock_override.py:359: in test_http_unavailable_travel_does_not_invent_house_verevin
+    assert data.get("session", {}).get("active_scene_id") == "frontier_gate"
+E   assert None == 'frontier_gate'
+E    +  where None = <built-in method get of dict object at 0x000001ED5E635E80>('active_scene_id')
+E    +    where <built-in method get of dict object at 0x000001ED5E635E80> = {}.get
+E    +      where {} = <built-in method get of dict object at 0x000001ED5E6FD940>('session', {})
+E    +        where <built-in method get of dict object at 0x000001ED5E6FD940> = {'ok': True, 'gm_output': {'player_facing_text': 'You want to reach House Verevin, but that is not an established dest...ction_id': 'conversational_decline', 'label': "I'll go to House Verevin.", 'prompt': "I'll go to House Verevin.", ...}}.get
+_____________ test_start_campaign_emits_opening_and_sets_started ______________
+tests\test_start_campaign_api.py:167: in test_start_campaign_emits_opening_and_sets_started
+    assert len(log_reload_entries) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started b9dc6fe1ab76db858fdebeb0
+[PROMPT] fresh campaign prompt constructed
+_ test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text _
+tests\test_start_campaign_api.py:258: in test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text
+    assert emission_debug.get("post_final_emission_gate_text_len", 0) > 800
+E   AssertionError: assert 781 > 800
+E    +  where 781 = <built-in method get of dict object at 0x000001ED5E791A80>('post_final_emission_gate_text_len', 0)
+E    +    where <built-in method get of dict object at 0x000001ED5E791A80> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 19940c2e5a92cf1309201f9b
+[PROMPT] fresh campaign prompt constructed
+_____ test_start_campaign_promotes_valid_upstream_prepared_scene_opening ______
+tests\test_start_campaign_api.py:287: in test_start_campaign_promotes_valid_upstream_prepared_scene_opening
+    assert response_text in RICH_OPENING_GPT_RESPONSE["player_facing_text"]
+E   assert "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke." in "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush."
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 22ae336e630fbe5ca432438d
+[PROMPT] fresh campaign prompt constructed
+________ test_http_class_b_visible_feature_is_not_swallowed_by_social _________
+tests\test_explicit_world_action_social_lock_override.py:376: in test_http_class_b_visible_feature_is_not_swallowed_by_social
+    assert "second flood" not in low
+E   AssertionError: assert 'second flood' not in 'the inner l...econd flood.'
+E     
+E     'second flood' is contained here:
+E       the inner lamps are trimmed before the second flood.
+E     ?                                        ++++++++++++
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_____________ test_http_stale_topic_does_not_mutate_world_action ______________
+tests\test_explicit_world_action_social_lock_override.py:470: in test_http_stale_topic_does_not_mutate_world_action
+    assert "second flood" not in _facing(second).lower()
+E   AssertionError: assert 'second flood' not in 'the inner l...econd flood.'
+E     
+E     'second flood' is contained here:
+E       the inner lamps are trimmed before the second flood.
+E     ?                                        ++++++++++++
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] social_harbor_wharf_lamp_warden_silt_schedule
+[PROMPT] fresh campaign prompt constructed
+__________ test_http_t13_glance_back_at_notice_board_is_world_action __________
+tests\test_explicit_world_action_social_lock_override.py:494: in test_http_t13_glance_back_at_notice_board_is_world_action
+    assert res.get("kind") in {"investigate", "discover_clue", "already_searched"}
+E   AssertionError: assert 'question' in {'already_searched', 'discover_clue', 'investigate'}
+E    +  where 'question' = <built-in method get of dict object at 0x000001ED5E6F42C0>('kind')
+E    +    where <built-in method get of dict object at 0x000001ED5E6F42C0> = {'kind': 'question', 'action_id': 'tavern_runner', 'label': 'Tavern Runner', 'prompt': 'I glance back at the notice board after that.', ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_cp_authorized_finalization.py::test_preference_gesture_is_not_an_undeclared_world_fact
+FAILED tests/test_pr_cp_authorized_finalization.py::test_authored_patrol_sentence_survives_and_extras_do_not
+FAILED tests/test_pr_cp_authorized_finalization.py::test_pr_cq_patrol_invalid_first_generation_projects_without_regeneration
+FAILED tests/test_exploration_resolution.py::test_chat_quarterstaff_attack_mechanical_resolution_absent
+FAILED tests/test_exploration_resolution.py::test_chat_observe_area_resolution_kwarg_to_build_messages
+FAILED tests/test_exploration_resolution.py::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution
+FAILED tests/test_exploration_resolution.py::test_chat_exploration_parsed_routes_through_exploration
+FAILED tests/test_narration_state_consistency.py::test_refusal_text_with_location_repair_updates_state_and_clues
+FAILED tests/test_narration_state_consistency.py::test_usable_location_in_text_updates_structured_topic_and_clues
+FAILED tests/test_unresolved_travel_narration_authority.py::test_valid_authored_transition_mutates_scene
+FAILED tests/test_unresolved_travel_narration_authority.py::test_unknown_destination_does_not_change_scene_or_imply_arrival
+FAILED tests/test_unresolved_travel_narration_authority.py::test_http_historical_t6_does_not_narrate_departure
+FAILED tests/test_generalized_destination_exit_resolution.py::test_http_unresolved_unavailable_place_does_not_move
+FAILED tests/test_stay_leave_social_lock_override.py::test_http_pursuit_while_socially_engaged_leaves_the_gate
+FAILED tests/test_stay_leave_social_lock_override.py::test_http_explicit_leave_overrides_dialogue_lock
+FAILED tests/test_stay_leave_social_lock_override.py::test_http_explicit_stay_does_not_enter_cinderwatch
+FAILED tests/test_stay_leave_social_lock_override.py::test_http_unavailable_travel_does_not_invent_house_verevin
+FAILED tests/test_start_campaign_api.py::test_start_campaign_emits_opening_and_sets_started
+FAILED tests/test_start_campaign_api.py::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text
+FAILED tests/test_start_campaign_api.py::test_start_campaign_promotes_valid_upstream_prepared_scene_opening
+FAILED tests/test_explicit_world_action_social_lock_override.py::test_http_class_b_visible_feature_is_not_swallowed_by_social
+FAILED tests/test_explicit_world_action_social_lock_override.py::test_http_stale_topic_does_not_mutate_world_action
+FAILED tests/test_explicit_world_action_social_lock_override.py::test_http_t13_glance_back_at_notice_board_is_world_action
+23 failed, 617 passed, 1 warning in 78.77s (0:01:18)

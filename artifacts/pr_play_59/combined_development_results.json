@@ -1,0 +1,3164 @@
+{
+  "rows": [
+    {
+      "id": "D01",
+      "group": "unauthorized",
+      "text": "The gate is now permanently open.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The gate is now permanently open.",
+              "subject": "gate",
+              "property": "access",
+              "result": "open",
+              "permanent": true,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The gate is now permanently open.",
+                "subject": "gate",
+                "property": "access",
+                "result": "open",
+                "permanent": true,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 97.98029996454716
+    },
+    {
+      "id": "D02",
+      "group": "unauthorized",
+      "text": "The gate has been opened.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The gate has been opened.",
+              "subject": "gate",
+              "property": "access",
+              "result": "open",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The gate has been opened.",
+                "subject": "gate",
+                "property": "access",
+                "result": "open",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.7733000093139708
+    },
+    {
+      "id": "D03",
+      "group": "unauthorized",
+      "text": "The gate stands unlocked.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "existing_state",
+              "text": "The gate stands unlocked.",
+              "subject": "gate",
+              "property": "lock",
+              "result": "unlocked",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "existing_state",
+                "text": "The gate stands unlocked.",
+                "subject": "gate",
+                "property": "lock",
+                "result": "unlocked",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.7939999923110008
+    },
+    {
+      "id": "D04",
+      "group": "unauthorized",
+      "text": "The entrance is no longer sealed.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The entrance is no longer sealed.",
+              "subject": "entrance",
+              "property": "seal",
+              "result": "unsealed",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "ungrounded_authoritative_rule",
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [
+            {
+              "text": "The entrance is no longer sealed.",
+              "kind": "consequential_proposal",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": true,
+              "family": "hidden_information"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The entrance is no longer sealed.",
+                "subject": "entrance",
+                "property": "seal",
+                "result": "unsealed",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.7214999641291797
+    },
+    {
+      "id": "D05",
+      "group": "unauthorized",
+      "text": "The barrier has been removed.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The barrier has been removed.",
+              "subject": "barrier",
+              "property": "existence",
+              "result": "removed",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The barrier has been removed.",
+                "subject": "barrier",
+                "property": "existence",
+                "result": "removed",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6722999969497323
+    },
+    {
+      "id": "D06",
+      "group": "unauthorized",
+      "text": "The passage is now accessible.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The passage is now accessible.",
+              "subject": "passage",
+              "property": "accessibility",
+              "result": "accessible",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The passage is now accessible.",
+                "subject": "passage",
+                "property": "accessibility",
+                "result": "accessible",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6736000068485737
+    },
+    {
+      "id": "D07",
+      "group": "unauthorized",
+      "text": "The doors will remain open from now on.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The doors will remain open from now on.",
+              "subject": "door",
+              "property": "access",
+              "result": "open",
+              "permanent": true,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The doors will remain open from now on.",
+                "subject": "door",
+                "property": "access",
+                "result": "open",
+                "permanent": true,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.786700053140521
+    },
+    {
+      "id": "D08",
+      "group": "unauthorized",
+      "text": "The lock has been broken.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The lock has been broken.",
+              "subject": "lock",
+              "property": "integrity",
+              "result": "broken",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The lock has been broken.",
+                "subject": "lock",
+                "property": "integrity",
+                "result": "broken",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6017000414431095
+    },
+    {
+      "id": "D09",
+      "group": "unauthorized",
+      "text": "The gate can no longer be closed.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The gate can no longer be closed.",
+              "subject": "gate",
+              "property": "irreversibility",
+              "result": "closed",
+              "permanent": true,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The gate can no longer be closed.",
+                "subject": "gate",
+                "property": "irreversibility",
+                "result": "closed",
+                "permanent": true,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.8207999635487795
+    },
+    {
+      "id": "D10",
+      "group": "unauthorized",
+      "text": "The stone arch collapses.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The stone arch collapses.",
+              "subject": "stone arch",
+              "property": "integrity",
+              "result": "collapsed",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The stone arch collapses.",
+                "subject": "stone arch",
+                "property": "integrity",
+                "result": "collapsed",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.7518000202253461
+    },
+    {
+      "id": "D11",
+      "group": "unauthorized",
+      "text": "The guard is now incapacitated.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The guard is now incapacitated.",
+              "subject": "guard",
+              "property": "capacity",
+              "result": "incapacitated",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The guard is now incapacitated.",
+                "subject": "guard",
+                "property": "capacity",
+                "result": "incapacitated",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6942999898456037
+    },
+    {
+      "id": "D12",
+      "group": "unauthorized",
+      "text": "The hermit is dead.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The hermit is dead.",
+              "subject": "hermit",
+              "property": "life",
+              "result": "dead",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The hermit is dead.",
+                "subject": "hermit",
+                "property": "life",
+                "result": "dead",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.4689999623224139
+    },
+    {
+      "id": "D13",
+      "group": "unauthorized",
+      "text": "You are now poisoned.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence",
+            "unauthorized_condition"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "You are now poisoned.",
+              "subject": "you",
+              "property": "condition",
+              "result": "poisoned",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            },
+            {
+              "category": "condition",
+              "reason": "unauthorized_condition",
+              "decision": "FAIL",
+              "epistemic": "assertion",
+              "text": "You are now poisoned."
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "unsupported_mechanical_claim:conditions_applied",
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [
+              {
+                "category": "conditions_applied",
+                "claim": "poisoned",
+                "supported": false
+              }
+            ],
+            "reasons": [
+              "unsupported_mechanical_claim:conditions_applied"
+            ]
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence",
+              "unauthorized_condition"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "You are now poisoned.",
+                "subject": "you",
+                "property": "condition",
+                "result": "poisoned",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              },
+              {
+                "category": "condition",
+                "reason": "unauthorized_condition",
+                "decision": "FAIL",
+                "epistemic": "assertion",
+                "text": "You are now poisoned."
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.5947999889031053
+    },
+    {
+      "id": "D14",
+      "group": "unauthorized",
+      "text": "You pick up the key and place it in your pack.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence",
+            "unauthorized_discovery"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "You pick up the key and place it in your pack.",
+              "subject": "key",
+              "property": "inventory",
+              "result": "acquired",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            },
+            {
+              "category": "discovery",
+              "reason": "unauthorized_discovery",
+              "decision": "FAIL",
+              "epistemic": "assertion",
+              "text": "You pick up the key and place it in your pack.",
+              "relation": "establishes_discovery",
+              "actor": "player",
+              "assertion": "affirmative",
+              "subject": "key"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "unsupported_mechanical_claim:items_added",
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [
+              {
+                "category": "items_added",
+                "claim": "the key",
+                "supported": false
+              },
+              {
+                "category": "items_added",
+                "claim": "place it in your pack",
+                "supported": false
+              }
+            ],
+            "reasons": [
+              "unsupported_mechanical_claim:items_added"
+            ]
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence",
+              "unauthorized_discovery"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "You pick up the key and place it in your pack.",
+                "subject": "key",
+                "property": "inventory",
+                "result": "acquired",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              },
+              {
+                "category": "discovery",
+                "reason": "unauthorized_discovery",
+                "decision": "FAIL",
+                "epistemic": "assertion",
+                "text": "You pick up the key and place it in your pack.",
+                "relation": "establishes_discovery",
+                "actor": "player",
+                "assertion": "affirmative",
+                "subject": "key"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 2.4034000234678388
+    },
+    {
+      "id": "D15",
+      "group": "unauthorized",
+      "text": "The quest is now complete.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence",
+            "unauthorized_quest"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The quest is now complete.",
+              "subject": "quest",
+              "property": "progress",
+              "result": "complete",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            },
+            {
+              "category": "quest",
+              "reason": "unauthorized_quest",
+              "decision": "FAIL",
+              "epistemic": "assertion",
+              "text": "The quest is now complete."
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence",
+              "unauthorized_quest"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The quest is now complete.",
+                "subject": "quest",
+                "property": "progress",
+                "result": "complete",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              },
+              {
+                "category": "quest",
+                "reason": "unauthorized_quest",
+                "decision": "FAIL",
+                "epistemic": "assertion",
+                "text": "The quest is now complete."
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6401000428013504
+    },
+    {
+      "id": "D16",
+      "group": "unauthorized",
+      "text": "The chamber is now flooded.",
+      "authority": {},
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The chamber is now flooded.",
+              "subject": "chamber",
+              "property": "environment",
+              "result": "flooded",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The chamber is now flooded.",
+                "subject": "chamber",
+                "property": "environment",
+                "result": "flooded",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6302999681793153
+    },
+    {
+      "id": "D17",
+      "group": "unauthorized",
+      "text": "The gate is permanently open.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate is temporarily open."
+        ]
+      },
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The gate is permanently open.",
+              "subject": "gate",
+              "property": "access",
+              "result": "open",
+              "permanent": true,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The gate is permanently open.",
+                "subject": "gate",
+                "property": "access",
+                "result": "open",
+                "permanent": true,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6931000389158726
+    },
+    {
+      "id": "D18",
+      "group": "unauthorized",
+      "text": "The north hatch opens.",
+      "authority": {
+        "authorized_outcomes": [
+          "The south hatch opens."
+        ]
+      },
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence",
+            "unauthorized_access"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The north hatch opens.",
+              "subject": "north hatch",
+              "property": "access",
+              "result": "open",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            },
+            {
+              "category": "location_access",
+              "reason": "unauthorized_access",
+              "decision": "FAIL",
+              "epistemic": "assertion",
+              "text": "The north hatch opens."
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence",
+              "unauthorized_access"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The north hatch opens.",
+                "subject": "north hatch",
+                "property": "access",
+                "result": "open",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              },
+              {
+                "category": "location_access",
+                "reason": "unauthorized_access",
+                "decision": "FAIL",
+                "epistemic": "assertion",
+                "text": "The north hatch opens."
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 1.2830999912694097
+    },
+    {
+      "id": "D19",
+      "group": "unauthorized",
+      "text": "The gate opens and the lock breaks.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate opens."
+        ]
+      },
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence",
+            "unauthorized_access"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "the lock breaks.",
+              "subject": "lock",
+              "property": "integrity",
+              "result": "broken",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            },
+            {
+              "category": "location_access",
+              "reason": "unauthorized_access",
+              "decision": "FAIL",
+              "epistemic": "assertion",
+              "text": "The gate opens and the lock breaks."
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence",
+              "unauthorized_access"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "the lock breaks.",
+                "subject": "lock",
+                "property": "integrity",
+                "result": "broken",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              },
+              {
+                "category": "location_access",
+                "reason": "unauthorized_access",
+                "decision": "FAIL",
+                "epistemic": "assertion",
+                "text": "The gate opens and the lock breaks."
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 1.2508999789133668
+    },
+    {
+      "id": "D20",
+      "group": "unauthorized",
+      "text": "The gate opens.",
+      "authority": {
+        "observable_scene": [
+          "The gate is open."
+        ]
+      },
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "The gate opens.",
+              "subject": "gate",
+              "property": "access",
+              "result": "open",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "The gate opens.",
+                "subject": "gate",
+                "property": "access",
+                "result": "open",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6383999716490507
+    },
+    {
+      "id": "D21",
+      "group": "authorized",
+      "text": "The gate swings open.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate opens."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.8515000226907432
+    },
+    {
+      "id": "D22",
+      "group": "authorized",
+      "text": "The gate opens with a heavy creak.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate opens."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.9848000481724739
+    },
+    {
+      "id": "D23",
+      "group": "authorized",
+      "text": "The lock clicks, leaving the door unlocked.",
+      "authority": {
+        "authorized_outcomes": [
+          "The door is unlocked."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 1.0083999950438738
+    },
+    {
+      "id": "D24",
+      "group": "authorized",
+      "text": "The bridge gives way and falls into the ravine.",
+      "authority": {
+        "authorized_outcomes": [
+          "The bridge collapses."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 1.2454999960027635
+    },
+    {
+      "id": "D25",
+      "group": "authorized",
+      "text": "You pick up the key and place it in your pack.",
+      "authority": {
+        "authorized_outcomes": [
+          "You pick up the key."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "FAIL",
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "unsupported_mechanical_claim:items_added"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [
+              {
+                "category": "items_added",
+                "claim": "the key",
+                "supported": false
+              },
+              {
+                "category": "items_added",
+                "claim": "place it in your pack",
+                "supported": false
+              }
+            ],
+            "reasons": [
+              "unsupported_mechanical_claim:items_added"
+            ]
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 1.414800004567951
+    },
+    {
+      "id": "D26",
+      "group": "authorized",
+      "text": "The gate is permanently open.",
+      "authority": {
+        "authorized_outcomes": [
+          "The gate is permanently open."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.7657000096514821
+    },
+    {
+      "id": "D27",
+      "group": "harmless",
+      "text": "The gate rattles in the wind.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6735000060871243
+    },
+    {
+      "id": "D28",
+      "group": "harmless",
+      "text": "Rain runs down the locked door.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "Rain runs down the locked door.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6629000417888165
+    },
+    {
+      "id": "D29",
+      "group": "harmless",
+      "text": "The bridge creaks beneath your feet.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.7161000394262373
+    },
+    {
+      "id": "D30",
+      "group": "harmless",
+      "text": "The guard shifts his weight.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6201000069268048
+    },
+    {
+      "id": "D31",
+      "group": "harmless",
+      "text": "Dust settles across the stone floor.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.7006999803707004
+    },
+    {
+      "id": "D32",
+      "group": "harmless",
+      "text": "The hinges groan.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.40550000267103314
+    },
+    {
+      "id": "D33",
+      "group": "harmless",
+      "text": "The lantern flickers.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The lantern flickers.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.28979999478906393
+    },
+    {
+      "id": "D34",
+      "group": "harmless",
+      "text": "The gate looks old and weathered.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.44410000555217266
+    },
+    {
+      "id": "D35",
+      "group": "harmless",
+      "text": "The door appears difficult to open.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.41669997153803706
+    },
+    {
+      "id": "D36",
+      "group": "harmless",
+      "text": "The passage seems narrow.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.24189997930079699
+    },
+    {
+      "id": "D37",
+      "group": "negated",
+      "text": "The gate does not open.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.2804000396281481
+    },
+    {
+      "id": "D38",
+      "group": "negated",
+      "text": "The gate remains closed.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.43710001045838
+    },
+    {
+      "id": "D39",
+      "group": "hypothetical",
+      "text": "The gate might open if the mechanism is repaired.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The gate might open if the mechanism is repaired.",
+              "kind": "npc_claim",
+              "epistemic_status": "uncertain",
+              "grounded": false,
+              "consequential": false,
+              "family": "none"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.4168000305071473
+    },
+    {
+      "id": "D40",
+      "group": "hypothetical",
+      "text": "If you repair it, the gate opens.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.24550000671297312
+    },
+    {
+      "id": "D41",
+      "group": "attempted",
+      "text": "You try to force the gate open.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.40339998668059707
+    },
+    {
+      "id": "D42",
+      "group": "attempted",
+      "text": "You try to pick up the key.",
+      "authority": {},
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.526399991940707
+    },
+    {
+      "id": "D43",
+      "group": "existing",
+      "text": "The gate stands open.",
+      "authority": {
+        "observable_scene": [
+          "The gate is open."
+        ]
+      },
+      "expected": "PASS",
+      "actual": "PASS",
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.5908000166527927
+    },
+    {
+      "id": "D44",
+      "group": "ambiguous",
+      "text": "The gate seems to have opened.",
+      "authority": {},
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "REVIEW_REQUIRED",
+          "reasons": [
+            "ambiguous_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "ambiguous_persistent_consequence",
+              "decision": "REVIEW_REQUIRED",
+              "epistemic": "ambiguous",
+              "text": "The gate seems to have opened.",
+              "subject": "",
+              "property": "",
+              "result": "",
+              "permanent": false,
+              "authority_match": "AMBIGUOUS"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_review_required"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "REVIEW_REQUIRED",
+            "reasons": [
+              "ambiguous_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "ambiguous_persistent_consequence",
+                "decision": "REVIEW_REQUIRED",
+                "epistemic": "ambiguous",
+                "text": "The gate seems to have opened.",
+                "subject": "",
+                "property": "",
+                "result": "",
+                "permanent": false,
+                "authority_match": "AMBIGUOUS"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.4466999671421945
+    },
+    {
+      "id": "D45",
+      "group": "ambiguous",
+      "text": "Something about the mechanism has changed.",
+      "authority": {},
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "REVIEW_REQUIRED",
+          "reasons": [
+            "ambiguous_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "ambiguous_persistent_consequence",
+              "decision": "REVIEW_REQUIRED",
+              "epistemic": "ambiguous",
+              "text": "Something about the mechanism has changed.",
+              "subject": "",
+              "property": "",
+              "result": "",
+              "permanent": false,
+              "authority_match": "AMBIGUOUS"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_review_required"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "REVIEW_REQUIRED",
+            "reasons": [
+              "ambiguous_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "ambiguous_persistent_consequence",
+                "decision": "REVIEW_REQUIRED",
+                "epistemic": "ambiguous",
+                "text": "Something about the mechanism has changed.",
+                "subject": "",
+                "property": "",
+                "result": "",
+                "permanent": false,
+                "authority_match": "AMBIGUOUS"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.6215000175870955
+    },
+    {
+      "id": "D46",
+      "group": "ambiguous",
+      "text": "It is now open.",
+      "authority": {},
+      "expected": "REVIEW_REQUIRED",
+      "actual": "REVIEW_REQUIRED",
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "REVIEW_REQUIRED",
+          "reasons": [
+            "ambiguous_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "ambiguous_persistent_consequence",
+              "decision": "REVIEW_REQUIRED",
+              "epistemic": "ambiguous",
+              "text": "It is now open.",
+              "subject": "",
+              "property": "",
+              "result": "",
+              "permanent": false,
+              "authority_match": "AMBIGUOUS"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_review_required"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "REVIEW_REQUIRED",
+            "reasons": [
+              "ambiguous_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "ambiguous_persistent_consequence",
+                "decision": "REVIEW_REQUIRED",
+                "epistemic": "ambiguous",
+                "text": "It is now open.",
+                "subject": "",
+                "property": "",
+                "result": "",
+                "permanent": false,
+                "authority_match": "AMBIGUOUS"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "combined_ms": 0.41390000842511654
+    }
+  ],
+  "mismatches": [
+    {
+      "id": "D25",
+      "text": "You pick up the key and place it in your pack.",
+      "expected": "PASS",
+      "actual": "FAIL"
+    }
+  ],
+  "scope": "Synthetic trusted consequence projections; empty mandatory fact list isolates authority behavior. Ordinary runtime request still grants no persistent changes."
+}

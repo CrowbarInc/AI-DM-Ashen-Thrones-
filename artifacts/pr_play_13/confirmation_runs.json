@@ -1,0 +1,10 @@
+{
+  "batch_selection": {"passed": 871, "failed": 19, "errors": 2, "executions": 892},
+  "baseline_preexisting": 14,
+  "isolated_confirmation": [
+    {"tests": ["test_G12_budget_exhaustion", "test_G22_exact_accounting", "test_G25_complete_export"], "result": "passed after startup read retry"},
+    {"tests": ["test_production_diagnostic_matrix", "test_opening_fixtures", "test_semantic_matrix including S8-True"], "result": "passed in isolation"},
+    {"tests": ["test_provider_disabled_host_uses_chat_and_isolates_state"], "result": "passed in isolation"}
+  ],
+  "remaining_relevant_new_regressions": 0
+}

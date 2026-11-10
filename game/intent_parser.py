@@ -146,6 +146,10 @@ _INTERACTABLE_CONTENT_QUESTION_RES = (
         r"\bwhat does\s+(?:the\s+|this\s+|that\s+)?(?P<target>.+?)\s+say\b",
         re.IGNORECASE,
     ),
+    re.compile(
+        r"\bwhat did\s+(?:the\s+|this\s+|that\s+)?(?P<target>.+?)\s+say\b",
+        re.IGNORECASE,
+    ),
 )
 INTERACT_PATTERNS = [
     (r"\b(talk\s+to|talk\s+with|speak\s+to|speak\s+with|ask|question|chat\s+with|greet)\s+(?:the\s+)?(.+?)(?:\s+about\s+)?\.?$", "interact", True),
@@ -1208,6 +1212,7 @@ def recover_interactable_content_question(text: str, scene: Dict[str, Any] | Non
             continue
         target = _clean_clause(m.group("target"))
         if target:
+            target = re.sub(r"^(?:the|this|that|a|an)\s+", "", target, count=1, flags=re.IGNORECASE)
             break
     if not target:
         return None
@@ -2042,7 +2047,12 @@ def parse_freeform_to_action(
     if not block_travel:
         from game.player_commitment import committed_world_text
 
-        if not re.search(r"\b(?:follow|leave|exit)\b", committed_world_text(t), re.IGNORECASE):
+        # "heading out" is pursuit-shaped but has no follow/leave/exit token.
+        # The existing unique-exit matcher still applies; it does not invent a route.
+        lexical_leave = bool(
+            re.search(r"\b(?:follow|leave|exit)\b", committed_world_text(t), re.IGNORECASE)
+        )
+        if not lexical_leave and not looks_like_explicit_leave_or_pursuit_intent(t):
             return None
         follow_target = _match_follow_pursuit_exit(t, exits, scene=scene, session=session)
         if follow_target:
@@ -2053,6 +2063,8 @@ def parse_freeform_to_action(
                 target_scene_id=follow_target,
                 metadata={"parser_lane": "legacy_follow_exit_match"},
             )
+        if not lexical_leave:
+            return None
         m_follow = re.search(r"\bfollow\b", low)
         if m_follow and exits and not _RE_FOLLOW_UP_PHRASAL.search(low):
             if re.match(r"^\s*follow\s*[\s\.,;?!]*$", low):

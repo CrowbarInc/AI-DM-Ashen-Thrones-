@@ -1,0 +1,260 @@
+diff --git a/docs/NEXT_SESSION.md b/docs/NEXT_SESSION.md
+index c00f592d..7c64cd9b 100644
+--- a/docs/NEXT_SESSION.md
++++ b/docs/NEXT_SESSION.md
+@@ -1,9 +1,26 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones â€” Product Realization. Updated 2026-10-31 / PR-PLAY-12.
++Ashen Thrones â€” Product Realization. Updated 2026-11-01 / PR-PLAY-13.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
+ 
++## Latest opening renderer â€” PR-PLAY-13
++
++2026-11-01: **B â€” Conditionally ready for controlled live validation.** Opt-in
++`ASHEN_OPENING_RENDERER` is default off. When set to `1`, campaign opening asks
++for a catalog selection plan and the engine publishes only public catalog text.
++Legacy openings, ordinary turns, provider caps, and retries are unchanged.
++Thirty focused tests passed. A deterministic five-turn run
++(`20261101T144743Z-14b8c942e340`) accepted the rendered opening, played four
++turns, and stopped at six synthetic requests. The PR-PLAY-12 selection kept the
++same 14 preexisting failures; seven extra batch errors were Windows file races
++and passed in isolation. No live call, model change, output increase, provider
++retry, ATGB edit, commit, or push. Next action: external review only. Do not
++start live validation from this handoff.
++
++Reports: `development/campaigns/product_realization/pr_play_13/`.
++Minimum read: reports 04, 05, 06, and 09.
++
+ ## Latest narrative architecture assessment â€” PR-PLAY-12
+ 
+ 2026-10-31: **B â€” Conditionally ready; external review only.** Diagnostics and
+diff --git a/game/api.py b/game/api.py
+index d9adda17..3e0ab4bc 100644
+--- a/game/api.py
++++ b/game/api.py
+@@ -6121,6 +6121,10 @@ def _complete_opening_turn_persistence_like_chat(
+     synchronize_scene_addressability(session, scene, world)
+     scene["scene_state"] = session.get("scene_state")
+     if mark_campaign_started:
++        from game.opening_presentation_renderer import enforce_rendered_publication
++
++        gm = enforce_rendered_publication(gm)
++        canonical_gm = gm
+         opening_rejection = _opening_response_rejection(gm, resolution, response_type_contract)
+         from game.provider_budget import observe_opening_validation
+         observe_opening_validation(
+diff --git a/game/gm.py b/game/gm.py
+index a7b7ac99..299e7ce0 100644
+--- a/game/gm.py
++++ b/game/gm.py
+@@ -5116,9 +5116,16 @@ def _generation_response_diagnostic(response, text, extraction, parsed, *, maxim
+         json_ok = True
+     except (ValueError, TypeError):
+         value, json_ok = None, False
+-    envelope_present = (isinstance(value, dict) and
+-                        (("narration" in value) if contract == "narration_only"
+-                         else {"declared_claims", "narration"} <= value.keys()))
++    if contract == "opening_presentation":
++        envelope_present = (
++            isinstance(value, dict)
++            and isinstance(value.get("selected_entries"), list)
++            and not ({"narration", "player_facing_text", "declared_claims"} & set(value))
++        )
++    else:
++        envelope_present = (isinstance(value, dict) and
++                            (("narration" in value) if contract == "narration_only"
++                             else {"declared_claims", "narration"} <= value.keys()))
+     meta = parsed.get("metadata") or {}
+     reason = meta.get("structured_contract_reason")
+     valid = not bool(meta.get("structured_output_rejected") or meta.get("structured_contract_failure"))
+@@ -5161,7 +5168,12 @@ def _generation_response_diagnostic(response, text, extraction, parsed, *, maxim
+             "requested_max_output_tokens": maximum, "output_limit_reached": reached,
+             "possible_output_truncation": bool(reached and not valid),
+             "json_parsing_succeeded": json_ok, "expected_envelope_present": envelope_present,
+-            "recognized_envelope_keys": sorted(set(value) & {"narration", "declared_claims", "player_facing_text"}) if isinstance(value, dict) else [],
++            "recognized_envelope_keys": (
++                sorted(set(value) & {"selected_entries"})
++                if contract == "opening_presentation" and isinstance(value, dict)
++                else sorted(set(value) & {"narration", "declared_claims", "player_facing_text"}) if isinstance(value, dict)
++                else []
++            ),
+             "parser_output_form": classified["form"], "structured_validation_result": valid,
+             "rejection_reason": reason, "classification": category,
+             "provider_response_contract": contract}
+@@ -5217,6 +5229,32 @@ def call_gpt(
+             strict_social=strict_social,
+             force_high_precision=force_high_precision,
+         )
++    requested_response_type = _requested_response_type_from_messages(messages)
++    is_opening = requested_response_type == "scene_opening"
++    from game.opening_presentation_renderer import opening_renderer_mode
++
++    renderer_mode = opening_renderer_mode() if is_opening else "disabled"
++    opening_catalog = None
++    if is_opening and renderer_mode == "invalid":
++        failed = _structured_contract_failure(
++            "structured",
++            "opening_renderer_configuration_invalid",
++            provider_response_contract="opening_presentation",
++        )
++        failed["metadata"]["opening_renderer"] = {
++            "mode": "invalid", "selected": False, "flag": "ASHEN_OPENING_RENDERER",
++        }
++        return _attach_model_route_metadata(
++            failed,
++            selected_model=route.selected_model,
++            route_reason=route.route_reason,
++            route_family=route.route_family,
++            purpose=purpose,
++            retry_attempt=retry_attempt,
++            retry_reason=retry_reason,
++            strict_social=strict_social,
++            force_high_precision=force_high_precision,
++        )
+     if os.environ.get("ASHEN_DISABLE_PROVIDER_CALLS", "").strip().lower() in {"1", "true", "yes", "on"}:
+         metadata = {
+             "provider_calls_disabled": True,
+@@ -5264,9 +5302,33 @@ def call_gpt(
+     )
+     pinned_model = os.environ.get("ASHEN_PIN_PROVIDER_MODEL", "").strip()
+     selected_model = pinned_model or route.selected_model
+-    requested_response_type = _requested_response_type_from_messages(messages)
+-    is_opening = requested_response_type == "scene_opening"
+-    if is_opening:
++    if is_opening and renderer_mode == "enabled":
++        from game.opening_presentation_renderer import prepare_opening_renderer
++
++        prepared = prepare_opening_renderer(messages)
++        if not prepared["ok"]:
++            failed = _structured_contract_failure(
++                "structured",
++                str(prepared["reason"] or "opening_catalog_empty"),
++                provider_response_contract="opening_presentation",
++            )
++            failed["metadata"]["opening_renderer"] = {
++                "mode": "enabled", "selected": False, "flag": "ASHEN_OPENING_RENDERER",
++            }
++            return _attach_model_route_metadata(
++                failed,
++                selected_model=route.selected_model,
++                route_reason=route.route_reason,
++                route_family=route.route_family,
++                purpose=purpose,
++                retry_attempt=retry_attempt,
++                retry_reason=retry_reason,
++                strict_social=strict_social,
++                force_high_precision=force_high_precision,
++            )
++        messages = prepared["messages"]
++        opening_catalog = prepared["catalog"]
++    elif is_opening:
+         # Free-text authored claims are checked by lexical coverage, not a
+         # synonym/entailment model. Supply that existing constraint at generation.
+         messages = [*messages[:1], {"role": "system", "content": (
+@@ -5388,10 +5450,27 @@ def call_gpt(
+                 }
+             )
+         provider_response_contract = _provider_response_contract_from_messages(messages)
+-        parsed_response = _safe_json(
+-            text.strip(), require_structured_claims=True,
+-            provider_response_contract=provider_response_contract,
+-        )
++        if opening_catalog is not None:
++            from game.opening_presentation_renderer import gm_response_from_render, realize_opening_provider_text
++
++            rendered = realize_opening_provider_text(text.strip(), opening_catalog)
++            provider_response_contract = "opening_presentation"
++            if rendered["ok"]:
++                parsed_response = gm_response_from_render(rendered)
++            else:
++                parsed_response = _structured_contract_failure(
++                    "structured",
++                    str(rendered["reason"] or "plan_schema"),
++                    provider_response_contract="opening_presentation",
++                )
++                parsed_response["metadata"]["opening_renderer"] = {
++                    "mode": "enabled", "selected": True, "flag": "ASHEN_OPENING_RENDERER",
++                }
++        else:
++            parsed_response = _safe_json(
++                text.strip(), require_structured_claims=True,
++                provider_response_contract=provider_response_contract,
++            )
+         # A complete JSON fragment cannot override an explicit incomplete opening.
+         # Preserve the normal parser diagnostics, then fail through the existing
+         # structured-contract rejection/rollback path without retrying.
+diff --git a/tools/playtest/runner.py b/tools/playtest/runner.py
+index ef95fc3d..d9e03979 100644
+--- a/tools/playtest/runner.py
++++ b/tools/playtest/runner.py
+@@ -295,8 +295,10 @@ def run_playtest(*, scenario='CampaignOpening', mode='Deterministic', authorize_
+             __import__(dependency)
+         prepare_isolated_store(run/'data', scenario_id=s['id'], repo=ROOT, player_campaign_dir=player)
+         write(run/'configuration/scenario.json', s)
++        from game.opening_presentation_renderer import opening_renderer_diagnostics
+         cfg = {'scenario_id': s['id'], 'mode': mode, 'fixture_response': case, 'port': port,
+-               'player_data': str(player), 'capture_response': capture_response}
++               'player_data': str(player), 'capture_response': capture_response,
++               'opening_renderer': opening_renderer_diagnostics()}
+         write(run/'configuration/run.json', cfg)
+         result['environment_verification'] = {'repository_root': str(ROOT), 'python': sys.executable,
+             'python_version': sys.version.split()[0], 'fixture_hash_verified': True,
+@@ -304,7 +306,8 @@ def run_playtest(*, scenario='CampaignOpening', mode='Deterministic', authorize_
+             'provider_request_ceiling': int(env['ASHEN_PROVIDER_REQUEST_LIMIT']),
+             'token_allowances': {k: int(env[f'ASHEN_PROVIDER_{k.upper()}_TOKEN_LIMIT']) for k in CAPS},
+             'live_authorization': authorize_live and mode == 'Live', 'retry_configuration': 'SDK=0, host=0',
+-            'response_capture_opt_in': capture_response}
++            'response_capture_opt_in': capture_response,
++            'opening_renderer': cfg['opening_renderer']}
+         print('Configured ceilings:', result['environment_verification']['provider_request_ceiling'],
+               'requests;', result['environment_verification']['token_allowances'], 'tokens; retries=0', flush=True)
+         if time.monotonic()-started > s['timeouts']['preflight']:
+@@ -328,7 +331,11 @@ def run_playtest(*, scenario='CampaignOpening', mode='Deterministic', authorize_
+                 raise RuntimeError('Owned server exited during startup')
+             path = run/'diagnostics/ready.json'
+             if path.exists():
+-                ready = json.loads(path.read_text(encoding='utf-8'))
++                try:
++                    ready = json.loads(path.read_text(encoding='utf-8'))
++                except (OSError, json.JSONDecodeError):
++                    time.sleep(.05)
++                    continue
+                 if ready['pid'] != process.pid or Path(ready['data_dir']).resolve() != run/'data' or not ready['isolation_verified']:
+                     raise RuntimeError('Isolation attestation mismatch')
+                 base = f"http://127.0.0.1:{ready['port']}"
+diff --git a/tools/playtest/worker.py b/tools/playtest/worker.py
+index c70b864b..376f2aa6 100644
+--- a/tools/playtest/worker.py
++++ b/tools/playtest/worker.py
+@@ -86,6 +86,13 @@ def install_transport(case, gameplay=False):
+         if case == 'exception' or (case == 'turn2_exception' and CURRENT_TURN == 2):
+             raise RuntimeError('Synthetic provider exception')
+         content = gameplay_fixture(CURRENT_TURN, (kwargs.get('text', {}).get('format', {}).get('name') == 'pr_dr_interpretation')) if gameplay and CURRENT_TURN else text
++        if case == 'success' and not (gameplay and CURRENT_TURN):
++            from game.opening_presentation_renderer import opening_renderer_mode, plan_selecting_required
++
++            if opening_renderer_mode() == 'enabled':
++                planned = plan_selecting_required(kwargs.get('input'))
++                if planned:
++                    content = planned
+         if case == 'turn3_invalid_json' and CURRENT_TURN == 3:
+             content = '{broken'
+         value = NS(output_text=content, id='synthetic-response', model=kwargs['model'],
+@@ -125,6 +132,7 @@ def main():
+         install_transport(cfg['fixture_response'], cfg['scenario_id'] == 'FiveTurnGameplay')
+     from game import api, gm, provider_budget as budget
+     from game.config import get_openai_api_key, DEFAULT_MODEL_NAME
++    from game.opening_presentation_renderer import opening_renderer_diagnostics
+     if cfg['mode'] == 'Live':
+         # Existence check only. Never dispatch connectivity probes.
+         if not get_openai_api_key().strip() or budget.provider_calls_disabled():
+@@ -144,6 +152,7 @@ def main():
+     write(diagnostics/'ready.json', {'pid': os.getpid(), 'port': sock.getsockname()[1],
+           'data_dir': str(st.DATA_DIR), 'isolation_verified': True,
+           'model': DEFAULT_MODEL_NAME, 'opening_output_allowance': gm._opening_max_output_tokens(),
++          'opening_renderer': opening_renderer_diagnostics(),
+           'limits': budget.limits(), 'sdk_retries': 0, 'host_retries': 0,
+           'diagnostics_enabled': budget.generation_diagnostics_enabled(),
+           'credentials_present': cfg['mode'] == 'Live', 'connectivity_diagnostics': False})

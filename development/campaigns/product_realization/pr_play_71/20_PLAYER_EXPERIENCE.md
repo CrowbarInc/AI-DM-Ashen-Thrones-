@@ -1,0 +1,5 @@
+# PLAYER EXPERIENCE
+
+New Campaign and Start Campaign are findable in Controls, although below the fold in a narrow viewport. Start gives a truthful Preparing opening… message. Opening provides situation and visible NPC/board actions. Notice-board discovery supplies a natural route, but the five-action suggestion cap can hide travel; supported chat successfully follows it. Old Milestone choices are clearly distinct and their authoritative consequences/follow-ups are explicit. Repeat investigation now says nothing new was established.
+
+Save Status explains auto-save; Save Slots exposes Create Snapshot/Load. Slot labels were essential because New Campaign replaces active runtime. Correct transcript reload matters for perceived continuity. Default UI can display bootstrap Start before async state is ready, and cached assets obscure upgrades; these are usability risks. Some narration says frontier gate rather than Cinderwatch Gate District. Narrow/scaled screenshots and incomplete exact startup timings limit UX conclusions. This remains a narrowly authored RPG sequence, not open-world player initiative.

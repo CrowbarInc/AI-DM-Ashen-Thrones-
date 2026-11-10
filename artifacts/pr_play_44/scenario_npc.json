@@ -1,0 +1,294 @@
+{
+  "campaign": {
+    "title": "Ashen Thrones"
+  },
+  "character": {
+    "id": "galinor",
+    "name": "Galinor",
+    "class": "Wizard",
+    "level": 1,
+    "ancestry": "Human",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "ac": {
+      "normal": 12,
+      "touch": 12,
+      "flat_footed": 10
+    },
+    "initiative_bonus": 2,
+    "speed": 30,
+    "bab": 0,
+    "cmb": 0,
+    "cmd": 12,
+    "ability_scores": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 18,
+      "wis": 12,
+      "cha": 10
+    },
+    "saves": {
+      "fort": 1,
+      "ref": 2,
+      "will": 3
+    },
+    "attacks": [
+      {
+        "id": "quarterstaff",
+        "name": "Quarterstaff",
+        "attack_bonus": 0,
+        "type": "melee",
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 6,
+          "bonus": 0,
+          "type": "bludgeoning"
+        }
+      },
+      {
+        "id": "crossbow",
+        "name": "Light Crossbow",
+        "attack_bonus": 2,
+        "type": "ranged",
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 8,
+          "bonus": 0,
+          "type": "piercing"
+        }
+      }
+    ],
+    "conditions": [],
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "skills": {
+      "knowledge_arcana": 8,
+      "spellcraft": 8,
+      "perception": 4,
+      "sense_motive": 4,
+      "stealth": 4,
+      "diplomacy": 4,
+      "intimidate": 2,
+      "bluff": 2
+    }
+  },
+  "session": {
+    "session_id": "22aa7a4cd1bcf378314f9b7c",
+    "campaign_run_id": "22aa7a4cd1bcf378314f9b7c",
+    "active_scene_id": "salt_market",
+    "character_name": "Galinor",
+    "response_mode": "standard",
+    "campaign_started": true,
+    "turn_counter": 1,
+    "visited_scene_ids": [
+      "salt_market"
+    ]
+  },
+  "scene": {
+    "scene": {
+      "id": "salt_market",
+      "location": "Salt Market",
+      "summary": "Stalls crowd a muddy square.",
+      "visible_facts": [
+        "Mira the merchant trades rumors from a blue stall."
+      ]
+    }
+  },
+  "combat": {
+    "in_combat": false,
+    "round": 0,
+    "active_actor_id": "",
+    "player_turn_used": false
+  },
+  "ui": {
+    "player_can_act": true,
+    "campaign_started": true,
+    "campaign_can_start": false,
+    "living_enemies": [],
+    "scene_ids": [
+      "salt_market"
+    ],
+    "affordances": [
+      {
+        "id": "question_mira_merchant",
+        "label": "Talk to Mira",
+        "type": "question",
+        "prompt": "I talk to Mira.",
+        "target_scene_id": "",
+        "target_id": "mira_merchant",
+        "target_location_id": ""
+      },
+      {
+        "id": "question_holt_smith",
+        "label": "Talk to Holt",
+        "type": "question",
+        "prompt": "I talk to Holt.",
+        "target_scene_id": "",
+        "target_id": "holt_smith",
+        "target_location_id": ""
+      },
+      {
+        "id": "question_sera_guard",
+        "label": "Talk to Sera",
+        "type": "question",
+        "prompt": "I talk to Sera.",
+        "target_scene_id": "",
+        "target_id": "sera_guard",
+        "target_location_id": ""
+      },
+      {
+        "id": "question_nell_page",
+        "label": "Talk to Nell",
+        "type": "question",
+        "prompt": "I talk to Nell.",
+        "target_scene_id": "",
+        "target_id": "nell_page",
+        "target_location_id": ""
+      },
+      {
+        "id": "market_notice",
+        "label": "Examine the Market notice",
+        "type": "investigate",
+        "prompt": "I examine the Market notice.",
+        "target_scene_id": "",
+        "target_id": "market_notice",
+        "target_location_id": ""
+      }
+    ],
+    "clues": {
+      "known": [
+        {
+          "text": "Mira heard the ferryman stops service at sunset because the mooring rope is frayed.",
+          "presentation": "explicit"
+        }
+      ],
+      "implicit": [],
+      "explicit": [
+        {
+          "text": "Mira heard the ferryman stops service at sunset because the mooring rope is frayed.",
+          "presentation": "explicit"
+        }
+      ],
+      "actionable": []
+    },
+    "scene_npcs": [
+      {
+        "id": "mira_merchant",
+        "name": "Mira",
+        "disposition": "neutral"
+      },
+      {
+        "id": "holt_smith",
+        "name": "Holt",
+        "disposition": "neutral"
+      },
+      {
+        "id": "sera_guard",
+        "name": "Sera",
+        "disposition": "neutral"
+      },
+      {
+        "id": "nell_page",
+        "name": "Nell",
+        "disposition": "neutral"
+      }
+    ],
+    "interaction": {
+      "active_interaction_target_id": "mira_merchant",
+      "active_interaction_target_name": "Mira",
+      "active_interaction_kind": "social",
+      "interaction_mode": "social"
+    }
+  },
+  "journal": {
+    "known_facts": [
+      "Mira the merchant trades rumors from a blue stall."
+    ],
+    "discovered_clues": [
+      "Mira heard the ferryman stops service at sunset because the mooring rope is frayed."
+    ],
+    "unresolved_leads": [
+      "Mira heard the ferryman stops service at sunset because the mooring rope is frayed."
+    ],
+    "status_effects": [],
+    "suspicion_flags": [],
+    "active_leads": [
+      {
+        "id": "social_salt_market_mira_merchant_ferry_news",
+        "title": "Mira heard the ferryman stops service at sunset because the mooring rope is frayed.",
+        "summary": "Mira heard the ferryman stops service at sunset because the mooring rope is frayed.",
+        "next_step": "",
+        "last_touched_turn": 1
+      }
+    ],
+    "pursued_leads": [],
+    "stale_leads": [],
+    "resolved_leads": [],
+    "obsolete_leads": [],
+    "lead_counts": {
+      "active": 1,
+      "pursued": 0,
+      "stale": 0,
+      "resolved": 0,
+      "obsolete": 0
+    }
+  },
+  "player_name": "Galinor",
+  "campaign_run_id": "22aa7a4cd1bcf378314f9b7c",
+  "save_summary": {
+    "saved_at": "2026-11-06T22:54:13.340631Z",
+    "save_data_exists": true,
+    "active_scene_id": "salt_market",
+    "discovered_clues": 1,
+    "chat_messages": 0
+  },
+  "snapshots": [],
+  "world": {},
+  "ok": true,
+  "gm_output": {
+    "player_facing_text": "Mira mutters, \"Word is, mira heard the ferryman stops service at sunset because the mooring rope is frayed.\""
+  },
+  "resolution": {}
+}

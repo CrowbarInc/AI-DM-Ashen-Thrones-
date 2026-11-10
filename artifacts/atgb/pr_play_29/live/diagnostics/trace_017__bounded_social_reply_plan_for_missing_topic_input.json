@@ -1,0 +1,42 @@
+{
+  "function": "game.social._bounded_social_reply_plan_for_missing_topic",
+  "args": [],
+  "kwargs": {
+    "action_type": "question",
+    "player_text": "I approach the tavern runner and ask what they're offering.",
+    "npc": {
+      "id": "tavern_runner",
+      "name": "Tavern Runner",
+      "location": "frontier_gate",
+      "aliases": [
+        "runner",
+        "tavern runner"
+      ],
+      "topics": [
+        {
+          "id": "patrol_rumor",
+          "discovery_categories": [
+            "rumor"
+          ],
+          "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "clue_id": "muddy_footprints_northwest"
+        }
+      ],
+      "role": "",
+      "affiliation": "",
+      "availability": "available",
+      "current_agenda": "sell_rumors",
+      "disposition": "friendly",
+      "stance_toward_player": "neutral",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "frontier_gate",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    "topic_revealed": false
+  }
+}

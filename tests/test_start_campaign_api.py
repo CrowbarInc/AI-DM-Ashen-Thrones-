@@ -159,6 +159,7 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
         assert data.get("ui", {}).get("campaign_can_start") is False
         response_text = str(data.get("gm_output", {}).get("player_facing_text") or "")
         response_debug = ((data.get("gm_output") or {}).get("metadata") or {}).get("emission_debug") or {}
+        assert response_debug == {}  # Diagnostics remain on the debug log lane.
         log_reload_entries = client.get("/api/log?ui_mode=debug").json().get("entries") or []
 
     entries = load_log()
@@ -208,7 +209,6 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
         "canonical_gm_object_id",
     ):
         assert field in reload_debug
-        assert field in response_debug
     assert emission_debug.get("opening_curated_facts_present") is True
     assert emission_debug.get("opening_curated_facts_count", 0) > 0
     assert emission_debug.get("opening_curated_facts_source") in {"selector", "realization"}

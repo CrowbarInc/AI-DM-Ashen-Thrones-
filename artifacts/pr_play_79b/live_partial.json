@@ -1,0 +1,1297 @@
+{
+  "campaign": "integrated",
+  "transcript": [
+    {
+      "input": "[start_campaign]",
+      "provenance": "campaign start, not a gameplay utterance",
+      "elapsed_ms": 12222.3,
+      "player_facing_text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and paid rumor. You can read the notice board, press the guards, or approach the tavern runner.",
+      "after": {
+        "scene": "frontier_gate"
+      },
+      "usage": {
+        "requests": 1,
+        "tokens": 26956,
+        "input_tokens": 25294,
+        "output_tokens": 1662
+      }
+    },
+    {
+      "input": "Hello, Gate Guard.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 3235.8,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {},
+        "focus": null
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {},
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "Hello, Gate Guard.",
+          "last_npc_response": "Gate Guard says, \"Hello there, just keeping an eye on the notice board and making sure everyone follows the rules.\""
+        }
+      },
+      "player_facing_text": "The Gate Guard stands by the notice board, watching it carefully and ensuring that everyone obeys the rules.",
+      "dialogue_adopted": true,
+      "dialogue_published": false,
+      "dialogue_text": "Hello there, just keeping an eye on the notice board and making sure everyone follows the rules.",
+      "dialogue_reasons": [],
+      "narration_adopted": true,
+      "narration_published": true,
+      "narration_text": "The Gate Guard stands by the notice board, watching it carefully and ensuring that everyone obeys the rules.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "95c8cc6abc104e3291912b818745d530",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:24.707225+00:00",
+          "time": "2026-11-08T03:55:26.253013+00:00",
+          "sent": true,
+          "request_id": "resp_0f01baf34794b427006aeff2ae33f087d2ae3319e4e9de63d9",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 238,
+          "output_tokens": 20,
+          "total_tokens": 258,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1177.3
+        },
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "2754495c0a974b42b5e7eeb184c759ba",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:26.256731+00:00",
+          "time": "2026-11-08T03:55:27.561317+00:00",
+          "sent": true,
+          "request_id": "resp_049ad08a722a1d99006aeff2afc05087d28c3245462d5265fe",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 76,
+          "output_tokens": 22,
+          "total_tokens": 98,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 942.606
+        }
+      ],
+      "usage": {
+        "requests": 3,
+        "tokens": 27312,
+        "input_tokens": 25608,
+        "output_tokens": 1704
+      }
+    },
+    {
+      "input": "Who are you?",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 2870.6,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {},
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "Who are you?",
+          "last_npc_response": "Gate Guard says, \"I'm Gate Guard, just an ordinary person in plain clothes, keeping watch by the gate and making sure everything's in order.\""
+        }
+      },
+      "player_facing_text": "The Gate Guard stands by the gate, dressed in plain clothes. He watches carefully, ensuring that everything is in order. He introduces himself as Gate Guard, describing himself as just an ordinary person.",
+      "dialogue_adopted": true,
+      "dialogue_published": false,
+      "dialogue_text": "I'm Gate Guard, just an ordinary person in plain clothes, keeping watch by the gate and making sure everything's in order.",
+      "dialogue_reasons": [],
+      "narration_adopted": true,
+      "narration_published": true,
+      "narration_text": "The Gate Guard stands by the gate, dressed in plain clothes. He watches carefully, ensuring that everything is in order. He introduces himself as Gate Guard, describing himself as just an ordinary person.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "77c197082d7f44d695f79505d27e6d64",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:27.942208+00:00",
+          "time": "2026-11-08T03:55:28.989633+00:00",
+          "sent": true,
+          "request_id": "resp_0d1c456bbd1d0b2d006aeff2b16c6c87d2b1b2f4cd6528bc9e",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 267,
+          "output_tokens": 26,
+          "total_tokens": 293,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 697.32
+        },
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "0bf66947dcd949d4beda87d6c508c92a",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:28.994154+00:00",
+          "time": "2026-11-08T03:55:30.350733+00:00",
+          "sent": true,
+          "request_id": "resp_0076e3dad8562371006aeff2b27ba087d2a16b9fa567d781f7",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 82,
+          "output_tokens": 40,
+          "total_tokens": 122,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1002.859
+        }
+      ],
+      "usage": {
+        "requests": 5,
+        "tokens": 27727,
+        "input_tokens": 25957,
+        "output_tokens": 1770
+      }
+    },
+    {
+      "input": "What do you know about the missing patrol?",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 2743.8,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What do you know about the missing patrol?",
+          "last_npc_response": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\""
+        }
+      },
+      "player_facing_text": "The Gate Guard points to the notice board and says, \"It shows the taxes, the curfew rules, and a warning about a missing patrol. Those are the only things you can see here. I don't know anything beyond that.\"",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": [
+        "uncertainty_required"
+      ],
+      "narration_adopted": true,
+      "narration_published": true,
+      "narration_text": "The Gate Guard points to the notice board and says, \"It shows the taxes, the curfew rules, and a warning about a missing patrol. Those are the only things you can see here. I don't know anything beyond that.\"",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "bad202bdb7544bc7b3e67ef38682ef9a",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:30.823245+00:00",
+          "time": "2026-11-08T03:55:31.861010+00:00",
+          "sent": true,
+          "request_id": "resp_029aad496b2afd99006aeff2b446dc87d2b7fba037efcc9014",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 316,
+          "output_tokens": 28,
+          "total_tokens": 344,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 703.287
+        },
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "6218d18710964e6ca6a87911a33af46e",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:31.866410+00:00",
+          "time": "2026-11-08T03:55:33.186386+00:00",
+          "sent": true,
+          "request_id": "resp_0807336befc3a8c3006aeff2b5582487d2a6ccefcce181a832",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 90,
+          "output_tokens": 48,
+          "total_tokens": 138,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 930.141
+        }
+      ],
+      "usage": {
+        "requests": 7,
+        "tokens": 28209,
+        "input_tokens": 26363,
+        "output_tokens": 1846
+      }
+    },
+    {
+      "input": "When did you last hear about them?",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 2568.5,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "When did you last hear about them?",
+          "last_npc_response": "Gate Guard says, \"I\u2019m not sure when I last heard about them; all I see here is the notice board with taxes, curfew rules, and a warning about a missing patrol.\""
+        }
+      },
+      "player_facing_text": "The Gate Guard says he doesn\u2019t remember the last time he heard anything about them. He points to the notice board nearby, which displays information about taxes, curfew rules, and a warning about a missing patrol.",
+      "dialogue_adopted": true,
+      "dialogue_published": false,
+      "dialogue_text": "I\u2019m not sure when I last heard about them; all I see here is the notice board with taxes, curfew rules, and a warning about a missing patrol.",
+      "dialogue_reasons": [],
+      "narration_adopted": true,
+      "narration_published": true,
+      "narration_text": "The Gate Guard says he doesn\u2019t remember the last time he heard anything about them. He points to the notice board nearby, which displays information about taxes, curfew rules, and a warning about a missing patrol.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "e25f4d1281a44b7495acecb5c7eb3f3e",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:33.581562+00:00",
+          "time": "2026-11-08T03:55:34.626343+00:00",
+          "sent": true,
+          "request_id": "resp_01964ea873991408006aeff2b70fa487d286b76f58a2b33806",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 336,
+          "output_tokens": 35,
+          "total_tokens": 371,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 677.512
+        },
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "aa508ba131c647a7ab51327854ad18e5",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:34.630439+00:00",
+          "time": "2026-11-08T03:55:35.769955+00:00",
+          "sent": true,
+          "request_id": "resp_0b3cecf8ca173bd8006aeff2b8226c87d2b7586edb1d5f53a7",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 91,
+          "output_tokens": 44,
+          "total_tokens": 135,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 741.171
+        }
+      ],
+      "usage": {
+        "requests": 9,
+        "tokens": 28715,
+        "input_tokens": 26790,
+        "output_tokens": 1925
+      }
+    },
+    {
+      "input": "Do you think something happened?",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 2897.6,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "Do you think something happened?",
+          "last_npc_response": "Gate Guard says, \"I\u2019m not sure if anything happened; all I see is the notice board with taxes, curfew rules, and a warning about a missing patrol.\""
+        }
+      },
+      "player_facing_text": "The Gate Guard looks uncertain as he speaks. He glances around, then points toward the notice board. On it, there are posted papers detailing taxes, curfew rules, and a warning about a missing patrol.",
+      "dialogue_adopted": true,
+      "dialogue_published": false,
+      "dialogue_text": "I\u2019m not sure if anything happened; all I see is the notice board with taxes, curfew rules, and a warning about a missing patrol.",
+      "dialogue_reasons": [],
+      "narration_adopted": true,
+      "narration_published": true,
+      "narration_text": "The Gate Guard looks uncertain as he speaks. He glances around, then points toward the notice board. On it, there are posted papers detailing taxes, curfew rules, and a warning about a missing patrol.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "37e421a530c24e7d8a3696afc0d4cc72",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:36.168794+00:00",
+          "time": "2026-11-08T03:55:37.486596+00:00",
+          "sent": true,
+          "request_id": "resp_067c891390ec60fd006aeff2b9a5e887d2b9bd4df5abcdc656",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 336,
+          "output_tokens": 31,
+          "total_tokens": 367,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 964.691
+        },
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "be26bdb091f04ab192c65baa2204bcdc",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:37.491476+00:00",
+          "time": "2026-11-08T03:55:38.602451+00:00",
+          "sent": true,
+          "request_id": "resp_030bb03cbed1de7a006aeff2bafc0c87d2aadafcfe569a36e5",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 87,
+          "output_tokens": 44,
+          "total_tokens": 131,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 739.075
+        }
+      ],
+      "usage": {
+        "requests": 11,
+        "tokens": 29213,
+        "input_tokens": 27213,
+        "output_tokens": 2000
+      }
+    },
+    {
+      "input": "What is this place like?",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 3557.5,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What is this place like?",
+          "last_npc_response": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\""
+        }
+      },
+      "player_facing_text": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\"",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": [
+        "uncertainty_required"
+      ],
+      "narration_adopted": true,
+      "narration_published": false,
+      "narration_text": "The Gate Guard looks uncertain as he speaks. He glances around, then points toward the notice board. On it, there are posted papers detailing taxes, curfew rules, and a warning about a missing patrol.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "320f72cc3e634327b498041b84389d1d",
+          "purpose": "contract_interpretation",
+          "owner": "semantic_interpreter._invoke_interpretation_model",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:39.068269+00:00",
+          "time": "2026-11-08T03:55:40.733108+00:00",
+          "sent": true,
+          "request_id": "resp_01405d0663c0dda5006aeff2bc90c487d2ba3d787536db5e0d",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 1136,
+          "output_tokens": 128,
+          "total_tokens": 1264,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1302.952
+        },
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "ff2d4859791448dfb6fe25af2e0ebdf8",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:40.741413+00:00",
+          "time": "2026-11-08T03:55:42.225907+00:00",
+          "sent": true,
+          "request_id": "resp_06c0197b98010bc5006aeff2be41b887d2b9df7a322ef2262e",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 318,
+          "output_tokens": 37,
+          "total_tokens": 355,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1115.451
+        }
+      ],
+      "usage": {
+        "requests": 13,
+        "tokens": 30832,
+        "input_tokens": 28667,
+        "output_tokens": 2165
+      }
+    },
+    {
+      "input": "What about the patrol again?",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 3275.0,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What about the patrol again?",
+          "last_npc_response": "Gate Guard says, \"The notice board mentions a warning about a missing patrol, but that's all I can tell you from here.\""
+        }
+      },
+      "player_facing_text": "The Gate Guard stands by and says, \"The notice board mentions a warning about a missing patrol, but that's all I can tell you from here.\"",
+      "dialogue_adopted": true,
+      "dialogue_published": true,
+      "dialogue_text": "The notice board mentions a warning about a missing patrol, but that's all I can tell you from here.",
+      "dialogue_reasons": [],
+      "narration_adopted": true,
+      "narration_published": true,
+      "narration_text": "The Gate Guard stands by and says, \"The notice board mentions a warning about a missing patrol, but that's all I can tell you from here.\"",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "911e3e07702c4e6baf3f8eb5625609b9",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:42.653018+00:00",
+          "time": "2026-11-08T03:55:43.871221+00:00",
+          "sent": true,
+          "request_id": "resp_082a65e5d65573bd006aeff2c01d1c87d2a527d6a0b71d8680",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 304,
+          "output_tokens": 22,
+          "total_tokens": 326,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 870.734
+        },
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "6286b9972b7149be92ec695c90bc93b5",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:43.875263+00:00",
+          "time": "2026-11-08T03:55:45.479711+00:00",
+          "sent": true,
+          "request_id": "resp_0c6e0f165c5f0f99006aeff2c15c4887d2bc3413f5b7ede044",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 78,
+          "output_tokens": 31,
+          "total_tokens": 109,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1258.019
+        }
+      ],
+      "usage": {
+        "requests": 15,
+        "tokens": 31267,
+        "input_tokens": 29049,
+        "output_tokens": 2218
+      }
+    },
+    {
+      "input": "I look at the notice board.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 2043.6,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What about the patrol again?",
+          "last_npc_response": "Gate Guard says, \"The notice board mentions a warning about a missing patrol, but that's all I can tell you from here.\""
+        }
+      },
+      "player_facing_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "dialogue_adopted": true,
+      "dialogue_published": false,
+      "dialogue_text": "The notice board mentions a warning about a missing patrol, but that's all I can tell you from here.",
+      "dialogue_reasons": [],
+      "narration_adopted": true,
+      "narration_published": false,
+      "narration_text": "The Gate Guard stands by and says, \"The notice board mentions a warning about a missing patrol, but that's all I can tell you from here.\"",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "75f6d53a129d4f36ad5a88ee95ef31d7",
+          "purpose": "contract_interpretation",
+          "owner": "semantic_interpreter._invoke_interpretation_model",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:45.990588+00:00",
+          "time": "2026-11-08T03:55:47.565874+00:00",
+          "sent": true,
+          "request_id": "resp_02593d42b4f5dc7e006aeff2c37ac087d2904021ee2fe45553",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 1135,
+          "output_tokens": 107,
+          "total_tokens": 1242,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1197.121
+        }
+      ],
+      "usage": {
+        "requests": 16,
+        "tokens": 32509,
+        "input_tokens": 30184,
+        "output_tokens": 2325
+      }
+    },
+    {
+      "input": "What do you know about the missing patrol?",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 3396.6,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What do you know about the missing patrol?",
+          "last_npc_response": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\""
+        }
+      },
+      "player_facing_text": "The gate guard points to the notice board and says that it displays information about taxes, curfew rules, and a warning about a missing patrol. He adds that these are the only things visible on the board and that he does not have any knowledge beyond what is written there.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": [
+        "uncertainty_required"
+      ],
+      "narration_adopted": true,
+      "narration_published": true,
+      "narration_text": "The gate guard points to the notice board and says that it displays information about taxes, curfew rules, and a warning about a missing patrol. He adds that these are the only things visible on the board and that he does not have any knowledge beyond what is written there.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "a4002a9c244c4c32be3a48182f3fb4ca",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:48.018565+00:00",
+          "time": "2026-11-08T03:55:49.323397+00:00",
+          "sent": true,
+          "request_id": "resp_0e621250344026ea006aeff2c5939487d2b000d9e83a6c8e7b",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 312,
+          "output_tokens": 21,
+          "total_tokens": 333,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 856.981
+        },
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "7c48afa60bd04adda0a2e9a5eac0f59b",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:49.327632+00:00",
+          "time": "2026-11-08T03:55:50.923166+00:00",
+          "sent": true,
+          "request_id": "resp_0ea639385fe811c3006aeff2c6d4fc87d2bd902881e5720de5",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 90,
+          "output_tokens": 56,
+          "total_tokens": 146,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1245.783
+        }
+      ],
+      "usage": {
+        "requests": 18,
+        "tokens": 32988,
+        "input_tokens": 30586,
+        "output_tokens": 2402
+      }
+    },
+    {
+      "input": "I examine the notice board.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 1895.8,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What do you know about the missing patrol?",
+          "last_npc_response": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\""
+        }
+      },
+      "player_facing_text": "The examination adds nothing new to what you already know.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": [
+        "uncertainty_required"
+      ],
+      "narration_adopted": true,
+      "narration_published": false,
+      "narration_text": "The gate guard points to the notice board and says that it displays information about taxes, curfew rules, and a warning about a missing patrol. He adds that these are the only things visible on the board and that he does not have any knowledge beyond what is written there.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "f13b801137ba4783ae40359a44491b7a",
+          "purpose": "contract_interpretation",
+          "owner": "semantic_interpreter._invoke_interpretation_model",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:51.428501+00:00",
+          "time": "2026-11-08T03:55:52.913437+00:00",
+          "sent": true,
+          "request_id": "resp_0077d515696b2f7a006aeff2c8ef2087d2a8892505fb8ce402",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 1110,
+          "output_tokens": 104,
+          "total_tokens": 1214,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1119.283
+        }
+      ],
+      "usage": {
+        "requests": 19,
+        "tokens": 34202,
+        "input_tokens": 31696,
+        "output_tokens": 2506
+      }
+    },
+    {
+      "input": "I follow the missing patrol rumor.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 403.6,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What do you know about the missing patrol?",
+          "last_npc_response": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\""
+        }
+      },
+      "player_facing_text": "You arrive at Old Milestone.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": [
+        "uncertainty_required"
+      ],
+      "narration_adopted": true,
+      "narration_published": false,
+      "narration_text": "The gate guard points to the notice board and says that it displays information about taxes, curfew rules, and a warning about a missing patrol. He adds that these are the only things visible on the board and that he does not have any knowledge beyond what is written there.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [],
+      "usage": {
+        "requests": 19,
+        "tokens": 34202,
+        "input_tokens": 31696,
+        "output_tokens": 2506
+      }
+    },
+    {
+      "input": "I examine the weathered milestone.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 550.5,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What do you know about the missing patrol?",
+          "last_npc_response": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\""
+        }
+      },
+      "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": [
+        "uncertainty_required"
+      ],
+      "narration_adopted": true,
+      "narration_published": false,
+      "narration_text": "The gate guard points to the notice board and says that it displays information about taxes, curfew rules, and a warning about a missing patrol. He adds that these are the only things visible on the board and that he does not have any knowledge beyond what is written there.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [],
+      "usage": {
+        "requests": 19,
+        "tokens": 34202,
+        "input_tokens": 31696,
+        "output_tokens": 2506
+      }
+    },
+    {
+      "input": "I look at the mud prints.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 411.8,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What do you know about the missing patrol?",
+          "last_npc_response": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\""
+        }
+      },
+      "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": [
+        "uncertainty_required"
+      ],
+      "narration_adopted": true,
+      "narration_published": false,
+      "narration_text": "The gate guard points to the notice board and says that it displays information about taxes, curfew rules, and a warning about a missing patrol. He adds that these are the only things visible on the board and that he does not have any knowledge beyond what is written there.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [],
+      "usage": {
+        "requests": 19,
+        "tokens": 34202,
+        "input_tokens": 31696,
+        "output_tokens": 2506
+      }
+    },
+    {
+      "input": "Look around.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 1608.8,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What do you know about the missing patrol?",
+          "last_npc_response": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\""
+        }
+      },
+      "player_facing_text": "You look around. Beside the northwest mud track, a weathered stone milestone leans slightly. The mud near the marker is disturbed, showing faint overlapping footprints that gradually disappear into the scrub. The track stretches a short distance beyond the stone before rainwater and thick brush obscure the path ahead.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": [
+        "uncertainty_required"
+      ],
+      "narration_adopted": true,
+      "narration_published": true,
+      "narration_text": "You look around. Beside the northwest mud track, a weathered stone milestone leans slightly. The mud near the marker is disturbed, showing faint overlapping footprints that gradually disappear into the scrub. The track stretches a short distance beyond the stone before rainwater and thick brush obscure the path ahead.",
+      "narration_reasons": [],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "4c5abae2d25346cabc2dca38ddae8147",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:54.722768+00:00",
+          "time": "2026-11-08T03:55:55.925011+00:00",
+          "sent": true,
+          "request_id": "resp_06b4dbc9af1ff2e2006aeff2cc2c9487d297b34b14d2c1ff29",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 107,
+          "output_tokens": 60,
+          "total_tokens": 167,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 857.327
+        }
+      ],
+      "usage": {
+        "requests": 20,
+        "tokens": 34369,
+        "input_tokens": 31803,
+        "output_tokens": 2566
+      }
+    },
+    {
+      "input": "I step back from the milestone.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 1294.8,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What do you know about the missing patrol?",
+          "last_npc_response": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\""
+        }
+      },
+      "player_facing_text": "You are not up against anything here.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": [
+        "uncertainty_required"
+      ],
+      "narration_adopted": false,
+      "narration_published": false,
+      "narration_text": "",
+      "narration_reasons": [
+        "irrelevant"
+      ],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "244b7145d1f247f1a9c7aa475d0653f5",
+          "purpose": "expression",
+          "owner": "expressive_dialogue.request_expression",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:56.352638+00:00",
+          "time": "2026-11-08T03:55:57.266670+00:00",
+          "sent": true,
+          "request_id": "resp_0ccb4ab8c3b2f631006aeff2cdd16487d29110e6a2b164a677",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 60,
+          "output_tokens": 10,
+          "total_tokens": 70,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 571.141
+        }
+      ],
+      "usage": {
+        "requests": 21,
+        "tokens": 34439,
+        "input_tokens": 31863,
+        "output_tokens": 2576
+      }
+    },
+    {
+      "input": "I look around the milestone.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 2474.4,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard"
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": "gate_guard",
+        "interlocutor": {
+          "npc_id": "gate_guard",
+          "scene_id": "frontier_gate",
+          "campaign_id": "1dce3ea668e36eab24ac2719",
+          "status": "active",
+          "last_player_utterance": "What do you know about the missing patrol?",
+          "last_npc_response": "Gate Guard says, \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. That is what is in view. I do not know anything beyond it.\""
+        }
+      },
+      "player_facing_text": "The examination adds nothing new to what you already know.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": [
+        "uncertainty_required"
+      ],
+      "narration_adopted": false,
+      "narration_published": false,
+      "narration_text": "",
+      "narration_reasons": [
+        "irrelevant"
+      ],
+      "clarification": false,
+      "authored_interception": false,
+      "new_provider_calls": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "6c2d36967de64e53ba02a701786f170e",
+          "attempt_id": "d24e9c36440d45a9b04de7b3c2af259f",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-08T03:55:57.671348+00:00",
+          "time": "2026-11-08T03:55:59.753074+00:00",
+          "sent": true,
+          "request_id": "resp_0751432da7e46f9c006aeff2cf259c87d290c9725eeaa223f1",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2369,
+          "output_tokens": 198,
+          "total_tokens": 2567,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 1749.237
+        }
+      ],
+      "usage": {
+        "requests": 22,
+        "tokens": 37006,
+        "input_tokens": 34232,
+        "output_tokens": 2774
+      }
+    }
+  ],
+  "usage": {
+    "requests": 22,
+    "tokens": 37006,
+    "input_tokens": 34232,
+    "output_tokens": 2774
+  }
+}

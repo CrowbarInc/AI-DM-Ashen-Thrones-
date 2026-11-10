@@ -1,0 +1,49 @@
+{
+  "verdict": "A",
+  "provider_requests": 0,
+  "provider_tokens": 0,
+  "live_gameplay_turns": 0,
+  "provider_isolation": "ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT=1",
+  "interpretation": "stubbed from captured PR-PLAY-41 records",
+  "narration": "call_gpt stubbed; expression generation disabled",
+  "resolvers": "production social and exploration functions",
+  "opening_state": "artifacts/atgb/pr_play_41/live/20261102T110016Z-47c71d381798/turns/T1/before/persistent",
+  "rumor": {
+    "npc": "tavern_runner",
+    "topic": "patrol_rumor",
+    "social_resolver": true,
+    "scene": "frontier_gate"
+  },
+  "notice_board": {
+    "target": "notice_board",
+    "clue": "notice_patrol_route",
+    "exploration_resolver": true,
+    "person_clarification": false
+  },
+  "travel": {
+    "exit": "leave_for_follow_the_missing_patrol_rumor",
+    "destination": "old_milestone",
+    "exploration_resolver": true,
+    "person_clarification": false
+  },
+  "footprints": {
+    "target": "prints",
+    "clue": "milestone_mud_prints",
+    "scene": "old_milestone"
+  },
+  "sequence_clock": {
+    "time_pressure_before": 1,
+    "time_pressure_after": 5,
+    "resolved_turns_that_advance_time": 4,
+    "turn_counter_before": 1,
+    "turn_counter_after": 5
+  },
+  "pytest": {
+    "command": "python -m pytest tests/test_pr_play_42_evidence_boundaries.py tests/test_pr_play_39_action_admission.py tests/test_pr_play_40_scenario_generalization.py tests/test_atgb_r2_02_speech_participant_grounding.py tests/test_stay_leave_social_lock_override.py tests/test_generalized_destination_exit_resolution.py tests/test_pr_play_37_opening_recovery.py tests/test_start_campaign_api.py tests/test_pr_cp_authorized_finalization.py tests/test_explicit_world_action_social_lock_override.py --tb=no -q",
+    "passed": 178,
+    "failed": 15,
+    "skipped": 0,
+    "new_pr_play_42_tests": 12,
+    "new_failures_from_this_repair": 0
+  }
+}

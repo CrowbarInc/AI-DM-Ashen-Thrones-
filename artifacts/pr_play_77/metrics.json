@@ -1,0 +1,45 @@
+{
+  "verdict": "B/PARTIAL",
+  "head": "d40f1ed198236c604085f1c842ead267a8104ce2",
+  "branch": "feature/product-realization",
+  "protected_files": {"compared": 150, "changed": 0, "missing": 0},
+  "development_tests": {"file": "tests/test_pr_play_77_multistep.py", "passed": 120, "failed": 0},
+  "frozen_holdout": {
+    "cases": 110,
+    "passed": 106,
+    "failed": 4,
+    "hash": "556191b095698ead786b1feb9860ffd86c93f957378418ad7e7d302cae3d5fad",
+    "failures": ["H017", "H068", "H073", "H089"],
+    "multi_turn": 70,
+    "save_resume": 20
+  },
+  "http": {"campaigns": 2, "turns": 10, "mean_ms": 364.25, "median_ms": 175.2, "max_ms": 908.1},
+  "browser": {
+    "campaigns": 2,
+    "chat_requests": 19,
+    "chat_mean_ms": 551.42,
+    "chat_median_ms": 424.55,
+    "chat_max_ms": 1683.87,
+    "action_requests": 4,
+    "paint_ms": null
+  },
+  "provider": {
+    "requests": 4,
+    "tokens": 1037,
+    "retries": 0,
+    "accepted": 1,
+    "rejected": 3,
+    "committed_by_provider": false,
+    "latencies_ms": [2253.155, 1478.815, 834.927, 1254.833]
+  },
+  "regression": {
+    "focused": [1065, 20],
+    "boundary": [101, 6],
+    "broader": [0, 9],
+    "lifecycle": [39, 0],
+    "new_failure_identities": 0
+  },
+  "hidden_information_exposures": 0,
+  "mandatory_disclosure_omissions": 0,
+  "critical_unsafe_publications": 0
+}

@@ -1,0 +1,47 @@
+{
+  "baseline_counts": {
+    "passed": 531,
+    "failed": 26,
+    "skipped": 0
+  },
+  "final_counts": {
+    "passed": 592,
+    "failed": 23,
+    "skipped": 0
+  },
+  "new_regressions": [],
+  "baseline_failed_now_passing": [
+    "tests.test_pr_play_37_opening_recovery::test_valid_ai_opening_does_not_call_the_composer",
+    "tests.test_pr_play_44_information_delivery::test_contradictory_discovery_draft_falls_back_without_losing_information",
+    "tests.test_pr_play_44_information_delivery::test_legacy_narrator_context_excludes_hidden_information"
+  ],
+  "repaired_original_contract_failures": [
+    "tests.test_pr_play_44_information_delivery::test_contradictory_discovery_draft_falls_back_without_losing_information",
+    "tests.test_pr_play_44_information_delivery::test_legacy_narrator_context_excludes_hidden_information"
+  ],
+  "carried_forward_failures": [
+    "tests.test_pr_cp_authorized_finalization::test_preference_gesture_is_not_an_undeclared_world_fact",
+    "tests.test_pr_cp_authorized_finalization::test_authored_patrol_sentence_survives_and_extras_do_not",
+    "tests.test_pr_cp_authorized_finalization::test_pr_cq_patrol_invalid_first_generation_projects_without_regeneration",
+    "tests.test_exploration_resolution::test_chat_quarterstaff_attack_mechanical_resolution_absent",
+    "tests.test_exploration_resolution::test_chat_observe_area_resolution_kwarg_to_build_messages",
+    "tests.test_exploration_resolution::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution",
+    "tests.test_exploration_resolution::test_chat_exploration_parsed_routes_through_exploration",
+    "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+    "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+    "tests.test_unresolved_travel_narration_authority::test_valid_authored_transition_mutates_scene",
+    "tests.test_unresolved_travel_narration_authority::test_unknown_destination_does_not_change_scene_or_imply_arrival",
+    "tests.test_unresolved_travel_narration_authority::test_http_historical_t6_does_not_narrate_departure",
+    "tests.test_generalized_destination_exit_resolution::test_http_unresolved_unavailable_place_does_not_move",
+    "tests.test_stay_leave_social_lock_override::test_http_pursuit_while_socially_engaged_leaves_the_gate",
+    "tests.test_stay_leave_social_lock_override::test_http_explicit_leave_overrides_dialogue_lock",
+    "tests.test_stay_leave_social_lock_override::test_http_explicit_stay_does_not_enter_cinderwatch",
+    "tests.test_stay_leave_social_lock_override::test_http_unavailable_travel_does_not_invent_house_verevin",
+    "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+    "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+    "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+    "tests.test_explicit_world_action_social_lock_override::test_http_class_b_visible_feature_is_not_swallowed_by_social",
+    "tests.test_explicit_world_action_social_lock_override::test_http_stale_topic_does_not_mutate_world_action",
+    "tests.test_explicit_world_action_social_lock_override::test_http_t13_glance_back_at_notice_board_is_world_action"
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "failures": [
+    {
+      "stage": "serialization",
+      "raised": true,
+      "before_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "after_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "old_character": {
+        "name": "Old",
+        "unknown": [
+          1,
+          null
+        ]
+      },
+      "temporary_files": [],
+      "replaced": false
+    },
+    {
+      "stage": "create",
+      "raised": true,
+      "before_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "after_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "old_character": {
+        "name": "Old",
+        "unknown": [
+          1,
+          null
+        ]
+      },
+      "temporary_files": [],
+      "replaced": false
+    },
+    {
+      "stage": "partial_write",
+      "raised": true,
+      "before_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "after_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "old_character": {
+        "name": "Old",
+        "unknown": [
+          1,
+          null
+        ]
+      },
+      "temporary_files": [],
+      "replaced": false
+    },
+    {
+      "stage": "flush",
+      "raised": true,
+      "before_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "after_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "old_character": {
+        "name": "Old",
+        "unknown": [
+          1,
+          null
+        ]
+      },
+      "temporary_files": [],
+      "replaced": false
+    },
+    {
+      "stage": "sync",
+      "raised": true,
+      "before_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "after_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "old_character": {
+        "name": "Old",
+        "unknown": [
+          1,
+          null
+        ]
+      },
+      "temporary_files": [],
+      "replaced": false
+    },
+    {
+      "stage": "replace",
+      "raised": true,
+      "before_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "after_sha256": "2dbf8a0be7157cee5d90229051664f66800d1f99a54b348b9bef24e46ee3d4d4",
+      "old_character": {
+        "name": "Old",
+        "unknown": [
+          1,
+          null
+        ]
+      },
+      "temporary_files": [],
+      "replaced": false
+    }
+  ],
+  "success": {
+    "before": {
+      "name": "Old",
+      "unknown": [
+        1,
+        null
+      ]
+    },
+    "reloaded": {
+      "name": "New caf\u00e9",
+      "unknown": {
+        "pf1": [
+          3
+        ],
+        "scifi": [
+          4
+        ]
+      }
+    },
+    "replacement_payloads": [
+      {
+        "name": "New caf\u00e9",
+        "unknown": {
+          "pf1": [
+            3
+          ],
+          "scifi": [
+            4
+          ]
+        }
+      }
+    ],
+    "permission_mode_preserved": true,
+    "same_directory": true,
+    "temporary_files": []
+  },
+  "postcommit": [
+    {
+      "stage": "open_directory",
+      "replaced": true,
+      "directory_synchronized": false,
+      "committed_character": {
+        "name": "Committed"
+      }
+    },
+    {
+      "stage": "sync_directory",
+      "replaced": true,
+      "directory_synchronized": false,
+      "committed_character": {
+        "name": "Committed"
+      }
+    }
+  ],
+  "commit_boundary": "successful os.replace",
+  "directory_sync_on_windows": false
+}

@@ -1,0 +1,62 @@
+{
+  "function": "game.dialogue_authority.build_dialogue_authority",
+  "result": {
+    "topic_grounding": {
+      "speaker_id": "tavern_runner",
+      "addressee": "player",
+      "requested_subject": "sort heard",
+      "requested_information": "rumor",
+      "reference": "current_request",
+      "candidate_sources": [
+        "npc:tavern_runner:patrol_rumor"
+      ],
+      "selected_source": "npc:tavern_runner:patrol_rumor",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "requested_information": "rumor",
+    "subject": "sort heard",
+    "knowledge_posture": "established",
+    "answer_relation": "sufficient",
+    "answer_sufficiency": "directly_answers",
+    "proposition_id": "topic:tavern_runner:patrol_rumor",
+    "authorized_proposition": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+    "public_fact_selection": {
+      "candidate_sources": [],
+      "selected_source": "",
+      "reason": "no_safe_match"
+    },
+    "public_fact_source": null,
+    "improvisation_permitted": false,
+    "improvisation_scope": "none",
+    "narration_determined": false,
+    "player_line": "",
+    "canonical": false,
+    "npc_id": "tavern_runner",
+    "npc_name": "Tavern Runner",
+    "npc_role": "",
+    "npc_disposition": "friendly",
+    "prohibited_claims": [
+      "consequential_world_fact",
+      "hidden_disclosure",
+      "mechanical_change",
+      "new_obligation",
+      "invented_answer"
+    ],
+    "prior_commitments": [],
+    "reconciled_plan": "authoritative_answer_available",
+    "reuse_prior_speech": false,
+    "authorization_provenance": {
+      "authority_category": "world_source",
+      "speaker_id": "tavern_runner",
+      "addressee": "player",
+      "operation": "disclose",
+      "authorized_proposition": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+      "source_id": "npc:tavern_runner:patrol_rumor",
+      "epistemic_status": "none",
+      "validation": "authorized",
+      "provenance_id": "c066320a0b2b6367",
+      "policy_version": "pr-eg-r6-r1-r1"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+# PR-PLAY-23 local interaction contract
+
+Scene transitions cross authored location boundaries. MOVE-to-exit binding, destination validation, reachability, movement consequences and encounter/time rules remain authoritative and unchanged.
+
+A local approach is a literal “approach”, “walk over to”, “step up to”, or “go over to” an authored target immediately followed by a supported ASK or INSPECT on that SAME target. The rule requires exactly two ordered components, INTERPRETED/IN_WORLD_ACTION status, no unresolved references, and matching player wording and provider description. A target must be in the current visible authoritative catalog. A conversational target additionally needs an explicit same-scene authored addressable=true entry and canonical addressability. The interaction must independently bind through the production bridge to the identical target.
+
+Visibility is insufficient. Unknown addressability, unavailable NPCs, explicit accessible/reachable/addressable=false, combat, hostile targets, or authored public access caveats prevent normalization. Because there is no local geometry/access solver, barrier/reachability caveats are conservatively vetoed in target data and current public scene context. The current bounded vocabulary includes locked, barred, blocked, inaccessible, unreachable, impassable, hostile, across, behind, another room and distant. This is a fail-closed syntactic guard, not a general natural-language access adjudicator. It may reject harmless scenes; unsupported wording retains conservative existing behavior. Explicit player barrier/travel language cannot fit the entire literal preamble.
+
+Only the MOVE preamble is normalized. Its original components and movement_executed=false are retained as diagnostic provenance. No MOVE resolver is called, no movement success is asserted, no position is persisted, and no extra travel time is added. The full original player request remains available to existing authority and publication.
+
+Travel to another district, entry through a gate, ravine crossing, theft, attacks, mismatched targets, third components, unresolved references and unsupported operations remain meaningful actions. They are not dropped. Failed consequential first steps still block later dependent interactions. Direct ASK behavior is unchanged. No NPC names or scenario IDs appear in the rule.

@@ -1,0 +1,262 @@
+# Campaign
+
+Campaign: PR-PLAY-66 — Mandatory disclosure publication integrity
+Identifier: `pr_play_66`
+Date: 2026-11-04
+Generated: 2026-11-05T01:05:46.788318+00:00
+Purpose: Narrow current-action publication repair and exact historical/final-HTTP verification.
+
+# Executive Summary
+
+# EXECUTIVE SUMMARY
+
+**C — FAIL / CRITICAL DEFECT.** CRITICAL STOP: final serialized HTTP bodies expose hidden canaries under session.gm_notes, world.gm_only and scene discoverable_clues/gm_notes/private_notes. This exists in entry-source replay and flag-disabled controls as well as the repaired experiment. 41 matrix responses and all five TCP gameplay responses expose hidden payload data. Experimental execution stopped; the second regression run was interrupted. Diagnose offline only; flags remain default off. No post-holdout implementation tuning or broader projection repair. See critical_incident.json.
+
+The exact historical action reproduces the PR65 defect through the real HTTP route before repair, then publishes its mandatory footprint discovery after repair. Root cause: exact-string provider-placeholder matching gave other legacy refusals precedence over a valid deterministic fallback. This is an implementation defect in final response selection, not a discovery-state or semantic-validator defect.
+
+45 publisher-inclusive development cases pass their stated text/selection assertions; they did not check the entire body for hidden values. Full-body inspection subsequently FAILS. Five consecutive supported gameplay actions complete over actual localhost TCP, including the authored frontier_gate → old_milestone exit, the milestone discovery, and two follow-ups. All five authoritative results match disabled controls. One synthetic validated presentation is published; three trusted fallbacks; movement uses the ordinary deterministic response. Zero live-provider requests/tokens. No browser or human quality/official ATGB claim.
+
+Frozen developer-authored holdout executed once: **40/40 correct publication decisions, zero mandatory omissions, zero unsafe AI publications, zero false rejections; raw aggregate 38/40**. Two raw state comparisons used different authoritative operations (injected empty resolver vs normal resolver). Original results/evaluator remain unchanged. Unsafe-publication counts here evaluate optional AI/final narration selection, not all other JSON fields; subsequent full-body inspection finds a separate critical hidden leak. A separate matched-operation audit confirms equal authority and no experimental publication for the missing outcome. This is an evaluation defect and an explicit holdout limitation, not two silently erased failures or independent blind validation.
+
+Completed initial focused regression: 891 passed, 5 failed, 2 additional failures (obsolete static assertion and unclassified transient malformed-output HTTP 500). Static correction/targeted diagnostic: 20 pass. Final aggregate rerun interrupted on the critical payload leak; no completed clean rerun claimed. Broader: 0 passed / 9 known failures. Protected 26478 files and frozen implementation hashes unchanged. Experimental flags remain default off/session-bound; no commit/push.
+
+Final milestone HTTP text:
+
+> You examine what is visible. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.
+
+Exactly one primary next step: **Repair hidden-information leakage in the final gameplay HTTP payload projection before resuming experimental publication.** Do not start presentation/naturalness work until full-body hidden-information publication is safe.
+
+
+Objective status: `C — FAIL / CRITICAL DEFECT`.
+
+# Changes Made
+
+## Production changes
+
+- Existing API publisher and quarantine module: request-local authority provenance, explicit text selection, final mandatory invariant with one deterministic recovery.
+
+## Validation changes
+
+- Semantic validators unchanged; new HTTP matrix and updated obsolete PR49 static integration assertion.
+
+## Tooling changes
+
+- Exact replay, frozen HTTP holdout, matched-operation evaluation audit, actual TCP gameplay/disconnect capture, disabled controls, protected regression.
+
+## Documentation changes
+
+- 18 campaign reports, behavioral evidence packet and NEXT_SESSION.
+
+## Generated artifacts
+
+- Before/after raw HTTP bodies, state/candidate/validation traces, unchanged frozen results/hash, latency, diffs, regression and review manifests.
+
+# What Was Tested
+
+- **Focused tests:** 891 passed / 5 known failures; 45 new HTTP cases.
+- **Broader relevant tests:** 9 known authority-assurance failures; full suite not run. Final aggregate rerun interrupted on critical hidden-payload leak.
+- **Full suite:** Not run.
+- **Runtime validation:** Five consecutive supported actions over actual localhost TCP. Exact historical milestone also replayed through TestClient before and after repair.
+- **Model/runtime boundary:** Zero live requests/tokens; one synthetic accepted/published presentation and three fallbacks in TCP sequence. No fallback provider call.
+- **New regressions:** Critical preexisting full-body hidden leak confirmed before/after/disabled. Additional initial regression failures: ['tests.test_pr_play_66_publication::test_publication_http[malformed]', 'tests.test_pr_play_49_anchored_narration::test_no_gameplay_wiring_or_effects']
+- **Pre-existing failures:** 3 focused and 9 broader known failures. Initial transient malformed HTTP 500 preserved; did not reproduce in targeted diagnostics. Aggregate rerun interrupted.
+- **Self-contained bundle review:** 18 reports, original failed/repaired final HTTP text, full fixtures/outcomes/state, frozen hash/results plus audit, TCP sequence, failures/regressions, incremental entry diff and hash manifest.
+
+# Behavioral Evidence
+
+## Evidence Packet: pr_play_66
+
+Runs / turns: `2` / `2`
+Runtime/model boundary: Exact historical HTTP before/after replay using saved provider candidate; separate five-action TCP sequence, zero live-provider calls. Full-body hidden leak forces C FAIL.
+
+### Representative success
+
+Example: `representative_success`
+Player classification: `runtime_discovered`
+Player: I examine the weathered milestone.
+GM: You examine what is visible. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.
+Automated result: `trusted_disclosure_published`
+Human review: `not_human_reviewed` - Inspect exact response and source trace.
+Source: `artifacts/pr_play_66/historical_after.json`
+
+### Representative failure
+
+Example: `representative_failure`
+Player classification: `runtime_discovered`
+Player: I examine the weathered milestone.
+GM: I cannot provide a validated response to that request.
+Automated result: `mandatory_omission`
+Human review: `not_human_reviewed` - Inspect exact response and source trace.
+Source: `artifacts/pr_play_66/baseline_reproduction.json`
+
+### Evaluator disagreement
+
+Example: `critical_hidden_payload`
+Player classification: `runtime_discovered`
+Player: I examine the weathered milestone.
+GM: Full response contains hidden payload values: [{"path": "/session/gm_notes/0", "canary": "CANARY_GM_NOTE", "value": "CANARY_GM_NOTE"}, {"path": "/world/gm_only/motivation", "canary": "CANARY_NPC_MOTIVE", "value": "CANARY_NPC_MOTIVE"}, {"path": "/scene/scene/discoverable_clues/1/text", "canary": "CANARY_UNDISCOVERED_CLUE", "value": "CANARY_UNDISCOVERED_CLUE"}, {"path": "/scene/scene/gm_notes/0", "canary": "CANARY_GM_NOTE", "value": "CANARY_GM_NOTE"}, {"path": "/scene/scene/private_notes", "canary": "CANARY_NPC_MOTIVE", "value": "CANARY_NPC_MOTIVE"}]
+Automated result: `FAIL_HIDDEN_INFORMATION_PUBLICATION`
+Human review: `not_human_reviewed` - Offline exact payload key/value inspection; no human review claimed.
+Source: `artifacts/pr_play_66/critical_incident.json`
+
+### Ambiguous/unexpected
+
+Example: `critical_hidden_payload`
+Player classification: `runtime_discovered`
+Player: I examine the weathered milestone.
+GM: Full response contains hidden payload values: [{"path": "/session/gm_notes/0", "canary": "CANARY_GM_NOTE", "value": "CANARY_GM_NOTE"}, {"path": "/world/gm_only/motivation", "canary": "CANARY_NPC_MOTIVE", "value": "CANARY_NPC_MOTIVE"}, {"path": "/scene/scene/discoverable_clues/1/text", "canary": "CANARY_UNDISCOVERED_CLUE", "value": "CANARY_UNDISCOVERED_CLUE"}, {"path": "/scene/scene/gm_notes/0", "canary": "CANARY_GM_NOTE", "value": "CANARY_GM_NOTE"}, {"path": "/scene/scene/private_notes", "canary": "CANARY_NPC_MOTIVE", "value": "CANARY_NPC_MOTIVE"}]
+Automated result: `FAIL_HIDDEN_INFORMATION_PUBLICATION`
+Human review: `not_human_reviewed` - Offline exact payload key/value inspection; no human review claimed.
+Source: `artifacts/pr_play_66/critical_incident.json`
+
+### Stress probe
+
+No example observed in this campaign.
+
+### All evaluator disagreements
+
+- `critical_hidden_payload`: automated `FAIL_HIDDEN_INFORMATION_PUBLICATION`; human `not_human_reviewed`; player: I examine the weathered milestone.; GM: Full response contains hidden payload values: [{"path": "/session/gm_notes/0", "canary": "CANARY_GM_NOTE", "value": "CANARY_GM_NOTE"}, {"path": "/world/gm_only/motivation", "canary": "CANARY_NPC_MOTIVE", "value": "CANARY_NPC_MOTIVE"}, {"path": "/scene/scene/discoverable_clues/1/text", "canary": "CANARY_UNDISCOVERED_CLUE", "value": "CANARY_UNDISCOVERED_CLUE"}, {"path": "/scene/scene/gm_notes/0", "canary": "CANARY_GM_NOTE", "value": "CANARY_GM_NOTE"}, {"path": "/scene/scene/private_notes", "canary": "CANARY_NPC_MOTIVE", "value": "CANARY_NPC_MOTIVE"}]
+
+# Decisions Requiring Human Review
+
+- Critical experimental stop; repair full-payload hidden visibility before future execution. No deployment/enablement requested. No deploy/commit/push.
+
+# Known Problems / Unresolved Findings
+
+## Campaign-specific
+
+- CRITICAL STOP: hidden values survive final JSON state-bearing fields in entry/disabled/repaired paths. 41 matrix responses and five TCP actions leak; narration-only safety assertions were insufficient.
+- Frozen holdout raw 38/40 due two mismatched authoritative-operation controls; 40/40 publication decisions. Separate matched-operation audit, not a corrected holdout score.
+- Initial aggregate malformed-output 500 remains unclassified after nonreproduction.
+- No live-provider acceptance/naturalness validation.
+
+## Pre-existing baseline
+
+- 3 focused/9 broader known failures; finite validators; no durable client ACK; legacy empty-resolver HTTP 200 refusal.
+
+# Missing Concepts / Future Capabilities
+
+- Natural optional presentation and delivery acknowledgement remain outside this repair.
+
+# What This Campaign Does NOT Prove
+
+- Universal semantic safety, independent blind validation, human/browser gameplay quality, official ATGB score, successful client delivery after disconnect or serialization error.
+
+# Recommended Next Step
+
+Repair hidden-information leakage in the final gameplay HTTP payload projection before resuming experimental publication.
+
+# Review Bundle Contents
+
+Bundle file count: `97`
+Bundle ZIP size: `000011516948` bytes
+Size warning threshold: `20971520` bytes
+Size status: `WITHIN_THRESHOLD`
+
+- `CURRENT_REVIEW.md`: generated orientation and decision surface.
+- `REVIEW_MANIFEST.json`: generated provenance, inclusion, omission, and size record.
+- `support/development/campaigns/product_realization/pr_play_66/01_EXECUTIVE_SUMMARY.md`: Primary campaign standard/report used to orient the review. Canonical source: `development/campaigns/product_realization/pr_play_66/01_EXECUTIVE_SUMMARY.md`.
+- `support/artifacts/validation_evidence/pr_play_66/evidence_summary.md`: Standardized behavioral evidence packet consumed by the handoff. Canonical source: `artifacts/validation_evidence/pr_play_66/evidence_summary.md`.
+- `support/artifacts/validation_evidence/pr_play_66/evidence_manifest.json`: Standardized behavioral evidence packet consumed by the handoff. Canonical source: `artifacts/validation_evidence/pr_play_66/evidence_manifest.json`.
+- `support/artifacts/pr_play_65/critical_incident.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_65/critical_incident.json`.
+- `support/artifacts/pr_play_66/audit_holdout.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/audit_holdout.py`.
+- `support/artifacts/pr_play_66/baseline.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/baseline.json`.
+- `support/artifacts/pr_play_66/baseline_reproduction.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/baseline_reproduction.json`.
+- `support/artifacts/pr_play_66/broader_hard_validation_final.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/broader_hard_validation_final.txt`.
+- `support/artifacts/pr_play_66/broader_hard_validation_final.xml`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/broader_hard_validation_final.xml`.
+- `support/artifacts/pr_play_66/build_reports.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/build_reports.py`.
+- `support/artifacts/pr_play_66/client_interruption.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/client_interruption.json`.
+- `support/artifacts/pr_play_66/controls.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/controls.py`.
+- `support/artifacts/pr_play_66/controls_run.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/controls_run.txt`.
+- `support/artifacts/pr_play_66/critical_incident.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/critical_incident.json`.
+- `support/artifacts/pr_play_66/development.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/development.txt`.
+- `support/artifacts/pr_play_66/development.xml`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/development.xml`.
+- `support/artifacts/pr_play_66/development_initial.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/development_initial.txt`.
+- `support/artifacts/pr_play_66/development_initial.xml`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/development_initial.xml`.
+- `support/artifacts/pr_play_66/diagnose_payload.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/diagnose_payload.py`.
+- `support/artifacts/pr_play_66/disabled_sequence_controls.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/disabled_sequence_controls.json`.
+- `support/artifacts/pr_play_66/entry_source/api.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/entry_source/api.py`.
+- `support/artifacts/pr_play_66/entry_source/integrated_investigation_narration.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/entry_source/integrated_investigation_narration.py`.
+- `support/artifacts/pr_play_66/entry_source/NEXT_SESSION.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/entry_source/NEXT_SESSION.md`.
+- `support/artifacts/pr_play_66/entry_source/quarantined_investigation_narration.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/entry_source/quarantined_investigation_narration.py`.
+- `support/artifacts/pr_play_66/entry_source/test_pr_play_49_anchored_narration.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/entry_source/test_pr_play_49_anchored_narration.py`.
+- `support/artifacts/pr_play_66/failure_injection.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/failure_injection.json`.
+- `support/artifacts/pr_play_66/final_worktree_status.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/final_worktree_status.txt`.
+- `support/artifacts/pr_play_66/focused_final.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/focused_final.txt`.
+- `support/artifacts/pr_play_66/focused_final.xml`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/focused_final.xml`.
+- `support/artifacts/pr_play_66/focused_initial.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/focused_initial.txt`.
+- `support/artifacts/pr_play_66/frozen_holdout.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/frozen_holdout.json`.
+- `support/artifacts/pr_play_66/frozen_holdout_manifest.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/frozen_holdout_manifest.json`.
+- `support/artifacts/pr_play_66/gameplay.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/gameplay.py`.
+- `support/artifacts/pr_play_66/gameplay_run.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/gameplay_run.txt`.
+- `support/artifacts/pr_play_66/harness.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/harness.py`.
+- `support/artifacts/pr_play_66/historical_after.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/historical_after.json`.
+- `support/artifacts/pr_play_66/historical_fixture.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/historical_fixture.json`.
+- `support/artifacts/pr_play_66/holdout.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/holdout.py`.
+- `support/artifacts/pr_play_66/holdout_audit_run.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/holdout_audit_run.txt`.
+- `support/artifacts/pr_play_66/holdout_evaluation_audit.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/holdout_evaluation_audit.json`.
+- `support/artifacts/pr_play_66/holdout_final.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/holdout_final.txt`.
+- `support/artifacts/pr_play_66/holdout_final.xml`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/holdout_final.xml`.
+- `support/artifacts/pr_play_66/holdout_results.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/holdout_results.json`.
+- `support/artifacts/pr_play_66/holdout_run.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/holdout_run.txt`.
+- `support/artifacts/pr_play_66/http_gameplay.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/http_gameplay.json`.
+- `support/artifacts/pr_play_66/implementation.diff`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/implementation.diff`.
+- `support/artifacts/pr_play_66/implementation_freeze.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/implementation_freeze.json`.
+- `support/artifacts/pr_play_66/latency.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/latency.json`.
+- `support/artifacts/pr_play_66/metrics.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/metrics.json`.
+- `support/artifacts/pr_play_66/package_review.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/package_review.py`.
+- `support/artifacts/pr_play_66/package_run.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/package_run.txt`.
+- `support/artifacts/pr_play_66/protected_integrity.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/protected_integrity.json`.
+- `support/artifacts/pr_play_66/provider_usage.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/provider_usage.json`.
+- `support/artifacts/pr_play_66/publication_call_chain.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/publication_call_chain.json`.
+- `support/artifacts/pr_play_66/publication_matrix.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/publication_matrix.json`.
+- `support/artifacts/pr_play_66/regression_diagnosis.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/regression_diagnosis.txt`.
+- `support/artifacts/pr_play_66/regression_diagnosis.xml`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/regression_diagnosis.xml`.
+- `support/artifacts/pr_play_66/regression_summary_final.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/regression_summary_final.json`.
+- `support/artifacts/pr_play_66/regression_summary_initial.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/regression_summary_initial.json`.
+- `support/artifacts/pr_play_66/replay.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/replay.py`.
+- `support/artifacts/pr_play_66/replay_run.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/replay_run.txt`.
+- `support/artifacts/pr_play_66/reports_run.txt`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/reports_run.txt`.
+- `support/artifacts/pr_play_66/run_regression.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/run_regression.py`.
+- `support/artifacts/pr_play_66/state_integrity.json`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `artifacts/pr_play_66/state_integrity.json`.
+- `support/development/campaigns/product_realization/pr_play_66/02_BASELINE_AND_SCOPE.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/02_BASELINE_AND_SCOPE.md`.
+- `support/development/campaigns/product_realization/pr_play_66/03_PR_PLAY_65_CRITICAL_REPRODUCTION.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/03_PR_PLAY_65_CRITICAL_REPRODUCTION.md`.
+- `support/development/campaigns/product_realization/pr_play_66/04_PUBLICATION_CALL_CHAIN.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/04_PUBLICATION_CALL_CHAIN.md`.
+- `support/development/campaigns/product_realization/pr_play_66/05_ROOT_CAUSE.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/05_ROOT_CAUSE.md`.
+- `support/development/campaigns/product_realization/pr_play_66/06_PUBLICATION_REPAIR.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/06_PUBLICATION_REPAIR.md`.
+- `support/development/campaigns/product_realization/pr_play_66/07_MANDATORY_DISCLOSURE_INVARIANT.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/07_MANDATORY_DISCLOSURE_INVARIANT.md`.
+- `support/development/campaigns/product_realization/pr_play_66/08_PUBLICATION_TEST_MATRIX.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/08_PUBLICATION_TEST_MATRIX.md`.
+- `support/development/campaigns/product_realization/pr_play_66/09_FROZEN_HOLDOUT.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/09_FROZEN_HOLDOUT.md`.
+- `support/development/campaigns/product_realization/pr_play_66/10_HISTORICAL_MILESTONE_REPLAY.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/10_HISTORICAL_MILESTONE_REPLAY.md`.
+- `support/development/campaigns/product_realization/pr_play_66/11_HTTP_GAMEPLAY.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/11_HTTP_GAMEPLAY.md`.
+- `support/development/campaigns/product_realization/pr_play_66/12_LIVE_PROVIDER_RESULTS.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/12_LIVE_PROVIDER_RESULTS.md`.
+- `support/development/campaigns/product_realization/pr_play_66/13_FAILURE_INJECTION.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/13_FAILURE_INJECTION.md`.
+- `support/development/campaigns/product_realization/pr_play_66/14_STATE_AND_DISCLOSURE.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/14_STATE_AND_DISCLOSURE.md`.
+- `support/development/campaigns/product_realization/pr_play_66/15_LATENCY_AND_QUALITY.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/15_LATENCY_AND_QUALITY.md`.
+- `support/development/campaigns/product_realization/pr_play_66/16_REGRESSION_RESULTS.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/16_REGRESSION_RESULTS.md`.
+- `support/development/campaigns/product_realization/pr_play_66/17_LIMITATIONS_AND_OPEN_RISKS.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/17_LIMITATIONS_AND_OPEN_RISKS.md`.
+- `support/development/campaigns/product_realization/pr_play_66/18_NEXT_SESSION.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `development/campaigns/product_realization/pr_play_66/18_NEXT_SESSION.md`.
+- `support/docs/DEVELOPMENT_CONSTITUTION.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `docs/DEVELOPMENT_CONSTITUTION.md`.
+- `support/docs/NEXT_SESSION.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `docs/NEXT_SESSION.md`.
+- `support/docs/review_handoff_standard.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `docs/review_handoff_standard.md`.
+- `support/docs/state_authority_model.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `docs/state_authority_model.md`.
+- `support/docs/validation_evidence_standard.md`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `docs/validation_evidence_standard.md`.
+- `support/game/anchored_investigation_narration.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `game/anchored_investigation_narration.py`.
+- `support/game/api.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `game/api.py`.
+- `support/game/consequential_narration_validation.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `game/consequential_narration_validation.py`.
+- `support/game/mandatory_outcome_coverage.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `game/mandatory_outcome_coverage.py`.
+- `support/game/quarantined_investigation_narration.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `game/quarantined_investigation_narration.py`.
+- `support/game/state_channels.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `game/state_channels.py`.
+- `support/tests/test_pr_play_49_anchored_narration.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `tests/test_pr_play_49_anchored_narration.py`.
+- `support/tests/test_pr_play_65_authoritative_disclosure.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `tests/test_pr_play_65_authoritative_disclosure.py`.
+- `support/tests/test_pr_play_66_publication.py`: Scoped implementation or exact campaign evidence; prior baseline preserved. Canonical source: `tests/test_pr_play_66_publication.py`.
+
+## Explicit omissions
+
+- `artifacts/pr_play_66/focused_initial.xml`: duplicate content of artifacts/pr_play_66/focused_final.xml; canonical reference retained
+- `artifacts/pr_play_66/regression_run.txt`: duplicate content of artifacts/pr_play_66/package_run.txt; canonical reference retained
+- `development/campaigns/product_realization/pr_play_66/01_EXECUTIVE_SUMMARY.md`: duplicate content of development/campaigns/product_realization/pr_play_66/01_EXECUTIVE_SUMMARY.md; canonical reference retained
+- `game/integrated_investigation_narration.py`: duplicate content of artifacts/pr_play_66/entry_source/integrated_investigation_narration.py; canonical reference retained
+
+The bundle intentionally excludes repository copies, dependency/cache directories, previous handoffs, unrelated artifacts, and sensitive configuration.
+Canonical repository files remain authoritative; packaged copies are review conveniences with hashes and source paths.

@@ -1,0 +1,5 @@
+# BROWSER LIFECYCLE
+
+Early attachment succeeded through existing cua_repl/IAB; application, New Campaign, screenshots, interactive UI and network capture confirmed. Browser-originated POST requests are captured by host middleware with full response and before/after authority. 22 action/chat submissions across baseline, repaired campaign A/B and resume continuations. 22 screenshots captured, with DOM/text snapshots for journal/transcript fidelity.
+
+Cached original context kept an older app.js across reload, causing an initial save-slot transcript mismatch and missing timing logs. Closed/reopened application context loaded current assets, after which both slot transitions restore correct history and actions. One bounded 60-second UI wait timed out while waiting for the missing A transcript; no extra branch choice was submitted. Native AX interactions recovered a misdirected locator click; network traces distinguish actual submissions. Viewport override and multiple checkpoints reduce clipping, but some captures remain scaled/narrow. Final storage/import cleanup occurred AFTER browser evidence; no final-source browser rerun is claimed.

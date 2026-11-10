@@ -1,0 +1,5 @@
+# FAILURE INJECTION
+
+Nineteen existing PR68 fault modes captured in failure_injection.json: accepted, rejected, empty, malformed, provider unavailable, timeout, FAIL, REVIEW_REQUIRED, VALIDATION_ERROR, legacy refusal, publisher exception/missing, duplicate, hidden, persistent, inventory, death, route and contradiction. Only the accepted case publishes optional AI. Each resolves once, calls the replay generator once, preserves the immediate mandatory clue/journal and hidden server notes, and excludes synthetic sentinels from the full HTTP response.
+
+The 53 PR68 development checks additionally cover structured/chat parity, unsupported action, actual deterministic resolver exception (500 with safe error, state unchanged), disabled experimental gate and wrong-session gate. Mixed hidden/NPC/route/inventory/persistent candidates and target provenance are covered by new tests/holdout. context_isolation.json rejects stale cross-session/campaign, new-resolution-after-reload and different-action bindings. Existing PR62 repeat fast-path test proves zero generator/provider requests when enabled. No retry loop or extra fallback request.

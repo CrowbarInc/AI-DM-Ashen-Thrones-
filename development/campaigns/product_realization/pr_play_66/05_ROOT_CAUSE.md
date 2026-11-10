@@ -1,0 +1,4 @@
+# ROOT CAUSE
+Primary class: implementation. Demonstrated causes A/B/C: exact-string placeholder matching, legacy rejection precedence, incorrect response selection. Earliest incorrect decision: api._publish_experimental_integrated_narration refuses a valid stored deterministic fallback whenever no target equals the provider-disabled stub. It repeats the stub requirement per target. The milestone's generic validation refusal thus wins after the hook correctly renders disclosure.
+
+Scope established: multiple legacy response/fallback inputs, successful eligible integrated investigations under all existing opt-in gates. It is not milestone-specific and not an HTTP serializer/schema defect. Repair is restricted to the authoritative-disclosure flag; ordinary gameplay and prior flag-disabled publisher behavior remain unchanged. No broader semantic-validator diagnosis was required.

@@ -1,0 +1,486 @@
+{
+  "authorities": {
+    "route": {
+      "player_action": "I examine the notice board.",
+      "resolved_outcome": {
+        "status": "discovered",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": []
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    },
+    "prints": {
+      "player_action": "I examine the footprints.",
+      "resolved_outcome": {
+        "status": "discovered",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "A weathered stone milestone leans beside the northwest mud track.",
+          "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+          "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+        ],
+        "continuity": []
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    },
+    "repeat": {
+      "player_action": "I examine the notice board.",
+      "resolved_outcome": {
+        "status": "known",
+        "success": false
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "engine_status",
+          "status": "known",
+          "text": "The examination adds nothing new to what you already know."
+        },
+        {
+          "id": "outcome:1",
+          "source": "player_knowledge",
+          "status": "previously_known",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ]
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    },
+    "empty": {
+      "player_action": "I examine the rain barrel.",
+      "resolved_outcome": {
+        "status": "observed",
+        "success": true
+      },
+      "must_communicate": [
+        {
+          "id": "outcome:0",
+          "source": "engine_status",
+          "status": "observed",
+          "text": "No new clue is established by this examination."
+        }
+      ],
+      "may_reference": {
+        "visible_scene": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "continuity": []
+      },
+      "authorized_consequences": [],
+      "must_not_establish": [
+        "Only communicate completed engine outcomes; never establish additional facts or effects.",
+        "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+        "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "H01",
+      "group": "legitimate",
+      "authority": "route",
+      "expected": "PASS",
+      "text": "The missing patrol was last spotted taking the northwest mud track beyond the crates."
+    },
+    {
+      "id": "H02",
+      "group": "legitimate",
+      "authority": "route",
+      "expected": "PASS",
+      "text": "Beyond the crates, the missing patrol was last observed heading along the northwest muddy trail."
+    },
+    {
+      "id": "H03",
+      "group": "legitimate",
+      "authority": "route",
+      "expected": "PASS",
+      "text": "The notices place the missing patrol on the northwest mud track, past the crates."
+    },
+    {
+      "id": "H04",
+      "group": "legitimate",
+      "authority": "route",
+      "expected": "PASS",
+      "text": "The missing patrol was last seen following the muddy northwest path past the crates."
+    },
+    {
+      "id": "H05",
+      "group": "legitimate",
+      "authority": "route",
+      "expected": "PASS",
+      "text": "Rain taps the paper. The missing patrol was last seen heading along the northwest mud track past the crates."
+    },
+    {
+      "id": "H06",
+      "group": "legitimate",
+      "authority": "prints",
+      "expected": "PASS",
+      "text": "Faint overlapping footprints mark the mud around the weathered milestone. Their number, origin and direction remain uncertain."
+    },
+    {
+      "id": "H07",
+      "group": "legitimate",
+      "authority": "prints",
+      "expected": "PASS",
+      "text": "By the old milestone, faint overlapping prints are visible in the mud, but you cannot tell how many people made them, where they came from or which way they went."
+    },
+    {
+      "id": "H08",
+      "group": "legitimate",
+      "authority": "prints",
+      "expected": "PASS",
+      "text": "The mud around the old milestone bears faint overlapping footprints; their number, source and direction are unresolved."
+    },
+    {
+      "id": "H09",
+      "group": "legitimate",
+      "authority": "prints",
+      "expected": "PASS",
+      "text": "Faint overlapping prints in the mud beside the old milestone offer no evidence of their number, origin or direction."
+    },
+    {
+      "id": "H10",
+      "group": "legitimate",
+      "authority": "prints",
+      "expected": "PASS",
+      "text": "At the old milestone you see faint overlapping prints in the mud, though their number, origin and direction are doubtful."
+    },
+    {
+      "id": "H11",
+      "group": "legitimate",
+      "authority": "repeat",
+      "expected": "PASS",
+      "text": "You return to the board; no fresh clues emerge. The missing patrol was last seen taking the northwest mud track past the crates."
+    },
+    {
+      "id": "H12",
+      "group": "legitimate",
+      "authority": "repeat",
+      "expected": "PASS",
+      "text": "The board offers nothing beyond what you already know: The missing patrol was last seen taking the northwest mud track past the crates."
+    },
+    {
+      "id": "H13",
+      "group": "legitimate",
+      "authority": "repeat",
+      "expected": "PASS",
+      "text": "You examine it again without learning anything new. The missing patrol was last seen taking the northwest mud track past the crates."
+    },
+    {
+      "id": "H14",
+      "group": "legitimate",
+      "authority": "empty",
+      "expected": "PASS",
+      "text": "The examination yields no additional information."
+    },
+    {
+      "id": "H15",
+      "group": "legitimate",
+      "authority": "empty",
+      "expected": "PASS",
+      "text": "Your inspection reveals nothing further."
+    },
+    {
+      "id": "H16",
+      "group": "missing",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "Only rain meets your gaze."
+    },
+    {
+      "id": "H17",
+      "group": "missing",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "You study the papers."
+    },
+    {
+      "id": "H18",
+      "group": "missing",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The patrol was last seen."
+    },
+    {
+      "id": "H19",
+      "group": "missing",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The missing patrol was last seen taking the northwest track."
+    },
+    {
+      "id": "H20",
+      "group": "missing",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The missing patrol was last seen past the crates."
+    },
+    {
+      "id": "H21",
+      "group": "missing",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "You see footprints."
+    },
+    {
+      "id": "H22",
+      "group": "missing",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "Faint overlapping prints mark the mud around the old milestone."
+    },
+    {
+      "id": "H23",
+      "group": "missing",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "Faint overlapping prints mark the mud around the old milestone, but their origin is unknown."
+    },
+    {
+      "id": "H24",
+      "group": "missing",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The number, origin and direction remain unclear."
+    },
+    {
+      "id": "H25",
+      "group": "missing",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The mud around the old milestone is wet."
+    },
+    {
+      "id": "H26",
+      "group": "contradictory",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northeast mud track past the crates."
+    },
+    {
+      "id": "H27",
+      "group": "contradictory",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing caravan was last seen taking the northwest mud track past the crates."
+    },
+    {
+      "id": "H28",
+      "group": "contradictory",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track before the crates."
+    },
+    {
+      "id": "H29",
+      "group": "contradictory",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol will be seen taking the northwest mud track past the crates."
+    },
+    {
+      "id": "H30",
+      "group": "contradictory",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was not last seen taking the northwest mud track past the crates."
+    },
+    {
+      "id": "H31",
+      "group": "contradictory",
+      "authority": "prints",
+      "expected": "FAIL",
+      "text": "Three travelers left the prints heading east."
+    },
+    {
+      "id": "H32",
+      "group": "contradictory",
+      "authority": "prints",
+      "expected": "FAIL",
+      "text": "The prints lead toward the northern gate."
+    },
+    {
+      "id": "H33",
+      "group": "contradictory",
+      "authority": "prints",
+      "expected": "FAIL",
+      "text": "No footprints are visible near the milestone."
+    },
+    {
+      "id": "H34",
+      "group": "contradictory",
+      "authority": "prints",
+      "expected": "FAIL",
+      "text": "The prints came from the smugglers camp."
+    },
+    {
+      "id": "H35",
+      "group": "contradictory",
+      "authority": "prints",
+      "expected": "FAIL",
+      "text": "Your investigation fails."
+    },
+    {
+      "id": "H36",
+      "group": "expansion",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates. The patrol was captured by smugglers."
+    },
+    {
+      "id": "H37",
+      "group": "expansion",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates. You acquire a silver key."
+    },
+    {
+      "id": "H38",
+      "group": "expansion",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates. The captain knows your secret."
+    },
+    {
+      "id": "H39",
+      "group": "expansion",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates. A hidden tunnel runs under the gate."
+    },
+    {
+      "id": "H40",
+      "group": "expansion",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates. You gain 10 gold coins."
+    },
+    {
+      "id": "H41",
+      "group": "expansion",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates. The gate is now permanently open."
+    },
+    {
+      "id": "H42",
+      "group": "expansion",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates. You discover a secret destination."
+    },
+    {
+      "id": "H43",
+      "group": "expansion",
+      "authority": "route",
+      "expected": "FAIL",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates. You are now poisoned."
+    },
+    {
+      "id": "H44",
+      "group": "expansion",
+      "authority": "repeat",
+      "expected": "FAIL",
+      "text": "For the first time, you discover this: The missing patrol was last seen taking the northwest mud track past the crates."
+    },
+    {
+      "id": "H45",
+      "group": "expansion",
+      "authority": "repeat",
+      "expected": "FAIL",
+      "text": "You examine the board again and discover a hidden map. The missing patrol was last seen taking the northwest mud track past the crates."
+    },
+    {
+      "id": "H46",
+      "group": "ambiguous",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "Perhaps the missing patrol took the northwest mud track past the crates."
+    },
+    {
+      "id": "H47",
+      "group": "ambiguous",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "Someone may have seen the missing patrol near the crates."
+    },
+    {
+      "id": "H48",
+      "group": "ambiguous",
+      "authority": "route",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The northwest mud track might explain the patrol."
+    },
+    {
+      "id": "H49",
+      "group": "ambiguous",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The marks might be prints, but who can say?"
+    },
+    {
+      "id": "H50",
+      "group": "ambiguous",
+      "authority": "prints",
+      "expected": "REVIEW_REQUIRED",
+      "text": "The mud suggests a direction, though the signs resist interpretation."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": "T04",
+  "text": "I walk over to the notice board and put a hand on the frame.",
+  "status": 200,
+  "visible": "You walk over to the notice board and rest a hand on its frame. You remain in Cinderwatch Gate District.",
+  "kind": "conversational_answer",
+  "success": true,
+  "resolved_transition": false,
+  "target_scene_id": null,
+  "reason": "transient_local_action_completed",
+  "action_owner": "local_interaction",
+  "scene_before": "frontier_gate",
+  "scene_after": "frontier_gate",
+  "publication": "You walk over to the notice board and rest a hand on its frame. You remain in Cinderwatch Gate District.",
+  "clues": [
+    "lead_frontier_gate_old_milestone",
+    "social_frontier_gate_guard_captain_patrol"
+  ],
+  "discovered": null,
+  "transient_local_action": {
+    "status": "completed",
+    "category": "transient_local_action",
+    "reason": "transient_local_action_completed",
+    "target_id": "notice_board",
+    "label": "Notice board",
+    "action_category": "local_movement_and_physical_contact",
+    "categories": [
+      "local_movement",
+      "physical_contact"
+    ],
+    "completion": {
+      "local_movement": "completed",
+      "physical_contact": "completed"
+    },
+    "authority_basis": {
+      "source": "authored_interactable_visible_catalog",
+      "visible_catalog_kind": "inspect_target",
+      "referenced_surface_authority": "authored_interactable",
+      "existence": true,
+      "visibility": true,
+      "inspectability": true,
+      "explicit_access_block": false
+    },
+    "scene_transition": false,
+    "persistent_state_changed": false,
+    "narration_authorized": true,
+    "player_facing_text": "You walk over to the notice board and rest a hand on its frame. You remain in Cinderwatch Gate District.",
+    "scene_id": "frontier_gate"
+  },
+  "accepted": {
+    "text": "You walk over to the notice board and rest a hand on its frame. You remain in Cinderwatch Gate District.",
+    "immutable": true,
+    "hard_valid": true,
+    "authorization_source": "conversational_decision:transient_local_action_completed"
+  }
+}

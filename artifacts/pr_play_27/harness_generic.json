@@ -1,0 +1,228 @@
+{
+  "step_id": "T1",
+  "player_input": "I take a moment to look around the gate district. What do I notice?",
+  "dm_response": "Tavern Runner says, \"I couldn't tell you.\"",
+  "response_truncated": false,
+  "http_status": 200,
+  "completion": {
+    "expression_status": "EXPRESSION_REJECTED_UNRECOVERED",
+    "transport_completed": true,
+    "pipeline_completed": true,
+    "action_executed": false,
+    "gameplay_completed": false,
+    "interaction_outcome": "rejected",
+    "semantic_dead_end": true,
+    "stop": true,
+    "reasons": [
+      "published_expression_not_authorized",
+      "semantic_dead_end"
+    ]
+  },
+  "outcome_classification": {
+    "kind": "unknown",
+    "evidence": "native accepted response and resolution; no invented success condition"
+  },
+  "state_diff": [],
+  "overlay_comparison": {
+    "integrity": true,
+    "changes": [],
+    "omitted_entries": 0,
+    "total_changes": 0
+  },
+  "state_before": "turns/T1/before/documents.json",
+  "state_after": "turns/T1/after/documents.json",
+  "diagnostics": [],
+  "provider_usage": {
+    "request_count": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "retry_count": 0,
+    "operations": [],
+    "provider_latency_ms": 0,
+    "provider_latency_status": "native latency_ms only; unavailable remains null"
+  },
+  "mechanical": {
+    "status": "PASS",
+    "completed_interaction": false,
+    "turn_delta": 0,
+    "log_delta": 0,
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "rules": {
+      "status": "recorded_requires_review",
+      "evidence": {
+        "kind": "question",
+        "metadata": {
+          "resolver_invoked": true,
+          "conversational_decision": {}
+        }
+      },
+      "source": "production resolution; no independent adjudication"
+    },
+    "mutation_authority": "REQUIRES_HUMAN_REVIEW for changes not covered by explicit invariants"
+  },
+  "semantic": {
+    "status": "FAIL",
+    "final_hard_validation": true,
+    "native_validation": {
+      "accepted_response": {
+        "speaker_id": "guard",
+        "interaction_completion": true,
+        "hard_validation": {
+          "hard_valid": true
+        }
+      }
+    },
+    "nonresolution": null,
+    "gameplay_acceptance": true,
+    "provider_stages": [],
+    "extraction": [],
+    "json_parsing": [],
+    "structured_validation": []
+  },
+  "quality": {
+    "rubric_version": "pr-play-09-quality-v1",
+    "scale": {
+      "0": "Complete failure",
+      "1": "Major deficiency",
+      "2": "Partially adequate",
+      "3": "Good",
+      "4": "Strong"
+    },
+    "dimensions": {
+      "Q1": {
+        "dimension": "Responsiveness",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "Tavern Runner says, \"I couldn't tell you.\"",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q2": {
+        "dimension": "Grounding",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "Tavern Runner says, \"I couldn't tell you.\"",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q3": {
+        "dimension": "Continuity",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "Tavern Runner says, \"I couldn't tell you.\"",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q4": {
+        "dimension": "Actionability",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "Tavern Runner says, \"I couldn't tell you.\"",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q5": {
+        "dimension": "Narrative quality",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "Tavern Runner says, \"I couldn't tell you.\"",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q6": {
+        "dimension": "Agency and consequences",
+        "score": null,
+        "status": "N/A",
+        "evidence": "Tavern Runner says, \"I couldn't tell you.\"",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "No immediate consequence required."
+      }
+    },
+    "probes": {
+      "response_exists": true,
+      "requested_subject_mentioned": false,
+      "repeated_exact_response": false,
+      "generic_marker": false
+    },
+    "concerns": [
+      "possibly_irrelevant_response"
+    ],
+    "method": "deterministic presence and exact markers; heuristic relevance and repetition",
+    "status": "REQUIRES_HUMAN_REVIEW"
+  },
+  "findings": [
+    {
+      "category": "published_expression_not_authorized",
+      "kind": "confirmed_semantic_failure",
+      "evidence": {
+        "expression_status": "EXPRESSION_REJECTED_UNRECOVERED",
+        "transport_completed": true,
+        "pipeline_completed": true,
+        "action_executed": false,
+        "gameplay_completed": false,
+        "interaction_outcome": "rejected",
+        "semantic_dead_end": true,
+        "stop": true,
+        "reasons": [
+          "published_expression_not_authorized",
+          "semantic_dead_end"
+        ]
+      },
+      "source": "native turn diagnostics",
+      "step_id": "T1",
+      "player_input": "I take a moment to look around the gate district. What do I notice?",
+      "dm_response": "Tavern Runner says, \"I couldn't tell you.\"",
+      "diagnostics": "turns/T1/evaluation.json#diagnostics",
+      "state_comparison": "turns/T1/evaluation.json#state_diff"
+    },
+    {
+      "category": "semantic_dead_end",
+      "kind": "confirmed_semantic_failure",
+      "evidence": {
+        "expression_status": "EXPRESSION_REJECTED_UNRECOVERED",
+        "transport_completed": true,
+        "pipeline_completed": true,
+        "action_executed": false,
+        "gameplay_completed": false,
+        "interaction_outcome": "rejected",
+        "semantic_dead_end": true,
+        "stop": true,
+        "reasons": [
+          "published_expression_not_authorized",
+          "semantic_dead_end"
+        ]
+      },
+      "source": "native turn diagnostics",
+      "step_id": "T1",
+      "player_input": "I take a moment to look around the gate district. What do I notice?",
+      "dm_response": "Tavern Runner says, \"I couldn't tell you.\"",
+      "diagnostics": "turns/T1/evaluation.json#diagnostics",
+      "state_comparison": "turns/T1/evaluation.json#state_diff"
+    },
+    {
+      "category": "possibly_irrelevant_response",
+      "kind": "heuristic_quality_concern",
+      "evidence": {
+        "response_exists": true,
+        "requested_subject_mentioned": false,
+        "repeated_exact_response": false,
+        "generic_marker": false
+      },
+      "source": "pr-play-09-quality-v1",
+      "step_id": "T1",
+      "player_input": "I take a moment to look around the gate district. What do I notice?",
+      "dm_response": "Tavern Runner says, \"I couldn't tell you.\"",
+      "diagnostics": "turns/T1/evaluation.json#diagnostics",
+      "state_comparison": "turns/T1/evaluation.json#state_diff"
+    }
+  ],
+  "stop": true
+}

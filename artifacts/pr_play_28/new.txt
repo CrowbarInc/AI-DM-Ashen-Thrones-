@@ -1,0 +1,151 @@
+FFFFFFFF...............FFFFFFFFFFFFFFF..                                 [100%]
+================================== FAILURES ===================================
+_________ test_integration[False-What sort of rumors have you heard?] _________
+tests\test_pr_play_28_topic_authority.py:32: in test_integration
+    runner['topics'][0]['discovery_categories']=authored['discovery_categories']
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'discovery_categories'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 1e1925556b78399754f2ee62
+________ test_integration[False-What have you heard about the patrol?] ________
+tests\test_pr_play_28_topic_authority.py:32: in test_integration
+    runner['topics'][0]['discovery_categories']=authored['discovery_categories']
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'discovery_categories'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 94e73cedae0b390b58942c6a
+_________ test_integration[True-What sort of rumors have you heard?] __________
+tests\test_pr_play_28_topic_authority.py:32: in test_integration
+    runner['topics'][0]['discovery_categories']=authored['discovery_categories']
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'discovery_categories'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started d255a3a96dd987d156fe54ec
+______________ test_inquiry[What sort of rumors have you heard?] ______________
+tests\test_pr_play_28_topic_authority.py:99: in test_inquiry
+    assert result and result['id']=='patrol_rumor'
+E   assert (None)
+__________________ test_inquiry[Have you heard any rumors?] ___________________
+tests\test_pr_play_28_topic_authority.py:99: in test_inquiry
+    assert result and result['id']=='patrol_rumor'
+E   assert (None)
+___________________ test_inquiry[What's the latest gossip?] ___________________
+tests\test_pr_play_28_topic_authority.py:99: in test_inquiry
+    assert result and result['id']=='patrol_rumor'
+E   assert (None)
+__________________________ test_inquiry[Any rumors?] __________________________
+tests\test_pr_play_28_topic_authority.py:99: in test_inquiry
+    assert result and result['id']=='patrol_rumor'
+E   assert (None)
+__________________ test_inquiry[What rumors have you heard?] __________________
+tests\test_pr_play_28_topic_authority.py:99: in test_inquiry
+    assert result and result['id']=='patrol_rumor'
+E   assert (None)
+_____________________ test_multiple_and_other_npc[False] ______________________
+tests\test_pr_play_28_topic_authority.py:121: in test_multiple_and_other_npc
+    assert r['id']=='a'
+           ^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+______________________ test_multiple_and_other_npc[True] ______________________
+tests\test_pr_play_28_topic_authority.py:121: in test_multiple_and_other_npc
+    assert r['id']=='a'
+           ^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+________________________ test_authority_controls[none] ________________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+_______________________ test_authority_controls[action] _______________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+____________________ test_authority_controls[topic_policy] ____________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+__________________ test_authority_controls[unsupported_clue] __________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+_____________________ test_authority_controls[wrong_npc] ______________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+___________________ test_authority_controls[source_missing] ___________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+_______________________ test_authority_controls[event] ________________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+_________________ test_authority_controls[unrelated_overlay] __________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+_____________________ test_authority_controls[lifecycle] ______________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+____________________ test_authority_controls[missing_log] _____________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+____________________ test_authority_controls[response_id] _____________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+____________________ test_authority_controls[denied_grant] ____________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+___________________ test_authority_controls[invented_hook] ____________________
+tests\test_pr_play_28_topic_authority.py:157: in test_authority_controls
+    result=compare_overlays(before,after,ordinary_action=a,turn_response=response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: compare_overlays() got an unexpected keyword argument 'ordinary_action'
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_28_topic_authority.py::test_integration[False-What sort of rumors have you heard?]
+FAILED tests/test_pr_play_28_topic_authority.py::test_integration[False-What have you heard about the patrol?]
+FAILED tests/test_pr_play_28_topic_authority.py::test_integration[True-What sort of rumors have you heard?]
+FAILED tests/test_pr_play_28_topic_authority.py::test_inquiry[What sort of rumors have you heard?]
+FAILED tests/test_pr_play_28_topic_authority.py::test_inquiry[Have you heard any rumors?]
+FAILED tests/test_pr_play_28_topic_authority.py::test_inquiry[What's the latest gossip?]
+FAILED tests/test_pr_play_28_topic_authority.py::test_inquiry[Any rumors?] - ...
+FAILED tests/test_pr_play_28_topic_authority.py::test_inquiry[What rumors have you heard?]
+FAILED tests/test_pr_play_28_topic_authority.py::test_multiple_and_other_npc[False]
+FAILED tests/test_pr_play_28_topic_authority.py::test_multiple_and_other_npc[True]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[none]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[action]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[topic_policy]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[unsupported_clue]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[wrong_npc]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[source_missing]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[event]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[unrelated_overlay]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[lifecycle]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[missing_log]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[response_id]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[denied_grant]
+FAILED tests/test_pr_play_28_topic_authority.py::test_authority_controls[invented_hook]

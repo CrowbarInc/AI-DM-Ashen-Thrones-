@@ -1,0 +1,1334 @@
+{
+  "initial": {
+    "id": "hero",
+    "inventory": [
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "legacy": {
+          "nested": [
+            1,
+            2
+          ]
+        },
+        "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+        "revision": 1,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        },
+        "markings": [
+          {
+            "version": 1,
+            "type": "add_marking",
+            "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+            "content": "Northwest track",
+            "source": {
+              "kind": "explicit_literal",
+              "reference": "controlled-fixture"
+            },
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "approval-1",
+              "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+              "preconditions": {
+                "capability": "fixture-evidence:capability",
+                "source_disclosed": "fixture-evidence:source_disclosed",
+                "writable_surface": "fixture-evidence:writable_surface",
+                "medium_compatible": "fixture-evidence:medium_compatible",
+                "rights": "fixture-evidence:rights",
+                "target_exists": "fixture-evidence:target_exists",
+                "accessible": "fixture-evidence:accessible",
+                "medium_available": "fixture-evidence:medium_available"
+              },
+              "mechanics": "not_applicable"
+            },
+            "request_id": "mark-request-1",
+            "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+            "applied_revision": 1
+          }
+        ]
+      },
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "instance_id": "ab58d300-28c9-4c5a-9f02-46b355599bff",
+        "revision": 0,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        }
+      }
+    ],
+    "unknown_character": {
+      "keep": true
+    },
+    "object_marking_receipts": {
+      "version": 1,
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "entries": {
+        "mark-request-1": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+          "request_id": "mark-request-1",
+          "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+          "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+          "previous_revision": 0,
+          "resulting_revision": 1
+        }
+      }
+    }
+  },
+  "requests": [
+    {
+      "version": 1,
+      "operation": "set_marking_visibility",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+      "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+      "visibility": {
+        "classification": "visible"
+      },
+      "expected_revision": 1,
+      "request_id": "visibility-1",
+      "authorization": {
+        "caller_id": "trusted-fixture",
+        "decision_id": "PRIVATE-CLASSIFICATION",
+        "mechanics": "not_applicable",
+        "preconditions": {
+          "capability": "PRIVATE:capability",
+          "rights": "PRIVATE:rights",
+          "classification_basis": "PRIVATE:classification_basis",
+          "target_exists": "PRIVATE:target_exists",
+          "marking_exists": "PRIVATE:marking_exists"
+        }
+      },
+      "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db"
+    },
+    {
+      "version": 1,
+      "operation": "set_marking_visibility",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+      "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+      "visibility": {
+        "classification": "concealed"
+      },
+      "expected_revision": 2,
+      "request_id": "visibility-2",
+      "authorization": {
+        "caller_id": "trusted-fixture",
+        "decision_id": "PRIVATE-CLASSIFICATION",
+        "mechanics": "not_applicable",
+        "preconditions": {
+          "capability": "PRIVATE:capability",
+          "rights": "PRIVATE:rights",
+          "classification_basis": "PRIVATE:classification_basis",
+          "target_exists": "PRIVATE:target_exists",
+          "marking_exists": "PRIVATE:marking_exists"
+        }
+      },
+      "request_digest": "a6ddea4a6c0a847173c6e92a122505e2e2764c2b02501f0dec25c0536af06fec"
+    },
+    {
+      "version": 1,
+      "operation": "set_marking_visibility",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+      "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+      "visibility": {
+        "classification": "visible"
+      },
+      "expected_revision": 3,
+      "request_id": "visibility-3",
+      "authorization": {
+        "caller_id": "trusted-fixture",
+        "decision_id": "PRIVATE-CLASSIFICATION",
+        "mechanics": "not_applicable",
+        "preconditions": {
+          "capability": "PRIVATE:capability",
+          "rights": "PRIVATE:rights",
+          "classification_basis": "PRIVATE:classification_basis",
+          "target_exists": "PRIVATE:target_exists",
+          "marking_exists": "PRIVATE:marking_exists"
+        }
+      },
+      "request_digest": "b3af8d48c1b2650259a986dcc04f39266c509a6e4c2e094fdf05539ef66b276c"
+    }
+  ],
+  "results": [
+    {
+      "version": 1,
+      "status": "applied",
+      "persistence": "committed",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+      "request_id": "visibility-1",
+      "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db",
+      "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+      "previous_revision": 1,
+      "resulting_revision": 2,
+      "operation": "set_marking_visibility",
+      "request": {
+        "version": 1,
+        "operation": "set_marking_visibility",
+        "campaign_run_id": "identity-test-campaign",
+        "character_id": "hero",
+        "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+        "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+        "visibility": {
+          "classification": "visible"
+        },
+        "expected_revision": 1,
+        "request_id": "visibility-1",
+        "authorization": {
+          "caller_id": "trusted-fixture",
+          "decision_id": "PRIVATE-CLASSIFICATION",
+          "mechanics": "not_applicable",
+          "preconditions": {
+            "capability": "PRIVATE:capability",
+            "rights": "PRIVATE:rights",
+            "classification_basis": "PRIVATE:classification_basis",
+            "target_exists": "PRIVATE:target_exists",
+            "marking_exists": "PRIVATE:marking_exists"
+          }
+        },
+        "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db"
+      }
+    },
+    {
+      "version": 1,
+      "status": "applied",
+      "persistence": "committed",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+      "request_id": "visibility-2",
+      "request_digest": "a6ddea4a6c0a847173c6e92a122505e2e2764c2b02501f0dec25c0536af06fec",
+      "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+      "previous_revision": 2,
+      "resulting_revision": 3,
+      "operation": "set_marking_visibility",
+      "request": {
+        "version": 1,
+        "operation": "set_marking_visibility",
+        "campaign_run_id": "identity-test-campaign",
+        "character_id": "hero",
+        "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+        "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+        "visibility": {
+          "classification": "concealed"
+        },
+        "expected_revision": 2,
+        "request_id": "visibility-2",
+        "authorization": {
+          "caller_id": "trusted-fixture",
+          "decision_id": "PRIVATE-CLASSIFICATION",
+          "mechanics": "not_applicable",
+          "preconditions": {
+            "capability": "PRIVATE:capability",
+            "rights": "PRIVATE:rights",
+            "classification_basis": "PRIVATE:classification_basis",
+            "target_exists": "PRIVATE:target_exists",
+            "marking_exists": "PRIVATE:marking_exists"
+          }
+        },
+        "request_digest": "a6ddea4a6c0a847173c6e92a122505e2e2764c2b02501f0dec25c0536af06fec"
+      }
+    },
+    {
+      "version": 1,
+      "status": "applied",
+      "persistence": "committed",
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+      "request_id": "visibility-3",
+      "request_digest": "b3af8d48c1b2650259a986dcc04f39266c509a6e4c2e094fdf05539ef66b276c",
+      "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+      "previous_revision": 3,
+      "resulting_revision": 4,
+      "operation": "set_marking_visibility",
+      "request": {
+        "version": 1,
+        "operation": "set_marking_visibility",
+        "campaign_run_id": "identity-test-campaign",
+        "character_id": "hero",
+        "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+        "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+        "visibility": {
+          "classification": "visible"
+        },
+        "expected_revision": 3,
+        "request_id": "visibility-3",
+        "authorization": {
+          "caller_id": "trusted-fixture",
+          "decision_id": "PRIVATE-CLASSIFICATION",
+          "mechanics": "not_applicable",
+          "preconditions": {
+            "capability": "PRIVATE:capability",
+            "rights": "PRIVATE:rights",
+            "classification_basis": "PRIVATE:classification_basis",
+            "target_exists": "PRIVATE:target_exists",
+            "marking_exists": "PRIVATE:marking_exists"
+          }
+        },
+        "request_digest": "b3af8d48c1b2650259a986dcc04f39266c509a6e4c2e094fdf05539ef66b276c"
+      }
+    }
+  ],
+  "snapshots": [
+    {
+      "snapshot": {
+        "id": "2026-11-10T03-54-29_63e55b94",
+        "created_at": "2026-11-10T03:54:29.558384Z",
+        "label": "S0 unclassified"
+      },
+      "state": {
+        "id": "hero",
+        "inventory": [
+          {
+            "id": "dagger",
+            "name": "Dagger",
+            "quantity": 1,
+            "usable": false,
+            "legacy": {
+              "nested": [
+                1,
+                2
+              ]
+            },
+            "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+            "revision": 1,
+            "provenance": {
+              "version": 1,
+              "campaign_run_id": "identity-test-campaign",
+              "operation_id": "explicit-migration-1",
+              "source": {
+                "host": "character.inventory",
+                "legacy_id": "dagger"
+              }
+            },
+            "markings": [
+              {
+                "version": 1,
+                "type": "add_marking",
+                "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+                "content": "Northwest track",
+                "source": {
+                  "kind": "explicit_literal",
+                  "reference": "controlled-fixture"
+                },
+                "authorization": {
+                  "caller_id": "internal-test",
+                  "decision_id": "approval-1",
+                  "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+                  "preconditions": {
+                    "capability": "fixture-evidence:capability",
+                    "source_disclosed": "fixture-evidence:source_disclosed",
+                    "writable_surface": "fixture-evidence:writable_surface",
+                    "medium_compatible": "fixture-evidence:medium_compatible",
+                    "rights": "fixture-evidence:rights",
+                    "target_exists": "fixture-evidence:target_exists",
+                    "accessible": "fixture-evidence:accessible",
+                    "medium_available": "fixture-evidence:medium_available"
+                  },
+                  "mechanics": "not_applicable"
+                },
+                "request_id": "mark-request-1",
+                "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+                "applied_revision": 1
+              }
+            ]
+          },
+          {
+            "id": "dagger",
+            "name": "Dagger",
+            "quantity": 1,
+            "usable": false,
+            "instance_id": "ab58d300-28c9-4c5a-9f02-46b355599bff",
+            "revision": 0,
+            "provenance": {
+              "version": 1,
+              "campaign_run_id": "identity-test-campaign",
+              "operation_id": "explicit-migration-1",
+              "source": {
+                "host": "character.inventory",
+                "legacy_id": "dagger"
+              }
+            }
+          }
+        ],
+        "unknown_character": {
+          "keep": true
+        },
+        "object_marking_receipts": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "entries": {
+            "mark-request-1": {
+              "version": 1,
+              "status": "applied",
+              "persistence": "committed",
+              "campaign_run_id": "identity-test-campaign",
+              "character_id": "hero",
+              "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+              "request_id": "mark-request-1",
+              "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+              "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+              "previous_revision": 0,
+              "resulting_revision": 1
+            }
+          }
+        }
+      },
+      "observation": {
+        "version": 1,
+        "status": "observed",
+        "target": {
+          "campaign_run_id": "identity-test-campaign",
+          "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc"
+        },
+        "properties": [
+          {
+            "category": "markings",
+            "knowledge": "unknown",
+            "coverage": "subset",
+            "values": []
+          }
+        ],
+        "limitations": [
+          "partial_observation_scope"
+        ],
+        "evidence": []
+      },
+      "receipt_count": 1
+    },
+    {
+      "snapshot": {
+        "id": "2026-11-10T03-54-30_1374fa91",
+        "created_at": "2026-11-10T03:54:30.031601Z",
+        "label": "S1 visible"
+      },
+      "state": {
+        "id": "hero",
+        "inventory": [
+          {
+            "id": "dagger",
+            "name": "Dagger",
+            "quantity": 1,
+            "usable": false,
+            "legacy": {
+              "nested": [
+                1,
+                2
+              ]
+            },
+            "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+            "revision": 2,
+            "provenance": {
+              "version": 1,
+              "campaign_run_id": "identity-test-campaign",
+              "operation_id": "explicit-migration-1",
+              "source": {
+                "host": "character.inventory",
+                "legacy_id": "dagger"
+              }
+            },
+            "markings": [
+              {
+                "version": 1,
+                "type": "add_marking",
+                "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+                "content": "Northwest track",
+                "source": {
+                  "kind": "explicit_literal",
+                  "reference": "controlled-fixture"
+                },
+                "authorization": {
+                  "caller_id": "internal-test",
+                  "decision_id": "approval-1",
+                  "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+                  "preconditions": {
+                    "capability": "fixture-evidence:capability",
+                    "source_disclosed": "fixture-evidence:source_disclosed",
+                    "writable_surface": "fixture-evidence:writable_surface",
+                    "medium_compatible": "fixture-evidence:medium_compatible",
+                    "rights": "fixture-evidence:rights",
+                    "target_exists": "fixture-evidence:target_exists",
+                    "accessible": "fixture-evidence:accessible",
+                    "medium_available": "fixture-evidence:medium_available"
+                  },
+                  "mechanics": "not_applicable"
+                },
+                "request_id": "mark-request-1",
+                "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+                "applied_revision": 1
+              }
+            ],
+            "marking_visibility": {
+              "version": 1,
+              "markings": {
+                "725191af-b85e-42ce-b44a-6a835598cba4": {
+                  "classification": "visible"
+                }
+              }
+            }
+          },
+          {
+            "id": "dagger",
+            "name": "Dagger",
+            "quantity": 1,
+            "usable": false,
+            "instance_id": "ab58d300-28c9-4c5a-9f02-46b355599bff",
+            "revision": 0,
+            "provenance": {
+              "version": 1,
+              "campaign_run_id": "identity-test-campaign",
+              "operation_id": "explicit-migration-1",
+              "source": {
+                "host": "character.inventory",
+                "legacy_id": "dagger"
+              }
+            }
+          }
+        ],
+        "unknown_character": {
+          "keep": true
+        },
+        "object_marking_receipts": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "entries": {
+            "mark-request-1": {
+              "version": 1,
+              "status": "applied",
+              "persistence": "committed",
+              "campaign_run_id": "identity-test-campaign",
+              "character_id": "hero",
+              "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+              "request_id": "mark-request-1",
+              "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+              "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+              "previous_revision": 0,
+              "resulting_revision": 1
+            },
+            "visibility-1": {
+              "version": 1,
+              "status": "applied",
+              "persistence": "committed",
+              "campaign_run_id": "identity-test-campaign",
+              "character_id": "hero",
+              "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+              "request_id": "visibility-1",
+              "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db",
+              "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+              "previous_revision": 1,
+              "resulting_revision": 2,
+              "operation": "set_marking_visibility",
+              "request": {
+                "version": 1,
+                "operation": "set_marking_visibility",
+                "campaign_run_id": "identity-test-campaign",
+                "character_id": "hero",
+                "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+                "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+                "visibility": {
+                  "classification": "visible"
+                },
+                "expected_revision": 1,
+                "request_id": "visibility-1",
+                "authorization": {
+                  "caller_id": "trusted-fixture",
+                  "decision_id": "PRIVATE-CLASSIFICATION",
+                  "mechanics": "not_applicable",
+                  "preconditions": {
+                    "capability": "PRIVATE:capability",
+                    "rights": "PRIVATE:rights",
+                    "classification_basis": "PRIVATE:classification_basis",
+                    "target_exists": "PRIVATE:target_exists",
+                    "marking_exists": "PRIVATE:marking_exists"
+                  }
+                },
+                "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db"
+              }
+            }
+          }
+        }
+      },
+      "observation": {
+        "version": 1,
+        "status": "observed",
+        "target": {
+          "campaign_run_id": "identity-test-campaign",
+          "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc"
+        },
+        "properties": [
+          {
+            "category": "markings",
+            "knowledge": "known_present",
+            "coverage": "subset",
+            "values": [
+              {
+                "content": "Northwest track",
+                "presentation": "inscription",
+                "evidence_ref": "observation:markings:0",
+                "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768"
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "partial_observation_scope"
+        ],
+        "evidence": [
+          {
+            "reference": "observation:markings:0",
+            "category": "markings",
+            "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768"
+          }
+        ]
+      },
+      "receipt_count": 2
+    },
+    {
+      "snapshot": {
+        "id": "2026-11-10T03-54-30_0f10f1fe",
+        "created_at": "2026-11-10T03:54:30.300793Z",
+        "label": "S2 concealed"
+      },
+      "state": {
+        "id": "hero",
+        "inventory": [
+          {
+            "id": "dagger",
+            "name": "Dagger",
+            "quantity": 1,
+            "usable": false,
+            "legacy": {
+              "nested": [
+                1,
+                2
+              ]
+            },
+            "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+            "revision": 3,
+            "provenance": {
+              "version": 1,
+              "campaign_run_id": "identity-test-campaign",
+              "operation_id": "explicit-migration-1",
+              "source": {
+                "host": "character.inventory",
+                "legacy_id": "dagger"
+              }
+            },
+            "markings": [
+              {
+                "version": 1,
+                "type": "add_marking",
+                "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+                "content": "Northwest track",
+                "source": {
+                  "kind": "explicit_literal",
+                  "reference": "controlled-fixture"
+                },
+                "authorization": {
+                  "caller_id": "internal-test",
+                  "decision_id": "approval-1",
+                  "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+                  "preconditions": {
+                    "capability": "fixture-evidence:capability",
+                    "source_disclosed": "fixture-evidence:source_disclosed",
+                    "writable_surface": "fixture-evidence:writable_surface",
+                    "medium_compatible": "fixture-evidence:medium_compatible",
+                    "rights": "fixture-evidence:rights",
+                    "target_exists": "fixture-evidence:target_exists",
+                    "accessible": "fixture-evidence:accessible",
+                    "medium_available": "fixture-evidence:medium_available"
+                  },
+                  "mechanics": "not_applicable"
+                },
+                "request_id": "mark-request-1",
+                "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+                "applied_revision": 1
+              }
+            ],
+            "marking_visibility": {
+              "version": 1,
+              "markings": {
+                "725191af-b85e-42ce-b44a-6a835598cba4": {
+                  "classification": "concealed"
+                }
+              }
+            }
+          },
+          {
+            "id": "dagger",
+            "name": "Dagger",
+            "quantity": 1,
+            "usable": false,
+            "instance_id": "ab58d300-28c9-4c5a-9f02-46b355599bff",
+            "revision": 0,
+            "provenance": {
+              "version": 1,
+              "campaign_run_id": "identity-test-campaign",
+              "operation_id": "explicit-migration-1",
+              "source": {
+                "host": "character.inventory",
+                "legacy_id": "dagger"
+              }
+            }
+          }
+        ],
+        "unknown_character": {
+          "keep": true
+        },
+        "object_marking_receipts": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "entries": {
+            "mark-request-1": {
+              "version": 1,
+              "status": "applied",
+              "persistence": "committed",
+              "campaign_run_id": "identity-test-campaign",
+              "character_id": "hero",
+              "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+              "request_id": "mark-request-1",
+              "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+              "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+              "previous_revision": 0,
+              "resulting_revision": 1
+            },
+            "visibility-1": {
+              "version": 1,
+              "status": "applied",
+              "persistence": "committed",
+              "campaign_run_id": "identity-test-campaign",
+              "character_id": "hero",
+              "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+              "request_id": "visibility-1",
+              "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db",
+              "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+              "previous_revision": 1,
+              "resulting_revision": 2,
+              "operation": "set_marking_visibility",
+              "request": {
+                "version": 1,
+                "operation": "set_marking_visibility",
+                "campaign_run_id": "identity-test-campaign",
+                "character_id": "hero",
+                "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+                "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+                "visibility": {
+                  "classification": "visible"
+                },
+                "expected_revision": 1,
+                "request_id": "visibility-1",
+                "authorization": {
+                  "caller_id": "trusted-fixture",
+                  "decision_id": "PRIVATE-CLASSIFICATION",
+                  "mechanics": "not_applicable",
+                  "preconditions": {
+                    "capability": "PRIVATE:capability",
+                    "rights": "PRIVATE:rights",
+                    "classification_basis": "PRIVATE:classification_basis",
+                    "target_exists": "PRIVATE:target_exists",
+                    "marking_exists": "PRIVATE:marking_exists"
+                  }
+                },
+                "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db"
+              }
+            },
+            "visibility-2": {
+              "version": 1,
+              "status": "applied",
+              "persistence": "committed",
+              "campaign_run_id": "identity-test-campaign",
+              "character_id": "hero",
+              "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+              "request_id": "visibility-2",
+              "request_digest": "a6ddea4a6c0a847173c6e92a122505e2e2764c2b02501f0dec25c0536af06fec",
+              "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+              "previous_revision": 2,
+              "resulting_revision": 3,
+              "operation": "set_marking_visibility",
+              "request": {
+                "version": 1,
+                "operation": "set_marking_visibility",
+                "campaign_run_id": "identity-test-campaign",
+                "character_id": "hero",
+                "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+                "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+                "visibility": {
+                  "classification": "concealed"
+                },
+                "expected_revision": 2,
+                "request_id": "visibility-2",
+                "authorization": {
+                  "caller_id": "trusted-fixture",
+                  "decision_id": "PRIVATE-CLASSIFICATION",
+                  "mechanics": "not_applicable",
+                  "preconditions": {
+                    "capability": "PRIVATE:capability",
+                    "rights": "PRIVATE:rights",
+                    "classification_basis": "PRIVATE:classification_basis",
+                    "target_exists": "PRIVATE:target_exists",
+                    "marking_exists": "PRIVATE:marking_exists"
+                  }
+                },
+                "request_digest": "a6ddea4a6c0a847173c6e92a122505e2e2764c2b02501f0dec25c0536af06fec"
+              }
+            }
+          }
+        }
+      },
+      "observation": {
+        "version": 1,
+        "status": "observed",
+        "target": {
+          "campaign_run_id": "identity-test-campaign",
+          "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc"
+        },
+        "properties": [
+          {
+            "category": "markings",
+            "knowledge": "unknown",
+            "coverage": "subset",
+            "values": []
+          }
+        ],
+        "limitations": [
+          "partial_observation_scope"
+        ],
+        "evidence": []
+      },
+      "receipt_count": 3
+    },
+    {
+      "snapshot": {
+        "id": "2026-11-10T03-54-30_ed2f5a22",
+        "created_at": "2026-11-10T03:54:30.576537Z",
+        "label": "S3 visible"
+      },
+      "state": {
+        "id": "hero",
+        "inventory": [
+          {
+            "id": "dagger",
+            "name": "Dagger",
+            "quantity": 1,
+            "usable": false,
+            "legacy": {
+              "nested": [
+                1,
+                2
+              ]
+            },
+            "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+            "revision": 4,
+            "provenance": {
+              "version": 1,
+              "campaign_run_id": "identity-test-campaign",
+              "operation_id": "explicit-migration-1",
+              "source": {
+                "host": "character.inventory",
+                "legacy_id": "dagger"
+              }
+            },
+            "markings": [
+              {
+                "version": 1,
+                "type": "add_marking",
+                "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+                "content": "Northwest track",
+                "source": {
+                  "kind": "explicit_literal",
+                  "reference": "controlled-fixture"
+                },
+                "authorization": {
+                  "caller_id": "internal-test",
+                  "decision_id": "approval-1",
+                  "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+                  "preconditions": {
+                    "capability": "fixture-evidence:capability",
+                    "source_disclosed": "fixture-evidence:source_disclosed",
+                    "writable_surface": "fixture-evidence:writable_surface",
+                    "medium_compatible": "fixture-evidence:medium_compatible",
+                    "rights": "fixture-evidence:rights",
+                    "target_exists": "fixture-evidence:target_exists",
+                    "accessible": "fixture-evidence:accessible",
+                    "medium_available": "fixture-evidence:medium_available"
+                  },
+                  "mechanics": "not_applicable"
+                },
+                "request_id": "mark-request-1",
+                "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+                "applied_revision": 1
+              }
+            ],
+            "marking_visibility": {
+              "version": 1,
+              "markings": {
+                "725191af-b85e-42ce-b44a-6a835598cba4": {
+                  "classification": "visible"
+                }
+              }
+            }
+          },
+          {
+            "id": "dagger",
+            "name": "Dagger",
+            "quantity": 1,
+            "usable": false,
+            "instance_id": "ab58d300-28c9-4c5a-9f02-46b355599bff",
+            "revision": 0,
+            "provenance": {
+              "version": 1,
+              "campaign_run_id": "identity-test-campaign",
+              "operation_id": "explicit-migration-1",
+              "source": {
+                "host": "character.inventory",
+                "legacy_id": "dagger"
+              }
+            }
+          }
+        ],
+        "unknown_character": {
+          "keep": true
+        },
+        "object_marking_receipts": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "entries": {
+            "mark-request-1": {
+              "version": 1,
+              "status": "applied",
+              "persistence": "committed",
+              "campaign_run_id": "identity-test-campaign",
+              "character_id": "hero",
+              "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+              "request_id": "mark-request-1",
+              "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+              "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+              "previous_revision": 0,
+              "resulting_revision": 1
+            },
+            "visibility-1": {
+              "version": 1,
+              "status": "applied",
+              "persistence": "committed",
+              "campaign_run_id": "identity-test-campaign",
+              "character_id": "hero",
+              "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+              "request_id": "visibility-1",
+              "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db",
+              "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+              "previous_revision": 1,
+              "resulting_revision": 2,
+              "operation": "set_marking_visibility",
+              "request": {
+                "version": 1,
+                "operation": "set_marking_visibility",
+                "campaign_run_id": "identity-test-campaign",
+                "character_id": "hero",
+                "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+                "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+                "visibility": {
+                  "classification": "visible"
+                },
+                "expected_revision": 1,
+                "request_id": "visibility-1",
+                "authorization": {
+                  "caller_id": "trusted-fixture",
+                  "decision_id": "PRIVATE-CLASSIFICATION",
+                  "mechanics": "not_applicable",
+                  "preconditions": {
+                    "capability": "PRIVATE:capability",
+                    "rights": "PRIVATE:rights",
+                    "classification_basis": "PRIVATE:classification_basis",
+                    "target_exists": "PRIVATE:target_exists",
+                    "marking_exists": "PRIVATE:marking_exists"
+                  }
+                },
+                "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db"
+              }
+            },
+            "visibility-2": {
+              "version": 1,
+              "status": "applied",
+              "persistence": "committed",
+              "campaign_run_id": "identity-test-campaign",
+              "character_id": "hero",
+              "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+              "request_id": "visibility-2",
+              "request_digest": "a6ddea4a6c0a847173c6e92a122505e2e2764c2b02501f0dec25c0536af06fec",
+              "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+              "previous_revision": 2,
+              "resulting_revision": 3,
+              "operation": "set_marking_visibility",
+              "request": {
+                "version": 1,
+                "operation": "set_marking_visibility",
+                "campaign_run_id": "identity-test-campaign",
+                "character_id": "hero",
+                "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+                "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+                "visibility": {
+                  "classification": "concealed"
+                },
+                "expected_revision": 2,
+                "request_id": "visibility-2",
+                "authorization": {
+                  "caller_id": "trusted-fixture",
+                  "decision_id": "PRIVATE-CLASSIFICATION",
+                  "mechanics": "not_applicable",
+                  "preconditions": {
+                    "capability": "PRIVATE:capability",
+                    "rights": "PRIVATE:rights",
+                    "classification_basis": "PRIVATE:classification_basis",
+                    "target_exists": "PRIVATE:target_exists",
+                    "marking_exists": "PRIVATE:marking_exists"
+                  }
+                },
+                "request_digest": "a6ddea4a6c0a847173c6e92a122505e2e2764c2b02501f0dec25c0536af06fec"
+              }
+            },
+            "visibility-3": {
+              "version": 1,
+              "status": "applied",
+              "persistence": "committed",
+              "campaign_run_id": "identity-test-campaign",
+              "character_id": "hero",
+              "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+              "request_id": "visibility-3",
+              "request_digest": "b3af8d48c1b2650259a986dcc04f39266c509a6e4c2e094fdf05539ef66b276c",
+              "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+              "previous_revision": 3,
+              "resulting_revision": 4,
+              "operation": "set_marking_visibility",
+              "request": {
+                "version": 1,
+                "operation": "set_marking_visibility",
+                "campaign_run_id": "identity-test-campaign",
+                "character_id": "hero",
+                "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+                "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+                "visibility": {
+                  "classification": "visible"
+                },
+                "expected_revision": 3,
+                "request_id": "visibility-3",
+                "authorization": {
+                  "caller_id": "trusted-fixture",
+                  "decision_id": "PRIVATE-CLASSIFICATION",
+                  "mechanics": "not_applicable",
+                  "preconditions": {
+                    "capability": "PRIVATE:capability",
+                    "rights": "PRIVATE:rights",
+                    "classification_basis": "PRIVATE:classification_basis",
+                    "target_exists": "PRIVATE:target_exists",
+                    "marking_exists": "PRIVATE:marking_exists"
+                  }
+                },
+                "request_digest": "b3af8d48c1b2650259a986dcc04f39266c509a6e4c2e094fdf05539ef66b276c"
+              }
+            }
+          }
+        }
+      },
+      "observation": {
+        "version": 1,
+        "status": "observed",
+        "target": {
+          "campaign_run_id": "identity-test-campaign",
+          "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc"
+        },
+        "properties": [
+          {
+            "category": "markings",
+            "knowledge": "known_present",
+            "coverage": "subset",
+            "values": [
+              {
+                "content": "Northwest track",
+                "presentation": "inscription",
+                "evidence_ref": "observation:markings:0",
+                "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768"
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "partial_observation_scope"
+        ],
+        "evidence": [
+          {
+            "reference": "observation:markings:0",
+            "category": "markings",
+            "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768"
+          }
+        ]
+      },
+      "receipt_count": 4
+    }
+  ],
+  "final": {
+    "id": "hero",
+    "inventory": [
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "legacy": {
+          "nested": [
+            1,
+            2
+          ]
+        },
+        "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+        "revision": 4,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        },
+        "markings": [
+          {
+            "version": 1,
+            "type": "add_marking",
+            "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+            "content": "Northwest track",
+            "source": {
+              "kind": "explicit_literal",
+              "reference": "controlled-fixture"
+            },
+            "authorization": {
+              "caller_id": "internal-test",
+              "decision_id": "approval-1",
+              "content_sha256": "f4363c3dc36c8a3e5403b624efff9eeeca569b9621a71a066ffe38f0f64dc768",
+              "preconditions": {
+                "capability": "fixture-evidence:capability",
+                "source_disclosed": "fixture-evidence:source_disclosed",
+                "writable_surface": "fixture-evidence:writable_surface",
+                "medium_compatible": "fixture-evidence:medium_compatible",
+                "rights": "fixture-evidence:rights",
+                "target_exists": "fixture-evidence:target_exists",
+                "accessible": "fixture-evidence:accessible",
+                "medium_available": "fixture-evidence:medium_available"
+              },
+              "mechanics": "not_applicable"
+            },
+            "request_id": "mark-request-1",
+            "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+            "applied_revision": 1
+          }
+        ],
+        "marking_visibility": {
+          "version": 1,
+          "markings": {
+            "725191af-b85e-42ce-b44a-6a835598cba4": {
+              "classification": "visible"
+            }
+          }
+        }
+      },
+      {
+        "id": "dagger",
+        "name": "Dagger",
+        "quantity": 1,
+        "usable": false,
+        "instance_id": "ab58d300-28c9-4c5a-9f02-46b355599bff",
+        "revision": 0,
+        "provenance": {
+          "version": 1,
+          "campaign_run_id": "identity-test-campaign",
+          "operation_id": "explicit-migration-1",
+          "source": {
+            "host": "character.inventory",
+            "legacy_id": "dagger"
+          }
+        }
+      }
+    ],
+    "unknown_character": {
+      "keep": true
+    },
+    "object_marking_receipts": {
+      "version": 1,
+      "campaign_run_id": "identity-test-campaign",
+      "character_id": "hero",
+      "entries": {
+        "mark-request-1": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+          "request_id": "mark-request-1",
+          "request_digest": "e458144b89db883905c59e7967c6f4682e94cb550b2eeec02329ceb0b2791095",
+          "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+          "previous_revision": 0,
+          "resulting_revision": 1
+        },
+        "visibility-1": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+          "request_id": "visibility-1",
+          "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db",
+          "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+          "previous_revision": 1,
+          "resulting_revision": 2,
+          "operation": "set_marking_visibility",
+          "request": {
+            "version": 1,
+            "operation": "set_marking_visibility",
+            "campaign_run_id": "identity-test-campaign",
+            "character_id": "hero",
+            "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+            "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+            "visibility": {
+              "classification": "visible"
+            },
+            "expected_revision": 1,
+            "request_id": "visibility-1",
+            "authorization": {
+              "caller_id": "trusted-fixture",
+              "decision_id": "PRIVATE-CLASSIFICATION",
+              "mechanics": "not_applicable",
+              "preconditions": {
+                "capability": "PRIVATE:capability",
+                "rights": "PRIVATE:rights",
+                "classification_basis": "PRIVATE:classification_basis",
+                "target_exists": "PRIVATE:target_exists",
+                "marking_exists": "PRIVATE:marking_exists"
+              }
+            },
+            "request_digest": "db93609ca7ab21c5807f6772ee33b57d83f18249873658eecbfbc3e625a151db"
+          }
+        },
+        "visibility-2": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+          "request_id": "visibility-2",
+          "request_digest": "a6ddea4a6c0a847173c6e92a122505e2e2764c2b02501f0dec25c0536af06fec",
+          "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+          "previous_revision": 2,
+          "resulting_revision": 3,
+          "operation": "set_marking_visibility",
+          "request": {
+            "version": 1,
+            "operation": "set_marking_visibility",
+            "campaign_run_id": "identity-test-campaign",
+            "character_id": "hero",
+            "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+            "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+            "visibility": {
+              "classification": "concealed"
+            },
+            "expected_revision": 2,
+            "request_id": "visibility-2",
+            "authorization": {
+              "caller_id": "trusted-fixture",
+              "decision_id": "PRIVATE-CLASSIFICATION",
+              "mechanics": "not_applicable",
+              "preconditions": {
+                "capability": "PRIVATE:capability",
+                "rights": "PRIVATE:rights",
+                "classification_basis": "PRIVATE:classification_basis",
+                "target_exists": "PRIVATE:target_exists",
+                "marking_exists": "PRIVATE:marking_exists"
+              }
+            },
+            "request_digest": "a6ddea4a6c0a847173c6e92a122505e2e2764c2b02501f0dec25c0536af06fec"
+          }
+        },
+        "visibility-3": {
+          "version": 1,
+          "status": "applied",
+          "persistence": "committed",
+          "campaign_run_id": "identity-test-campaign",
+          "character_id": "hero",
+          "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+          "request_id": "visibility-3",
+          "request_digest": "b3af8d48c1b2650259a986dcc04f39266c509a6e4c2e094fdf05539ef66b276c",
+          "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+          "previous_revision": 3,
+          "resulting_revision": 4,
+          "operation": "set_marking_visibility",
+          "request": {
+            "version": 1,
+            "operation": "set_marking_visibility",
+            "campaign_run_id": "identity-test-campaign",
+            "character_id": "hero",
+            "instance_id": "6f72216a-f3b8-42fd-9126-e026b7f8d6fc",
+            "modification_id": "725191af-b85e-42ce-b44a-6a835598cba4",
+            "visibility": {
+              "classification": "visible"
+            },
+            "expected_revision": 3,
+            "request_id": "visibility-3",
+            "authorization": {
+              "caller_id": "trusted-fixture",
+              "decision_id": "PRIVATE-CLASSIFICATION",
+              "mechanics": "not_applicable",
+              "preconditions": {
+                "capability": "PRIVATE:capability",
+                "rights": "PRIVATE:rights",
+                "classification_basis": "PRIVATE:classification_basis",
+                "target_exists": "PRIVATE:target_exists",
+                "marking_exists": "PRIVATE:marking_exists"
+              }
+            },
+            "request_digest": "b3af8d48c1b2650259a986dcc04f39266c509a6e4c2e094fdf05539ef66b276c"
+          }
+        }
+      }
+    }
+  },
+  "leakage": {
+    "leaks": []
+  },
+  "live_provider_calls": 0
+}

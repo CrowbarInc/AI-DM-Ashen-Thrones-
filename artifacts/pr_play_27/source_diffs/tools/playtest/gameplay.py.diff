@@ -1,0 +1,89 @@
+--- before/tools/playtest/gameplay.py
++++ after/tools/playtest/gameplay.py
+@@ -15,6 +15,52 @@
+ 
+ class QualityReviewer(Protocol):
+     def review(self, action: dict, text: str, prior: list[str]) -> dict: ...
++
++
++def can_start_interaction(usage, request_limit):
++    """Reserve interpretation plus optional expression before starting a turn."""
++    return (not usage.get('stopped')
++            and request_limit - usage.get('dispatched_requests', 0) >= 2)
++
++
++def expression_outcome(gm):
++    """Evaluate delivered wording against native authority, never candidate adoption alone."""
++    from game.expressive_dialogue import validate_expression, spoken_text, wrap_speech, _norm, _UNCERTAIN
++    metadata = gm.get('metadata') or {}
++    audit = metadata.get('expression_generation') or {}
++    accepted = metadata.get('accepted_response') or {}
++    decision = audit.get('decision') or accepted.get('expression_decision')
++    if decision not in {'adopted', 'rejected'}:
++        return 'EXPRESSION_NOT_INVOKED', []
++    contract = audit.get('contract') or {}
++    text = str(gm.get('player_facing_text') or '')
++    reasons = []
++    if not text.strip():
++        reasons.append('unrecoverable_expression_failure')
++    elif contract:
++        spoken = spoken_text(text, str(contract.get('speaker_name') or ''))
++        props = contract.get('authorized_propositions') or []
++        if text != wrap_speech(str(contract.get('speaker_name') or ''), spoken, str(contract.get('fallback_response') or '')):
++            reasons.append('published_speaker_or_frame_changed')
++        if props and _UNCERTAIN.search(spoken):
++            reasons.append('semantic_dead_end')
++        # Exact canonical answer is a valid fallback, although expression
++        # adoption deliberately rejects verbatim repetition.
++        exact = len(props) == 1 and _norm(spoken) == _norm(props[0])
++        validation = validate_expression(spoken, contract)
++        if not exact and not validation['adopt']:
++            reasons.append('published_expression_not_authorized')
++    elif decision == 'rejected':
++        # Player projection may omit the full audit. Require native authority
++        # and validation evidence instead of inferring recovery from text alone.
++        proposition = str(accepted.get('authorized_proposition') or '')
++        spoken = spoken_text(text, '')
++        if (not proposition or _norm(spoken) != _norm(proposition)
++                or (accepted.get('hard_validation') or {}).get('hard_valid') is not True):
++            reasons.append('expression_recovery_unverified')
++    return ('EXPRESSION_ACCEPTED' if decision == 'adopted' else
++            'EXPRESSION_REJECTED_UNRECOVERED' if reasons else
++            'EXPRESSION_REJECTED_RECOVERED'), reasons
+ 
+ 
+ def classify_turn(status, body, events=()):
+@@ -30,7 +76,8 @@
+     bridge = meta.get('stored_interpretation_bridge') or {}
+     live = meta.get('live_chat_interpretation') or {}
+     accepted = (gm.get('metadata') or {}).get('accepted_response') or {}
+-    reasons = []
++    expression_status, expression_reasons = expression_outcome(gm)
++    reasons = list(expression_reasons)
+     if status != 200:
+         reasons.append('http_failure')
+     if body.get('ok') is False:
+@@ -77,7 +124,7 @@
+     pipeline_completed = (status == 200 and bool(str(gm.get('player_facing_text') or '').strip())
+                           and bool(resolution or accepted)
+                           and not set(reasons) & {'provider_or_parser_failure', 'interpretation_rejection', 'validator_rejection'})
+-    return {'transport_completed': status == 200, 'pipeline_completed': pipeline_completed,
++    return {'expression_status': expression_status, 'transport_completed': status == 200, 'pipeline_completed': pipeline_completed,
+             'action_executed': executed and not reasons, 'gameplay_completed': completed,
+             'interaction_outcome': 'rejected' if reasons else 'partial' if partial else 'completed' if completed else 'unknown',
+             'semantic_dead_end': bool(reasons), 'stop': bool(reasons), 'reasons': sorted(set(reasons))}
+@@ -168,6 +215,14 @@
+     changes = diff({k: document(before, k) for k in before}, {k: document(after, k) for k in after})
+     resolution = body.get('resolution') or {}
+     completion_status = classify_turn(status, body, events)
++    # Some experiments explicitly require an answer, rather than legitimate
++    # uncertainty. A generic host line must not satisfy that scenario gate.
++    if action.get('requires_substantive_answer'):
++        from game.expressive_dialogue import _UNCERTAIN
++        if _UNCERTAIN.search(text):
++            completion_status.update(gameplay_completed=False, semantic_dead_end=True,
++                                     stop=True, interaction_outcome='rejected')
++            completion_status['reasons'].append('decisive_conversational_dead_end')
+     findings = []
+     def finding(category, kind, evidence, source):
+         findings.append({'category': category, 'kind': kind, 'evidence': evidence, 'source': source,

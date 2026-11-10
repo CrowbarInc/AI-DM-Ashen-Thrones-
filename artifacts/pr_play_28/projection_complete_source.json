@@ -1,0 +1,73 @@
+[
+  {
+    "frontier_gate": {
+      "scene_id": "frontier_gate",
+      "visible_facts_add": [],
+      "discovered_clues": [
+        "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+        "Ask around the old trading crossroads"
+      ],
+      "state_flags": {},
+      "runtime_entities": [],
+      "mutations": {}
+    },
+    "market_quarter": {
+      "scene_id": "market_quarter",
+      "visible_facts_add": [],
+      "discovered_clues": [],
+      "state_flags": {},
+      "runtime_entities": [],
+      "mutations": {}
+    },
+    "old_milestone": {
+      "scene_id": "old_milestone",
+      "visible_facts_add": [],
+      "discovered_clues": [],
+      "state_flags": {},
+      "runtime_entities": [],
+      "mutations": {}
+    }
+  },
+  {
+    "operation": "authored_social_clue_projection",
+    "action_id": "tavern_runner",
+    "player_input": "What have you heard about the patrol?",
+    "source_id": "npc:tavern_runner:patrol_rumor",
+    "disclosure": {
+      "speaker_id": "tavern_runner",
+      "addressee": "player",
+      "source_id": "npc:tavern_runner:patrol_rumor",
+      "classification": "public",
+      "knowledge_status": "known",
+      "permission": true,
+      "epistemic_status": "npc_knowledge",
+      "operation": "disclose",
+      "authorized_proposition": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+      "canonical": false,
+      "authorized_clue_text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+      "authorized_clue_id": "muddy_footprints_northwest",
+      "provenance": "authored_npc_source",
+      "validation": "authorized"
+    },
+    "events": [
+      {
+        "type": "social_lead_revealed",
+        "clue_id": "muddy_footprints_northwest",
+        "scene_id": "frontier_gate",
+        "npc_id": "tavern_runner",
+        "topic_id": "patrol_rumor"
+      },
+      {
+        "type": "social_extracted_lead",
+        "clue_id": "lead_frontier_gate_old_trading_crossroads",
+        "scene_id": "frontier_gate",
+        "source": "discoverable_clue:old_trading_crossroads"
+      }
+    ],
+    "minimum_lead": {
+      "minimum_actionable_lead_enforced": true,
+      "enforced_lead_id": "lead_frontier_gate_old_trading_crossroads",
+      "enforced_lead_source": "discoverable_clue"
+    }
+  }
+]

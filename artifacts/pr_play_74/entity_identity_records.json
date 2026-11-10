@@ -1,0 +1,153 @@
+{
+  "browser_survey_before_resume": [
+    {
+      "id": "wf_ebac2f6f9bc6a0fa515f",
+      "campaign_id": "f79a82e8025f7bacaa0d92c6",
+      "scene_id": "old_milestone",
+      "category": "B",
+      "family": "environment",
+      "entity_type": "surface",
+      "label": "rough stone surface",
+      "content": "The stone has a rough, uneven surface.",
+      "canonical_description": "The stone has a rough, uneven surface.",
+      "properties": {
+        "material": "stone",
+        "texture": "rough"
+      },
+      "anchor": "A weathered stone milestone leans beside the northwest mud track.",
+      "provenance": "accepted_improvisation",
+      "source": "validated_proposal",
+      "creation_turn": 6,
+      "visibility": "public",
+      "status": "accepted",
+      "authority": "controlled_world_fact",
+      "truth_status": "runtime_incidental",
+      "scope": "scene",
+      "persistence_status": "campaign",
+      "interactions": []
+    },
+    {
+      "id": "wf_0e00857f97a566196809",
+      "campaign_id": "f79a82e8025f7bacaa0d92c6",
+      "scene_id": "old_milestone",
+      "category": "C",
+      "family": "object",
+      "entity_type": "object",
+      "label": "ordinary stone seat",
+      "content": "An ordinary low stone beside the established stonework offers a place to sit.",
+      "canonical_description": "An ordinary low stone beside the established stonework offers a place to sit.",
+      "properties": {
+        "material": "stone",
+        "use": "seat"
+      },
+      "anchor": "A weathered stone milestone leans beside the northwest mud track.",
+      "provenance": "accepted_improvisation",
+      "source": "validated_proposal",
+      "creation_turn": 7,
+      "visibility": "public",
+      "status": "accepted",
+      "authority": "controlled_world_fact",
+      "truth_status": "runtime_incidental",
+      "scope": "scene",
+      "persistence_status": "campaign",
+      "interactions": [
+        {
+          "turn": 8,
+          "action": "physical_search"
+        }
+      ]
+    }
+  ],
+  "browser_survey_after_interaction": [
+    {
+      "id": "wf_ebac2f6f9bc6a0fa515f",
+      "campaign_id": "f79a82e8025f7bacaa0d92c6",
+      "scene_id": "old_milestone",
+      "category": "B",
+      "family": "environment",
+      "entity_type": "surface",
+      "label": "rough stone surface",
+      "content": "The stone has a rough, uneven surface.",
+      "canonical_description": "The stone has a rough, uneven surface.",
+      "properties": {
+        "material": "stone",
+        "texture": "rough"
+      },
+      "anchor": "A weathered stone milestone leans beside the northwest mud track.",
+      "provenance": "accepted_improvisation",
+      "source": "validated_proposal",
+      "creation_turn": 6,
+      "visibility": "public",
+      "status": "accepted",
+      "authority": "controlled_world_fact",
+      "truth_status": "runtime_incidental",
+      "scope": "scene",
+      "persistence_status": "campaign",
+      "interactions": []
+    },
+    {
+      "id": "wf_0e00857f97a566196809",
+      "campaign_id": "f79a82e8025f7bacaa0d92c6",
+      "scene_id": "old_milestone",
+      "category": "C",
+      "family": "object",
+      "entity_type": "object",
+      "label": "ordinary stone seat",
+      "content": "An ordinary low stone beside the established stonework offers a place to sit.",
+      "canonical_description": "An ordinary low stone beside the established stonework offers a place to sit.",
+      "properties": {
+        "material": "stone",
+        "use": "seat"
+      },
+      "anchor": "A weathered stone milestone leans beside the northwest mud track.",
+      "provenance": "accepted_improvisation",
+      "source": "validated_proposal",
+      "creation_turn": 7,
+      "visibility": "public",
+      "status": "accepted",
+      "authority": "controlled_world_fact",
+      "truth_status": "runtime_incidental",
+      "scope": "scene",
+      "persistence_status": "campaign",
+      "interactions": [
+        {
+          "turn": 8,
+          "action": "physical_search"
+        },
+        {
+          "turn": 9,
+          "action": "physical_search"
+        }
+      ]
+    }
+  ],
+  "http_campaigns": [
+    {
+      "branch": "survey",
+      "identity": "7bfa221bb6802cf5b18b0ae4",
+      "snapshot_id": "2026-11-07T15-12-31_523192b9",
+      "entity_id": "wf_6727ea2dfdda9dd05db0",
+      "resumed": true,
+      "texts": {
+        "Describe the stone surface.": "The stone has a rough, uneven surface.",
+        "Is there anything nearby I could sit on?": "An ordinary low stone beside the established stonework offers a place to sit.",
+        "I examine the stone seat.": "An ordinary low stone beside the established stonework offers a place to sit. You check ordinary stone seat. Nothing concealed is established there. No passage, treasure, or new evidence is revealed."
+      },
+      "npc_creation": "not requested"
+    },
+    {
+      "branch": "report",
+      "identity": "ab44dd5d6e2a47f92d23de63",
+      "snapshot_id": "2026-11-07T15-12-43_7afb74f2",
+      "entity_id": "wf_c2255c70eafcfef7aed6",
+      "resumed": true,
+      "texts": {
+        "npc_attempt": "Guard Captain says, \"I couldn't tell you.\"",
+        "Describe the stone surface.": "The stone has a rough, uneven surface.",
+        "Is there anything nearby I could sit on?": "An ordinary low stone beside the established stonework offers a place to sit.",
+        "I examine the stone seat.": "An ordinary low stone beside the established stonework offers a place to sit. You check ordinary stone seat. Nothing concealed is established there. No passage, treasure, or new evidence is revealed."
+      },
+      "npc_creation": "deferred"
+    }
+  ]
+}

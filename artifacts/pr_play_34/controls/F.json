@@ -1,0 +1,313 @@
+{
+  "case": "F",
+  "run": "artifacts/atgb/pr_play_34/readiness/F/20261102T010523Z-c621ea52169f",
+  "observation": {
+    "live": {
+      "controller_pid": 26144,
+      "controller_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "controller_created_utc": "2026-11-02T01:05:11Z",
+      "popen_pid": 460,
+      "parent_pid": null,
+      "reported_image": null,
+      "worker_executable": null,
+      "worker_created_utc": "2026-11-02T01:05:23Z",
+      "worker_query_error": 31,
+      "base_executable": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "launch_command": [
+        "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-u",
+        "-m",
+        "tools.playtest.worker",
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\F\\20261102T010523Z-c621ea52169f"
+      ],
+      "children": [],
+      "parent_chain": [],
+      "process_alive": false,
+      "exit_code": 2,
+      "startup_event_pid": 460,
+      "reported_pid": 460
+    },
+    "session_before": {
+      "exists": false,
+      "path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\F\\20261102T010523Z-c621ea52169f\\data\\session.json",
+      "debug_traces": [],
+      "inside_isolated_store": null,
+      "log_entries": 0
+    },
+    "session_after": {
+      "exists": false,
+      "path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\F\\20261102T010523Z-c621ea52169f\\data\\session.json",
+      "debug_traces": [],
+      "inside_isolated_store": null,
+      "log_entries": 0
+    },
+    "provider_events": [],
+    "usage": {},
+    "http_requests": [],
+    "http_status": null,
+    "http_ready_exists": false,
+    "startup_seconds": null,
+    "timeout_seconds": 30,
+    "verdict": "BLOCKED",
+    "failure": {
+      "type": "RuntimeError",
+      "stage": "application_startup_failure"
+    },
+    "stop_reason": "application_startup_failure",
+    "steps": [],
+    "process_cleanup": {
+      "owned": true,
+      "pid": 460,
+      "stopped": true,
+      "exit_code": 2,
+      "shutdown_seconds": 0.0
+    },
+    "orphans": [],
+    "port": null,
+    "port_released": null,
+    "poll_events": [
+      {
+        "event": "worker_spawned",
+        "time": "2026-11-02T01:05:24.221164+00:00",
+        "elapsed_seconds": 0.0,
+        "pid": 460,
+        "deadline_seconds": 30
+      },
+      {
+        "event": "worker_exited",
+        "time": "2026-11-02T01:05:24.221164+00:00",
+        "elapsed_seconds": 0.0,
+        "exit_code": 2
+      }
+    ],
+    "worker_failure": {
+      "type": "OSError",
+      "stage": "socket_binding",
+      "os_error": 10048
+    },
+    "holder": {
+      "pid": 29176,
+      "port": 50267,
+      "alive": true,
+      "port_still_bound": true
+    },
+    "elapsed_seconds": 1.188,
+    "cleanup_succeeded": true
+  },
+  "controls": [
+    {
+      "control": "F",
+      "result": "PASS",
+      "failed_ids": [],
+      "assertions": [
+        {
+          "id": "F_conflict_detected",
+          "expected": "worker records socket_binding address-in-use and does not become ready",
+          "observed": {
+            "stage": "socket_binding",
+            "os_error": 10048,
+            "http_ready_exists": false,
+            "verdict": "BLOCKED"
+          },
+          "passed": true,
+          "evidence": {
+            "poll_events": [
+              {
+                "event": "worker_spawned",
+                "time": "2026-11-02T01:05:24.221164+00:00",
+                "elapsed_seconds": 0.0,
+                "pid": 460,
+                "deadline_seconds": 30
+              },
+              {
+                "event": "worker_exited",
+                "time": "2026-11-02T01:05:24.221164+00:00",
+                "elapsed_seconds": 0.0,
+                "exit_code": 2
+              }
+            ]
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "F_holder_preserved",
+          "expected": "the isolated process holding the port is still alive and still bound",
+          "observed": {
+            "holder_pid": 29176,
+            "alive": true,
+            "port_still_bound": true
+          },
+          "passed": true,
+          "evidence": {
+            "port": 50267
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "F_cleanup_is_owned_only",
+          "expected": "cleanup pid is the harness worker, not the port holder",
+          "observed": {
+            "cleanup_pid": 460,
+            "worker_pid": 460,
+            "holder_pid": 29176
+          },
+          "passed": true,
+          "evidence": {
+            "orphans": []
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "B_cleanup_stopped",
+          "expected": "owned worker process was stopped",
+          "observed": {
+            "owned": true,
+            "pid": 460,
+            "stopped": true,
+            "exit_code": 2,
+            "shutdown_seconds": 0.0
+          },
+          "passed": true,
+          "evidence": {
+            "exit_code": 2
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "B_no_orphan",
+          "expected": "no remaining process whose parent or pid is the owned worker",
+          "observed": {
+            "orphans": []
+          },
+          "passed": true,
+          "evidence": {
+            "popen_pid": 460
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_session_file_allowed",
+          "expected": "session.json may exist after GET /api/state; absence is not required",
+          "observed": {
+            "existed_before_request": false,
+            "exists_after_request": false
+          },
+          "passed": true,
+          "evidence": {
+            "note": "load_session creates a bootstrap document when the file is missing"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_isolated_store",
+          "expected": "session file, when present, is inside the isolated run store",
+          "observed": {
+            "inside_isolated_store": null,
+            "exists": false
+          },
+          "passed": true,
+          "evidence": {
+            "path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\pr_play_34\\readiness\\F\\20261102T010523Z-c621ea52169f\\data\\session.json"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_campaign_not_started",
+          "expected": "campaign_started is false",
+          "observed": {
+            "campaign_started": null
+          },
+          "passed": true,
+          "evidence": {
+            "source": "session payload"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_turn_counter_zero",
+          "expected": "turn_counter remains 0",
+          "observed": {
+            "turn_counter": null
+          },
+          "passed": true,
+          "evidence": {
+            "source": "session payload"
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_no_gameplay_action",
+          "expected": "no chat history, session-log entries, last action, or scenario steps",
+          "observed": {
+            "chat_history_len": null,
+            "log_entries": 0,
+            "last_action_debug": null,
+            "steps": 0
+          },
+          "passed": true,
+          "evidence": {
+            "debug_traces": []
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_no_gameplay_traces",
+          "expected": "debug traces do not record campaign start, chat, narration, or provider dispatch",
+          "observed": {
+            "forbidden_operations": [],
+            "operations": []
+          },
+          "passed": true,
+          "evidence": {
+            "debug_traces": []
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_no_provider_dispatch",
+          "expected": "no provider dispatch and zero tokens",
+          "observed": {
+            "dispatch_events": 0,
+            "dispatched_requests": 0,
+            "total_tokens": 0
+          },
+          "passed": true,
+          "evidence": {
+            "events": []
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        },
+        {
+          "id": "G_no_campaign_http",
+          "expected": "HTTP activity is limited to GET /api/state",
+          "observed": {
+            "requests": []
+          },
+          "passed": true,
+          "evidence": {
+            "forbidden": []
+          },
+          "gating": true,
+          "cleanup_succeeded": true
+        }
+      ],
+      "cleanup_succeeded": true,
+      "run": "artifacts/atgb/pr_play_34/readiness/F/20261102T010523Z-c621ea52169f",
+      "elapsed_seconds": 1.188
+    }
+  ],
+  "provider_dispatches": 0,
+  "gameplay_turns": 0
+}

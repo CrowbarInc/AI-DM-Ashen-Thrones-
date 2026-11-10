@@ -1450,6 +1450,24 @@ def enforce_scene_momentum(
     if _extract_scene_momentum_kind(gm):
         return gm
 
+    from game.authorized_information import revealed_information
+
+    if revealed_information(resolution):
+        # Selected information is the resolved beat. This renderer supplies
+        # synthetic scene pressure, not an elaboration of that disclosure.
+        # Keep all existing candidate prose; only decline the stock append.
+        import copy
+
+        out = copy.deepcopy(gm)
+        tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+        out["tags"] = list(tags) + [f"{SCENE_MOMENTUM_TAG_PREFIX}new_information"]
+        out.setdefault("metadata", {}).setdefault("emission_debug", {})["scene_momentum_composition"] = {
+            "appended": False,
+            "reason": "selected_information_takes_precedence",
+            "excluded_source": "render_scene_momentum_diegetic_append",
+        }
+        return out
+
     gm = dict(gm)
     tags = gm.get("tags") if isinstance(gm.get("tags"), list) else []
     kind = "consequence_or_opportunity"

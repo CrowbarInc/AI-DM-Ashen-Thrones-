@@ -20,12 +20,16 @@ copy of the scene JSON.
 """
 from __future__ import annotations
 from pathlib import Path
+import contextvars
 import copy
 import hashlib
 import json
 import os
 import secrets
+import stat
+import tempfile
 import threading
+import time
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional
 
@@ -110,7 +114,7 @@ def _runtime_persistence_guard(op_name: str):
 def _load_json(path: Path, default: Dict[str, Any]) -> Dict[str, Any]:
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(default, indent=2), encoding='utf-8')
+        _save_json(path, default)
         return copy.deepcopy(default)
     text = path.read_text(encoding='utf-8').strip()
     if not text:
@@ -119,42 +123,156 @@ def _load_json(path: Path, default: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _save_json(path: Path, data: Dict[str, Any]) -> None:
+    # Keep every character write, including bootstrap, on the snapshot writer.
+    if path == CHARACTER_PATH:
+        _atomic_save_json(path, data)
+        return
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2), encoding='utf-8')
 
 
-def _atomic_write_bytes(path: Path, content: bytes) -> None:
+def _sync_directory(path: Path) -> bool:
+    """Report directory durability honestly; Windows has no portable directory fsync."""
+    if os.name == 'nt':
+        return False
+    try:
+        dfd = os.open(path, os.O_RDONLY)
+        try:
+            os.fsync(dfd)
+        finally:
+            os.close(dfd)
+    except OSError:
+        return False
+    return True
+
+
+def _atomic_write_bytes(path: Path, content: bytes) -> bool:
     """Atomically replace a file's contents with bytes.
 
     Writes to a temp file in the same directory, fsyncs, then swaps with os.replace.
-    Cleans up temp files on failure.
+    Commit boundary is successful os.replace. Returns whether directory sync
+    succeeded; failure/unsupported sync after replacement is a reduced durability
+    guarantee, not an uncommitted write. Preserves permission bits, not custom
+    ACLs or inode metadata. Does not coordinate multiple processes.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_name(f"{path.name}.tmp.{secrets.token_hex(8)}")
+    if path.is_symlink() or (path.exists() and not path.is_file()):
+        raise ValueError('Atomic destination must be a regular file')
+    prior_mode = stat.S_IMODE(path.stat().st_mode) if path.exists() else None
+    fd, name = tempfile.mkstemp(prefix=path.name+'.tmp.', dir=path.parent)
+    tmp = Path(name)
     try:
-        with open(tmp, "wb") as f:
+        try:
+            stream = os.fdopen(fd, 'wb')
+        except BaseException:
+            os.close(fd)
+            raise
+        with stream as f:
+            if prior_mode is not None:
+                os.chmod(tmp, prior_mode)
             f.write(content)
             f.flush()
             os.fsync(f.fileno())
-        os.replace(tmp, path)
-        # Best-effort directory fsync for durability; may not be supported on all platforms.
-        try:
-            dfd = os.open(path.parent, os.O_RDONLY)
-        except OSError:
-            dfd = None
-        if dfd is not None:
+        # Windows readers (including file scanners) can briefly deny replacement.
+        # Retry only the same prepared rename, never its enclosing gameplay turn.
+        for delay in (0.01, 0.03, 0.09, None):
             try:
-                os.fsync(dfd)
-            except OSError:
-                pass
-            finally:
-                os.close(dfd)
+                os.replace(tmp, path)
+                break
+            except PermissionError as exc:
+                if getattr(exc, 'winerror', None) != 5 or delay is None:
+                    raise
+                time.sleep(delay)
+        return _sync_directory(path.parent)
     except Exception:
         try:
             if tmp.exists():
+                if os.name == 'nt':
+                    # A copied read-only destination mode must not strand a temp.
+                    os.chmod(tmp, stat.S_IMODE(tmp.stat().st_mode) | stat.S_IWRITE)
                 tmp.unlink()
         finally:
             raise
+
+
+_RUNTIME_COMMIT: contextvars.ContextVar = contextvars.ContextVar("ashen_runtime_commit", default=None)
+_RUNTIME_COMMIT_PATHS = (
+    "SESSION_PATH",
+    "WORLD_PATH",
+    "COMBAT_PATH",
+    "CHARACTER_PATH",
+    "SESSION_LOG_PATH",
+)
+
+
+def _runtime_commit_paths() -> tuple[Path, ...]:
+    return tuple(globals()[name] for name in _RUNTIME_COMMIT_PATHS)
+
+
+def _note_runtime_commit_origin() -> None:
+    """Remember runtime bytes before the first durable write in a player turn."""
+    state = _RUNTIME_COMMIT.get()
+    if not isinstance(state, dict) or "originals" in state:
+        return
+    state["originals"] = {path: _read_bytes_if_exists(path) for path in _runtime_commit_paths()}
+
+
+def _restore_runtime_bytes(path: Path, raw: bytes | None) -> None:
+    if _read_bytes_if_exists(path) == raw:
+        return
+    if raw is None:
+        path.unlink(missing_ok=True)
+        return
+    try:
+        _atomic_write_bytes(path, raw)
+    except Exception:
+        # The failed primitive may be replacement itself. A direct write can
+        # still undo an earlier non-atomic world or character save.
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(raw)
+
+
+@contextmanager
+def runtime_commit_scope():
+    """Undo runtime files when a turn raises after an earlier file was written.
+
+    Successful returns keep the written files. This does not retry the turn
+    or the provider call.
+    """
+    token = _RUNTIME_COMMIT.set({})
+    try:
+        yield
+    except Exception:
+        state = _RUNTIME_COMMIT.get()
+        originals = state.get("originals") if isinstance(state, dict) else None
+        if isinstance(originals, dict):
+            for path, raw in reversed(list(originals.items())):
+                try:
+                    _restore_runtime_bytes(path, raw)
+                except Exception:
+                    pass
+        raise
+    finally:
+        _RUNTIME_COMMIT.reset(token)
+
+
+def preserve_committed_runtime(*path_names: str) -> None:
+    """Keep a successful mutation if a later publication step fails.
+
+    The turn scope still restores files when an earlier write raises. After the
+    authoritative character save has returned, publication is not a reason to
+    undo that character.
+    """
+    state = _RUNTIME_COMMIT.get()
+    if not isinstance(state, dict):
+        return
+    originals = state.get("originals")
+    if not isinstance(originals, dict):
+        return
+    for name in path_names:
+        path = globals().get(name)
+        if isinstance(path, Path) and path in originals:
+            originals[path] = _read_bytes_if_exists(path)
 
 
 def _atomic_write_text(path: Path, text: str, *, encoding: str = "utf-8") -> None:
@@ -215,7 +333,9 @@ def load_character() -> Dict[str, Any]:
 
 
 def save_character(data: Dict[str, Any]) -> None:
-    _save_json(CHARACTER_PATH, data)
+    with _runtime_persistence_guard('save_character'):
+        _note_runtime_commit_origin()
+        _save_json(CHARACTER_PATH, data)
 
 
 def load_session() -> Dict[str, Any]:
@@ -251,6 +371,7 @@ def load_session() -> Dict[str, Any]:
 def save_session(data: Dict[str, Any]) -> None:
     """Persist session to disk. Sets last_saved_at timestamp for save summary."""
     with _runtime_persistence_guard("save_session"):
+        _note_runtime_commit_origin()
         payload = dict(data)
         now = utc_iso_now()
         payload["last_saved_at"] = now
@@ -270,6 +391,7 @@ def load_world() -> Dict[str, Any]:
 
 
 def save_world(data: Dict[str, Any]) -> None:
+    _note_runtime_commit_origin()
     _save_json(WORLD_PATH, data)
 
 
@@ -299,6 +421,7 @@ def load_combat() -> Dict[str, Any]:
 
 def save_combat(data: Dict[str, Any]) -> None:
     with _runtime_persistence_guard("save_combat"):
+        _note_runtime_commit_origin()
         payload = dict(data)
         now = utc_iso_now()
         env = wrap_runtime_payload(kind="combat", payload=payload, saved_at=now, include_integrity=True)
@@ -348,7 +471,8 @@ def load_active_scene() -> Dict[str, Any]:
 
 def get_effective_scene(session: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
     """Load canon and merge the session runtime overlay; required for gameplay logic."""
-    return build_effective_scene(load_scene(scene_id), get_runtime_scene_overlay(session, scene_id))
+    from game.authored_consequences import overlay
+    return overlay(build_effective_scene(load_scene(scene_id), get_runtime_scene_overlay(session, scene_id)), session)
 
 
 def activate_scene(scene_id: str) -> Dict[str, Any]:
@@ -376,6 +500,7 @@ def append_log(entry: Dict[str, Any]) -> None:
     # Serialize with other runtime persistence ops (restore/reset/clear/save) to avoid
     # mixed visible state windows where the transcript diverges from session/combat.
     with _runtime_persistence_guard("append_log"):
+        _note_runtime_commit_origin()
         with SESSION_LOG_PATH.open('a', encoding='utf-8') as f:
             f.write(json.dumps(entry, ensure_ascii=False) + '\n')
             f.flush()
@@ -398,6 +523,7 @@ def load_log() -> List[Dict[str, Any]]:
 
 def clear_log() -> None:
     with _runtime_persistence_guard("clear_log"):
+        _note_runtime_commit_origin()
         _atomic_write_text(SESSION_LOG_PATH, "", encoding="utf-8")
 
 

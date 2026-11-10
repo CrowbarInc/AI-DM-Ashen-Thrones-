@@ -1,0 +1,24 @@
+{
+  "note": "Executed after the scored corpus. Not included in the 49/49 detection rate. These lines show the weak-verb limit.",
+  "authority": "notice_success",
+  "results": [
+    {
+      "text": "You find a ribbon beneath the board.",
+      "decision": "PASS",
+      "reasons": [],
+      "assessment": "false negative outside the scored corpus; find plus an unlisted portable noun"
+    },
+    {
+      "text": "You discover a ribbon beneath the board.",
+      "decision": "FAIL",
+      "reasons": ["unauthorized_discovery"],
+      "assessment": "strong discovery verb catches the same noun"
+    },
+    {
+      "text": "You notice a crack in the board.",
+      "decision": "PASS",
+      "reasons": [],
+      "assessment": "surface detail kept as embellishment"
+    }
+  ]
+}

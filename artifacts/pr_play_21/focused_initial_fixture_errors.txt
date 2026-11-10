@@ -1,0 +1,57 @@
+F................E...F.F                                                 [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_selector_normalization_and_duplicate_queries[ui_mode=player&ui_mode=author-403] _
+tests\test_pr_play_21_privileged_reads.py:43: in read_world
+    st.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_selector_normalization_an2\\data\\session.json.tmp.932755a56c5bbb5d' -> 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_selector_normalization_an2\\data\\session.json'
+================================== FAILURES ===================================
+_______________ test_default_public_and_authority_preservation ________________
+tests\test_pr_play_21_privileged_reads.py:65: in test_default_public_and_authority_preservation
+    assert state.json()["public_state"]["scene"]["scene"]["visible_facts"]
+E   assert []
+---------------------------- Captured stdout setup ----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+________________ test_internal_projection_access_is_preserved _________________
+tests\test_pr_play_21_privileged_reads.py:124: in test_internal_projection_access_is_preserved
+    assert debug["debug_state"]["debug_traces"] == [{"detail": SENTINEL + "_DEBUG"}]
+E   AssertionError: assert [{'detail': '...tities', ...}] == [{'detail': '...TINEL_DEBUG'}]
+E     
+E     Left contains 2 more items, first extra item: {'kind': 'state_mutation', 'domain': 'scene_state', 'owner_module': 'game.interaction_context', 'operation': 'rebuild_active_scene_entities', ...}
+E     Use -v to get more diff
+---------------------------- Captured stdout setup ----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+_______________ test_offline_initialization_and_ordinary_action _______________
+tests\test_pr_play_21_privileged_reads.py:150: in test_offline_initialization_and_ordinary_action
+    assert action.json()["ok"] and st.load_combat()["active"]
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'active'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started d68984e438f82db5fe94a972
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_21_privileged_reads.py::test_default_public_and_authority_preservation
+FAILED tests/test_pr_play_21_privileged_reads.py::test_internal_projection_access_is_preserved
+FAILED tests/test_pr_play_21_privileged_reads.py::test_offline_initialization_and_ordinary_action
+ERROR tests/test_pr_play_21_privileged_reads.py::test_selector_normalization_and_duplicate_queries[ui_mode=player&ui_mode=author-403]
+3 failed, 20 passed, 1 warning, 1 error in 5.71s

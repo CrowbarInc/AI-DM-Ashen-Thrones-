@@ -1,0 +1,37 @@
+{
+  "live_provider_calls": 0,
+  "new_tests": {"command": "pytest tests/test_at_opt_02_retreat_and_budget.py -q", "passed": 20, "failed": 0, "skipped": 0},
+  "adjacent": {
+    "command": "pytest tests/test_pr_play_79df3_classification.py tests/test_pr_play_79b_integration.py tests/test_pr_play_76_physical.py::test_flag_off_does_not_adjudicate tests/test_pr_play_79c_publication.py::test_step_back_after_approach_names_the_milestone tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome -q",
+    "passed": 118,
+    "failed": 0,
+    "skipped": 0,
+    "counts": {
+      "test_pr_play_79df3_classification.py": 27,
+      "test_pr_play_79b_integration.py": 81,
+      "test_flag_off_does_not_adjudicate": 1,
+      "test_pr_play_79c_publication.py": 9
+    }
+  },
+  "frozen_holdout_cases": {"command": "python artifacts/at_opt_02/rerun_holdout.py", "passed": 28, "failed": 0, "digest_checked": true},
+  "direct_holdout_pytest": {
+    "command": "pytest tests/test_pr_play_79df3_holdout.py -q",
+    "result": "blocked_before_assertion",
+    "reason": "The test writes artifacts/pr_play_79df3/holdout_results.jsonl. The storage guard refuses that historical path. The same 28 cases passed when results were written under artifacts/at_opt_02/."
+  },
+  "protected_files": {"unchanged": 150, "changed": 0, "missing": 0},
+  "preexisting_failures_in_these_suites": [],
+  "new_failures": [],
+  "budget": {
+    "default_total_tokens": 3000,
+    "oversized_estimate": 28000,
+    "oversized_refusal": "input-token ceiling",
+    "oversized_dispatch_count": 0,
+    "within_budget_dispatch_count": 1,
+    "within_budget_estimated_input": 100,
+    "within_budget_actual_total": 14,
+    "aggregate_total": 500,
+    "aggregate_dispatches": 2,
+    "aggregate_next_refusal": "total-token ceiling"
+  }
+}

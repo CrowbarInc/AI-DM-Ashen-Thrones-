@@ -1,0 +1,51 @@
+{
+  "accepted": true,
+  "chosen_input": "I push the crate aside and inspect it.",
+  "attempts": [
+    {
+      "input": "I open the door and look inside.",
+      "accepted": false,
+      "reason": "deterministic_disagreement",
+      "detail": null,
+      "proposed": [
+        "approach",
+        "open",
+        "inspect_result"
+      ]
+    },
+    {
+      "input": "Open the door, then check inside.",
+      "accepted": false,
+      "reason": "deterministic_disagreement",
+      "detail": null,
+      "proposed": [
+        "approach",
+        "open",
+        "inspect_result"
+      ]
+    },
+    {
+      "input": "I push the crate aside and inspect it.",
+      "accepted": true,
+      "reason": "interpretation_only",
+      "detail": null,
+      "proposed": null
+    }
+  ],
+  "committed_by_provider": false,
+  "used_for_execution": true,
+  "publication": "You push the oak crate. It is now aside from where it was. The oak crate is aside from where it was.",
+  "resulting_properties": {
+    "mobility": "movable",
+    "weight": "light",
+    "position": "aside from where it was",
+    "accessible": true,
+    "visible": true
+  },
+  "prior_rejected_requests": 1,
+  "prior_rejected_tokens": 264,
+  "requests": 4,
+  "tokens": 1037,
+  "retries": 0,
+  "blocked": false
+}

@@ -1,0 +1,8 @@
+{
+  "destination": "data/character.json",
+  "read_only_inspection": true,
+  "inheritance_protected": false,
+  "explicit_access_rule_count": 0,
+  "command": "Get-Acl -LiteralPath data/character.json; inspect AreAccessRulesProtected and count non-inherited Access entries",
+  "scope": "Current repository character file uses inherited directory ACLs; no custom per-file Windows ACL guarantee. No campaign writes performed."
+}

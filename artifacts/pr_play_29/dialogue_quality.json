@@ -1,0 +1,56 @@
+{
+  "dimensions": [
+    {
+      "dimension": "Relevance",
+      "status": "PASS",
+      "evidence": "Turn 1 identifies hot stew/rumors; Turn 2 supplies the missing-patrol rumor."
+    },
+    {
+      "dimension": "Naturalness",
+      "status": "PARTIAL",
+      "evidence": "\"Well, I've got...\" sounds conversational; \"Word is, the runner heard...\" retains authored third-person phrasing."
+    },
+    {
+      "dimension": "Continuity",
+      "status": "PASS",
+      "evidence": "The offered rumors lead directly to the player's rumor question, answered by the same NPC."
+    },
+    {
+      "dimension": "Grounding",
+      "status": "PASS",
+      "evidence": "Offering matches selected visible fact; patrol/footprints claim matches granted authored topic."
+    },
+    {
+      "dimension": "Agency",
+      "status": "PASS",
+      "evidence": "\"muddy footprints northwest of the crates\" gives a concrete place to investigate."
+    },
+    {
+      "dimension": "Repetition",
+      "status": "PASS",
+      "evidence": "No repeated uncertainty or duplicate offering answer on Turn 2."
+    },
+    {
+      "dimension": "Contradictions",
+      "status": "PASS",
+      "evidence": "No contradiction with the scene or either knowledge source; third-person wording is awkward, not a new factual contradiction."
+    },
+    {
+      "dimension": "Third-person self-reference",
+      "status": "PARTIAL",
+      "evidence": "The runner says \"the runner heard\" about themselves in Turn 2."
+    },
+    {
+      "dimension": "Mechanical leakage",
+      "status": "PASS",
+      "evidence": "Published dialogue has no topic IDs, action names, validator messages or hidden metadata."
+    },
+    {
+      "dimension": "Playability",
+      "status": "PASS",
+      "evidence": "Both questions receive understandable answers and a specific investigation lead."
+    }
+  ],
+  "overall": "PASS (adequate, with naturalness/self-reference caveat)",
+  "independent_of_mechanics": true
+}

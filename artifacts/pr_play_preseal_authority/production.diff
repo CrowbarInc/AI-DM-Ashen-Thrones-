@@ -1,0 +1,183 @@
+--- a/game/immutable_valid_response.py
++++ b/game/immutable_valid_response.py
+@@ -21,6 +21,7 @@
+ PROVENANCE_INITIAL = "initial_generation"
+ PROVENANCE_REGENERATION = "regeneration"
+ PROVENANCE_AUTHORED_PROJECTION = "authored_answer_projection"
++PROVENANCE_CLOSED_SURFACE = "closed_surface_authority_projection"
+ PROVENANCE_SAFE = "safe_nonresolution"
+ PROVENANCE_REJECTED = "rejected"
+ 
+@@ -1621,6 +1622,64 @@
+     return sealed
+ 
+ 
++def _closed_surface_preparation(
++    *,
++    resolution: Mapping[str, Any] | None,
++    contract: Mapping[str, Any],
++    decision: Mapping[str, Any],
++    scene: Mapping[str, Any] | None,
++) -> dict[str, Any] | None:
++    """Select an existing closed inspection outcome, never infer one from prose.
++
++    A stale restriction cannot erase selected information or a resolved effect.
++    Unmapped effects are an authority ambiguity: leave their existing owner in
++    control rather than treating absence of a known adapter as a prohibition.
++    """
++    if not isinstance(resolution, Mapping) or resolution.get("kind") != "investigate":
++        return None
++    if isinstance(resolution.get("social"), Mapping) or _operation(contract) not in {"", "inspect", "investigate"}:
++        return None
++    from game.referenced_surface import (
++        AUTHORITY_AUTHORED_ABSTRACT_REFERENCE, AUTHORITY_AUTHORED_HIDDEN,
++        AUTHORITY_UNSUPPORTED, classification_from_resolution,
++        render_referenced_surface_inspection_line,
++    )
++    classified = classification_from_resolution(resolution)
++    if classified.get("authority") not in {
++        AUTHORITY_AUTHORED_ABSTRACT_REFERENCE, AUTHORITY_AUTHORED_HIDDEN, AUTHORITY_UNSUPPORTED,
++    }:
++        return None
++    from game.mechanical_claims import mechanical_outcome
++
++    effects = mechanical_outcome(resolution)
++    meta = resolution.get("metadata") or {}
++    changes = resolution.get("state_changes") or {}
++    precedence = {
++        "selected_information": bool(effects.get("revealed")),
++        "readable_surface": bool(classified.get("inspectability") or classified.get("inspectable_text")),
++        "mechanical_outcome": any(bool(v) for k, v in effects.items() if k != "revealed"),
++        "resolved_physical_action": bool(meta.get("physical_adjudication") or (
++            isinstance(changes, Mapping) and changes.get("physical_operation"))),
++        "resolved_transition": bool(resolution.get("resolved_transition") or resolution.get("activate_scene_id")),
++        "engine_publication": bool(meta.get("engine_publication")),
++        "permitted_mutations": bool(decision.get("permitted_state_mutations")),
++        "unmapped_resolution_effect": bool(changes or resolution.get("world_updates")),
++    }
++    eligible = not any(precedence.values())
++    return {
++        "eligible": eligible, "applied": False,
++        "classification": classified,
++        "authoritative_resolution": {
++            "kind": resolution.get("kind"), "success": resolution.get("success"),
++            "resolved_transition": bool(resolution.get("resolved_transition")),
++            "state_change_keys": sorted(changes) if isinstance(changes, Mapping) else [],
++        },
++        "precedence": precedence,
++        "reason": "explicit_closed_inspection" if eligible else "specific_authority_or_ambiguity_preserved",
++        "prepared_candidate": render_referenced_surface_inspection_line(classified, scene) if eligible else "",
++    }
++
++
+ def run_preserve_if_valid(
+     gm: dict[str, Any],
+     *,
+@@ -1638,6 +1697,8 @@
+ ) -> dict[str, Any]:
+     """Generate is already done. Validate, preserve, or retry once."""
+     if not isinstance(gm, dict):
++        return gm
++    if response_is_immutable(gm):
+         return gm
+     original_provider_text = str(gm.get('player_facing_text') or '')
+     adopted = adopt_host_speech(gm, resolution=resolution, player_text=player_text, session=session, world=world)
+@@ -1771,7 +1832,32 @@
+             }
+         return verdict
+ 
+-    first = _check(gm)
++    preparation = _closed_surface_preparation(
++        resolution=resolution, contract=contract, decision=gm_decision, scene=scene,
++    )
++    preparation_failed = False
++    if preparation is not None:
++        preparation.update(
++            original_candidate=original_provider_text[:2000],
++            original_candidate_length=len(original_provider_text),
++            original_candidate_sha256=hashlib.sha256(original_provider_text.encode("utf-8")).hexdigest(),
++            original_candidate_source=PROVENANCE_INITIAL,
++        )
++    if preparation is not None and preparation["eligible"]:
++        projected = copy.deepcopy(gm)
++        projected["player_facing_text"] = preparation["prepared_candidate"]
++        first = _check(projected)
++        preparation["hard_validation"] = {
++            key: copy.deepcopy(first.get(key)) for key in ("hard_valid", "reasons", "authority")
++        }
++        preparation_failed = not first["hard_valid"] or not preparation["prepared_candidate"]
++        if not preparation_failed:
++            gm = projected
++            preparation["applied"] = True
++    else:
++        first = _check(gm)
++    if preparation is not None:
++        gm.setdefault("metadata", {})["closed_surface_preparation"] = preparation
+     if isinstance(resolution, Mapping) and resolution.get("kind") == "scene_opening":
+         from game.provider_budget import observe_opening_semantics
+ 
+@@ -1793,7 +1879,7 @@
+             "hard_valid": first["hard_valid"],
+             "reasons": list(first["reasons"]),
+             "soft_flags": list(first["soft_flags"]),
+-            "text": str(gm.get("player_facing_text") or "")[:2000],
++            "text": (preparation["prepared_candidate"] if preparation_failed else str(gm.get("player_facing_text") or ""))[:2000],
+         }
+     review: dict[str, Any] = {
+         "governing_decision_contract_id": str((gm_decision or {}).get("contract_id") or ""),
+@@ -1829,6 +1915,10 @@
+         review["acceptance"] = {"why": why, "text": str(sealed.get("player_facing_text") or "")[:2000]}
+         sealed_meta = sealed.setdefault("metadata", {})
+         if isinstance(sealed_meta, dict):
++            if preparation is not None:
++                preparation["final_acceptance_status"] = why
++                preparation["published_text"] = str(sealed.get("player_facing_text") or "")
++                sealed_meta["closed_surface_preparation"] = preparation
+             sealed_meta["decision_review"] = review
+             record = sealed_meta.get(ACCEPTED_KEY)
+             if isinstance(record, dict):
+@@ -1856,6 +1946,12 @@
+                 "nonresolution_origin": "application" if record.get("provenance") == PROVENANCE_SAFE else None,
+             })
+         return sealed
++
++    if preparation_failed:
++        # A deterministic projection cannot trigger generation or sentence salvage.
++        # Existing terminal safety blocks effects if its normal validation fails.
++        return _finish(mark_candidate_rejected(gm, str(gm.get("player_facing_text") or ""),
++                                              first["reasons"]), why="closed_surface_validation_failure")
+ 
+     if first["hard_valid"]:
+         social = resolution.get("social") if isinstance(resolution, Mapping) else None
+@@ -1883,14 +1979,14 @@
+         sealed = seal_accepted_response(
+             gm,
+             text=str(gm.get("player_facing_text") or ""),
+-            provenance=PROVENANCE_INITIAL,
++            provenance=PROVENANCE_CLOSED_SURFACE if preparation and preparation["applied"] else PROVENANCE_INITIAL,
+             attempt=1,
+             validation=first,
+             contract=contract,
+             player_text=player,
+             resolution=resolution,
+         )
+-        return _finish(sealed, why="initial_hard_valid")
++        return _finish(sealed, why="closed_surface_prepared_hard_valid" if preparation and preparation["applied"] else "initial_hard_valid")
+ 
+     mark_candidate_rejected(gm, str(gm.get("player_facing_text") or ""), first["reasons"])
+     if any(reason.startswith('unsupported_mechanical_claim:') for reason in first['reasons']):
+--- a/game/referenced_surface.py
++++ b/game/referenced_surface.py
+@@ -540,9 +540,9 @@
+             "That remains something spoken of, not a surface you can inspect here. "
+             f"What you can actually see is {surroundings}."
+         )
+-    if authority == AUTHORITY_AUTHORED_HIDDEN:
+-        return f"You find no such thing among what is actually present. {surroundings[0].upper() + surroundings[1:]}."
+-    if authority == AUTHORITY_UNSUPPORTED:
++    # Nonconfirmation does not assert absence or expose the hidden target.
++    # Keep the classified authority intact; only its public rendering is shared.
++    if authority in {AUTHORITY_AUTHORED_HIDDEN, AUTHORITY_UNSUPPORTED}:
+         return f"Nothing here matches that. What you can actually see is {surroundings}."
+     if authority == AUTHORITY_UNTARGETED:
+         return (

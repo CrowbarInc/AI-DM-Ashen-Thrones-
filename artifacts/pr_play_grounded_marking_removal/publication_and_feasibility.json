@@ -1,0 +1,16 @@
+{
+  "source": "tests/test_grounded_marking_removal.py::test_missing_method_resource_and_mechanics_do_not_invent and test_publication_faults_do_not_restore_or_repeat_removal, both passed in the focused run.",
+  "wipe_without_established_method": "marking stays; reply says the method is not established as removable",
+  "wash_without_water": "water is not invented; reply asks for the cleaning material",
+  "wash_after_water_is_present": "marking removed; water quantity unchanged",
+  "consumption_required": "unresolved; quantity not decremented",
+  "mechanics_required": "unresolved; no difficulty class added",
+  "publication": {
+    "unchanged": "committed wipe sentence",
+    "paraphrase": "You clear the marking from the sleeve, still naming the warning and its absence",
+    "contradictory": "still-written seal replaced by the committed sentence",
+    "empty": "committed sentence",
+    "sealer_exception": "committed sentence; retry is replay",
+    "session_save_failure_after_commit": "character save kept; retry does not remove again"
+  }
+}

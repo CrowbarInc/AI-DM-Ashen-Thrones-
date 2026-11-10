@@ -1,0 +1,270 @@
+[
+  {
+    "action": "I examine the notice board.",
+    "raw": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+    "validation": {
+      "decision": "REVIEW_REQUIRED",
+      "semantic": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "legacy": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [
+          {
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "kind": "incidental_fact",
+            "epistemic_status": "world_truth",
+            "grounded": false,
+            "consequential": false,
+            "family": "incidental"
+          }
+        ],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        },
+        "consequential_validation": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        }
+      },
+      "coverage": {
+        "decision": "PASS",
+        "facts": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "decision": "PASS",
+            "classification": "covered",
+            "evidence": "the missing patrol was last seen taking the northwest mud track past the crates.",
+            "relation": {
+              "subject": "missing patrol",
+              "path": "northwest mud track",
+              "landmark": "crates"
+            }
+          }
+        ],
+        "scope": "bounded_deterministic_coverage_not_semantic_proof"
+      },
+      "composition_reason": "optional_disclosure_overlap"
+    },
+    "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+    "published": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates."
+  },
+  {
+    "action": "I examine the rain barrel.",
+    "raw": "You examine the rain barrel. No new clue is established by this examination.",
+    "validation": {
+      "decision": "REVIEW_REQUIRED",
+      "semantic": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "legacy": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [
+          {
+            "text": "You examine the rain barrel.",
+            "kind": "incidental_fact",
+            "epistemic_status": "world_truth",
+            "grounded": false,
+            "consequential": false,
+            "family": "incidental"
+          }
+        ],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        },
+        "consequential_validation": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        }
+      },
+      "coverage": {
+        "decision": "PASS",
+        "facts": [
+          {
+            "id": "outcome:status",
+            "source": "engine_status",
+            "status": "observed",
+            "text": "No new clue is established by this examination.",
+            "decision": "PASS",
+            "classification": "covered",
+            "evidence": "No new clue is established by this examination."
+          }
+        ],
+        "scope": "bounded_deterministic_coverage_not_semantic_proof"
+      },
+      "composition_reason": "optional_disclosure_overlap"
+    },
+    "assembled": "You examine the rain barrel; no new clue is established.",
+    "published": "You examine the rain barrel; no new clue is established."
+  },
+  {
+    "action": "I examine the notice board again.",
+    "raw": "You examine the notice board again. The examination adds nothing new to what you already know.",
+    "validation": {
+      "decision": "REVIEW_REQUIRED",
+      "semantic": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "legacy": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        },
+        "consequential_validation": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        }
+      },
+      "coverage": {
+        "decision": "PASS",
+        "facts": [
+          {
+            "id": "outcome:0",
+            "source": "engine_status",
+            "status": "known",
+            "text": "The examination adds nothing new to what you already know.",
+            "decision": "PASS",
+            "classification": "covered",
+            "evidence": "The examination adds nothing new to what you already know."
+          }
+        ],
+        "scope": "bounded_deterministic_coverage_not_semantic_proof"
+      },
+      "composition_reason": "optional_disclosure_overlap"
+    },
+    "assembled": "You examine the notice board again; nothing new is established.",
+    "published": "You examine the notice board again; nothing new is established."
+  },
+  {
+    "action": "I follow the missing patrol rumor.",
+    "raw": null,
+    "validation": null,
+    "assembled": null,
+    "published": "You arrive at Old Milestone."
+  },
+  {
+    "action": "I examine the weathered milestone.",
+    "raw": "You examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "validation": {
+      "decision": "REVIEW_REQUIRED",
+      "semantic": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      },
+      "legacy": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [
+          {
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "kind": "incidental_fact",
+            "epistemic_status": "world_truth",
+            "grounded": false,
+            "consequential": false,
+            "family": "incidental"
+          }
+        ],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        },
+        "consequential_validation": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        }
+      },
+      "coverage": {
+        "decision": "PASS",
+        "facts": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "decision": "PASS",
+            "classification": "covered",
+            "evidence": "faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+            "uncertainty_facets": [
+              "direction",
+              "number",
+              "origin"
+            ]
+          }
+        ],
+        "scope": "bounded_deterministic_coverage_not_semantic_proof"
+      },
+      "composition_reason": "optional_disclosure_overlap"
+    },
+    "assembled": "You examine what is visible. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "published": "I cannot provide a validated response to that request."
+  }
+]

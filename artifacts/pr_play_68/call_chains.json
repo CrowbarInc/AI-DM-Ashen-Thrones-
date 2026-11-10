@@ -1,0 +1,25 @@
+{
+  "structured": [
+    "submitExplorationAction",
+    "POST /api/action",
+    "action",
+    "_resolve_engine_noncombat_seam",
+    "_run_resolved_turn_pipeline",
+    "_observe_quarantined_investigation_narration",
+    "state persistence",
+    "_finalize_investigation_publication",
+    "_build_turn_response_payload / project_player_response",
+    "replaceMessage gm_output.player_facing_text"
+  ],
+  "chat": [
+    "submitChat",
+    "POST /api/chat",
+    "chat",
+    "same deterministic resolver/pipeline",
+    "_complete_opening_turn_persistence_like_chat",
+    "same _finalize_investigation_publication",
+    "same player-safe projection",
+    "replaceMessage gm_output.player_facing_text"
+  ],
+  "earliest_incorrect_decision": "Structured action returned its legacy narration after persistence without invoking PR66 publication."
+}

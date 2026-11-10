@@ -1,0 +1,626 @@
+{
+  "npc": {
+    "campaign": {
+      "title": "Ashen Thrones"
+    },
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "class": "Wizard",
+      "level": 1,
+      "ancestry": "Human",
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "ac": {
+        "normal": 12,
+        "touch": 12,
+        "flat_footed": 10
+      },
+      "initiative_bonus": 2,
+      "speed": 30,
+      "bab": 0,
+      "cmb": 0,
+      "cmd": 12,
+      "ability_scores": {
+        "str": 10,
+        "dex": 14,
+        "con": 12,
+        "int": 18,
+        "wis": 12,
+        "cha": 10
+      },
+      "saves": {
+        "fort": 1,
+        "ref": 2,
+        "will": 3
+      },
+      "attacks": [
+        {
+          "id": "quarterstaff",
+          "name": "Quarterstaff",
+          "attack_bonus": 0,
+          "type": "melee",
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 6,
+            "bonus": 0,
+            "type": "bludgeoning"
+          }
+        },
+        {
+          "id": "crossbow",
+          "name": "Light Crossbow",
+          "attack_bonus": 2,
+          "type": "ranged",
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 8,
+            "bonus": 0,
+            "type": "piercing"
+          }
+        }
+      ],
+      "conditions": [],
+      "inventory": [
+        {
+          "id": "spellbook",
+          "name": "Spellbook",
+          "quantity": 1,
+          "usable": false
+        }
+      ],
+      "spells": {
+        "prepared": [
+          {
+            "id": "daze",
+            "name": "Daze",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "detect_magic",
+            "name": "Detect Magic",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "magic_missile",
+            "name": "Magic Missile",
+            "cast": false,
+            "level": 1
+          },
+          {
+            "id": "shield",
+            "name": "Shield",
+            "cast": false,
+            "level": 1
+          }
+        ],
+        "slots": {
+          "0": 3,
+          "1": 1
+        }
+      },
+      "skills": {
+        "knowledge_arcana": 8,
+        "spellcraft": 8,
+        "perception": 4,
+        "sense_motive": 4,
+        "stealth": 4,
+        "diplomacy": 4,
+        "intimidate": 2,
+        "bluff": 2
+      }
+    },
+    "session": {
+      "session_id": "5d7040aa8eb9b4e6f6b7c933",
+      "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+      "active_scene_id": "frontier_gate",
+      "character_name": "Galinor",
+      "response_mode": "standard",
+      "campaign_started": true,
+      "turn_counter": 2,
+      "visited_scene_ids": [
+        "frontier_gate"
+      ]
+    },
+    "scene": {
+      "scene": {
+        "id": "frontier_gate",
+        "location": "Cinderwatch Gate District",
+        "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+        "mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ]
+      }
+    },
+    "combat": {
+      "in_combat": false,
+      "round": 0,
+      "active_actor_id": "",
+      "player_turn_used": false
+    },
+    "ui": {
+      "player_can_act": true,
+      "campaign_started": true,
+      "campaign_can_start": false,
+      "living_enemies": [],
+      "scene_ids": [
+        "frontier_gate"
+      ],
+      "affordances": [
+        {
+          "id": "question_gate_guard",
+          "label": "Talk to Gate Guard",
+          "type": "question",
+          "prompt": "I talk to Gate Guard.",
+          "target_scene_id": "",
+          "target_id": "gate_guard",
+          "target_location_id": ""
+        },
+        {
+          "id": "question_gate_serjeant",
+          "label": "Talk to Gate Serjeant",
+          "type": "question",
+          "prompt": "I talk to Gate Serjeant.",
+          "target_scene_id": "",
+          "target_id": "gate_serjeant",
+          "target_location_id": ""
+        },
+        {
+          "id": "question_tavern_runner",
+          "label": "Talk to Tavern Runner",
+          "type": "question",
+          "prompt": "I talk to Tavern Runner.",
+          "target_scene_id": "",
+          "target_id": "tavern_runner",
+          "target_location_id": ""
+        },
+        {
+          "id": "notice_board",
+          "label": "Examine the Notice board",
+          "type": "investigate",
+          "prompt": "I examine the Notice board.",
+          "target_scene_id": "",
+          "target_id": "notice_board",
+          "target_location_id": ""
+        },
+        {
+          "id": "examine_the_notice_board_lists_taxes",
+          "label": "Examine The notice board lists taxes",
+          "type": "investigate",
+          "prompt": "I examine The notice board lists taxes.",
+          "target_scene_id": "",
+          "target_id": "",
+          "target_location_id": ""
+        }
+      ],
+      "clues": {
+        "known": [
+          {
+            "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "presentation": "explicit"
+          },
+          {
+            "text": "Follow the missing patrol rumor",
+            "presentation": "actionable"
+          }
+        ],
+        "implicit": [],
+        "explicit": [
+          {
+            "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "presentation": "explicit"
+          }
+        ],
+        "actionable": [
+          {
+            "text": "Follow the missing patrol rumor",
+            "presentation": "actionable"
+          }
+        ]
+      },
+      "scene_npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "disposition": "neutral"
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "disposition": "neutral"
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "disposition": "friendly"
+        }
+      ],
+      "interaction": {
+        "active_interaction_target_id": "tavern_runner",
+        "active_interaction_target_name": "Tavern Runner",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social"
+      }
+    },
+    "journal": {
+      "known_facts": [
+        "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+        "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+        "A notice board announces new taxes and curfews, and names a missing patrol.",
+        "A tavern runner is hawking hot stew and rumor for coin.",
+        "A ragged stranger hangs back, watching the crowd more than the queue."
+      ],
+      "discovered_clues": [
+        "Follow the missing patrol rumor",
+        "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      ],
+      "unresolved_leads": [
+        "Follow the missing patrol rumor",
+        "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      ],
+      "status_effects": [],
+      "suspicion_flags": [],
+      "active_leads": [
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "title": "Follow the missing patrol rumor",
+          "summary": "Follow the missing patrol rumor",
+          "next_step": "",
+          "last_touched_turn": 2
+        },
+        {
+          "id": "muddy_footprints_northwest",
+          "title": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "summary": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "next_step": "",
+          "last_touched_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 2,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0
+      }
+    },
+    "player_name": "Galinor",
+    "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+    "save_summary": {
+      "saved_at": "2026-11-06T22:54:15.141758Z",
+      "save_data_exists": true,
+      "active_scene_id": "frontier_gate",
+      "discovered_clues": 2,
+      "chat_messages": 2
+    },
+    "snapshots": [],
+    "world": {},
+    "ok": true,
+    "gm_output": {
+      "player_facing_text": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\""
+    },
+    "resolution": {}
+  },
+  "travel": {
+    "campaign": {
+      "title": "Ashen Thrones"
+    },
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "class": "Wizard",
+      "level": 1,
+      "ancestry": "Human",
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "ac": {
+        "normal": 12,
+        "touch": 12,
+        "flat_footed": 10
+      },
+      "initiative_bonus": 2,
+      "speed": 30,
+      "bab": 0,
+      "cmb": 0,
+      "cmd": 12,
+      "ability_scores": {
+        "str": 10,
+        "dex": 14,
+        "con": 12,
+        "int": 18,
+        "wis": 12,
+        "cha": 10
+      },
+      "saves": {
+        "fort": 1,
+        "ref": 2,
+        "will": 3
+      },
+      "attacks": [
+        {
+          "id": "quarterstaff",
+          "name": "Quarterstaff",
+          "attack_bonus": 0,
+          "type": "melee",
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 6,
+            "bonus": 0,
+            "type": "bludgeoning"
+          }
+        },
+        {
+          "id": "crossbow",
+          "name": "Light Crossbow",
+          "attack_bonus": 2,
+          "type": "ranged",
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 8,
+            "bonus": 0,
+            "type": "piercing"
+          }
+        }
+      ],
+      "conditions": [],
+      "inventory": [
+        {
+          "id": "spellbook",
+          "name": "Spellbook",
+          "quantity": 1,
+          "usable": false
+        }
+      ],
+      "spells": {
+        "prepared": [
+          {
+            "id": "daze",
+            "name": "Daze",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "detect_magic",
+            "name": "Detect Magic",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "magic_missile",
+            "name": "Magic Missile",
+            "cast": false,
+            "level": 1
+          },
+          {
+            "id": "shield",
+            "name": "Shield",
+            "cast": false,
+            "level": 1
+          }
+        ],
+        "slots": {
+          "0": 3,
+          "1": 1
+        }
+      },
+      "skills": {
+        "knowledge_arcana": 8,
+        "spellcraft": 8,
+        "perception": 4,
+        "sense_motive": 4,
+        "stealth": 4,
+        "diplomacy": 4,
+        "intimidate": 2,
+        "bluff": 2
+      }
+    },
+    "session": {
+      "session_id": "5d7040aa8eb9b4e6f6b7c933",
+      "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+      "active_scene_id": "old_milestone",
+      "character_name": "Galinor",
+      "response_mode": "standard",
+      "campaign_started": true,
+      "turn_counter": 3,
+      "visited_scene_ids": [
+        "frontier_gate",
+        "old_milestone"
+      ]
+    },
+    "scene": {
+      "scene": {
+        "id": "old_milestone",
+        "location": "Old Milestone",
+        "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+        "mode": "exploration",
+        "visible_facts": [
+          "A weathered stone milestone leans beside the northwest mud track.",
+          "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+          "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+        ]
+      }
+    },
+    "combat": {
+      "in_combat": false,
+      "round": 0,
+      "active_actor_id": "",
+      "player_turn_used": false
+    },
+    "ui": {
+      "player_can_act": true,
+      "campaign_started": true,
+      "campaign_can_start": false,
+      "living_enemies": [],
+      "scene_ids": [
+        "frontier_gate",
+        "old_milestone"
+      ],
+      "affordances": [
+        {
+          "id": "milestone",
+          "label": "Examine the Weathered milestone",
+          "type": "investigate",
+          "prompt": "I examine the Weathered milestone.",
+          "target_scene_id": "",
+          "target_id": "milestone",
+          "target_location_id": ""
+        },
+        {
+          "id": "prints",
+          "label": "Examine the Mud prints",
+          "type": "investigate",
+          "prompt": "I examine the Mud prints.",
+          "target_scene_id": "",
+          "target_id": "prints",
+          "target_location_id": ""
+        },
+        {
+          "id": "examine_a_weathered_stone_milestone_leans_bes",
+          "label": "Examine A weathered stone milestone leans bes",
+          "type": "investigate",
+          "prompt": "I examine A weathered stone milestone leans bes.",
+          "target_scene_id": "",
+          "target_id": "",
+          "target_location_id": ""
+        },
+        {
+          "id": "examine_the_mud_around_the_marker_is_churned",
+          "label": "Examine The mud around the marker is churned",
+          "type": "investigate",
+          "prompt": "I examine The mud around the marker is churned.",
+          "target_scene_id": "",
+          "target_id": "",
+          "target_location_id": ""
+        },
+        {
+          "id": "examine_the_track_continues_a_short_way_past",
+          "label": "Examine The track continues a short way past",
+          "type": "investigate",
+          "prompt": "I examine The track continues a short way past.",
+          "target_scene_id": "",
+          "target_id": "",
+          "target_location_id": ""
+        }
+      ],
+      "clues": {
+        "known": [
+          {
+            "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "presentation": "explicit"
+          },
+          {
+            "text": "Follow the missing patrol rumor",
+            "presentation": "actionable"
+          }
+        ],
+        "implicit": [],
+        "explicit": [
+          {
+            "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "presentation": "explicit"
+          }
+        ],
+        "actionable": [
+          {
+            "text": "Follow the missing patrol rumor",
+            "presentation": "actionable"
+          }
+        ]
+      },
+      "scene_npcs": [],
+      "interaction": {
+        "active_interaction_target_id": "",
+        "active_interaction_kind": "",
+        "interaction_mode": "none"
+      }
+    },
+    "journal": {
+      "known_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discovered_clues": [
+        "Follow the missing patrol rumor",
+        "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      ],
+      "unresolved_leads": [
+        "Follow the missing patrol rumor",
+        "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      ],
+      "status_effects": [],
+      "suspicion_flags": [],
+      "active_leads": [
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "title": "Follow the missing patrol rumor",
+          "summary": "Follow the missing patrol rumor",
+          "next_step": "",
+          "last_touched_turn": 2
+        },
+        {
+          "id": "muddy_footprints_northwest",
+          "title": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "summary": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "next_step": "",
+          "last_touched_turn": 2
+        }
+      ],
+      "pursued_leads": [],
+      "stale_leads": [],
+      "resolved_leads": [],
+      "obsolete_leads": [],
+      "lead_counts": {
+        "active": 2,
+        "pursued": 0,
+        "stale": 0,
+        "resolved": 0,
+        "obsolete": 0
+      }
+    },
+    "player_name": "Galinor",
+    "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+    "save_summary": {
+      "saved_at": "2026-11-06T22:54:17.247596Z",
+      "save_data_exists": true,
+      "active_scene_id": "old_milestone",
+      "discovered_clues": 2,
+      "chat_messages": 3
+    },
+    "snapshots": [],
+    "world": {},
+    "ok": true,
+    "gm_output": {
+      "player_facing_text": "You arrive at Old Milestone."
+    },
+    "resolution": {}
+  },
+  "calls": {
+    "interpretation": [
+      "Have you heard any interesting rumors lately?"
+    ],
+    "narration": [],
+    "social": [
+      true
+    ],
+    "exploration": [
+      true
+    ]
+  }
+}

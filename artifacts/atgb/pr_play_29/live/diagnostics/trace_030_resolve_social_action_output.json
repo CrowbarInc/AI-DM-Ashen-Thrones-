@@ -1,0 +1,198 @@
+{
+  "function": "game.social.resolve_social_action",
+  "result": {
+    "kind": "question",
+    "action_id": "tavern_runner",
+    "label": "Tavern Runner",
+    "prompt": "What sort of rumors have you heard?",
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": "muddy_footprints_northwest",
+    "discovered_clues": [
+      "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+    ],
+    "world_updates": null,
+    "state_changes": {
+      "topic_revealed": true,
+      "npc_id": "tavern_runner"
+    },
+    "hint": "Player questioned Tavern Runner and learned: The runner heard the patrol vanished near muddy footprints northwest of the crates.. Narrate the revelation.",
+    "social": {
+      "social_intent_class": "social_exchange",
+      "npc_id": "tavern_runner",
+      "npc_name": "Tavern Runner",
+      "target_resolved": true,
+      "topic_revealed": {
+        "id": "patrol_rumor",
+        "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+        "clue_id": "muddy_footprints_northwest",
+        "clue_text": null,
+        "disclosure_authorization": {
+          "speaker_id": "tavern_runner",
+          "addressee": "player",
+          "source_id": "npc:tavern_runner:patrol_rumor",
+          "classification": "public",
+          "knowledge_status": "known",
+          "permission": true,
+          "epistemic_status": "npc_knowledge",
+          "operation": "disclose",
+          "authorized_proposition": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "canonical": false,
+          "authorized_clue_text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "authorized_clue_id": "muddy_footprints_northwest",
+          "provenance": "authored_npc_source",
+          "validation": "authorized"
+        }
+      },
+      "recalled_topic": false,
+      "topic_selection": {
+        "candidate_sources": [
+          "npc:tavern_runner:patrol_rumor"
+        ],
+        "selected_source": "npc:tavern_runner:patrol_rumor",
+        "ambiguous": false
+      },
+      "skill_check": null,
+      "npc_reply_expected": true,
+      "reply_kind": "answer",
+      "target_source": "explicit_target",
+      "target_reason": "normalized target_id matches scene-addressable roster",
+      "target_candidate_id": "tavern_runner",
+      "target_candidate_valid": true,
+      "stale_interlocutor_cleared": false,
+      "addressability_checked_against": [
+        "active_entities",
+        "entity_presence_active_or_nearby",
+        "scene_addressables",
+        "world_roster_in_scene",
+        "interaction_continuity"
+      ],
+      "declared_switch_detected": false,
+      "declared_switch_target_actor_id": null,
+      "continuity_overridden_by_declared_switch": false,
+      "spoken_vocative_detected": false,
+      "spoken_vocative_target_actor_id": null,
+      "continuity_overridden_by_spoken_vocative": false,
+      "actor_addressable": true,
+      "target_binding": {
+        "final_target_kind": "npc",
+        "npc_id": "tavern_runner",
+        "target_source": "native_npc",
+        "origin_actor_id": null,
+        "promoted_this_turn": false
+      },
+      "target_profile_hints": {
+        "guardedness": "medium",
+        "answer_reliability_tier": "medium",
+        "speaks_authoritatively_for_scene": false
+      },
+      "authority_source_used": "explicit_target",
+      "proposed_reply_speaker_id": "tavern_runner",
+      "grounding_fallback_applied": false,
+      "grounding_reason_code": "authoritative_speaker_eligible",
+      "grounded_speaker_id": "tavern_runner",
+      "dialogue_authority": {
+        "topic_grounding": {
+          "speaker_id": "tavern_runner",
+          "addressee": "player",
+          "requested_subject": "sort heard",
+          "requested_information": "rumor",
+          "reference": "current_request",
+          "candidate_sources": [
+            "npc:tavern_runner:patrol_rumor"
+          ],
+          "selected_source": "npc:tavern_runner:patrol_rumor",
+          "ambiguous": false,
+          "ownership": "npc"
+        },
+        "requested_information": "rumor",
+        "subject": "sort heard",
+        "knowledge_posture": "established",
+        "answer_relation": "sufficient",
+        "answer_sufficiency": "directly_answers",
+        "proposition_id": "topic:tavern_runner:patrol_rumor",
+        "authorized_proposition": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+        "public_fact_selection": {
+          "candidate_sources": [],
+          "selected_source": "",
+          "reason": "no_safe_match"
+        },
+        "public_fact_source": null,
+        "improvisation_permitted": false,
+        "improvisation_scope": "none",
+        "narration_determined": false,
+        "player_line": "",
+        "canonical": false,
+        "npc_id": "tavern_runner",
+        "npc_name": "Tavern Runner",
+        "npc_role": "",
+        "npc_disposition": "friendly",
+        "prohibited_claims": [
+          "consequential_world_fact",
+          "hidden_disclosure",
+          "mechanical_change",
+          "new_obligation",
+          "invented_answer"
+        ],
+        "prior_commitments": [],
+        "reconciled_plan": "authoritative_answer_available",
+        "reuse_prior_speech": false,
+        "authorization_provenance": {
+          "authority_category": "world_source",
+          "speaker_id": "tavern_runner",
+          "addressee": "player",
+          "operation": "disclose",
+          "authorized_proposition": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "source_id": "npc:tavern_runner:patrol_rumor",
+          "epistemic_status": "none",
+          "validation": "authorized",
+          "provenance_id": "c066320a0b2b6367",
+          "policy_version": "pr-eg-r6-r1-r1"
+        }
+      }
+    },
+    "requires_check": false,
+    "metadata": {
+      "stored_interpretation": {
+        "operation": "ASK",
+        "target_ref": "tavern_runner",
+        "visible_surface_inspection": false,
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        }
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "rumors heard",
+        "evidence_refs": [
+          "npc_latest_reply",
+          "visible:2",
+          "visible:4"
+        ]
+      },
+      "public_conversation_evidence": {
+        "npc_latest_reply": "Tavern Runner says, \"Well, I've got hot stew and rumors to share.\"",
+        "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point."
+      },
+      "canonical_entry_path": "social",
+      "canonical_entry_reason": "active_interlocutor_followup",
+      "canonical_entry_target_actor_id": "tavern_runner",
+      "segmented_turn": {
+        "declared_action_text": "What sort of rumors have you heard?"
+      },
+      "npc_stance": {
+        "attitude": 0,
+        "trust": 1,
+        "fear": 0,
+        "suspicion": 0,
+        "topics_revealed": 1,
+        "last_interaction_turn": 3
+      }
+    }
+  }
+}

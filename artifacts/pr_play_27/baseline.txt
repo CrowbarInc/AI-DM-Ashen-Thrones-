@@ -1,0 +1,1242 @@
+..............FF..F...F....F............F...FF.......................... [  4%]
+..FF.FFF..............F...F.FFF......................................... [  8%]
+..........F...................................F..............FFF.....FF. [ 13%]
+.................................F...........F.......................... [ 17%]
+..........F............FFFFF.........................FFFFFFFF.....F..... [ 22%]
+....................................................................F... [ 26%]
+..............................................F......................... [ 31%]
+........................................................................ [ 35%]
+................FFF.......FF.......................FFFFFFFF............. [ 40%]
+.F...................................................................... [ 44%]
+.....................................................................F.. [ 49%]
+........................................................................ [ 53%]
+........................................................................ [ 58%]
+........................................................................ [ 62%]
+..........................................F...........................F. [ 67%]
+.................................FF.................................FFFF [ 71%]
+FF....................................................................F. [ 76%]
+........................................................................ [ 80%]
+.........................................................FFFF..........F [ 85%]
+FF..F...F.F..F.FFF.FFFF.......F....................F...................F [ 89%]
+F.........................FFF........F.............FFF..F............... [ 94%]
+..........F.....F.FFFFF....................FF..............F.....F...... [ 98%]
+...FF.F............                                                      [100%]
+================================== FAILURES ===================================
+_____________ test_http_notice_question_communicates_patrol_fact ______________
+tests\test_authored_knowledge_realization.py:341: in test_http_notice_question_communicates_patrol_fact
+    assert "northwest" in low
+E   assert 'northwest' in 'gate guard says, "i do not know enough to answer that."'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_______________ test_http_read_notice_board_speaks_written_clue _______________
+tests\test_authored_knowledge_realization.py:361: in test_http_read_notice_board_speaks_written_clue
+    assert "northwest" in low
+E   AssertionError: assert 'northwest' in 'you read the notice board, and you turn up a concrete clue.'
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] notice_patrol_route
+[PROMPT] fresh campaign prompt constructed
+_________ test_general_http_informational_social_prose_mints_no_lead __________
+tests\test_authoritative_lead_provenance_social_prose_non_ingestion.py:320: in test_general_http_informational_social_prose_mints_no_lead
+    assert "trestle" in _facing(data).lower() or "coal loft" in _facing(data).lower()
+E   assert ('trestle' in 'harbor clerk says, "i couldn\'t tell you."' or 'coal loft' in 'harbor clerk says, "i couldn\'t tell you."')
+E    +  where 'harbor clerk says, "i couldn\'t tell you."' = <built-in method lower of str object at 0x000001D1251C5530>()
+E    +    where <built-in method lower of str object at 0x000001D1251C5530> = 'Harbor Clerk says, "I couldn\'t tell you."'.lower
+E    +      where 'Harbor Clerk says, "I couldn\'t tell you."' = _facing({'ok': True, 'gm_output': {'player_facing_text': 'Harbor Clerk says, "I couldn\'t tell you."', 'tags': ['deterministic...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})
+E    +  and   'harbor clerk says, "i couldn\'t tell you."' = <built-in method lower of str object at 0x000001D1251C5530>()
+E    +    where <built-in method lower of str object at 0x000001D1251C5530> = 'Harbor Clerk says, "I couldn\'t tell you."'.lower
+E    +      where 'Harbor Clerk says, "I couldn\'t tell you."' = _facing({'ok': True, 'gm_output': {'player_facing_text': 'Harbor Clerk says, "I couldn\'t tell you."', 'tags': ['deterministic...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_general_http_existing_lead_mention_does_not_duplicate __________
+tests\test_authoritative_lead_provenance_social_prose_non_ingestion.py:405: in test_general_http_existing_lead_mention_does_not_duplicate
+    assert tuple(sorted(_lead_ids(after))) == before
+E   AssertionError: assert () == ('kelp_shed_key',)
+E     
+E     Right contains one more item: 'kelp_shed_key'
+E     Use -v to get more diff
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] kelp_shed_key
+[CLUE DUPLICATE IGNORED] kelp_shed_key
+[PROMPT] fresh campaign prompt constructed
+______ test_calibration_http_captain_answer_does_not_mint_narration_ctx _______
+tests\test_authoritative_lead_provenance_social_prose_non_ingestion.py:543: in test_calibration_http_captain_answer_does_not_mint_narration_ctx
+    assert inspect_interaction_context(sess).get("active_interaction_target_id") == "guard_captain"
+E   AssertionError: assert None == 'guard_captain'
+E    +  where None = <built-in method get of dict object at 0x000001D121E96940>('active_interaction_target_id')
+E    +    where <built-in method get of dict object at 0x000001D121E96940> = {'active_interaction_target_id': None, 'active_interaction_kind': None, 'interaction_mode': 'none', 'engagement_level': 'none', ...}.get
+E    +      where {'active_interaction_target_id': None, 'active_interaction_kind': None, 'interaction_mode': 'none', 'engagement_level': 'none', ...} = inspect_interaction_context({'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['frontier_gate'], 'current_date': 'Day 1', 'turn_counter': 1, ...})
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+___________________ test_general_http_owned_topic_first_ask ___________________
+tests\test_bound_speaker_knowledge_resolution.py:330: in test_general_http_owned_topic_first_ask
+    assert "first light" in text
+E   AssertionError: assert 'first light' in 'the action cannot currently be completed.'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________________ test_http_bound_captain_first_ask_no_warmup _________________
+tests\test_bound_speaker_knowledge_resolution.py:450: in test_http_bound_captain_first_ask_no_warmup
+    assert "thoran" in low
+E   assert 'thoran' in 'guard captain shakes their head. "i don\'t know."'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________________ test_http_bound_captain_natural_paraphrase __________________
+tests\test_bound_speaker_knowledge_resolution.py:484: in test_http_bound_captain_natural_paraphrase
+    assert "thoran" in low
+E   assert 'thoran' in 'guard captain shakes their head. "i don\'t know."'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_______________ test_by3_strict_social_hidden_mutation_detected _______________
+tests\test_by3_strict_social_semantic_mutation.py:50: in test_by3_strict_social_hidden_mutation_detected
+    assert target["post_gate_mutation_detected"] is True
+E   assert None is True
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+____________ test_by3_wrong_speaker_fixture_has_attributable_trace ____________
+tests\test_by3_strict_social_semantic_mutation.py:72: in test_by3_wrong_speaker_fixture_has_attributable_trace
+    assert str(target.get("first_semantic_mutation_source") or "").strip()
+E   AssertionError: assert ''
+E    +  where '' = <built-in method strip of str object at 0x00007FFCE5071D00>()
+E    +    where <built-in method strip of str object at 0x00007FFCE5071D00> = ''.strip
+E    +      where '' = str((None or ''))
+E    +        where None = <built-in method get of dict object at 0x000001D1210DE280>('first_semantic_mutation_source')
+E    +          where <built-in method get of dict object at 0x000001D1210DE280> = {'turn_identity': 'wrong_speaker_strict_social_emission|idx:0', 'scenario_id': 'wrong_speaker_strict_social_emission', 'turn_index': 0, 'turn_id': None, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+___________________ test_by3_report_schema_and_gap_closure ____________________
+tests\test_by3_strict_social_semantic_mutation.py:103: in test_by3_report_schema_and_gap_closure
+    assert coverage["gap_closed"] is True
+E   assert False is True
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+________ test_by3_writer_raw_checkpoint_present_on_strict_social_turn _________
+tests\test_by3_strict_social_semantic_mutation.py:131: in test_by3_writer_raw_checkpoint_present_on_strict_social_turn
+    assert CHECKPOINT_NORMALIZED_SOCIAL_CANDIDATE in checkpoint_ids
+E   AssertionError: assert 'normalized_social_candidate' in {'policy_output', 'replay_final_text', 'writer_raw_candidate'}
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+______________________ test_by3_generate_repo_artifacts _______________________
+tests\test_by3_strict_social_semantic_mutation.py:152: in test_by3_generate_repo_artifacts
+    assert by3_report["before_after_coverage"]["gap_closed"] is True
+E   assert False is True
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+_______ test_generic_to_the_guard_redirects_from_prior_stranger_target ________
+tests\test_dialogue_interaction_establishment.py:188: in test_generic_to_the_guard_redirects_from_prior_stranger_target
+    assert est["established"] is True
+E   assert False is True
+_______________ test_quoted_npc_line_without_plan_fails_closed ________________
+tests\test_dialogue_plan_final_emission_gate.py:54: in test_quoted_npc_line_without_plan_fails_closed
+    assert '"' not in out["player_facing_text"]
+E   assert '"' not in 'Tavern Runn...on\'t know."'
+E     
+E     '"' is contained here:
+E       Tavern Runner shakes their head. "I don't know."
+E     ?                                  +
+________________________ test_missing_speaker_id_fails ________________________
+tests\test_dialogue_plan_final_emission_gate.py:111: in test_missing_speaker_id_fails
+    assert '"' not in out["player_facing_text"]
+E   assert '"' not in 'Tavern Runn...on\'t know."'
+E     
+E     '"' is contained here:
+E       Tavern Runner shakes their head. "I don't know."
+E     ?                                  +
+_____________________ test_missing_dialogue_intent_fails ______________________
+tests\test_dialogue_plan_final_emission_gate.py:136: in test_missing_dialogue_intent_fails
+    assert '"' not in out["player_facing_text"]
+E   assert '"' not in 'Tavern Runn...on\'t know."'
+E     
+E     '"' is contained here:
+E       Tavern Runner shakes their head. "I don't know."
+E     ?                                  +
+_________________ test_wrong_attributed_speaker_fails_closed __________________
+tests\test_dialogue_plan_final_emission_gate.py:167: in test_wrong_attributed_speaker_fails_closed
+    assert '"' not in out["player_facing_text"]
+E   assert '"' not in 'Tavern Runn...on\'t know."'
+E     
+E     '"' is contained here:
+E       Tavern Runner shakes their head. "I don't know."
+E     ?                                  +
+________ test_chat_hailing_runner_with_can_you_question_routes_social _________
+tests\test_directed_social_routing.py:242: in test_chat_hailing_runner_with_can_you_question_routes_social
+    assert resolution.get("kind") == "question"
+E   AssertionError: assert 'conversational_clarify' == 'question'
+E     
+E     - question
+E     + conversational_clarify
+______ test_api_repairs_empty_social_after_force_terminal_retry_fallback ______
+tests\test_empty_social_retry_regressions.py:252: in test_api_repairs_empty_social_after_force_terminal_retry_fallback
+    assert len(captured) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] east_lanes
+[PROMPT] fresh campaign prompt constructed
+__________ test_http_read_while_bound_communicates_authored_contents __________
+tests\test_explicit_world_action_social_lock_override.py:363: in test_http_read_while_bound_communicates_authored_contents
+    assert "silt" in low or "two marks" in low or "spring tide" in low
+E   AssertionError: assert ('silt' in 'in harbor wharf, a wet quay, a tide marker, and a brass plaque' or 'two marks' in 'in harbor wharf, a wet quay, a tide marker, and a brass plaque' or 'spring tide' in 'in harbor wharf, a wet quay, a tide marker, and a brass plaque')
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] plaque_silt
+[PROMPT] fresh campaign prompt constructed
+________ test_http_class_b_visible_feature_is_not_swallowed_by_social _________
+tests\test_explicit_world_action_social_lock_override.py:376: in test_http_class_b_visible_feature_is_not_swallowed_by_social
+    assert "second flood" not in low
+E   AssertionError: assert 'second flood' not in 'the inner l...econd flood.'
+E     
+E     'second flood' is contained here:
+E       the inner lamps are trimmed before the second flood.
+E     ?                                        ++++++++++++
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+___________________ test_http_leave_while_bound_still_moves ___________________
+tests\test_explicit_world_action_social_lock_override.py:384: in test_http_leave_while_bound_still_moves
+    assert res.get("kind") == "scene_transition"
+E   assert None == 'scene_transition'
+E    +  where None = <built-in method get of dict object at 0x000001D125264A80>('kind')
+E    +    where <built-in method get of dict object at 0x000001D125264A80> = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...ene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': "I'll climb the quay stair."}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_____________ test_http_stale_topic_does_not_mutate_world_action ______________
+tests\test_explicit_world_action_social_lock_override.py:470: in test_http_stale_topic_does_not_mutate_world_action
+    assert "second flood" not in _facing(second).lower()
+E   AssertionError: assert 'second flood' not in 'the inner l...econd flood.'
+E     
+E     'second flood' is contained here:
+E       the inner lamps are trimmed before the second flood.
+E     ?                                        ++++++++++++
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] social_harbor_wharf_lamp_warden_silt_schedule
+[PROMPT] fresh campaign prompt constructed
+__________ test_http_t13_glance_back_at_notice_board_is_world_action __________
+tests\test_explicit_world_action_social_lock_override.py:494: in test_http_t13_glance_back_at_notice_board_is_world_action
+    assert res.get("kind") in {"investigate", "discover_clue", "already_searched"}
+E   AssertionError: assert 'question' in {'already_searched', 'discover_clue', 'investigate'}
+E    +  where 'question' = <built-in method get of dict object at 0x000001D1252D4C80>('kind')
+E    +    where <built-in method get of dict object at 0x000001D1252D4C80> = {'kind': 'question', 'action_id': 'tavern_runner', 'label': 'Tavern Runner', 'prompt': 'I glance back at the notice board after that.', ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_____________ test_engine_has_grounded_absence_before_realization _____________
+tests\test_grounded_social_absence_live_model_non_invention.py:238: in test_engine_has_grounded_absence_before_realization
+    assert soc.get("reply_kind") == "refusal"
+E   AssertionError: assert 'unknown' == 'refusal'
+E     
+E     - refusal
+E     + unknown
+___________________ test_http_refusal_grammar_still_intact ____________________
+tests\test_grounded_social_absence_live_model_non_invention.py:409: in test_http_refusal_grammar_still_intact
+    assert "from what i know" in text.lower() or "don't know" in text.lower() or "do not know" in text.lower()
+E   assert ('from what i know' in 'night porter says, "i couldn\'t tell you."' or "don't know" in 'night porter says, "i couldn\'t tell you."' or 'do not know' in 'night porter says, "i couldn\'t tell you."')
+E    +  where 'night porter says, "i couldn\'t tell you."' = <built-in method lower of str object at 0x000001D1222C9AD0>()
+E    +    where <built-in method lower of str object at 0x000001D1222C9AD0> = 'Night Porter says, "I couldn\'t tell you."'.lower
+E    +  and   'night porter says, "i couldn\'t tell you."' = <built-in method lower of str object at 0x000001D1222C9AD0>()
+E    +    where <built-in method lower of str object at 0x000001D1222C9AD0> = 'Night Porter says, "I couldn\'t tell you."'.lower
+E    +  and   'night porter says, "i couldn\'t tell you."' = <built-in method lower of str object at 0x000001D1222C9AD0>()
+E    +    where <built-in method lower of str object at 0x000001D1222C9AD0> = 'Night Porter says, "I couldn\'t tell you."'.lower
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+________ test_question_rule_does_not_rewrite_resolved_place_existence _________
+tests\test_nearby_place_existence_knowledge_ownership.py:507: in test_question_rule_does_not_rewrite_resolved_place_existence
+    assert check.get("applies") is False
+E   AssertionError: assert True is False
+E    +  where True = <built-in method get of dict object at 0x000001D1263329C0>('applies')
+E    +    where <built-in method get of dict object at 0x000001D1263329C0> = {'applies': True, 'ok': True, 'reasons': []}.get
+_ test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[captain_preference-guard_captain-Guard Captain, do you prefer standing watch in the rain, or somewhere dry?-history0] _
+tests\test_pr_cw_social_context_projection.py:131: in test_pr_cw_harmless_incidental_dialogue_uses_reduced_context
+    assert sealed["metadata"]["hard_validation_attempt_1"]["hard_valid"] is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[baker_preference-baker-Baker, which loaf do you usually keep for yourself?-history1] _
+tests\test_pr_cw_social_context_projection.py:131: in test_pr_cw_harmless_incidental_dialogue_uses_reduced_context
+    assert sealed["metadata"]["hard_validation_attempt_1"]["hard_valid"] is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[subjective_opinion-guard_captain-Guard Captain, which view of the square do you like best?-history2] _
+tests\test_pr_cw_social_context_projection.py:131: in test_pr_cw_harmless_incidental_dialogue_uses_reduced_context
+    assert sealed["metadata"]["hard_validation_attempt_1"]["hard_valid"] is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[followup-baker-Baker, which loaf would you recommend to me?-history3] _
+tests\test_pr_cw_social_context_projection.py:131: in test_pr_cw_harmless_incidental_dialogue_uses_reduced_context
+    assert sealed["metadata"]["hard_validation_attempt_1"]["hard_valid"] is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[recent_history-guard_captain-Guard Captain, which weather do you prefer for a watch?-history4] _
+tests\test_pr_cw_social_context_projection.py:131: in test_pr_cw_harmless_incidental_dialogue_uses_reduced_context
+    assert sealed["metadata"]["hard_validation_attempt_1"]["hard_valid"] is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_adversarial_validation_matches_full_context[biography-The guard captain was born in Blackharbor and served for twenty years.-False] _
+tests\test_pr_cw_social_context_projection.py:251: in test_pr_cw_adversarial_validation_matches_full_context
+    audit = sealed["metadata"]["hard_validation_attempt_1"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_adversarial_validation_matches_full_context[geography-The old milestone lies east beyond the trading crossroads.-False] _
+tests\test_pr_cw_social_context_projection.py:251: in test_pr_cw_adversarial_validation_matches_full_context
+    audit = sealed["metadata"]["hard_validation_attempt_1"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_adversarial_validation_matches_full_context[objective_fact-The gate tax is five silver coins for every traveler.-False] _
+tests\test_pr_cw_social_context_projection.py:251: in test_pr_cw_adversarial_validation_matches_full_context
+    audit = sealed["metadata"]["hard_validation_attempt_1"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_adversarial_validation_matches_full_context[hidden_information-A secret tunnel runs beneath the gate into the keep.-False] _
+tests\test_pr_cw_social_context_projection.py:251: in test_pr_cw_adversarial_validation_matches_full_context
+    audit = sealed["metadata"]["hard_validation_attempt_1"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_adversarial_validation_matches_full_context[npc_action-The captain unlocks the gate and lets you pass.-False] _
+tests\test_pr_cw_social_context_projection.py:251: in test_pr_cw_adversarial_validation_matches_full_context
+    audit = sealed["metadata"]["hard_validation_attempt_1"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_adversarial_validation_matches_full_context[certainty-The captain confirms that bandits murdered the missing patrol.-False] _
+tests\test_pr_cw_social_context_projection.py:251: in test_pr_cw_adversarial_validation_matches_full_context
+    audit = sealed["metadata"]["hard_validation_attempt_1"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_adversarial_validation_matches_full_context[discovery-You discover a hidden map beneath the notice board.-False] _
+tests\test_pr_cw_social_context_projection.py:251: in test_pr_cw_adversarial_validation_matches_full_context
+    audit = sealed["metadata"]["hard_validation_attempt_1"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+_ test_pr_cw_adversarial_validation_matches_full_context[state_change-The captain gives you ten gold coins and a signed entry permit.-False] _
+tests\test_pr_cw_social_context_projection.py:251: in test_pr_cw_adversarial_validation_matches_full_context
+    audit = sealed["metadata"]["hard_validation_attempt_1"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'hard_validation_attempt_1'
+__________________ test_pr_dy_clarification_does_not_mutate ___________________
+tests\test_pr_dy_live_gameplay.py:179: in test_pr_dy_clarification_does_not_mutate
+    data = chat(ChatRequest(text="Look at that.", ui_mode="player"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6636: in chat
+    return _chat_turn(req, ui_mode=ui_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:7154: in _chat_turn
+    ordinary_contract = establish_ordinary_gameplay_contract(
+game\ordinary_semantic_ownership.py:266: in establish_ordinary_gameplay_contract
+    _attach(True)
+game\ordinary_semantic_ownership.py:172: in _attach
+    attach_interaction_obligation(
+game\live_resolution.py:441: in attach_interaction_obligation
+    contract = construct_resolution_contract(
+game\resolution_contract.py:1750: in construct_resolution_contract
+    interpreted = model_interpreter(
+game\semantic_interpreter.py:262: in interpret_for_contract
+    text = _invoke_interpretation_model(messages)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\helpers\live_model_guard.py:76: in _blocked_interpretation
+    raise LiveModelCallForbidden("game.semantic_interpreter._invoke_interpretation_model")
+E   tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.
+E   site: game.semantic_interpreter._invoke_interpretation_model
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E       res = hook_impl.function(*args)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 118, in pytest_runtest_protocol
+E       runtestprotocol(item, nextitem=nextitem)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 139, in runtestprotocol
+E       reports.append(call_and_report(item, "call", log))
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 249, in call_and_report
+E       call = CallInfo.from_call(
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 361, in from_call
+E       result: TResult | None = func()
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 250, in <lambda>
+E       lambda: runtest_hook(item=item, **kwds),
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E       res = hook_impl.function(*args)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 184, in pytest_runtest_call
+E       item.runtest()
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 1707, in runtest
+E       self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E       res = hook_impl.function(*args)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 167, in pytest_pyfunc_call
+E       result = testfunction(**testargs)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_dy_live_gameplay.py", line 179, in test_pr_dy_clarification_does_not_mutate
+E       data = chat(ChatRequest(text="Look at that.", ui_mode="player"))
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6636, in chat
+E       return _chat_turn(req, ui_mode=ui_mode)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 7154, in _chat_turn
+E       ordinary_contract = establish_ordinary_gameplay_contract(
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\ordinary_semantic_ownership.py", line 266, in establish_ordinary_gameplay_contract
+E       _attach(True)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\ordinary_semantic_ownership.py", line 172, in _attach
+E       attach_interaction_obligation(
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\live_resolution.py", line 441, in attach_interaction_obligation
+E       contract = construct_resolution_contract(
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\resolution_contract.py", line 1750, in construct_resolution_contract
+E       interpreted = model_interpreter(
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\semantic_interpreter.py", line 262, in interpret_for_contract
+E       text = _invoke_interpretation_model(messages)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 76, in _blocked_interpretation
+E       raise LiveModelCallForbidden("game.semantic_interpreter._invoke_interpretation_model")
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 30, in __init__
+E       stack = "".join(traceback.format_stack(limit=25))
+_________________ test_t19_t23_answer_sufficiency_and_refusal _________________
+tests\test_pr_eg_r3_r1_expression_semantics.py:215: in test_t19_t23_answer_sufficiency_and_refusal
+    assert direct["answer_sufficiency"] == "directly_answers"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'answer_sufficiency'
+_____________ test_consequential_disclosure_http_and_persistence ______________
+tests\test_pr_eg_r4_r1_delivery_integrity.py:160: in test_consequential_disclosure_http_and_persistence
+    response=TestClient(api.app).post('/api/chat?ui_mode=player',json=dict(text='I ask Sergeant Mara whether guards watch the north gate throughout the night.',ui_mode='player'))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:555: in post
+    return super().post(
+.venv\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:454: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:356: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:353: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:88: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2692: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1274: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:276: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:156: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:142: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:698: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:352: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2641: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1033: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6627: in api_chat
+    return _project_player_runtime_response(chat(req, ui_mode=ui_mode))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6636: in chat
+    return _chat_turn(req, ui_mode=ui_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:7776: in _chat_turn
+    result = _complete_opening_turn_persistence_like_chat(
+game\api.py:6276: in _complete_opening_turn_persistence_like_chat
+    save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_consequential_disclosure_0\\data\\session.json.tmp.1dd6699242f6dda2' -> 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_consequential_disclosure_0\\data\\session.json'
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] social_waystation_courtyard_sergeant_mara_watch
+______________ test_forged_authority_or_entity_rejected[change0] ______________
+tests\test_pr_eg_r6_r2_grounding.py:154: in test_forged_authority_or_entity_rejected
+    assert p['response_kind']=='clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+______________ test_forged_authority_or_entity_rejected[change1] ______________
+tests\test_pr_eg_r6_r2_grounding.py:154: in test_forged_authority_or_entity_rejected
+    assert p['response_kind']=='clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+______________ test_forged_authority_or_entity_rejected[change2] ______________
+tests\test_pr_eg_r6_r2_grounding.py:154: in test_forged_authority_or_entity_rejected
+    assert p['response_kind']=='clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+__________ test_bad_prior_target_cannot_launder_history[correction] ___________
+tests\test_pr_eg_r6_r2_grounding.py:199: in test_bad_prior_target_cannot_launder_history
+    assert ask(plan,text='Who told you?',session=prior_session())['response_kind']=='clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+___________ test_bad_prior_target_cannot_launder_history[follow_up] ___________
+tests\test_pr_eg_r6_r2_grounding.py:199: in test_bad_prior_target_cannot_launder_history
+    assert ask(plan,text='Who told you?',session=prior_session())['response_kind']=='clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+_____ test_untrusted_operations_fail_closed_without_losing_focus[forged] ______
+tests\test_pr_eg_r6_r2_r1_referents.py:211: in test_untrusted_operations_fail_closed_without_losing_focus
+    assert locked['response_kind'] == 'clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+_ test_untrusted_operations_fail_closed_without_losing_focus[cross_conversation] _
+tests\test_pr_eg_r6_r2_r1_referents.py:211: in test_untrusted_operations_fail_closed_without_losing_focus
+    assert locked['response_kind'] == 'clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+______ test_untrusted_operations_fail_closed_without_losing_focus[stale] ______
+tests\test_pr_eg_r6_r2_r1_referents.py:211: in test_untrusted_operations_fail_closed_without_losing_focus
+    assert locked['response_kind'] == 'clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+_____ test_untrusted_operations_fail_closed_without_losing_focus[speaker] _____
+tests\test_pr_eg_r6_r2_r1_referents.py:211: in test_untrusted_operations_fail_closed_without_losing_focus
+    assert locked['response_kind'] == 'clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+______ test_untrusted_operations_fail_closed_without_losing_focus[field] ______
+tests\test_pr_eg_r6_r2_r1_referents.py:211: in test_untrusted_operations_fail_closed_without_losing_focus
+    assert locked['response_kind'] == 'clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+____ test_untrusted_operations_fail_closed_without_losing_focus[operation] ____
+tests\test_pr_eg_r6_r2_r1_referents.py:211: in test_untrusted_operations_fail_closed_without_losing_focus
+    assert locked['response_kind'] == 'clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+___ test_untrusted_operations_fail_closed_without_losing_focus[unwitnessed] ___
+tests\test_pr_eg_r6_r2_r1_referents.py:211: in test_untrusted_operations_fail_closed_without_losing_focus
+    assert locked['response_kind'] == 'clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+__ test_untrusted_operations_fail_closed_without_losing_focus[substitution] ___
+tests\test_pr_eg_r6_r2_r1_referents.py:211: in test_untrusted_operations_fail_closed_without_losing_focus
+    assert locked['response_kind'] == 'clarification'
+E   AssertionError: assert 'unknown' == 'clarification'
+E     
+E     - clarification
+E     + unknown
+____________ test_unqualified_historical_id_cannot_override_focus _____________
+tests\test_pr_eg_r6_r2_r1_referents.py:323: in test_unqualified_historical_id_cannot_override_focus
+    assert locked['bound_referent_id']==refs.active(session)['referent_id']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'bound_referent_id'
+______________________ test_t60_provider_call_accounting ______________________
+tests\test_pr_eg_r6_r3_r1_candidates.py:684: in test_t60_provider_call_accounting
+    assert proposed["api_calls"] == 1
+E   assert 0 == 1
+__________________ test_successful_start_serialized_boundary __________________
+tests\test_pr_play_20_response_confidentiality.py:84: in test_successful_start_serialized_boundary
+    assert response.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 2af775cdf95882eec6d03402
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+[PROMPT] fresh campaign prompt constructed
+_______________ test_offline_initialization_and_ordinary_action _______________
+tests\test_pr_play_21_privileged_reads.py:146: in test_offline_initialization_and_ordinary_action
+    assert started.status_code == public.status_code == action.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+E    +  and   200 = <Response [200 OK]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started a3d443ceb352e377933ce646
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+_______________ test_opening_to_interaction_publication[False] ________________
+tests\test_pr_play_23_local_interaction.py:141: in test_opening_to_interaction_publication
+    assert opening.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started a89fe77f9efdc0f9637a96fb
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+________________ test_opening_to_interaction_publication[True] ________________
+tests\test_pr_play_23_local_interaction.py:141: in test_opening_to_interaction_publication
+    assert opening.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 8504cb674094fd2bf3eb96b5
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+___________________ test_offline_opening_to_http[offerings] ___________________
+tests\test_pr_play_25_public_fact_dialogue.py:173: in test_offline_opening_to_http
+    assert opening.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 84e8e0f9b81c582ddd95d6db
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+_____________________ test_offline_opening_to_http[host] ______________________
+tests\test_pr_play_25_public_fact_dialogue.py:173: in test_offline_opening_to_http
+    assert opening.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 7829d4a8650c4ac8442422de
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+_____________________ test_offline_opening_to_http[price] _____________________
+tests\test_pr_play_25_public_fact_dialogue.py:173: in test_offline_opening_to_http
+    assert opening.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 055bf6efcae21c303c022574
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+____________________ test_offline_opening_to_http[unknown] ____________________
+tests\test_pr_play_25_public_fact_dialogue.py:173: in test_offline_opening_to_http
+    assert opening.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 263b1066a041684e38127041
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+_________________ test_offline_opening_to_http[embellishment] _________________
+tests\test_pr_play_25_public_fact_dialogue.py:173: in test_offline_opening_to_http
+    assert opening.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started d9d675493e3af594205291dc
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+____________________ test_offline_opening_to_http[secret] _____________________
+tests\test_pr_play_25_public_fact_dialogue.py:173: in test_offline_opening_to_http
+    assert opening.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 18c2c89dbf6e55ada44c218b
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+_ test_emission_quality_anyone_else_talk_to_manifests_preserves_redirect_not_fragment _
+tests\test_social_emission_quality.py:166: in test_emission_quality_anyone_else_talk_to_manifests_preserves_redirect_not_fragment
+    assert details.get("resolved_answer_source") == "topic_pressure:last_answer:redirect"
+E   AssertionError: assert 'topic_pressure:last_answer' == 'topic_pressu...swer:redirect'
+E     
+E     - topic_pressure:last_answer:redirect
+E     ?                           ---------
+E     + topic_pressure:last_answer
+_____________ test_social_lead_lands_discovered_clue_id_and_event _____________
+tests\test_social_lead_landing.py:65: in test_social_lead_lands_discovered_clue_id_and_event
+    assert "east_lanes" in added or "East road is dangerous." in added
+E   AssertionError: assert ('east_lanes' in [] or 'East road is dangerous.' in [])
+_______________ test_social_lead_idempotent_no_duplicate_event ________________
+tests\test_social_lead_landing.py:90: in test_social_lead_idempotent_no_duplicate_event
+    assert len(events) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+_________ test_social_topic_without_clue_id_gets_stable_synthetic_id __________
+tests\test_social_lead_landing.py:108: in test_social_topic_without_clue_id_gets_stable_synthetic_id
+    assert syn in get_all_known_clue_ids(session)
+E   AssertionError: assert 'social_gate_runner_t1' in set()
+E    +  where set() = get_all_known_clue_ids({})
+______ test_social_lead_with_leads_to_scene_adds_pending_and_actionable _______
+tests\test_social_lead_landing.py:127: in test_social_lead_with_leads_to_scene_adds_pending_and_actionable
+    assert any(isinstance(p, dict) and p.get("clue_id") == "to_milestone" for p in pending)
+E   assert False
+E    +  where False = any(<generator object test_social_lead_with_leads_to_scene_adds_pending_and_actionable.<locals>.<genexpr> at 0x000001D12685B220>)
+____________ test_topic_text_old_milestone_creates_extracted_lead _____________
+tests\test_social_lead_landing.py:483: in test_topic_text_old_milestone_creates_extracted_lead
+    assert lid in get_all_known_clue_ids(session)
+E   AssertionError: assert 'lead_frontier_gate_old_milestone' in set()
+E    +  where set() = get_all_known_clue_ids({})
+_____________ test_topic_text_guards_and_town_crier_create_leads ______________
+tests\test_social_lead_landing.py:515: in test_topic_text_guards_and_town_crier_create_leads
+    assert lid in get_all_known_clue_ids(session)
+E   AssertionError: assert 'lead_frontier_gate_guards' in set()
+E    +  where set() = get_all_known_clue_ids({})
+__________ test_structured_fact_scene_id_without_regex_creates_lead ___________
+tests\test_social_lead_landing.py:542: in test_structured_fact_scene_id_without_regex_creates_lead
+    assert lid in get_all_known_clue_ids(session)
+E   AssertionError: assert 'lead_frontier_gate_old_milestone' in set()
+E    +  where set() = get_all_known_clue_ids({})
+____ test_duplicate_social_resolution_does_not_duplicate_extracted_pending ____
+tests\test_social_lead_landing.py:618: in test_duplicate_social_resolution_does_not_duplicate_extracted_pending
+    assert len(matches) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+_ test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_empty _
+tests\test_social_lead_landing.py:693: in test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_empty
+    assert dbg.get("enforced_lead_source") == "exit"
+E   AssertionError: assert 'discoverable_clue' == 'exit'
+E     
+E     - exit
+E     + discoverable_clue
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] lead_frontier_gate_old_trading_crossroads
+_____ test_minimum_actionable_lead_double_call_does_not_duplicate_pending _____
+tests\test_social_lead_landing.py:765: in test_minimum_actionable_lead_double_call_does_not_duplicate_pending
+    assert len(milestone_pending) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] lead_frontier_gate_old_trading_crossroads
+________ test_extracted_social_lead_creates_authoritative_registry_row ________
+tests\test_social_lead_landing.py:851: in test_extracted_social_lead_creates_authoritative_registry_row
+    assert row is not None
+E   assert None is not None
+__________ test_lead_landing_metadata_reports_authoritative_outcomes __________
+tests\test_social_lead_landing.py:902: in test_lead_landing_metadata_reports_authoritative_outcomes
+    ll = res["metadata"]["lead_landing"]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'lead_landing'
+___ test_clue_discovery_then_social_extract_updates_same_authoritative_row ____
+tests\test_social_lead_landing.py:961: in test_clue_discovery_then_social_extract_updates_same_authoritative_row
+    assert "lead_frontier_gate_old_milestone" in ev
+E   AssertionError: assert 'lead_frontier_gate_old_milestone' in ['gate_hint']
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] gate_hint
+_ test_apply_socially_revealed_leads_reentrancy_one_authoritative_one_pending_idempotent_events _
+tests\test_social_lead_landing.py:1014: in test_apply_socially_revealed_leads_reentrancy_one_authoritative_one_pending_idempotent_events
+    assert get_lead(session, auth_id) is not None
+E   AssertionError: assert None is not None
+E    +  where None = get_lead({'scene_runtime': {}, 'clue_knowledge': {}, 'turn_counter': 1, 'lead_registry': {}}, 'lead_frontier_gate_old_milestone')
+_ test_ensure_minimum_actionable_skips_after_normal_social_landing_no_extra_rows _
+tests\test_social_lead_landing.py:1098: in test_ensure_minimum_actionable_skips_after_normal_social_landing_no_extra_rows
+    assert dbg.get("minimum_actionable_lead_enforced") is False
+E   AssertionError: assert True is False
+E    +  where True = <built-in method get of dict object at 0x000001D12B52BDC0>('minimum_actionable_lead_enforced')
+E    +    where <built-in method get of dict object at 0x000001D12B52BDC0> = {'minimum_actionable_lead_enforced': True, 'enforced_lead_id': 'to_milestone', 'enforced_lead_source': 'extracted_social'}.get
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] to_milestone
+___ test_first_pass_lead_landing_metadata_shape_actionable_matches_pending ____
+tests\test_social_lead_landing.py:1127: in test_first_pass_lead_landing_metadata_shape_actionable_matches_pending
+    ll = res["metadata"]["lead_landing"]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'lead_landing'
+_ test_canonical_extracted_sibling_collapses_evidence_uses_one_extracted_trigger_cid _
+tests\test_social_lead_landing.py:1172: in test_canonical_extracted_sibling_collapses_evidence_uses_one_extracted_trigger_cid
+    ext = res["metadata"]["lead_landing"]["extracted_lead_ids"]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'lead_landing'
+______ test_social_extract_reinforced_second_disclosure_one_registry_row ______
+tests\test_social_lead_landing.py:1224: in test_social_extract_reinforced_second_disclosure_one_registry_row
+    assert row is not None
+E   assert None is not None
+_ test_transactional_probe_after_runner_topic_exhausted_yields_redirect_contract _
+tests\test_social_probe_determinism.py:71: in test_transactional_probe_after_runner_topic_exhausted_yields_redirect_contract
+    assert soc["social_probe_move"] == "transactional"
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'social_probe_move'
+__ test_immutable_preseal_preserves_selected_authored_answer_over_ignorance ___
+tests\test_social_question_relevance_answer_selection.py:428: in test_immutable_preseal_preserves_selected_authored_answer_over_ignorance
+    assert record.get("provenance") == "initial_generation"
+E   AssertionError: assert 'authorized_host_speech' == 'initial_generation'
+E     
+E     - initial_generation
+E     + authorized_host_speech
+_______ test_transcript_runner_asks_about_aldric_followup_stays_runner ________
+tests\test_social_speaker_grounding.py:454: in test_transcript_runner_asks_about_aldric_followup_stays_runner
+    assert r1.get("success") is True
+E   AssertionError: assert None is True
+E    +  where None = <built-in method get of dict object at 0x000001D12A5B9740>('success')
+E    +    where <built-in method get of dict object at 0x000001D12A5B9740> = {'kind': 'question', 'action_id': 'question_tavern_runner', 'label': 'Runner, what do you think Lord Aldric would say about the patrol schedule?', 'prompt': 'Runner, what do you think Lord Aldric would say about the patrol schedule?', ...}.get
+_______ test_transcript_where_is_aldric_repeated_followups_stay_runner ________
+tests\test_social_speaker_grounding.py:519: in test_transcript_where_is_aldric_repeated_followups_stay_runner
+    assert r1.get("success") is True
+E   AssertionError: assert None is True
+E    +  where None = <built-in method get of dict object at 0x000001D1287A3000>('success')
+E    +    where <built-in method get of dict object at 0x000001D1287A3000> = {'kind': 'question', 'action_id': 'q_where', 'label': 'Runner, where can I find Lord Aldric?', 'prompt': 'Runner, where can I find Lord Aldric?', ...}.get
+_____________ test_start_campaign_emits_opening_and_sets_started ______________
+tests\test_start_campaign_api.py:167: in test_start_campaign_emits_opening_and_sets_started
+    assert len(log_reload_entries) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 253baea4b21278cf56786f67
+[PROMPT] fresh campaign prompt constructed
+_ test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text _
+tests\test_start_campaign_api.py:258: in test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text
+    assert emission_debug.get("post_final_emission_gate_text_len", 0) > 800
+E   AssertionError: assert 781 > 800
+E    +  where 781 = <built-in method get of dict object at 0x000001D126E572C0>('post_final_emission_gate_text_len', 0)
+E    +    where <built-in method get of dict object at 0x000001D126E572C0> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 62ad824fadff600d3344a545
+[PROMPT] fresh campaign prompt constructed
+_____ test_start_campaign_promotes_valid_upstream_prepared_scene_opening ______
+tests\test_start_campaign_api.py:287: in test_start_campaign_promotes_valid_upstream_prepared_scene_opening
+    assert response_text in RICH_OPENING_GPT_RESPONSE["player_facing_text"]
+E   assert "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke." in "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush."
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 7f424eb39cb1d8e4ab26cbe5
+[PROMPT] fresh campaign prompt constructed
+_______________ test_heading_out_after_them_binds_authored_exit _______________
+tests\test_stay_leave_social_lock_override.py:105: in test_heading_out_after_them_binds_authored_exit
+    assert parsed is not None
+E   assert None is not None
+__________ test_http_pursuit_while_socially_engaged_leaves_the_gate ___________
+tests\test_stay_leave_social_lock_override.py:293: in test_http_pursuit_while_socially_engaged_leaves_the_gate
+    assert any(token in low for token in ("leave", "path", "move", "position"))
+E   assert False
+E    +  where False = any(<generator object test_http_pursuit_while_socially_engaged_leaves_the_gate.<locals>.<genexpr> at 0x000001D12B5F0AD0>)
+---------------------------- Captured stdout call -----------------------------
+[ENGINE] Scene transition -> old_milestone
+[PROMPT] fresh campaign prompt constructed
+______________ test_http_explicit_leave_overrides_dialogue_lock _______________
+tests\test_stay_leave_social_lock_override.py:306: in test_http_explicit_leave_overrides_dialogue_lock
+    assert res.get("kind") in {"scene_transition", "travel"}
+E   assert 'conversational_clarify' in {'scene_transition', 'travel'}
+E    +  where 'conversational_clarify' = <built-in method get of dict object at 0x000001D1269A3140>('kind')
+E    +    where <built-in method get of dict object at 0x000001D1269A3140> = {'kind': 'conversational_clarify', 'action_id': 'conversational_clarify', 'label': "I'm leaving. I'll head down the road after the patrol.", 'prompt': "I'm leaving. I'll head down the road after the patrol.", ...}.get
+_____________ test_http_explicit_stay_does_not_enter_cinderwatch ______________
+tests\test_stay_leave_social_lock_override.py:322: in test_http_explicit_stay_does_not_enter_cinderwatch
+    assert "enter cinderwatch" not in low
+E   AssertionError: assert 'enter cinderwatch' not in 'you leave t...cinderwatch.'
+E     
+E     'enter cinderwatch' is contained here:
+E       you leave the gate and enter cinderwatch.
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_http_unavailable_travel_does_not_invent_house_verevin __________
+tests\test_stay_leave_social_lock_override.py:359: in test_http_unavailable_travel_does_not_invent_house_verevin
+    assert data.get("session", {}).get("active_scene_id") == "frontier_gate"
+E   assert None == 'frontier_gate'
+E    +  where None = <built-in method get of dict object at 0x000001D1252BC280>('active_scene_id')
+E    +    where <built-in method get of dict object at 0x000001D1252BC280> = {}.get
+E    +      where {} = <built-in method get of dict object at 0x000001D125189CC0>('session', {})
+E    +        where <built-in method get of dict object at 0x000001D125189CC0> = {'ok': True, 'gm_output': {'player_facing_text': 'You want to reach House Verevin, but that is not an established dest...ction_id': 'conversational_decline', 'label': "I'll go to House Verevin.", 'prompt': "I'll go to House Verevin.", ...}}.get
+_____ test_chat_fallback_preserves_endpoint_specific_no_resolution_shape ______
+tests\test_turn_pipeline_shared.py:317: in test_chat_fallback_preserves_endpoint_specific_no_resolution_shape
+    assert data.get("resolution") is None
+E   assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None
+E    +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x000001D128883E40>('resolution')
+E    +    where <built-in method get of dict object at 0x000001D128883E40> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_ test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback _
+tests\test_turn_pipeline_shared.py:494: in test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback
+    assert captured_inputs
+E   assert []
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+___________ test_chat_known_follow_up_bypasses_uncertainty_fallback ___________
+tests\test_turn_pipeline_shared.py:601: in test_chat_known_follow_up_bypasses_uncertainty_fallback
+    assert "retry_strategy:selected=unresolved_question" in read_turn_debug_notes(data)
+E   assert 'retry_strategy:selected=unresolved_question' in ''
+E    +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, "Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______________ test_chat_targeted_retry_unresolved_question_only ______________
+tests\test_turn_pipeline_shared.py:630: in test_chat_targeted_retry_unresolved_question_only
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+_______ test_chat_targeted_retry_prefers_highest_priority_failure_first _______
+tests\test_turn_pipeline_shared.py:670: in test_chat_targeted_retry_prefers_highest_priority_failure_first
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+__ test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback __
+tests\test_turn_pipeline_shared.py:700: in test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+_ test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback _
+tests\test_turn_pipeline_shared.py:738: in test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_social_pressure_line_prefers_dialogue_over_adjudication ______
+tests\test_turn_pipeline_shared.py:1272: in test_chat_social_pressure_line_prefers_dialogue_over_adjudication
+    assert data.get("resolution") is None
+E   assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None
+E    +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x000001D1222F5B00>('resolution')
+E    +    where <built-in method get of dict object at 0x000001D1222F5B00> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_active_target_direct_command_routes_to_social_exchange _______
+tests\test_turn_pipeline_shared.py:1309: in test_chat_active_target_direct_command_routes_to_social_exchange
+    assert_dialogue_lock_social_route_smoke(
+tests\helpers\emission_smoke_assertions.py:377: in assert_dialogue_lock_social_route_smoke
+    assert kind in allowed, (
+E   AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'
+________ test_chat_mixed_turn_preserves_embedded_adjudication_metadata ________
+tests\test_turn_pipeline_shared.py:1538: in test_chat_mixed_turn_preserves_embedded_adjudication_metadata
+    assert embedded.get("category") == "roll_requirement_query"
+E   AssertionError: assert None == 'roll_requirement_query'
+E    +  where None = <built-in method get of dict object at 0x000001D126B9CE40>('category')
+E    +    where <built-in method get of dict object at 0x000001D126B9CE40> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] desk_clue
+[PROMPT] fresh campaign prompt constructed
+___ test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane ___
+tests\test_turn_pipeline_shared.py:1719: in test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane
+    assert embedded.get("category") == "roll_requirement_query"
+E   AssertionError: assert None == 'roll_requirement_query'
+E    +  where None = <built-in method get of dict object at 0x000001D128800540>('category')
+E    +    where <built-in method get of dict object at 0x000001D128800540> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_______ test_chat_social_exchange_invalid_blob_is_repaired_before_emit ________
+tests\test_turn_pipeline_shared.py:2030: in test_chat_social_exchange_invalid_blob_is_repaired_before_emit
+    assert_emission_repair_evidence(
+tests\helpers\emission_smoke_assertions.py:356: in assert_emission_repair_evidence
+    assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_chat_social_exchange_blocks_advisory_prose_before_emit _________
+tests\test_turn_pipeline_shared.py:2058: in test_chat_social_exchange_blocks_advisory_prose_before_emit
+    assert_emission_repair_evidence(
+tests\helpers\emission_smoke_assertions.py:356: in assert_emission_repair_evidence
+    assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_ test_chat_repeated_interruption_progresses_without_losing_dialogue_contract _
+tests\test_turn_pipeline_shared.py:2134: in test_chat_repeated_interruption_progresses_without_losing_dialogue_contract
+    assert second_text != first_text
+E   assert 'Tavern Runner says, "I couldn\'t tell you."' != 'Tavern Runner says, "I couldn\'t tell you."'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_authored_knowledge_realization.py::test_http_notice_question_communicates_patrol_fact
+FAILED tests/test_authored_knowledge_realization.py::test_http_read_notice_board_speaks_written_clue
+FAILED tests/test_authoritative_lead_provenance_social_prose_non_ingestion.py::test_general_http_informational_social_prose_mints_no_lead
+FAILED tests/test_authoritative_lead_provenance_social_prose_non_ingestion.py::test_general_http_existing_lead_mention_does_not_duplicate
+FAILED tests/test_authoritative_lead_provenance_social_prose_non_ingestion.py::test_calibration_http_captain_answer_does_not_mint_narration_ctx
+FAILED tests/test_bound_speaker_knowledge_resolution.py::test_general_http_owned_topic_first_ask
+FAILED tests/test_bound_speaker_knowledge_resolution.py::test_http_bound_captain_first_ask_no_warmup
+FAILED tests/test_bound_speaker_knowledge_resolution.py::test_http_bound_captain_natural_paraphrase
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_strict_social_hidden_mutation_detected
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_wrong_speaker_fixture_has_attributable_trace
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_report_schema_and_gap_closure
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_writer_raw_checkpoint_present_on_strict_social_turn
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_generate_repo_artifacts
+FAILED tests/test_dialogue_interaction_establishment.py::test_generic_to_the_guard_redirects_from_prior_stranger_target
+FAILED tests/test_dialogue_plan_final_emission_gate.py::test_quoted_npc_line_without_plan_fails_closed
+FAILED tests/test_dialogue_plan_final_emission_gate.py::test_missing_speaker_id_fails
+FAILED tests/test_dialogue_plan_final_emission_gate.py::test_missing_dialogue_intent_fails
+FAILED tests/test_dialogue_plan_final_emission_gate.py::test_wrong_attributed_speaker_fails_closed
+FAILED tests/test_directed_social_routing.py::test_chat_hailing_runner_with_can_you_question_routes_social
+FAILED tests/test_empty_social_retry_regressions.py::test_api_repairs_empty_social_after_force_terminal_retry_fallback
+FAILED tests/test_explicit_world_action_social_lock_override.py::test_http_read_while_bound_communicates_authored_contents
+FAILED tests/test_explicit_world_action_social_lock_override.py::test_http_class_b_visible_feature_is_not_swallowed_by_social
+FAILED tests/test_explicit_world_action_social_lock_override.py::test_http_leave_while_bound_still_moves
+FAILED tests/test_explicit_world_action_social_lock_override.py::test_http_stale_topic_does_not_mutate_world_action
+FAILED tests/test_explicit_world_action_social_lock_override.py::test_http_t13_glance_back_at_notice_board_is_world_action
+FAILED tests/test_grounded_social_absence_live_model_non_invention.py::test_engine_has_grounded_absence_before_realization
+FAILED tests/test_grounded_social_absence_live_model_non_invention.py::test_http_refusal_grammar_still_intact
+FAILED tests/test_nearby_place_existence_knowledge_ownership.py::test_question_rule_does_not_rewrite_resolved_place_existence
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[captain_preference-guard_captain-Guard Captain, do you prefer standing watch in the rain, or somewhere dry?-history0]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[baker_preference-baker-Baker, which loaf do you usually keep for yourself?-history1]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[subjective_opinion-guard_captain-Guard Captain, which view of the square do you like best?-history2]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[followup-baker-Baker, which loaf would you recommend to me?-history3]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[recent_history-guard_captain-Guard Captain, which weather do you prefer for a watch?-history4]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[biography-The guard captain was born in Blackharbor and served for twenty years.-False]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[geography-The old milestone lies east beyond the trading crossroads.-False]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[objective_fact-The gate tax is five silver coins for every traveler.-False]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[hidden_information-A secret tunnel runs beneath the gate into the keep.-False]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[npc_action-The captain unlocks the gate and lets you pass.-False]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[certainty-The captain confirms that bandits murdered the missing patrol.-False]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[discovery-You discover a hidden map beneath the notice board.-False]
+FAILED tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[state_change-The captain gives you ten gold coins and a signed entry permit.-False]
+FAILED tests/test_pr_dy_live_gameplay.py::test_pr_dy_clarification_does_not_mutate
+FAILED tests/test_pr_eg_r3_r1_expression_semantics.py::test_t19_t23_answer_sufficiency_and_refusal
+FAILED tests/test_pr_eg_r4_r1_delivery_integrity.py::test_consequential_disclosure_http_and_persistence
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_forged_authority_or_entity_rejected[change0]
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_forged_authority_or_entity_rejected[change1]
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_forged_authority_or_entity_rejected[change2]
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_bad_prior_target_cannot_launder_history[correction]
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_bad_prior_target_cannot_launder_history[follow_up]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[forged]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[cross_conversation]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[stale]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[speaker]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[field]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[operation]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[unwitnessed]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[substitution]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_unqualified_historical_id_cannot_override_focus
+FAILED tests/test_pr_eg_r6_r3_r1_candidates.py::test_t60_provider_call_accounting
+FAILED tests/test_pr_play_20_response_confidentiality.py::test_successful_start_serialized_boundary
+FAILED tests/test_pr_play_21_privileged_reads.py::test_offline_initialization_and_ordinary_action
+FAILED tests/test_pr_play_23_local_interaction.py::test_opening_to_interaction_publication[False]
+FAILED tests/test_pr_play_23_local_interaction.py::test_opening_to_interaction_publication[True]
+FAILED tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[offerings]
+FAILED tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[host]
+FAILED tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[price]
+FAILED tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[unknown]
+FAILED tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[embellishment]
+FAILED tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[secret]
+FAILED tests/test_social_emission_quality.py::test_emission_quality_anyone_else_talk_to_manifests_preserves_redirect_not_fragment
+FAILED tests/test_social_lead_landing.py::test_social_lead_lands_discovered_clue_id_and_event
+FAILED tests/test_social_lead_landing.py::test_social_lead_idempotent_no_duplicate_event
+FAILED tests/test_social_lead_landing.py::test_social_topic_without_clue_id_gets_stable_synthetic_id
+FAILED tests/test_social_lead_landing.py::test_social_lead_with_leads_to_scene_adds_pending_and_actionable
+FAILED tests/test_social_lead_landing.py::test_topic_text_old_milestone_creates_extracted_lead
+FAILED tests/test_social_lead_landing.py::test_topic_text_guards_and_town_crier_create_leads
+FAILED tests/test_social_lead_landing.py::test_structured_fact_scene_id_without_regex_creates_lead
+FAILED tests/test_social_lead_landing.py::test_duplicate_social_resolution_does_not_duplicate_extracted_pending
+FAILED tests/test_social_lead_landing.py::test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_empty
+FAILED tests/test_social_lead_landing.py::test_minimum_actionable_lead_double_call_does_not_duplicate_pending
+FAILED tests/test_social_lead_landing.py::test_extracted_social_lead_creates_authoritative_registry_row
+FAILED tests/test_social_lead_landing.py::test_lead_landing_metadata_reports_authoritative_outcomes
+FAILED tests/test_social_lead_landing.py::test_clue_discovery_then_social_extract_updates_same_authoritative_row
+FAILED tests/test_social_lead_landing.py::test_apply_socially_revealed_leads_reentrancy_one_authoritative_one_pending_idempotent_events
+FAILED tests/test_social_lead_landing.py::test_ensure_minimum_actionable_skips_after_normal_social_landing_no_extra_rows
+FAILED tests/test_social_lead_landing.py::test_first_pass_lead_landing_metadata_shape_actionable_matches_pending
+FAILED tests/test_social_lead_landing.py::test_canonical_extracted_sibling_collapses_evidence_uses_one_extracted_trigger_cid
+FAILED tests/test_social_lead_landing.py::test_social_extract_reinforced_second_disclosure_one_registry_row
+FAILED tests/test_social_probe_determinism.py::test_transactional_probe_after_runner_topic_exhausted_yields_redirect_contract
+FAILED tests/test_social_question_relevance_answer_selection.py::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance
+FAILED tests/test_social_speaker_grounding.py::test_transcript_runner_asks_about_aldric_followup_stays_runner
+FAILED tests/test_social_speaker_grounding.py::test_transcript_where_is_aldric_repeated_followups_stay_runner
+FAILED tests/test_start_campaign_api.py::test_start_campaign_emits_opening_and_sets_started
+FAILED tests/test_start_campaign_api.py::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text
+FAILED tests/test_start_campaign_api.py::test_start_campaign_promotes_valid_upstream_prepared_scene_opening
+FAILED tests/test_stay_leave_social_lock_override.py::test_heading_out_after_them_binds_authored_exit
+FAILED tests/test_stay_leave_social_lock_override.py::test_http_pursuit_while_socially_engaged_leaves_the_gate
+FAILED tests/test_stay_leave_social_lock_override.py::test_http_explicit_leave_overrides_dialogue_lock
+FAILED tests/test_stay_leave_social_lock_override.py::test_http_explicit_stay_does_not_enter_cinderwatch
+FAILED tests/test_stay_leave_social_lock_override.py::test_http_unavailable_travel_does_not_invent_house_verevin
+FAILED tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape
+FAILED tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication
+FAILED tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract

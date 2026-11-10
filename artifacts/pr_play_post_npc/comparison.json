@@ -1,0 +1,24 @@
+{
+  "milestone": "pr_play_post_npc",
+  "pr_play_80_opened": false,
+  "live_provider_dispatches": 0,
+  "before": "artifacts/pr_play_post_npc/baseline_trace.json",
+  "after": "artifacts/pr_play_post_npc/corrected_trace.json",
+  "discarded_parallel_replay": "The first corrected_trace.json was produced while data/scenes/frontier_gate.json had lost its interactables. That file was restored from HEAD. The corrected_trace.json now on disk is the solo rerun after the restore.",
+  "call_gpt_entries_before": ["strict_social", "primary_turn", "strict_social", "retry_escalation"],
+  "call_gpt_entries_after": ["strict_social", "primary_turn", "primary_turn", "retry_escalation"],
+  "turns": [
+    {"id": "T01", "before_kind": "observe", "after_kind": "observe", "before_reason": null, "after_reason": null, "changed": false},
+    {"id": "T02", "before_kind": "question", "after_kind": "question", "before_reason": null, "after_reason": null, "changed": false},
+    {"id": "T03", "before_kind": "question", "after_kind": "question", "before_reason": "active_interlocutor_followup", "after_reason": "active_interlocutor_followup", "changed": false},
+    {"id": "T04", "before_kind": "conversational_decline", "after_kind": "conversational_decline", "before_reason": "destination_not_established", "after_reason": "local_object_not_a_destination", "changed": true},
+    {"id": "T05", "before_kind": "conversational_answer", "after_kind": "discover_clue", "before_reason": "repeat_delivered_statement", "after_reason": null, "changed": true},
+    {"id": "T06", "before_kind": "conversational_answer", "after_kind": "conversational_decline", "before_reason": "repeat_delivered_statement", "after_reason": "unsupported_physical_manipulation", "changed": true},
+    {"id": "T07", "before_kind": null, "after_kind": null, "before_reason": null, "after_reason": null, "changed": true, "note": "Before published a mashed incidental sentence. After published the disabled-narration sentence."},
+    {"id": "T08", "before_kind": "question", "after_kind": "question", "before_reason": null, "after_reason": null, "changed": false},
+    {"id": "T09", "before_kind": "conversational_clarify", "after_kind": "already_searched", "before_reason": "conversational_continuity_ask", "after_reason": "single_authoritative_component", "after_operation": "INSPECT", "changed": true},
+    {"id": "T10", "before_kind": "adjudication_query", "after_kind": "adjudication_query", "before_reason": null, "after_reason": null, "changed": false},
+    {"id": "T11", "before_kind": "scene_transition", "after_kind": "scene_transition", "before_reason": "grounded_movement_destination", "after_reason": "grounded_movement_destination", "changed": false},
+    {"id": "T12", "before_kind": "interact", "after_kind": "interact", "before_reason": null, "after_reason": null, "changed": false}
+  ]
+}

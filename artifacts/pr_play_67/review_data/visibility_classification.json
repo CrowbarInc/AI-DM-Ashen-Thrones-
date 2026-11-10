@@ -1,0 +1,33 @@
+{
+  "internal_authoritative": [
+    "session.gm_notes",
+    "world",
+    "scene.discoverable_clues",
+    "scene.gm_notes",
+    "scene.private_notes",
+    "campaign.character_secret",
+    "unvisited scene catalog"
+  ],
+  "player_authorized": [
+    "current public scene",
+    "player-owned character sheet/inventory",
+    "existing journal and known-clue publications",
+    "server-filtered affordances",
+    "visited locations",
+    "public session/run IDs",
+    "validated final narration"
+  ],
+  "internal_execution": [
+    "resolution metadata and state diffs",
+    "provider prompts",
+    "validator traces",
+    "GM metadata",
+    "upstream diagnostics",
+    "stack traces"
+  ],
+  "missing_visibility_contracts": [
+    "world factions/plans/projects/events: fail closed to empty world view",
+    "NPC private role/trust: omitted",
+    "future scene catalog: only visited/current IDs exposed"
+  ]
+}

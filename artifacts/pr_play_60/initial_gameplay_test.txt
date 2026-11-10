@@ -1,0 +1,44 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__________ test_investigation_then_repeat_preserves_persisted_state ___________
+tests\test_pr_play_60_gameplay_readiness.py:24: in test_investigation_then_repeat_preserves_persisted_state
+    with TestClient(api.app) as client:
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:606: in close
+    self.__exit__(None, None, None)
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:598: in __exit__
+    raise exc_details[1]
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:583: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:466: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\from_thread.py:380: in start_task_soon
+    self._check_running()
+.venv\Lib\site-packages\anyio\from_thread.py:214: in _check_running
+    raise RuntimeError("This portal is not running")
+E   RuntimeError: This portal is not running
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[CLUE DISCOVERED] notice_patrol_route
+[PROMPT] fresh campaign prompt constructed
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_60_gameplay_readiness.py::test_investigation_then_repeat_preserves_persisted_state
+1 failed, 1 warning in 5.04s

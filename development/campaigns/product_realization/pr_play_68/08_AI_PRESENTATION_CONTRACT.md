@@ -1,0 +1,3 @@
+# AI PRESENTATION CONTRACT
+
+See presentation_contract.json. Engine owns all facts, effects, discoveries, movement, inventory, NPC state and persistent consequences. AI contributes one optional attention/transition sentence or an exact public observation. Prompt expressly separates engine-owned facts from the writing task; must_communicate is removed from provider writing fields and kept under engine_owned_facts_do_not_narrate for reference. Validation continues to use the original mandatory request. No additional provider dependency or call. Unknown descriptive propositions fall back; this is not unrestricted atmospheric invention.

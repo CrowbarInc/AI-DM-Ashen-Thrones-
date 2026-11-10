@@ -1,0 +1,149 @@
+...FFF...........                                                        [100%]
+================================== FAILURES ===================================
+_ test_http_publication_matches_prepared_authority[I inspect the brass token.-You pry up the hopper and pocket the brass token.-authored_hidden] _
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000254C4677F50>
+player_request = 'I inspect the brass token.'
+bad = 'You pry up the hopper and pocket the brass token.'
+authority = 'authored_hidden'
+
+    @pytest.mark.parametrize("player_request,bad,authority", [
+        ("I inspect the brass token.", "You pry up the hopper and pocket the brass token.", "authored_hidden"),
+        ("I inspect the shipping ledger.", "The ledger lists eight named crews bound for Glassport.", "authored_abstract_reference"),
+        ("I inspect the glass kiln schedule.", "The kiln schedule names four new overseers.", "unsupported"),
+    ])
+    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):
+        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())
+        before_character = copy.deepcopy(storage.load_character())
+        before_world = copy.deepcopy(storage.load_world())
+        data = _chat(monkeypatch, player_request, bad)
+        line = _facing(data)
+        assert line and line != bad
+        assert not any(term in line.lower() for term in ("token", "sealed under", "pocket", "glassport", "eight", "overseers"))
+        assert storage.load_character() == before_character
+>       assert storage.load_world() == before_world
+E       assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}
+E         
+E         Omitting 8 identical items, use -vv to show
+E         Differing items:
+E         {'event_log': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': "The Ash Cowl's pressure mounts.", 'source': 'ash_cowl'}]} != {'event_log': []}
+E         {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\test_pr_play_preseal_authority.py:71: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+------------------------------ Captured log call ------------------------------
+ERROR    asyncio:base_events.py:1785 Error on reading from the event loop self pipe
+loop: <ProactorEventLoop running=True closed=False debug=False>
+Traceback (most recent call last):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 461, in finish_socket_func
+    return ov.getresult()
+           ^^^^^^^^^^^^^^
+OSError: [WinError 995] The I/O operation has been aborted because of either a thread exit or an application request
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\proactor_events.py", line 793, in _loop_self_reading
+    f.result()  # may raise
+    ^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 798, in _poll
+    value = callback(transferred, key, ov)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 465, in finish_socket_func
+    raise ConnectionResetError(*exc.args)
+ConnectionResetError: [WinError 995] The I/O operation has been aborted because of either a thread exit or an application request
+_ test_http_publication_matches_prepared_authority[I inspect the shipping ledger.-The ledger lists eight named crews bound for Glassport.-authored_abstract_reference] _
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000254C46B0350>
+player_request = 'I inspect the shipping ledger.'
+bad = 'The ledger lists eight named crews bound for Glassport.'
+authority = 'authored_abstract_reference'
+
+    @pytest.mark.parametrize("player_request,bad,authority", [
+        ("I inspect the brass token.", "You pry up the hopper and pocket the brass token.", "authored_hidden"),
+        ("I inspect the shipping ledger.", "The ledger lists eight named crews bound for Glassport.", "authored_abstract_reference"),
+        ("I inspect the glass kiln schedule.", "The kiln schedule names four new overseers.", "unsupported"),
+    ])
+    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):
+        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())
+        before_character = copy.deepcopy(storage.load_character())
+        before_world = copy.deepcopy(storage.load_world())
+        data = _chat(monkeypatch, player_request, bad)
+        line = _facing(data)
+        assert line and line != bad
+        assert not any(term in line.lower() for term in ("token", "sealed under", "pocket", "glassport", "eight", "overseers"))
+        assert storage.load_character() == before_character
+>       assert storage.load_world() == before_world
+E       assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}
+E         
+E         Omitting 8 identical items, use -vv to show
+E         Differing items:
+E         {'event_log': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': "The Ash Cowl's pressure mounts.", 'source': 'ash_cowl'}]} != {'event_log': []}
+E         {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\test_pr_play_preseal_authority.py:71: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_ test_http_publication_matches_prepared_authority[I inspect the glass kiln schedule.-The kiln schedule names four new overseers.-unsupported] _
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000254C488A8A0>
+player_request = 'I inspect the glass kiln schedule.'
+bad = 'The kiln schedule names four new overseers.', authority = 'unsupported'
+
+    @pytest.mark.parametrize("player_request,bad,authority", [
+        ("I inspect the brass token.", "You pry up the hopper and pocket the brass token.", "authored_hidden"),
+        ("I inspect the shipping ledger.", "The ledger lists eight named crews bound for Glassport.", "authored_abstract_reference"),
+        ("I inspect the glass kiln schedule.", "The kiln schedule names four new overseers.", "unsupported"),
+    ])
+    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):
+        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())
+        before_character = copy.deepcopy(storage.load_character())
+        before_world = copy.deepcopy(storage.load_world())
+        data = _chat(monkeypatch, player_request, bad)
+        line = _facing(data)
+        assert line and line != bad
+        assert not any(term in line.lower() for term in ("token", "sealed under", "pocket", "glassport", "eight", "overseers"))
+        assert storage.load_character() == before_character
+>       assert storage.load_world() == before_world
+E       assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}
+E         
+E         Omitting 8 identical items, use -vv to show
+E         Differing items:
+E         {'event_log': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verevin'}, {'type': 'faction_pressure', 'text': "The Ash Cowl's pressure mounts.", 'source': 'ash_cowl'}]} != {'event_log': []}
+E         {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'na...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\test_pr_play_preseal_authority.py:71: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_pr_play_preseal_authority.py::test_http_publication_matches_prepared_authority[I inspect the brass token.-You pry up the hopper and pocket the brass token.-authored_hidden]
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: None
+  
+  Traceback (most recent call last):
+    File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 444, in select
+      self._poll(timeout)
+  RuntimeError: <_overlapped.Overlapped object at 0x00000254C46833F0> still has pending operation at deallocation, the process may crash
+  
+  
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_preseal_authority.py::test_http_publication_matches_prepared_authority[I inspect the brass token.-You pry up the hopper and pocket the brass token.-authored_hidden]
+FAILED tests/test_pr_play_preseal_authority.py::test_http_publication_matches_prepared_authority[I inspect the shipping ledger.-The ledger lists eight named crews bound for Glassport.-authored_abstract_reference]
+FAILED tests/test_pr_play_preseal_authority.py::test_http_publication_matches_prepared_authority[I inspect the glass kiln schedule.-The kiln schedule names four new overseers.-unsupported]
+{"protected_files": 1293, "changed": [], "added": [], "network_attempts_blocked": [], "live_provider_calls": 0, "pytest_exit_code": 1}

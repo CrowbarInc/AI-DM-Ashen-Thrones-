@@ -1,0 +1,42 @@
+{
+  "before": {
+    "audit": {
+      "median_us": 58.45,
+      "p95_us": 102.9,
+      "iterations": 500
+    },
+    "full_validation": {
+      "median_us": 252.55,
+      "p95_us": 429.9,
+      "iterations": 500
+    },
+    "rejection_and_fallback": {
+      "median_us": 807.15,
+      "p95_us": 1393.5,
+      "iterations": 200
+    }
+  },
+  "after": {
+    "audit": {
+      "median_us": 63.4,
+      "p95_us": 72.2,
+      "iterations": 500
+    },
+    "full_validation": {
+      "median_us": 259.9,
+      "p95_us": 399.6,
+      "iterations": 500
+    },
+    "rejection_and_fallback": {
+      "median_us": 810.15,
+      "p95_us": 992.6,
+      "iterations": 200
+    }
+  },
+  "median_delta_us": {
+    "audit": 4.949999999999996,
+    "full_validation": 7.349999999999966,
+    "rejection_and_fallback": 3.0
+  },
+  "method": "Same input rejected in both versions; sequential local wall-clock microbenchmark, not a latency guarantee. No provider calls."
+}

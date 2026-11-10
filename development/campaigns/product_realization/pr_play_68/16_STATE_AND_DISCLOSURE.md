@@ -1,0 +1,3 @@
+# STATE AND DISCLOSURE
+
+state_integrity.json compares raw gameplay authority after each live action with matched flag-disabled control operations before evidence redaction: 5/5 equal. Includes complete world/character/combat plus active/visited scene, overlays, scene runtime, clocks, turn counter, gm_notes. New tests snapshot authority around the narration hook and assert exactly one resolver invocation during fallback. Journal and immediate discovery both checked. Duplicate mud-prints resolver result is ignored by established persistence owner; no new duplicate journal effect. Scene fixtures unchanged; hidden authority stays server-side. No claim of general concurrent multiplayer isolation.

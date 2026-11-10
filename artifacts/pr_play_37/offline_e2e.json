@@ -1,0 +1,33 @@
+{
+  "provider_request_count": 1,
+  "status_code": 200,
+  "player_facing_text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and paid rumor. You can read the notice board, press the guards, or approach the tavern runner.",
+  "opening_recovery_debug": {
+    "opening_source": "deterministic_fallback",
+    "original_rejection_code": "safe_nonresolution",
+    "recovery_eligibility": "semantic_narration_rejection",
+    "fallback_attempted": true,
+    "fallback_succeeded": true,
+    "fallback_error": null,
+    "provider_requests_consumed": 1,
+    "initialization_outcome": "started",
+    "state_integrity": "authorized_initialization_only"
+  },
+  "before": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "time_pressure": 0,
+    "scene_id": "frontier_gate",
+    "log_len": 0
+  },
+  "after": {
+    "campaign_started": true,
+    "turn_counter": 1,
+    "time_pressure": 1,
+    "scene_id": "frontier_gate",
+    "log_len": 1,
+    "character_unchanged": true,
+    "combat_hp": null
+  },
+  "stubbed_provider_narration": "You leave the gate and arrive at the market quarter."
+}

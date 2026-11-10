@@ -1,0 +1,58 @@
+{
+  "bridge": {
+    "source": "stored_interpretation",
+    "accepted": false,
+    "reason": "operation_incompatible_with_entity_kind",
+    "operation": "MOVE",
+    "target_ref": "tavern_runner",
+    "target_kind": "npc"
+  },
+  "decision": {
+    "category": "CLARIFY",
+    "primary_intention": "Approach the tavern runner and ask what they are offering",
+    "intent_family": "unsupported_world_operation",
+    "incidental_context": [],
+    "proposed_operation": null,
+    "proposed_target": null,
+    "proposed_record": null,
+    "missing_information": [],
+    "context_references": [],
+    "requires_authoritative_execution": false,
+    "reason": "proposal_not_eligible",
+    "confidence": null,
+    "ambiguity": null,
+    "player_facing_text": "I cannot carry out Approach the tavern runner, then Ask the tavern runner what they are offering with the available actions and targets. I have not done any of them yet.",
+    "context_update": {
+      "conversational_context": {
+        "pending_clarification": null
+      }
+    },
+    "intent_modality": "committed",
+    "secondary_intentions": [
+      {
+        "text": "Approach the tavern runner",
+        "label": "Approach the tavern runner",
+        "operation": "MOVE",
+        "target_id": "tavern_runner",
+        "supported": false,
+        "consequential": true,
+        "dependency": "sequence",
+        "status": "pending"
+      },
+      {
+        "text": "Ask the tavern runner what they are offering",
+        "label": "Ask the tavern runner what they are offering",
+        "operation": "ASK",
+        "target_id": "tavern_runner",
+        "supported": true,
+        "consequential": true,
+        "dependency": "sequence",
+        "status": "pending"
+      }
+    ],
+    "execution_policy": "",
+    "communication_owner": "GM",
+    "communication_purpose": "CLARIFICATION",
+    "authorization": null
+  }
+}

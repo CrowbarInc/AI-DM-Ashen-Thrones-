@@ -1,0 +1,465 @@
+{
+  "rows": [
+    {
+      "nodeid": "tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert compact_payload[\"social_context\"][\"answer_style_hints\"]",
+        "errors": [
+          "E       KeyError: 'social_context'"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert compact_payload[\"social_context\"][\"answer_style_hints\"]",
+        "errors": [
+          "E       KeyError: 'social_context'"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_http_authorized_speech_can_survive",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"",
+        "errors": [
+          "E       AssertionError: assert None == 'observe'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...rass_quay', 'location': 'Brass Quay', 'summary': 'A clerk works the deserted quay.', 'mode': 'exploration', ...}}, ...}.get"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"",
+        "errors": [
+          "E       AssertionError: assert None == 'observe'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...rass_quay', 'location': 'Brass Quay', 'summary': 'A clerk works the deserted quay.', 'mode': 'exploration', ...}}, ...}.get"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_http_empty_listen_complete_and_grounded",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"",
+        "errors": [
+          "E       AssertionError: assert None == 'observe'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"",
+        "errors": [
+          "E       AssertionError: assert None == 'observe'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_whisper_does_not_create_one",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"",
+        "errors": [
+          "E       AssertionError: assert None == 'observe'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"",
+        "errors": [
+          "E       AssertionError: assert None == 'observe'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert \"can't say what the stew costs\" in visible",
+        "errors": [
+          "E       assert \"can't say what the stew costs\" in 'Tavern Runner mutters, \"Word is, hot stew and rumors for coin.\"'"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert \"can't say what the stew costs\" in visible",
+        "errors": [
+          "E       assert \"can't say what the stew costs\" in 'Tavern Runner mutters, \"Word is, hot stew and rumors for coin.\"'"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "hidden = payload[\"scene\"][\"gm_only\"][\"hidden_facts\"]",
+        "errors": [
+          "E           KeyError: 'gm_only'"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "hidden = payload[\"scene\"][\"gm_only\"][\"hidden_facts\"]",
+        "errors": [
+          "E           KeyError: 'gm_only'"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert payload[\"provider_context_projection\"][\"selected\"] is True, label",
+        "errors": [
+          "E           KeyError: 'provider_context_projection'"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert payload[\"provider_context_projection\"][\"selected\"] is True, label",
+        "errors": [
+          "E           KeyError: 'provider_context_projection'"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_pr_play_39_action_admission.py::test_sequence_patrol_travel_reaches_the_movement_resolver",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert body[\"resolution\"][\"resolved_transition\"] is True",
+        "errors": [
+          "E       KeyError: 'resolved_transition'"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert body[\"resolution\"][\"resolved_transition\"] is True",
+        "errors": [
+          "E       KeyError: 'resolved_transition'"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_pr_play_39_action_admission.py::test_sequence_unsupported_actions_invent_nothing",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert npc_body[\"resolution\"][\"resolved_transition\"] is False",
+        "errors": [
+          "E       KeyError: 'resolved_transition'"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert npc_body[\"resolution\"][\"resolved_transition\"] is False",
+        "errors": [
+          "E       KeyError: 'resolved_transition'"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_pr_play_79df3_classification.py::test_duplicate_refusal_does_not_publish",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert not events.exists() or events.read_text(encoding=\"utf-8\").strip() == \"\"",
+        "errors": [
+          "E       assert (not True or '{\"turn_id\": ...s_code\": 200}' == ''",
+          "E        +  where True = exists()",
+          "E        +    where exists = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_authority_pytest/test_duplicate_refusal_does_no0/events.jsonl').exists",
+          "E",
+          "E         + {\"turn_id\": \"b475fe3ec9804b81a12b62d409aef7fa\", \"publication_owner\": \"completed_runtime_response\", \"response_category\": \"engine_response\", \"source_handler\": \"api_chat\", \"provider_involvement\": false, \"provider_attempt_references\": [], \"accepted_expression_references\": [], \"published_expression_reference\": \"28b98fec2ae38822d271447810b01a9c55b3f3cc02db9202712449e1e8bab622\", \"final_player_facing_response\": \"Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted.\", \"validation_outcome\": \"engine_or_grounded_fallback\", \"status_code\": 200})"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert not events.exists() or events.read_text(encoding=\"utf-8\").strip() == \"\"",
+        "errors": [
+          "E       assert (not True or '{\"turn_id\": ...s_code\": 200}' == ''",
+          "E        +  where True = exists()",
+          "E        +    where exists = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_authority_pytest/test_duplicate_refusal_does_no0/events.jsonl').exists",
+          "E",
+          "E         + {\"turn_id\": \"fbac7d6b8a7941a4b848e8340ada921c\", \"publication_owner\": \"completed_runtime_response\", \"response_category\": \"engine_response\", \"source_handler\": \"api_chat\", \"provider_involvement\": false, \"provider_attempt_references\": [], \"accepted_expression_references\": [], \"published_expression_reference\": \"28b98fec2ae38822d271447810b01a9c55b3f3cc02db9202712449e1e8bab622\", \"final_player_facing_response\": \"Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted.\", \"validation_outcome\": \"engine_or_grounded_fallback\", \"status_code\": 200})"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_pr_play_79df3_classification.py::test_http_fallback_is_not_an_operational_refusal",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert storage.load_session()[\"last_publication\"][\"visible\"] == visible",
+        "errors": [
+          "E       assert 'Gate Guard s...sing patrol.\"' == 'That request...en attempted.'",
+          "E",
+          "E         - That request addresses someone. Nothing has been attempted.",
+          "E         + Gate Guard says, \"The notice board mentions a missing patrol.\""
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert storage.load_session()[\"last_publication\"][\"visible\"] == visible",
+        "errors": [
+          "E       assert 'Gate Guard s...sing patrol.\"' == 'That request...en attempted.'",
+          "E",
+          "E         - That request addresses someone. Nothing has been attempted.",
+          "E         + Gate Guard says, \"The notice board mentions a missing patrol.\""
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_pr_play_79df3_classification.py::test_save_reload_keeps_the_preceding_publication",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert any(item.get(\"log_meta\", {}).get(\"response_class\") == OPERATIONAL_REFUSAL for item in storage.load_log())",
+        "errors": [
+          "E       assert False",
+          "E        +  where False = any(<generator object test_save_reload_keeps_the_preceding_publication.<locals>.<genexpr> at 0xADDR>)"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert any(item.get(\"log_meta\", {}).get(\"response_class\") == OPERATIONAL_REFUSAL for item in storage.load_log())",
+        "errors": [
+          "E       assert False",
+          "E        +  where False = any(<generator object test_save_reload_keeps_the_preceding_publication.<locals>.<genexpr> at 0xADDR>)"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_pr_play_79df3_classification.py::test_two_refusals_then_gameplay_advances",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "raise RuntimeError(\"This portal is not running\")",
+        "errors": [
+          "E           RuntimeError: This portal is not running"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "raise RuntimeError(\"This portal is not running\")",
+        "errors": [
+          "E           RuntimeError: This portal is not running"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert (data.get(\"resolution\") or {}).get(\"kind\") == \"investigate\"",
+        "errors": [
+          "E       AssertionError: assert None == 'investigate'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...hoke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.', 'mode': 'social', ...}}, ...}.get"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert (data.get(\"resolution\") or {}).get(\"kind\") == \"investigate\"",
+        "errors": [
+          "E       AssertionError: assert None == 'investigate'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...hoke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.', 'mode': 'social', ...}}, ...}.get"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_alias_binds",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}",
+        "errors": [
+          "E       AssertionError: assert None in {'discover_clue', 'investigate'}",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = {}.get"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}",
+        "errors": [
+          "E       AssertionError: assert None in {'discover_clue', 'investigate'}",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = {}.get"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_then_observe_uses_current_scene",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert (first.get(\"resolution\") or {}).get(\"kind\") == \"investigate\"",
+        "errors": [
+          "E       AssertionError: assert None == 'investigate'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert (first.get(\"resolution\") or {}).get(\"kind\") == \"investigate\"",
+        "errors": [
+          "E       AssertionError: assert None == 'investigate'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_narration_only_object_does_not_gain_authority",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert (first.get(\"resolution\") or {}).get(\"kind\") == \"observe\"",
+        "errors": [
+          "E       AssertionError: assert None == 'observe'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert (first.get(\"resolution\") or {}).get(\"kind\") == \"observe\"",
+        "errors": [
+          "E       AssertionError: assert None == 'observe'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = ({} or {}).get",
+          "E        +      where {} = <built-in method get of dict object at 0xADDR>('resolution')",
+          "E        +        where <built-in method get of dict object at 0xADDR> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}",
+        "errors": [
+          "E       AssertionError: assert None in {'discover_clue', 'investigate'}",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = {}.get"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}",
+        "errors": [
+          "E       AssertionError: assert None in {'discover_clue', 'investigate'}",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = {}.get"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_unknown_player_named_object_is_not_instantiated",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert res.get(\"kind\") == \"investigate\"",
+        "errors": [
+          "E       AssertionError: assert None == 'investigate'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = {}.get"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert res.get(\"kind\") == \"investigate\"",
+        "errors": [
+          "E       AssertionError: assert None == 'investigate'",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = {}.get"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    },
+    {
+      "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_observe_stock_replacement_keeps_notice_board_working",
+      "before": {
+        "phase": "call",
+        "assertion_or_raise": "assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}",
+        "errors": [
+          "E       AssertionError: assert None in {'discover_clue', 'investigate'}",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = {}.get"
+        ]
+      },
+      "after": {
+        "phase": "call",
+        "assertion_or_raise": "assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}",
+        "errors": [
+          "E       AssertionError: assert None in {'discover_clue', 'investigate'}",
+          "E        +  where None = <built-in method get of dict object at 0xADDR>('kind')",
+          "E        +    where <built-in method get of dict object at 0xADDR> = {}.get"
+        ]
+      },
+      "same_assertion_identity": true,
+      "same_normalized_failure": true
+    }
+  ],
+  "normalization": "Only hexadecimal object addresses and generated turn_id UUIDs; complete raw tracebacks retained in run failures.json."
+}

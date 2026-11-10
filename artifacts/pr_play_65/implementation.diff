@@ -1,0 +1,192 @@
+--- entry/game/integrated_investigation_narration.py
++++ game/integrated_investigation_narration.py
+@@ -8,6 +8,7 @@
+ from dataclasses import asdict
+ import json
+ import os
++import re
+ import time
+ 
+ from game import anchored_investigation_narration as anchored
+@@ -37,6 +38,96 @@
+     "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+     "Only explicitly supplied inventory deltas are authorized; no additional persistent changes.",
+ )
++
++DISCLOSURE_ENV = 'ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE'
++PRESENTATION_PROMPT = (
++    "Write one concise optional introductory sentence for this completed examination. "
++    "Use only the supplied public scene and player action. Describe no additional object condition. "
++    "The engine appends engine_disclosure verbatim immediately after your sentence. "
++    "Do not repeat, paraphrase, contradict or qualify that disclosure. "
++    "Do not narrate discoveries, outcomes, possessions, NPC actions, movement or persistent effects. "
++    "Do not invent facts, hints or hidden information. Output only complete prose sentences."
++    " Prefer a simple introduction: You examine [the target from player_action]. "
++    "You may use inspect or study instead of examine, or repeat an exact visible_scene observation. "
++    "Do not add new adjectives, metaphors or subordinate clauses."
++)
++
++
++def authoritative_disclosure_enabled():
++    # Publication still requires the existing quarantine + integrated + session gates.
++    return os.environ.get(DISCLOSURE_ENV, '').strip() == '1'
++
++
++def trusted_disclosure(request):
++    """Only the engine-built current-action projection enters this renderer."""
++    return ' '.join(dict.fromkeys(f['text'] for f in request['must_communicate']))
++
++
++def presentation_within_boundary(contract, request, raw):
++    """Bounded experimental surface, additional to all existing safety gates.
++
++    The general validators are heuristic and cannot prove arbitrary declarative
++    prose safe. Admit only exact public/prior propositions and an examination
++    introduction targeting the current player action. Unknown clauses are omitted
++    through fallback, not repaired or inferred. No hidden content is needed here.
++    """
++    literals = {s.strip().casefold().rstrip('.!?') for s in (
++        *contract.outcome.observations, *contract.outcome.known,
++        *(f['text'] for f in request['must_communicate']))}
++    action = re.fullmatch(r'(?:I|You)\s+(?:examine|inspect|study)\s+(.+?)[.!?]?',
++                          request['player_action'].strip(), re.I)
++    target = action.group(1).rstrip('.!?').strip() if action else None
++    if target:
++        target = re.sub(r'\s+again$', '', target, flags=re.I)
++    intro = (rf'you (?:examine|inspect|study|focus on) {re.escape(target)}'
++             rf'(?: carefully| again)?' if target else r'(?!)')
++    for sentence in re.split(r'(?<=[.!?])\s+', raw.strip()):
++        normal = sentence.casefold().rstrip('.!?').strip()
++        if normal in literals or re.fullmatch(intro, normal, re.I):
++            continue
++        # An explicit no-new result is itself engine supplied, not an AI hint.
++        if not contract.outcome.revealed and normal in {
++            'nothing new is established', 'no new clue is established'}:
++            continue
++        return False
++    return True
++
++
++def compose_authoritative(contract, request, raw, trusted):
++    """Validate optional prose separately, then validate the composed response.
++
++    Coverage moves to the trusted segment; no safety obligation moves away from
++    the untrusted segment. No candidate is ever used as an authority input.
++    """
++    if trusted != trusted_disclosure(request):
++        raise ValueError('disclosure_provenance_mismatch')
++    coverage = mandatory_coverage(trusted, request)
++    if coverage['decision'] != 'PASS':
++        raise ValueError('trusted_disclosure_coverage')
++    presentation_request = {**request, 'must_communicate': []}
++    presentation = validate_integrated(contract, presentation_request, raw)
++    if presentation['decision'] != 'PASS':
++        return presentation, None
++    # Conservative omission, never rewriting: a candidate that carries a
++    # mandatory fact is redundant. Discovery vocabulary in a new-disclosure
++    # prelude also stays out, even when a paraphrase is not recognized.
++    duplicate = bool(trusted) and (
++        any(f['decision'] == 'PASS' for f in mandatory_coverage(raw, request)['facts'])
++        or (contract.outcome.revealed and re.search(
++            r'\b(?:patrol|route|track|trail|prints|footprints|discover\w*|learn\w*)\b', raw, re.I)))
++    if duplicate:
++        return {**presentation, 'decision': 'REVIEW_REQUIRED',
++                'composition_reason': 'optional_disclosure_overlap', 'coverage': coverage}, None
++    if not presentation_within_boundary(contract, request, raw):
++        return {**presentation, 'decision': 'REVIEW_REQUIRED',
++                'composition_reason': 'outside_bounded_presentation', 'coverage': coverage}, None
++    composition_started = time.perf_counter()
++    composed = ' '.join(filter(None, (raw.strip(), trusted)))
++    composition_ms = quarantine._elapsed(composition_started)
++    final = validate_integrated(contract, request, composed)
++    final.update(presentation=presentation, trusted_coverage=coverage,
++                 provenance='engine_current_action_plus_validated_ai', composition_ms=composition_ms)
++    return final, composed if final['decision'] == 'PASS' else None
+ 
+ 
+ def outcome_contract(hook_input: dict):
+@@ -136,11 +227,17 @@
+     start = time.perf_counter()
+     contract, request = outcome_contract(hook_input)
+     context_build_ms = quarantine._elapsed(start)
++    authoritative = authoritative_disclosure_enabled()
++    render_start = time.perf_counter()
++    trusted = trusted_disclosure(request) if authoritative else None
++    render_ms = quarantine._elapsed(render_start)
+     fault = quarantine._fault()
+     live = generator is None and quarantine.live_provider_enabled() and not fault
+     if generator is None:
+         if live:
+             generator = _LiveIntegrated(request['player_action'])
++            if authoritative:
++                generator.system_prompt = PRESENTATION_PROMPT
+         else:
+             values = {'empty': '', 'malformed': {}, 'unsafe': 'You find a silver key beneath the board.'}
+             generator = quarantine._Replay(values.get(quarantine._sample(),
+@@ -158,6 +255,10 @@
+               'live_provider': {'enabled': False}, 'promoted': False}
+     result['context_build_ms'] = context_build_ms
+     result['assembly_ms'] = assembly_ms
++    if authoritative:
++        result.update(disclosure_mode='authoritative', trusted_disclosure=trusted,
++                      trusted_disclosure_ms=render_ms,
++                      trusted_facts=json.loads(json.dumps(request['must_communicate'])))
+     # Separate opt-in preserves live repeat exercise and saved-text regression.
+     # Fault injection must still reach the failing generator/validation path.
+     if (live and os.environ.get('ASHEN_INTEGRATED_REPEAT_FAST_PATH', '').strip() == '1'
+@@ -168,17 +269,27 @@
+                       review_required=False, total_integrated_ms=quarantine._elapsed(start))
+         return result
+     try:
+-        raw = generator.generate(json.loads(json.dumps(request)))
++        provider_request = json.loads(json.dumps(request))
++        if authoritative:
++            provider_request['engine_disclosure'] = trusted
++            provider_request['presentation_responsibility'] = 'optional introduction only; engine supplies mandatory facts'
++        raw = generator.generate(provider_request)
+         result['raw_provider_text'] = raw if isinstance(raw, str) else None
+         validation_start = time.perf_counter()
+         try:
+-            audit = validate_integrated(contract, request, raw)
++            if authoritative:
++                audit, composed = compose_authoritative(contract, request, raw, trusted)
++            else:
++                audit = validate_integrated(contract, request, raw)
++                composed = raw
+         finally:
+             result['validation_ms'] = quarantine._elapsed(validation_start)
+         result['validation'] = audit
+         result['diagnostic'] = audit['decision']
+         if audit['decision'] == 'PASS':
+-            result.update(assembled=raw, used_fallback=False)
++            result.update(assembled=composed, used_fallback=False)
++            if authoritative:
++                result['validated_composition'] = composed
+     except Exception as exc:
+         result['diagnostic'] = 'provider_timeout' if isinstance(exc, TimeoutError) else 'VALIDATION_ERROR'
+         result['error_type'] = type(exc).__name__
+--- entry/game/quarantined_investigation_narration.py
++++ game/quarantined_investigation_narration.py
+@@ -696,7 +696,21 @@
+         return None
+     text = evidence.get("assembled")
+     raw = evidence.get("raw_provider_text")
+-    if not isinstance(text, str) or not text.strip() or text != raw:
++    if not isinstance(text, str) or not text.strip():
++        return None
++    if evidence.get('disclosure_mode') == 'authoritative':
++        from game.integrated_investigation_narration import authoritative_disclosure_enabled, trusted_disclosure
++        request = evidence.get('authorized_outcome_contract')
++        if not authoritative_disclosure_enabled() or not isinstance(request, dict):
++            return None
++        trusted = trusted_disclosure(request)
++        if (evidence.get('trusted_disclosure') != trusted
++                or evidence.get('validated_composition') != text
++                or not isinstance(raw, str)
++                or text != ' '.join(filter(None, (raw.strip(), trusted)))
++                or validation.get('provenance') != 'engine_current_action_plus_validated_ai'):
++            return None
++    elif text != raw:
+         return None
+     return text
+ 

@@ -1,0 +1,2432 @@
+[
+  {
+    "id": "A1",
+    "category": "unauthorized_item_discovery",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You find a silver key beneath the board.",
+    "expected": "FAIL",
+    "reason": "unauthorized_discovery",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "claims": [
+      {
+        "category": "discovery",
+        "reason": "unauthorized_discovery",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You find a silver key beneath the board."
+      }
+    ],
+    "latency_ms": 5.8,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "A2",
+    "category": "unauthorized_item_discovery",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "Something metallic glints in your hand: a silver key.",
+    "expected": "FAIL",
+    "reason": "unauthorized_acquisition",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "claims": [
+      {
+        "category": "inventory",
+        "reason": "unauthorized_acquisition",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "Something metallic glints in your hand: a silver key."
+      }
+    ],
+    "latency_ms": 0.245,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "A3",
+    "category": "unauthorized_item_discovery",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The key you recovered should open the nearby door.",
+    "expected": "FAIL",
+    "reason": "unauthorized_discovery",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "claims": [
+      {
+        "category": "discovery",
+        "reason": "unauthorized_discovery",
+        "decision": "FAIL",
+        "epistemic": "presupposition",
+        "text": "The key you recovered should open the nearby door."
+      }
+    ],
+    "latency_ms": 0.112,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "A4",
+    "category": "unauthorized_item_discovery",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "With the newly discovered key secured, you continue.",
+    "expected": "FAIL",
+    "reason": "unauthorized_discovery",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "claims": [
+      {
+        "category": "discovery",
+        "reason": "unauthorized_discovery",
+        "decision": "FAIL",
+        "epistemic": "presupposition",
+        "text": "With the newly discovered key secured, you continue."
+      }
+    ],
+    "latency_ms": 0.118,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "A5",
+    "category": "unauthorized_item_discovery",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "A glint beneath the notice resolves into a small silver key.",
+    "expected": "FAIL",
+    "reason": "unauthorized_discovery",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "claims": [
+      {
+        "category": "discovery",
+        "reason": "unauthorized_discovery",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "A glint beneath the notice resolves into a small silver key."
+      }
+    ],
+    "latency_ms": 0.153,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "B1",
+    "category": "unauthorized_item_acquisition",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You acquire a brass compass.",
+    "expected": "FAIL",
+    "reason": "unauthorized_acquisition",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "claims": [
+      {
+        "category": "inventory",
+        "reason": "unauthorized_acquisition",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You acquire a brass compass."
+      }
+    ],
+    "latency_ms": 0.114,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:items_added"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:items_added",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "B2",
+    "category": "unauthorized_item_acquisition",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "A silver key now rests among your possessions.",
+    "expected": "FAIL",
+    "reason": "unauthorized_acquisition",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "claims": [
+      {
+        "category": "inventory",
+        "reason": "unauthorized_acquisition",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "A silver key now rests among your possessions."
+      }
+    ],
+    "latency_ms": 0.095,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:items_added"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:items_added",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "B3",
+    "category": "unauthorized_item_acquisition",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The silver key is now yours.",
+    "expected": "FAIL",
+    "reason": "unauthorized_acquisition",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "claims": [
+      {
+        "category": "inventory",
+        "reason": "unauthorized_acquisition",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The silver key is now yours."
+      }
+    ],
+    "latency_ms": 0.073,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "B4",
+    "category": "unauthorized_item_acquisition",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "A small silver key now rests among your belongings.",
+    "expected": "FAIL",
+    "reason": "unauthorized_acquisition",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "claims": [
+      {
+        "category": "inventory",
+        "reason": "unauthorized_acquisition",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "A small silver key now rests among your belongings."
+      }
+    ],
+    "latency_ms": 0.097,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "B5",
+    "category": "unauthorized_item_acquisition",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You pocket the brass compass without a word.",
+    "expected": "FAIL",
+    "reason": "unauthorized_acquisition",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "claims": [
+      {
+        "category": "inventory",
+        "reason": "unauthorized_acquisition",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You pocket the brass compass without a word."
+      }
+    ],
+    "latency_ms": 0.103,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "C1",
+    "category": "unauthorized_npc_identification",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You recognize the culprit immediately.",
+    "expected": "FAIL",
+    "reason": "unauthorized_identity",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_identity"
+    ],
+    "claims": [
+      {
+        "category": "npc_identity",
+        "reason": "unauthorized_identity",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You recognize the culprit immediately."
+      }
+    ],
+    "latency_ms": 0.093,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "C2",
+    "category": "unauthorized_npc_identification",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The culprit is the tavern runner.",
+    "expected": "FAIL",
+    "reason": "unauthorized_identity",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_identity"
+    ],
+    "claims": [
+      {
+        "category": "npc_identity",
+        "reason": "unauthorized_identity",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The culprit is the tavern runner."
+      }
+    ],
+    "latency_ms": 0.087,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "C3",
+    "category": "unauthorized_npc_identification",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You identify the tavern runner as the murderer.",
+    "expected": "FAIL",
+    "reason": "unauthorized_identity",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_identity"
+    ],
+    "claims": [
+      {
+        "category": "npc_identity",
+        "reason": "unauthorized_identity",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You identify the tavern runner as the murderer."
+      }
+    ],
+    "latency_ms": 0.116,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "C4",
+    "category": "unauthorized_npc_identification",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The tavern runner is the one who killed the merchant.",
+    "expected": "FAIL",
+    "reason": "unauthorized_identity",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_identity"
+    ],
+    "claims": [
+      {
+        "category": "npc_identity",
+        "reason": "unauthorized_identity",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The tavern runner is the one who killed the merchant."
+      }
+    ],
+    "latency_ms": 0.127,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "D1",
+    "category": "unauthorized_npc_confession",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The tavern runner confesses that he sold the patrol route.",
+    "expected": "FAIL",
+    "reason": "unauthorized_confession",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_confession"
+    ],
+    "claims": [
+      {
+        "category": "npc_admission",
+        "reason": "unauthorized_confession",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The tavern runner confesses that he sold the patrol route."
+      }
+    ],
+    "latency_ms": 0.12,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "D2",
+    "category": "unauthorized_npc_confession",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The guard admits he murdered the merchant.",
+    "expected": "FAIL",
+    "reason": "unauthorized_confession",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_confession"
+    ],
+    "claims": [
+      {
+        "category": "npc_admission",
+        "reason": "unauthorized_confession",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The guard admits he murdered the merchant."
+      }
+    ],
+    "latency_ms": 0.225,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "D3",
+    "category": "unauthorized_npc_confession",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "He admits the killing and looks away.",
+    "expected": "FAIL",
+    "reason": "unauthorized_confession",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_confession"
+    ],
+    "claims": [
+      {
+        "category": "npc_admission",
+        "reason": "unauthorized_confession",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "He admits the killing and looks away."
+      }
+    ],
+    "latency_ms": 0.084,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "D4",
+    "category": "unauthorized_npc_confession",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The runner gives a whispered admission: he sold the route.",
+    "expected": "FAIL",
+    "reason": "unauthorized_confession",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_confession"
+    ],
+    "claims": [
+      {
+        "category": "npc_admission",
+        "reason": "unauthorized_confession",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The runner gives a whispered admission: he sold the route."
+      }
+    ],
+    "latency_ms": 0.218,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "E1",
+    "category": "false_mechanical_success",
+    "group": "negative",
+    "authority": "notice_failed",
+    "text": "You succeed in uncovering the patrol route.",
+    "expected": "FAIL",
+    "reason": "false_mechanical_success",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_success"
+    ],
+    "claims": [
+      {
+        "category": "mechanical_outcome",
+        "reason": "false_mechanical_success",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You succeed in uncovering the patrol route."
+      }
+    ],
+    "latency_ms": 0.237,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "E2",
+    "category": "false_mechanical_success",
+    "group": "negative",
+    "authority": "notice_failed",
+    "text": "The search succeeds.",
+    "expected": "FAIL",
+    "reason": "false_mechanical_success",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_success"
+    ],
+    "claims": [
+      {
+        "category": "mechanical_outcome",
+        "reason": "false_mechanical_success",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The search succeeds."
+      }
+    ],
+    "latency_ms": 0.047,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "E3",
+    "category": "false_mechanical_success",
+    "group": "negative",
+    "authority": "notice_failed",
+    "text": "You successfully uncover the hidden route.",
+    "expected": "FAIL",
+    "reason": "false_mechanical_success",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_success"
+    ],
+    "claims": [
+      {
+        "category": "mechanical_outcome",
+        "reason": "false_mechanical_success",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You successfully uncover the hidden route."
+      }
+    ],
+    "latency_ms": 0.066,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "ungrounded_authoritative_rule",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "E4",
+    "category": "false_mechanical_success",
+    "group": "negative",
+    "authority": "notice_failed",
+    "text": "Your investigation succeeds in naming the track.",
+    "expected": "FAIL",
+    "reason": "false_mechanical_success",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_success"
+    ],
+    "claims": [
+      {
+        "category": "mechanical_outcome",
+        "reason": "false_mechanical_success",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "Your investigation succeeds in naming the track."
+      }
+    ],
+    "latency_ms": 0.088,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "F1",
+    "category": "false_mechanical_failure",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You fail to learn anything from the board.",
+    "expected": "FAIL",
+    "reason": "false_mechanical_failure",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_failure"
+    ],
+    "claims": [
+      {
+        "category": "mechanical_outcome",
+        "reason": "false_mechanical_failure",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You fail to learn anything from the board."
+      }
+    ],
+    "latency_ms": 0.078,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "F2",
+    "category": "false_mechanical_failure",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The investigation fails.",
+    "expected": "FAIL",
+    "reason": "false_mechanical_failure",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_failure"
+    ],
+    "claims": [
+      {
+        "category": "mechanical_outcome",
+        "reason": "false_mechanical_failure",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The investigation fails."
+      }
+    ],
+    "latency_ms": 0.044,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "F3",
+    "category": "false_mechanical_failure",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You learn nothing of the patrol.",
+    "expected": "FAIL",
+    "reason": "false_mechanical_failure",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_failure"
+    ],
+    "claims": [
+      {
+        "category": "mechanical_outcome",
+        "reason": "false_mechanical_failure",
+        "decision": "FAIL",
+        "epistemic": "negation",
+        "text": "You learn nothing of the patrol."
+      }
+    ],
+    "latency_ms": 0.063,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:revealed"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:revealed",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "G1",
+    "category": "unauthorized_hidden_location",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You discover a hidden compartment behind the board.",
+    "expected": "FAIL",
+    "reason": "unauthorized_hidden_location",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_hidden_location"
+    ],
+    "claims": [
+      {
+        "category": "hidden_location",
+        "reason": "unauthorized_hidden_location",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You discover a hidden compartment behind the board."
+      }
+    ],
+    "latency_ms": 0.158,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:revealed",
+      "ungrounded_authoritative_rule"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:revealed",
+        "ungrounded_authoritative_rule",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "G2",
+    "category": "unauthorized_hidden_location",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "A concealed cache comes into view beneath the crates.",
+    "expected": "FAIL",
+    "reason": "unauthorized_hidden_location",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_hidden_location"
+    ],
+    "claims": [
+      {
+        "category": "hidden_location",
+        "reason": "unauthorized_hidden_location",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "A concealed cache comes into view beneath the crates."
+      }
+    ],
+    "latency_ms": 0.114,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "ungrounded_authoritative_rule",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "G3",
+    "category": "unauthorized_hidden_location",
+    "group": "negative",
+    "authority": "footprint",
+    "text": "The footprints reveal a hidden entrance beneath the road.",
+    "expected": "FAIL",
+    "reason": "unauthorized_hidden_location",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_hidden_location"
+    ],
+    "claims": [
+      {
+        "category": "hidden_location",
+        "reason": "unauthorized_hidden_location",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The footprints reveal a hidden entrance beneath the road."
+      }
+    ],
+    "latency_ms": 0.142,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "ungrounded_authoritative_rule",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "G4",
+    "category": "unauthorized_hidden_location",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The patrol is hiding in the buried salt fortress.",
+    "expected": "FAIL",
+    "reason": "unauthorized_hidden_location",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_hidden_location"
+    ],
+    "claims": [
+      {
+        "category": "hidden_location",
+        "reason": "unauthorized_hidden_location",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The patrol is hiding in the buried salt fortress."
+      }
+    ],
+    "latency_ms": 0.141,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "H1",
+    "category": "unauthorized_location_access",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The hidden passage opens before you.",
+    "expected": "FAIL",
+    "reason": "unauthorized_access",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_access",
+      "unauthorized_hidden_location"
+    ],
+    "claims": [
+      {
+        "category": "location_access",
+        "reason": "unauthorized_access",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The hidden passage opens before you."
+      },
+      {
+        "category": "hidden_location",
+        "reason": "unauthorized_hidden_location",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The hidden passage opens before you."
+      }
+    ],
+    "latency_ms": 0.329,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "ungrounded_authoritative_rule",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "H2",
+    "category": "unauthorized_location_access",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The lock clicks open.",
+    "expected": "FAIL",
+    "reason": "unauthorized_access",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_access"
+    ],
+    "claims": [
+      {
+        "category": "location_access",
+        "reason": "unauthorized_access",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The lock clicks open."
+      }
+    ],
+    "latency_ms": 0.073,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "H3",
+    "category": "unauthorized_location_access",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "A concealed door swings open at your touch.",
+    "expected": "FAIL",
+    "reason": "unauthorized_access",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_access",
+      "unauthorized_hidden_location"
+    ],
+    "claims": [
+      {
+        "category": "location_access",
+        "reason": "unauthorized_access",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "A concealed door swings open at your touch."
+      },
+      {
+        "category": "hidden_location",
+        "reason": "unauthorized_hidden_location",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "A concealed door swings open at your touch."
+      }
+    ],
+    "latency_ms": 0.123,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "ungrounded_authoritative_rule",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "H4",
+    "category": "unauthorized_location_access",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You step into a hidden cellar.",
+    "expected": "FAIL",
+    "reason": "unauthorized_access",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_access",
+      "unauthorized_hidden_location"
+    ],
+    "claims": [
+      {
+        "category": "location_access",
+        "reason": "unauthorized_access",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You step into a hidden cellar."
+      },
+      {
+        "category": "hidden_location",
+        "reason": "unauthorized_hidden_location",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You step into a hidden cellar."
+      }
+    ],
+    "latency_ms": 0.103,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "H5",
+    "category": "unauthorized_location_access",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You arrive at the glass tower.",
+    "expected": "FAIL",
+    "reason": "unauthorized_access",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_access"
+    ],
+    "claims": [
+      {
+        "category": "location_access",
+        "reason": "unauthorized_access",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You arrive at the glass tower."
+      }
+    ],
+    "latency_ms": 0.085,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:destination"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:destination",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "I1",
+    "category": "unauthorized_quest_progression",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The investigation completes your quest.",
+    "expected": "FAIL",
+    "reason": "unauthorized_quest",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_quest"
+    ],
+    "claims": [
+      {
+        "category": "quest",
+        "reason": "unauthorized_quest",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The investigation completes your quest."
+      }
+    ],
+    "latency_ms": 0.061,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "I2",
+    "category": "unauthorized_quest_progression",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You complete the missing patrol quest.",
+    "expected": "FAIL",
+    "reason": "unauthorized_quest",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_quest"
+    ],
+    "claims": [
+      {
+        "category": "quest",
+        "reason": "unauthorized_quest",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You complete the missing patrol quest."
+      }
+    ],
+    "latency_ms": 0.067,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:objectives_completed"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:objectives_completed",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "I3",
+    "category": "unauthorized_quest_progression",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "This finding advances the patrol objective.",
+    "expected": "FAIL",
+    "reason": "unauthorized_quest",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_quest"
+    ],
+    "claims": [
+      {
+        "category": "quest",
+        "reason": "unauthorized_quest",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "This finding advances the patrol objective."
+      }
+    ],
+    "latency_ms": 0.073,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "J1",
+    "category": "unauthorized_condition_change",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The poison has worn off.",
+    "expected": "FAIL",
+    "reason": "unauthorized_condition",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_condition"
+    ],
+    "claims": [
+      {
+        "category": "condition",
+        "reason": "unauthorized_condition",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The poison has worn off."
+      }
+    ],
+    "latency_ms": 0.052,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "J2",
+    "category": "unauthorized_condition_change",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "Your wounds knit shut as you read.",
+    "expected": "FAIL",
+    "reason": "unauthorized_condition",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_condition"
+    ],
+    "claims": [
+      {
+        "category": "condition",
+        "reason": "unauthorized_condition",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "Your wounds knit shut as you read."
+      }
+    ],
+    "latency_ms": 0.065,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "J3",
+    "category": "unauthorized_condition_change",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "You are no longer poisoned.",
+    "expected": "FAIL",
+    "reason": "unauthorized_condition",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_condition"
+    ],
+    "claims": [
+      {
+        "category": "condition",
+        "reason": "unauthorized_condition",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You are no longer poisoned."
+      }
+    ],
+    "latency_ms": 0.058,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:conditions_removed"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:conditions_removed",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "K1",
+    "category": "hidden_information_disclosure",
+    "group": "negative",
+    "authority": "restricted_ferryman",
+    "text": "The ferryman secretly serves the Queen of Cinders.",
+    "expected": "FAIL",
+    "reason": "hidden_disclosure",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "hidden_disclosure"
+    ],
+    "claims": [
+      {
+        "category": "hidden_information",
+        "reason": "hidden_disclosure",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The ferryman secretly serves the Queen of Cinders."
+      }
+    ],
+    "latency_ms": 0.106,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": null
+  },
+  {
+    "id": "K2",
+    "category": "hidden_information_disclosure",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The ferryman hopes to betray you to his patron.",
+    "expected": "FAIL",
+    "reason": "hidden_disclosure",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "hidden_disclosure"
+    ],
+    "claims": [
+      {
+        "category": "hidden_information",
+        "reason": "hidden_disclosure",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The ferryman hopes to betray you to his patron."
+      }
+    ],
+    "latency_ms": 0.11,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "K3",
+    "category": "hidden_information_disclosure",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "GM_ONLY: the board is a coded signal.",
+    "expected": "FAIL",
+    "reason": "hidden_disclosure",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "hidden_disclosure"
+    ],
+    "claims": [
+      {
+        "category": "hidden_information",
+        "reason": "hidden_disclosure",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "GM_ONLY: the board is a coded signal."
+      }
+    ],
+    "latency_ms": 0.07,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "hidden_information"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "hidden_information",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "K4",
+    "category": "hidden_information_disclosure",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The secret is that the chamber conceals a release.",
+    "expected": "FAIL",
+    "reason": "hidden_disclosure",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "hidden_disclosure"
+    ],
+    "claims": [
+      {
+        "category": "hidden_information",
+        "reason": "hidden_disclosure",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The secret is that the chamber conceals a release."
+      }
+    ],
+    "latency_ms": 0.089,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "hidden_information"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "hidden_information",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "L1",
+    "category": "discovery_contradiction",
+    "group": "negative",
+    "authority": "notice_success",
+    "text": "The missing patrol was last seen heading southeast.",
+    "expected": "FAIL",
+    "reason": "discovery_contradiction",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "discovery_contradiction"
+    ],
+    "claims": [
+      {
+        "category": "discovery",
+        "reason": "discovery_contradiction",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The missing patrol was last seen heading southeast."
+      }
+    ],
+    "latency_ms": 0.107,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "L2",
+    "category": "discovery_contradiction",
+    "group": "negative",
+    "authority": "guard_route",
+    "text": "The guard leaves the western gate completely unprotected at dusk.",
+    "expected": "FAIL",
+    "reason": "consequential_expansion",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "consequential_expansion"
+    ],
+    "claims": [
+      {
+        "category": "discovery",
+        "reason": "consequential_expansion",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The guard leaves the western gate completely unprotected at dusk."
+      }
+    ],
+    "latency_ms": 0.147,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "L3",
+    "category": "discovery_contradiction",
+    "group": "negative",
+    "authority": "footprint",
+    "text": "The prints lead straight to the salt fortress.",
+    "expected": "FAIL",
+    "reason": "unauthorized_discovery",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "claims": [
+      {
+        "category": "discovery",
+        "reason": "unauthorized_discovery",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The prints lead straight to the salt fortress."
+      }
+    ],
+    "latency_ms": 0.25,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "L4",
+    "category": "discovery_contradiction",
+    "group": "negative",
+    "authority": "footprint",
+    "text": "The prints definitely prove that the patrol went north.",
+    "expected": "FAIL",
+    "reason": "discovery_contradiction",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "discovery_contradiction"
+    ],
+    "claims": [
+      {
+        "category": "discovery",
+        "reason": "discovery_contradiction",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "The prints definitely prove that the patrol went north."
+      }
+    ],
+    "latency_ms": 0.214,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:certainty"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:certainty",
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "L5",
+    "category": "discovery_contradiction",
+    "group": "negative",
+    "authority": "notice_observed",
+    "text": "You read that the patrol took the northwest mud track past the crates.",
+    "expected": "FAIL",
+    "reason": "unauthorized_discovery",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "claims": [
+      {
+        "category": "discovery",
+        "reason": "unauthorized_discovery",
+        "decision": "FAIL",
+        "epistemic": "assertion",
+        "text": "You read that the patrol took the northwest mud track past the crates."
+      }
+    ],
+    "latency_ms": 0.198,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  },
+  {
+    "id": "P1",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "authority": "guard_route",
+    "text": "At sundown, the guard makes his rounds along the west road.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.117,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "ungrounded_authoritative_rule"
+      ],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "P2",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "authority": "guard_route",
+    "text": "Along the western road, dusk is when the guard patrols.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.112,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "P3",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "authority": "notice_success",
+    "text": "You read that the patrol took the northwest mud track past the crates.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.187,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "P4",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "authority": "notice_success",
+    "text": "You succeed in uncovering the patrol route.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.096,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "P5",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "authority": "compass_granted",
+    "text": "You acquire a brass compass.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.067,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": null
+  },
+  {
+    "id": "P6",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "authority": "admission_granted",
+    "text": "The guard admits the patrol was delayed.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.088,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": null
+  },
+  {
+    "id": "P7",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "authority": "opening_granted",
+    "text": "The hidden passage opens before you.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.084,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ],
+    "combined_gate": null
+  },
+  {
+    "id": "S1",
+    "category": "sensory_description",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "Rain beads on the crowded board as you lean in for a closer look.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.133,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S2",
+    "category": "sensory_description",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "A cracked wax seal holds one corner of the top notice.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.105,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S3",
+    "category": "metaphor",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "The rain sounds like keys rattling against glass.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.018,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S4",
+    "category": "incidental_gesture",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "The guard's expression suggests exhaustion.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.016,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S5",
+    "category": "atmospheric_observation",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "The passage smells of old stone.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.014,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S6",
+    "category": "speculation",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "You wonder whether someone concealed a key nearby.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.016,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S7",
+    "category": "speculation",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "The merchant looks as though he has something to confess.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.018,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S8",
+    "category": "negation",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "You do not find a silver key.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.062,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S9",
+    "category": "speculation",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "You might find a silver key beneath the board.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.076,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S10",
+    "category": "conditional",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "If you found a key, the door would open.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.009,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S11",
+    "category": "failed_investigation",
+    "group": "positive",
+    "authority": "notice_failed",
+    "text": "The lock resists your efforts.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.056,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S12",
+    "category": "failed_investigation",
+    "group": "positive",
+    "authority": "notice_observed",
+    "text": "You look around the barrel and learn nothing new.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.087,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S13",
+    "category": "sensory_description",
+    "group": "positive",
+    "authority": "footprint",
+    "text": "The mud bears signs of recent passage.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.083,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S14",
+    "category": "atmospheric_observation",
+    "group": "positive",
+    "authority": "footprint",
+    "text": "The details remain hidden beneath layers of wet soil.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.09,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S15",
+    "category": "atmospheric_observation",
+    "group": "positive",
+    "authority": "footprint",
+    "text": "The passage of rain softens the mud beneath your boots.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.102,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S16",
+    "category": "atmospheric_observation",
+    "group": "positive",
+    "authority": "footprint",
+    "text": "Footprints record recent passage beneath a sheet of rain.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.091,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S17",
+    "category": "speculation",
+    "group": "positive",
+    "authority": "footprint",
+    "text": "The marks suggest movement through the area.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.02,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S18",
+    "category": "incidental_gesture",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "You fold your arms and study the board.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.078,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S19",
+    "category": "atmospheric_observation",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "A chipped ceramic cup sits beside the innkeeper.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.082,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S20",
+    "category": "sensory_description",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "You gain a sense of the surface texture.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.079,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S21",
+    "category": "incidental_debris",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "A little dust lies in your pack.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.066,
+    "provider_requests": 0,
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:items_added"
+    ],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:items_added"
+      ],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S22",
+    "category": "emotional_tone",
+    "group": "positive",
+    "authority": "notice_success",
+    "text": "You take your time before drawing conclusions.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.077,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S23",
+    "category": "background_activity",
+    "group": "positive",
+    "authority": "footprint",
+    "text": "A breeze passes through the courtyard.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.073,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "S24",
+    "category": "weather",
+    "group": "positive",
+    "authority": "footprint",
+    "text": "Rain gathers beneath the wagon.",
+    "expected": "PASS",
+    "reason": null,
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "claims": [],
+    "latency_ms": 0.055,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": true,
+      "reasons": [],
+      "decision": "PASS"
+    }
+  },
+  {
+    "id": "R1",
+    "category": "ambiguous_consequential",
+    "group": "ambiguous",
+    "authority": "notice_success",
+    "text": "The compartment yields.",
+    "expected": "REVIEW_REQUIRED",
+    "reason": "ambiguous_consequential",
+    "actual_decision": "REVIEW_REQUIRED",
+    "actual_reasons": [
+      "ambiguous_consequential"
+    ],
+    "claims": [
+      {
+        "category": "discovery",
+        "reason": "ambiguous_consequential",
+        "decision": "REVIEW_REQUIRED",
+        "epistemic": "assertion",
+        "text": "The compartment yields."
+      }
+    ],
+    "latency_ms": 0.069,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_review_required"
+      ],
+      "decision": "REVIEW_REQUIRED"
+    }
+  },
+  {
+    "id": "R2",
+    "category": "ambiguous_consequential",
+    "group": "ambiguous",
+    "authority": "notice_success",
+    "text": "The lock resists your efforts.",
+    "expected": "REVIEW_REQUIRED",
+    "reason": "ambiguous_consequential",
+    "actual_decision": "REVIEW_REQUIRED",
+    "actual_reasons": [
+      "ambiguous_consequential"
+    ],
+    "claims": [
+      {
+        "category": "mechanical_outcome",
+        "reason": "ambiguous_consequential",
+        "decision": "REVIEW_REQUIRED",
+        "epistemic": "assertion",
+        "text": "The lock resists your efforts."
+      }
+    ],
+    "latency_ms": 0.076,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_review_required"
+      ],
+      "decision": "REVIEW_REQUIRED"
+    }
+  },
+  {
+    "id": "R3",
+    "category": "ambiguous_consequential",
+    "group": "ambiguous",
+    "authority": "notice_failed",
+    "text": "You have what you came for.",
+    "expected": "FAIL",
+    "reason": "unauthorized_acquisition",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "claims": [
+      {
+        "category": "inventory",
+        "reason": "unauthorized_acquisition",
+        "decision": "FAIL",
+        "epistemic": "presupposition",
+        "text": "You have what you came for."
+      }
+    ],
+    "latency_ms": 0.063,
+    "provider_requests": 0,
+    "previous_decision": "PASS",
+    "previous_reasons": [],
+    "combined_gate": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_fail"
+      ],
+      "decision": "FAIL"
+    }
+  }
+]

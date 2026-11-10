@@ -1,0 +1,313 @@
+{
+  "campaign_id": "pr_play_adjacent_regression",
+  "campaign_name": "PR-PLAY Adjacent Regression Reconciliation \u2014 Verified Recovery",
+  "campaign_date": "2026-11-08",
+  "purpose": "Recover handoff integrity and individually investigate twelve adjacent HTTP failures.",
+  "objective_status": "A/PASS",
+  "executive_summary": "Audit A/PASS; previous repair B \u2014 Conditional acceptance. Same 176 adjacent tests: 164 passed, 12 failed, zero errors/skips; seven focused controls pass. Classifications A=0/B=0/C=9/D=0/E=3. Nine obsolete public-resolution assertions are grounded in PR-PLAY-67; three prose defects have unresolved origin. Local stable ZIP was the prior repair package while Markdown/manifest had advanced. New archive independently verified. No production/test changes, live provider calls, or campaign openings.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "Unchanged tests; fresh isolated evidence only."
+    ],
+    "tooling": [],
+    "documentation": [
+      "Eight recovery reports; prepended NEXT_SESSION preserving historical entries."
+    ],
+    "generated_artifacts": [
+      "Fresh evidence and coherent standard review bundle; historical reports preserved."
+    ]
+  },
+  "testing": {
+    "focused": "7 passed; T04/T05/T06/T09 and negative controls.",
+    "broader": "176 tests: 164 passed, same 12 failures, zero errors/skips. C=9/E=3.",
+    "full_suite": "Not run.",
+    "runtime_validation": "In-process provider-free TestClient; synthetic already-started sessions only.",
+    "model_runtime_boundary": "Live provider calls 0. No external network attempts in valid run.",
+    "new_regressions": "None confirmed; three origins unresolved.",
+    "pre_existing_failures": "No B classifications claimed without exact baseline. Nine C assertions conflict with PR-PLAY-67."
+  },
+  "decisions_requiring_human_review": [
+    "Conditional repair acceptance; authenticate baseline/provenance before full acceptance."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "T05 clue plus stock sentence remains."
+    ],
+    "pre_existing": [
+      "Dirty worktree; exact pre-repair baseline absent. Three publication defects have unresolved origin."
+    ]
+  },
+  "missing_concepts": [
+    "Authenticated exact pre-repair dirty source snapshot."
+  ],
+  "does_not_prove": [
+    "No broad playability, independent holdout, live-model evaluation or Gameplay Benchmark.",
+    "Historical origin of three prose defects remains unresolved. No authorization for a new repair cycle."
+  ],
+  "recommended_next_step": "Option C \u2014 Baseline-integrity correction. Stop here; defer T05 repair.",
+  "self_contained_review_test": "Exact new ZIP opened after generation; reports, 12-row matrix, canonical hashes and both handoffs verified; external seal record retained.",
+  "primary_report": "development/campaigns/product_realization/pr_play_adjacent_regression_recovery/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "development/campaigns/product_realization/pr_play_adjacent_regression_recovery/HANDOFF_RECOVERY.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_adjacent_regression_recovery/FAILURE_INVENTORY.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_adjacent_regression_recovery/BASELINE_RECONSTRUCTION.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_adjacent_regression_recovery/CONTRACT_ANALYSIS.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_adjacent_regression_recovery/TARGETED_REPAIR_VERIFICATION.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_adjacent_regression_recovery/NEXT_STEP_DECISION.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_adjacent_regression_recovery/INTEGRITY.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/classification_matrix.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/http_capture.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/failures.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/recovery_junit.xml",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/targeted_controls.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/archive_diagnosis.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/source_comparison.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/execution_integrity.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/command.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/collected_nodes.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/entry_hashes.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/entry_git_status.txt",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression_recovery/run_audit.py",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_67/05_PLAYER_SAFE_RESPONSE_CONTRACT.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_67/09_FRONTEND_COMPATIBILITY.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_67/10_DEVELOPMENT_TESTS.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_67/response_contract.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression/overlay_manifest.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression/current_capture.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_adjacent_regression/historical_capture.json",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_play_post_npc/implementation.diff",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_post_npc/REGRESSION_RESULTS.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_post_npc/ROUTING_CONTRACT.md",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/player_http_projection.py",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/perception_grounding.py",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_referenced_surface_grounding_inspection_resolution.py",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_play_39_action_admission.py",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_play_post_npc_handoff.py",
+      "role": "audit_evidence",
+      "why": "Supports recovered audit claims and review provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ],
+  "max_file_bytes": 41943040
+}

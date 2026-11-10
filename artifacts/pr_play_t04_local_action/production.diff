@@ -1,0 +1,441 @@
+--- before/game/local_interaction.py
++++ after/game/local_interaction.py
+@@ -78,3 +78,292 @@
+         "original_components": copy.deepcopy(components), "movement_executed": False,
+     }
+     return proposed
++
++
++_OUTSIDE_CLASS = re.compile(
++    r"\b(?:take|grab|pocket|steal|pick\s+up|open|close|unlock|unlatch|break|smash|"
++    r"destroy|damage|pry|write|copy|inscribe|carve|climb|read|reads|reading|"
++    r"examine|inspect|investigate|search|ask|question|speak|talk|push|pull|lift|"
++    r"move\s+the|shift\s+the)\b",
++    re.IGNORECASE,
++)
++_APPROACH = re.compile(
++    r"\b(?:walk\s+over\s+to|step\s+up\s+to|go\s+over\s+to|approach)\s+"
++    r"(?:the\s+|a\s+|an\s+)?(?P<target>.+)$",
++    re.IGNORECASE,
++)
++_CONTACT_PATTERNS = (
++    re.compile(
++        r"\b(?:put|place|rest|lay)\s+(?:a\s+|my\s+)?hand\s+(?:on|against)\s+"
++        r"(?:the\s+|its\s+|a\s+)?(?P<target>.+)$",
++        re.IGNORECASE,
++    ),
++    re.compile(
++        r"\btouch(?:es|ed|ing)?\s+(?:the\s+|a\s+|an\s+)?(?P<target>.+)$",
++        re.IGNORECASE,
++    ),
++)
++_PART_WORDS = frozenset({"frame", "surface", "edge", "rail", "railing", "post", "rim", "side"})
++_BLOCK_WORDS = re.compile(
++    r"\b(?:locked|barred|blocked|inaccessible|unreachable|impassable)\b",
++    re.IGNORECASE,
++)
++
++
++def _inner_scene(scene):
++    if isinstance(scene, dict) and isinstance(scene.get("scene"), dict):
++        return scene["scene"]
++    return scene if isinstance(scene, dict) else {}
++
++
++def _names(row, entity_id):
++    labels = [row.get("label"), row.get("name"), str(entity_id or "").replace("_", " ")]
++    labels.extend(row.get("aliases") or [])
++    return [str(label).strip() for label in labels if str(label or "").strip()]
++
++
++def _phrase_hits(phrase, rows):
++    from game.conversational_orchestration import _place_match
++
++    found = []
++    for entity_id, row, kind in rows:
++        if any(_place_match(phrase, name) for name in _names(row, entity_id)):
++            found.append((entity_id, row, kind))
++    return found
++
++
++def _part_of_target(phrase):
++    tokens = [tok for tok in re.findall(r"[a-z]+", (phrase or "").casefold()) if tok not in {"the", "a", "an", "its", "it"}]
++    return bool(tokens) and set(tokens) <= _PART_WORDS
++
++
++def _row_veto(row):
++    if not isinstance(row, dict):
++        return "access"
++    check = row.get("skill_check")
++    if isinstance(check, dict) and check.get("skill_id"):
++        return "check"
++    if row.get("hidden") or row.get("visible") is False or row.get("accessible") is False or row.get("reachable") is False:
++        return "access"
++    availability = row.get("availability")
++    if availability not in (None, "", "available"):
++        return "access"
++    blob = " ".join(str(row.get(key) or "") for key in ("label", "name", "description", "notes", "access"))
++    if _BLOCK_WORDS.search(blob):
++        return "access"
++    return None
++
++
++def _surface_authority(scene, entity_id, label):
++    from game.referenced_surface import AUTHORITY_AUTHORED_INTERACTABLE, classify_referenced_surface
++
++    classified = classify_referenced_surface("", scene, explicit_target=label)
++    if classified.get("authority") != AUTHORITY_AUTHORED_INTERACTABLE:
++        return None
++    if str(classified.get("interactable_id") or "") != str(entity_id):
++        return None
++    if not (classified.get("existence") and classified.get("visibility") and classified.get("inspectability")):
++        return None
++    return classified
++
++
++def _narrate(label, location, *, movement, contact_phrase):
++    name = label[:1].lower() + label[1:] if label else "object"
++    stay = f" You remain in {location}." if location else ""
++    if movement and contact_phrase:
++        return f"You walk over to the {name} and rest a hand on {contact_phrase}.{stay}"
++    if movement:
++        return f"You walk over to the {name}.{stay}"
++    return f"You rest a hand on the {name}.{stay}"
++
++
++def resolve_transient_local_action(player_text, *, scene, world, session=None):
++    """Authorize low-stakes approach or contact, or refuse it without a new owner.
++
++    Returns None when the utterance belongs to travel, speech, inspection,
++    consequential manipulation, or the experimental physical owner. A returned
++    record is the authoritative transient outcome. It does not mutate state.
++    """
++    text = re.sub(r"\s+", " ", str(player_text or "")).strip()
++    if not text or "?" in text or _OUTSIDE_CLASS.search(text):
++        return None
++    if not re.match(r"^(?:i|we|let me|let's|lets)\b", text, re.IGNORECASE):
++        return None
++    from game.physical_adjudication import enabled
++
++    if enabled(session):
++        return None
++    inner = _inner_scene(scene)
++    if inner.get("mode") == "combat" or (session or {}).get("in_combat"):
++        return None
++    parts = [part.strip(" .") for part in re.split(r"\s+\band\s+", text, flags=re.IGNORECASE) if part.strip(" .")]
++    if len(parts) > 2:
++        return None
++    clauses = parts or [text]
++    approach_phrase = None
++    contact_phrase = None
++    for clause in clauses:
++        approached = _APPROACH.search(clause)
++        contacted = next((match for pattern in _CONTACT_PATTERNS if (match := pattern.search(clause))), None)
++        if approached and contacted:
++            return None
++        if approached:
++            if approach_phrase is not None:
++                return None
++            approach_phrase = approached.group("target").strip(" .")
++        elif contacted:
++            if contact_phrase is not None:
++                return None
++            contact_phrase = contacted.group("target").strip(" .")
++        else:
++            return None
++    if not approach_phrase and not contact_phrase:
++        return None
++    from game.player_interpretation_bridge import visible_catalog
++
++    catalog = visible_catalog(scene, world)
++    visible_rows = []
++    npc_rows = []
++    for entity_id, info in catalog.items():
++        row = info.get("row") if isinstance(info.get("row"), dict) else {}
++        kind = str(info.get("kind") or "")
++        if kind == "npc":
++            npc_rows.append((entity_id, row, kind))
++        elif kind in {"inspect_target", "perceive_target"}:
++            visible_rows.append((entity_id, row, kind))
++    raw_rows = []
++    for item in inner.get("interactables") or []:
++        if isinstance(item, dict) and item.get("id"):
++            raw_rows.append((str(item.get("id")), item, "interactable"))
++    anchor = approach_phrase or contact_phrase
++    if npc_rows and _phrase_hits(anchor, npc_rows) and not _phrase_hits(anchor, visible_rows):
++        return None
++    visible_hits = _phrase_hits(anchor, visible_rows)
++    if len(visible_hits) > 1:
++        labels = [str(row.get("label") or entity_id) for entity_id, row, _kind in visible_hits[:4]]
++        return {
++            "status": "refused",
++            "category": "clarify",
++            "reason": "ambiguous_local_object",
++            "target_id": None,
++            "player_facing_text": (
++                "More than one thing here could match. Do you mean "
++                + " or ".join(labels)
++                + "? Nothing has been attempted."
++            ),
++            "scene_transition": False,
++            "persistent_state_changed": False,
++            "narration_authorized": False,
++        }
++    if len(visible_hits) == 0:
++        hidden_hits = [
++            (entity_id, row) for entity_id, row, _kind in _phrase_hits(anchor, raw_rows)
++            if row.get("hidden") or row.get("visible") is False
++        ]
++        blocked_hits = [
++            (entity_id, row) for entity_id, row, _kind in _phrase_hits(anchor, raw_rows)
++            if row.get("accessible") is False or row.get("reachable") is False
++        ]
++        if hidden_hits:
++            return {
++                "status": "refused",
++                "category": "decline",
++                "reason": "hidden_local_object",
++                "target_id": None,
++                "player_facing_text": "Nothing here matches that. Nothing has been attempted.",
++                "scene_transition": False,
++                "persistent_state_changed": False,
++                "narration_authorized": False,
++            }
++        if blocked_hits:
++            label = str(blocked_hits[0][1].get("label") or blocked_hits[0][0])
++            return {
++                "status": "refused",
++                "category": "decline",
++                "reason": "inaccessible_local_object",
++                "target_id": blocked_hits[0][0],
++                "label": label,
++                "player_facing_text": (
++                    f"{label} is not accessible from here. "
++                    "You have not approached or touched it."
++                ),
++                "scene_transition": False,
++                "persistent_state_changed": False,
++                "narration_authorized": False,
++            }
++        return None
++    entity_id, row, kind = visible_hits[0]
++    veto = _row_veto(row)
++    if veto:
++        label = str(row.get("label") or entity_id)
++        if veto == "check":
++            message = f"Touching or approaching the {label[:1].lower() + label[1:]} needs a check that is not resolved. Nothing was attempted."
++            reason = "unresolved_local_check"
++        else:
++            message = f"{label} is not accessible from here. You have not approached or touched it."
++            reason = "inaccessible_local_object"
++        return {
++            "status": "refused",
++            "category": "decline",
++            "reason": reason,
++            "target_id": entity_id,
++            "label": label,
++            "player_facing_text": message,
++            "scene_transition": False,
++            "persistent_state_changed": False,
++            "narration_authorized": False,
++        }
++    label = str(row.get("label") or entity_id)
++    authority = _surface_authority(scene, entity_id, label)
++    if authority is None:
++        return None
++    contact_binding = None
++    if contact_phrase:
++        contact_hits = _phrase_hits(contact_phrase, visible_rows)
++        same = len(contact_hits) == 1 and contact_hits[0][0] == entity_id
++        if same or (approach_phrase and _part_of_target(contact_phrase)):
++            contact_binding = "its " + next(iter(_PART_WORDS & set(re.findall(r"[a-z]+", contact_phrase.casefold()))), "").strip()
++            if same and not _part_of_target(contact_phrase):
++                contact_binding = "it"
++            elif _part_of_target(contact_phrase):
++                part = next(tok for tok in re.findall(r"[a-z]+", contact_phrase.casefold()) if tok in _PART_WORDS)
++                contact_binding = f"its {part}"
++        else:
++            return None
++    movement = approach_phrase is not None
++    narration = _narrate(
++        label, str(inner.get("location") or "").strip(),
++        movement=movement, contact_phrase=contact_binding,
++    )
++    categories = []
++    if movement:
++        categories.append("local_movement")
++    if contact_phrase:
++        categories.append("physical_contact")
++    return {
++        "status": "completed",
++        "category": "transient_local_action",
++        "reason": "transient_local_action_completed",
++        "target_id": entity_id,
++        "label": label,
++        "action_category": "_and_".join(categories),
++        "categories": categories,
++        "completion": {
++            "local_movement": "completed" if movement else "not_requested",
++            "physical_contact": "completed" if contact_phrase else "not_requested",
++        },
++        "authority_basis": {
++            "source": "authored_interactable_visible_catalog",
++            "visible_catalog_kind": kind,
++            "referenced_surface_authority": authority.get("authority"),
++            "existence": True,
++            "visibility": True,
++            "inspectability": True,
++            "explicit_access_block": False,
++        },
++        "scene_transition": False,
++        "persistent_state_changed": False,
++        "narration_authorized": True,
++        "player_facing_text": narration,
++        "scene_id": str(inner.get("id") or ""),
++    }
+--- before/game/conversational_orchestration.py
++++ after/game/conversational_orchestration.py
+@@ -1638,16 +1638,64 @@
+     )
+ 
+ 
++def _transient_local_decision(player_text: str, outcome: Mapping[str, Any]) -> ConversationalDecision:
++    """Publish an already authorized transient approach or contact."""
++    status = str(outcome.get("status") or "")
++    if status == "completed":
++        return ConversationalDecision(
++            category=ConversationalDecisionCategory.ANSWER,
++            primary_intention=player_text,
++            intent_family="local_interaction",
++            context_references=[str(outcome.get("target_id") or "")],
++            proposed_target=str(outcome.get("target_id") or "") or None,
++            reason="transient_local_action_completed",
++            confidence=0.9,
++            player_facing_text=str(outcome.get("player_facing_text") or ""),
++            intent_modality="committed",
++            execution_policy="record_transient_outcome",
++            authorization={"transient_local_action": dict(outcome)},
++        )
++    category = (
++        ConversationalDecisionCategory.CLARIFY
++        if outcome.get("category") == "clarify"
++        else ConversationalDecisionCategory.DECLINE
++    )
++    return ConversationalDecision(
++        category=category,
++        primary_intention=player_text,
++        intent_family="local_interaction",
++        reason=str(outcome.get("reason") or "local_action_refused"),
++        confidence=0.84,
++        player_facing_text=str(outcome.get("player_facing_text") or ""),
++        intent_modality="committed",
++        execution_policy="decline_unadjudicated_contact" if category == ConversationalDecisionCategory.DECLINE else "clarify_before_execution",
++        authorization={"transient_local_action": dict(outcome)},
++    )
++
++
+ def _local_presence_decision(
+     player_text: str,
+     hits: list[tuple[str, Mapping[str, Any]]],
++    *,
++    scene: Mapping[str, Any] | None = None,
++    world: Mapping[str, Any] | None = None,
++    session: Mapping[str, Any] | None = None,
+ ) -> ConversationalDecision:
+     """A current-scene object is not an unestablished journey.
+ 
+-    Contact itself stays unadjudicated. The scene, position, and inventory
+-    are left unchanged, and no clue is revealed by the approach.
++    Eligible approach or contact is a transient outcome from the local
++    interaction owner. Anything outside that class stays unadjudicated.
++    The scene, position, and inventory are left unchanged, and no clue is
++    revealed by the approach.
+     """
+     if len(hits) == 1:
++        from game.local_interaction import resolve_transient_local_action
++
++        outcome = resolve_transient_local_action(
++            player_text, scene=scene, world=world, session=session,
++        )
++        if isinstance(outcome, dict):
++            return _transient_local_decision(player_text, outcome)
+         entity_id, info = hits[0]
+         row = info.get("row") if isinstance(info.get("row"), Mapping) else None
+         label = _label(row, entity_id)
+@@ -1786,7 +1834,9 @@
+             {"npc", "inspect_target", "perceive_target"},
+         )
+         if local:
+-            return _local_presence_decision(player_text, local)
++            return _local_presence_decision(
++                player_text, local, scene=scene, world=world, session=session,
++            )
+         return _unknown_destination(player_text, destination, clear=clear)
+     if pursuit_row is not None:
+         return _move_along_pursuit(
+@@ -2643,6 +2693,13 @@
+     )
+     if committed is not None:
+         return committed
++    from game.local_interaction import resolve_transient_local_action
++
++    transient = resolve_transient_local_action(
++        text, scene=scene, world=world, session=session,
++    )
++    if isinstance(transient, dict):
++        return _transient_local_decision(text, transient)
+     if (
+         _QUESTION_START_RE.search(text)
+         and _OOC_HELP_RE.search(text)
+--- before/game/api.py
++++ after/game/api.py
+@@ -953,6 +953,27 @@
+             world=load_world(),
+         )
+         attach_expression_audit(gm, expression_audit)
++    transient = decision.authorization.get("transient_local_action") if isinstance(decision.authorization, dict) else None
++    if (
++        isinstance(transient, dict)
++        and transient.get("status") == "completed"
++        and transient.get("narration_authorized") is True
++        and transient.get("scene_transition") is False
++        and transient.get("persistent_state_changed") is False
++        and gm.get("player_facing_text") == transient.get("player_facing_text")
++    ):
++        from game.publication_contract import FINAL_ENGINE_RESPONSE, note_completed_publication, stamp
++
++        resolution["success"] = True
++        resolution["resolved_transition"] = False
++        resolution["state_changes"] = {}
++        resolution["metadata"]["action_owner"] = "local_interaction"
++        resolution["metadata"]["transient_local_action"] = transient
++        stamp(resolution["metadata"], FINAL_ENGINE_RESPONSE, publication=str(gm.get("player_facing_text") or ""))
++        note_completed_publication(
++            session, text=str(gm.get("player_facing_text") or ""), resolution=resolution, gm=gm,
++        )
++        context_changed = True
+     if decision.reason == "npc_request_declined" and decision.proposed_target:
+         from game.dialogue_authority import remember_dialogue_commitment
+ 
+--- before/tests/test_pr_play_post_npc_handoff.py
++++ after/tests/test_pr_play_post_npc_handoff.py
+@@ -90,14 +90,16 @@
+     assert captain["scene"] == "frontier_gate"
+ 
+     approach = _say(client, "I walk over to the notice board and put a hand on the frame.")
+-    assert "Notice board is here" in approach["visible"]
+-    assert "have not moved" in approach["visible"]
++    assert "notice board" in approach["visible"].lower()
++    assert "frame" in approach["visible"].lower()
++    assert "not a supported action" not in approach["visible"].lower()
+     assert "not an established destination" not in approach["visible"]
++    assert "have not moved" not in approach["visible"].lower()
+     assert CAPTAIN not in approach["visible"]
+     assert CLUE not in approach["visible"]
+     assert approach["scene"] == "frontier_gate"
+     assert "notice_patrol_route" not in approach["clues"]
+-    assert approach["publication"] == captain["publication"]
++    assert approach["publication"] == approach["visible"]
+     assert approach["completed"] is not True
+ 
+     reading = _say(client, "Read me the missing-patrol notice, not the tax lines.")

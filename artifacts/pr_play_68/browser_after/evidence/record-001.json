@@ -1,0 +1,77 @@
+{
+  "enabled": true,
+  "player_text": "I examine the Notice board.",
+  "provider_requests": 0,
+  "state_write_attempted": false,
+  "projection_build_ms": 0.676,
+  "hook_input": {
+    "eligible": true,
+    "player_text": "I examine the Notice board.",
+    "target_id": "notice_board",
+    "target_label": "notice board",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "action_id": "notice_board",
+      "interactable_id": "notice_board",
+      "discovered_clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "state_changes": {}
+    },
+    "narration_payload": {
+      "scene": {
+        "public": {
+          "location": "Cinderwatch Gate District",
+          "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ]
+        },
+        "discovered_clues": [
+          {
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    }
+  },
+  "eligible": true,
+  "diagnostic": "unexpected_experimental_hook_exception",
+  "error_type": "TypeError",
+  "error": "_Replay.__init__() missing 1 required positional argument: 'fault'",
+  "used_fallback": true,
+  "anchors": [
+    {
+      "order": 0,
+      "source": "resolved_action",
+      "status": "newly_revealed",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+    }
+  ],
+  "assembled": "You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+  "hook_work_ms": 0.965,
+  "evidence_write": "ok",
+  "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_68\\browser_after\\evidence\\record-001.json",
+  "serialization_ms": 0.117,
+  "evidence_write_ms": 0.613,
+  "total_hook_ms": 4.549,
+  "publication": {
+    "decision": "fallback",
+    "trusted_disclosure": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "mandatory_disclosures": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "final_text": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+    "invariant": "PASS",
+    "recovery_reason": null,
+    "server_constructed": true,
+    "client_received": "unknown"
+  },
+  "player_facing_published": false
+}

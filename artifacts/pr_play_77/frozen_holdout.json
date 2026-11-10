@@ -1,0 +1,1695 @@
+[
+  {
+    "id": "H001",
+    "group": "sequential",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "I open the door and look inside.",
+        "category": "A",
+        "fragment": "nothing concealed"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "standing here"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H002",
+    "group": "sequential",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "Please open the door, then look inside.",
+        "category": "A",
+        "fragment": "nothing concealed"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "standing here"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H003",
+    "group": "sequential",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "Let me unlatch the door and check inside.",
+        "category": "A",
+        "fragment": "nothing concealed"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "standing here"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H004",
+    "group": "sequential",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "I will push the crate aside and look where it was.",
+        "category": "A",
+        "fragment": "aside"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "standing here"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H005",
+    "group": "sequential",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "First shift the crate aside; next, inspect it.",
+        "category": "A",
+        "fragment": "aside"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "standing here"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H006",
+    "group": "sequential",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I sit on the bench and stand up.",
+        "category": "A",
+        "fragment": "you stand"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "standing here"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H007",
+    "group": "sequential",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "Approach the bench and sit on it.",
+        "category": "A",
+        "fragment": "you sit"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "seated"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H008",
+    "group": "sequential",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I stand up and approach the bench.",
+        "category": "A",
+        "fragment": "beside"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "standing here"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H009",
+    "group": "sequential",
+    "setup": "cup",
+    "turns": [
+      {
+        "input": "Lift the cup and place the cup aside.",
+        "category": "A",
+        "fragment": "aside"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "standing here"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H010",
+    "group": "sequential",
+    "setup": "blocking",
+    "turns": [
+      {
+        "input": "I push the crate away from the doorway and check the doorway.",
+        "category": "A",
+        "fragment": "the doorway is clear"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "standing here"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H011",
+    "group": "sequential",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "Open the door and then look inside.",
+        "category": "A",
+        "fragment": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H012",
+    "group": "sequential",
+    "setup": "open",
+    "turns": [
+      {
+        "input": "I close the door and look inside.",
+        "category": "A",
+        "fragment": "nothing concealed"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H013",
+    "group": "sequential",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "Nudge the crate aside, then inspect it.",
+        "category": "A",
+        "fragment": "aside"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H014",
+    "group": "sequential",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I walk over to the bench and sit on the bench.",
+        "category": "A",
+        "fragment": "you sit"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H015",
+    "group": "sequential",
+    "setup": "beside",
+    "turns": [
+      {
+        "input": "Step back from the bench and stand up.",
+        "category": "A",
+        "fragment": "already standing"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H016",
+    "group": "sequential",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "I open the door; look inside.",
+        "category": "A",
+        "fragment": "nothing concealed"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H017",
+    "group": "sequential",
+    "setup": "cup",
+    "turns": [
+      {
+        "input": "Heave the cup and set the cup aside.",
+        "category": "A",
+        "fragment": "aside"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H018",
+    "group": "sequential",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "I pull the crate aside and look where it was.",
+        "category": "A",
+        "fragment": "aside"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H019",
+    "group": "sequential",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "Please have a seat on the bench and stand up.",
+        "category": "A",
+        "fragment": "you stand"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H020",
+    "group": "sequential",
+    "setup": "notice",
+    "turns": [
+      {
+        "input": "I approach the notice board and step back from the notice board.",
+        "category": "A",
+        "fragment": "step back"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H021",
+    "group": "dependency",
+    "setup": "locked",
+    "turns": [
+      {
+        "input": "I open the locked door and look inside.",
+        "category": "D",
+        "fragment": "not attempted",
+        "absent": "nothing concealed"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H022",
+    "group": "dependency",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I open the hatch and sit on the bench.",
+        "category": "E",
+        "fragment": "not attempted",
+        "absent": "you sit"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H023",
+    "group": "dependency",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "I push the crate and open the hatch.",
+        "category": "A",
+        "fragment": "not established"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H024",
+    "group": "dependency",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "Open the door, step through, and look around.",
+        "category": "A",
+        "fragment": "no passage",
+        "absent": "room was created"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H025",
+    "group": "dependency",
+    "setup": "door_milestone",
+    "turns": [
+      {
+        "input": "I open the door and climb the milestone.",
+        "category": "A",
+        "fragment": "no climbing check",
+        "absent": "you reach"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H026",
+    "group": "dependency",
+    "setup": "crate_milestone",
+    "turns": [
+      {
+        "input": "Push the crate aside, climb the milestone, and look down the road.",
+        "category": "A",
+        "fragment": "not attempted",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H027",
+    "group": "dependency",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "I break the door and look inside.",
+        "category": "C",
+        "fragment": "not attempted",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H028",
+    "group": "dependency",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "If the door opens, look inside.",
+        "category": "A",
+        "fragment": "skipped",
+        "absent": "nothing concealed"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H029",
+    "group": "dependency",
+    "setup": "hard",
+    "turns": [
+      {
+        "input": "I open the stuck door and look inside.",
+        "category": "B",
+        "fragment": "attempt fails",
+        "absent": "nothing concealed"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H030",
+    "group": "dependency",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "Move the crate through the wall and look inside.",
+        "category": "E",
+        "fragment": "unchanged"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H031",
+    "group": "dependency",
+    "setup": "guarded",
+    "turns": [
+      {
+        "input": "I open the guarded door and look inside.",
+        "category": "C",
+        "fragment": "not attempted",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H032",
+    "group": "dependency",
+    "setup": "locked",
+    "turns": [
+      {
+        "input": "I open the door, and if it opens, look inside.",
+        "category": "D",
+        "fragment": "not attempted",
+        "absent": "nothing concealed"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H033",
+    "group": "dependency",
+    "setup": "cup",
+    "turns": [
+      {
+        "input": "I pick up the cup and examine it.",
+        "category": "D",
+        "fragment": "not attempted",
+        "absent": "raised"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H034",
+    "group": "dependency",
+    "setup": "milestone",
+    "turns": [
+      {
+        "input": "I climb the milestone and survey the road.",
+        "category": "D",
+        "fragment": "not attempted",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H035",
+    "group": "dependency",
+    "setup": "pillar",
+    "turns": [
+      {
+        "input": "I push the pillar and look where it was.",
+        "category": "E",
+        "fragment": "not attempted",
+        "absent": "aside"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H036",
+    "group": "partial",
+    "setup": "crate_milestone",
+    "turns": [
+      {
+        "input": "I push the crate aside, climb the milestone, and look down the road.",
+        "category": "A",
+        "fragment": "aside",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H037",
+    "group": "partial",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "Open the door, step through, and look around.",
+        "category": "A",
+        "fragment": "you open",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H038",
+    "group": "partial",
+    "setup": "cup_milestone",
+    "turns": [
+      {
+        "input": "I lift the cup, climb the milestone, and survey the road.",
+        "category": "A",
+        "fragment": "raised",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H039",
+    "group": "partial",
+    "setup": "blocking_milestone",
+    "turns": [
+      {
+        "input": "Push the crate away from the doorway, climb the milestone, and look down the road.",
+        "category": "A",
+        "fragment": "doorway",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H040",
+    "group": "partial",
+    "setup": "door_milestone",
+    "turns": [
+      {
+        "input": "I open the door and climb the milestone.",
+        "category": "A",
+        "fragment": "no climbing check",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H041",
+    "group": "partial",
+    "setup": "bench_milestone",
+    "turns": [
+      {
+        "input": "I sit on the bench, climb the milestone, and look down the road.",
+        "category": "A",
+        "fragment": "you sit",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H042",
+    "group": "partial",
+    "setup": "bench_milestone",
+    "turns": [
+      {
+        "input": "Approach the bench, climb the milestone, and survey the road.",
+        "category": "A",
+        "fragment": "beside",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H043",
+    "group": "partial",
+    "setup": "milestone",
+    "turns": [
+      {
+        "input": "I stand up, climb the milestone, and look down the road.",
+        "category": "A",
+        "fragment": "no climbing check",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H044",
+    "group": "partial",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "Open the door, step through, and peer around.",
+        "category": "A",
+        "fragment": "no passage",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H045",
+    "group": "partial",
+    "setup": "fitting_milestone",
+    "turns": [
+      {
+        "input": "I push the loose stone aside and climb the milestone.",
+        "category": "A",
+        "fragment": "no climbing check",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H046",
+    "group": "partial",
+    "setup": "crate_milestone",
+    "turns": [
+      {
+        "input": "Move the crate aside and climb the milestone.",
+        "category": "A",
+        "fragment": "aside",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H047",
+    "group": "partial",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "I open the door, then step through.",
+        "category": "A",
+        "fragment": "no passage",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H048",
+    "group": "partial",
+    "setup": "cup_milestone",
+    "turns": [
+      {
+        "input": "Lift the cup and climb the milestone.",
+        "category": "A",
+        "fragment": "raised",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H049",
+    "group": "partial",
+    "setup": "notice_milestone",
+    "turns": [
+      {
+        "input": "I approach the notice board and climb the milestone.",
+        "category": "A",
+        "fragment": "no climbing check",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H050",
+    "group": "partial",
+    "setup": "crate_milestone",
+    "turns": [
+      {
+        "input": "Push the crate farther and climb the milestone.",
+        "category": "A",
+        "fragment": "farther",
+        "absent": "hidden road"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H051",
+    "group": "conditional",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "If the door opens, look inside.",
+        "category": "A",
+        "fragment": "skipped"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H052",
+    "group": "conditional",
+    "setup": "open",
+    "turns": [
+      {
+        "input": "If the door is open, look inside.",
+        "category": "A",
+        "fragment": "nothing concealed"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H053",
+    "group": "conditional",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "If the crate is aside, look where it was.",
+        "category": "A",
+        "fragment": "skipped"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H054",
+    "group": "conditional",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "If I am beside the bench, step back from the bench.",
+        "category": "A",
+        "fragment": "skipped"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H055",
+    "group": "conditional",
+    "setup": "beside",
+    "turns": [
+      {
+        "input": "If I am beside the bench, step back from the bench.",
+        "category": "A",
+        "fragment": "step back"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H056",
+    "group": "conditional",
+    "setup": "milestone",
+    "turns": [
+      {
+        "input": "If I can reach the ledge, try to climb it.",
+        "category": "D",
+        "fragment": "not established"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H057",
+    "group": "conditional",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "If the door opens, then look inside.",
+        "category": "A",
+        "fragment": "not met"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H058",
+    "group": "conditional",
+    "setup": "open",
+    "turns": [
+      {
+        "input": "If the wooden door opens, check inside.",
+        "category": "A",
+        "fragment": "nothing concealed"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H059",
+    "group": "conditional",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "If the crate moves, step through.",
+        "category": "A",
+        "fragment": "skipped"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H060",
+    "group": "conditional",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "If the door is opened, peer inside.",
+        "category": "A",
+        "fragment": "skipped"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H061",
+    "group": "independent",
+    "setup": "locked",
+    "turns": [
+      {
+        "input": "I open the locked door and stand up.",
+        "category": "A",
+        "fragment": "locked"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H062",
+    "group": "independent",
+    "setup": "locked_bench",
+    "turns": [
+      {
+        "input": "I open the locked door and approach the bench.",
+        "category": "A",
+        "fragment": "beside"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H063",
+    "group": "independent",
+    "setup": "pillar",
+    "turns": [
+      {
+        "input": "I push the pillar and stand up.",
+        "category": "A",
+        "fragment": "cannot be moved"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H064",
+    "group": "independent",
+    "setup": "none",
+    "turns": [
+      {
+        "input": "I open the hatch and wave to the guard.",
+        "category": "E",
+        "fragment": "not attempted"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H065",
+    "group": "independent",
+    "setup": "notice",
+    "turns": [
+      {
+        "input": "I stand up and approach the notice board.",
+        "category": "A",
+        "fragment": "beside"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H066",
+    "group": "independent",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I sit on the bench and wave.",
+        "category": "A",
+        "fragment": "you sit"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H067",
+    "group": "independent",
+    "setup": "locked_bench",
+    "turns": [
+      {
+        "input": "The door is locked, so I stand up and approach the bench.",
+        "category": "A",
+        "fragment": "beside"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H068",
+    "group": "independent",
+    "setup": "guarded",
+    "turns": [
+      {
+        "input": "I open the guarded door and stand up.",
+        "category": "C",
+        "fragment": "not attempted"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H069",
+    "group": "independent",
+    "setup": "none",
+    "turns": [
+      {
+        "input": "I climb the missing spire and stand up.",
+        "category": "E",
+        "fragment": "not attempted"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H070",
+    "group": "independent",
+    "setup": "none",
+    "turns": [
+      {
+        "input": "I stand up and greet the traveler.",
+        "category": "A",
+        "fragment": "not resolved"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H071",
+    "group": "continuity",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "Move the crate aside and inspect it.",
+        "category": "A",
+        "fragment": "aside"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H072",
+    "group": "continuity",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "I open the door and close it.",
+        "category": "A",
+        "fragment": "you close"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H073",
+    "group": "continuity",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I sit on the bench and stand up.",
+        "category": "A",
+        "fragment": "standing"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H074",
+    "group": "continuity",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I approach the bench and step back from it.",
+        "category": "A",
+        "fragment": "step back"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H075",
+    "group": "continuity",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "Push it aside and look where it was.",
+        "category": "A",
+        "fragment": "aside"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H076",
+    "group": "continuity",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "I open it and look inside.",
+        "category": "A",
+        "fragment": "nothing concealed"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H077",
+    "group": "continuity",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "Sit on it and stand up.",
+        "category": "A",
+        "fragment": "you stand"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H078",
+    "group": "continuity",
+    "setup": "cup",
+    "turns": [
+      {
+        "input": "I lift the cup and place it aside.",
+        "category": "A",
+        "fragment": "aside"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H079",
+    "group": "continuity",
+    "setup": "notice",
+    "turns": [
+      {
+        "input": "Approach the notice board and read it.",
+        "category": "A",
+        "fragment": "beside"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H080",
+    "group": "continuity",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "I push the crate aside and push it farther.",
+        "category": "A",
+        "fragment": "farther"
+      }
+    ],
+    "save": false,
+    "multi": true
+  },
+  {
+    "id": "H081",
+    "group": "persistence",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "I open the door and look inside.",
+        "category": "A",
+        "fragment": "you open"
+      },
+      {
+        "input": "Is the door still open?",
+        "category": "A",
+        "fragment": "is open"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H082",
+    "group": "persistence",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I sit on the bench and stand up.",
+        "category": "A",
+        "fragment": "you stand"
+      },
+      {
+        "input": "Am I standing?",
+        "category": "A",
+        "fragment": "standing"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H083",
+    "group": "persistence",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "I push the crate aside and look where it was.",
+        "category": "A",
+        "fragment": "aside"
+      },
+      {
+        "input": "Where is the crate?",
+        "category": "A",
+        "fragment": "aside"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H084",
+    "group": "persistence",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I approach the bench and sit on it.",
+        "category": "A",
+        "fragment": "you sit"
+      },
+      {
+        "input": "Am I sitting?",
+        "category": "A",
+        "fragment": "seated"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H085",
+    "group": "persistence",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "Open the door, step through, and look around.",
+        "category": "A",
+        "fragment": "you open"
+      },
+      {
+        "input": "Is the door open?",
+        "category": "A",
+        "fragment": "is open"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H086",
+    "group": "persistence",
+    "setup": "crate_milestone",
+    "turns": [
+      {
+        "input": "I push the crate aside, climb the milestone, and look down the road.",
+        "category": "A",
+        "fragment": "aside"
+      },
+      {
+        "input": "Where is the crate?",
+        "category": "A",
+        "fragment": "aside"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H087",
+    "group": "persistence",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I stand up and approach the bench.",
+        "category": "A",
+        "fragment": "beside"
+      },
+      {
+        "input": "Am I beside the bench?",
+        "category": "A",
+        "fragment": "beside"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H088",
+    "group": "persistence",
+    "setup": "cup",
+    "turns": [
+      {
+        "input": "Lift the cup and place the cup aside.",
+        "category": "A",
+        "fragment": "aside"
+      },
+      {
+        "input": "Where is the cup?",
+        "category": "A",
+        "fragment": "aside"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H089",
+    "group": "persistence",
+    "setup": "locked",
+    "turns": [
+      {
+        "input": "I open the locked door and stand up.",
+        "category": "D",
+        "fragment": "locked"
+      },
+      {
+        "input": "Is the door open?",
+        "category": "A",
+        "fragment": "closed"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H090",
+    "group": "persistence",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "If the door opens, look inside.",
+        "category": "A",
+        "fragment": "skipped"
+      },
+      {
+        "input": "Is the door open?",
+        "category": "A",
+        "fragment": "closed"
+      }
+    ],
+    "save": true,
+    "multi": true
+  },
+  {
+    "id": "H091",
+    "group": "readonly",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "Is the door open, and what is on the other side?",
+        "category": "A",
+        "fragment": "nothing was opened",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H092",
+    "group": "readonly",
+    "setup": "open",
+    "turns": [
+      {
+        "input": "Is the door open and what lies beyond?",
+        "category": "A",
+        "fragment": "nothing was opened",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H093",
+    "group": "readonly",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "Can I move the crate?",
+        "category": "A",
+        "fragment": "nothing has been moved",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H094",
+    "group": "readonly",
+    "setup": "none",
+    "turns": [
+      {
+        "input": "Am I sitting, and what is on the other side?",
+        "category": "A",
+        "fragment": "not seated",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H095",
+    "group": "readonly",
+    "setup": "none",
+    "turns": [
+      {
+        "input": "Is the doorway clear, and what lies beyond?",
+        "category": "D",
+        "fragment": "no doorway",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H096",
+    "group": "readonly",
+    "setup": "locked",
+    "turns": [
+      {
+        "input": "Is the door locked, and what is on the hidden side?",
+        "category": "A",
+        "fragment": "locked",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H097",
+    "group": "readonly",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "What is on the other side of the door?",
+        "category": "D",
+        "fragment": "not established",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H098",
+    "group": "readonly",
+    "setup": "crate",
+    "turns": [
+      {
+        "input": "Is the crate still by the wall, and what lies beyond?",
+        "category": "A",
+        "fragment": "nothing",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H099",
+    "group": "readonly",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "Can I open the door, and what is on the other side?",
+        "category": "A",
+        "fragment": "nothing was opened",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H100",
+    "group": "readonly",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "Is the bench here, and what is on the hidden side?",
+        "category": "D",
+        "fragment": "not established",
+        "absent": "you open"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H101",
+    "group": "isolation",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I sit on the bench.",
+        "category": "E",
+        "fragment": "not established",
+        "absent": "which seat"
+      }
+    ],
+    "save": false,
+    "multi": false,
+    "campaign": "beta"
+  },
+  {
+    "id": "H102",
+    "group": "isolation",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "Let me sit on the bench.",
+        "category": "E",
+        "fragment": "not established",
+        "absent": "which seat"
+      }
+    ],
+    "save": false,
+    "multi": false,
+    "campaign": "beta"
+  },
+  {
+    "id": "H103",
+    "group": "isolation",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "Please have a seat on the bench.",
+        "category": "E",
+        "fragment": "not established",
+        "absent": "which seat"
+      }
+    ],
+    "save": false,
+    "multi": false,
+    "campaign": "beta"
+  },
+  {
+    "id": "H104",
+    "group": "isolation",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I will sit on the bench.",
+        "category": "E",
+        "fragment": "not established",
+        "absent": "which seat"
+      }
+    ],
+    "save": false,
+    "multi": false,
+    "campaign": "beta"
+  },
+  {
+    "id": "H105",
+    "group": "isolation",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I rest on the bench.",
+        "category": "E",
+        "fragment": "not established",
+        "absent": "which seat"
+      }
+    ],
+    "save": false,
+    "multi": false,
+    "campaign": "beta"
+  },
+  {
+    "id": "H106",
+    "group": "publication",
+    "setup": "crate_milestone",
+    "turns": [
+      {
+        "input": "I push the crate aside, climb the milestone, and look down the road.",
+        "category": "A",
+        "fragment": "not attempted",
+        "absent": "SENTINEL"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H107",
+    "group": "publication",
+    "setup": "door",
+    "turns": [
+      {
+        "input": "Open the door, step through, and look around.",
+        "category": "A",
+        "fragment": "not attempted",
+        "absent": "SENTINEL"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H108",
+    "group": "publication",
+    "setup": "bench",
+    "turns": [
+      {
+        "input": "I stand up, approach the bench, sit on the bench, and step back.",
+        "category": "F",
+        "fragment": "nothing has been attempted",
+        "absent": "SENTINEL"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H109",
+    "group": "publication",
+    "setup": "two",
+    "turns": [
+      {
+        "input": "I push the crate and then open it.",
+        "category": "F",
+        "fragment": "which",
+        "absent": "SENTINEL"
+      }
+    ],
+    "save": false,
+    "multi": false
+  },
+  {
+    "id": "H110",
+    "group": "publication",
+    "setup": "hidden",
+    "turns": [
+      {
+        "input": "I open the hidden chest and look inside.",
+        "category": "E",
+        "fragment": "not established",
+        "absent": "SENTINEL"
+      }
+    ],
+    "save": false,
+    "multi": false
+  }
+]

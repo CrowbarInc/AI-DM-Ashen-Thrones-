@@ -1,0 +1,72 @@
+{
+  "ok": true,
+  "gm_output": {
+    "player_facing_text": "I couldn't interpret that just now, so no gameplay action was taken.",
+    "tags": [
+      "interpretation_rejected",
+      "non_mutating"
+    ],
+    "scene_update": null,
+    "activate_scene_id": null,
+    "new_scene_draft": null,
+    "world_updates": null,
+    "suggested_action": null
+  },
+  "resolution": {
+    "kind": "interpretation_rejected",
+    "action_id": "interpretation_rejected",
+    "label": "I approach the gate serjeant and ask what happened to the missing patrol.",
+    "prompt": "I approach the gate serjeant and ask what happened to the missing patrol.",
+    "success": false,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "metadata": {
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "authoritative_mutation": false,
+      "resolver_invoked": false,
+      "gameplay_parser_invoked": false,
+      "narration_invoked": false,
+      "processing_outcome": "provider_failure",
+      "live_chat_interpretation": {
+        "status": "blocked",
+        "reason": "provider_failure",
+        "raw_interpretation": "",
+        "provider_requests": [],
+        "provider_error": "RuntimeError",
+        "record": null
+      },
+      "provider_calls": {
+        "interpretation_requests": 0,
+        "narration_requests": 0,
+        "ooc_assistance_requests": 0,
+        "retries": 0
+      },
+      "performance": {
+        "elapsed_ms": 19,
+        "interpretation_ms": null,
+        "resolution_ms": null,
+        "narration_ms": null,
+        "validation_ms": null,
+        "retry_ms": null,
+        "provider_call_count": 0,
+        "input_tokens": null,
+        "output_tokens": null,
+        "retry_count": 0,
+        "retry_reason": null,
+        "disposition": "interpretation_rejected",
+        "successful": true,
+        "provider_narration_skipped": false
+      },
+      "provider_accounting": {
+        "version": "ATGB-03B-1",
+        "scope": "process_cumulative_admissions",
+        "request_upper_bound": 3,
+        "status": "recorded"
+      }
+    }
+  }
+}

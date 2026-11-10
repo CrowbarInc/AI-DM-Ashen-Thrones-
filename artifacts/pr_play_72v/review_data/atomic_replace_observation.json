@@ -1,0 +1,16 @@
+{
+  "raw_lifecycle": {
+    "passed": 38,
+    "failed": 1
+  },
+  "failure": "tests.test_pr_play_71v_verification::test_atomic_replace_succeeds_within_budget[0]",
+  "actual": "target bytes were next as required; observed 2 rename calls versus expected 1",
+  "inference": "Consistent with existing bounded Windows WinError 5 recovery; original transient OS exception was not captured, so exact external cause is unproven.",
+  "fresh_recheck": {
+    "passed": 4,
+    "failed": 0,
+    "source_change": false
+  },
+  "classification": "nonreproduced test failure; not labeled historical; no confirmed new product regression",
+  "storage_source_changed_by_this_cycle": false
+}

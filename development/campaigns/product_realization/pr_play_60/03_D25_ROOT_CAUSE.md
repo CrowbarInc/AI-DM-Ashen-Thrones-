@@ -1,0 +1,5 @@
+# 03 D25 ROOT CAUSE
+
+Primary class: implementation (loss of structured effect authority), with a historical evaluation limitation. mechanical_outcome reads state_changes/top-level deltas; project_narration_payload disclosure-filters them. Previously authorize_investigation rendered them to consequence text only. Anchored construction rejected effects, anchored._resolution emitted empty state_changes, authority_from_anchored supplied no item grants, and integrated.outcome_contract always declared no consequences.
+
+The original PR59 D25 is not an authoritative resolver capture: combined_controls.py manually constructs AuthorizedInvestigation with consequence prose and empty mandatory facts. Its historical record contains no items_added at all. We preserve that exact fixture, original decisions and exact candidate. No intervening repair had occurred: current-entry replay reproduced FAIL. A second independent defect split “and place it in your pack” into another item. Quantity-bearing record adapters also discarded quantity. Repairing projection alone would not close these gaps.

@@ -1,0 +1,435 @@
+{
+  "step_id": "T2",
+  "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
+  "dm_response": "I couldn't interpret that just now, so no gameplay action was taken.",
+  "response_truncated": false,
+  "http_status": 200,
+  "completion": {
+    "expression_status": "EXPRESSION_NOT_INVOKED",
+    "transport_completed": true,
+    "pipeline_completed": false,
+    "action_executed": false,
+    "gameplay_completed": false,
+    "interaction_outcome": "rejected",
+    "semantic_dead_end": true,
+    "stop": true,
+    "reasons": [
+      "interpretation_rejection",
+      "provider_or_parser_failure"
+    ]
+  },
+  "outcome_classification": {
+    "kind": "unknown",
+    "evidence": "native accepted response and resolution; no invented success condition"
+  },
+  "state_diff": [
+    {
+      "path": "/session_log.jsonl",
+      "before": {
+        "preview": "[{\"timestamp\": \"2026-11-01T22:28:05.906860Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+        "truncated": true,
+        "characters": 95284,
+        "sha256": "0b0ccfff335c57d87bb0fc824920d2bbdc48b1992b468595cd97e2d3d7969bf4"
+      },
+      "after": {
+        "preview": "[{\"timestamp\": \"2026-11-01T22:28:05.906860Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+        "truncated": true,
+        "characters": 97670,
+        "sha256": "7f5934945dc66204d3bcc7ac5aaff98eb450f6842a0670183cfadac00e14f56d"
+      }
+    }
+  ],
+  "overlay_comparison": {
+    "integrity": true,
+    "changes": [],
+    "omitted_entries": 0,
+    "total_changes": 0
+  },
+  "state_before": "turns/T2/before/documents.json",
+  "state_after": "turns/T2/after/documents.json",
+  "diagnostics": [
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "143087897e0449d28bde04013b817028",
+      "attempt_id": "8807d6579f254a2eb4621dd67132a48f",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-01T22:28:06.753829+00:00",
+      "time": "2026-11-01T22:28:06.753829+00:00",
+      "sequence": 3,
+      "admission": "admitted",
+      "budget_remaining": 3,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "143087897e0449d28bde04013b817028",
+      "attempt_id": "8807d6579f254a2eb4621dd67132a48f",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-01T22:28:06.753829+00:00",
+      "time": "2026-11-01T22:28:06.756834+00:00",
+      "sequence": 3,
+      "admission": "admitted",
+      "budget_remaining": 3,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "143087897e0449d28bde04013b817028",
+      "attempt_id": "8807d6579f254a2eb4621dd67132a48f",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-11-01T22:28:06.753829+00:00",
+      "time": "2026-11-01T22:28:06.757834+00:00",
+      "sequence": 3,
+      "admission": "admitted",
+      "budget_remaining": 3,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "sent": true,
+      "request_id": null,
+      "model": "gpt-4.1-mini",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "usage_consistent": false,
+      "refusal": null,
+      "completion_status": "failed",
+      "dispatch_attempted": true,
+      "latency_ms": 0.076,
+      "error": "provider_error"
+    }
+  ],
+  "provider_usage": {
+    "request_count": 1,
+    "input_tokens": null,
+    "output_tokens": null,
+    "total_tokens": null,
+    "retry_count": 0,
+    "operations": [
+      {
+        "attempt_id": "8807d6579f254a2eb4621dd67132a48f",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "purpose": "interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "latency_ms": 0.076,
+        "completion_status": "failed"
+      }
+    ],
+    "provider_latency_ms": 0.076,
+    "provider_latency_status": "native latency_ms only; unavailable remains null"
+  },
+  "mechanical": {
+    "status": "FAIL",
+    "completed_interaction": false,
+    "turn_delta": 0,
+    "log_delta": 1,
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "rules": {
+      "status": "recorded_requires_review",
+      "evidence": {
+        "kind": "interpretation_rejected",
+        "action_id": "interpretation_rejected",
+        "label": "I approach the gate serjeant and ask what happened to the missing patrol.",
+        "prompt": "I approach the gate serjeant and ask what happened to the missing patrol.",
+        "success": false,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "discovered_clues": [],
+        "world_updates": null,
+        "state_changes": {},
+        "metadata": {
+          "communication_mode": "AUTO",
+          "mode_source": "automatic",
+          "authoritative_mutation": false,
+          "resolver_invoked": false,
+          "gameplay_parser_invoked": false,
+          "narration_invoked": false,
+          "processing_outcome": "provider_failure",
+          "live_chat_interpretation": {
+            "status": "blocked",
+            "reason": "provider_failure",
+            "raw_interpretation": "",
+            "provider_requests": [],
+            "provider_error": "RuntimeError",
+            "record": null
+          },
+          "provider_calls": {
+            "interpretation_requests": 0,
+            "narration_requests": 0,
+            "ooc_assistance_requests": 0,
+            "retries": 0
+          },
+          "performance": {
+            "elapsed_ms": 20,
+            "interpretation_ms": null,
+            "resolution_ms": null,
+            "narration_ms": null,
+            "validation_ms": null,
+            "retry_ms": null,
+            "provider_call_count": 0,
+            "input_tokens": null,
+            "output_tokens": null,
+            "retry_count": 0,
+            "retry_reason": null,
+            "disposition": "interpretation_rejected",
+            "successful": true,
+            "provider_narration_skipped": false
+          },
+          "provider_accounting": {
+            "version": "ATGB-03B-1",
+            "scope": "process_cumulative_admissions",
+            "request_upper_bound": 3,
+            "status": "recorded"
+          }
+        }
+      },
+      "source": "production resolution; no independent adjudication"
+    },
+    "mutation_authority": "REQUIRES_HUMAN_REVIEW for changes not covered by explicit invariants"
+  },
+  "semantic": {
+    "status": "FAIL",
+    "final_hard_validation": null,
+    "native_validation": {},
+    "nonresolution": null,
+    "gameplay_acceptance": true,
+    "provider_stages": [],
+    "extraction": [],
+    "json_parsing": [],
+    "structured_validation": []
+  },
+  "quality": {
+    "rubric_version": "pr-play-09-quality-v1",
+    "scale": {
+      "0": "Complete failure",
+      "1": "Major deficiency",
+      "2": "Partially adequate",
+      "3": "Good",
+      "4": "Strong"
+    },
+    "dimensions": {
+      "Q1": {
+        "dimension": "Responsiveness",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q2": {
+        "dimension": "Grounding",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q3": {
+        "dimension": "Continuity",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q4": {
+        "dimension": "Actionability",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q5": {
+        "dimension": "Narrative quality",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q6": {
+        "dimension": "Agency and consequences",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      }
+    },
+    "probes": {
+      "response_exists": true,
+      "requested_subject_mentioned": false,
+      "repeated_exact_response": false,
+      "generic_marker": false
+    },
+    "concerns": [
+      "possibly_irrelevant_response"
+    ],
+    "method": "deterministic presence and exact markers; heuristic relevance and repetition",
+    "status": "REQUIRES_HUMAN_REVIEW"
+  },
+  "findings": [
+    {
+      "category": "provider_transport_failure",
+      "kind": "confirmed_mechanical_failure",
+      "evidence": [
+        {
+          "event": "admitted",
+          "version": "ATGB-03B-1",
+          "run_id": "143087897e0449d28bde04013b817028",
+          "attempt_id": "8807d6579f254a2eb4621dd67132a48f",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-01T22:28:06.753829+00:00",
+          "time": "2026-11-01T22:28:06.753829+00:00",
+          "sequence": 3,
+          "admission": "admitted",
+          "budget_remaining": 3,
+          "sdk_retries": 0,
+          "host_retries": "disabled"
+        },
+        {
+          "event": "dispatch_attempted",
+          "version": "ATGB-03B-1",
+          "run_id": "143087897e0449d28bde04013b817028",
+          "attempt_id": "8807d6579f254a2eb4621dd67132a48f",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-01T22:28:06.753829+00:00",
+          "time": "2026-11-01T22:28:06.756834+00:00",
+          "sequence": 3,
+          "admission": "admitted",
+          "budget_remaining": 3,
+          "sdk_retries": 0,
+          "host_retries": "disabled"
+        },
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "143087897e0449d28bde04013b817028",
+          "attempt_id": "8807d6579f254a2eb4621dd67132a48f",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-01T22:28:06.753829+00:00",
+          "time": "2026-11-01T22:28:06.757834+00:00",
+          "sequence": 3,
+          "admission": "admitted",
+          "budget_remaining": 3,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "sent": true,
+          "request_id": null,
+          "model": "gpt-4.1-mini",
+          "input_tokens": null,
+          "output_tokens": null,
+          "total_tokens": null,
+          "usage_consistent": false,
+          "refusal": null,
+          "completion_status": "failed",
+          "dispatch_attempted": true,
+          "latency_ms": 0.076,
+          "error": "provider_error"
+        }
+      ],
+      "source": "native completed ledger record",
+      "step_id": "T2",
+      "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
+      "dm_response": "I couldn't interpret that just now, so no gameplay action was taken.",
+      "diagnostics": "turns/T2/evaluation.json#diagnostics",
+      "state_comparison": "turns/T2/evaluation.json#state_diff"
+    },
+    {
+      "category": "interpretation_rejection",
+      "kind": "confirmed_semantic_failure",
+      "evidence": {
+        "expression_status": "EXPRESSION_NOT_INVOKED",
+        "transport_completed": true,
+        "pipeline_completed": false,
+        "action_executed": false,
+        "gameplay_completed": false,
+        "interaction_outcome": "rejected",
+        "semantic_dead_end": true,
+        "stop": true,
+        "reasons": [
+          "interpretation_rejection",
+          "provider_or_parser_failure"
+        ]
+      },
+      "source": "native turn diagnostics",
+      "step_id": "T2",
+      "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
+      "dm_response": "I couldn't interpret that just now, so no gameplay action was taken.",
+      "diagnostics": "turns/T2/evaluation.json#diagnostics",
+      "state_comparison": "turns/T2/evaluation.json#state_diff"
+    },
+    {
+      "category": "provider_or_parser_failure",
+      "kind": "confirmed_semantic_failure",
+      "evidence": {
+        "expression_status": "EXPRESSION_NOT_INVOKED",
+        "transport_completed": true,
+        "pipeline_completed": false,
+        "action_executed": false,
+        "gameplay_completed": false,
+        "interaction_outcome": "rejected",
+        "semantic_dead_end": true,
+        "stop": true,
+        "reasons": [
+          "interpretation_rejection",
+          "provider_or_parser_failure"
+        ]
+      },
+      "source": "native turn diagnostics",
+      "step_id": "T2",
+      "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
+      "dm_response": "I couldn't interpret that just now, so no gameplay action was taken.",
+      "diagnostics": "turns/T2/evaluation.json#diagnostics",
+      "state_comparison": "turns/T2/evaluation.json#state_diff"
+    },
+    {
+      "category": "possibly_irrelevant_response",
+      "kind": "heuristic_quality_concern",
+      "evidence": {
+        "response_exists": true,
+        "requested_subject_mentioned": false,
+        "repeated_exact_response": false,
+        "generic_marker": false
+      },
+      "source": "pr-play-09-quality-v1",
+      "step_id": "T2",
+      "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
+      "dm_response": "I couldn't interpret that just now, so no gameplay action was taken.",
+      "diagnostics": "turns/T2/evaluation.json#diagnostics",
+      "state_comparison": "turns/T2/evaluation.json#state_diff"
+    }
+  ],
+  "stop": true,
+  "application_latency_seconds": 0.218,
+  "ok": false,
+  "action": "player_turn"
+}

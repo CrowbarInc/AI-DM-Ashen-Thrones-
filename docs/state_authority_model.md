@@ -18,6 +18,16 @@ Validation **phase** ownership (truth vs structure vs expression vs legality vs 
 
 ## Canonical runtime owners (declarative)
 
+Character-held object identity is a narrow `world_state` semantic facet persisted
+in the existing character document. `game.object_instances` may perform only
+`assign_inventory_identity` (explicit singleton identity/revision/provenance);
+the operation-specific guard rejects every other domain or operation for this
+owner. It has no authority over character mechanics, scene objects or equipment.
+The internal `game.api.migrate_inventory_object_identity` entry stages detached
+data under the existing FIFO lane and runtime commit scope. Ordinary reads and
+gameplay do not call it. Storage remains the byte writer; no new state domain or
+object database is introduced.
+
 These are the modules that **should** own or orchestrate mutations for each domain. Other modules remain readers or downstream consumers until a seam is refactored.
 
 | Domain | Canonical runtime owner module(s) |

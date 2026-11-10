@@ -1,0 +1,346 @@
+{
+  "focused": {
+    "label": "focused",
+    "collected": 896,
+    "failed": 26,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 870,
+    "exit_code": 1,
+    "failed_nodeids": [
+      "tests.test_pr_play_61_player_facing::test_publication_requires_the_bound_session",
+      "tests.test_pr_play_61_player_facing::test_rejected_provider_text_uses_the_engine_sentence",
+      "tests.test_pr_play_52_quarantined_integration::test_gate_defaults_off",
+      "tests.test_pr_play_52_quarantined_integration::test_notice_board_paired_gameplay",
+      "tests.test_pr_play_52_quarantined_integration::test_footprints_paired_gameplay",
+      "tests.test_pr_play_52_quarantined_integration::test_saved_responses_stay_paired",
+      "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-missing-missing_saved_prelude]",
+      "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-empty-invalid_prelude]",
+      "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-malformed-invalid_prelude]",
+      "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-unsafe-semantic_rejection]",
+      "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[assembly_exception-stub-generator_or_renderer_error]",
+      "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[invalid_projection-stub-invalid_authorized_projection]",
+      "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-A1-incorrect_investigation_response_pairing]",
+      "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[timeout-stub-simulated_timeout]",
+      "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[evidence_write-stub-heuristic_pass_pending_review]",
+      "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[unexpected-stub-unexpected_experimental_hook_exception]",
+      "tests.test_pr_play_52_quarantined_integration::test_hook_overhead_distribution",
+      "tests.test_pr_play_42_evidence_boundaries::test_patrol_travel_reaches_old_milestone_on_the_saved_opening",
+      "tests.test_pr_play_42_evidence_boundaries::test_five_turn_sequence_on_the_saved_opening",
+      "tests.test_pr_play_44_information_delivery::test_unfamiliar_scenes_deliver_only_selected_information[ledger-The ledger records twelve copper ingots arriving, but only nine entered stock.]",
+      "tests.test_pr_play_44_information_delivery::test_unfamiliar_scenes_deliver_only_selected_information[tracks-The tracks may belong to a large animal; their species and direction remain unclear.]",
+      "tests.test_pr_play_44_information_delivery::test_unfamiliar_scenes_deliver_only_selected_information[mechanism-The left lever disengages the ratchet. The mechanism remains inactive.]",
+      "tests.test_pr_play_44_information_delivery::test_npc_and_travel_from_saved_43",
+      "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+      "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+      "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues"
+    ],
+    "failure_messages": [
+      {
+        "nodeid": "tests.test_pr_play_61_player_facing::test_publication_requires_the_bound_session",
+        "message": "KeyError: 'metadata'"
+      },
+      {
+        "nodeid": "tests.test_pr_play_61_player_facing::test_rejected_provider_text_uses_the_engine_sentence",
+        "message": "KeyError: 'metadata'"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_gate_defaults_off",
+        "message": "AssertionError: assert 'The missing patrol was last seen taking the northwest mud track past the crates.' in ((None or ''))\n +  where None = <built-in method get of dict object at 0x0000017A7E041680>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7E041680> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 308.174, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, "
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_notice_board_paired_gameplay",
+        "message": "AssertionError: assert None is True\n +  where None = <built-in method get of dict object at 0x0000017A7E1074C0>('success')\n +    where <built-in method get of dict object at 0x0000017A7E1074C0> = {}.get"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_footprints_paired_gameplay",
+        "message": "AssertionError: assert None is True\n +  where None = <built-in method get of dict object at 0x0000017A7E042440>('success')\n +    where <built-in method get of dict object at 0x0000017A7E042440> = {}.get"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_saved_responses_stay_paired",
+        "message": "AssertionError: assert None == 'The missing patrol was last seen taking the northwest mud track past the crates.'\n +  where None = <built-in method get of dict object at 0x0000017A7E16DFC0>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7E16DFC0> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 487.353, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, 'round': 0"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-missing-missing_saved_prelude]",
+        "message": "AssertionError: assert None == 'The missing patrol was last seen taking the northwest mud track past the crates.'\n +  where None = <built-in method get of dict object at 0x0000017A7E242140>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7E242140> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 344.925, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, 'round': 0"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-empty-invalid_prelude]",
+        "message": "AssertionError: assert None == 'The missing patrol was last seen taking the northwest mud track past the crates.'\n +  where None = <built-in method get of dict object at 0x0000017A7E0B7B00>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7E0B7B00> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 330.064, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, 'round': 0"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-malformed-invalid_prelude]",
+        "message": "AssertionError: assert None == 'The missing patrol was last seen taking the northwest mud track past the crates.'\n +  where None = <built-in method get of dict object at 0x0000017A7E1E7B00>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7E1E7B00> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 406.065, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, 'round': 0"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-unsafe-semantic_rejection]",
+        "message": "AssertionError: assert None == 'The missing patrol was last seen taking the northwest mud track past the crates.'\n +  where None = <built-in method get of dict object at 0x0000017A7DC69700>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7DC69700> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 374.506, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, 'round': 0"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[assembly_exception-stub-generator_or_renderer_error]",
+        "message": "AssertionError: assert None == 'The missing patrol was last seen taking the northwest mud track past the crates.'\n +  where None = <built-in method get of dict object at 0x0000017A7F2B6080>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7F2B6080> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 358.103, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, 'round': 0"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[invalid_projection-stub-invalid_authorized_projection]",
+        "message": "AssertionError: assert None == 'The missing patrol was last seen taking the northwest mud track past the crates.'\n +  where None = <built-in method get of dict object at 0x0000017A7E0502C0>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7E0502C0> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 351.091, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, 'round': 0"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-A1-incorrect_investigation_response_pairing]",
+        "message": "AssertionError: assert None == 'Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.'\n +  where None = <built-in method get of dict object at 0x0000017A7DAC8640>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7DAC8640> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 390.897, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'com"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[timeout-stub-simulated_timeout]",
+        "message": "AssertionError: assert None == 'The missing patrol was last seen taking the northwest mud track past the crates.'\n +  where None = <built-in method get of dict object at 0x0000017A7DFD1140>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7DFD1140> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 336.301, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, 'round': 0"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[evidence_write-stub-heuristic_pass_pending_review]",
+        "message": "AssertionError: assert None == 'The missing patrol was last seen taking the northwest mud track past the crates.'\n +  where None = <built-in method get of dict object at 0x0000017A7E2757C0>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7E2757C0> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 410.209, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, 'round': 0"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[unexpected-stub-unexpected_experimental_hook_exception]",
+        "message": "AssertionError: assert None == 'The missing patrol was last seen taking the northwest mud track past the crates.'\n +  where None = <built-in method get of dict object at 0x0000017A7E0F5E40>('clue_text')\n +    where <built-in method get of dict object at 0x0000017A7E0F5E40> = {}.get\n +      where {} = _resolution({'status_code': 200, 'elapsed_ms': 337.242, 'body': {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'gali...ard', 'level': 1, ...}, 'combat': {'in_combat': False, 'round': 0"
+      },
+      {
+        "nodeid": "tests.test_pr_play_52_quarantined_integration::test_hook_overhead_distribution",
+        "message": "assert False\n +  where False = all(<generator object test_hook_overhead_distribution.<locals>.<genexpr> at 0x0000017A7F2F8EE0>)"
+      },
+      {
+        "nodeid": "tests.test_pr_play_42_evidence_boundaries::test_patrol_travel_reaches_old_milestone_on_the_saved_opening",
+        "message": "KeyError: 'resolved_transition'"
+      },
+      {
+        "nodeid": "tests.test_pr_play_42_evidence_boundaries::test_five_turn_sequence_on_the_saved_opening",
+        "message": "KeyError: 'target_scene_id'"
+      },
+      {
+        "nodeid": "tests.test_pr_play_44_information_delivery::test_unfamiliar_scenes_deliver_only_selected_information[ledger-The ledger records twelve copper ingots arriving, but only nine entered stock.]",
+        "message": "KeyError: 'success'"
+      },
+      {
+        "nodeid": "tests.test_pr_play_44_information_delivery::test_unfamiliar_scenes_deliver_only_selected_information[tracks-The tracks may belong to a large animal; their species and direction remain unclear.]",
+        "message": "KeyError: 'success'"
+      },
+      {
+        "nodeid": "tests.test_pr_play_44_information_delivery::test_unfamiliar_scenes_deliver_only_selected_information[mechanism-The left lever disengages the ratchet. The mechanism remains inactive.]",
+        "message": "KeyError: 'success'"
+      },
+      {
+        "nodeid": "tests.test_pr_play_44_information_delivery::test_npc_and_travel_from_saved_43",
+        "message": "KeyError: 'social'"
+      },
+      {
+        "nodeid": "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+        "message": "assert False"
+      },
+      {
+        "nodeid": "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+        "message": "assert set()\n +  where set() = get_all_known_clue_ids({})"
+      },
+      {
+        "nodeid": "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+        "message": "assert set()\n +  where set() = get_all_known_clue_ids({})"
+      }
+    ],
+    "command": [
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_66_publication.py",
+      "tests/test_pr_play_65_authoritative_disclosure.py",
+      "tests/test_pr_play_64_discovery_language.py",
+      "tests/test_pr_play_63_disclosure.py",
+      "tests/test_state_authority.py",
+      "tests/test_pr_play_61_player_facing.py",
+      "tests/test_pr_play_62_investigation_quality.py",
+      "tests/test_pr_play_60_inventory_projection.py",
+      "tests/test_pr_play_60_gameplay_readiness.py",
+      "tests/test_pr_play_59_persistent_consequences.py",
+      "tests/test_pr_play_57_integrated_narration.py",
+      "tests/test_pr_play_58_semantic_coverage.py",
+      "tests/test_pr_play_55_discovery_claims.py",
+      "tests/test_pr_play_54_consequential_validation.py",
+      "tests/test_pr_play_53_quarantined_live.py",
+      "tests/test_pr_play_52_quarantined_integration.py",
+      "tests/test_pr_play_42_evidence_boundaries.py",
+      "tests/test_pr_play_51_geography_grounding.py",
+      "tests/test_pr_play_49_anchored_narration.py",
+      "tests/test_pr_play_47_controlled_renderer.py",
+      "tests/test_pr_play_45_narration_authority.py",
+      "tests/test_pr_play_46_mechanical_boundary.py",
+      "tests/test_pr_play_44_information_delivery.py",
+      "tests/test_pr_bu_lexical_scope.py",
+      "tests/test_provider_accounting_integrity.py",
+      "tests/test_pr_bw_narration_only_envelope.py",
+      "tests/test_diegetic_fallback_narration.py",
+      "tests/test_narration_state_consistency.py",
+      "--tb=line",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_67\\focused_final.xml",
+      "--basetemp",
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_66_focused_35668"
+    ],
+    "provider_calls": "disabled"
+  },
+  "boundary": {
+    "label": "boundary",
+    "collected": 82,
+    "failed": 1,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 81,
+    "exit_code": 1,
+    "failed_nodeids": [
+      "tests.test_ui_mode_regression_matrix_objective15::test_unknown_ui_mode_fails_closed"
+    ],
+    "failure_messages": [
+      {
+        "nodeid": "tests.test_ui_mode_regression_matrix_objective15::test_unknown_ui_mode_fails_closed",
+        "message": "AssertionError: assert 'unknown ui mode' in 'unable to complete this request. refresh your session and try again.'\n +  where 'unable to complete this request. refresh your session and try again.' = <built-in method lower of str object at 0x0000020AF4BEA250>()\n +    where <built-in method lower of str object at 0x0000020AF4BEA250> = ('Unable to complete this request. Refresh your session and try again.').lower\n +      where 'Unable to complete this request. Refresh your session and try again.' = "
+      }
+    ],
+    "command": [
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_67_player_projection.py",
+      "tests/test_ui_mode_backend_integration.py",
+      "tests/test_ui_mode_regression_matrix_objective15.py",
+      "tests/test_frontend_ui_mode_hardening_objective15.py",
+      "tests/test_state_channels.py",
+      "tests/test_snapshots.py",
+      "--tb=line",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_67\\boundary_final.xml",
+      "--basetemp",
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_66_boundary_35668"
+    ],
+    "provider_calls": "disabled"
+  },
+  "broader": {
+    "label": "broader",
+    "collected": 9,
+    "failed": 9,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 0,
+    "exit_code": 1,
+    "failed_nodeids": [
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]"
+    ],
+    "failure_messages": [
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      {
+        "nodeid": "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    ],
+    "command": [
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pr_cx_authority_assurance.py",
+      "--tb=line",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_67\\broader_final.xml",
+      "--basetemp",
+      "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_66_broader_35668"
+    ],
+    "provider_calls": "disabled"
+  },
+  "historical_focused_failures": [
+    "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+    "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+    "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution"
+  ],
+  "new_focused_failures": [
+    "tests.test_pr_play_61_player_facing::test_publication_requires_the_bound_session",
+    "tests.test_pr_play_61_player_facing::test_rejected_provider_text_uses_the_engine_sentence",
+    "tests.test_pr_play_52_quarantined_integration::test_gate_defaults_off",
+    "tests.test_pr_play_52_quarantined_integration::test_notice_board_paired_gameplay",
+    "tests.test_pr_play_52_quarantined_integration::test_footprints_paired_gameplay",
+    "tests.test_pr_play_52_quarantined_integration::test_saved_responses_stay_paired",
+    "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-missing-missing_saved_prelude]",
+    "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-empty-invalid_prelude]",
+    "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-malformed-invalid_prelude]",
+    "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-unsafe-semantic_rejection]",
+    "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[assembly_exception-stub-generator_or_renderer_error]",
+    "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[invalid_projection-stub-invalid_authorized_projection]",
+    "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[-A1-incorrect_investigation_response_pairing]",
+    "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[timeout-stub-simulated_timeout]",
+    "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[evidence_write-stub-heuristic_pass_pending_review]",
+    "tests.test_pr_play_52_quarantined_integration::test_failure_stays_outside_gameplay[unexpected-stub-unexpected_experimental_hook_exception]",
+    "tests.test_pr_play_52_quarantined_integration::test_hook_overhead_distribution",
+    "tests.test_pr_play_42_evidence_boundaries::test_patrol_travel_reaches_old_milestone_on_the_saved_opening",
+    "tests.test_pr_play_42_evidence_boundaries::test_five_turn_sequence_on_the_saved_opening",
+    "tests.test_pr_play_44_information_delivery::test_unfamiliar_scenes_deliver_only_selected_information[ledger-The ledger records twelve copper ingots arriving, but only nine entered stock.]",
+    "tests.test_pr_play_44_information_delivery::test_unfamiliar_scenes_deliver_only_selected_information[tracks-The tracks may belong to a large animal; their species and direction remain unclear.]",
+    "tests.test_pr_play_44_information_delivery::test_unfamiliar_scenes_deliver_only_selected_information[mechanism-The left lever disengages the ratchet. The mechanism remains inactive.]",
+    "tests.test_pr_play_44_information_delivery::test_npc_and_travel_from_saved_43"
+  ],
+  "full_suite": "not run",
+  "restored_generated_evidence": [
+    "artifacts/pr_play_49/evidence_actual_failed_known.json",
+    "artifacts/pr_play_49/evidence_corpus_condition.json",
+    "artifacts/pr_play_49/evidence_corpus_contradiction.json",
+    "artifacts/pr_play_49/evidence_corpus_passage.json",
+    "artifacts/pr_play_49/evidence_fixture_bridge.json",
+    "artifacts/pr_play_49/evidence_fixture_campsite.json",
+    "artifacts/pr_play_49/evidence_fixture_chamber.json",
+    "artifacts/pr_play_49/evidence_fixture_frontier_gate.json",
+    "artifacts/pr_play_49/evidence_fixture_ledger.json",
+    "artifacts/pr_play_49/evidence_fixture_monument.json",
+    "artifacts/pr_play_49/evidence_fixture_old_milestone.json",
+    "artifacts/pr_play_49/evidence_fixture_testimony.json",
+    "artifacts/pr_play_49/evidence_performance.json",
+    "artifacts/pr_play_47/evidence_actual_failed_repeat.json",
+    "artifacts/pr_play_47/evidence_isolation.json",
+    "artifacts/pr_play_47/evidence_performance.json",
+    "artifacts/pr_play_47/evidence_scenario_failed.json",
+    "artifacts/pr_play_47/evidence_scenario_frontier_gate.json",
+    "artifacts/pr_play_47/evidence_scenario_known.json",
+    "artifacts/pr_play_47/evidence_scenario_mundane.json",
+    "artifacts/pr_play_47/evidence_scenario_no_clue.json",
+    "artifacts/pr_play_47/evidence_scenario_npc.json",
+    "artifacts/pr_play_47/evidence_scenario_old_milestone.json",
+    "artifacts/pr_play_47/evidence_scenario_partial.json",
+    "artifacts/pr_play_47/evidence_scenario_success.json",
+    "artifacts/pr_play_47/evidence_scenario_uncertain.json",
+    "artifacts/pr_play_52/integration_results.json"
+  ]
+}

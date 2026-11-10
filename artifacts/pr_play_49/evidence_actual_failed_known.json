@@ -1,0 +1,130 @@
+{
+  "failed": {
+    "kind": "investigate",
+    "action_id": "chamber",
+    "label": "chamber",
+    "prompt": "I examine the chamber.",
+    "success": false,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {
+      "skill_check_failed": true,
+      "interactable_id": "chamber"
+    },
+    "hint": "Player investigated [chamber] but failed the check (d20=2+0=2 vs DC 18). Narrate the failed attempt\u2014they notice nothing decisive.",
+    "metadata": {
+      "skill_check": {
+        "success": false,
+        "roll": 2,
+        "total": 2,
+        "modifier": 0,
+        "difficulty": 18
+      }
+    },
+    "skill_check": {
+      "success": false,
+      "roll": 2,
+      "total": 2,
+      "modifier": 0,
+      "difficulty": 18
+    }
+  },
+  "failed_contract": {
+    "outcome": {
+      "status": "failed",
+      "success": false,
+      "target_id": "chamber",
+      "revealed": [],
+      "known": [],
+      "observations": [
+        "A chamber lies in plain view.",
+        "Light catches the uneven surface."
+      ],
+      "consequences": "",
+      "inventory_effects_json": "{}"
+    },
+    "anchors": [
+      {
+        "order": 0,
+        "source": "engine_status",
+        "status": "failed",
+        "text": "The investigation establishes nothing new."
+      },
+      {
+        "order": 1,
+        "source": "public_observation",
+        "status": "observed",
+        "text": "A chamber lies in plain view."
+      },
+      {
+        "order": 2,
+        "source": "public_observation",
+        "status": "observed",
+        "text": "Light catches the uneven surface."
+      }
+    ]
+  },
+  "repeated": {
+    "kind": "already_searched",
+    "action_id": "testimony",
+    "label": "Action",
+    "prompt": "I examine the testimony.",
+    "success": false,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {
+      "already_searched": true,
+      "interactable_id": "testimony"
+    },
+    "hint": "Player has already searched [testimony]. Narrate that they find nothing new.",
+    "interactable_id": "testimony",
+    "metadata": {
+      "referenced_surface_authority": "authored_interactable",
+      "referenced_surface_target": "testimony",
+      "referenced_surface_existence": true,
+      "referenced_surface_visibility": true,
+      "referenced_surface_inspectability": true,
+      "referenced_surface_interactable_id": "testimony",
+      "referenced_surface_visible_fact": "",
+      "referenced_surface_inspectable_text": "The signature is faded.",
+      "skip_unrelated_clue_discovery": false
+    }
+  },
+  "known_contract": {
+    "outcome": {
+      "status": "known",
+      "success": false,
+      "target_id": "testimony",
+      "revealed": [],
+      "known": [
+        "The signature is faded."
+      ],
+      "observations": [
+        "A testimony lies in plain view.",
+        "Light catches the uneven surface."
+      ],
+      "consequences": "",
+      "inventory_effects_json": "{}"
+    },
+    "anchors": [
+      {
+        "order": 0,
+        "source": "engine_status",
+        "status": "known",
+        "text": "The examination adds nothing new to what you already know."
+      },
+      {
+        "order": 1,
+        "source": "player_knowledge",
+        "status": "previously_known",
+        "text": "The signature is faded."
+      }
+    ]
+  }
+}

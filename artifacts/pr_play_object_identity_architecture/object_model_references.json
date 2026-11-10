@@ -1,0 +1,612 @@
+[
+  {
+    "path": "game/anchored_investigation_narration.py",
+    "line": 44,
+    "text": "def authorize_anchored_investigation(resolution: dict, payload: dict, *, inventory: bool = False) -> AnchoredInvestigation:"
+  },
+  {
+    "path": "game/anchored_investigation_narration.py",
+    "line": 45,
+    "text": "\"\"\"Reuse the existing projection; inventory deltas require explicit opt-in."
+  },
+  {
+    "path": "game/anchored_investigation_narration.py",
+    "line": 52,
+    "text": "allowed = {'revealed', 'items_added', 'items_removed'} if inventory else {'revealed'}"
+  },
+  {
+    "path": "game/anchored_investigation_narration.py",
+    "line": 103,
+    "text": "'state_changes': json.loads(v.inventory_effects_json)}"
+  },
+  {
+    "path": "game/bounded_improvisation.py",
+    "line": 64,
+    "text": "r\"inventory|condition|spell slot|initiative|armor class|ac|success|failure\""
+  },
+  {
+    "path": "game/bounded_improvisation.py",
+    "line": 822,
+    "text": "r\"what (?:do|did|have) (?:i|we) know|remind me|my (?:inventory|journal))\\b\","
+  },
+  {
+    "path": "game/bounded_improvisation.py",
+    "line": 897,
+    "text": "if not focused and re.search(r'\\b(?:what (?:have|did|do) (?:i|we)|my (?:inventory|journal|spells|character)|what happened|remind me)\\b', low):"
+  },
+  {
+    "path": "game/bounded_improvisation.py",
+    "line": 1042,
+    "text": "# A posture receipt, not a movement/inventory or social effect."
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 156,
+    "text": "items_added: tuple[str, ...] = ()"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 157,
+    "text": "items_removed: tuple[str, ...] = ()"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 172,
+    "text": "effects = json.loads(view.inventory_effects_json)"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 178,
+    "text": "items_added=tuple(_values(effects.get('items_added'))),"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 179,
+    "text": "items_removed=tuple(_values(effects.get('items_removed'))),"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 210,
+    "text": "authority.items_added + authority.items_removed + authority.routes_unlocked"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 472,
+    "text": "r\"(?:belongings|possessions|things|gear|inventory|pack|bag|satchel|hand|palm|grasp|fist|fingers)\\b\""
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 474,
+    "text": "r\"|\\byour\\s+(?:purse|inventory|pack|bag|satchel)\\s+(?:now\\s+)?(?:holds?|contains?)\\s+(.+)\""
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 487,
+    "text": "# A discovered fact is not an inventory grant. Possession needs items_added."
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 488,
+    "text": "if _granted(entity, authority.items_added):"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 490,
+    "text": "return [_claim(\"inventory\", \"unauthorized_acquisition\", clause)]"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 493,
+    "text": "def _inventory_verb(clause: str, authority: SemanticAuthority) -> list[dict]:"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 507,
+    "text": "return [_claim(\"inventory\", \"unauthorized_acquisition\", clause)]"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 512,
+    "text": "if _granted(entity, authority.items_added):"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 514,
+    "text": "return [_claim(\"inventory\", \"unauthorized_acquisition\", clause)]"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 974,
+    "text": "if re.search(r\"\\byou have what you came for\\b\", clause, re.IGNORECASE) and not authority.items_added:"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 975,
+    "text": "return [_claim(\"inventory\", \"unauthorized_acquisition\", clause, epistemic=\"presupposition\")]"
+  },
+  {
+    "path": "game/consequential_narration_validation.py",
+    "line": 988,
+    "text": "_possession, _inventory_verb, _identity, _confession, _quoted_killing,"
+  },
+  {
+    "path": "game/conversational_orchestration.py",
+    "line": 756,
+    "text": "r\"what (?:do|did|have) (?:i|we) know|remind me|my (?:inventory|journal))\\b\","
+  },
+  {
+    "path": "game/conversational_orchestration.py",
+    "line": 1688,
+    "text": "The scene, position, and inventory are left unchanged, and no clue is"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 32,
+    "text": "def attach_ctir(container: MutableMapping[str, Any], ctir_obj: dict[str, Any]) -> None:"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 33,
+    "text": "\"\"\"Store *ctir_obj* on *container* (typically ``session``).\"\"\""
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 34,
+    "text": "container[SESSION_CTIR_KEY] = ctir_obj"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 37,
+    "text": "def get_attached_ctir(container: MutableMapping[str, Any] | None) -> dict[str, Any] | None:"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 39,
+    "text": "if not isinstance(container, MutableMapping):"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 41,
+    "text": "raw = container.get(SESSION_CTIR_KEY)"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 45,
+    "text": "def detach_ctir(container: MutableMapping[str, Any] | None) -> None:"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 46,
+    "text": "\"\"\"Remove CTIR attachment and stamp from *container*.\"\"\""
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 47,
+    "text": "if not isinstance(container, MutableMapping):"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 49,
+    "text": "container.pop(SESSION_CTIR_KEY, None)"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 50,
+    "text": "container.pop(SESSION_CTIR_STAMP_KEY, None)"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 52,
+    "text": "container.pop(\"_runtime_narration_plan_bundle_v1\", None)"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 53,
+    "text": "container.pop(\"_runtime_narration_plan_bundle_stamp_v1\", None)"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 70,
+    "text": "container: MutableMapping[str, Any],"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 76,
+    "text": "existing = get_attached_ctir(container)"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 77,
+    "text": "stamp_ok = str(container.get(SESSION_CTIR_STAMP_KEY) or \"\") == turn_stamp"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 81,
+    "text": "attach_ctir(container, built)"
+  },
+  {
+    "path": "game/ctir_runtime.py",
+    "line": 82,
+    "text": "container[SESSION_CTIR_STAMP_KEY] = turn_stamp"
+  },
+  {
+    "path": "game/defaults.py",
+    "line": 87,
+    "text": "\"inventory\": [{\"id\": \"spellbook\", \"name\": \"Spellbook\", \"quantity\": 1, \"usable\": False}],"
+  },
+  {
+    "path": "game/final_emission_boundary_contract.py",
+    "line": 7,
+    "text": "See ``docs/final_emission_boundary_audit.md`` and ``docs/gate_cleanup_inventory.md``."
+  },
+  {
+    "path": "game/final_emission_meta.py",
+    "line": 7,
+    "text": "contract **validates** stamped tokens when building inventory records."
+  },
+  {
+    "path": "game/gm.py",
+    "line": 286,
+    "text": "Do not use bounded improvisation for mechanics, inventory changes, clues, hidden facts, secret passages, factions, major geography/history, quest-critical facts, or player decisions. Mark such attempted material as consequential_proposal rather than presenting it as truth."
+  },
+  {
+    "path": "game/immutable_valid_response.py",
+    "line": 137,
+    "text": "# C17 mutator inventory. Every entry has one implementation status."
+  },
+  {
+    "path": "game/integrated_investigation_narration.py",
+    "line": 39,
+    "text": "\"Only explicitly supplied inventory deltas are authorized; no additional persistent changes.\","
+  },
+  {
+    "path": "game/integrated_investigation_narration.py",
+    "line": 153,
+    "text": "hook_input['resolution'], hook_input['narration_payload'], inventory=True)"
+  },
+  {
+    "path": "game/integrated_investigation_narration.py",
+    "line": 167,
+    "text": "effects = json.loads(v.inventory_effects_json)"
+  },
+  {
+    "path": "game/integrated_investigation_narration.py",
+    "line": 169,
+    "text": "facts.append({'id': 'outcome:inventory', 'source': 'inventory_effect',"
+  },
+  {
+    "path": "game/integrated_investigation_narration.py",
+    "line": 285,
+    "text": "and not json.loads(contract.outcome.inventory_effects_json)):"
+  },
+  {
+    "path": "game/interaction_routing.py",
+    "line": 67,
+    "text": "\"inventory\","
+  },
+  {
+    "path": "game/live_resolution.py",
+    "line": 64,
+    "text": "r\"\\b(attack|strike|stab|shoot|cast|damage|hp|hit points?|inventory|take|buy|pay|spend|coin|gold|silver|copper|roll|check|dc|initiative)\\b\","
+  },
+  {
+    "path": "game/mandatory_outcome_coverage.py",
+    "line": 146,
+    "text": "if fact['source'] == 'inventory_effect':"
+  },
+  {
+    "path": "game/mandatory_outcome_coverage.py",
+    "line": 151,
+    "text": "expected = [(k, v) for k in ('items_added', 'items_removed') for v in _values(effects.get(k))]"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 25,
+    "text": "Inventory/currency adapters also support explicit synthetic resolver deltas;"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 33,
+    "text": "for key in ('items_added', 'items_removed', 'currency_gained', 'currency_spent',"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 82,
+    "text": "templates = {'items_added': 'You receive {}.', 'items_removed': 'You lose {}.',"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 97,
+    "text": "\"\"\"Dust and the like describe a container. They are not an item grant.\"\"\""
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 116,
+    "text": "container = re.search("
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 117,
+    "text": "r'\\byour\\s+(purse|inventory|possessions|pack|bag|satchel)\\s+(?:now\\s+)?'"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 119,
+    "text": "if container:"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 120,
+    "text": "objects.append(container[2])"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 123,
+    "text": "r'(?:among|in)\\s+your\\s+(?:possessions|inventory|pack|bag|satchel)\\b', clause, re.I)"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 141,
+    "text": "claims.append(('items_added', item, _supported(item, effects.get('items_added'))))"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 155,
+    "text": "claims.append(('inventory_source', sentence.strip(), False))"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 157,
+    "text": "narrator = re.sub(r'\\b([^.!?;]+?)\\s+is added to your (?:inventory|pack|bag)\\b', r'you receive \\1', narrator, flags=re.I)"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 162,
+    "text": "possession = 'now yours|yours now' if effects.get('items_added') else 'yours now'"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 198,
+    "text": "# Delta-only inventory authority has no consumption, equipment"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 200,
+    "text": "claims.append(('unsupported_inventory_operation', clause, False))"
+  },
+  {
+    "path": "game/mechanical_claims.py",
+    "line": 210,
+    "text": "key = ('currency_spent' if loss else 'currency_gained') if currency else ('items_removed' if loss else 'items_added')"
+  },
+  {
+    "path": "game/narration_authorization.py",
+    "line": 66,
+    "text": "for key in ('items_added', 'items_removed', 'conditions_applied', 'conditions_removed',"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 31,
+    "text": "See :mod:`game.planner_input_manifest` for a classified inventory of planner inputs at this seam."
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 115,
+    "text": "def get_attached_narration_plan_bundle(container: MutableMapping[str, Any] | None) -> dict[str, Any] | None:"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 116,
+    "text": "raw = container.get(SESSION_NARRATION_PLAN_BUNDLE_KEY) if isinstance(container, MutableMapping) else None"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 120,
+    "text": "def get_narration_plan_bundle_stamp(container: MutableMapping[str, Any] | None) -> str:"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 121,
+    "text": "if not isinstance(container, MutableMapping):"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 123,
+    "text": "return str(container.get(SESSION_NARRATION_PLAN_BUNDLE_STAMP_KEY) or \"\").strip()"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 126,
+    "text": "def detach_narration_plan_bundle(container: MutableMapping[str, Any] | None) -> None:"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 127,
+    "text": "if not isinstance(container, MutableMapping):"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 129,
+    "text": "container.pop(SESSION_NARRATION_PLAN_BUNDLE_KEY, None)"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 130,
+    "text": "container.pop(SESSION_NARRATION_PLAN_BUNDLE_STAMP_KEY, None)"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 133,
+    "text": "def attach_narration_plan_bundle(container: MutableMapping[str, Any], bundle: dict[str, Any]) -> None:"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 134,
+    "text": "container[SESSION_NARRATION_PLAN_BUNDLE_KEY] = bundle"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 138,
+    "text": "container: MutableMapping[str, Any],"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 144,
+    "text": "existing = get_attached_narration_plan_bundle(container)"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 145,
+    "text": "stamp_ok = get_narration_plan_bundle_stamp(container) == turn_stamp"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 149,
+    "text": "attach_narration_plan_bundle(container, built)"
+  },
+  {
+    "path": "game/narration_plan_bundle.py",
+    "line": 150,
+    "text": "container[SESSION_NARRATION_PLAN_BUNDLE_STAMP_KEY] = turn_stamp"
+  },
+  {
+    "path": "game/narration_seam_guards.py",
+    "line": 20,
+    "text": "# --- Path inventory (Block C matrix; keep in sync with runtime call sites) ---"
+  },
+  {
+    "path": "game/narration_seam_guards.py",
+    "line": 165,
+    "text": "Debug-only: this must never drive orchestration (C1-B inventory only)."
+  },
+  {
+    "path": "game/offline_investigation_projection.py",
+    "line": 30,
+    "text": "inventory_effects_json: str = '{}'"
+  },
+  {
+    "path": "game/offline_investigation_projection.py",
+    "line": 56,
+    "text": "'items_added', 'items_removed', 'currency_gained', 'currency_spent',"
+  },
+  {
+    "path": "game/offline_investigation_projection.py",
+    "line": 72,
+    "text": "json.dumps({k: effects[k] for k in ('items_added', 'items_removed') if k in effects}, sort_keys=True))"
+  },
+  {
+    "path": "game/opening_visible_fact_selection.py",
+    "line": 217,
+    "text": "for container_key in (\"campaign_spine\", \"scenario_spine\", \"spine\"):"
+  },
+  {
+    "path": "game/opening_visible_fact_selection.py",
+    "line": 218,
+    "text": "container = public_scene.get(container_key)"
+  },
+  {
+    "path": "game/opening_visible_fact_selection.py",
+    "line": 219,
+    "text": "if isinstance(container, Mapping):"
+  },
+  {
+    "path": "game/opening_visible_fact_selection.py",
+    "line": 222,
+    "text": "container.get(\"opening_seed_facts\"),"
+  },
+  {
+    "path": "game/opening_visible_fact_selection.py",
+    "line": 223,
+    "text": "container.get(\"opening_facts\"),"
+  },
+  {
+    "path": "game/opening_visible_fact_selection.py",
+    "line": 224,
+    "text": "container.get(\"scene_opening_facts\"),"
+  },
+  {
+    "path": "game/persistent_consequence_claims.py",
+    "line": 88,
+    "text": "prop,result='inventory','acquired'"
+  },
+  {
+    "path": "game/persistent_consequence_claims.py",
+    "line": 121,
+    "text": "grants = {'inventory':authority.items_added,'condition':authority.conditions_applied,'progress':authority.objectives_completed,'accessibility':authority.routes_unlocked}"
+  },
+  {
+    "path": "game/persistent_consequence_claims.py",
+    "line": 125,
+    "text": "expected={'inventory':'acquired','condition':frame.result if frame.entity=='you' else '', 'progress':'complete','accessibility':'accessible'}"
+  },
+  {
+    "path": "game/physical_adjudication.py",
+    "line": 6,
+    "text": "classes, rolls, rooms, inventory, or success."
+  },
+  {
+    "path": "game/physical_adjudication.py",
+    "line": 36,
+    "text": "r\"\\b(?:what (?:have|did|do) (?:i|we)|my (?:inventory|journal|spells|character)|what happened|remind me|what do i know)\\b\","
+  },
+  {
+    "path": "game/physical_adjudication.py",
+    "line": 446,
+    "text": "message=\"Carrying ordinary objects is not available. Nothing was added to your inventory or dropped.\")"
+  },
+  {
+    "path": "game/planner_convergence.py",
+    "line": 1,
+    "text": "\"\"\"Planner convergence contract (Block A): explicit inventory labels for CTIR → plan → prompt → gate."
+  },
+  {
+    "path": "game/planner_input_manifest.py",
+    "line": 1,
+    "text": "\"\"\"Planner input manifest — CTIR-backed narration planning (inspectable inventory)."
+  },
+  {
+    "path": "game/planner_seam_fencing.py",
+    "line": 6,
+    "text": "See :mod:`game.planner_input_manifest` for inventory; this module owns **runtime**"
+  },
+  {
+    "path": "game/player_http_projection.py",
+    "line": 44,
+    "text": "conditions=[EFFECT], inventory=[ITEM],"
+  },
+  {
+    "path": "game/prompt_context.py",
+    "line": 1949,
+    "text": "\"It does not establish objective world truth, inventory, a durable trait, relationship state, quest evidence, or declared_claims. \""
+  },
+  {
+    "path": "game/realization_authority.py",
+    "line": 363,
+    "text": "\"Inventory placeholder for seams that have not yet received an authority decision.\""
+  },
+  {
+    "path": "game/scenario_spine_opening_convergence.py",
+    "line": 55,
+    "text": "\"inventory is empty\","
+  },
+  {
+    "path": "game/social.py",
+    "line": 4530,
+    "text": "\"Do not treat the reply as authored world truth, durable preference, inventory fact, \""
+  },
+  {
+    "path": "game/unified_semantic_planning.py",
+    "line": 17,
+    "text": "Combat, movement, inventory, bargaining, and every other family stay on"
+  },
+  {
+    "path": "game/importers/pf_json_importer.py",
+    "line": 70,
+    "text": "def collect_inventory(raw: Dict[str, Any]):"
+  },
+  {
+    "path": "game/importers/pf_json_importer.py",
+    "line": 105,
+    "text": "'inventory': collect_inventory(raw),"
+  }
+]

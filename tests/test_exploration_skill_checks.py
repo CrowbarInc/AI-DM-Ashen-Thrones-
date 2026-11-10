@@ -109,7 +109,7 @@ def test_action_without_configured_check_works_normally():
 
 
 def test_gpt_payload_includes_skill_check_when_resolved(monkeypatch):
-    """build_messages includes skill_check in payload when resolution has it."""
+    """Narration gets the check result, not private rolls or thresholds (PLAY-45)."""
     monkeypatch.setattr("game.skill_checks._deterministic_d20", lambda _: 10)
     character = default_character()
     character["skills"]["perception"] = 2
@@ -124,9 +124,9 @@ def test_gpt_payload_includes_skill_check_when_resolved(monkeypatch):
         if m.get("role") == "user" and "content" in m:
             payload = json.loads(m["content"])
             assert "skill_check" in payload
-            assert payload["skill_check"]["roll"] == 10
-            assert payload["skill_check"]["total"] == 12
-            assert payload["skill_check"]["dc"] == 8
+            assert "roll" not in payload["skill_check"]
+            assert "total" not in payload["skill_check"]
+            assert "dc" not in payload["skill_check"]
             assert payload["skill_check"]["success"] is True
             # Instruction about not inventing dice
             instructions = " ".join(payload.get("instructions", []))

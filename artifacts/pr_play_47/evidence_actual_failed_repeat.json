@@ -1,0 +1,92 @@
+{
+  "failed_resolution": {
+    "kind": "investigate",
+    "action_id": "seal",
+    "label": "seal",
+    "prompt": "I examine the seal.",
+    "success": false,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {
+      "skill_check_failed": true,
+      "interactable_id": "seal"
+    },
+    "hint": "Player investigated [seal] but failed the check (d20=2+0=2 vs DC 18). Narrate the failed attempt\u2014they notice nothing decisive.",
+    "metadata": {
+      "skill_check": {
+        "success": false,
+        "roll": 2,
+        "modifier": 0,
+        "total": 2,
+        "difficulty": 18
+      }
+    },
+    "skill_check": {
+      "success": false,
+      "roll": 2,
+      "modifier": 0,
+      "total": 2,
+      "difficulty": 18
+    }
+  },
+  "failed_view": {
+    "status": "failed",
+    "success": false,
+    "target_id": "seal",
+    "revealed": [],
+    "known": [],
+    "observations": [
+      "A seal lies in plain view.",
+      "Light catches the uneven surface."
+    ],
+    "consequences": "",
+    "inventory_effects_json": "{}"
+  },
+  "repeat_resolution": {
+    "kind": "already_searched",
+    "action_id": "seal",
+    "label": "Action",
+    "prompt": "I examine the seal.",
+    "success": false,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {
+      "already_searched": true,
+      "interactable_id": "seal"
+    },
+    "hint": "Player has already searched [seal]. Narrate that they find nothing new.",
+    "interactable_id": "seal",
+    "metadata": {
+      "referenced_surface_authority": "authored_interactable",
+      "referenced_surface_target": "seal",
+      "referenced_surface_existence": true,
+      "referenced_surface_visibility": true,
+      "referenced_surface_inspectability": true,
+      "referenced_surface_interactable_id": "seal",
+      "referenced_surface_visible_fact": "",
+      "referenced_surface_inspectable_text": "The wax bears a crescent stamp.",
+      "skip_unrelated_clue_discovery": false
+    }
+  },
+  "repeat_view": {
+    "status": "known",
+    "success": false,
+    "target_id": "seal",
+    "revealed": [],
+    "known": [
+      "The wax bears a crescent stamp."
+    ],
+    "observations": [
+      "A seal lies in plain view.",
+      "Light catches the uneven surface."
+    ],
+    "consequences": "",
+    "inventory_effects_json": "{}"
+  }
+}

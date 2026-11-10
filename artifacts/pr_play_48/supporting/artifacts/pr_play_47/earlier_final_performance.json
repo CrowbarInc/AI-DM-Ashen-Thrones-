@@ -1,0 +1,17 @@
+{
+  "provenance": "Captured measurement from the first complete final regression, before diagnostic/authorized-transition hardening; retained alongside the final measurement rather than hiding the noisy tails.",
+  "schema_bytes": 820,
+  "plan_bytes": 213,
+  "authorized_context_bytes": 520,
+  "full_selection_payload_bytes": 1394,
+  "render": {"median_us": 6.9, "p95_us": 7.7, "iterations": 500},
+  "validate": {"median_us": 2.5, "p95_us": 2.8, "iterations": 500},
+  "fallback_end_to_end": {"median_us": 103.75, "p95_us": 4080.1, "iterations": 500},
+  "preview_end_to_end": {"median_us": 125.35, "p95_us": 6734.1, "iterations": 500},
+  "traced_peak_bytes": 29797,
+  "traced_retained_bytes": 21504,
+  "estimated_input_tokens_bytes_div_4": 348.5,
+  "estimated_output_tokens_bytes_div_4": 53.25,
+  "cost_method": "Rough UTF-8 bytes/4 estimate; not measured tokenizer usage or live billing.",
+  "latency_method": "Sequential local Python wall time, warm process; not a deployment guarantee."
+}

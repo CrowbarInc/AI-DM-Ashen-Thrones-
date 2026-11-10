@@ -1,0 +1,3 @@
+# PR-PLAY-74 — 18 FROZEN HOLDOUT
+
+80/80 on one execution after final_source.json freeze. Developer authored before implementation, not external independent validation. SHA256 c83f19bb8850842d3caa1e9fe6767bcf26f9e6659b3e7c43cba3c44d07a465c1. Distribution is structural schema/context/material validation with varied isolated scenes, including 16 accepted and 64 rejected proposals. Repeated templates reduce diversity. Manifest records persistence expectations, but holdout runner tests validation purity only; persistence is separately demonstrated by lifecycle evidence. No NPC, broad language or independent generalization claim.

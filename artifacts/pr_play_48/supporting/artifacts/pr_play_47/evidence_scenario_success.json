@@ -1,0 +1,306 @@
+{
+  "id": "success",
+  "category": "successful discovery",
+  "scene": {
+    "scene": {
+      "id": "unfamiliar_site",
+      "location": "Unfamiliar Site",
+      "visible_facts": [
+        "A ledger lies in plain view.",
+        "Light catches the uneven surface."
+      ],
+      "summary": "A quiet place for a closer look.",
+      "interactables": [
+        {
+          "id": "ledger",
+          "label": "ledger",
+          "type": "investigate",
+          "reveals_clue": "selected"
+        }
+      ],
+      "discoverable_clues": [
+        {
+          "id": "selected",
+          "text": "The ledger records twelve ingots arriving, but only nine entered stock."
+        },
+        {
+          "id": "hidden",
+          "text": "CANARY_UNDISCOVERED"
+        }
+      ],
+      "hidden_facts": [
+        "CANARY_DESTINATION"
+      ],
+      "gm_notes": [
+        "CANARY_GM_NOTE"
+      ],
+      "npcs": [
+        {
+          "hidden_motivation": "CANARY_NPC_MOTIVE"
+        }
+      ],
+      "hidden_faction": "CANARY_FACTION_ACTIVITY",
+      "exits": []
+    }
+  },
+  "resolution": {
+    "kind": "discover_clue",
+    "action_id": "ledger",
+    "label": "ledger",
+    "prompt": "I examine the ledger.",
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": "selected",
+    "discovered_clues": [
+      "The ledger records twelve ingots arriving, but only nine entered stock."
+    ],
+    "world_updates": null,
+    "state_changes": {
+      "clue_revealed": true,
+      "interactable_id": "ledger"
+    },
+    "hint": "Player investigated [ledger] and discovered clue [selected]. Narrate the discovery and its significance.",
+    "interactable_id": "ledger",
+    "clue_text": "The ledger records twelve ingots arriving, but only nine entered stock.",
+    "metadata": {
+      "referenced_surface_authority": "authored_interactable",
+      "referenced_surface_target": "ledger",
+      "referenced_surface_existence": true,
+      "referenced_surface_visibility": true,
+      "referenced_surface_inspectability": true,
+      "referenced_surface_interactable_id": "ledger",
+      "referenced_surface_visible_fact": "",
+      "referenced_surface_inspectable_text": "The ledger records twelve ingots arriving, but only nine entered stock.",
+      "skip_unrelated_clue_discovery": false
+    }
+  },
+  "known": [],
+  "origin": "actual exploration resolver on synthetic scene",
+  "player": "I examine the ledger.",
+  "authorized_view": {
+    "status": "discovered",
+    "success": true,
+    "target_id": "ledger",
+    "revealed": [
+      "The ledger records twelve ingots arriving, but only nine entered stock."
+    ],
+    "known": [],
+    "observations": [
+      "A ledger lies in plain view.",
+      "Light catches the uneven surface."
+    ],
+    "consequences": ""
+  },
+  "hidden_information": [
+    "CANARY_UNDISCOVERED",
+    "CANARY_GM_NOTE",
+    "CANARY_NPC_MOTIVE",
+    "CANARY_FACTION_ACTIVITY",
+    "CANARY_DESTINATION",
+    "CANARY_WORLD_STATE"
+  ],
+  "selection_payload": {
+    "authorized_investigation": {
+      "status": "discovered",
+      "success": true,
+      "target_id": "ledger",
+      "revealed": [
+        "The ledger records twelve ingots arriving, but only nine entered stock."
+      ],
+      "known": [],
+      "observations": [
+        "A ledger lies in plain view.",
+        "Light catches the uneven surface."
+      ],
+      "consequences": ""
+    },
+    "available_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "structure",
+        "pace",
+        "tone",
+        "sensory_focus",
+        "detail",
+        "perspective",
+        "transition",
+        "information_order"
+      ],
+      "properties": {
+        "structure": {
+          "type": "string",
+          "enum": [
+            "action_first",
+            "evidence_first",
+            "setting_first"
+          ]
+        },
+        "pace": {
+          "type": "string",
+          "enum": [
+            "clipped",
+            "flowing",
+            "measured"
+          ]
+        },
+        "tone": {
+          "type": "string",
+          "enum": [
+            "spare",
+            "reflective",
+            "intent"
+          ]
+        },
+        "sensory_focus": {
+          "type": "string",
+          "enum": [
+            "none",
+            "visual",
+            "texture",
+            "listening"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "enum": [
+            "lean",
+            "standard",
+            "extended"
+          ]
+        },
+        "perspective": {
+          "type": "string",
+          "enum": [
+            "second_person",
+            "close_observation"
+          ]
+        },
+        "transition": {
+          "type": "string",
+          "enum": [
+            "direct",
+            "pause",
+            "question"
+          ]
+        },
+        "information_order": {
+          "type": "string",
+          "enum": [
+            "new_first",
+            "known_first"
+          ]
+        }
+      }
+    }
+  },
+  "host_speech": "You inspect ledger. The ledger records twelve ingots arriving, but only nine entered stock.",
+  "host_source": "resolved_clue_discovery",
+  "host_fact_emitter": {
+    "text": "You inspect ledger. The ledger records twelve ingots arriving, but only nine entered stock.",
+    "source": {
+      "kind": "discover_clue",
+      "source": "clue_text"
+    }
+  },
+  "variants": [
+    {
+      "style": "concise",
+      "plan": {
+        "structure": "action_first",
+        "pace": "clipped",
+        "tone": "spare",
+        "sensory_focus": "none",
+        "detail": "lean",
+        "perspective": "second_person",
+        "transition": "direct",
+        "information_order": "new_first"
+      },
+      "narration": "You examine the evidence. The ledger records twelve ingots arriving, but only nine entered stock.",
+      "mechanical_validator": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        }
+      },
+      "information_complete": true
+    },
+    {
+      "style": "atmospheric",
+      "plan": {
+        "structure": "setting_first",
+        "pace": "flowing",
+        "tone": "reflective",
+        "sensory_focus": "visual",
+        "detail": "extended",
+        "perspective": "close_observation",
+        "transition": "pause",
+        "information_order": "new_first"
+      },
+      "narration": "A ledger lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The ledger records twelve ingots arriving, but only nine entered stock.",
+      "mechanical_validator": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        }
+      },
+      "information_complete": true
+    },
+    {
+      "style": "investigative",
+      "plan": {
+        "structure": "evidence_first",
+        "pace": "measured",
+        "tone": "intent",
+        "sensory_focus": "texture",
+        "detail": "standard",
+        "perspective": "second_person",
+        "transition": "question",
+        "information_order": "known_first"
+      },
+      "narration": "What does the evidence actually establish? The ledger records twelve ingots arriving, but only nine entered stock.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nA ledger lies in plain view.",
+      "mechanical_validator": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "speaker": "",
+        "addressee": "",
+        "operation": "",
+        "interaction_complete": true,
+        "contract_satisfying": true,
+        "authority": [],
+        "gm_resolution_decision_audit": null,
+        "mechanical_claim_audit": {
+          "coverage": "bounded_assertion_frames_not_semantic_proof",
+          "claims": [],
+          "reasons": []
+        }
+      },
+      "information_complete": true
+    }
+  ],
+  "state_unchanged": true
+}

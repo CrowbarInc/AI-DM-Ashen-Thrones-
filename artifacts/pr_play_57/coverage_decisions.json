@@ -1,0 +1,158 @@
+[
+  {
+    "id": "A1",
+    "decision": "REVIEW_REQUIRED",
+    "facts": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "decision": "REVIEW_REQUIRED",
+        "classification": "ambiguous_paraphrase",
+        "evidence": null,
+        "content_overlap": 0.778
+      }
+    ],
+    "scope": "provisional_conservative_coverage_not_semantic_proof"
+  },
+  {
+    "id": "A2",
+    "decision": "PASS",
+    "facts": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "decision": "PASS",
+        "classification": "covered",
+        "evidence": "You study the notice board carefully and discover a new detail: the missing patrol was last seen taking the northwest mud track past the crates.",
+        "content_overlap": 1.0
+      }
+    ],
+    "scope": "provisional_conservative_coverage_not_semantic_proof"
+  },
+  {
+    "id": "B1",
+    "decision": "PASS",
+    "facts": [
+      {
+        "id": "outcome:0",
+        "source": "engine_status",
+        "status": "observed",
+        "text": "No new clue is established by this examination.",
+        "decision": "PASS",
+        "classification": "covered",
+        "evidence": "Despite your scrutiny, nothing new or unusual catches your attention this time—no fresh clues emerge from this inspection.",
+        "content_overlap": 0.5
+      }
+    ],
+    "scope": "provisional_conservative_coverage_not_semantic_proof"
+  },
+  {
+    "id": "B2",
+    "decision": "PASS",
+    "facts": [
+      {
+        "id": "outcome:0",
+        "source": "engine_status",
+        "status": "observed",
+        "text": "No new clue is established by this examination.",
+        "decision": "PASS",
+        "classification": "covered",
+        "evidence": "Despite your careful inspection, nothing new stands out—no hidden compartments or unusual markings catch your eye this time.",
+        "content_overlap": 0.25
+      }
+    ],
+    "scope": "provisional_conservative_coverage_not_semantic_proof"
+  },
+  {
+    "id": "C1",
+    "decision": "PASS",
+    "facts": [
+      {
+        "id": "outcome:0",
+        "source": "engine_status",
+        "status": "known",
+        "text": "The examination adds nothing new to what you already know.",
+        "decision": "PASS",
+        "classification": "covered",
+        "evidence": "You take a closer look at the notice board, but it offers no new information beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates.",
+        "content_overlap": 0.571
+      },
+      {
+        "id": "outcome:1",
+        "source": "player_knowledge",
+        "status": "previously_known",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "decision": "PASS",
+        "classification": "covered",
+        "evidence": "You take a closer look at the notice board, but it offers no new information beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates.",
+        "content_overlap": 1.0
+      }
+    ],
+    "scope": "provisional_conservative_coverage_not_semantic_proof"
+  },
+  {
+    "id": "C2",
+    "decision": "REVIEW_REQUIRED",
+    "facts": [
+      {
+        "id": "outcome:0",
+        "source": "engine_status",
+        "status": "known",
+        "text": "The examination adds nothing new to what you already know.",
+        "decision": "PASS",
+        "classification": "covered",
+        "evidence": "You take a careful look at the notice board once more, but nothing new catches your eye beyond what you already know: the missing patrol was last spotted heading along the northwest mud track past the crates.",
+        "content_overlap": 0.714
+      },
+      {
+        "id": "outcome:1",
+        "source": "player_knowledge",
+        "status": "previously_known",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "decision": "REVIEW_REQUIRED",
+        "classification": "ambiguous_paraphrase",
+        "evidence": null,
+        "content_overlap": 0.889
+      }
+    ],
+    "scope": "provisional_conservative_coverage_not_semantic_proof"
+  },
+  {
+    "id": "D1",
+    "decision": "REVIEW_REQUIRED",
+    "facts": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "decision": "REVIEW_REQUIRED",
+        "classification": "ambiguous_paraphrase",
+        "evidence": null,
+        "content_overlap": 0.417
+      }
+    ],
+    "scope": "provisional_conservative_coverage_not_semantic_proof"
+  },
+  {
+    "id": "D2",
+    "decision": "REVIEW_REQUIRED",
+    "facts": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "decision": "REVIEW_REQUIRED",
+        "classification": "ambiguous_paraphrase",
+        "evidence": null,
+        "content_overlap": 0.417
+      }
+    ],
+    "scope": "provisional_conservative_coverage_not_semantic_proof"
+  }
+]

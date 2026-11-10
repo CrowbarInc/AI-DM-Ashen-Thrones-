@@ -1,0 +1,29 @@
+{
+  "cycle": "pr_play_grounded_marking_removal",
+  "branch": "feature/product-realization",
+  "head": "d40f1ed198236c604085f1c842ead267a8104ce2",
+  "committed": false,
+  "production_changed_this_cycle": [
+    "game/api.py",
+    "game/marking_removal.py"
+  ],
+  "tests_added": [
+    "tests/test_grounded_marking_removal.py"
+  ],
+  "unchanged_from_cycle_baseline": {
+    "game/storage.py": "32EBDA69C998E9B463B6FEA6ED6C473B9F8B0C3E566EB9DBD6AB4960E95CB8E0",
+    "game/marking_action.py": "59C1883A7C71BE4E8F0AC5E9BDFCA17ADE27556E4CCAA39A63C4F4E46E0C2CC2",
+    "game/marking_observation.py": "2247A223144B0D5AF8AA2B7592637AF11D7294F4903B105313E04746C597EA23",
+    "game/object_marking.py": "1828925D4B4A8591EE34CD34C284941B088F26F00A332AEE04F7F1C8A1CF98EE",
+    "game/object_observation.py": "74EF7D12D7D3102192A1D9A5F5E7728AF7606418C9896C7BE399E909F5DEF95F",
+    "tests/test_grounded_marking_action.py": "EE67ABC4F2DBB6167064990705F9A5E55C8DE95AAF192815B1931448118D2F88",
+    "tests/test_player_marking_observation.py": "90615B9AFC519F00A191FE082A0FEAD9F6A85EC85EF190CD3994178368002496"
+  },
+  "exit_hashes": {
+    "game/api.py": "61CC8D5C8A47B14DEAA7961339902841CC0583F4B91F59F7F35BD4B1C93CD94B",
+    "game/marking_removal.py": "F1EEA2F7167BC7453190A1CB4BADA97F8FA51F7B94764A712B316A5680323C48",
+    "tests/test_grounded_marking_removal.py": "0DA5C59840CD848031B1584C5524ED0D86B77CB4EE38BEDE67A231E14B90CB00"
+  },
+  "baseline_api_sha256": "98538F11C00B3464A77A76A29CB03E82C08823A9BC07F60114C3D54928B29014",
+  "note": "git diff against HEAD includes earlier uncommitted work. This cycle's production delta is the api.py hash change plus the new marking_removal.py module."
+}

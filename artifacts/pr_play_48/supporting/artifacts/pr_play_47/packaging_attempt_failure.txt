@@ -1,0 +1,16 @@
+The first archive was written and all manifest hashes verified successfully.
+Updating the stable CURRENT_REVIEW.zip pointer with shutil.copy2 then failed:
+
+  File "artifacts/pr_play_47/package_review.py", line 137, in main
+    shutil.copy2(archive, ROOT/'handoff/CURRENT_REVIEW.zip')
+  File "shutil.py", line 448, in copy2
+    _winapi.CopyFile2(src_, dst_, flags)
+OSError: [WinError 1224] The requested operation cannot be performed on a file with a user-mapped section open
+
+No campaign or application source was involved. The timestamped archive was
+retained. The packaging utility now copies to a new file and atomically replaces
+the stable pointer, without truncating the mapped ZIP in place.
+
+The second attempt successfully replaced the ZIP but the same in-place write
+pattern failed on CURRENT_REVIEW.md with OSError [Errno 22] Invalid argument.
+The report pointer now uses the same new-file/atomic-replace pattern.

@@ -1,0 +1,107 @@
+[
+  {
+    "case": "A Flag disabled",
+    "status": "PASS",
+    "evidence": "Five-action control"
+  },
+  {
+    "case": "B Flag enabled",
+    "status": "PASS",
+    "evidence": "Session-bound HTTP run"
+  },
+  {
+    "case": "C Discovery",
+    "status": "PASS",
+    "evidence": "Notice-board route"
+  },
+  {
+    "case": "D No new information",
+    "status": "PASS",
+    "evidence": "Accurate fallback; AI acceptance remains partial"
+  },
+  {
+    "case": "E Repeat",
+    "status": "PASS",
+    "evidence": "Known resolution; zero-call fast path"
+  },
+  {
+    "case": "F Follow-up",
+    "status": "PASS",
+    "evidence": "Gate then barrel"
+  },
+  {
+    "case": "G Continuity sequence",
+    "status": "PASS",
+    "evidence": "Five HTTP 200 responses"
+  },
+  {
+    "case": "H Valid AI publication",
+    "status": "PASS",
+    "evidence": "Turn 1"
+  },
+  {
+    "case": "I Invalid rejection",
+    "status": "PASS",
+    "evidence": "Live REVIEW and injected FAIL"
+  },
+  {
+    "case": "J Relevant fallback",
+    "status": "PASS",
+    "evidence": "Turns 2/4 and faults"
+  },
+  {
+    "case": "K Fast path",
+    "status": "PASS",
+    "evidence": "Turns 3/5"
+  },
+  {
+    "case": "L Timeout recovery",
+    "status": "PASS",
+    "evidence": "Injected timeout and continuation"
+  },
+  {
+    "case": "M Provider error",
+    "status": "PASS",
+    "evidence": "Injected error and continuation"
+  },
+  {
+    "case": "N Validation recovery",
+    "status": "PASS",
+    "evidence": "FAIL/REVIEW/shape and exception controls"
+  },
+  {
+    "case": "O Browser submission",
+    "status": "BLOCKED",
+    "evidence": "Attachment timeout twice; zero UI actions"
+  },
+  {
+    "case": "P Frontend rendering",
+    "status": "NOT TESTED",
+    "evidence": "No attached tab"
+  },
+  {
+    "case": "Q State integrity",
+    "status": "PASS",
+    "evidence": "Per-turn control agreement"
+  },
+  {
+    "case": "R Provider accounting",
+    "status": "PASS",
+    "evidence": "3 requests / 1525 tokens"
+  },
+  {
+    "case": "S Latency measured",
+    "status": "PASS",
+    "evidence": "Measured; speed improvement not established"
+  },
+  {
+    "case": "T Gameplay quality",
+    "status": "PARTIAL",
+    "evidence": "Provisional fallback gain; live no-discovery unreliable"
+  },
+  {
+    "case": "U Regression",
+    "status": "PASS",
+    "evidence": "Focused: 746/749 passed, 3 failures, 0 errors; 0 new failures. Additional failed-examination boundary: 1 passed. PR55 holdout wrapper: 1/1 passed. Broader authority assurance: 9/9 failures involving hard_validation_attempt_1. Full suite NOT TESTED."
+  }
+]

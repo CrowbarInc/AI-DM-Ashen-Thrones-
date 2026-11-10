@@ -1,0 +1,367 @@
+{
+  "latency_seconds": 3.8970122000027914,
+  "response": {
+    "id": "resp_0adc469e4ce1d265006ae78c398a4887d28ca3dcb094ef8293",
+    "created_at": 1793559609.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-4.1-mini-2025-04-14",
+    "object": "response",
+    "output": [
+      {
+        "id": "msg_0adc469e4ce1d265006ae78c3a2edc87d2ae67893e58e9d429",
+        "content": [
+          {
+            "annotations": [],
+            "text": "{\"selected_entries\":[{\"catalog_id\":\"rc_31feab1dcf72\",\"variant_id\":\"authored\"},{\"catalog_id\":\"rc_a0201a45af25\",\"variant_id\":\"authored\"},{\"catalog_id\":\"rc_280f5390057f\",\"variant_id\":\"authored\"},{\"catalog_id\":\"rc_4a217a3c17bc\",\"variant_id\":\"authored\"},{\"catalog_id\":\"rc_819bf0e987bb\",\"variant_id\":\"authored\"},{\"catalog_id\":\"rc_6c31b34a1529\",\"variant_id\":\"authored\"}]}",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 1.0,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 1.0,
+    "background": false,
+    "completed_at": 1793559611.0,
+    "conversation": null,
+    "max_output_tokens": 3000,
+    "max_tool_calls": null,
+    "moderation": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "context": null,
+      "effort": null,
+      "generate_summary": null,
+      "mode": null,
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "name": "opening_presentation",
+        "schema_": {
+          "type": "object",
+          "properties": {
+            "selected_entries": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 24,
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_a83c5bcfc65e"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored",
+                          "concise"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_d40a1efdddb3"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_3b26b521977b"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_b59727e13c62"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_be348e85a5e6"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_31feab1dcf72"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_a0201a45af25"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_280f5390057f"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_4a217a3c17bc"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_819bf0e987bb"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "catalog_id": {
+                        "type": "string",
+                        "enum": [
+                          "rc_6c31b34a1529"
+                        ]
+                      },
+                      "variant_id": {
+                        "type": "string",
+                        "enum": [
+                          "authored"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "catalog_id",
+                      "variant_id"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "selected_entries"
+          ],
+          "additionalProperties": false
+        },
+        "type": "json_schema",
+        "description": null,
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 1378,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 120,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 1498
+    },
+    "user": null,
+    "access_programs": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "presence_penalty": 0.0,
+    "store": true,
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    }
+  },
+  "sdk_request_id": "req_4b2dd4f46e4847d483a59c8c74ce9718"
+}

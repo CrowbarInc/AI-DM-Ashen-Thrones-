@@ -1,0 +1,208 @@
+{
+  "http_ms": {
+    "count": 48,
+    "mean": 1769.549712499914,
+    "median": 1805.628450063523,
+    "maximum": 5754.814599989913
+  },
+  "five_category_samples": {
+    "initial": {
+      "http_ms": {
+        "count": 1,
+        "mean": 357.8504999168217,
+        "median": 357.8504999168217,
+        "maximum": 357.8504999168217
+      },
+      "stages_ms": {
+        "interpretation_ms": {
+          "count": 1,
+          "mean": 7.426,
+          "median": 7.426,
+          "maximum": 7.426
+        },
+        "grounding_validation_mapping_ms": {
+          "count": 1,
+          "mean": 0.105,
+          "median": 0.105,
+          "maximum": 0.105
+        },
+        "resolver_ms": {
+          "count": 1,
+          "mean": 43.914,
+          "median": 43.914,
+          "maximum": 43.914
+        },
+        "atomic_write_ms": {
+          "count": 3,
+          "mean": 5.193333333333333,
+          "median": 5.257,
+          "maximum": 6.173
+        },
+        "publication_ms": {
+          "count": 1,
+          "mean": 0.683,
+          "median": 0.683,
+          "maximum": 0.683
+        },
+        "log_append_ms": {
+          "count": 1,
+          "mean": 3.213,
+          "median": 3.213,
+          "maximum": 3.213
+        }
+      }
+    },
+    "repeat": {
+      "http_ms": {
+        "count": 1,
+        "mean": 4410.4340999620035,
+        "median": 4410.4340999620035,
+        "maximum": 4410.4340999620035
+      },
+      "stages_ms": {
+        "interpretation_ms": {
+          "count": 1,
+          "mean": 0.289,
+          "median": 0.289,
+          "maximum": 0.289
+        },
+        "grounding_validation_mapping_ms": {
+          "count": 1,
+          "mean": 0.111,
+          "median": 0.111,
+          "maximum": 0.111
+        },
+        "resolver_ms": {
+          "count": 1,
+          "mean": 361.62,
+          "median": 361.62,
+          "maximum": 361.62
+        },
+        "atomic_write_ms": {
+          "count": 3,
+          "mean": 34.705,
+          "median": 36.0,
+          "maximum": 38.318
+        },
+        "publication_ms": {
+          "count": 1,
+          "mean": 0.328,
+          "median": 0.328,
+          "maximum": 0.328
+        },
+        "log_append_ms": {
+          "count": 1,
+          "mean": 22.445,
+          "median": 22.445,
+          "maximum": 22.445
+        }
+      }
+    },
+    "information": {
+      "http_ms": {
+        "count": 1,
+        "mean": 490.90510001406074,
+        "median": 490.90510001406074,
+        "maximum": 490.90510001406074
+      },
+      "stages_ms": {
+        "interpretation_ms": {
+          "count": 1,
+          "mean": 89.231,
+          "median": 89.231,
+          "maximum": 89.231
+        },
+        "log_append_ms": {
+          "count": 1,
+          "mean": 64.023,
+          "median": 64.023,
+          "maximum": 64.023
+        }
+      }
+    },
+    "clarification": {
+      "http_ms": {
+        "count": 1,
+        "mean": 316.7291999561712,
+        "median": 316.7291999561712,
+        "maximum": 316.7291999561712
+      },
+      "stages_ms": {
+        "interpretation_ms": {
+          "count": 1,
+          "mean": 0.101,
+          "median": 0.101,
+          "maximum": 0.101
+        },
+        "log_append_ms": {
+          "count": 1,
+          "mean": 33.89,
+          "median": 33.89,
+          "maximum": 33.89
+        }
+      }
+    },
+    "unsupported": {
+      "http_ms": {
+        "count": 1,
+        "mean": 370.0109999626875,
+        "median": 370.0109999626875,
+        "maximum": 370.0109999626875
+      },
+      "stages_ms": {
+        "interpretation_ms": {
+          "count": 1,
+          "mean": 0.094,
+          "median": 0.094,
+          "maximum": 0.094
+        },
+        "log_append_ms": {
+          "count": 1,
+          "mean": 23.21,
+          "median": 23.21,
+          "maximum": 23.21
+        }
+      }
+    }
+  },
+  "browser_observed_upper_bounds_ms": {
+    "count": 7,
+    "mean": 3359.5714285714284,
+    "median": 1175,
+    "maximum": 9805
+  },
+  "browser_samples": [
+    {
+      "text": "Have the guards searched?",
+      "observed_ms": 702
+    },
+    {
+      "text": "Did I record the survey?",
+      "observed_ms": 1175
+    },
+    {
+      "text": "Please study that weathered stone.",
+      "observed_ms": 5771
+    },
+    {
+      "text": "Have the guards searched?",
+      "observed_ms": 1072
+    },
+    {
+      "text": "Did I record the survey?",
+      "observed_ms": 4172
+    },
+    {
+      "text": "Search the hidden camp.",
+      "observed_ms": 820
+    },
+    {
+      "text": "Check it again.",
+      "observed_ms": 9805
+    }
+  ],
+  "notes": "DOM-observed upper bounds, not paint timing. Grounding, validation and mapping measured together at existing bridge. Atomic writes and append-log are persistence components; stages can overlap. Five dedicated categories have n=1 each, under concurrent validation.",
+  "provider_requests": 0,
+  "provider_tokens": 0,
+  "retries": 0
+}

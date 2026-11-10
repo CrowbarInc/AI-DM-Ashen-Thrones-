@@ -1,0 +1,25 @@
+{
+  "exact_rejected_naturally_reproduced": false,
+  "isolated_attempt": "publication_reproduction.txt: pass",
+  "focused_attempt": "focused_final.xml: pass",
+  "related_natural_failures": [
+    {
+      "case": "H32",
+      "path": "/api/new_campaign",
+      "file": "session_log.jsonl",
+      "exception": "PermissionError WinError 5 on os.replace"
+    },
+    {
+      "case": "H35",
+      "path": "/api/chat",
+      "file": "session.json",
+      "exception": "PermissionError WinError 5 on os.replace"
+    }
+  ],
+  "full_trace": "holdout_run.txt",
+  "primary_class": "implementation: existing persistence boundary lacked bounded transient recovery and failed-reset rollback",
+  "unknown": "Exact Windows lock holder not established",
+  "repair": "Four attempts at same prepared rename; only WinError 5; 130ms maximum sleep. New Campaign restores previous changed file bytes on failure.",
+  "fault_verification": "persistence_recovery_final.xml; post_holdout_repair.xml",
+  "no_action_or_provider_replay": true
+}

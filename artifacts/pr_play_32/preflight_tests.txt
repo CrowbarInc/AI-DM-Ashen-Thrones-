@@ -1,0 +1,64 @@
+........................................................................ [ 54%]
+..E.........................................................             [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/world] _
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pytest/test_supported_body_selectors_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000196EF44B740>
+
+    @pytest.fixture
+    def read_world(tmp_path, monkeypatch):
+        original_connect = socket.socket.connect
+        def no_network(sock, address):
+            if isinstance(address, tuple) and address[0] in ("127.0.0.1", "::1"):
+                return original_connect(sock, address)  # Windows asyncio socketpair
+            raise AssertionError("PR-PLAY-21 forbids external network")
+        monkeypatch.setattr(socket.socket, "connect", no_network)
+        _seed_minimal_with_spoilers(tmp_path, monkeypatch)
+        monkeypatch.setattr(st, "SNAPSHOTS_DIR", st.DATA_DIR / "snapshots")
+        scene = st.load_active_scene()
+        scene["scene"]["hidden_facts"] = [SENTINEL]
+        scene["scene"]["visible_facts"] = ["Public test fact"]
+        st._save_json(st.scene_path("test_scene"), scene)
+        session = st.load_session()
+        session["debug_traces"] = [{"detail": SENTINEL + "_DEBUG"}]
+>       st.save_session(session)
+
+tests\test_pr_play_21_privileged_reads.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pytest/test_supported_body_selectors_2/data/session.json')
+content = b'{\n  "persistence_version": 1,\n  "kind": "session",\n  "saved_at": "2026-11-02T00:41:53.903928Z",\n  "payload": {\n...4bd981ba8b46057904ed2c019394ce9a",\n    "canonicalization": "json/sort_keys,separators",\n    "hash": "sha256"\n  }\n}'
+
+    def _atomic_write_bytes(path: Path, content: bytes) -> None:
+        """Atomically replace a file's contents with bytes.
+    
+        Writes to a temp file in the same directory, fsyncs, then swaps with os.replace.
+        Cleans up temp files on failure.
+        """
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_name(f"{path.name}.tmp.{secrets.token_hex(8)}")
+        try:
+            with open(tmp, "wb") as f:
+                f.write(content)
+                f.flush()
+                os.fsync(f.fileno())
+>           os.replace(tmp, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_supported_body_selectors_2\\data\\session.json.tmp.1739647e1f3cd517' -> 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_supported_body_selectors_2\\data\\session.json'
+
+game\storage.py:139: PermissionError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+ERROR tests/test_pr_play_21_privileged_reads.py::test_supported_body_selectors_fail_closed_without_writes[ui_mode-/api/world]

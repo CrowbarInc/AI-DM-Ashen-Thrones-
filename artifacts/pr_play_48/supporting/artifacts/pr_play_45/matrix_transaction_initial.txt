@@ -1,0 +1,9 @@
+..........................................F...                           [100%]
+================================== FAILURES ===================================
+_____ test_synthetic_transaction_applies_once_then_narration_is_read_only _____
+tests\test_pr_play_45_narration_authority.py:213: in test_synthetic_transaction_applies_once_then_narration_is_read_only
+    output = run_preserve_if_valid({'player_facing_text': 'You receive a linen cloak. You spend 3 copper coins.', 'metadata': {}},
+E   TypeError: run_preserve_if_valid() got an unexpected keyword argument 'character'
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_45_narration_authority.py::test_synthetic_transaction_applies_once_then_narration_is_read_only
+1 failed, 45 passed in 2.81s

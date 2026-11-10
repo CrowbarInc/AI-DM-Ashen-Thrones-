@@ -1,0 +1,458 @@
+--- entry/game\api.py
++++ game\api.py
+@@ -34,6 +34,8 @@
+ from fastapi.middleware.cors import CORSMiddleware
+ from fastapi.staticfiles import StaticFiles
+ from fastapi.responses import FileResponse, JSONResponse
++from game.player_http_boundary import PlayerHTTPRoute
++from game.player_http_projection import project_player_state, project_player_response
+ 
+ from game.models import (
+     ActionRequest,
+@@ -304,6 +306,7 @@
+ 
+ 
+ app = FastAPI(title='Ashen Thrones AI GM', lifespan=lifespan)  # noqa: E302
++app.router.route_class = PlayerHTTPRoute
+ app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=False, allow_methods=['*'], allow_headers=['*'])
+ 
+ STATIC_DIR = BASE_DIR / 'static'
+@@ -5136,7 +5139,7 @@
+ 
+ def _project_state_for_ui_mode(full_state: dict, ui_mode: str) -> dict:
+     # Always compute projections from the single internal snapshot.
+-    public_state = deep_project_public_payload(full_state)
++    public_state = project_player_state(full_state)
+     out: dict = {"ui_mode": ui_mode, "public_state": public_state}
+     if ui_mode == "author":
+         out["author_state"] = deep_project_author_payload(full_state)
+@@ -5154,11 +5157,11 @@
+     helpers and persisted engine documents retain their full representations.
+     """
+     if isinstance(response, JSONResponse):
+-        content = deep_project_public_payload(json.loads(response.body))
++        content = project_player_response(json.loads(response.body))
+         headers = {k: v for k, v in response.headers.items() if k != "content-length"}
+         return JSONResponse(content=content, status_code=response.status_code,
+                             headers=headers, background=response.background)
+-    return deep_project_public_payload(response)
++    return project_player_response(response)
+ 
+ 
+ def _extract_log_player_input(entry: dict | None) -> str:
+--- entry/docs\NEXT_SESSION.md
++++ docs\NEXT_SESSION.md
+@@ -1,4 +1,14 @@
+ # NEXT_SESSION
++
++## Latest HTTP trust-boundary repair — PR-PLAY-67 (2026-11-04)
++
++**A — PASS / PLAYER-SAFE HTTP BOUNDARY ESTABLISHED.** Original session/world/scene leak reproduced through actual TCP with experimental flags off and on. HTTP now uses explicit nested player DTOs plus a shared final JSON/error boundary on all 20 API routes. Unknown internal fields fail closed; complete server state and snapshot persistence retain hidden data. Experimental gates remain default off/session-bound; no commit/push or live provider calls.
++
++42 development tests; frozen developer-authored holdout once 50/50; 78 endpoint/fault TCP requests with zero hidden sentinel/field exposures. Five-action chat replay completes in both modes; exact milestone fact survives enabled narration and published journal. Unredacted raw authoritative comparison passes 5/5. Protected 32,045 entry hashes unchanged. Focused aggregate: 893 passed / 3 failed; boundary/frontend/persistence: 82 passed / 0 failed; broader: nine historical failures. See regression_summary.json for initial contract-test migrations, transient WinError 5 traces, diagnostic and retry results; do not infer a clean historical baseline. No full suite/official ATGB/live-provider quality claim.
++
++Browser verifies scene display, character/inventory, structured notice-board action, supported exit and exact known-discovery journal. Structured milestone button narration still refuses; offline entry-source comparison reproduces it unchanged. Private world faction/project/event information lacks item-level publication rules and is withheld; the existing UI renders empty states. No new multi-tenant authorization or delivery ACK system.
++
++Read development/campaigns/product_realization/pr_play_67 reports 01/05/09/17/19 and artifacts/pr_play_67/{endpoint_inventory,response_contract,holdout_summary,raw_authority_audit,regression_summary,protected_integrity}.json. Exact archive pointer: artifacts/pr_play_67/archive_path.txt. Preserve the frozen holdout; do not tune/rerun it. Primary next step: **PR-PLAY-68: AI PRESENTATION ACCEPTANCE & NATURALNESS**. Older cycle recommendations below are historical; preserve the repaired HTTP boundary and existing authority/publication protections.
+ 
+ ## Latest publication repair — PR-PLAY-66 (2026-11-04)
+ 
+--- entry/tests\test_pr_play_42_evidence_boundaries.py
++++ tests\test_pr_play_42_evidence_boundaries.py
+@@ -437,8 +437,9 @@
+     assert "old_milestone" in after["visited_scene_ids"]
+     assert after["clocks"]["time_pressure"] == before["clocks"]["time_pressure"] + 1
+     assert after["turn_counter"] == before["turn_counter"] + 1
+-    assert body["resolution"]["resolved_transition"] is True
+-    assert body["resolution"]["target_scene_id"] == "old_milestone"
++    assert body["resolution"] == {}
++    assert storage.load_log()[-1]["resolution"]["resolved_transition"] is True
++    assert storage.load_log()[-1]["resolution"]["target_scene_id"] == "old_milestone"
+     assert storage.load_log()[-1]["player_input"] == PATROL
+     assert "moon_gate" not in json.dumps(storage.load_world())
+ 
+@@ -477,7 +478,9 @@
+     assert _ids(storage.load_world()) == npc_ids
+     rumor_log = next(row for row in storage.load_log() if row.get("player_input") == RUMOR)
+     assert rumor_log["resolution"]["social"]["topic_revealed"]["id"] == "patrol_rumor"
+-    assert travel["resolution"]["target_scene_id"] == "old_milestone"
++    assert travel["resolution"] == {}
++    travel_log = next(row for row in storage.load_log() if row.get("player_input") == PATROL)
++    assert travel_log["resolution"]["target_scene_id"] == "old_milestone"
+     print_log = storage.load_log()[-1]
+     assert print_log["player_input"] == FOOTPRINTS
+     assert print_log["resolution"].get("action_id") in {"prints", "notice_board"} or "print" in json.dumps(print_log["resolution"]).casefold()
+--- entry/tests\test_pr_play_44_information_delivery.py
++++ tests\test_pr_play_44_information_delivery.py
+@@ -96,6 +96,7 @@
+     monkeypatch.setattr(api, 'build_messages', capture)
+     with TestClient(api.app) as client:
+         body = _post(client, player)
++        first_resolution = copy.deepcopy(storage.load_log()[-1]['resolution'])
+         assert calls['narration'] == []
+         repeat = _post(client, player)
+     assert text in _facing(body)
+@@ -105,8 +106,9 @@
+     # A repeated search is eligible for narration; _quiet supplies a hostile
+     # controlled draft and the normal validators must keep its inventions out.
+     assert 'moon_gate' not in json.dumps(storage.load_world())
+-    assert body['resolution']['success'] is True
+-    assert repeat['resolution']['state_changes'].get('already_searched') is True
++    assert body['resolution'] == repeat['resolution'] == {}
++    assert first_resolution['success'] is True
++    assert storage.load_log()[-1]['resolution']['state_changes'].get('already_searched') is True
+     (OUT / f'scenario_{target}.json').write_text(json.dumps({'first': body, 'repeat': repeat, 'calls': calls, 'contexts': contexts,
+         'legacy_context_contains_hidden_canary': 'SECRET' in json.dumps(contexts)}, indent=2), encoding='utf-8')
+ 
+@@ -267,9 +269,11 @@
+     calls = _quiet(monkeypatch, {rumor: {'status': 'accepted', 'record': record, 'provider_requests': []}})
+     with TestClient(api.app) as client:
+         body = _post(client, rumor)
++        rumor_resolution = copy.deepcopy(storage.load_log()[-1]['resolution'])
+         moved = _post(client, 'I want to follow the trail connected to the missing patrol.')
+-    assert body['resolution']['social']['topic_revealed']['text'].casefold() in _facing(body).casefold()
+-    assert moved['resolution']['target_scene_id'] == 'old_milestone'
++    assert body['resolution'] == moved['resolution'] == {}
++    assert rumor_resolution['social']['topic_revealed']['text'].casefold() in _facing(body).casefold()
++    assert storage.load_log()[-1]['resolution']['target_scene_id'] == 'old_milestone'
+     assert 'Old Milestone' in _facing(moved)
+     assert calls['narration'] == []
+     (OUT / 'npc_travel.json').write_text(json.dumps({'npc': body, 'travel': moved, 'calls': calls}, indent=2), encoding='utf-8')
+--- entry/tests\test_pr_play_52_quarantined_integration.py
++++ tests\test_pr_play_52_quarantined_integration.py
+@@ -225,9 +225,9 @@
+ 
+ 
+ def _resolution(run) -> dict:
+-    body = run["body"] if isinstance(run["body"], dict) else {}
+-    if isinstance(body.get("resolution"), dict):
+-        return body["resolution"]
++    # PR67: resolver contracts remain server-only. Assert them against the
++    # authoritative log, independently of the complete player HTTP payload.
++    assert run["body"].get("resolution") == {}
+     log = run["final"]["log"]
+     if log and isinstance(log[-1].get("resolution"), dict):
+         return log[-1]["resolution"]
+--- entry/tests\test_pr_play_61_player_facing.py
++++ tests\test_pr_play_61_player_facing.py
+@@ -91,7 +91,8 @@
+     published = _session([NOTICE])[0]
+     assert _facing({"body": hidden}) == _facing({"body": foreign})
+     assert _facing({"body": published}) == ROUTE
+-    assert published["gm_output"]["metadata"]["experimental_integrated_narration"] == "published"
++    assert "metadata" not in published["gm_output"]
++    assert storage.load_log()[-1]["gm_output"]["metadata"]["experimental_integrated_narration"] == "published"
+     assert q.evidence_records()[-1]["player_facing_published"] is True
+     assert q.evidence_records()[-1]["validation"]["decision"] == "PASS"
+     assert other_id != bound_id
+@@ -145,7 +146,8 @@
+     assert "Provider calls are disabled" not in text
+     assert "no new clue is established" in text.casefold()
+     assert q.evidence_records()[-1].get("player_facing_published") is not True
+-    assert body["gm_output"]["metadata"]["experimental_integrated_narration"] == "fallback"
++    assert "metadata" not in body["gm_output"]
++    assert storage.load_log()[-1]["gm_output"]["metadata"]["experimental_integrated_narration"] == "fallback"
+ 
+ 
+ def test_four_actions_keep_authority_and_recover(tmp_path, monkeypatch):
+--- entry/tests\test_ui_mode_regression_matrix_objective15.py
++++ tests\test_ui_mode_regression_matrix_objective15.py
+@@ -138,7 +138,9 @@
+     assert r.status_code == 400
+     body = r.json()
+     assert body.get("ok") is False
+-    assert "unknown ui mode" in (body.get("error") or "").lower()
++    # PR67 deliberately avoids echoing diagnostic text or the supplied mode.
++    assert body.get("error") == "Unable to complete this request. Refresh your session and try again."
++    assert "not_a_real_mode" not in r.text
+ 
+ 
+ def test_public_state_deep_projection_strips_nested_author_and_debug_leakage(tmp_path, monkeypatch) -> None:
+--- /dev/null
++++ game/player_http_projection.py
+@@ -0,0 +1,136 @@
++"""Player HTTP DTOs. Pure, source-specific allowlists; unknown fields fail closed.
++
++This is a publication adapter, never a persistence or gameplay authority. In
++particular, discovery text comes from the existing journal/clue publication
++owners, not the scene's discoverable_clues catalog. No arbitrary object leaf,
++stringification of objects, or internal resolution/GM metadata crosses here.
++"""
++from __future__ import annotations
++
++import math
++
++# Schema leaves accept only their declared primitive type. Lists and dictionaries
++# always have a nested schema; there is deliberately no "any JSON" escape hatch.
++TEXT = str
++NUMBER = float
++BOOL = bool
++
++
++def project(value, schema):
++    if schema is TEXT:
++        return value if isinstance(value, str) else ''
++    if schema is BOOL:
++        return value if isinstance(value, bool) else False
++    if schema is NUMBER:
++        return value if type(value) in (int, float) and math.isfinite(value) else 0
++    if isinstance(schema, list):
++        return [project(item, schema[0]) for item in value
++                if (isinstance(item, dict) if isinstance(schema[0], dict) else isinstance(item, schema[0]))] if isinstance(value, list) else []
++    source = value if isinstance(value, dict) else {}
++    return {key: project(source[key], spec) for key, spec in schema.items() if key in source}
++
++
++ITEM = dict(id=TEXT, name=TEXT, quantity=NUMBER, usable=BOOL)
++EFFECT = dict(id=TEXT, name=TEXT, kind=TEXT, duration=NUMBER)
++CHARACTER = dict(
++    id=TEXT, name=TEXT, **{'class': TEXT}, level=NUMBER, ancestry=TEXT,
++    hp=dict(current=NUMBER, max=NUMBER, nonlethal=NUMBER),
++    ac=dict(normal=NUMBER, touch=NUMBER, flat_footed=NUMBER),
++    initiative_bonus=NUMBER, speed=NUMBER, bab=NUMBER, cmb=NUMBER, cmd=NUMBER,
++    ability_scores={k:NUMBER for k in ('str','dex','con','int','wis','cha')},
++    saves={k:NUMBER for k in ('fort','ref','will')},
++    attacks=[dict(id=TEXT,name=TEXT,attack_bonus=NUMBER,type=TEXT,
++                  damage=dict(dice_count=NUMBER,dice_sides=NUMBER,bonus=NUMBER,type=TEXT))],
++    conditions=[EFFECT], inventory=[ITEM],
++    spells=dict(prepared=[dict(id=TEXT,name=TEXT,cast=BOOL,level=NUMBER)],
++                slots={str(k):NUMBER for k in range(10)}),
++)
++SESSION = dict(session_id=TEXT, campaign_run_id=TEXT, active_scene_id=TEXT, character_name=TEXT,
++               response_mode=TEXT, campaign_started=BOOL, turn_counter=NUMBER,
++               visited_scene_ids=[TEXT])
++SCENE = dict(scene=dict(id=TEXT, location=TEXT, summary=TEXT, mode=TEXT, visible_facts=[TEXT]))
++AFFORDANCE = dict(id=TEXT,label=TEXT,type=TEXT,prompt=TEXT,
++                  target_scene_id=TEXT,target_id=TEXT,target_location_id=TEXT,
++                  targetSceneId=TEXT,targetEntityId=TEXT,targetLocationId=TEXT)
++CLUE = dict(text=TEXT,presentation=TEXT)
++LEAD = dict(id=TEXT,title=TEXT,summary=TEXT,next_step=TEXT,last_touched_turn=NUMBER)
++JOURNAL = dict(known_facts=[TEXT],discovered_clues=[TEXT],unresolved_leads=[TEXT],
++               status_effects=[EFFECT],suspicion_flags=[TEXT],
++               **{k:[LEAD] for k in ('active_leads','pursued_leads','stale_leads','resolved_leads','obsolete_leads')},
++               lead_counts={k:NUMBER for k in ('active','pursued','stale','resolved','obsolete')})
++SNAPSHOT = dict(id=TEXT,created_at=TEXT,label=TEXT)
++UI = dict(player_can_act=BOOL,campaign_started=BOOL,campaign_can_start=BOOL,
++          living_enemies=[dict(id=TEXT,name=TEXT,hp=NUMBER,max_hp=NUMBER)],
++          scene_ids=[TEXT],affordances=[AFFORDANCE],
++          clues={k:[CLUE] for k in ('known','implicit','explicit','actionable')},
++          # Identity/name are public for the existing active-scene roster. Private
++          # role, numeric trust and attitude lack a player-knowledge contract.
++          scene_npcs=[dict(id=TEXT,name=TEXT,disposition=TEXT)],
++          interaction={k:TEXT for k in ('active_interaction_target_id','active_interaction_target_name','active_interaction_kind','interaction_mode')})
++STATE = dict(campaign=dict(id=TEXT,title=TEXT),character=CHARACTER,session=SESSION,
++             scene=SCENE,combat=dict(in_combat=BOOL,round=NUMBER,active_actor_id=TEXT,player_turn_used=BOOL),
++             ui=UI,journal=JOURNAL,player_name=TEXT,campaign_run_id=TEXT,
++             save_summary=dict(saved_at=TEXT,save_data_exists=BOOL,active_scene_id=TEXT,discovered_clues=NUMBER,chat_messages=NUMBER),
++             snapshots=[SNAPSHOT])
++
++
++def project_player_state(state):
++    """Derive a fresh DTO from an authoritative composed state, without mutation."""
++    source = state if isinstance(state, dict) else {}
++    out = project(source, STATE)
++    character = source.get('character')
++    if isinstance(character, dict) and isinstance(character.get('skills'), dict):
++        # Skill names are player-sheet identifiers. Only numeric ranks cross;
++        # arbitrary nested sheet annotations are never serialized.
++        out.setdefault('character', {})['skills'] = {
++            k:v for k,v in character['skills'].items()
++            if isinstance(k,str) and type(v) in (int,float) and math.isfinite(v)}
++    session = source.get('session') if isinstance(source.get('session'),dict) else {}
++    if isinstance(out.get('ui'),dict):
++        # All authored scene IDs were previously exposed by the scene picker.
++        # Restrict to already visited/current locations, never the full catalog.
++        known = session.get('visited_scene_ids', [])
++        known = [x for x in known if isinstance(x,str)] if isinstance(known,list) else []
++        current = session.get('active_scene_id')
++        if isinstance(current,str): known.append(current)
++        # Retain already projected state for idempotent final response enforcement.
++        out['ui']['scene_ids'] = list(dict.fromkeys(known))
++    # World structures contain private plans/events without per-item publication
++    # metadata. No raw world subtree is authorized. UI tolerates this empty view.
++    if 'world' in source: out['world'] = {}
++    return out
++
++
++SAFE_ERRORS = frozenset({
++    'Unknown or invalid scene ID.', 'snapshot_id required', 'Snapshot not found',
++    'You cannot act right now.', 'You have no attacks available.',
++    'Campaign has already started, or the transcript is not empty.',
++    'privileged HTTP ui mode is not authorized',
++})
++SAFE_STATUSES = frozenset({'ok','blocked','already_started','opening_failed','error'})
++GENERIC_ERROR = 'Unable to complete this request. Refresh your session and try again.'
++
++
++def project_player_response(payload):
++    """Endpoint envelope plus explicit state and narration. No execution metadata."""
++    source = payload if isinstance(payload,dict) else {}
++    out = project_player_state(source)
++    if 'public_state' in source:
++        out['public_state'] = project_player_state(source['public_state'])
++    if isinstance(source.get('session_id'),str): out['session_id'] = source['session_id']
++    for key in ('ok','campaign_started','gameplay_committed'):
++        if isinstance(source.get(key),bool): out[key] = source[key]
++    if 'ui_mode' in source: out['ui_mode'] = 'player'
++    if isinstance(source.get('status'),str) and source['status'] in SAFE_STATUSES: out['status'] = source['status']
++    if 'error' in source:
++        error = source['error']
++        out['error'] = error if isinstance(error,str) and error in SAFE_ERRORS else GENERIC_ERROR
++    if 'gm_output' in source:
++        out['gm_output'] = project(source['gm_output'],dict(player_facing_text=TEXT))
++    # The frontend uses resolution only for an optional details panel. Do not
++    # publish resolver claims, state diffs, hidden discoveries or validation data.
++    if 'resolution' in source: out['resolution'] = {}
++    if 'snapshot' in source: out['snapshot'] = project(source['snapshot'],SNAPSHOT)
++    if 'entries' in source:
++        out['entries'] = project(source['entries'],[dict(timestamp=TEXT,player_input=TEXT,gm_output=dict(player_facing_text=TEXT))])
++    return out
+--- /dev/null
++++ game/player_http_boundary.py
+@@ -0,0 +1,38 @@
++"""Final FastAPI JSON boundary, shared by every registered HTTP API route."""
++import json
++import logging
++from fastapi.routing import APIRoute
++from fastapi.responses import JSONResponse
++from fastapi.exceptions import RequestValidationError, HTTPException
++from game.player_http_projection import GENERIC_ERROR, project_player_response
++
++log = logging.getLogger(__name__)
++
++
++class PlayerHTTPRoute(APIRoute):
++    def get_route_handler(self):
++        original = super().get_route_handler()
++
++        async def handle(request):
++            if not request.url.path.startswith('/api/'):
++                return await original(request)
++            try:
++                response = await original(request)
++                # No streaming or non-JSON internal API responses are authorized.
++                payload = json.loads(response.body)
++                content = project_player_response(payload)
++                headers = {k:v for k,v in response.headers.items()
++                           if k.lower() not in ('content-length','content-type')}
++                return JSONResponse(content=content,status_code=response.status_code,
++                                    headers=headers,background=response.background)
++            except RequestValidationError:
++                return JSONResponse(status_code=422,content={'ok':False,'error':'Check the request fields and try again.'})
++            except HTTPException as error:
++                return JSONResponse(status_code=error.status_code,content={'ok':False,'error':GENERIC_ERROR})
++            except Exception:
++                # Detailed exceptions stay in server logs. Never serialize input,
++                # exception text, stack frames, prompts or partial internal state.
++                log.exception('Player HTTP request failed: %s', request.url.path)
++                return JSONResponse(status_code=500,content={'ok':False,'error':GENERIC_ERROR})
++
++        return handle
+--- /dev/null
++++ tests/test_pr_play_67_player_projection.py
+@@ -0,0 +1,105 @@
++"""Complete-payload HTTP assertions for the server/player trust boundary."""
++import copy
++import json
++import pytest
++from fastapi.testclient import TestClient
++from game import api, storage
++from game.player_http_projection import project_player_response, project_player_state
++from tests.test_pr_play_66_publication import setup as setup_publication
++
++HIDDEN_PATHS = [
++    ('session','gm_notes'),('world','gm_only'),('scene','scene','discoverable_clues'),
++    ('scene','scene','gm_notes'),('scene','scene','private_notes'),
++    ('campaign','objectives'),('world','npcs'),('world','locations'),('world','triggers'),
++    ('session','resolver_metadata'),('gm_output','prompt'),('gm_output','validation'),
++    ('resolution','state_changes'),('session','future_field'),('optional_metadata',),
++    ('scene','scene','future_field'),('journal','future_field'),('character','future_field'),
++    ('ui','future_field'),('world','public_looking_field'),
++]
++def put(data,path,value):
++    node=data
++    for key in path[:-1]: node=node.setdefault(key,{})
++    node[path[-1]]=value
++
++@pytest.mark.parametrize('path',HIDDEN_PATHS)
++def test_unknown_and_internal_sources_fail_closed(path):
++    data={'gm_output':{'player_facing_text':'Visible narration'},'character':{'name':'Galinor'}}
++    put(data,path,{'innocuous':'SECRET_SENTINEL_ALPHA'})
++    before=copy.deepcopy(data)
++    result=project_player_response(data)
++    assert 'SECRET_SENTINEL_ALPHA' not in json.dumps(result)
++    assert result['gm_output']['player_facing_text']=='Visible narration'
++    assert data==before
++
++@pytest.mark.parametrize('path',[
++    ('character','hp'),('scene','scene','summary'),('session','active_scene_id'),
++    ('ui','affordances'),('journal','known_facts'),('gm_output','player_facing_text'),
++])
++def test_object_under_public_scalar_never_stringified(path):
++    data={};put(data,path,{'text':'SECRET_SENTINEL_ALPHA'})
++    assert 'SECRET_SENTINEL_ALPHA' not in json.dumps(project_player_response(data))
++
++@pytest.mark.parametrize('enabled',[False,True])
++def test_real_http_state_and_gameplay_preserve_secrets(tmp_path,monkeypatch,enabled):
++    setup_publication(tmp_path,monkeypatch)
++    from game import quarantined_investigation_narration as q
++    if not enabled: monkeypatch.setenv(q.GATE_ENV,'0')
++    monkeypatch.setattr(storage,'SNAPSHOTS_DIR',tmp_path/'snapshots')
++    scene_before=storage.scene_path('old_milestone').read_bytes()
++    with TestClient(api.app,raise_server_exceptions=False) as client:
++        for path,payload in [('/api/state',None),('/api/chat',{'text':'I examine the weathered milestone.'}),('/api/state',None),('/api/response_mode',{'mode':'vivid'})]:
++            response=client.get(path) if payload is None else client.post(path,json=payload)
++            assert response.status_code==200,response.text
++            assert 'CANARY_' not in response.text
++            assert 'discoverable_clues' not in response.text
++    assert storage.load_session()['gm_notes']==['CANARY_GM_NOTE']
++    assert storage.load_world()['gm_only']['motivation']=='CANARY_NPC_MOTIVE'
++    assert storage.scene_path('old_milestone').read_bytes()==scene_before
++
++@pytest.mark.parametrize('fault',['initialization','resolution','validation','malformed_response','nested_error','serialization'])
++def test_http_failures_never_publish_internal_details(tmp_path,monkeypatch,fault):
++    setup_publication(tmp_path,monkeypatch)
++    def fail(*a,**k): raise RuntimeError('SECRET_SENTINEL_ERROR')
++    if fault=='initialization': monkeypatch.setattr(api,'load_campaign',fail)
++    if fault=='resolution': monkeypatch.setattr(api,'_resolve_engine_noncombat_seam',fail)
++    if fault=='malformed_response': monkeypatch.setattr(api,'chat',lambda *a,**k:{'status':{'secret':'SECRET_SENTINEL_ERROR'}})
++    if fault=='nested_error': monkeypatch.setattr(api,'chat',lambda *a,**k:{'ok':False,'error':{'text':'SECRET_SENTINEL_ERROR'},'world':storage.load_world()})
++    if fault=='serialization':
++        from starlette.responses import JSONResponse
++        original=JSONResponse.render
++        def render(self,content):
++            if isinstance(content,dict) and 'gm_output' in content: raise TypeError('SECRET_SENTINEL_ERROR')
++            return original(self,content)
++        monkeypatch.setattr(JSONResponse,'render',render)
++    with TestClient(api.app,raise_server_exceptions=False) as client:
++        response=client.post('/api/chat',json={'text':{'secret':'SECRET_SENTINEL_ERROR'}} if fault=='validation' else {'text':'I examine the weathered milestone.'})
++    assert 'SECRET_SENTINEL' not in response.text and 'CANARY_' not in response.text
++    if fault in {'initialization','resolution','serialization'}: assert response.status_code==500
++    if fault=='validation': assert response.status_code==422
++
++@pytest.mark.parametrize('name',['public_fields','known_discovery','inventory','affordances','visited_scenes','pure_projection','repeat','isolation'])
++def test_frontend_and_authority_contract(tmp_path,monkeypatch,name):
++    setup_publication(tmp_path,monkeypatch)
++    state=api.compose_state(); before=copy.deepcopy(state)
++    projected=project_player_state(state)
++    assert state==before
++    assert projected['character']['name']==state['character']['name']
++    assert projected['character']['inventory']==[{'id':'spellbook','name':'Spellbook','quantity':1,'usable':False}]
++    assert projected['ui']['scene_ids']==['old_milestone']
++    assert projected['scene']['scene']['id']=='old_milestone'
++    assert 'CANARY_' not in json.dumps(projected)
++    assert project_player_state(projected)==projected
++    projected['character']['inventory'][0]['name']='changed'
++    assert storage.load_character()['inventory'][0]['name']=='Spellbook'
++    with TestClient(api.app) as client:
++        first=client.post('/api/chat',json={'text':'I examine the weathered milestone.'})
++        assert first.status_code==200
++        from tests.test_pr_play_52_quarantined_integration import PRINT_CLUE
++        assert PRINT_CLUE in first.json()['gm_output']['player_facing_text']
++        second=client.post('/api/chat',json={'text':'I examine the weathered milestone again.'})
++        assert second.status_code==200 and 'CANARY_' not in second.text
++        visible=client.get('/api/state').json()['public_state']
++        assert PRINT_CLUE in visible['journal']['discovered_clues']
++        for mode in ['author','debug']:
++            denied=client.get('/api/state?ui_mode='+mode)
++            assert denied.status_code==403 and 'CANARY_' not in denied.text

@@ -1,0 +1,24 @@
+{
+  "fixture": "tests/fixtures/pr_play_78_holdout.json",
+  "sha256": "5a9d2d003ba91a311edff0006a99e91a7c5d9b1b9e8ff5f5d1be4d68339c46a0",
+  "cases": 120,
+  "groups": {
+    "mixed": 20,
+    "continuity": 40,
+    "narration": 15,
+    "dialogue": 15,
+    "concurrency": 10,
+    "readonly": 10,
+    "isolation": 5,
+    "publication": 5
+  },
+  "developer_authored": true,
+  "external_validation": false,
+  "fixture_edited_after_freeze": false,
+  "first_execution_note": "The first execution missed H098 because the harness reused one request key and lane across duplicate cases. The fixture was not edited. The harness was scoped by case id and the frozen file was run again.",
+  "closure_rerun": {
+    "command": "python -m pytest tests/test_pr_play_78_holdout.py tests/test_pr_play_78_integrated.py tests/test_pr_play_78_http.py tests/test_pr_play_77_multistep.py",
+    "result": "passed",
+    "holdout_cases_failed": []
+  }
+}

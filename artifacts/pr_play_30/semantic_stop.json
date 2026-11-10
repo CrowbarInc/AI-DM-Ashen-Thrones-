@@ -1,0 +1,51 @@
+{
+  "turn": 3,
+  "classification": {
+    "expression_status": "EXPRESSION_NOT_INVOKED",
+    "transport_completed": true,
+    "pipeline_completed": true,
+    "action_executed": false,
+    "gameplay_completed": false,
+    "interaction_outcome": "rejected",
+    "semantic_dead_end": true,
+    "stop": true,
+    "reasons": [
+      "action_or_compound_rejection"
+    ]
+  },
+  "decision": {
+    "category": "DECLINE",
+    "primary_intention": "I head northwest of the crates to investigate the muddy footprints.",
+    "intent_family": "movement",
+    "incidental_context": [],
+    "proposed_operation": null,
+    "proposed_target": null,
+    "proposed_record": null,
+    "missing_information": [],
+    "context_references": [],
+    "requires_authoritative_execution": false,
+    "reason": "destination_not_established",
+    "confidence": 0.82,
+    "ambiguity": null,
+    "player_facing_text": "You want to reach investigate the muddy footprints, but that is not an established destination from here. You stay where you are.",
+    "context_update": {
+      "interaction_context": {
+        "active_interaction_target_id": null,
+        "active_interaction_kind": null,
+        "interaction_mode": "none",
+        "engagement_level": "none"
+      }
+    },
+    "intent_modality": "committed",
+    "secondary_intentions": [],
+    "execution_policy": "decline_unauthorized_route",
+    "communication_owner": "GM",
+    "communication_purpose": "EXPLANATION",
+    "authorization": null
+  },
+  "interpreter_invoked": false,
+  "resolver_invoked": false,
+  "narration_provider_invoked": false,
+  "subsequent_scenario_actions": 0,
+  "live_go": false
+}

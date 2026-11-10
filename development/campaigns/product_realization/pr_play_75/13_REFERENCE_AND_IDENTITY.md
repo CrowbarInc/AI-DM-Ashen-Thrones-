@@ -1,0 +1,3 @@
+# PR-PLAY-75 — 13 REFERENCE AND IDENTITY
+
+Public name, role, canonical label and contextual/pronoun references resolve the same campaign-scene identity. Name matches now require word boundaries, preventing Eli from matching believe. Current focus cannot expose another scene/campaign; stale scene envelopes reject. Multiple plausible background identities clarify without mutation; absent references do not create a replacement. The initial live HTTP run exposed a duplicate authored-roster gate: stable NPCs survived load, but resumed references clarified. API now skips only that duplicate gate after bridge acceptance and exact target revalidation. Stronger final tests assert a new memory exchange, not merely identity survival.

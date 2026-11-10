@@ -1,0 +1,635 @@
+[
+  {
+    "path": "artifacts/at_opt_06/CURRENT_REVIEW(20261108-153108).zip",
+    "sha256": "68488f9a1809d7ba6a25e21c328394275a858dd34638ab3e661442453fc455bc",
+    "member_count": 22,
+    "summary_head": "# Campaign\n\nCampaign: AT-OPT-06 Same-Scene Transition Correction and Compact Eligibility Safeguard\nIdentifier: `at_opt_06`\nDate: 2026-11-08\nGenerated: 2026-11-08T15:31:08-05:00\nPurpose: Stop treating an unchanged scene id as a required location change, and keep plan-backed manual_play_auto narration on the full instruction list.\n\n# Executive Summary\n\nVerdict A/PASS. Live provider calls: 0. A same-scene scene-id stamp no longer sets transition_required or location_change. Genuine signals still do: a different scene id, activate_scene_id, resolved_transition, arrival, and time_skip. Equality does not clear an independent signal. On the F3 examine-turn CTIR both scene ids remain frontier_gate a",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "artifacts/pr_play_adjacent_regression/CURRENT_REVIEW(20261108-174500).zip",
+    "sha256": "4b1b8e9533aee81cc6d7a39155a2c4aae24f39bf3832a0c043577be2f57c5f2d",
+    "member_count": 16,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Adjacent Regression Reconciliation\nIdentifier: `pr_play_adjacent_regression`\nDate: 2026-11-08\nGenerated: 2026-11-08T22:45:00+00:00\nPurpose: Classify the twelve adjacent HTTP failures from the post-NPC handoff repair without changing production behavior.\n\n# Executive Summary\n\nAudit verdict A/PASS. The targeted handoff repair is accepted. The game is not playable. Live provider calls: 0. PR-PLAY-80 was not opened. The same 176-test selection failed the same 12 assertions. All 12 match a pre-handoff package that keeps authored travel and removes the handoff symbols. Zero are new regressions. Eight fail because the player body empties resolution while the log still ",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "artifacts/pr_play_post_npc/CURRENT_REVIEW(20261108-172122).zip",
+    "sha256": "648317fb809da2e8f2dfb2baa3dc17a0be8c892d8cd9669272bad8507a14f540",
+    "member_count": 17,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Post-NPC Conversational Handoff Repair\nIdentifier: `pr_play_post_npc`\nDate: 2026-11-08\nGenerated: 2026-11-08T22:21:22.170598+00:00\nPurpose: Let a player leave the previous NPC response for a visible object, a reading, an improvised action, or a grounded recall without losing travel checks or explicit repeats.\n\n# Executive Summary\n\nVerdict A/PASS for the targeted orchestration repair. The game is not playable. Live provider calls: 0. PR-PLAY-80 was not opened. After the Guard Captain answered, walking to the notice board was an unknown destination, reading the notice and copying it replayed the captain, and asking what the notice said was an unaddressed ask. Thos",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "artifacts/pr_play_post_opt/CURRENT_REVIEW(20261108-164245).zip",
+    "sha256": "796f4e6c346de3d764da95ce93766a8c157a06dc1764694123bb1b8ad43fae06",
+    "member_count": 17,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Post-Optimization Gameplay Evaluation and Failure Triage\nIdentifier: `pr_play_post_opt`\nDate: 2026-11-08\nGenerated: 2026-11-08T16:42:45-05:00\nPurpose: Evaluate whether the current engine can sustain a short continuation without live provider calls, and name the single largest remaining playability obstacle.\n\n# Executive Summary\n\nEvaluation verdict A/PASS. The twelve-turn continuation is not a sustainable conversation. Live provider calls: 0. PR-PLAY-80 was not opened. No production code was changed. One grounded Guard Captain answer and one authored move to Old Milestone succeeded. After the captain's answer, conversational orchestration reused that sentence for",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261106-181537).zip",
+    "sha256": "3b32ccb90e9d04267342e4a882f628b7fc2d58d3db25a17f69f02d3ea09b5fee",
+    "member_count": 149,
+    "summary_head": "# Campaign\n\nCampaign: Consequence-aware Player Initiative\nIdentifier: `PR-PLAY-72`\nDate: 2026-11-06\nGenerated: 2026-11-06T23:15:25.033676+00:00\nPurpose: Extend bounded natural intentions through existing authority and publication, preserve repository data and retain honest verification limits.\n\n# Executive Summary\n\nB \u2014 PARTIAL / DETERMINISTIC INITIATIVE WITH VERIFICATION LIMITATIONS\n\nObjective status: `B`.\n\n# Changes Made\n\n## Production changes\n\n- Default-off read-only initiative decision leaf, existing bridge validation and existing resolver integration.\n- See implementation diff and final repair evidence for precise scope; inherited changes are retained.\n\n## Validation changes\n\n- Frozen de",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [
+        "support/game/conversational_orchestration.py"
+      ],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [
+        "support/game/api.py"
+      ],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {
+      "support/game/conversational_orchestration.py": "481b309cc147193f46db297a138bda019e5eaac34c3e160d524b9b712a763f20",
+      "support/game/api.py": "6994bf71aaf41d550b256d9edaeb397729f66837f297217fd9163ac0d2722da4"
+    },
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261106-213835).zip",
+    "sha256": "40ea19c34cf328e42ec6aa0d25018bee11d4b9663add5b55ec1f200d9fca63e9",
+    "member_count": 155,
+    "summary_head": "# Campaign\n\nCampaign: Natural Initiative Verification & Resolution Closure\nIdentifier: `PR-PLAY-72V`\nDate: 2026-11-06\nGenerated: 2026-11-07T02:38:15.902848+00:00\nPurpose: Repair and verify repeat resolution, genuine ambiguity and read-only inquiries through existing authority boundaries.\n\n# Executive Summary\n\nB \u2014 PARTIAL / CORE REPAIR VERIFIED\n\nObjective status: `B`.\n\n# Changes Made\n\n## Production changes\n\n- Completed accessible repeat outcome in existing exploration resolver.\n- Read-only contextual/auxiliary inquiry classification repairs; no new resolver or persistence layer.\n\n## Validation changes\n\n- Frozen developer holdout once: 46/50, with failures preserved.\n- Final 78-case safety dev",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [
+        "support/game/conversational_orchestration.py"
+      ],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {
+      "support/game/conversational_orchestration.py": "481b309cc147193f46db297a138bda019e5eaac34c3e160d524b9b712a763f20"
+    },
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261106-221226).zip",
+    "sha256": "a0a56e020d47e011c4f4dd09e54a79959d88b6e4bf95bdcf2092755f64df4093",
+    "member_count": 37,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261107-101924).zip",
+    "sha256": "a29a161d17ca4d38f201350e4d5fa1853309455f1caa849e03069d1cf9212224",
+    "member_count": 90,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261107-110651).zip",
+    "sha256": "9182e6c3988883081689f769d797fe25fd85e10ed116541154e27d49d6482e28",
+    "member_count": 125,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY-75: Dynamic NPC interaction and social consequence continuity\nIdentifier: `pr_play_75`\nDate: 2026-11-07\nGenerated: 2026-11-07T16:08:01.134700+00:00\nPurpose: Verify bounded live NPC creation, authoritative continuity and player-safe conversation.\n\n# Executive Summary\n\nB \u2014 PARTIAL / DYNAMIC NPC PATHWAY DEMONSTRATED. Six live provider NPC proposals were validated and committed across the retained runs; four NPCs completed final HTTP/browser lifecycle verification. The first two live HTTP NPCs persisted but their resumed references clarified incorrectly. Final HTTP A/B and browser A/B pass after the target-gate repair. All 150 protected files match. Twelve live requ",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [
+        "support/artifacts/pr_play_75/source_at_holdout/game/api.py",
+        "support/artifacts/pr_play_75/source_before/game/api.py",
+        "support/game/api.py"
+      ],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {
+      "support/artifacts/pr_play_75/source_at_holdout/game/api.py": "192344e262e2344408b38fd7119305c876f19b3207c81e1721473319de475e51",
+      "support/artifacts/pr_play_75/source_before/game/api.py": "fe8f69b79b3e8f48256c0098d69297d6dd7da69b44cc136048d9f2cd9eff7141",
+      "support/game/api.py": "6be0b8afa93adbcb3326d956dac5c2218b62bc87a235f2619e6d7462c27dad7e"
+    },
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261107-121730).zip",
+    "sha256": "e813aede35360f6eedcc9e9732448c96b70f613930b44df1bfc9faabb2719c9a",
+    "member_count": 32,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261107-152806).zip",
+    "sha256": "0664df06b5fd6e6eafba6f52c8a0cb9740bf130f1143b7884bb07cdead666645",
+    "member_count": 41,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261107-175518).zip",
+    "sha256": "d86b1da419e37e7440834b661c2a02dc48790627be0179eef271fc0cbd764b93",
+    "member_count": 49,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261107-210010).zip",
+    "sha256": "48ddd28696e46b28903292d3f19e36f03486608b379885151f96d37b70448f60",
+    "member_count": 46,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261107-215430).zip",
+    "sha256": "9eaa31b756ada075a0d746c37ee8dee83e1b2f88ce8a6c579ee999410ea7e210",
+    "member_count": 27,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261107-225721).zip",
+    "sha256": "7c1bcae4c5aa912dc7c0cdbe3d0c67502cdb1a29e76e93555c5e453b1e78dba2",
+    "member_count": 27,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261107-235457).zip",
+    "sha256": "6f735deafb7d32bd2818272195e4d3c04f77314621b47cf35250dacf1f13c15c",
+    "member_count": 32,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-075338).zip",
+    "sha256": "4e179417ad4c26c98ade76c305ce6d941639f55eedc02f6bb9cc05caa09c7ca9",
+    "member_count": 87,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [
+        "source/game/api.py"
+      ],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {
+      "source/game/api.py": "c94292c3dffc8bcd3b745907c2fb31c6f864cc83f0602e49aae646f7a9a5052d"
+    },
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-075513).zip",
+    "sha256": "98895389227c97b5988eb8d39f43364d430c7fe0b419f23dfb3b2b7538b68786",
+    "member_count": 88,
+    "summary_head": null,
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [
+        "source/game/api.py"
+      ],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {
+      "source/game/api.py": "c94292c3dffc8bcd3b745907c2fb31c6f864cc83f0602e49aae646f7a9a5052d"
+    },
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-082936).zip",
+    "sha256": "4cb0c16711e477157789134632d63d9d111edb9cfdee384ebe4865a3c23b2656",
+    "member_count": 40,
+    "summary_head": "# CURRENT_REVIEW \u2014 PR-PLAY-79D-F\r\n\r\n## Campaign\r\n\r\nPR-PLAY-79D-F, final-source verification of bounded narration and the PR-PLAY-79 integration closeout. Branch `feature/product-realization`, HEAD `d40f1ed198236c604085f1c842ead267a8104ce2`. Application source was not edited.\r\n\r\n## Executive Summary\r\n\r\n**B \u2014 PARTIAL / CLOSEOUT STILL INCOMPLETE.** PR-PLAY-79 is not closed.\r\n\r\nThe live retreat on one frozen revision made one bounded expression request and published that accepted sentence. The same revision\u2019s live Gate Guard question published a grounded mutter. The completed expression was not accepted, and `last_publication` still describes an older guard line. The five-request budget ended on",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-122657).zip",
+    "sha256": "409a33ed67a5f872297d5bf274cdfd930e77830324b7e34a34d30218d7f23f92",
+    "member_count": 15,
+    "summary_head": "# Campaign\n\nCampaign: AT-OPT-01 Runtime Cost Attribution and Routing Audit\nIdentifier: `at_opt_01`\nDate: 2026-11-08\nGenerated: 2026-11-08T17:45:00+00:00\nPurpose: Read-only audit of why PR-PLAY-79D-F3 sent one 22777-input primary narration, where tokens and latency actually go, and which single later experiment is justified.\n\n# Executive Summary\n\nVerdict B/PARTIAL. The F3 step-back was one gm.call_gpt primary_turn: 22777 input, 600 output, 23377 total, provider latency 5339.716 ms. Interpretation and the physical experiment were off, so the fast path stored operation unresolved, and disabling expression does not block primary narration. The 3000-token cycle cap was never installed; the HTTP s",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-125717).zip",
+    "sha256": "3f19976960a4dd62bfbb55d6477b7fe37bb78babc190880dcf0e47caf84d8273",
+    "member_count": 13,
+    "summary_head": "# Campaign\n\nCampaign: AT-OPT-02 Unresolved Retreat Routing and Verification Budget Enforcement\nIdentifier: `at_opt_02`\nDate: 2026-11-08\nGenerated: 2026-11-08T17:57:10.817574+00:00\nPurpose: Stop a simple unresolved retreat from entering primary narration when physical adjudication is off, and make the F3 HTTP verification profile enforce a 3000-token total before provider dispatch.\n\n# Executive Summary\n\nVerdict A/PASS. Failure class: implementation defect. With physical adjudication off, I step back from the notice board now returns the existing unsupported sentence, does not enter call_gpt, and is an operational refusal. Turn, position, and last_publication stay unchanged. With physical adju",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-132042).zip",
+    "sha256": "1e071a6775190befcac05facbd8499c9e92b7b4bf2596c603360182819021294",
+    "member_count": 12,
+    "summary_head": "# Campaign\n\nCampaign: AT-OPT-03 Primary Narration Context Attribution and Compression Feasibility\nIdentifier: `at_opt_03`\nDate: 2026-11-08\nGenerated: 2026-11-08T18:20:42Z\nPurpose: Explain why legitimate primary narration requests exceed 20,000 input tokens and identify one safe, measurable compression experiment. Do not change production prompts.\n\n# Executive Summary\n\nVerdict A/PASS. Live provider calls: 0. The captured F3 prompt was not stored. A rebuild from the pre-continuation snapshot is 83,040 bytes and an admission estimate of 27,744, against a recorded 22,777 input tokens. The 4,967-token gap is unattributed. The user JSON is mostly response_policy (21,638 bytes), instructions (12,59",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-142618).zip",
+    "sha256": "c39c1c2dfd5fd929094b19da5604abdaa47739fca77a51067ed6def6a893a4d6",
+    "member_count": 17,
+    "summary_head": "# Campaign\n\nCampaign: AT-OPT-04 Mixed-Key Response Policy Deduplication\nIdentifier: `at_opt_04`\nDate: 2026-11-08\nGenerated: 2026-11-08T19:26:18Z\nPurpose: Remove individually identical nested turn-packet policy keys from the serialized primary narration request, and measure that reduction without a provider call.\n\n# Executive Summary\n\nVerdict A/PASS. Live provider calls: 0. omit_duplicate_turn_packet_policy now drops each nested policy key whose complete JSON value equals the root, and keeps differing and root-absent keys. The root policy hash is unchanged. On the F3 build_messages reconstruction the blob falls from 83,040 bytes to 80,403, a reduction of 2,637 bytes (3.18%). The admission est",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-172122).zip",
+    "sha256": "648317fb809da2e8f2dfb2baa3dc17a0be8c892d8cd9669272bad8507a14f540",
+    "member_count": 17,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Post-NPC Conversational Handoff Repair\nIdentifier: `pr_play_post_npc`\nDate: 2026-11-08\nGenerated: 2026-11-08T22:21:22.170598+00:00\nPurpose: Let a player leave the previous NPC response for a visible object, a reading, an improvised action, or a grounded recall without losing travel checks or explicit repeats.\n\n# Executive Summary\n\nVerdict A/PASS for the targeted orchestration repair. The game is not playable. Live provider calls: 0. PR-PLAY-80 was not opened. After the Guard Captain answered, walking to the notice board was an unknown destination, reading the notice and copying it replayed the captain, and asking what the notice said was an unaddressed ask. Thos",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-174500).zip",
+    "sha256": "4b1b8e9533aee81cc6d7a39155a2c4aae24f39bf3832a0c043577be2f57c5f2d",
+    "member_count": 16,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Adjacent Regression Reconciliation\nIdentifier: `pr_play_adjacent_regression`\nDate: 2026-11-08\nGenerated: 2026-11-08T22:45:00+00:00\nPurpose: Classify the twelve adjacent HTTP failures from the post-NPC handoff repair without changing production behavior.\n\n# Executive Summary\n\nAudit verdict A/PASS. The targeted handoff repair is accepted. The game is not playable. Live provider calls: 0. PR-PLAY-80 was not opened. The same 176-test selection failed the same 12 assertions. All 12 match a pre-handoff package that keeps authored travel and removes the handoff symbols. Zero are new regressions. Eight fail because the player body empties resolution while the log still ",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-194409).zip",
+    "sha256": "d2076c61b28e6a0841853b62d0d6901d03463ff252e53e184ed6e891a708cae8",
+    "member_count": 40,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Adjacent Regression Reconciliation \u2014 Verified Recovery\nIdentifier: `pr_play_adjacent_regression`\nDate: 2026-11-08\nGenerated: 2026-11-09T00:43:05.685802+00:00\nPurpose: Recover handoff integrity and individually investigate twelve adjacent HTTP failures.\n\n# Executive Summary\n\nAudit A/PASS; previous repair B \u2014 Conditional acceptance. Same 176 adjacent tests: 164 passed, 12 failed, zero errors/skips; seven focused controls pass. Classifications A=0/B=0/C=9/D=0/E=3. Nine obsolete public-resolution assertions are grounded in PR-PLAY-67; three prose defects have unresolved origin. Local stable ZIP was the prior repair package while Markdown/manifest had advanced. New a",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [
+        "support/game/perception_grounding.py"
+      ],
+      "game/immutable_valid_response.py": [
+        "support/game/immutable_valid_response.py"
+      ],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": [
+        "support/tests/test_referenced_surface_grounding_inspection_resolution.py"
+      ]
+    },
+    "source_member_hashes": {
+      "support/game/perception_grounding.py": "de12afb50862029542db682f6b8cacf52064a6521c4ed665955792e6af08246a",
+      "support/game/immutable_valid_response.py": "1ffd6158184c621a79c0358e7a0ac6db49fc32580fcfbbd2dad07bb2df165afe",
+      "support/tests/test_referenced_surface_grounding_inspection_resolution.py": "eadc2c24f678f9ba08d2e89209e7dfebd8205f202aabb1ec6808ea471ca7cea3"
+    },
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW(20261108-194430).zip",
+    "sha256": "d2076c61b28e6a0841853b62d0d6901d03463ff252e53e184ed6e891a708cae8",
+    "member_count": 40,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Adjacent Regression Reconciliation \u2014 Verified Recovery\nIdentifier: `pr_play_adjacent_regression`\nDate: 2026-11-08\nGenerated: 2026-11-09T00:43:05.685802+00:00\nPurpose: Recover handoff integrity and individually investigate twelve adjacent HTTP failures.\n\n# Executive Summary\n\nAudit A/PASS; previous repair B \u2014 Conditional acceptance. Same 176 adjacent tests: 164 passed, 12 failed, zero errors/skips; seven focused controls pass. Classifications A=0/B=0/C=9/D=0/E=3. Nine obsolete public-resolution assertions are grounded in PR-PLAY-67; three prose defects have unresolved origin. Local stable ZIP was the prior repair package while Markdown/manifest had advanced. New a",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [
+        "support/game/perception_grounding.py"
+      ],
+      "game/immutable_valid_response.py": [
+        "support/game/immutable_valid_response.py"
+      ],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": [
+        "support/tests/test_referenced_surface_grounding_inspection_resolution.py"
+      ]
+    },
+    "source_member_hashes": {
+      "support/game/perception_grounding.py": "de12afb50862029542db682f6b8cacf52064a6521c4ed665955792e6af08246a",
+      "support/game/immutable_valid_response.py": "1ffd6158184c621a79c0358e7a0ac6db49fc32580fcfbbd2dad07bb2df165afe",
+      "support/tests/test_referenced_surface_grounding_inspection_resolution.py": "eadc2c24f678f9ba08d2e89209e7dfebd8205f202aabb1ec6808ea471ca7cea3"
+    },
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/CURRENT_REVIEW.zip",
+    "sha256": "d2076c61b28e6a0841853b62d0d6901d03463ff252e53e184ed6e891a708cae8",
+    "member_count": 40,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Adjacent Regression Reconciliation \u2014 Verified Recovery\nIdentifier: `pr_play_adjacent_regression`\nDate: 2026-11-08\nGenerated: 2026-11-09T00:43:05.685802+00:00\nPurpose: Recover handoff integrity and individually investigate twelve adjacent HTTP failures.\n\n# Executive Summary\n\nAudit A/PASS; previous repair B \u2014 Conditional acceptance. Same 176 adjacent tests: 164 passed, 12 failed, zero errors/skips; seven focused controls pass. Classifications A=0/B=0/C=9/D=0/E=3. Nine obsolete public-resolution assertions are grounded in PR-PLAY-67; three prose defects have unresolved origin. Local stable ZIP was the prior repair package while Markdown/manifest had advanced. New a",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [
+        "support/game/perception_grounding.py"
+      ],
+      "game/immutable_valid_response.py": [
+        "support/game/immutable_valid_response.py"
+      ],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": [
+        "support/tests/test_referenced_surface_grounding_inspection_resolution.py"
+      ]
+    },
+    "source_member_hashes": {
+      "support/game/perception_grounding.py": "de12afb50862029542db682f6b8cacf52064a6521c4ed665955792e6af08246a",
+      "support/game/immutable_valid_response.py": "1ffd6158184c621a79c0358e7a0ac6db49fc32580fcfbbd2dad07bb2df165afe",
+      "support/tests/test_referenced_surface_grounding_inspection_resolution.py": "eadc2c24f678f9ba08d2e89209e7dfebd8205f202aabb1ec6808ea471ca7cea3"
+    },
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/history/at_opt_06/REVIEW.zip",
+    "sha256": "68488f9a1809d7ba6a25e21c328394275a858dd34638ab3e661442453fc455bc",
+    "member_count": 22,
+    "summary_head": "# Campaign\n\nCampaign: AT-OPT-06 Same-Scene Transition Correction and Compact Eligibility Safeguard\nIdentifier: `at_opt_06`\nDate: 2026-11-08\nGenerated: 2026-11-08T15:31:08-05:00\nPurpose: Stop treating an unchanged scene id as a required location change, and keep plan-backed manual_play_auto narration on the full instruction list.\n\n# Executive Summary\n\nVerdict A/PASS. Live provider calls: 0. A same-scene scene-id stamp no longer sets transition_required or location_change. Genuine signals still do: a different scene id, activate_scene_id, resolved_transition, arrival, and time_skip. Equality does not clear an independent signal. On the F3 examine-turn CTIR both scene ids remain frontier_gate a",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/history/pr_play_adjacent_regression/REVIEW.zip",
+    "sha256": "4b1b8e9533aee81cc6d7a39155a2c4aae24f39bf3832a0c043577be2f57c5f2d",
+    "member_count": 16,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Adjacent Regression Reconciliation\nIdentifier: `pr_play_adjacent_regression`\nDate: 2026-11-08\nGenerated: 2026-11-08T22:45:00+00:00\nPurpose: Classify the twelve adjacent HTTP failures from the post-NPC handoff repair without changing production behavior.\n\n# Executive Summary\n\nAudit verdict A/PASS. The targeted handoff repair is accepted. The game is not playable. Live provider calls: 0. PR-PLAY-80 was not opened. The same 176-test selection failed the same 12 assertions. All 12 match a pre-handoff package that keeps authored travel and removes the handoff symbols. Zero are new regressions. Eight fail because the player body empties resolution while the log still ",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/history/pr_play_post_npc/REVIEW.zip",
+    "sha256": "648317fb809da2e8f2dfb2baa3dc17a0be8c892d8cd9669272bad8507a14f540",
+    "member_count": 17,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Post-NPC Conversational Handoff Repair\nIdentifier: `pr_play_post_npc`\nDate: 2026-11-08\nGenerated: 2026-11-08T22:21:22.170598+00:00\nPurpose: Let a player leave the previous NPC response for a visible object, a reading, an improvised action, or a grounded recall without losing travel checks or explicit repeats.\n\n# Executive Summary\n\nVerdict A/PASS for the targeted orchestration repair. The game is not playable. Live provider calls: 0. PR-PLAY-80 was not opened. After the Guard Captain answered, walking to the notice board was an unknown destination, reading the notice and copying it replayed the captain, and asking what the notice said was an unaddressed ask. Thos",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  },
+  {
+    "path": "handoff/history/pr_play_post_opt/REVIEW.zip",
+    "sha256": "796f4e6c346de3d764da95ce93766a8c157a06dc1764694123bb1b8ad43fae06",
+    "member_count": 17,
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Post-Optimization Gameplay Evaluation and Failure Triage\nIdentifier: `pr_play_post_opt`\nDate: 2026-11-08\nGenerated: 2026-11-08T16:42:45-05:00\nPurpose: Evaluate whether the current engine can sustain a short continuation without live provider calls, and name the single largest remaining playability obstacle.\n\n# Executive Summary\n\nEvaluation verdict A/PASS. The twelve-turn continuation is not a sustainable conversation. Live provider calls: 0. PR-PLAY-80 was not opened. No production code was changed. One grounded Guard Captain answer and one authored move to Old Milestone succeeded. After the captain's answer, conversational orchestration reused that sentence for",
+    "required_source_members": {
+      "game/conversational_orchestration.py": [],
+      "game/conversational_continuity.py": [],
+      "game/intent_parser.py": [],
+      "game/referenced_surface.py": [],
+      "game/perception_grounding.py": [],
+      "game/immutable_valid_response.py": [],
+      "game/api.py": [],
+      "tests/test_referenced_surface_grounding_inspection_resolution.py": []
+    },
+    "source_member_hashes": {},
+    "has_complete_relevant_set": false
+  }
+]

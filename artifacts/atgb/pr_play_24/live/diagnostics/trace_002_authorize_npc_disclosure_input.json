@@ -1,0 +1,42 @@
+{
+  "function": "game.dialogue_authority.authorize_npc_disclosure",
+  "args": [
+    {
+      "id": "gate_serjeant",
+      "name": "Gate Serjeant",
+      "location": "frontier_gate",
+      "aliases": [
+        "serjeant",
+        "watch serjeant",
+        "gate serjeant"
+      ],
+      "topics": [
+        {
+          "id": "route_change",
+          "text": "The patrol route changed after the Ash Compact census choke worsened.",
+          "clue_id": "patrol_route_change"
+        }
+      ],
+      "role": "",
+      "affiliation": "",
+      "availability": "available",
+      "current_agenda": "",
+      "disposition": "neutral",
+      "stance_toward_player": "neutral",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "frontier_gate",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "route_change",
+      "text": "The patrol route changed after the Ash Compact census choke worsened.",
+      "clue_id": "patrol_route_change"
+    }
+  ],
+  "kwargs": {}
+}

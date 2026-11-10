@@ -1,0 +1,298 @@
+{
+  "source_scene": {
+    "scene": {
+      "id": "frontier_gate",
+      "location": "Cinderwatch Gate District",
+      "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+      "mode": "social",
+      "visible_facts": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "opening_seed_facts": [
+        "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+        "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+        "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+        "A tavern runner shouts offers of hot stew and paid rumor.",
+        "A well-appointed townhouse overlooking the square flies noble colors\u00e2\u20ac\u201da quiet contrast to the mud and clamor.",
+        "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+      ],
+      "journal_seed_facts": [
+        "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+        "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+        "A notice board announces new taxes and curfews, and names a missing patrol.",
+        "A tavern runner is hawking hot stew and rumor for coin.",
+        "A ragged stranger hangs back, watching the crowd more than the queue."
+      ],
+      "discoverable_clues": [
+        {
+          "id": "notice_patrol_route",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "hidden_facts": [
+        "An agent of a noble house is watching new arrivals from the square's edge.",
+        "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+        "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+        "A spotter above the lane is matching faces to a written list paid for in silver."
+      ],
+      "exits": [
+        {
+          "label": "Enter Cinderwatch",
+          "target_scene_id": "market_quarter"
+        },
+        {
+          "label": "Follow the missing patrol rumor",
+          "target_scene_id": "old_milestone"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "scene_id": "frontier_gate",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "guard",
+            "watchman",
+            "sentry",
+            "guardsman",
+            "captain"
+          ],
+          "aliases": []
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "scene_id": "frontier_gate",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 1,
+          "address_roles": [
+            "runner",
+            "informant"
+          ],
+          "aliases": []
+        },
+        {
+          "id": "refugee",
+          "name": "Ragged stranger",
+          "scene_id": "frontier_gate",
+          "kind": "scene_actor",
+          "addressable": true,
+          "address_priority": 2,
+          "address_roles": [
+            "stranger",
+            "refugee"
+          ],
+          "aliases": [
+            "ragged stranger"
+          ]
+        },
+        {
+          "id": "threadbare_watcher",
+          "name": "Threadbare watcher",
+          "scene_id": "frontier_gate",
+          "kind": "scene_actor",
+          "addressable": true,
+          "address_priority": 3,
+          "address_roles": [
+            "watcher"
+          ],
+          "aliases": []
+        }
+      ],
+      "interactables": [
+        {
+          "id": "notice_board",
+          "label": "Notice board",
+          "aliases": [
+            "notice",
+            "board",
+            "curfew notice",
+            "missing patrol warning"
+          ],
+          "type": "investigate",
+          "reveals_clue": "notice_patrol_route"
+        }
+      ]
+    }
+  },
+  "destination_scene": {
+    "scene": {
+      "id": "old_milestone",
+      "location": "Old Milestone",
+      "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+      "mode": "exploration",
+      "visible_facts": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+        "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      ],
+      "opening_seed_facts": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub."
+      ],
+      "journal_seed_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discoverable_clues": [
+        {
+          "id": "milestone_mud_prints",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "hidden_facts": [],
+      "exits": [
+        {
+          "label": "Return to Cinderwatch Gate",
+          "target_scene_id": "frontier_gate"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "interactables": [
+        {
+          "id": "milestone",
+          "label": "Weathered milestone",
+          "aliases": [
+            "old milestone",
+            "stone",
+            "marker",
+            "weathered stone"
+          ],
+          "type": "investigate",
+          "reveals_clue": "milestone_mud_prints"
+        },
+        {
+          "id": "prints",
+          "label": "Mud prints",
+          "aliases": [
+            "footprints",
+            "mud",
+            "track",
+            "mud track",
+            "northwest track"
+          ],
+          "type": "investigate",
+          "reveals_clue": "milestone_mud_prints"
+        }
+      ]
+    }
+  },
+  "adapted_routes": [
+    {
+      "label": "Enter Cinderwatch",
+      "target_scene_id": "market_quarter",
+      "id": "leave_for_enter_cinderwatch"
+    },
+    {
+      "label": "Follow the missing patrol rumor",
+      "target_scene_id": "old_milestone",
+      "id": "leave_for_follow_the_missing_patrol_rumor"
+    }
+  ],
+  "known_information": {
+    "muddy_footprints_northwest": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "explicit",
+      "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+    },
+    "minlead_exit_frontier_gate_old_milestone": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "actionable",
+      "text": "Follow the missing patrol rumor"
+    }
+  },
+  "decision": {
+    "category": "CLARIFY",
+    "primary_intention": "I head northwest of the crates to investigate the muddy footprints.",
+    "intent_family": "movement",
+    "incidental_context": [],
+    "proposed_operation": null,
+    "proposed_target": null,
+    "proposed_record": null,
+    "missing_information": [
+      "destination"
+    ],
+    "context_references": [
+      "muddy_footprints_northwest"
+    ],
+    "requires_authoritative_execution": false,
+    "reason": "clue_route_clarification",
+    "confidence": 0.84,
+    "ambiguity": "More than one established destination could match.",
+    "player_facing_text": "I cannot establish which route reaches the place you mean. Available routes: Enter Cinderwatch; Follow the missing patrol rumor. Which route do you want to take? Your intention to investigate the muddy footprints is still pending; nothing has been attempted.",
+    "context_update": {
+      "conversational_context": {
+        "pending_clarification": {
+          "kind": "ambiguous_destination",
+          "operation": "MOVE",
+          "original_text": "I head northwest of the crates to investigate the muddy footprints.",
+          "choices": [
+            {
+              "entity_id": "leave_for_enter_cinderwatch",
+              "label": "Enter Cinderwatch"
+            },
+            {
+              "entity_id": "leave_for_follow_the_missing_patrol_rumor",
+              "label": "Follow the missing patrol rumor"
+            }
+          ],
+          "scene_id": "frontier_gate",
+          "deferred_steps": [
+            {
+              "text": "investigate the muddy footprints",
+              "operation": "INSPECT",
+              "status": "pending",
+              "dependency": "after_travel",
+              "supported": false,
+              "target_id": "",
+              "consequential": true
+            }
+          ]
+        }
+      },
+      "interaction_context": {
+        "active_interaction_target_id": null,
+        "active_interaction_kind": null,
+        "interaction_mode": "none",
+        "engagement_level": "none"
+      }
+    },
+    "intent_modality": "committed",
+    "secondary_intentions": [
+      {
+        "text": "investigate the muddy footprints",
+        "operation": "INSPECT",
+        "status": "pending",
+        "dependency": "after_travel",
+        "supported": false,
+        "target_id": "",
+        "consequential": true
+      }
+    ],
+    "execution_policy": "clarify_before_execution",
+    "communication_owner": "GM",
+    "communication_purpose": "CLARIFICATION",
+    "authorization": {
+      "route_decision": "NO_AUTHORIZED_ROUTE",
+      "requested_destination": "northwest of the crates",
+      "purpose": "investigate the muddy footprints",
+      "referenced_clues": [
+        "muddy_footprints_northwest"
+      ],
+      "selection_evidence": "no_authored_clue_route_link"
+    }
+  }
+}

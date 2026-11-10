@@ -1,0 +1,13 @@
+{
+  "status": "PARTIAL",
+  "overall": "C",
+  "campaign_initialized": true,
+  "provider_requests": 4,
+  "ordinary_attempted": 4,
+  "ordinary_http_completed": 4,
+  "ordinary_gameplay_completed": 0,
+  "first_decisive_failure": "T1 unsupported MOVE to present NPC blocks ASK",
+  "controller_stop_reason": "no_supported_consequence_followup",
+  "protocol_deviation": "PROTOCOL DEVIATION: T1 already made the intended NPC sequence unusable. The controller checked HTTP/provider errors but failed to detect this host-generated semantic dead end. It submitted T2–T4 before stopping, and its raw ordinary_completed=4 counter counts HTTP success, not gameplay success. Those raw records are preserved. Review counts: 4 attempted, 4 HTTP responses, 0 successful NPC/gameplay interactions. T2–T4 are post-failure diagnostic observations, not a valid continuation or recovery. No restart, provider retry, replacement initialization, or extra live run occurred.",
+  "hidden_boundary_pass": true
+}

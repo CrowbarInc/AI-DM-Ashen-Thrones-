@@ -1,0 +1,2170 @@
+{
+  "step_id": "T6",
+  "player_input": "I examine the footprints.",
+  "dm_response": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+  "response_truncated": false,
+  "http_status": 200,
+  "completion": {
+    "expression_status": "EXPRESSION_NOT_INVOKED",
+    "transport_completed": true,
+    "pipeline_completed": true,
+    "action_executed": false,
+    "gameplay_completed": false,
+    "interaction_outcome": "unknown",
+    "semantic_dead_end": false,
+    "stop": false,
+    "reasons": []
+  },
+  "outcome_classification": {
+    "kind": "legitimate_gameplay_outcome",
+    "evidence": "native accepted response and resolution; no invented success condition"
+  },
+  "state_diff": [
+    {
+      "path": "/session.json/_runtime_canonical_ctir_stamp_v1",
+      "before": "5:1ddcd3d97c0:746d2c6a",
+      "after": "6:1ddccf7b180:746d2c6a"
+    },
+    {
+      "path": "/session.json/_runtime_canonical_ctir_v1/resolution/authoritative_outputs/clue_id",
+      "before": "milestone_mud_prints",
+      "after": null
+    },
+    {
+      "path": "/session.json/_runtime_canonical_ctir_v1/resolution/consequences",
+      "before": [
+        "clue_revealed",
+        "interactable_id"
+      ],
+      "after": [
+        "already_searched",
+        "interactable_id"
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_canonical_ctir_v1/resolution/kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/_runtime_canonical_ctir_v1/resolution/success_state",
+      "before": "success",
+      "after": "failure"
+    },
+    {
+      "path": "/session.json/_runtime_canonical_ctir_v1/turn_id",
+      "before": 5,
+      "after": 6
+    },
+    {
+      "path": "/session.json/_runtime_canonical_ctir_v1/world/progression/faction_agenda",
+      "before": [
+        {
+          "id": "ash_cowl",
+          "status": "active",
+          "value": 5
+        },
+        {
+          "id": "house_verevin",
+          "status": "active",
+          "value": 5
+        },
+        {
+          "id": "ordo_pyric",
+          "status": "active",
+          "value": 5
+        }
+      ],
+      "after": [
+        {
+          "id": "ash_cowl",
+          "status": "active",
+          "value": 6
+        },
+        {
+          "id": "house_verevin",
+          "status": "active",
+          "value": 6
+        },
+        {
+          "id": "ordo_pyric",
+          "status": "active",
+          "value": 6
+        }
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_canonical_ctir_v1/world/progression/faction_pressure",
+      "before": [
+        {
+          "id": "ash_cowl",
+          "status": "active",
+          "value": 7
+        },
+        {
+          "id": "house_verevin",
+          "status": "active",
+          "value": 7
+        },
+        {
+          "id": "ordo_pyric",
+          "status": "active",
+          "value": 6
+        }
+      ],
+      "after": [
+        {
+          "id": "ash_cowl",
+          "status": "active",
+          "value": 8
+        },
+        {
+          "id": "house_verevin",
+          "status": "active",
+          "value": 8
+        },
+        {
+          "id": "ordo_pyric",
+          "status": "active",
+          "value": 7
+        }
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_stamp_v1",
+      "before": "5:1ddcd3d97c0:746d2c6a",
+      "after": "6:1ddccf7b180:746d2c6a"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/narrative_plan/action_outcome/result/result_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/narrative_plan/action_outcome/result/success_state",
+      "before": "success",
+      "after": "failure"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/narrative_plan/recent_compressed_events",
+      "before": [
+        {
+          "gm_snippet": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A not",
+          "player_input": ""
+        },
+        {
+          "gm_snippet": "Tavern Runner says, \"I offer hot stew and rumors.\"",
+          "player_input": "I approach the tavern runner and ask what they're offering."
+        },
+        {
+          "gm_snippet": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+          "player_input": "What sort of rumors have you heard?"
+        },
+        {
+          "gm_snippet": "I cannot establish which route reaches the place you mean. Available routes: Enter Cinderwatch; Follow the missing patrol rumor. Which route do you want to take? Your intention to investigate the mudd",
+          "player_input": "I head northwest of the crates to investigate the muddy footprints."
+        },
+        {
+          "gm_snippet": "You arrive at Old Milestone. Your intended follow-up is still pending. Choose a visible target here when you are ready.",
+          "player_input": "I go to Follow the missing patrol rumor."
+        }
+      ],
+      "after": [
+        {
+          "gm_snippet": "Tavern Runner says, \"I offer hot stew and rumors.\"",
+          "player_input": "I approach the tavern runner and ask what they're offering."
+        },
+        {
+          "gm_snippet": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+          "player_input": "What sort of rumors have you heard?"
+        },
+        {
+          "gm_snippet": "I cannot establish which route reaches the place you mean. Available routes: Enter Cinderwatch; Follow the missing patrol rumor. Which route do you want to take? Your intention to investigate the mudd",
+          "player_input": "I head northwest of the crates to investigate the muddy footprints."
+        },
+        {
+          "gm_snippet": "You arrive at Old Milestone. Your intended follow-up is still pending. Choose a visible target here when you are ready.",
+          "player_input": "I go to Follow the missing patrol rumor."
+        },
+        {
+          "gm_snippet": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "player_input": "I examine the footprints."
+        }
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/narrative_plan/required_new_information",
+      "before": [
+        {
+          "kind": "authoritative_output_keys",
+          "keys": [
+            "action_id",
+            "clue_id",
+            "interactable_id",
+            "resolved_transition"
+          ]
+        },
+        {
+          "kind": "consequence_atoms",
+          "values": [
+            "clue_revealed",
+            "interactable_id"
+          ]
+        },
+        {
+          "kind": "resolution_kind",
+          "value": "discover_clue"
+        },
+        {
+          "kind": "success_state",
+          "value": "success"
+        }
+      ],
+      "after": [
+        {
+          "kind": "authoritative_output_keys",
+          "keys": [
+            "action_id",
+            "interactable_id",
+            "resolved_transition"
+          ]
+        },
+        {
+          "kind": "consequence_atoms",
+          "values": [
+            "already_searched",
+            "interactable_id"
+          ]
+        },
+        {
+          "kind": "resolution_kind",
+          "value": "already_searched"
+        },
+        {
+          "kind": "success_state",
+          "value": "failure"
+        }
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/plan_metadata/ctir_stamp",
+      "before": "5:1ddcd3d97c0:746d2c6a",
+      "after": "6:1ddccf7b180:746d2c6a"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/narration_obligations/scene_momentum_exchanges_since",
+      "before": 1,
+      "after": 2
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/answer_completeness/trace/answer_pressure_anchor_kind",
+      "before": null,
+      "after": "prior_player_topic_overlap"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/overlap_ratio",
+      "before": null,
+      "after": 1.0
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/press_depth",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/previous_answer_snippet",
+      "before": null,
+      "after": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/previous_player_input",
+      "before": null,
+      "after": "I examine the footprints."
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/topic_tokens",
+      "before": [],
+      "after": [
+        "examine",
+        "footprints"
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/trace/answer_pressure_anchor_kind",
+      "before": null,
+      "after": "prior_player_topic_overlap"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/trace/follow_up_overlap_ratio",
+      "before": null,
+      "after": 1.0
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/trace/follow_up_press_depth",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/trace/follow_up_pressure_detected",
+      "before": false,
+      "after": true
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/trace/prior_answer_available",
+      "before": false,
+      "after": true
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/trace/resolution_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/response_policy/response_delta/trace/suppressed_because",
+      "before": [
+        "no_follow_up_pressure",
+        "not_answer_seeking_turn"
+      ],
+      "after": [
+        "not_answer_seeking_turn"
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/scene_state_anchor_contract/player_action_tokens",
+      "before": [
+        "discover_clue",
+        "prints",
+        "examine",
+        "footprints"
+      ],
+      "after": [
+        "already_searched",
+        "prints",
+        "examine",
+        "footprints"
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/answer_completeness/trace/answer_pressure_anchor_kind",
+      "before": null,
+      "after": "prior_player_topic_overlap"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/overlap_ratio",
+      "before": null,
+      "after": 1.0
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/press_depth",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/previous_answer_snippet",
+      "before": null,
+      "after": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/previous_player_input",
+      "before": null,
+      "after": "I examine the footprints."
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/topic_tokens",
+      "before": [],
+      "after": [
+        "examine",
+        "footprints"
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/trace/answer_pressure_anchor_kind",
+      "before": null,
+      "after": "prior_player_topic_overlap"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/trace/follow_up_overlap_ratio",
+      "before": null,
+      "after": 1.0
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/trace/follow_up_press_depth",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/trace/follow_up_pressure_detected",
+      "before": false,
+      "after": true
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/trace/prior_answer_available",
+      "before": false,
+      "after": true
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/trace/resolution_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/contracts/response_delta/trace/suppressed_because",
+      "before": [
+        "no_follow_up_pressure",
+        "not_answer_seeking_turn"
+      ],
+      "after": [
+        "not_answer_seeking_turn"
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/resolution_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/answer_completeness/trace/answer_pressure_anchor_kind",
+      "before": null,
+      "after": "prior_player_topic_overlap"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/overlap_ratio",
+      "before": null,
+      "after": 1.0
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/press_depth",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/previous_answer_snippet",
+      "before": null,
+      "after": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/previous_player_input",
+      "before": null,
+      "after": "I examine the footprints."
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/topic_tokens",
+      "before": [],
+      "after": [
+        "examine",
+        "footprints"
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/trace/answer_pressure_anchor_kind",
+      "before": null,
+      "after": "prior_player_topic_overlap"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/trace/follow_up_overlap_ratio",
+      "before": null,
+      "after": 1.0
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/trace/follow_up_press_depth",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/trace/follow_up_pressure_detected",
+      "before": false,
+      "after": true
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/trace/prior_answer_available",
+      "before": false,
+      "after": true
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/trace/resolution_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/_runtime_narration_plan_bundle_v1/renderer_inputs/turn_packet/response_policy/response_delta/trace/suppressed_because",
+      "before": [
+        "no_follow_up_pressure",
+        "not_answer_seeking_turn"
+      ],
+      "after": [
+        "not_answer_seeking_turn"
+      ]
+    },
+    {
+      "path": "/session.json/_runtime_progression_nodes_fingerprint_v1/faction_agenda:ash_cowl",
+      "before": "active|5|10",
+      "after": "active|6|10"
+    },
+    {
+      "path": "/session.json/_runtime_progression_nodes_fingerprint_v1/faction_agenda:house_verevin",
+      "before": "active|5|10",
+      "after": "active|6|10"
+    },
+    {
+      "path": "/session.json/_runtime_progression_nodes_fingerprint_v1/faction_agenda:ordo_pyric",
+      "before": "active|5|10",
+      "after": "active|6|10"
+    },
+    {
+      "path": "/session.json/_runtime_progression_nodes_fingerprint_v1/faction_pressure:ash_cowl",
+      "before": "active|7|10",
+      "after": "active|8|10"
+    },
+    {
+      "path": "/session.json/_runtime_progression_nodes_fingerprint_v1/faction_pressure:house_verevin",
+      "before": "active|7|10",
+      "after": "active|8|10"
+    },
+    {
+      "path": "/session.json/_runtime_progression_nodes_fingerprint_v1/faction_pressure:ordo_pyric",
+      "before": "active|6|10",
+      "after": "active|7|10"
+    },
+    {
+      "path": "/session.json/clocks/time_pressure",
+      "before": 5,
+      "after": 6
+    },
+    {
+      "path": "/session.json/conversational_context/delivered_exchanges",
+      "before": {
+        "preview": "[{\"speaker_id\": \"\", \"speaker_name\": \"\", \"addressee\": \"player\", \"ownership\": \"gm\", \"player_text\": \"\", \"delivered_text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. A tavern runner shouts offers of hot stew and paid rumor. A well-appointed townhouse overlooking the square flies noble colors\\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\", \"subject\": \"\", \"topic_id\": \"\", \"requested_information\": \"\", \"supplied_text\": \"\", \"uncertain\": false, \"commitment\": false, \"scene_id\": \"frontier_gate\", \"turn\": 1, \"active\": false, \"authorized_proposition\": \"\", \"answer_sufficiency\": \"\", \"proposition_id\": \"\", \"response_integrity_digest\": \"3a7fe3f55d6e48c5e2ed4f4894aa019f1cd1989b76f8331acc32280be6af2e10\", \"authorization_source\": \"initial_generation\", \"adoption_turn_identity\": \"rc_dd89a2b89c62\"}, {\"speaker_id\": \"tavern_runner\", \"speaker_name\": \"Tavern Runner\", \"addressee\": \"player\", \"ownership\": \"npc\", \"player_text\": \"I approach the tavern runner and ask what they're offering.\", \"delivered_text\": \"Tavern Runner says, \\\"I offer hot stew and rumors.\\\"\", \"subject\": \"approach they're offering\", \"topic_id\": \"\", \"requested_information\": \"general\", \"supplied_text\": \"I offer hot stew and rumors.\", \"uncertain\": false, \"commitment\": false, \"scene_id\": \"frontier_gate\", \"turn\": 2, \"active\": false, \"authorized_proposition\": \"I offer hot stew and rumors.\", \"answer_sufficiency\": \"directly_answers\", \"proposition_id\": \"statement:bf3939512215\", \"response_integrity_digest\": \"585a56ebc5ee01b3e224b45531c1062d2d225f286757641d3bab25f097b838be\", \"authorization_source\": \"dialogue_authority.public_fact:scene:frontier_gate:visible:2\", \"adoption_turn_identity\": \"rc_bc7037c9986c\"}, {\"speaker_id\": \"tavern_runner\", \"spea",
+        "truncated": true,
+        "characters": 5388,
+        "sha256": "508e304fa855a0194a5f743ca24c0b5d62c758330d360e69c324b494994a4394"
+      },
+      "after": {
+        "preview": "[{\"speaker_id\": \"\", \"speaker_name\": \"\", \"addressee\": \"player\", \"ownership\": \"gm\", \"player_text\": \"\", \"delivered_text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. A tavern runner shouts offers of hot stew and paid rumor. A well-appointed townhouse overlooking the square flies noble colors\\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\", \"subject\": \"\", \"topic_id\": \"\", \"requested_information\": \"\", \"supplied_text\": \"\", \"uncertain\": false, \"commitment\": false, \"scene_id\": \"frontier_gate\", \"turn\": 1, \"active\": false, \"authorized_proposition\": \"\", \"answer_sufficiency\": \"\", \"proposition_id\": \"\", \"response_integrity_digest\": \"3a7fe3f55d6e48c5e2ed4f4894aa019f1cd1989b76f8331acc32280be6af2e10\", \"authorization_source\": \"initial_generation\", \"adoption_turn_identity\": \"rc_dd89a2b89c62\"}, {\"speaker_id\": \"tavern_runner\", \"speaker_name\": \"Tavern Runner\", \"addressee\": \"player\", \"ownership\": \"npc\", \"player_text\": \"I approach the tavern runner and ask what they're offering.\", \"delivered_text\": \"Tavern Runner says, \\\"I offer hot stew and rumors.\\\"\", \"subject\": \"approach they're offering\", \"topic_id\": \"\", \"requested_information\": \"general\", \"supplied_text\": \"I offer hot stew and rumors.\", \"uncertain\": false, \"commitment\": false, \"scene_id\": \"frontier_gate\", \"turn\": 2, \"active\": false, \"authorized_proposition\": \"I offer hot stew and rumors.\", \"answer_sufficiency\": \"directly_answers\", \"proposition_id\": \"statement:bf3939512215\", \"response_integrity_digest\": \"585a56ebc5ee01b3e224b45531c1062d2d225f286757641d3bab25f097b838be\", \"authorization_source\": \"dialogue_authority.public_fact:scene:frontier_gate:visible:2\", \"adoption_turn_identity\": \"rc_bc7037c9986c\"}, {\"speaker_id\": \"tavern_runner\", \"spea",
+        "truncated": true,
+        "characters": 6098,
+        "sha256": "cec313ea2ddb8934d02d1f9a85013904b849b41fa41ba32daa8f91435e27b552"
+      }
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/operation",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/response",
+      "before": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "after": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    },
+    {
+      "path": "/session.json/discourse_focus/active_claim/turn_index",
+      "before": 5,
+      "after": 6
+    },
+    {
+      "path": "/session.json/discourse_focus/active_inspected/turn_index",
+      "before": 5,
+      "after": 6
+    },
+    {
+      "path": "/session.json/discourse_focus/last_committed_contract_id",
+      "before": "rc_51e8449ddc90",
+      "after": "rc_5a14c8cebd5e"
+    },
+    {
+      "path": "/session.json/discourse_focus/last_committed_turn",
+      "before": 5,
+      "after": 6
+    },
+    {
+      "path": "/session.json/interpretation_telemetry/fast_path_success",
+      "before": 5,
+      "after": 6
+    },
+    {
+      "path": "/session.json/last_action_debug/resolution_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/last_action_debug/resolver_result/clue_id",
+      "before": "milestone_mud_prints",
+      "after": null
+    },
+    {
+      "path": "/session.json/last_action_debug/resolver_result/clue_text",
+      "before": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "after": null
+    },
+    {
+      "path": "/session.json/last_action_debug/resolver_result/discovered_clues",
+      "before": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "after": []
+    },
+    {
+      "path": "/session.json/last_action_debug/resolver_result/hint",
+      "before": "Player investigated [prints] and discovered clue [milestone_mud_prints]. Narrate the discovery and its significance.",
+      "after": "Player has already searched [prints]. Narrate that they find nothing new."
+    },
+    {
+      "path": "/session.json/last_action_debug/resolver_result/kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/last_action_debug/resolver_result/state_changes/already_searched",
+      "before": null,
+      "after": true
+    },
+    {
+      "path": "/session.json/last_action_debug/resolver_result/state_changes/clue_revealed",
+      "before": true,
+      "after": null
+    },
+    {
+      "path": "/session.json/last_action_debug/resolver_result/success",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_action_debug/resolver_result/world_tick_events",
+      "before": [
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        }
+      ],
+      "after": []
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/answer_completeness/trace/answer_pressure_anchor_kind",
+      "before": null,
+      "after": "prior_player_topic_overlap"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/anti_railroading/allow_exclusivity_from_authoritative_resolution",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/anti_railroading/debug_flags/authoritative_resolution_outcome",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/anti_railroading/debug_reason",
+      "before": "anti_railroading: transition=False authoritative=True commitment=False surfaced_leads=3",
+      "after": "anti_railroading: transition=False authoritative=False commitment=False surfaced_leads=3"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/debug_flags/authoritative_or_consequence_relevant",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/debug_flags/interaction_kind_worldish",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/debug_flags/pressure_focus_allowed",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/debug_reason",
+      "before": "context_separation: pressure_focus_allowed=True primary_topics=19 ambient=3",
+      "after": "context_separation: pressure_focus_allowed=False primary_topics=19 ambient=3"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/interaction_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/primary_topics",
+      "before": [
+        "examine",
+        "footprints",
+        "old_milestone",
+        "old milestone",
+        "weathered",
+        "stone",
+        "milestone",
+        "leans",
+        "beside",
+        "northwest",
+        "track",
+        "gate guard",
+        "guard",
+        "gate serjeant",
+        "serjeant",
+        "tavern runner",
+        "runner",
+        "discover_clue",
+        "prints"
+      ],
+      "after": [
+        "examine",
+        "footprints",
+        "old_milestone",
+        "old milestone",
+        "weathered",
+        "stone",
+        "milestone",
+        "leans",
+        "beside",
+        "northwest",
+        "track",
+        "gate guard",
+        "guard",
+        "gate serjeant",
+        "serjeant",
+        "tavern runner",
+        "runner",
+        "already_searched",
+        "prints"
+      ]
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/scene_focus_summary",
+      "before": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater. discover clue (prints) discover_clue A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+      "after": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater. already searched (prints) already_searched A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater."
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/tone_escalation_contract/allow_guarded_refusal",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/tone_escalation_contract/debug_flags/max_rank",
+      "before": 1,
+      "after": 0
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/tone_escalation_contract/debug_flags/recent_player_text_latest_len",
+      "before": 40,
+      "after": 25
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/tone_escalation_contract/debug_flags/resolution_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/tone_escalation_contract/debug_inputs/recent_log_len",
+      "before": 5,
+      "after": 6
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/tone_escalation_contract/debug_reason",
+      "before": "tone_escalation: base_rank=0 max_rank=1 combat_active=False hostile_npc=False",
+      "after": "tone_escalation: base_rank=0 max_rank=0 combat_active=False hostile_npc=False"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/tone_escalation_contract/justification_flags/resolution_is_risky",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/tone_escalation_contract/justification_reasons",
+      "before": [
+        "resolution_kind_or_mechanical_payload_is_risky"
+      ],
+      "after": []
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/context_separation/tone_escalation_contract/max_allowed_tone",
+      "before": "guarded",
+      "after": "neutral"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/narrative_authenticity/trace/prior_turn_gm_snippet_for_overlap",
+      "before": "You arrive at Old Milestone. Your intended follow-up is still pending. Choose a visible target here when you are ready.",
+      "after": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/narrative_authenticity/trace/rumor_trigger_spans",
+      "before": [
+        "rumor"
+      ],
+      "after": []
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/narrative_authenticity/trace/rumor_turn_active",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/narrative_authenticity/trace/rumor_turn_reason_codes",
+      "before": [
+        "recent_log_player_input:lex_rumor"
+      ],
+      "after": []
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/narrative_authenticity/trace/topic_follow_up_active",
+      "before": false,
+      "after": true
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/narrative_authority/authoritative_outcome_available",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/narrative_authority/debug_flags/mechanical_risky",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/narrative_authority/debug_reason",
+      "before": "narrative_authority: authoritative_outcome=True kind='discover_clue' mechanical_risky=True",
+      "after": "narrative_authority: authoritative_outcome=False kind='already_searched' mechanical_risky=False"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/narrative_authority/forbid_unresolved_outcome_assertions",
+      "before": false,
+      "after": true
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/narrative_authority/resolution_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/overlap_ratio",
+      "before": null,
+      "after": 1.0
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/press_depth",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/previous_answer_snippet",
+      "before": null,
+      "after": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/previous_player_input",
+      "before": null,
+      "after": "I examine the footprints."
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/topic_tokens",
+      "before": [],
+      "after": [
+        "examine",
+        "footprints"
+      ]
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/trace/answer_pressure_anchor_kind",
+      "before": null,
+      "after": "prior_player_topic_overlap"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/trace/follow_up_overlap_ratio",
+      "before": null,
+      "after": 1.0
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/trace/follow_up_press_depth",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/trace/follow_up_pressure_detected",
+      "before": false,
+      "after": true
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/trace/prior_answer_available",
+      "before": false,
+      "after": true
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/trace/resolution_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/response_delta/trace/suppressed_because",
+      "before": [
+        "no_follow_up_pressure",
+        "not_answer_seeking_turn"
+      ],
+      "after": [
+        "not_answer_seeking_turn"
+      ]
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/tone_escalation/allow_guarded_refusal",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/tone_escalation/debug_flags/max_rank",
+      "before": 1,
+      "after": 0
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/tone_escalation/debug_flags/recent_player_text_latest_len",
+      "before": 40,
+      "after": 25
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/tone_escalation/debug_flags/resolution_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/tone_escalation/debug_inputs/recent_log_len",
+      "before": 5,
+      "after": 6
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/tone_escalation/debug_reason",
+      "before": "tone_escalation: base_rank=0 max_rank=1 combat_active=False hostile_npc=False",
+      "after": "tone_escalation: base_rank=0 max_rank=0 combat_active=False hostile_npc=False"
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/tone_escalation/justification_flags/resolution_is_risky",
+      "before": true,
+      "after": false
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/tone_escalation/justification_reasons",
+      "before": [
+        "resolution_kind_or_mechanical_payload_is_risky"
+      ],
+      "after": []
+    },
+    {
+      "path": "/session.json/last_turn_response_policy/tone_escalation/max_allowed_tone",
+      "before": "guarded",
+      "after": "neutral"
+    },
+    {
+      "path": "/session.json/scene_runtime/old_milestone/last_description_hash",
+      "before": "c8939303f4aa616f960ad730763a73f3",
+      "after": "ce23b12c3725d411cc56bdf8ea4f76fd"
+    },
+    {
+      "path": "/session.json/scene_runtime/old_milestone/last_resolution_kind",
+      "before": "discover_clue",
+      "after": "already_searched"
+    },
+    {
+      "path": "/session.json/scene_runtime/old_milestone/momentum_exchanges_since",
+      "before": 2,
+      "after": 3
+    },
+    {
+      "path": "/session.json/scene_runtime/old_milestone/recent_player_actions",
+      "before": [
+        {
+          "text": "I examine the footprints.",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 5
+        }
+      ],
+      "after": [
+        {
+          "text": "I examine the footprints.",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 5
+        },
+        {
+          "text": "I examine the footprints.",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 6
+        }
+      ]
+    },
+    {
+      "path": "/session.json/scene_runtime/old_milestone/repeated_action_count",
+      "before": 1,
+      "after": 2
+    },
+    {
+      "path": "/session.json/turn_counter",
+      "before": 5,
+      "after": 6
+    },
+    {
+      "path": "/session_log.jsonl",
+      "before": {
+        "preview": "[{\"timestamp\": \"2026-11-02T00:35:21.337572Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+        "truncated": true,
+        "characters": 513357,
+        "sha256": "459dc29af4e31f73e8b2d782b03a948e13f0876236b902d8297a1d1721c568a4"
+      },
+      "after": {
+        "preview": "[{\"timestamp\": \"2026-11-02T00:35:21.337572Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+        "truncated": true,
+        "characters": 563436,
+        "sha256": "7229ebe1c8a100c1336f13743d66fdc58d6375f507a5dfd7319b453f7f0c9cf1"
+      }
+    },
+    {
+      "path": "/world.json/factions",
+      "before": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 7,
+          "goal": "Expand territory",
+          "current_plan": "Gathering influence",
+          "agenda_progress": 5,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 7,
+          "goal": "Control black market",
+          "current_plan": "Establishing smuggling routes",
+          "agenda_progress": 5,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 6,
+          "goal": "Suppress dangerous magic",
+          "current_plan": "Watching newcomers",
+          "agenda_progress": 5,
+          "assets": []
+        }
+      ],
+      "after": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 8,
+          "goal": "Expand territory",
+          "current_plan": "Gathering influence",
+          "agenda_progress": 6,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 8,
+          "goal": "Control black market",
+          "current_plan": "Establishing smuggling routes",
+          "agenda_progress": 6,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 7,
+          "goal": "Suppress dangerous magic",
+          "current_plan": "Watching newcomers",
+          "agenda_progress": 6,
+          "assets": []
+        }
+      ]
+    }
+  ],
+  "overlay_comparison": {
+    "integrity": true,
+    "changes": [],
+    "omitted_entries": 0,
+    "total_changes": 0
+  },
+  "state_before": "turns/T6/before/documents.json",
+  "state_after": "turns/T6/after/documents.json",
+  "diagnostics": [],
+  "provider_usage": {
+    "request_count": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "retry_count": 0,
+    "operations": [],
+    "provider_latency_ms": 0,
+    "provider_latency_status": "native latency_ms only; unavailable remains null"
+  },
+  "mechanical": {
+    "status": "PASS",
+    "completed_interaction": false,
+    "turn_delta": 1,
+    "log_delta": 1,
+    "scene_before": "old_milestone",
+    "scene_after": "old_milestone",
+    "rules": {
+      "status": "recorded_requires_review",
+      "evidence": {
+        "kind": "already_searched",
+        "action_id": "prints",
+        "label": "Mud prints",
+        "prompt": "I examine the footprints.",
+        "success": false,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "world_updates": null,
+        "state_changes": {
+          "already_searched": true,
+          "interactable_id": "prints"
+        },
+        "hint": "Player has already searched [prints]. Narrate that they find nothing new.",
+        "interactable_id": "prints",
+        "metadata": {
+          "referenced_surface_authority": "authored_interactable",
+          "referenced_surface_target": "footprint",
+          "referenced_surface_existence": true,
+          "referenced_surface_visibility": true,
+          "referenced_surface_inspectability": true,
+          "referenced_surface_interactable_id": "prints",
+          "referenced_surface_visible_fact": "",
+          "referenced_surface_inspectable_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "skip_unrelated_clue_discovery": false,
+          "resolution_contract": {
+            "contract_id": "rc_5a14c8cebd5e",
+            "turn_index": 6,
+            "request_kind": "inquiry",
+            "operation": "inspect",
+            "target_ref": {
+              "type": "object",
+              "id_or_text": "Mud prints",
+              "source": "explicit_player"
+            },
+            "interlocutor_id": null,
+            "conversational_subject": "Mud prints",
+            "dimension": null,
+            "dimensions": [],
+            "expected_resolution": "answer",
+            "epistemic_mode": "unknown_allowed",
+            "discourse_ref": {
+              "type": "object",
+              "id": "prints",
+              "label": "Mud prints",
+              "source_turn": null
+            },
+            "referent_provenance": "explicit_player",
+            "ambiguous": false,
+            "raw_input": "I examine the footprints.",
+            "construction": {
+              "cues": [],
+              "referent_slot": "explicit_target",
+              "referent_reason": "explicit_current_turn_target",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": true,
+              "fast_path_abstained": false,
+              "fast_path_abstention_reason": null,
+              "model_interpreter_invoked": false,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 0,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "prints",
+                  "type": "object",
+                  "label": "Mud prints"
+                },
+                {
+                  "id": "claim_2a16d1081e",
+                  "type": "claim",
+                  "label": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+                },
+                {
+                  "id": "rc_18833a2118c4",
+                  "type": "action",
+                  "label": "I go to Follow the missing patrol rumor."
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Old Milestone"
+                },
+                {
+                  "id": "milestone",
+                  "type": "object",
+                  "label": "Weathered milestone"
+                },
+                {
+                  "id": "prints",
+                  "type": "object",
+                  "label": "Mud prints"
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Return to Cinderwatch Gate"
+                }
+              ],
+              "proposal_source": "deterministic_fast_path",
+              "proposed_operation": "inspect",
+              "proposed_supporting_operations": [],
+              "proposed_raw_target": "Mud prints",
+              "canonicalization_attempted": true,
+              "canonical_target_found": true,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": "prints",
+                "canonical_target_label": "Mud prints",
+                "canonical_target_type": "object",
+                "canonical_basis": "discourse",
+                "authoritative_operation": "inspect",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "interlocutor_rejected": false,
+              "entity_binding": {
+                "status": "unresolved",
+                "entity_class": "ambiguous_unresolved",
+                "proposed_interlocutor": null,
+                "proposed_span": null,
+                "bound_interlocutor_id": null,
+                "entity_id": null,
+                "label": null,
+                "explicit_new_interlocutor": false,
+                "authority_reasons": [],
+                "claim_binding": "none"
+              },
+              "authoritative": true,
+              "semantic_completeness": "sufficient",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I examine the footprints.",
+                "source": "deterministic_fast_path",
+                "primary_operation": "inspect",
+                "supporting_operations": [],
+                "raw_target_text": "Mud prints",
+                "proposed_target_id": null,
+                "target_capture": "verb_object",
+                "has_determiner": true,
+                "interlocutor_id": null,
+                "conversational_subject": null,
+                "dimension": null,
+                "dimensions": [],
+                "expected_resolution": "answer",
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": null,
+                "confidence": null,
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              },
+              "commitment_status": "executed_now",
+              "primary_operation": "inspect",
+              "resolution_subject": "perception",
+              "resolution_subject_coherence": "accepted",
+              "semantic_input_length": 25,
+              "provenance_excerpt": "I examine the footprints.",
+              "secondary_operations": [],
+              "executable_obligations": {
+                "primary": null,
+                "mutation_owner": null,
+                "sequence": [],
+                "supporting": []
+              },
+              "requested_addressee": null,
+              "addressee_binding_status": "unresolved",
+              "conversational_authorization": {
+                "communication_ownership": "character_action",
+                "intent_purpose": "perform_action",
+                "target_resolution": "none_required",
+                "target_provenance": "none",
+                "target_id": null,
+                "candidate_target_ids": [],
+                "operation_eligibility": "executable",
+                "mutation_eligibility": true,
+                "authority_provenance": "resolution_contract",
+                "conflict_status": "none",
+                "conflict_details": {},
+                "pending_intention_relationship": "starts_new",
+                "allowed_operation": "inspect",
+                "clarification": "",
+                "choices": [],
+                "direct_address": false,
+                "player_text": "I examine the footprints."
+              }
+            },
+            "retry_preserved": true
+          },
+          "interaction_obligation": {
+            "kind": "inspection",
+            "target": "prints",
+            "interlocutor_id": null,
+            "subject": "footprints",
+            "requested_outcome": "resolve the inspection from authoritative or bounded incidental detail",
+            "claim_id": "bi_2b17c54a7c48",
+            "resolution_mode": "authoritative_mechanical_action",
+            "turn_index": 6,
+            "resolution_contract_id": "rc_5a14c8cebd5e",
+            "executable_obligations": {
+              "primary": null,
+              "mutation_owner": null,
+              "sequence": [],
+              "supporting": []
+            }
+          },
+          "gm_resolution_decision": {
+            "contract_id": "rc_5a14c8cebd5e",
+            "resolution_method": "inspect",
+            "outcome_classification": "established_or_retrieved",
+            "established_fact_refs": [
+              "scene_world_authored_corpus",
+              "contract_discourse_ref"
+            ],
+            "proposed_facts": [
+              {
+                "text": "A weathered stone milestone leans beside the northwest mud track.",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "scene.visible_facts.0",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {}
+              },
+              {
+                "text": "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "scene.visible_facts.1",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {}
+              },
+              {
+                "text": "The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "scene.visible_facts.2",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {}
+              },
+              {
+                "text": "A weathered stone milestone leans beside the northwest mud track.",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "scene.opening_seed_facts.0",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {}
+              },
+              {
+                "text": "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "scene.opening_seed_facts.1",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {}
+              },
+              {
+                "text": "The northwest mud track reaches an old milestone beyond the gate.",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "scene.journal_seed_facts.0",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {}
+              },
+              {
+                "text": "The mud around the marker is churned; any trail beyond it is unclear.",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "scene.journal_seed_facts.1",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {}
+              },
+              {
+                "text": "Gate Guard exists",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "world.npcs.0",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {
+                  "kind": "entity",
+                  "subject": "gate_guard",
+                  "subject_aliases": [
+                    "Gate Guard"
+                  ],
+                  "relation": "exists",
+                  "value": "present",
+                  "authority": "world_truth"
+                }
+              },
+              {
+                "text": "Gate Serjeant exists",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "world.npcs.1",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {
+                  "kind": "entity",
+                  "subject": "gate_serjeant",
+                  "subject_aliases": [
+                    "Gate Serjeant"
+                  ],
+                  "relation": "exists",
+                  "value": "present",
+                  "authority": "world_truth"
+                }
+              },
+              {
+                "text": "Tavern Runner exists",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "world.npcs.2",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {
+                  "kind": "entity",
+                  "subject": "tavern_runner",
+                  "subject_aliases": [
+                    "Tavern Runner"
+                  ],
+                  "relation": "exists",
+                  "value": "present",
+                  "authority": "world_truth"
+                }
+              },
+              {
+                "text": "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+                "provenance": "npc_claim",
+                "consequence": "epistemic",
+                "authorized": true,
+                "authority": "claim_only",
+                "persistence": "claim_only",
+                "source_ref": "bi_2b17c54a7c48",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "kind": "npc_claim",
+                  "subject": "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+                  "subject_aliases": [
+                    "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater."
+                  ],
+                  "relation": "claim",
+                  "value": "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+                  "value_aliases": [
+                    "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater."
+                  ],
+                  "speaker_id": "",
+                  "epistemic_status": "hearsay",
+                  "authority": "claim_only"
+                }
+              }
+            ],
+            "permitted_state_mutations": [],
+            "persistence_policy": "do_not_persist",
+            "narration_constraints": [
+              "Narration may not establish consequential world facts absent this decision.",
+              "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+              "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+              "Inference must not be narrated as physical evidence.",
+              "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+            ],
+            "unresolved_consequential_questions": [],
+            "unresolved_qualifiers": [],
+            "answer_relations": [],
+            "epistemic_acts": [
+              {
+                "act": "establish",
+                "source_ref": "scene.visible_facts.0",
+                "authority": "world_truth",
+                "semantic_identity": {}
+              },
+              {
+                "act": "establish",
+                "source_ref": "scene.visible_facts.1",
+                "authority": "world_truth",
+                "semantic_identity": {}
+              },
+              {
+                "act": "establish",
+                "source_ref": "scene.visible_facts.2",
+                "authority": "world_truth",
+                "semantic_identity": {}
+              },
+              {
+                "act": "establish",
+                "source_ref": "scene.opening_seed_facts.0",
+                "authority": "world_truth",
+                "semantic_identity": {}
+              },
+              {
+                "act": "establish",
+                "source_ref": "scene.opening_seed_facts.1",
+                "authority": "world_truth",
+                "semantic_identity": {}
+              },
+              {
+                "act": "establish",
+                "source_ref": "scene.journal_seed_facts.0",
+                "authority": "world_truth",
+                "semantic_identity": {}
+              },
+              {
+                "act": "establish",
+                "source_ref": "scene.journal_seed_facts.1",
+                "authority": "world_truth",
+                "semantic_identity": {}
+              },
+              {
+                "act": "establish",
+                "source_ref": "world.npcs.0",
+                "authority": "world_truth",
+                "semantic_identity": {
+                  "kind": "entity",
+                  "subject": "gate_guard",
+                  "subject_aliases": [
+                    "Gate Guard"
+                  ],
+                  "relation": "exists",
+                  "value": "present",
+                  "authority": "world_truth"
+                }
+              },
+              {
+                "act": "establish",
+                "source_ref": "world.npcs.1",
+                "authority": "world_truth",
+                "semantic_identity": {
+                  "kind": "entity",
+                  "subject": "gate_serjeant",
+                  "subject_aliases": [
+                    "Gate Serjeant"
+                  ],
+                  "relation": "exists",
+                  "value": "present",
+                  "authority": "world_truth"
+                }
+              },
+              {
+                "act": "establish",
+                "source_ref": "world.npcs.2",
+                "authority": "world_truth",
+                "semantic_identity": {
+                  "kind": "entity",
+                  "subject": "tavern_runner",
+                  "subject_aliases": [
+                    "Tavern Runner"
+                  ],
+                  "relation": "exists",
+                  "value": "present",
+                  "authority": "world_truth"
+                }
+              },
+              {
+                "act": "infer",
+                "source_ref": "bi_2b17c54a7c48",
+                "authority": "claim_only",
+                "semantic_identity": {
+                  "kind": "npc_claim",
+                  "subject": "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+                  "subject_aliases": [
+                    "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater."
+                  ],
+                  "relation": "claim",
+                  "value": "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+                  "value_aliases": [
+                    "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater."
+                  ],
+                  "speaker_id": "",
+                  "epistemic_status": "hearsay",
+                  "authority": "claim_only"
+                }
+              }
+            ],
+            "realization_claims": [
+              {
+                "claim_id": "rc_5303178f9090",
+                "semantic_identity": {},
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "modality": "",
+                "realization_role": "MUST_STATE",
+                "persistence": "world_truth",
+                "source_ref": "scene.visible_facts.0",
+                "text": "A weathered stone milestone leans beside the northwest mud track.",
+                "relation_kind": "ordinary_predicate",
+                "premise_claim_ids": []
+              },
+              {
+                "claim_id": "rc_8fdb90dbf781",
+                "semantic_identity": {},
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "modality": "",
+                "realization_role": "MUST_STATE",
+                "persistence": "world_truth",
+                "source_ref": "scene.visible_facts.1",
+                "text": "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+                "relation_kind": "ordinary_predicate",
+                "premise_claim_ids": []
+              },
+              {
+                "claim_id": "rc_37ce26e4d393",
+                "semantic_identity": {},
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "modality": "",
+                "realization_role": "MUST_STATE",
+                "persistence": "world_truth",
+                "source_ref": "scene.visible_facts.2",
+                "text": "The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+                "relation_kind": "ordinary_predicate",
+                "premise_claim_ids": []
+              },
+              {
+                "claim_id": "rc_093df7b88bed",
+                "semantic_identity": {},
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "modality": "",
+                "realization_role": "MUST_STATE",
+                "persistence": "world_truth",
+                "source_ref": "scene.opening_seed_facts.0",
+                "text": "A weathered stone milestone leans beside the northwest mud track.",
+                "relation_kind": "ordinary_predicate",
+                "premise_claim_ids": []
+              },
+              {
+                "claim_id": "rc_8a8b6f267427",
+                "semantic_identity": {},
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "modality": "",
+                "realization_role": "MUST_STATE",
+                "persistence": "world_truth",
+                "source_ref": "scene.opening_seed_facts.1",
+                "text": "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+                "relation_kind": "ordinary_predicate",
+                "premise_claim_ids": []
+              },
+              {
+                "claim_id": "rc_8b3aa3a1732d",
+                "semantic_identity": {},
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "modality": "",
+                "realization_role": "MUST_STATE",
+                "persistence": "world_truth",
+                "source_ref": "scene.journal_seed_facts.0",
+                "text": "The northwest mud track reaches an old milestone beyond the gate.",
+                "relation_kind": "ordinary_predicate",
+                "premise_claim_ids": []
+              },
+              {
+                "claim_id": "rc_98d7f5cacf1a",
+                "semantic_identity": {},
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "modality": "",
+                "realization_role": "MUST_STATE",
+                "persistence": "world_truth",
+                "source_ref": "scene.journal_seed_facts.1",
+                "text": "The mud around the marker is churned; any trail beyond it is unclear.",
+                "relation_kind": "ordinary_predicate",
+                "premise_claim_ids": []
+              },
+              {
+                "claim_id": "rc_292f7b38c08a",
+                "semantic_identity": {
+                  "kind": "entity",
+                  "subject": "gate_guard",
+                  "subject_aliases": [
+                    "Gate Guard"
+                  ],
+                  "relation": "exists",
+                  "value": "present",
+                  "authority": "world_truth"
+                },
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "modality": "",
+                "realization_role": "MUST_STATE",
+                "persistence": "world_truth",
+                "source_ref": "world.npcs.0",
+                "text": "Gate Guard exists",
+                "relation_kind": "observation",
+                "premise_claim_ids": []
+              },
+              {
+                "claim_id": "rc_14d0d8bfa78d",
+                "semantic_identity": {
+                  "kind": "entity",
+                  "subject": "gate_serjeant",
+                  "subject_aliases": [
+                    "Gate Serjeant"
+                  ],
+                  "relation": "exists",
+                  "value": "present",
+                  "authority": "world_truth"
+                },
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "modality": "",
+                "realization_role": "MUST_STATE",
+                "persistence": "world_truth",
+                "source_ref": "world.npcs.1",
+                "text": "Gate Serjeant exists",
+                "relation_kind": "observation",
+                "premise_claim_ids": []
+              },
+              {
+                "claim_id": "rc_e54a945324e1",
+                "semantic_identity": {
+                  "kind": "entity",
+                  "subject": "tavern_runner",
+                  "subject_aliases": [
+                    "Tavern Runner"
+                  ],
+                  "relation": "exists",
+                  "value": "present",
+                  "authority": "world_truth"
+                },
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "modality": "",
+                "realization_role": "MUST_STATE",
+                "persistence": "world_truth",
+                "source_ref": "world.npcs.2",
+                "text": "Tavern Runner exists",
+                "relation_kind": "observation",
+                "premise_claim_ids": []
+              },
+              {
+                "claim_id": "rc_cc2d66d2dac5",
+                "semantic_identity": {
+                  "kind": "npc_claim",
+                  "subject": "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+                  "subject_aliases": [
+                    "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater."
+                  ],
+                  "relation": "claim",
+                  "value": "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+                  "value_aliases": [
+                    "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater."
+                  ],
+                  "speaker_id": "",
+                  "epistemic_status": "hearsay",
+                  "authority": "claim_only"
+                },
+                "provenance": "npc_claim",
+                "authority": "claim_only",
+                "epistemic_status": "hearsay",
+                "modality": "",
+                "realization_role": "MAY_STATE",
+                "persistence": "claim_only",
+                "source_ref": "bi_2b17c54a7c48",
+                "text": "You arrive at Old Milestone. A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+                "relation_kind": "observation",
+                "premise_claim_ids": []
+              }
+            ],
+            "executable_obligations": {
+              "primary": null,
+              "mutation_owner": null,
+              "sequence": [],
+              "supporting": []
+            },
+            "authority_algorithm": "proposition_claim_control_v1"
+          },
+          "ordinary_contract_established": true,
+          "semantic_owner": "resolution_contract",
+          "contract_before_resolver": true,
+          "contract_construction_source": "deterministic",
+          "selected_resolver": "exploration",
+          "turn_segmentation": {
+            "declared_action_text": "I examine the footprints."
+          },
+          "unknown_legacy_keys": {
+            "noncombat_resolution": {
+              "framework_version": "2026.04.noncombat.v1",
+              "kind": "investigation",
+              "subkind": "investigate",
+              "authority_domain": "scene_state",
+              "deterministic_resolved": true,
+              "requires_check": false,
+              "check_request": null,
+              "outcome_type": "closed",
+              "success_state": "failure",
+              "discovered_entities": [
+                {
+                  "entity_kind": "interactable",
+                  "entity_id": "prints"
+                }
+              ],
+              "surfaced_facts": [],
+              "state_changes": {
+                "already_searched": true,
+                "interactable_id": "prints"
+              },
+              "blocked_reason_codes": [],
+              "ambiguous_reason_codes": [],
+              "unsupported_reason_codes": [],
+              "authoritative_outputs": [
+                {
+                  "output_kind": "resolution_trace",
+                  "source_engine": "game.exploration",
+                  "route": "exploration",
+                  "engine_action_id": "prints"
+                }
+              ]
+            }
+          },
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "escalation_block_reason": "non_hostile_world_action_guard",
+            "strict_target_id": null,
+            "strict_answer_expected": false,
+            "strict_dialogue_expected": false,
+            "action_must_preserve_agency": true
+          },
+          "live_chat_interpretation": {
+            "status": "accepted",
+            "reason": "eligible_for_bridge",
+            "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+            "model_communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "raw_interpretation": "{\"communication_mode\": \"IN_WORLD_ACTION\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"I examine the footprints.\"}, \"asserted_premises\": [], \"requested_outcomes\": [], \"action_components\": [{\"order\": 1, \"description\": \"I examine the footprints.\", \"target_ref\": \"prints\", \"operation_class\": \"INSPECT\"}], \"references\": {\"permitted_entity_ids\": [\"prints\"], \"unresolved_references\": []}, \"clarification_question\": \"\", \"correction\": {\"subject\": \"NONE\", \"note\": \"\"}}",
+            "provider_requests": [
+              {
+                "purpose": "interpretation",
+                "sent": true,
+                "model": "gpt-4.1-mini",
+                "input_tokens": 12,
+                "output_tokens": 8,
+                "total_tokens": 20
+              }
+            ],
+            "bridge": {
+              "source": "stored_interpretation",
+              "accepted": true,
+              "operation": "INSPECT",
+              "target_ref": "prints",
+              "engine_type": "investigate",
+              "visible_surface_inspection": false
+            },
+            "record": {
+              "communication_mode": "IN_WORLD_ACTION",
+              "interpretation_status": "INTERPRETED",
+              "player_intent": {
+                "summary": "I examine the footprints."
+              },
+              "asserted_premises": [],
+              "requested_outcomes": [],
+              "action_components": [
+                {
+                  "order": 1,
+                  "description": "I examine the footprints.",
+                  "target_ref": "prints",
+                  "operation_class": "INSPECT"
+                }
+              ],
+              "references": {
+                "permitted_entity_ids": [
+                  "prints"
+                ],
+                "unresolved_references": []
+              },
+              "clarification_question": "",
+              "correction": {
+                "subject": "NONE",
+                "note": ""
+              }
+            }
+          },
+          "communication_mode": "AUTO",
+          "performance": {
+            "elapsed_ms": 54,
+            "interpretation_ms": 3,
+            "resolution_ms": 0,
+            "narration_ms": 1,
+            "validation_ms": 0,
+            "retry_ms": 0,
+            "provider_call_count": 2,
+            "input_tokens": null,
+            "output_tokens": null,
+            "retry_count": 0,
+            "retry_reason": null,
+            "disposition": "chat",
+            "successful": true,
+            "provider_narration_skipped": false
+          }
+        },
+        "world_tick_events": []
+      },
+      "source": "production resolution; no independent adjudication"
+    },
+    "mutation_authority": "REQUIRES_HUMAN_REVIEW for changes not covered by explicit invariants"
+  },
+  "semantic": {
+    "status": "RECORDED",
+    "final_hard_validation": true,
+    "native_validation": {
+      "hard_validation_attempt_1": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      },
+      "accepted_response": {
+        "addressee": "",
+        "adoption_status": "candidate_accepted",
+        "attempt": 1,
+        "authority_result": "accepted",
+        "authorization_source": "initial_generation",
+        "contract": {
+          "contract_id": "rc_5a14c8cebd5e",
+          "expected_resolution": "answer",
+          "interlocutor_id": "",
+          "operation": "inspect"
+        },
+        "contract_satisfying": true,
+        "generation_attempts": 1,
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "authority": [
+            {
+              "consequential": false,
+              "epistemic_status": "world_truth",
+              "family": "incidental",
+              "grounded": false,
+              "kind": "incidental_fact",
+              "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+            }
+          ],
+          "decision_acceptance_why": "initial_hard_valid",
+          "gm_resolution_decision_audit": {
+            "claim_results": [
+              {
+                "authority": "observation",
+                "authorized": true,
+                "epistemic_status": "unresolved",
+                "persistence": "do_not_persist",
+                "provenance": "speculation",
+                "relation_kind": "epistemic_status",
+                "semantic_identity": {
+                  "epistemic_status": "unresolved",
+                  "relation_kind": "epistemic_status"
+                },
+                "source_ref": "",
+                "source_scene": "",
+                "source_turn": null,
+                "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+              }
+            ],
+            "decision_id": "rc_5a14c8cebd5e",
+            "hard_valid": true,
+            "proposed_facts": [
+              {
+                "authority": "observation",
+                "authorized": true,
+                "consequence": "epistemic",
+                "outcome_classification": "epistemically_qualified",
+                "persistence": "do_not_persist",
+                "provenance": "speculation",
+                "semantic_identity": {
+                  "epistemic_status": "unresolved",
+                  "relation_kind": "epistemic_status"
+                },
+                "source_ref": "",
+                "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+              }
+            ],
+            "violations": []
+          },
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": []
+        },
+        "immutable": true,
+        "interaction_completion": true,
+        "operation": "inspect",
+        "player_input": "I examine the footprints.",
+        "provenance": "initial_generation",
+        "resolution_kind": "already_searched",
+        "speaker": "",
+        "subject": "Mud prints",
+        "target": "Mud prints",
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "turn_identity": "rc_5a14c8cebd5e",
+        "integrity_digest": "565d86037cb06f541321ddf358e8e1f1711e82ae4f0fd84e60487e5242a76e39"
+      }
+    },
+    "nonresolution": "initial_generation",
+    "gameplay_acceptance": true,
+    "provider_stages": [],
+    "extraction": [],
+    "json_parsing": [],
+    "structured_validation": []
+  },
+  "quality": {
+    "rubric_version": "pr-play-09-quality-v1",
+    "scale": {
+      "0": "Complete failure",
+      "1": "Major deficiency",
+      "2": "Partially adequate",
+      "3": "Good",
+      "4": "Strong"
+    },
+    "dimensions": {
+      "Q1": {
+        "dimension": "Responsiveness",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q2": {
+        "dimension": "Grounding",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q3": {
+        "dimension": "Continuity",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q4": {
+        "dimension": "Actionability",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q5": {
+        "dimension": "Narrative quality",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q6": {
+        "dimension": "Agency and consequences",
+        "score": null,
+        "status": "N/A",
+        "evidence": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "No immediate consequence required."
+      }
+    },
+    "probes": {
+      "response_exists": true,
+      "requested_subject_mentioned": true,
+      "repeated_exact_response": false,
+      "generic_marker": false
+    },
+    "concerns": [],
+    "method": "deterministic presence and exact markers; heuristic relevance and repetition",
+    "status": "REQUIRES_HUMAN_REVIEW"
+  },
+  "findings": [],
+  "stop": false
+}

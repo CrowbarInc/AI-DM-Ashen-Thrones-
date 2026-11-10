@@ -1,0 +1,38 @@
+{
+  "note": "Offline replay of the captured PR-PLAY-35 opening before the realization repair. Produced by artifacts/pr_play_36/replay_opening_audit.py against a disposable copy of the isolated baseline. Provider requests: 0. User campaign session hash unchanged.",
+  "audit_hard_valid": false,
+  "audit_deterministic": true,
+  "declaration_hard_valid": true,
+  "narration_hard_valid": false,
+  "unmatched_source_claim_ids": [],
+  "validate_generated_response_reasons": ["unauthorized_resolution_decision_fact"],
+  "violation_count": 2,
+  "audit_violations": [
+    {
+      "text": "A notice board nearby lists new taxes, curfew rules, and a posted warning about a missing patrol.",
+      "provenance": "generated_proposal",
+      "consequence": "consequential",
+      "authorized": false,
+      "reason_codes": ["notice_roster_history"],
+      "authority": "unauthorized",
+      "persistence": "do_not_persist",
+      "source_ref": "",
+      "outcome_classification": "consequentially_unresolved",
+      "semantic_identity": {}
+    },
+    {
+      "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke tightly as the crowd presses in.",
+      "semantic_identity": {},
+      "provenance": "authored_world_fact",
+      "authority": "unauthorized",
+      "epistemic_status": "established",
+      "relation_kind": "ordinary_predicate",
+      "persistence": "world_truth",
+      "authorized": false,
+      "source_ref": "scene.opening_seed_facts.1",
+      "source_turn": null,
+      "source_scene": "",
+      "reason_codes": ["undeclared_consequential_claim"]
+    }
+  ]
+}

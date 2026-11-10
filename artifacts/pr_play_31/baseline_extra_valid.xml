@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="82" time="8.422" timestamp="2026-11-01T19:19:58.620641-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_directional_proceed_reaches_travel_without_compass_exit_bind" time="0.007" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_contextual_directional_proceed_stays_unresolved_travel" time="0.002" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_existing_follow_exit_still_transitions" time="0.004" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_bare_compass_head_stays_unresolved_travel" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_named_destination_proceed_uses_existing_exit" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_local_movement_and_nonspatial_proceed_are_not_scene_travel" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_ownerless_false_arrival_is_not_emitted" time="0.005" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_ownerless_false_scene_update_is_not_adopted" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_same_scene_update_survives_when_no_transition_occurred" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_local_movement_narration_is_not_rewritten" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_successful_transition_keeps_destination_narration" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_human_shaped_cascade_does_not_commit_destination_b" time="0.047" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_unknown_cause_actor_and_time_are_not_event_sites" time="0.018" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_it_happened_here_is_still_an_event_site" time="0.003" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_preservation_keeps_authorized_uncertainty_and_drops_narrator_lead" time="0.007" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_npc_rumor_with_a_source_stays_a_claim" time="0.006" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_successful_transition_authorizes_destination_and_rejects_departure_exit" time="0.006" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_unresolved_and_failed_movement_do_not_authorize_arrival" time="0.003" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_turn7_thanks_is_supporting_and_travel_is_primary" time="0.004" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_inverse_mixed_intent_keeps_social_primary_and_committed_travel" time="0.001" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_modality_contrasts_do_not_execute_uncommitted_travel" time="0.001" /><testcase classname="tests.test_clue_knowledge" name="test_discovered_clues_update_player_knowledge" time="0.001" /><testcase classname="tests.test_clue_knowledge" name="test_inference_rules_require_all_prerequisites" time="0.001" /><testcase classname="tests.test_clue_knowledge" name="test_reveal_clue_duplicate_does_not_reinvoke_inference" time="0.001" /><testcase classname="tests.test_clue_knowledge" name="test_record_discovered_clue_returns_structured_status" time="0.001" /><testcase classname="tests.test_clue_knowledge" name="test_reveal_clue_triggers_inference" time="0.001" /><testcase classname="tests.test_clue_knowledge" name="test_save_load_preserves_clue_knowledge" time="0.006" /><testcase classname="tests.test_clue_knowledge" name="test_authoritative_clue_gateway_dedupes_duplicate_writes" time="0.001" /><testcase classname="tests.test_clue_knowledge" name="test_inferred_clue_can_remain_implicit_until_promoted" time="0.001" /><testcase classname="tests.test_clue_knowledge" name="test_explicit_clue_can_become_actionable" time="0.001" /><testcase classname="tests.test_clue_idempotence" name="test_apply_authoritative_clue_discovery_twice_runs_inference_once" time="0.001" /><testcase classname="tests.test_clue_idempotence" name="test_apply_socially_revealed_leads_twice_preserves_canonical_state" time="0.001"><failure message="assert 0 == 1&#10; +  where 0 = len([])">def test_apply_socially_revealed_leads_twice_preserves_canonical_state():
+        """Second pass through the social landing path must match first-pass session/world clue bookkeeping."""
+        session: dict = {}
+        world = default_world()
+        world.setdefault("event_log", [])
+        scene_id = "frontier_gate"
+        res = {
+            "kind": "question",
+            "action_id": "q",
+            "label": "Ask",
+            "prompt": "Ask",
+            "success": True,
+            "resolved_transition": False,
+            "target_scene_id": None,
+            "clue_id": "missing_patrol",
+            "discovered_clues": ["A patrol went missing near the old milestone."],
+            "world_updates": None,
+            "state_changes": {"topic_revealed": True},
+            "hint": "h",
+            "social": {
+                "npc_id": "guard_captain",
+                "npc_name": "Captain",
+                "target_resolved": True,
+                "topic_revealed": {
+                    "id": "patrol",
+                    "text": "A patrol went missing near the old milestone.",
+                    "clue_id": "missing_patrol",
+                },
+            },
+            "requires_check": False,
+        }
+        scene = {"scene": {"id": scene_id}}
+    
+        apply_socially_revealed_leads(session, scene_id, world, res, scene=scene)
+        snap1 = _canonical_clue_snapshot(session, scene_id, world)
+    
+        apply_socially_revealed_leads(session, scene_id, world, res, scene=scene)
+        snap2 = _canonical_clue_snapshot(session, scene_id, world)
+    
+        assert snap2 == snap1
+        social_events = [
+            e
+            for e in world.get("event_log") or []
+            if isinstance(e, dict) and e.get("type") == "social_lead_revealed"
+        ]
+&gt;       assert len([e for e in social_events if e.get("clue_id") == "missing_patrol"]) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+tests\test_clue_idempotence.py:122: AssertionError</failure></testcase><testcase classname="tests.test_clue_idempotence" name="test_process_investigation_discovery_second_call_is_noop" time="0.001" /><testcase classname="tests.test_clue_discovery" name="test_investigation_reveals_new_clue_once" time="0.001" /><testcase classname="tests.test_clue_discovery" name="test_same_clue_not_repeated_twice" time="0.001" /><testcase classname="tests.test_clue_discovery" name="test_clue_leads_generate_exploration_affordances" time="0.001" /><testcase classname="tests.test_clue_discovery" name="test_pending_lead_added_when_clue_has_leads_to_scene" time="0.001" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_look_toward_extracts_visible_feature_not_untargeted" time="0.002" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_content_question_extracts_written_surface_not_untargeted" time="0.001" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_untargeted_investigate_skips_scene_clue_conveyor" time="0.001" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_written_surface_question_discovers_authored_clue" time="0.120"><failure message="assert None == 'discover_clue'&#10; +  where None = &lt;built-in method get of dict object at 0x0000014B8C89BC40&gt;('kind')&#10; +    where &lt;built-in method get of dict object at 0x0000014B8C89BC40&gt; = ({'world_tick_events': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verev...act_discourse_ref'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'What is posted on the bench slate?'}).get&#10; +      where {'world_tick_events': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verev...act_discourse_ref'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'What is posted on the bench slate?'} = &lt;built-in method get of dict object at 0x0000014B8CCC1240&gt;('resolution')&#10; +        where &lt;built-in method get of dict object at 0x0000014B8CCC1240&gt; = {'ok': True, 'gm_output': {'player_facing_text': 'A silver locket names the night buyer.', 'tags': [], 'scene_update':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_baseline_extra_valid/test_general_written_surface_q0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000014B8C961370&gt;
+
+    def test_general_written_surface_question_discovers_authored_clue(tmp_path, monkeypatch):
+        scene = _quay_scene(
+            discoverable_clues=[{"id": "bench_wax", "text": WAX_STAIN}],
+            interactables=[
+                {
+                    "id": "coopers_bench",
+                    "label": "Cooper's bench",
+                    "aliases": ["bench", "slate", "bench slate"],
+                    "type": "investigate",
+                    "reveals_clue": "bench_wax",
+                }
+            ],
+        )
+        _seed(tmp_path, monkeypatch, scene)
+        data = _chat(monkeypatch, "What is posted on the bench slate?", "A silver locket names the night buyer.")
+        session = data.get("session") or {}
+&gt;       assert (data.get("resolution") or {}).get("kind") == "discover_clue"
+E       assert None == 'discover_clue'
+E        +  where None = &lt;built-in method get of dict object at 0x0000014B8C89BC40&gt;('kind')
+E        +    where &lt;built-in method get of dict object at 0x0000014B8C89BC40&gt; = ({'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_discourse_ref'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'What is posted on the bench slate?'}).get
+E        +      where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_discourse_ref'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'What is posted on the bench slate?'} = &lt;built-in method get of dict object at 0x0000014B8CCC1240&gt;('resolution')
+E        +        where &lt;built-in method get of dict object at 0x0000014B8CCC1240&gt; = {'ok': True, 'gm_output': {'player_facing_text': 'A silver locket names the night buyer.', 'tags': [], 'scene_update':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+
+tests\test_investigation_result_provenance_non_invention.py:259: AssertionError</failure></testcase><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_visible_evidence_may_be_reported" time="0.148"><failure message="AssertionError: assert ('cooper' in 'a silver locket names the night buyer.' or 'bench' in 'a silver locket names the night buyer.')">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_baseline_extra_valid/test_general_visible_evidence_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000014B8C962B40&gt;
+
+    def test_general_visible_evidence_may_be_reported(tmp_path, monkeypatch):
+        scene = _quay_scene()
+        _seed(tmp_path, monkeypatch, scene)
+        data = _chat(monkeypatch, "I examine the cooper's bench.", "A silver locket names the night buyer.")
+        text = _facing(data).lower()
+&gt;       assert "cooper" in text or "bench" in text
+E       AssertionError: assert ('cooper' in 'a silver locket names the night buyer.' or 'bench' in 'a silver locket names the night buyer.')
+
+tests\test_investigation_result_provenance_non_invention.py:269: AssertionError</failure></testcase><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_hidden_discoverable_evidence_can_land" time="0.121" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_valid_target_no_evidence_is_grounded_absence" time="0.101"><failure message="AssertionError: assert 'details on ... assignment.' not in 'details on ... assignment.'&#10;  &#10;  'details on the exa... patrol assignment.' is contained here:&#10;    details on the exact timing and personnel of the missing patrol assignment.">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_baseline_extra_valid/test_general_valid_target_no_e0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000014B8C8CEC90&gt;
+
+    def test_general_valid_target_no_evidence_is_grounded_absence(tmp_path, monkeypatch):
+        _seed(tmp_path, monkeypatch, _quay_scene())
+        before = _lead_ids()
+        data = _chat(monkeypatch, "I investigate the cooper's bench.", SUSPICIOUS_TITLE)
+        session = data.get("session") or {}
+        assert _lead_ids(session) == before
+        assert SUSPICIOUS_SLUG not in _lead_ids(session)
+        assert not any("timing" in t.lower() and "personnel" in t.lower() for t in _lead_titles(session))
+&gt;       assert SUSPICIOUS_TITLE.lower() not in _facing(data).lower()
+E       AssertionError: assert 'details on ... assignment.' not in 'details on ... assignment.'
+E         
+E         'details on the exa... patrol assignment.' is contained here:
+E           details on the exact timing and personnel of the missing patrol assignment.
+
+tests\test_investigation_result_provenance_non_invention.py:304: AssertionError</failure></testcase><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_requested_identity_absent_does_not_mint_person" time="0.121"><failure message="AssertionError: assert 'cooper hale' not in 'the last us... at dusk. []'&#10;  &#10;  'cooper hale' is contained here:&#10;    the last user was cooper hale, who left at dusk. []&#10;  ?                   +++++++++++">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_baseline_extra_valid/test_general_requested_identit0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000014B8CADD400&gt;
+
+    def test_general_requested_identity_absent_does_not_mint_person(tmp_path, monkeypatch):
+        _seed(tmp_path, monkeypatch, _quay_scene())
+        data = _chat(
+            monkeypatch,
+            "I inspect the bench to see who used it last.",
+            "The last user was Cooper Hale, who left at dusk.",
+        )
+        session = data.get("session") or {}
+        blob = (_facing(data) + " " + json.dumps(_lead_titles(session))).lower()
+&gt;       assert "cooper hale" not in blob
+E       AssertionError: assert 'cooper hale' not in 'the last us... at dusk. []'
+E         
+E         'cooper hale' is contained here:
+E           the last user was cooper hale, who left at dusk. []
+E         ?                   +++++++++++
+
+tests\test_investigation_result_provenance_non_invention.py:316: AssertionError</failure></testcase><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_requested_time_absent_does_not_mint_timing" time="0.123" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_related_evidence_is_not_requested_property" time="0.160" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_world_true_fact_does_not_leak_locally" time="0.160" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_false_player_hypothesis_is_not_adopted" time="0.239" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_recent_conversation_does_not_become_evidence" time="0.234" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_authorized_clue_consequence_still_fires" time="0.117" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_unsourced_text_cannot_mint_clue" time="0.107" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_observe_empty_target_does_not_invent" time="0.123"><failure message="assert 'duke' not in &quot;a sealed do...ke's killer.&quot;&#10;  &#10;  'duke' is contained here:&#10;    a sealed dossier names the duke's killer.&#10;  ?                            ++++">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_baseline_extra_valid/test_general_observe_empty_tar0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000014B8C900D70&gt;
+
+    def test_general_observe_empty_target_does_not_invent(tmp_path, monkeypatch):
+        _seed(tmp_path, monkeypatch, _quay_scene())
+        data = _chat(monkeypatch, "I look toward the doorway.", "A sealed dossier names the duke's killer.")
+        session = data.get("session") or {}
+        assert "dossier" not in json.dumps(session.get(SESSION_LEAD_REGISTRY_KEY) or {}).lower()
+&gt;       assert "duke" not in _facing(data).lower()
+E       assert 'duke' not in "a sealed do...ke's killer."
+E         
+E         'duke' is contained here:
+E           a sealed dossier names the duke's killer.
+E         ?                            ++++
+
+tests\test_investigation_result_provenance_non_invention.py:443: AssertionError</failure></testcase><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_investigate_empty_target_does_not_invent" time="0.125" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_player_specified_relation_does_not_become_schema" time="0.123" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_authorized_different_evidence_is_not_rewritten" time="0.167" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_repeated_empty_investigation_does_not_accumulate" time="0.202" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_general_rediscovery_does_not_duplicate_clue" time="0.269" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_canon_filter_excludes_overlay_injected_clue" time="0.020" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_overlay_injected_clue_is_not_authoritative_discovery" time="0.123" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_direct_helper_still_reveals_authored_next_clue" time="0.001" /><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing" time="0.176"><failure message="AssertionError: assert 'exact timing' not in 'details on ... assignment.'&#10;  &#10;  'exact timing' is contained here:&#10;    details on the exact timing and personnel of the missing patrol assignment.&#10;  ?                ++++++++++++">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/pr31_baseline_extra_valid/test_frontier_gate_t15_look_to0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000014B89955760&gt;
+
+    def test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing(tmp_path, monkeypatch):
+        scene = json.loads(Path("data/scenes/frontier_gate.json").read_text(encoding="utf-8"))
+        _seed(tmp_path, monkeypatch, scene, world=default_world())
+        session = storage.load_session()
+        process_investigation_discovery(scene, session)
+        storage.save_session(session)
+        before = _lead_ids(session)
+        data = _chat(monkeypatch, T15_TEXT, SUSPICIOUS_TITLE)
+        after = data.get("session") or {}
+        assert SUSPICIOUS_SLUG not in _lead_ids(after)
+        assert SUSPICIOUS_TITLE not in _lead_titles(after)
+        assert _lead_ids(after) &lt;= before | {"notice_patrol_route"}
+        facing = _facing(data).lower()
+&gt;       assert "exact timing" not in facing
+E       AssertionError: assert 'exact timing' not in 'details on ... assignment.'
+E         
+E         'exact timing' is contained here:
+E           details on the exact timing and personnel of the missing patrol assignment.
+E         ?                ++++++++++++
+
+tests\test_investigation_result_provenance_non_invention.py:578: AssertionError</failure></testcase><testcase classname="tests.test_investigation_result_provenance_non_invention" name="test_anti_overfitting_generic_helpers_have_no_calibration_special_case__investigation_result_provenance_non_invention" time="0.005" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_malformed_world_updates_projects_sanitized" time="0.004" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_valid_world_updates_projects_apply_normally" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_non_project_collections_not_wiped_by_malformed_partial" time="0.000" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_append_events_still_works" time="0.000" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_clue_surfaced_detection_whitespace_case_punctuation" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_normalize_clue_match_text_helper" time="0.000" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_gpt_narration_surfacing_does_not_mutate_clue_state" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_post_gm_updates_scene_update_runs_under_api_scene_state_guard" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_post_gm_updates_records_compact_scene_update_trace" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_post_gm_updates_scene_update_preserves_discoverable_and_hidden_adds" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_post_gm_updates_rejects_non_dict_scene_update_without_overlay_mutation" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_post_gm_updates_rejects_nested_scene_update_fact_payload" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_post_gm_updates_records_world_update_trace_without_changing_updates" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_post_gm_updates_rejects_non_dict_world_updates_without_mutation" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_post_gm_updates_rejects_unknown_prose_world_update_payload" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_post_gm_updates_records_transition_proposals_as_advisory_only" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_build_effective_scene_merges_overlay_without_mutating_canon" time="0.000" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_post_gm_updates_rejects_canon_scene_mutation_attempt" time="0.001" /><testcase classname="tests.test_world_updates_and_clue_normalization" name="test_apply_authoritative_resolution_state_mutation_world_and_scene_guards_observe" time="0.001" /></testsuite></testsuites>

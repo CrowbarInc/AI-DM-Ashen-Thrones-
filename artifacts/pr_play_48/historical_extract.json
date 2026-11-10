@@ -1,0 +1,4732 @@
+{
+  "source": "artifacts/pr_play_43/live_result.json",
+  "source_sha256": "285570fb1b843e04e896298a724c2b9831f373d3d7d90928be96325fca95f61a",
+  "run_id": "20261102T225835Z-b91e96381683",
+  "provider_usage": {
+    "dispatched_requests": 5,
+    "input_tokens": 37326,
+    "output_tokens": 2478,
+    "total_tokens": 39804,
+    "stopped": false,
+    "stop_reason": "",
+    "pending_requests": 0
+  },
+  "turns": [
+    {
+      "step_id": "T1",
+      "player_input": "What is available here?",
+      "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point. Rain spatters soot-dark stone as frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach, pressing against the guards holding the choke point tight. Nearby, a gate serjeant keeps a sharp eye on the roster board while managing the anxious crowd. A notice board lists new taxes, imposed curfew rules, and a warning about a missing patrol, drawing furtive glances from passersby. Threadbare watchers and ragged strangers cluster along the muddy gate line, their eyes shifting uneasily. A tavern runner loudly trades hot stew and whispered rumors near a rain barrel, cutting through the damp air. Overlooking the square, a well-appointed townhouse flies noble colors, standing in quiet contrast to the clamorous, muddy scene below. Just beyond, Ash Compact census delays have tightened the eastern caravan choke point, worsening the crowd's congestion. One figure in threadbare clothes stands unnervingly still, watching faces and pack animals more than the gate line itself.",
+      "engine": {
+        "ok": true,
+        "status": null,
+        "error": null,
+        "resolution_keys": [
+          "action_id",
+          "discovered_clues",
+          "kind",
+          "label",
+          "metadata",
+          "prompt",
+          "resolved_transition",
+          "state_changes",
+          "success",
+          "target_scene_id",
+          "world_updates"
+        ],
+        "action_type": null,
+        "intent": null,
+        "kind": "conversational_answer",
+        "action_id": "conversational_answer",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "originating_scene_id": null,
+        "prompt": "What is available here?",
+        "discovered_clues": [],
+        "state_changes": {},
+        "noncombat_resolution": null,
+        "authoritative_mutation": false,
+        "processing_outcome": "conversational_answer",
+        "resolver_invoked": false,
+        "narration_invoked": false,
+        "gameplay_parser_invoked": false,
+        "provider_calls": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "resolution_metadata_keys": [
+          "authoritative_mutation",
+          "communication_mode",
+          "conversational_decision",
+          "gameplay_parser_invoked",
+          "live_chat_interpretation",
+          "mode_source",
+          "narration_invoked",
+          "performance",
+          "processing_outcome",
+          "provider_calls",
+          "resolver_invoked",
+          "stored_interpretation_bridge"
+        ],
+        "conversational_decision": {
+          "category": "ANSWER",
+          "primary_intention": "What is available here?",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "scene",
+            "visible:0",
+            "visible:1",
+            "visible:2",
+            "visible:3",
+            "visible:4",
+            "reply:0"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point. Rain spatters soot-dark stone as frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach, pressing against the guards holding the choke point tight. Nearby, a gate serjeant keeps a sharp eye on the roster board while managing the anxious crowd. A notice board lists new taxes, imposed curfew rules, and a warning about a missing patrol, drawing furtive glances from passersby. Threadbare watchers and ragged strangers cluster along the muddy gate line, their eyes shifting uneasily. A tavern runner loudly trades hot stew and whispered rumors near a rain barrel, cutting through the damp air. Overlooking the square, a well-appointed townhouse flies noble colors, standing in quiet contrast to the clamorous, muddy scene below. Just beyond, Ash Compact census delays have tightened the eastern caravan choke point, worsening the crowd's congestion. One figure in threadbare clothes stands unnervingly still, watching faces and pack animals more than the gate line itself.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "QUESTION",
+          "authorization": null
+        },
+        "stored_interpretation_bridge": null,
+        "live_interpretation": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "eligibility_disposition": "SAFE_ABSTENTION",
+          "model_communication_mode": "OTHER",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"QUESTION\",\"subject\":\"available items and points of interest in the current location\",\"evidence_refs\":[\"scene\",\"visible:0\",\"visible:1\",\"visible:2\",\"visible:3\",\"visible:4\",\"reply:0\"]},\"communication_mode\":\"OTHER\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Request a description of what is available here in the Cinderwatch Gate District\"},\"asserted_premises\":[{\"text\":\"The player is at Cinderwatch Gate District.\"},{\"text\":\"There is rain, choke traffic, a notice board, and gate watch pressure.\"},{\"text\":\"There is a missing patrol inquiry ongoing.\"}],\"requested_outcomes\":[{\"text\":\"A description of available items, points of interest, and notable NPCs or features in the current location.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"leave_for_enter_cinderwatch\",\"leave_for_follow_the_missing_patrol_rumor\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "e76d09f5c1b94f1a8c3025e133d9643a",
+              "attempt_id": "70e429248cff467680821cd48d034073",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-11-02T22:58:55.027508+00:00",
+              "time": "2026-11-02T22:58:58.273568+00:00",
+              "sequence": 2,
+              "admission": "admitted",
+              "budget_remaining": 8,
+              "sdk_retries": 0,
+              "host_retries": "disabled",
+              "sent": true,
+              "request_id": "resp_06efa22a763a1274006ae915afe95c87d2a970c58b6ed8f22b",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2417,
+              "output_tokens": 240,
+              "total_tokens": 2657,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2636.392
+            }
+          ],
+          "record": {
+            "communication_mode": "OTHER",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Request a description of what is available here in the Cinderwatch Gate District"
+            },
+            "asserted_premises": [
+              {
+                "text": "The player is at Cinderwatch Gate District.",
+                "canon_status": "PLAYER_CLAIM"
+              },
+              {
+                "text": "There is rain, choke traffic, a notice board, and gate watch pressure.",
+                "canon_status": "PLAYER_CLAIM"
+              },
+              {
+                "text": "There is a missing patrol inquiry ongoing.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "A description of available items, points of interest, and notable NPCs or features in the current location.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [
+                "gate_guard",
+                "gate_serjeant",
+                "leave_for_enter_cinderwatch",
+                "leave_for_follow_the_missing_patrol_rumor",
+                "notice_board",
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            },
+            "communication": {
+              "recipient": "GM",
+              "purpose": "QUESTION",
+              "subject": "available items and points of interest in the current location",
+              "evidence_refs": [
+                "scene",
+                "visible:0",
+                "visible:1",
+                "visible:2",
+                "visible:3",
+                "visible:4",
+                "reply:0"
+              ]
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": ""
+            },
+            "public_evidence": {
+              "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+              "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+              "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+              "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+              "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+              "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+              "reply:0": "Rain spatters soot-dark stone as frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach, pressing against the guards holding the choke point tight. Nearby, a gate serjeant keeps a sharp eye on the roster board while managing the anxious crowd. A notice board lists new taxes, imposed curfew rules, and a warning about a missing patrol, drawing furtive glances from passersby. Threadbare watchers and ragged strangers cluster along the muddy gate line, their eyes shifting uneasily. A tavern runner loudly trades hot stew and whispered rumors near a rain barrel, cutting through the damp air. Overlooking the square, a well-appointed townhouse flies noble colors, standing in quiet contrast to the clamorous, muddy scene below. Just beyond, Ash Compact census delays have tightened the eastern caravan choke point, worsening the crowd's congestion. One figure in threadbare clothes stands unnervingly still, watching faces and pack animals more than the gate line itself."
+            }
+          }
+        },
+        "tags": [
+          "conversational_orchestration",
+          "answer",
+          "non_mutating"
+        ],
+        "provenance": "authorized_host_speech",
+        "hard_valid": true,
+        "expression_decision": null,
+        "gm_metadata_keys": [
+          "accepted_response"
+        ],
+        "missing_observability": []
+      },
+      "persisted_engine": {
+        "log_index": 1,
+        "player_input": "What is available here?",
+        "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point. Rain spatters soot-dark stone as frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach, pressing against the guards holding the choke point tight. Nearby, a gate serjeant keeps a sharp eye on the roster board while managing the anxious crowd. A notice board lists new taxes, imposed curfew rules, and a warning about a missing patrol, drawing furtive glances from passersby. Threadbare watchers and ragged strangers cluster along the muddy gate line, their eyes shifting uneasily. A tavern runner loudly trades hot stew and whispered rumors near a rain barrel, cutting through the damp air. Overlooking the square, a well-appointed townhouse flies noble colors, standing in quiet contrast to the clamorous, muddy scene below. Just beyond, Ash Compact census delays have tightened the eastern caravan choke point, worsening the crowd's congestion. One figure in threadbare clothes stands unnervingly still, watching faces and pack animals more than the gate line itself.",
+        "intent_classification": null,
+        "resolution_kind": "conversational_answer",
+        "action_id": "conversational_answer",
+        "action_type": null,
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "originating_scene_id": null,
+        "prompt": "What is available here?",
+        "discovered_clues": [],
+        "state_changes": {},
+        "clocks_changed": null,
+        "discovered_clues_added": null,
+        "approved_state_updates": null,
+        "rejected_state_updates": null,
+        "log_meta_keys": [
+          "authoritative_mutation",
+          "communication_mode",
+          "mode_source",
+          "player_input",
+          "processing_outcome",
+          "resolver_invoked"
+        ],
+        "resolution_metadata_keys": [
+          "authoritative_mutation",
+          "communication_mode",
+          "conversational_decision",
+          "gameplay_parser_invoked",
+          "live_chat_interpretation",
+          "mode_source",
+          "narration_invoked",
+          "performance",
+          "processing_outcome",
+          "provider_calls",
+          "resolver_invoked",
+          "stored_interpretation_bridge"
+        ],
+        "processing_outcome": "conversational_answer",
+        "resolver_invoked": false,
+        "narration_invoked": false,
+        "gameplay_parser_invoked": false,
+        "conversational_decision": {
+          "category": "ANSWER",
+          "primary_intention": "What is available here?",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "scene",
+            "visible:0",
+            "visible:1",
+            "visible:2",
+            "visible:3",
+            "visible:4",
+            "reply:0"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point. Rain spatters soot-dark stone as frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach, pressing against the guards holding the choke point tight. Nearby, a gate serjeant keeps a sharp eye on the roster board while managing the anxious crowd. A notice board lists new taxes, imposed curfew rules, and a warning about a missing patrol, drawing furtive glances from passersby. Threadbare watchers and ragged strangers cluster along the muddy gate line, their eyes shifting uneasily. A tavern runner loudly trades hot stew and whispered rumors near a rain barrel, cutting through the damp air. Overlooking the square, a well-appointed townhouse flies noble colors, standing in quiet contrast to the clamorous, muddy scene below. Just beyond, Ash Compact census delays have tightened the eastern caravan choke point, worsening the crowd's congestion. One figure in threadbare clothes stands unnervingly still, watching faces and pack animals more than the gate line itself.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "QUESTION",
+          "authorization": null
+        },
+        "stored_interpretation_bridge": null,
+        "opening_recovery_debug": null,
+        "provenance": "authorized_host_speech",
+        "hard_valid": true,
+        "response_type_contract": null
+      },
+      "state_before": {
+        "campaign_title": "Ashen Thrones",
+        "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+        "session_id": "5d7040aa8eb9b4e6f6b7c933",
+        "campaign_started": true,
+        "active_scene_id": "frontier_gate",
+        "visited_scene_ids": [
+          "frontier_gate"
+        ],
+        "current_date": "Day 1",
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        },
+        "turn_counter": 1,
+        "chat_history_len": 0,
+        "log_entries": 1,
+        "discovered_clues_by_scene": {},
+        "clue_knowledge": {},
+        "known_clue_ids": null,
+        "deferred_intentions": null,
+        "deferred_steps": null,
+        "time_pressure": 1,
+        "active_quests": null,
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "hp_current": 8,
+          "hp_max": 8,
+          "gold": null,
+          "resources": null,
+          "inventory_count": 1,
+          "inventory_ids": [
+            "spellbook"
+          ]
+        },
+        "world_clue_ids": [],
+        "authority_catalog": {
+          "npc_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "tavern_runner"
+          ],
+          "npcs": [
+            {
+              "id": "gate_guard",
+              "name": "Gate Guard",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "watch_command"
+              ]
+            },
+            {
+              "id": "gate_serjeant",
+              "name": "Gate Serjeant",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "route_change"
+              ]
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "patrol_rumor"
+              ]
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "pressure": 3,
+              "influence": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "pressure": 3,
+              "influence": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "pressure": 2,
+              "influence": 2,
+              "agenda_progress": 1
+            }
+          ],
+          "world_event_log_len": 2,
+          "scenes": {
+            "frontier_gate": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Enter Cinderwatch",
+                  "target_scene_id": "market_quarter"
+                },
+                {
+                  "id": null,
+                  "label": "Follow the missing patrol rumor",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [
+                "notice_board"
+              ],
+              "addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher"
+              ]
+            },
+            "market_quarter": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to the Gate",
+                  "target_scene_id": "frontier_gate"
+                },
+                {
+                  "id": null,
+                  "label": "Seek the fortress trail",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [],
+              "addressable_ids": []
+            },
+            "old_milestone": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to Cinderwatch Gate",
+                  "target_scene_id": "frontier_gate"
+                }
+              ],
+              "interactable_ids": [
+                "milestone",
+                "prints"
+              ],
+              "addressable_ids": []
+            }
+          }
+        },
+        "documents_present": [
+          "campaign.json",
+          "character.json",
+          "combat.json",
+          "conditions.json",
+          "scenes/frontier_gate.json",
+          "scenes/market_quarter.json",
+          "scenes/old_milestone.json",
+          "session.json",
+          "session_log.jsonl",
+          "world.json"
+        ],
+        "observability_gaps": [
+          "active_quests",
+          "known_clues",
+          "character_resources"
+        ]
+      },
+      "state_after": {
+        "campaign_title": "Ashen Thrones",
+        "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+        "session_id": "5d7040aa8eb9b4e6f6b7c933",
+        "campaign_started": true,
+        "active_scene_id": "frontier_gate",
+        "visited_scene_ids": [
+          "frontier_gate"
+        ],
+        "current_date": "Day 1",
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        },
+        "turn_counter": 1,
+        "chat_history_len": 0,
+        "log_entries": 2,
+        "discovered_clues_by_scene": {},
+        "clue_knowledge": {},
+        "known_clue_ids": null,
+        "deferred_intentions": null,
+        "deferred_steps": null,
+        "time_pressure": 1,
+        "active_quests": null,
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "hp_current": 8,
+          "hp_max": 8,
+          "gold": null,
+          "resources": null,
+          "inventory_count": 1,
+          "inventory_ids": [
+            "spellbook"
+          ]
+        },
+        "world_clue_ids": [],
+        "authority_catalog": {
+          "npc_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "tavern_runner"
+          ],
+          "npcs": [
+            {
+              "id": "gate_guard",
+              "name": "Gate Guard",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "watch_command"
+              ]
+            },
+            {
+              "id": "gate_serjeant",
+              "name": "Gate Serjeant",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "route_change"
+              ]
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "patrol_rumor"
+              ]
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "pressure": 3,
+              "influence": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "pressure": 3,
+              "influence": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "pressure": 2,
+              "influence": 2,
+              "agenda_progress": 1
+            }
+          ],
+          "world_event_log_len": 2,
+          "scenes": {
+            "frontier_gate": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Enter Cinderwatch",
+                  "target_scene_id": "market_quarter"
+                },
+                {
+                  "id": null,
+                  "label": "Follow the missing patrol rumor",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [
+                "notice_board"
+              ],
+              "addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher"
+              ]
+            },
+            "market_quarter": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to the Gate",
+                  "target_scene_id": "frontier_gate"
+                },
+                {
+                  "id": null,
+                  "label": "Seek the fortress trail",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [],
+              "addressable_ids": []
+            },
+            "old_milestone": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to Cinderwatch Gate",
+                  "target_scene_id": "frontier_gate"
+                }
+              ],
+              "interactable_ids": [
+                "milestone",
+                "prints"
+              ],
+              "addressable_ids": []
+            }
+          }
+        },
+        "documents_present": [
+          "campaign.json",
+          "character.json",
+          "combat.json",
+          "conditions.json",
+          "scenes/frontier_gate.json",
+          "scenes/market_quarter.json",
+          "scenes/old_milestone.json",
+          "session.json",
+          "session_log.jsonl",
+          "world.json"
+        ],
+        "observability_gaps": [
+          "active_quests",
+          "known_clues",
+          "character_resources"
+        ]
+      },
+      "state_delta": {
+        "log_entries": {
+          "before": 1,
+          "after": 2
+        }
+      },
+      "provider": [
+        {
+          "event": "admitted",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "total_tokens": null,
+          "latency_ms": null,
+          "completion_status": null,
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 2,
+          "budget_remaining": 8,
+          "fallback": null,
+          "retry_count": null
+        },
+        {
+          "event": "dispatch_attempted",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "total_tokens": null,
+          "latency_ms": null,
+          "completion_status": null,
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 2,
+          "budget_remaining": 8,
+          "fallback": null,
+          "retry_count": null
+        },
+        {
+          "event": "completed",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2417,
+          "output_tokens": 240,
+          "total_tokens": 2657,
+          "latency_ms": 2636.392,
+          "completion_status": "completed",
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 2,
+          "budget_remaining": 8,
+          "fallback": null,
+          "retry_count": null
+        }
+      ],
+      "api_latency_seconds": 3.428
+    },
+    {
+      "step_id": "T2",
+      "player_input": "Have you heard any interesting rumors lately?",
+      "player_facing_text": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+      "engine": {
+        "ok": true,
+        "status": null,
+        "error": null,
+        "resolution_keys": [
+          "action_id",
+          "clue_id",
+          "discovered_clues",
+          "hint",
+          "kind",
+          "label",
+          "metadata",
+          "prompt",
+          "requires_check",
+          "resolved_transition",
+          "social",
+          "state_changes",
+          "success",
+          "target_scene_id",
+          "world_tick_events",
+          "world_updates"
+        ],
+        "action_type": null,
+        "intent": null,
+        "kind": "question",
+        "action_id": "tavern_runner",
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "originating_scene_id": null,
+        "prompt": "Have you heard any interesting rumors lately?",
+        "discovered_clues": [
+          "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+        ],
+        "state_changes": {
+          "topic_revealed": true,
+          "npc_id": "tavern_runner"
+        },
+        "noncombat_resolution": null,
+        "authoritative_mutation": null,
+        "processing_outcome": null,
+        "resolver_invoked": null,
+        "narration_invoked": null,
+        "gameplay_parser_invoked": null,
+        "provider_calls": null,
+        "resolution_metadata_keys": [
+          "authoritative_result",
+          "canonical_entry_path",
+          "canonical_entry_reason",
+          "canonical_entry_target_actor_id",
+          "communication",
+          "communication_mode",
+          "contract_before_resolver",
+          "contract_construction_source",
+          "enforced_lead_id",
+          "enforced_lead_source",
+          "gm_resolution_decision",
+          "interaction_obligation",
+          "lead_landing",
+          "live_chat_interpretation",
+          "minimum_actionable_lead",
+          "minimum_actionable_lead_enforced",
+          "npc_stance",
+          "ordinary_contract_established",
+          "performance",
+          "public_conversation_evidence",
+          "resolution_contract",
+          "response_type_contract",
+          "segmented_turn",
+          "selected_resolver",
+          "semantic_owner",
+          "stored_interpretation",
+          "turn_segmentation",
+          "unknown_legacy_keys"
+        ],
+        "conversational_decision": null,
+        "stored_interpretation_bridge": null,
+        "live_interpretation": {
+          "status": "accepted",
+          "reason": "eligible_for_bridge",
+          "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+          "model_communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication\":{\"recipient\":\"NPC\",\"purpose\":\"QUESTION\",\"subject\":\"interesting rumors lately\",\"evidence_refs\":[\"visible:2\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask an NPC if they have heard any interesting rumors lately.\"},\"asserted_premises\":[{\"text\":\"The player is at Cinderwatch Gate District where a tavern runner trades rumors near a rain barrel.\"}],\"requested_outcomes\":[{\"text\":\"Obtain information about any interesting rumors the NPC might have heard recently.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask the tavern runner if they have heard any interesting rumors lately.\",\"target_ref\":\"tavern_runner\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "e76d09f5c1b94f1a8c3025e133d9643a",
+              "attempt_id": "7cd20dd929f648a3939904414f414499",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-11-02T22:58:58.814430+00:00",
+              "time": "2026-11-02T22:59:01.518815+00:00",
+              "sequence": 3,
+              "admission": "admitted",
+              "budget_remaining": 7,
+              "sdk_retries": 0,
+              "host_retries": "disabled",
+              "sent": true,
+              "request_id": "resp_0196de42729729ab006ae915b3ad1887d2a26a55c91151efc8",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2746,
+              "output_tokens": 188,
+              "total_tokens": 2934,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2270.753
+            }
+          ],
+          "bridge": {
+            "source": "stored_interpretation",
+            "accepted": true,
+            "operation": "ASK",
+            "target_ref": "tavern_runner",
+            "engine_type": "question",
+            "visible_surface_inspection": false
+          },
+          "record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Ask an NPC if they have heard any interesting rumors lately."
+            },
+            "asserted_premises": [
+              {
+                "text": "The player is at Cinderwatch Gate District where a tavern runner trades rumors near a rain barrel.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "Obtain information about any interesting rumors the NPC might have heard recently.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [
+              {
+                "order": 1,
+                "description": "Ask the tavern runner if they have heard any interesting rumors lately.",
+                "target_ref": "tavern_runner",
+                "operation_class": "ASK"
+              }
+            ],
+            "references": {
+              "permitted_entity_ids": [
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            },
+            "communication": {
+              "recipient": "NPC",
+              "purpose": "QUESTION",
+              "subject": "interesting rumors lately",
+              "evidence_refs": [
+                "visible:2"
+              ]
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": "ASK"
+            },
+            "public_evidence": {
+              "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel."
+            }
+          }
+        },
+        "tags": [
+          "deterministic_narration",
+          "provider_narration_skipped",
+          "authorized_host_speech",
+          "live_bounded_improvisation_proposal"
+        ],
+        "provenance": "authorized_host_speech",
+        "hard_valid": true,
+        "expression_decision": null,
+        "gm_metadata_keys": [
+          "accepted_response",
+          "live_resolution_mode",
+          "narration_provider_calls",
+          "narration_retry_count",
+          "narration_seam",
+          "provider_narration_skip_reason",
+          "provider_narration_skipped",
+          "skipped_semantic_mutators"
+        ],
+        "missing_observability": []
+      },
+      "persisted_engine": {
+        "log_index": 2,
+        "player_input": "Have you heard any interesting rumors lately?",
+        "player_facing_text": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+        "intent_classification": {
+          "raw_text": "Have you heard any interesting rumors lately?",
+          "labels": [
+            "downtime"
+          ],
+          "allow_discoverable_clues": false,
+          "confidence": "rule_based"
+        },
+        "resolution_kind": "question",
+        "action_id": "tavern_runner",
+        "action_type": null,
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "originating_scene_id": null,
+        "prompt": "Have you heard any interesting rumors lately?",
+        "discovered_clues": [
+          "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+        ],
+        "state_changes": {
+          "topic_revealed": true,
+          "npc_id": "tavern_runner"
+        },
+        "clocks_changed": {
+          "time_pressure": 2
+        },
+        "discovered_clues_added": [
+          "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+        ],
+        "approved_state_updates": {
+          "scene_update": null,
+          "world_updates": null,
+          "new_scene_draft": null
+        },
+        "rejected_state_updates": [],
+        "log_meta_keys": [
+          "approved_state_updates",
+          "clocks_changed",
+          "communication_mode",
+          "discovered_clues_added",
+          "gm_prompt_context_summary",
+          "gm_raw_output_meta",
+          "intent_classification",
+          "mode_source",
+          "player_input",
+          "processing_input",
+          "rejected_state_updates",
+          "response_type_contract",
+          "surfaced_clues_in_narration_non_authoritative"
+        ],
+        "resolution_metadata_keys": [
+          "authoritative_result",
+          "canonical_entry_path",
+          "canonical_entry_reason",
+          "canonical_entry_target_actor_id",
+          "communication",
+          "communication_mode",
+          "contract_before_resolver",
+          "contract_construction_source",
+          "emission_debug",
+          "enforced_lead_id",
+          "enforced_lead_source",
+          "gm_resolution_decision",
+          "interaction_obligation",
+          "lead_landing",
+          "live_chat_interpretation",
+          "minimum_actionable_lead",
+          "minimum_actionable_lead_enforced",
+          "npc_stance",
+          "ordinary_contract_established",
+          "performance",
+          "public_conversation_evidence",
+          "resolution_contract",
+          "response_type_contract",
+          "segmented_turn",
+          "selected_resolver",
+          "semantic_owner",
+          "stored_interpretation",
+          "turn_segmentation",
+          "unknown_legacy_keys"
+        ],
+        "processing_outcome": null,
+        "resolver_invoked": null,
+        "narration_invoked": null,
+        "gameplay_parser_invoked": null,
+        "conversational_decision": null,
+        "stored_interpretation_bridge": null,
+        "opening_recovery_debug": null,
+        "provenance": "authorized_host_speech",
+        "hard_valid": true,
+        "response_type_contract": {
+          "required_response_type": "dialogue",
+          "source_route": "social",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "authoritative_social_target_requires_dialogue",
+            "dialogue_turn_contains_question_expectation",
+            "social_question_guard"
+          ]
+        }
+      },
+      "state_before": {
+        "campaign_title": "Ashen Thrones",
+        "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+        "session_id": "5d7040aa8eb9b4e6f6b7c933",
+        "campaign_started": true,
+        "active_scene_id": "frontier_gate",
+        "visited_scene_ids": [
+          "frontier_gate"
+        ],
+        "current_date": "Day 1",
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        },
+        "turn_counter": 1,
+        "chat_history_len": 0,
+        "log_entries": 2,
+        "discovered_clues_by_scene": {},
+        "clue_knowledge": {},
+        "known_clue_ids": null,
+        "deferred_intentions": null,
+        "deferred_steps": null,
+        "time_pressure": 1,
+        "active_quests": null,
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "hp_current": 8,
+          "hp_max": 8,
+          "gold": null,
+          "resources": null,
+          "inventory_count": 1,
+          "inventory_ids": [
+            "spellbook"
+          ]
+        },
+        "world_clue_ids": [],
+        "authority_catalog": {
+          "npc_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "tavern_runner"
+          ],
+          "npcs": [
+            {
+              "id": "gate_guard",
+              "name": "Gate Guard",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "watch_command"
+              ]
+            },
+            {
+              "id": "gate_serjeant",
+              "name": "Gate Serjeant",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "route_change"
+              ]
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "patrol_rumor"
+              ]
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "pressure": 3,
+              "influence": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "pressure": 3,
+              "influence": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "pressure": 2,
+              "influence": 2,
+              "agenda_progress": 1
+            }
+          ],
+          "world_event_log_len": 2,
+          "scenes": {
+            "frontier_gate": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Enter Cinderwatch",
+                  "target_scene_id": "market_quarter"
+                },
+                {
+                  "id": null,
+                  "label": "Follow the missing patrol rumor",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [
+                "notice_board"
+              ],
+              "addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher"
+              ]
+            },
+            "market_quarter": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to the Gate",
+                  "target_scene_id": "frontier_gate"
+                },
+                {
+                  "id": null,
+                  "label": "Seek the fortress trail",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [],
+              "addressable_ids": []
+            },
+            "old_milestone": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to Cinderwatch Gate",
+                  "target_scene_id": "frontier_gate"
+                }
+              ],
+              "interactable_ids": [
+                "milestone",
+                "prints"
+              ],
+              "addressable_ids": []
+            }
+          }
+        },
+        "documents_present": [
+          "campaign.json",
+          "character.json",
+          "combat.json",
+          "conditions.json",
+          "scenes/frontier_gate.json",
+          "scenes/market_quarter.json",
+          "scenes/old_milestone.json",
+          "session.json",
+          "session_log.jsonl",
+          "world.json"
+        ],
+        "observability_gaps": [
+          "active_quests",
+          "known_clues",
+          "character_resources"
+        ]
+      },
+      "state_after": {
+        "campaign_title": "Ashen Thrones",
+        "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+        "session_id": "5d7040aa8eb9b4e6f6b7c933",
+        "campaign_started": true,
+        "active_scene_id": "frontier_gate",
+        "visited_scene_ids": [
+          "frontier_gate"
+        ],
+        "current_date": "Day 1",
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 2
+        },
+        "turn_counter": 2,
+        "chat_history_len": 0,
+        "log_entries": 3,
+        "discovered_clues_by_scene": {
+          "frontier_gate": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ]
+        },
+        "clue_knowledge": {
+          "muddy_footprints_northwest": "discovered",
+          "minlead_exit_frontier_gate_old_milestone": "discovered"
+        },
+        "known_clue_ids": null,
+        "deferred_intentions": null,
+        "deferred_steps": null,
+        "time_pressure": 2,
+        "active_quests": null,
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "hp_current": 8,
+          "hp_max": 8,
+          "gold": null,
+          "resources": null,
+          "inventory_count": 1,
+          "inventory_ids": [
+            "spellbook"
+          ]
+        },
+        "world_clue_ids": [],
+        "authority_catalog": {
+          "npc_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "tavern_runner"
+          ],
+          "npcs": [
+            {
+              "id": "gate_guard",
+              "name": "Gate Guard",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "watch_command"
+              ]
+            },
+            {
+              "id": "gate_serjeant",
+              "name": "Gate Serjeant",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "route_change"
+              ]
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "patrol_rumor"
+              ]
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "pressure": 4,
+              "influence": 3,
+              "agenda_progress": 2
+            },
+            {
+              "id": "ash_cowl",
+              "pressure": 4,
+              "influence": 3,
+              "agenda_progress": 2
+            },
+            {
+              "id": "ordo_pyric",
+              "pressure": 3,
+              "influence": 2,
+              "agenda_progress": 2
+            }
+          ],
+          "world_event_log_len": 5,
+          "scenes": {
+            "frontier_gate": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Enter Cinderwatch",
+                  "target_scene_id": "market_quarter"
+                },
+                {
+                  "id": null,
+                  "label": "Follow the missing patrol rumor",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [
+                "notice_board"
+              ],
+              "addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher"
+              ]
+            },
+            "market_quarter": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to the Gate",
+                  "target_scene_id": "frontier_gate"
+                },
+                {
+                  "id": null,
+                  "label": "Seek the fortress trail",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [],
+              "addressable_ids": []
+            },
+            "old_milestone": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to Cinderwatch Gate",
+                  "target_scene_id": "frontier_gate"
+                }
+              ],
+              "interactable_ids": [
+                "milestone",
+                "prints"
+              ],
+              "addressable_ids": []
+            }
+          }
+        },
+        "documents_present": [
+          "campaign.json",
+          "character.json",
+          "combat.json",
+          "conditions.json",
+          "scenes/frontier_gate.json",
+          "scenes/market_quarter.json",
+          "scenes/old_milestone.json",
+          "session.json",
+          "session_log.jsonl",
+          "world.json"
+        ],
+        "observability_gaps": [
+          "active_quests",
+          "known_clues",
+          "character_resources"
+        ]
+      },
+      "state_delta": {
+        "authority_catalog": {
+          "before": {
+            "npc_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "tavern_runner"
+            ],
+            "npcs": [
+              {
+                "id": "gate_guard",
+                "name": "Gate Guard",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "watch_command"
+                ]
+              },
+              {
+                "id": "gate_serjeant",
+                "name": "Gate Serjeant",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "route_change"
+                ]
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "patrol_rumor"
+                ]
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "pressure": 3,
+                "influence": 3,
+                "agenda_progress": 1
+              },
+              {
+                "id": "ash_cowl",
+                "pressure": 3,
+                "influence": 3,
+                "agenda_progress": 1
+              },
+              {
+                "id": "ordo_pyric",
+                "pressure": 2,
+                "influence": 2,
+                "agenda_progress": 1
+              }
+            ],
+            "world_event_log_len": 2,
+            "scenes": {
+              "frontier_gate": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Enter Cinderwatch",
+                    "target_scene_id": "market_quarter"
+                  },
+                  {
+                    "id": null,
+                    "label": "Follow the missing patrol rumor",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [
+                  "notice_board"
+                ],
+                "addressable_ids": [
+                  "guard_captain",
+                  "tavern_runner",
+                  "refugee",
+                  "threadbare_watcher"
+                ]
+              },
+              "market_quarter": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to the Gate",
+                    "target_scene_id": "frontier_gate"
+                  },
+                  {
+                    "id": null,
+                    "label": "Seek the fortress trail",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [],
+                "addressable_ids": []
+              },
+              "old_milestone": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to Cinderwatch Gate",
+                    "target_scene_id": "frontier_gate"
+                  }
+                ],
+                "interactable_ids": [
+                  "milestone",
+                  "prints"
+                ],
+                "addressable_ids": []
+              }
+            }
+          },
+          "after": {
+            "npc_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "tavern_runner"
+            ],
+            "npcs": [
+              {
+                "id": "gate_guard",
+                "name": "Gate Guard",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "watch_command"
+                ]
+              },
+              {
+                "id": "gate_serjeant",
+                "name": "Gate Serjeant",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "route_change"
+                ]
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "patrol_rumor"
+                ]
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "pressure": 4,
+                "influence": 3,
+                "agenda_progress": 2
+              },
+              {
+                "id": "ash_cowl",
+                "pressure": 4,
+                "influence": 3,
+                "agenda_progress": 2
+              },
+              {
+                "id": "ordo_pyric",
+                "pressure": 3,
+                "influence": 2,
+                "agenda_progress": 2
+              }
+            ],
+            "world_event_log_len": 5,
+            "scenes": {
+              "frontier_gate": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Enter Cinderwatch",
+                    "target_scene_id": "market_quarter"
+                  },
+                  {
+                    "id": null,
+                    "label": "Follow the missing patrol rumor",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [
+                  "notice_board"
+                ],
+                "addressable_ids": [
+                  "guard_captain",
+                  "tavern_runner",
+                  "refugee",
+                  "threadbare_watcher"
+                ]
+              },
+              "market_quarter": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to the Gate",
+                    "target_scene_id": "frontier_gate"
+                  },
+                  {
+                    "id": null,
+                    "label": "Seek the fortress trail",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [],
+                "addressable_ids": []
+              },
+              "old_milestone": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to Cinderwatch Gate",
+                    "target_scene_id": "frontier_gate"
+                  }
+                ],
+                "interactable_ids": [
+                  "milestone",
+                  "prints"
+                ],
+                "addressable_ids": []
+              }
+            }
+          }
+        },
+        "clocks": {
+          "before": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "after": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          }
+        },
+        "clue_knowledge": {
+          "before": {},
+          "after": {
+            "muddy_footprints_northwest": "discovered",
+            "minlead_exit_frontier_gate_old_milestone": "discovered"
+          }
+        },
+        "discovered_clues_by_scene": {
+          "before": {},
+          "after": {
+            "frontier_gate": [
+              "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+              "Follow the missing patrol rumor"
+            ]
+          }
+        },
+        "log_entries": {
+          "before": 2,
+          "after": 3
+        },
+        "time_pressure": {
+          "before": 1,
+          "after": 2
+        },
+        "turn_counter": {
+          "before": 1,
+          "after": 2
+        }
+      },
+      "provider": [
+        {
+          "event": "admitted",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "total_tokens": null,
+          "latency_ms": null,
+          "completion_status": null,
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 3,
+          "budget_remaining": 7,
+          "fallback": null,
+          "retry_count": null
+        },
+        {
+          "event": "dispatch_attempted",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "total_tokens": null,
+          "latency_ms": null,
+          "completion_status": null,
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 3,
+          "budget_remaining": 7,
+          "fallback": null,
+          "retry_count": null
+        },
+        {
+          "event": "completed",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2746,
+          "output_tokens": 188,
+          "total_tokens": 2934,
+          "latency_ms": 2270.753,
+          "completion_status": "completed",
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 3,
+          "budget_remaining": 7,
+          "fallback": null,
+          "retry_count": null
+        }
+      ],
+      "api_latency_seconds": 3.097
+    },
+    {
+      "step_id": "T3",
+      "player_input": "I examine the notice board.",
+      "player_facing_text": "You examine the notice board, and you turn up a concrete clue.",
+      "engine": {
+        "ok": true,
+        "status": null,
+        "error": null,
+        "resolution_keys": [
+          "action_id",
+          "clue_id",
+          "clue_text",
+          "discovered_clues",
+          "hint",
+          "interactable_id",
+          "kind",
+          "label",
+          "metadata",
+          "prompt",
+          "resolved_transition",
+          "state_changes",
+          "success",
+          "target_scene_id",
+          "world_tick_events",
+          "world_updates"
+        ],
+        "action_type": null,
+        "intent": null,
+        "kind": "discover_clue",
+        "action_id": "notice_board",
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "originating_scene_id": null,
+        "prompt": "I examine the notice board.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "interactable_id": "notice_board"
+        },
+        "noncombat_resolution": null,
+        "authoritative_mutation": null,
+        "processing_outcome": null,
+        "resolver_invoked": null,
+        "narration_invoked": null,
+        "gameplay_parser_invoked": null,
+        "provider_calls": null,
+        "resolution_metadata_keys": [
+          "communication_mode",
+          "contract_before_resolver",
+          "contract_construction_source",
+          "gm_resolution_decision",
+          "interaction_obligation",
+          "live_chat_interpretation",
+          "ordinary_contract_established",
+          "performance",
+          "referenced_surface_authority",
+          "referenced_surface_existence",
+          "referenced_surface_inspectability",
+          "referenced_surface_inspectable_text",
+          "referenced_surface_interactable_id",
+          "referenced_surface_target",
+          "referenced_surface_visibility",
+          "referenced_surface_visible_fact",
+          "resolution_contract",
+          "response_type_contract",
+          "selected_resolver",
+          "semantic_owner",
+          "skip_unrelated_clue_discovery",
+          "turn_segmentation",
+          "unknown_legacy_keys"
+        ],
+        "conversational_decision": null,
+        "stored_interpretation_bridge": null,
+        "live_interpretation": {
+          "status": "accepted",
+          "reason": "eligible_for_bridge",
+          "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+          "model_communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"ACTION\",\"subject\":\"examine notice board\",\"evidence_refs\":[\"visible:0\",\"visible:1\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player intends to examine the notice board at Cinderwatch Gate District.\"},\"asserted_premises\":[{\"text\":\"The notice board is present and visible in the Cinderwatch Gate District scene.\"},{\"text\":\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\"}],\"requested_outcomes\":[{\"text\":\"A detailed description or relevant information from the notice board is revealed.\"}],\"action_components\":[{\"order\":1,\"description\":\"Examine the notice board to read its contents.\",\"target_ref\":\"notice_board\",\"operation_class\":\"INSPECT\"}],\"references\":{\"permitted_entity_ids\":[\"notice_board\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "e76d09f5c1b94f1a8c3025e133d9643a",
+              "attempt_id": "5277bc37505e42349738718ac41eb3a6",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-11-02T22:59:02.588226+00:00",
+              "time": "2026-11-02T22:59:05.546154+00:00",
+              "sequence": 4,
+              "admission": "admitted",
+              "budget_remaining": 6,
+              "sdk_retries": 0,
+              "host_retries": "disabled",
+              "sent": true,
+              "request_id": "resp_0d0081309e35491e006ae915b7a2b487d2906e2c89c225d2d4",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2863,
+              "output_tokens": 204,
+              "total_tokens": 3067,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2203.705
+            }
+          ],
+          "bridge": {
+            "source": "stored_interpretation",
+            "accepted": true,
+            "operation": "INSPECT",
+            "target_ref": "notice_board",
+            "engine_type": "investigate",
+            "visible_surface_inspection": false
+          },
+          "record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "The player intends to examine the notice board at Cinderwatch Gate District."
+            },
+            "asserted_premises": [
+              {
+                "text": "The notice board is present and visible in the Cinderwatch Gate District scene.",
+                "canon_status": "PLAYER_CLAIM"
+              },
+              {
+                "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "A detailed description or relevant information from the notice board is revealed.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [
+              {
+                "order": 1,
+                "description": "Examine the notice board to read its contents.",
+                "target_ref": "notice_board",
+                "operation_class": "INSPECT"
+              }
+            ],
+            "references": {
+              "permitted_entity_ids": [
+                "notice_board"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            },
+            "communication": {
+              "recipient": "CHARACTER",
+              "purpose": "ACTION",
+              "subject": "examine notice board",
+              "evidence_refs": [
+                "visible:0",
+                "visible:1"
+              ]
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": "INSPECT"
+            },
+            "public_evidence": {
+              "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+              "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board."
+            }
+          }
+        },
+        "tags": [
+          "deterministic_narration",
+          "provider_narration_skipped",
+          "resolved_clue_discovery"
+        ],
+        "provenance": "initial_generation",
+        "hard_valid": true,
+        "expression_decision": null,
+        "gm_metadata_keys": [
+          "accepted_response",
+          "decision_review",
+          "hard_validation_attempt_1",
+          "live_resolution_mode",
+          "narration_provider_calls",
+          "narration_retry_count",
+          "narration_seam",
+          "provider_narration_skip_reason",
+          "provider_narration_skipped",
+          "response_policy_enforcement_applied",
+          "skipped_semantic_mutators"
+        ],
+        "missing_observability": []
+      },
+      "persisted_engine": {
+        "log_index": 3,
+        "player_input": "I examine the notice board.",
+        "player_facing_text": "You examine the notice board, and you turn up a concrete clue.",
+        "intent_classification": {
+          "raw_text": "I examine the notice board.",
+          "labels": [
+            "investigation"
+          ],
+          "allow_discoverable_clues": true,
+          "confidence": "rule_based"
+        },
+        "resolution_kind": "discover_clue",
+        "action_id": "notice_board",
+        "action_type": null,
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "originating_scene_id": null,
+        "prompt": "I examine the notice board.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "interactable_id": "notice_board"
+        },
+        "clocks_changed": {
+          "time_pressure": 3
+        },
+        "discovered_clues_added": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "approved_state_updates": {
+          "scene_update": null,
+          "world_updates": null,
+          "new_scene_draft": null
+        },
+        "rejected_state_updates": [],
+        "log_meta_keys": [
+          "approved_state_updates",
+          "clocks_changed",
+          "communication_mode",
+          "discovered_clues_added",
+          "gm_prompt_context_summary",
+          "gm_raw_output_meta",
+          "intent_classification",
+          "mode_source",
+          "player_input",
+          "processing_input",
+          "rejected_state_updates",
+          "response_type_contract",
+          "surfaced_clues_in_narration_non_authoritative"
+        ],
+        "resolution_metadata_keys": [
+          "communication_mode",
+          "contract_before_resolver",
+          "contract_construction_source",
+          "emission_debug",
+          "gm_resolution_decision",
+          "interaction_obligation",
+          "live_chat_interpretation",
+          "ordinary_contract_established",
+          "performance",
+          "referenced_surface_authority",
+          "referenced_surface_existence",
+          "referenced_surface_inspectability",
+          "referenced_surface_inspectable_text",
+          "referenced_surface_interactable_id",
+          "referenced_surface_target",
+          "referenced_surface_visibility",
+          "referenced_surface_visible_fact",
+          "resolution_contract",
+          "response_type_contract",
+          "selected_resolver",
+          "semantic_owner",
+          "skip_unrelated_clue_discovery",
+          "turn_segmentation",
+          "unknown_legacy_keys"
+        ],
+        "processing_outcome": null,
+        "resolver_invoked": null,
+        "narration_invoked": null,
+        "gameplay_parser_invoked": null,
+        "conversational_decision": null,
+        "stored_interpretation_bridge": null,
+        "opening_recovery_debug": null,
+        "provenance": "initial_generation",
+        "hard_valid": true,
+        "response_type_contract": {
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ]
+        }
+      },
+      "state_before": {
+        "campaign_title": "Ashen Thrones",
+        "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+        "session_id": "5d7040aa8eb9b4e6f6b7c933",
+        "campaign_started": true,
+        "active_scene_id": "frontier_gate",
+        "visited_scene_ids": [
+          "frontier_gate"
+        ],
+        "current_date": "Day 1",
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 2
+        },
+        "turn_counter": 2,
+        "chat_history_len": 0,
+        "log_entries": 3,
+        "discovered_clues_by_scene": {
+          "frontier_gate": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ]
+        },
+        "clue_knowledge": {
+          "muddy_footprints_northwest": "discovered",
+          "minlead_exit_frontier_gate_old_milestone": "discovered"
+        },
+        "known_clue_ids": null,
+        "deferred_intentions": null,
+        "deferred_steps": null,
+        "time_pressure": 2,
+        "active_quests": null,
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "hp_current": 8,
+          "hp_max": 8,
+          "gold": null,
+          "resources": null,
+          "inventory_count": 1,
+          "inventory_ids": [
+            "spellbook"
+          ]
+        },
+        "world_clue_ids": [],
+        "authority_catalog": {
+          "npc_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "tavern_runner"
+          ],
+          "npcs": [
+            {
+              "id": "gate_guard",
+              "name": "Gate Guard",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "watch_command"
+              ]
+            },
+            {
+              "id": "gate_serjeant",
+              "name": "Gate Serjeant",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "route_change"
+              ]
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "patrol_rumor"
+              ]
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "pressure": 4,
+              "influence": 3,
+              "agenda_progress": 2
+            },
+            {
+              "id": "ash_cowl",
+              "pressure": 4,
+              "influence": 3,
+              "agenda_progress": 2
+            },
+            {
+              "id": "ordo_pyric",
+              "pressure": 3,
+              "influence": 2,
+              "agenda_progress": 2
+            }
+          ],
+          "world_event_log_len": 5,
+          "scenes": {
+            "frontier_gate": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Enter Cinderwatch",
+                  "target_scene_id": "market_quarter"
+                },
+                {
+                  "id": null,
+                  "label": "Follow the missing patrol rumor",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [
+                "notice_board"
+              ],
+              "addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher"
+              ]
+            },
+            "market_quarter": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to the Gate",
+                  "target_scene_id": "frontier_gate"
+                },
+                {
+                  "id": null,
+                  "label": "Seek the fortress trail",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [],
+              "addressable_ids": []
+            },
+            "old_milestone": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to Cinderwatch Gate",
+                  "target_scene_id": "frontier_gate"
+                }
+              ],
+              "interactable_ids": [
+                "milestone",
+                "prints"
+              ],
+              "addressable_ids": []
+            }
+          }
+        },
+        "documents_present": [
+          "campaign.json",
+          "character.json",
+          "combat.json",
+          "conditions.json",
+          "scenes/frontier_gate.json",
+          "scenes/market_quarter.json",
+          "scenes/old_milestone.json",
+          "session.json",
+          "session_log.jsonl",
+          "world.json"
+        ],
+        "observability_gaps": [
+          "active_quests",
+          "known_clues",
+          "character_resources"
+        ]
+      },
+      "state_after": {
+        "campaign_title": "Ashen Thrones",
+        "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+        "session_id": "5d7040aa8eb9b4e6f6b7c933",
+        "campaign_started": true,
+        "active_scene_id": "frontier_gate",
+        "visited_scene_ids": [
+          "frontier_gate"
+        ],
+        "current_date": "Day 1",
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 3
+        },
+        "turn_counter": 3,
+        "chat_history_len": 0,
+        "log_entries": 4,
+        "discovered_clues_by_scene": {
+          "frontier_gate": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ]
+        },
+        "clue_knowledge": {
+          "muddy_footprints_northwest": "discovered",
+          "minlead_exit_frontier_gate_old_milestone": "discovered",
+          "notice_patrol_route": "discovered"
+        },
+        "known_clue_ids": null,
+        "deferred_intentions": null,
+        "deferred_steps": null,
+        "time_pressure": 3,
+        "active_quests": null,
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "hp_current": 8,
+          "hp_max": 8,
+          "gold": null,
+          "resources": null,
+          "inventory_count": 1,
+          "inventory_ids": [
+            "spellbook"
+          ]
+        },
+        "world_clue_ids": [],
+        "authority_catalog": {
+          "npc_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "tavern_runner"
+          ],
+          "npcs": [
+            {
+              "id": "gate_guard",
+              "name": "Gate Guard",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "watch_command"
+              ]
+            },
+            {
+              "id": "gate_serjeant",
+              "name": "Gate Serjeant",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "route_change"
+              ]
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "patrol_rumor"
+              ]
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "pressure": 5,
+              "influence": 3,
+              "agenda_progress": 3
+            },
+            {
+              "id": "ash_cowl",
+              "pressure": 5,
+              "influence": 3,
+              "agenda_progress": 3
+            },
+            {
+              "id": "ordo_pyric",
+              "pressure": 4,
+              "influence": 2,
+              "agenda_progress": 3
+            }
+          ],
+          "world_event_log_len": 5,
+          "scenes": {
+            "frontier_gate": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Enter Cinderwatch",
+                  "target_scene_id": "market_quarter"
+                },
+                {
+                  "id": null,
+                  "label": "Follow the missing patrol rumor",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [
+                "notice_board"
+              ],
+              "addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher"
+              ]
+            },
+            "market_quarter": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to the Gate",
+                  "target_scene_id": "frontier_gate"
+                },
+                {
+                  "id": null,
+                  "label": "Seek the fortress trail",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [],
+              "addressable_ids": []
+            },
+            "old_milestone": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to Cinderwatch Gate",
+                  "target_scene_id": "frontier_gate"
+                }
+              ],
+              "interactable_ids": [
+                "milestone",
+                "prints"
+              ],
+              "addressable_ids": []
+            }
+          }
+        },
+        "documents_present": [
+          "campaign.json",
+          "character.json",
+          "combat.json",
+          "conditions.json",
+          "scenes/frontier_gate.json",
+          "scenes/market_quarter.json",
+          "scenes/old_milestone.json",
+          "session.json",
+          "session_log.jsonl",
+          "world.json"
+        ],
+        "observability_gaps": [
+          "active_quests",
+          "known_clues",
+          "character_resources"
+        ]
+      },
+      "state_delta": {
+        "authority_catalog": {
+          "before": {
+            "npc_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "tavern_runner"
+            ],
+            "npcs": [
+              {
+                "id": "gate_guard",
+                "name": "Gate Guard",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "watch_command"
+                ]
+              },
+              {
+                "id": "gate_serjeant",
+                "name": "Gate Serjeant",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "route_change"
+                ]
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "patrol_rumor"
+                ]
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "pressure": 4,
+                "influence": 3,
+                "agenda_progress": 2
+              },
+              {
+                "id": "ash_cowl",
+                "pressure": 4,
+                "influence": 3,
+                "agenda_progress": 2
+              },
+              {
+                "id": "ordo_pyric",
+                "pressure": 3,
+                "influence": 2,
+                "agenda_progress": 2
+              }
+            ],
+            "world_event_log_len": 5,
+            "scenes": {
+              "frontier_gate": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Enter Cinderwatch",
+                    "target_scene_id": "market_quarter"
+                  },
+                  {
+                    "id": null,
+                    "label": "Follow the missing patrol rumor",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [
+                  "notice_board"
+                ],
+                "addressable_ids": [
+                  "guard_captain",
+                  "tavern_runner",
+                  "refugee",
+                  "threadbare_watcher"
+                ]
+              },
+              "market_quarter": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to the Gate",
+                    "target_scene_id": "frontier_gate"
+                  },
+                  {
+                    "id": null,
+                    "label": "Seek the fortress trail",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [],
+                "addressable_ids": []
+              },
+              "old_milestone": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to Cinderwatch Gate",
+                    "target_scene_id": "frontier_gate"
+                  }
+                ],
+                "interactable_ids": [
+                  "milestone",
+                  "prints"
+                ],
+                "addressable_ids": []
+              }
+            }
+          },
+          "after": {
+            "npc_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "tavern_runner"
+            ],
+            "npcs": [
+              {
+                "id": "gate_guard",
+                "name": "Gate Guard",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "watch_command"
+                ]
+              },
+              {
+                "id": "gate_serjeant",
+                "name": "Gate Serjeant",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "route_change"
+                ]
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "patrol_rumor"
+                ]
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "pressure": 5,
+                "influence": 3,
+                "agenda_progress": 3
+              },
+              {
+                "id": "ash_cowl",
+                "pressure": 5,
+                "influence": 3,
+                "agenda_progress": 3
+              },
+              {
+                "id": "ordo_pyric",
+                "pressure": 4,
+                "influence": 2,
+                "agenda_progress": 3
+              }
+            ],
+            "world_event_log_len": 5,
+            "scenes": {
+              "frontier_gate": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Enter Cinderwatch",
+                    "target_scene_id": "market_quarter"
+                  },
+                  {
+                    "id": null,
+                    "label": "Follow the missing patrol rumor",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [
+                  "notice_board"
+                ],
+                "addressable_ids": [
+                  "guard_captain",
+                  "tavern_runner",
+                  "refugee",
+                  "threadbare_watcher"
+                ]
+              },
+              "market_quarter": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to the Gate",
+                    "target_scene_id": "frontier_gate"
+                  },
+                  {
+                    "id": null,
+                    "label": "Seek the fortress trail",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [],
+                "addressable_ids": []
+              },
+              "old_milestone": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to Cinderwatch Gate",
+                    "target_scene_id": "frontier_gate"
+                  }
+                ],
+                "interactable_ids": [
+                  "milestone",
+                  "prints"
+                ],
+                "addressable_ids": []
+              }
+            }
+          }
+        },
+        "clocks": {
+          "before": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "after": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 3
+          }
+        },
+        "clue_knowledge": {
+          "before": {
+            "muddy_footprints_northwest": "discovered",
+            "minlead_exit_frontier_gate_old_milestone": "discovered"
+          },
+          "after": {
+            "muddy_footprints_northwest": "discovered",
+            "minlead_exit_frontier_gate_old_milestone": "discovered",
+            "notice_patrol_route": "discovered"
+          }
+        },
+        "discovered_clues_by_scene": {
+          "before": {
+            "frontier_gate": [
+              "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+              "Follow the missing patrol rumor"
+            ]
+          },
+          "after": {
+            "frontier_gate": [
+              "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+              "Follow the missing patrol rumor",
+              "The missing patrol was last seen taking the northwest mud track past the crates."
+            ]
+          }
+        },
+        "log_entries": {
+          "before": 3,
+          "after": 4
+        },
+        "time_pressure": {
+          "before": 2,
+          "after": 3
+        },
+        "turn_counter": {
+          "before": 2,
+          "after": 3
+        }
+      },
+      "provider": [
+        {
+          "event": "admitted",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "total_tokens": null,
+          "latency_ms": null,
+          "completion_status": null,
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 4,
+          "budget_remaining": 6,
+          "fallback": null,
+          "retry_count": null
+        },
+        {
+          "event": "dispatch_attempted",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "total_tokens": null,
+          "latency_ms": null,
+          "completion_status": null,
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 4,
+          "budget_remaining": 6,
+          "fallback": null,
+          "retry_count": null
+        },
+        {
+          "event": "completed",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2863,
+          "output_tokens": 204,
+          "total_tokens": 3067,
+          "latency_ms": 2203.705,
+          "completion_status": "completed",
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 4,
+          "budget_remaining": 6,
+          "fallback": null,
+          "retry_count": null
+        }
+      ],
+      "api_latency_seconds": 3.587
+    },
+    {
+      "step_id": "T4",
+      "player_input": "I want to follow the trail connected to the missing patrol.",
+      "player_facing_text": "You arrive at Old Milestone.",
+      "engine": {
+        "ok": true,
+        "status": null,
+        "error": null,
+        "resolution_keys": [
+          "action_id",
+          "clue_id",
+          "discovered_clues",
+          "hint",
+          "kind",
+          "label",
+          "metadata",
+          "originating_scene_id",
+          "prompt",
+          "resolved_transition",
+          "state_changes",
+          "success",
+          "target_scene_id",
+          "world_tick_events",
+          "world_updates"
+        ],
+        "action_type": null,
+        "intent": null,
+        "kind": "scene_transition",
+        "action_id": "leave_for_follow_the_missing_patrol_rumor",
+        "success": true,
+        "resolved_transition": true,
+        "target_scene_id": "old_milestone",
+        "originating_scene_id": "frontier_gate",
+        "prompt": "Go to Follow the missing patrol rumor.",
+        "discovered_clues": [],
+        "state_changes": {
+          "scene_changed": true,
+          "scene_transition_occurred": true,
+          "arrived_at_scene": true,
+          "new_scene_context_available": true
+        },
+        "noncombat_resolution": null,
+        "authoritative_mutation": null,
+        "processing_outcome": null,
+        "resolver_invoked": null,
+        "narration_invoked": null,
+        "gameplay_parser_invoked": null,
+        "provider_calls": null,
+        "resolution_metadata_keys": [
+          "blocked_incompatible_scene_transition",
+          "contract_before_resolver",
+          "contract_construction_source",
+          "destination_binding_conflict",
+          "destination_binding_conflict_candidates",
+          "destination_binding_resolution_reason",
+          "destination_binding_source",
+          "destination_compatibility_actual_kind",
+          "destination_compatibility_checked",
+          "destination_compatibility_expected_kind",
+          "destination_compatibility_failure_reason",
+          "destination_compatibility_passed",
+          "destination_semantic_kind",
+          "gm_resolution_decision",
+          "interaction_obligation",
+          "ordinary_contract_established",
+          "performance",
+          "prompt",
+          "resolution_contract",
+          "response_type_contract",
+          "selected_resolver",
+          "semantic_owner",
+          "stored_interpretation",
+          "turn_segmentation",
+          "unknown_legacy_keys"
+        ],
+        "conversational_decision": null,
+        "stored_interpretation_bridge": null,
+        "live_interpretation": null,
+        "tags": [
+          "deterministic_narration",
+          "provider_narration_skipped",
+          "resolved_scene_transition",
+          "live_bounded_improvisation_proposal",
+          "resolution_contract_semantic_preserved",
+          "authoritative_resolution_fact_preserved"
+        ],
+        "provenance": "initial_generation",
+        "hard_valid": true,
+        "expression_decision": null,
+        "gm_metadata_keys": [
+          "accepted_response",
+          "decision_review",
+          "hard_validation_attempt_1",
+          "live_resolution_mode",
+          "narration_provider_calls",
+          "narration_retry_count",
+          "narration_seam",
+          "provider_narration_skip_reason",
+          "provider_narration_skipped",
+          "regeneration_feedback",
+          "regeneration_invoked",
+          "response_policy_enforcement_applied",
+          "skipped_semantic_mutators"
+        ],
+        "missing_observability": [
+          "recognized_intent"
+        ]
+      },
+      "persisted_engine": {
+        "log_index": 4,
+        "player_input": "I want to follow the trail connected to the missing patrol.",
+        "player_facing_text": "You arrive at Old Milestone.",
+        "intent_classification": {
+          "raw_text": "Go to Follow the missing patrol rumor.",
+          "labels": [
+            "travel"
+          ],
+          "allow_discoverable_clues": false,
+          "confidence": "rule_based"
+        },
+        "resolution_kind": "scene_transition",
+        "action_id": "leave_for_follow_the_missing_patrol_rumor",
+        "action_type": null,
+        "success": true,
+        "resolved_transition": true,
+        "target_scene_id": "old_milestone",
+        "originating_scene_id": "frontier_gate",
+        "prompt": "Go to Follow the missing patrol rumor.",
+        "discovered_clues": [],
+        "state_changes": {
+          "scene_changed": true,
+          "scene_transition_occurred": true,
+          "arrived_at_scene": true,
+          "new_scene_context_available": true
+        },
+        "clocks_changed": {
+          "time_pressure": 4
+        },
+        "discovered_clues_added": [],
+        "approved_state_updates": {
+          "scene_update": null,
+          "world_updates": null,
+          "new_scene_draft": null
+        },
+        "rejected_state_updates": [],
+        "log_meta_keys": [
+          "approved_state_updates",
+          "clocks_changed",
+          "communication_mode",
+          "discovered_clues_added",
+          "gm_prompt_context_summary",
+          "gm_raw_output_meta",
+          "intent_classification",
+          "mode_source",
+          "player_input",
+          "processing_input",
+          "rejected_state_updates",
+          "response_type_contract",
+          "surfaced_clues_in_narration_non_authoritative"
+        ],
+        "resolution_metadata_keys": [
+          "blocked_incompatible_scene_transition",
+          "contract_before_resolver",
+          "contract_construction_source",
+          "destination_binding_conflict",
+          "destination_binding_conflict_candidates",
+          "destination_binding_resolution_reason",
+          "destination_binding_source",
+          "destination_compatibility_actual_kind",
+          "destination_compatibility_checked",
+          "destination_compatibility_expected_kind",
+          "destination_compatibility_failure_reason",
+          "destination_compatibility_passed",
+          "destination_semantic_kind",
+          "emission_debug",
+          "gm_resolution_decision",
+          "interaction_obligation",
+          "ordinary_contract_established",
+          "performance",
+          "prompt",
+          "resolution_contract",
+          "response_type_contract",
+          "selected_resolver",
+          "semantic_owner",
+          "stored_interpretation",
+          "turn_segmentation",
+          "unknown_legacy_keys"
+        ],
+        "processing_outcome": null,
+        "resolver_invoked": null,
+        "narration_invoked": null,
+        "gameplay_parser_invoked": null,
+        "conversational_decision": null,
+        "stored_interpretation_bridge": null,
+        "opening_recovery_debug": null,
+        "provenance": "initial_generation",
+        "hard_valid": true,
+        "response_type_contract": {
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ]
+        }
+      },
+      "state_before": {
+        "campaign_title": "Ashen Thrones",
+        "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+        "session_id": "5d7040aa8eb9b4e6f6b7c933",
+        "campaign_started": true,
+        "active_scene_id": "frontier_gate",
+        "visited_scene_ids": [
+          "frontier_gate"
+        ],
+        "current_date": "Day 1",
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 3
+        },
+        "turn_counter": 3,
+        "chat_history_len": 0,
+        "log_entries": 4,
+        "discovered_clues_by_scene": {
+          "frontier_gate": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ]
+        },
+        "clue_knowledge": {
+          "muddy_footprints_northwest": "discovered",
+          "minlead_exit_frontier_gate_old_milestone": "discovered",
+          "notice_patrol_route": "discovered"
+        },
+        "known_clue_ids": null,
+        "deferred_intentions": null,
+        "deferred_steps": null,
+        "time_pressure": 3,
+        "active_quests": null,
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "hp_current": 8,
+          "hp_max": 8,
+          "gold": null,
+          "resources": null,
+          "inventory_count": 1,
+          "inventory_ids": [
+            "spellbook"
+          ]
+        },
+        "world_clue_ids": [],
+        "authority_catalog": {
+          "npc_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "tavern_runner"
+          ],
+          "npcs": [
+            {
+              "id": "gate_guard",
+              "name": "Gate Guard",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "watch_command"
+              ]
+            },
+            {
+              "id": "gate_serjeant",
+              "name": "Gate Serjeant",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "route_change"
+              ]
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "patrol_rumor"
+              ]
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "pressure": 5,
+              "influence": 3,
+              "agenda_progress": 3
+            },
+            {
+              "id": "ash_cowl",
+              "pressure": 5,
+              "influence": 3,
+              "agenda_progress": 3
+            },
+            {
+              "id": "ordo_pyric",
+              "pressure": 4,
+              "influence": 2,
+              "agenda_progress": 3
+            }
+          ],
+          "world_event_log_len": 5,
+          "scenes": {
+            "frontier_gate": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Enter Cinderwatch",
+                  "target_scene_id": "market_quarter"
+                },
+                {
+                  "id": null,
+                  "label": "Follow the missing patrol rumor",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [
+                "notice_board"
+              ],
+              "addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher"
+              ]
+            },
+            "market_quarter": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to the Gate",
+                  "target_scene_id": "frontier_gate"
+                },
+                {
+                  "id": null,
+                  "label": "Seek the fortress trail",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [],
+              "addressable_ids": []
+            },
+            "old_milestone": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to Cinderwatch Gate",
+                  "target_scene_id": "frontier_gate"
+                }
+              ],
+              "interactable_ids": [
+                "milestone",
+                "prints"
+              ],
+              "addressable_ids": []
+            }
+          }
+        },
+        "documents_present": [
+          "campaign.json",
+          "character.json",
+          "combat.json",
+          "conditions.json",
+          "scenes/frontier_gate.json",
+          "scenes/market_quarter.json",
+          "scenes/old_milestone.json",
+          "session.json",
+          "session_log.jsonl",
+          "world.json"
+        ],
+        "observability_gaps": [
+          "active_quests",
+          "known_clues",
+          "character_resources"
+        ]
+      },
+      "state_after": {
+        "campaign_title": "Ashen Thrones",
+        "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+        "session_id": "5d7040aa8eb9b4e6f6b7c933",
+        "campaign_started": true,
+        "active_scene_id": "old_milestone",
+        "visited_scene_ids": [
+          "frontier_gate",
+          "old_milestone"
+        ],
+        "current_date": "Day 1",
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 4
+        },
+        "turn_counter": 4,
+        "chat_history_len": 0,
+        "log_entries": 5,
+        "discovered_clues_by_scene": {
+          "frontier_gate": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ]
+        },
+        "clue_knowledge": {
+          "muddy_footprints_northwest": "discovered",
+          "minlead_exit_frontier_gate_old_milestone": "discovered",
+          "notice_patrol_route": "discovered"
+        },
+        "known_clue_ids": null,
+        "deferred_intentions": null,
+        "deferred_steps": null,
+        "time_pressure": 4,
+        "active_quests": null,
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "hp_current": 8,
+          "hp_max": 8,
+          "gold": null,
+          "resources": null,
+          "inventory_count": 1,
+          "inventory_ids": [
+            "spellbook"
+          ]
+        },
+        "world_clue_ids": [],
+        "authority_catalog": {
+          "npc_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "tavern_runner"
+          ],
+          "npcs": [
+            {
+              "id": "gate_guard",
+              "name": "Gate Guard",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "watch_command"
+              ]
+            },
+            {
+              "id": "gate_serjeant",
+              "name": "Gate Serjeant",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "route_change"
+              ]
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "patrol_rumor"
+              ]
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "pressure": 6,
+              "influence": 3,
+              "agenda_progress": 4
+            },
+            {
+              "id": "ash_cowl",
+              "pressure": 6,
+              "influence": 3,
+              "agenda_progress": 4
+            },
+            {
+              "id": "ordo_pyric",
+              "pressure": 5,
+              "influence": 2,
+              "agenda_progress": 4
+            }
+          ],
+          "world_event_log_len": 5,
+          "scenes": {
+            "frontier_gate": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Enter Cinderwatch",
+                  "target_scene_id": "market_quarter"
+                },
+                {
+                  "id": null,
+                  "label": "Follow the missing patrol rumor",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [
+                "notice_board"
+              ],
+              "addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher"
+              ]
+            },
+            "market_quarter": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to the Gate",
+                  "target_scene_id": "frontier_gate"
+                },
+                {
+                  "id": null,
+                  "label": "Seek the fortress trail",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [],
+              "addressable_ids": []
+            },
+            "old_milestone": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to Cinderwatch Gate",
+                  "target_scene_id": "frontier_gate"
+                }
+              ],
+              "interactable_ids": [
+                "milestone",
+                "prints"
+              ],
+              "addressable_ids": []
+            }
+          }
+        },
+        "documents_present": [
+          "campaign.json",
+          "character.json",
+          "combat.json",
+          "conditions.json",
+          "scenes/frontier_gate.json",
+          "scenes/market_quarter.json",
+          "scenes/old_milestone.json",
+          "session.json",
+          "session_log.jsonl",
+          "world.json"
+        ],
+        "observability_gaps": [
+          "active_quests",
+          "known_clues",
+          "character_resources"
+        ]
+      },
+      "state_delta": {
+        "active_scene_id": {
+          "before": "frontier_gate",
+          "after": "old_milestone"
+        },
+        "authority_catalog": {
+          "before": {
+            "npc_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "tavern_runner"
+            ],
+            "npcs": [
+              {
+                "id": "gate_guard",
+                "name": "Gate Guard",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "watch_command"
+                ]
+              },
+              {
+                "id": "gate_serjeant",
+                "name": "Gate Serjeant",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "route_change"
+                ]
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "patrol_rumor"
+                ]
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "pressure": 5,
+                "influence": 3,
+                "agenda_progress": 3
+              },
+              {
+                "id": "ash_cowl",
+                "pressure": 5,
+                "influence": 3,
+                "agenda_progress": 3
+              },
+              {
+                "id": "ordo_pyric",
+                "pressure": 4,
+                "influence": 2,
+                "agenda_progress": 3
+              }
+            ],
+            "world_event_log_len": 5,
+            "scenes": {
+              "frontier_gate": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Enter Cinderwatch",
+                    "target_scene_id": "market_quarter"
+                  },
+                  {
+                    "id": null,
+                    "label": "Follow the missing patrol rumor",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [
+                  "notice_board"
+                ],
+                "addressable_ids": [
+                  "guard_captain",
+                  "tavern_runner",
+                  "refugee",
+                  "threadbare_watcher"
+                ]
+              },
+              "market_quarter": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to the Gate",
+                    "target_scene_id": "frontier_gate"
+                  },
+                  {
+                    "id": null,
+                    "label": "Seek the fortress trail",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [],
+                "addressable_ids": []
+              },
+              "old_milestone": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to Cinderwatch Gate",
+                    "target_scene_id": "frontier_gate"
+                  }
+                ],
+                "interactable_ids": [
+                  "milestone",
+                  "prints"
+                ],
+                "addressable_ids": []
+              }
+            }
+          },
+          "after": {
+            "npc_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "tavern_runner"
+            ],
+            "npcs": [
+              {
+                "id": "gate_guard",
+                "name": "Gate Guard",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "watch_command"
+                ]
+              },
+              {
+                "id": "gate_serjeant",
+                "name": "Gate Serjeant",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "route_change"
+                ]
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "patrol_rumor"
+                ]
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "pressure": 6,
+                "influence": 3,
+                "agenda_progress": 4
+              },
+              {
+                "id": "ash_cowl",
+                "pressure": 6,
+                "influence": 3,
+                "agenda_progress": 4
+              },
+              {
+                "id": "ordo_pyric",
+                "pressure": 5,
+                "influence": 2,
+                "agenda_progress": 4
+              }
+            ],
+            "world_event_log_len": 5,
+            "scenes": {
+              "frontier_gate": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Enter Cinderwatch",
+                    "target_scene_id": "market_quarter"
+                  },
+                  {
+                    "id": null,
+                    "label": "Follow the missing patrol rumor",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [
+                  "notice_board"
+                ],
+                "addressable_ids": [
+                  "guard_captain",
+                  "tavern_runner",
+                  "refugee",
+                  "threadbare_watcher"
+                ]
+              },
+              "market_quarter": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to the Gate",
+                    "target_scene_id": "frontier_gate"
+                  },
+                  {
+                    "id": null,
+                    "label": "Seek the fortress trail",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [],
+                "addressable_ids": []
+              },
+              "old_milestone": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to Cinderwatch Gate",
+                    "target_scene_id": "frontier_gate"
+                  }
+                ],
+                "interactable_ids": [
+                  "milestone",
+                  "prints"
+                ],
+                "addressable_ids": []
+              }
+            }
+          }
+        },
+        "clocks": {
+          "before": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 3
+          },
+          "after": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 4
+          }
+        },
+        "log_entries": {
+          "before": 4,
+          "after": 5
+        },
+        "time_pressure": {
+          "before": 3,
+          "after": 4
+        },
+        "turn_counter": {
+          "before": 3,
+          "after": 4
+        },
+        "visited_scene_ids": {
+          "before": [
+            "frontier_gate"
+          ],
+          "after": [
+            "frontier_gate",
+            "old_milestone"
+          ]
+        }
+      },
+      "provider": [],
+      "api_latency_seconds": 0.91
+    },
+    {
+      "step_id": "T5",
+      "player_input": "I examine the footprints.",
+      "player_facing_text": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "engine": {
+        "ok": true,
+        "status": null,
+        "error": null,
+        "resolution_keys": [
+          "action_id",
+          "clue_id",
+          "clue_text",
+          "discovered_clues",
+          "hint",
+          "interactable_id",
+          "kind",
+          "label",
+          "metadata",
+          "prompt",
+          "resolved_transition",
+          "state_changes",
+          "success",
+          "target_scene_id",
+          "world_tick_events",
+          "world_updates"
+        ],
+        "action_type": null,
+        "intent": null,
+        "kind": "discover_clue",
+        "action_id": "prints",
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "originating_scene_id": null,
+        "prompt": "I examine the footprints.",
+        "discovered_clues": [
+          "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "interactable_id": "prints"
+        },
+        "noncombat_resolution": null,
+        "authoritative_mutation": null,
+        "processing_outcome": null,
+        "resolver_invoked": null,
+        "narration_invoked": null,
+        "gameplay_parser_invoked": null,
+        "provider_calls": null,
+        "resolution_metadata_keys": [
+          "communication_mode",
+          "contract_before_resolver",
+          "contract_construction_source",
+          "gm_resolution_decision",
+          "interaction_obligation",
+          "live_chat_interpretation",
+          "ordinary_contract_established",
+          "performance",
+          "referenced_surface_authority",
+          "referenced_surface_existence",
+          "referenced_surface_inspectability",
+          "referenced_surface_inspectable_text",
+          "referenced_surface_interactable_id",
+          "referenced_surface_target",
+          "referenced_surface_visibility",
+          "referenced_surface_visible_fact",
+          "resolution_contract",
+          "response_type_contract",
+          "selected_resolver",
+          "semantic_owner",
+          "skip_unrelated_clue_discovery",
+          "turn_segmentation",
+          "unknown_legacy_keys"
+        ],
+        "conversational_decision": null,
+        "stored_interpretation_bridge": null,
+        "live_interpretation": {
+          "status": "accepted",
+          "reason": "eligible_for_bridge",
+          "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+          "model_communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"ACTION\",\"subject\":\"examine footprints\",\"evidence_refs\":[\"visible:1\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player intends to examine the footprints in the mud track near the Old Milestone.\"},\"asserted_premises\":[{\"text\":\"The footprints are faint overlapping prints in the mud around the weathered milestone.\"}],\"requested_outcomes\":[{\"text\":\"Gain detailed information about the footprints to potentially aid in following the missing patrol trail.\"}],\"action_components\":[{\"order\":1,\"description\":\"Examine the mud prints near the weathered milestone on the northwest track.\",\"target_ref\":\"prints\",\"operation_class\":\"INSPECT\"}],\"references\":{\"permitted_entity_ids\":[\"prints\",\"milestone\",\"leave_for_return_to_cinderwatch_gate\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "e76d09f5c1b94f1a8c3025e133d9643a",
+              "attempt_id": "c472349802b84966ae92f6910609ca1c",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-11-02T22:59:09.020952+00:00",
+              "time": "2026-11-02T22:59:13.062614+00:00",
+              "sequence": 5,
+              "admission": "admitted",
+              "budget_remaining": 5,
+              "sdk_retries": 0,
+              "host_retries": "disabled",
+              "sent": true,
+              "request_id": "resp_05ec4ddac95016cb006ae915bec3f087d29914bc106a635c11",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2586,
+              "output_tokens": 197,
+              "total_tokens": 2783,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2611.732
+            }
+          ],
+          "bridge": {
+            "source": "stored_interpretation",
+            "accepted": true,
+            "operation": "INSPECT",
+            "target_ref": "prints",
+            "engine_type": "investigate",
+            "visible_surface_inspection": false
+          },
+          "record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "The player intends to examine the footprints in the mud track near the Old Milestone."
+            },
+            "asserted_premises": [
+              {
+                "text": "The footprints are faint overlapping prints in the mud around the weathered milestone.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "Gain detailed information about the footprints to potentially aid in following the missing patrol trail.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [
+              {
+                "order": 1,
+                "description": "Examine the mud prints near the weathered milestone on the northwest track.",
+                "target_ref": "prints",
+                "operation_class": "INSPECT"
+              }
+            ],
+            "references": {
+              "permitted_entity_ids": [
+                "prints",
+                "milestone",
+                "leave_for_return_to_cinderwatch_gate"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            },
+            "communication": {
+              "recipient": "CHARACTER",
+              "purpose": "ACTION",
+              "subject": "examine footprints",
+              "evidence_refs": [
+                "visible:1"
+              ]
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": "INSPECT"
+            },
+            "public_evidence": {
+              "visible:1": "The mud around the marker is churned with faint overlapping prints that fade into the scrub."
+            }
+          }
+        },
+        "tags": [
+          "deterministic_narration",
+          "provider_narration_skipped",
+          "resolved_clue_discovery",
+          "final_emission_gate_replaced",
+          "visibility_enforcement_replaced",
+          "visibility_violation:undiscovered_fact_assertion",
+          "authoritative_resolution_fact_preserved"
+        ],
+        "provenance": "initial_generation",
+        "hard_valid": true,
+        "expression_decision": null,
+        "gm_metadata_keys": [
+          "accepted_response",
+          "decision_review",
+          "hard_validation_attempt_1",
+          "live_resolution_mode",
+          "narration_provider_calls",
+          "narration_retry_count",
+          "narration_seam",
+          "provider_narration_skip_reason",
+          "provider_narration_skipped",
+          "response_policy_enforcement_applied",
+          "skipped_semantic_mutators"
+        ],
+        "missing_observability": []
+      },
+      "persisted_engine": {
+        "log_index": 5,
+        "player_input": "I examine the footprints.",
+        "player_facing_text": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "intent_classification": {
+          "raw_text": "I examine the footprints.",
+          "labels": [
+            "investigation"
+          ],
+          "allow_discoverable_clues": true,
+          "confidence": "rule_based"
+        },
+        "resolution_kind": "discover_clue",
+        "action_id": "prints",
+        "action_type": null,
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "originating_scene_id": null,
+        "prompt": "I examine the footprints.",
+        "discovered_clues": [
+          "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "interactable_id": "prints"
+        },
+        "clocks_changed": {
+          "time_pressure": 5
+        },
+        "discovered_clues_added": [
+          "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        ],
+        "approved_state_updates": {
+          "scene_update": null,
+          "world_updates": null,
+          "new_scene_draft": null
+        },
+        "rejected_state_updates": [],
+        "log_meta_keys": [
+          "approved_state_updates",
+          "clocks_changed",
+          "communication_mode",
+          "discovered_clues_added",
+          "gm_prompt_context_summary",
+          "gm_raw_output_meta",
+          "intent_classification",
+          "mode_source",
+          "player_input",
+          "processing_input",
+          "rejected_state_updates",
+          "response_type_contract",
+          "surfaced_clues_in_narration_non_authoritative"
+        ],
+        "resolution_metadata_keys": [
+          "communication_mode",
+          "contract_before_resolver",
+          "contract_construction_source",
+          "emission_debug",
+          "gm_resolution_decision",
+          "interaction_obligation",
+          "live_chat_interpretation",
+          "ordinary_contract_established",
+          "performance",
+          "referenced_surface_authority",
+          "referenced_surface_existence",
+          "referenced_surface_inspectability",
+          "referenced_surface_inspectable_text",
+          "referenced_surface_interactable_id",
+          "referenced_surface_target",
+          "referenced_surface_visibility",
+          "referenced_surface_visible_fact",
+          "resolution_contract",
+          "response_type_contract",
+          "selected_resolver",
+          "semantic_owner",
+          "skip_unrelated_clue_discovery",
+          "turn_segmentation",
+          "unknown_legacy_keys"
+        ],
+        "processing_outcome": null,
+        "resolver_invoked": null,
+        "narration_invoked": null,
+        "gameplay_parser_invoked": null,
+        "conversational_decision": null,
+        "stored_interpretation_bridge": null,
+        "opening_recovery_debug": null,
+        "provenance": "initial_generation",
+        "hard_valid": true,
+        "response_type_contract": {
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ]
+        }
+      },
+      "state_before": {
+        "campaign_title": "Ashen Thrones",
+        "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+        "session_id": "5d7040aa8eb9b4e6f6b7c933",
+        "campaign_started": true,
+        "active_scene_id": "old_milestone",
+        "visited_scene_ids": [
+          "frontier_gate",
+          "old_milestone"
+        ],
+        "current_date": "Day 1",
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 4
+        },
+        "turn_counter": 4,
+        "chat_history_len": 0,
+        "log_entries": 5,
+        "discovered_clues_by_scene": {
+          "frontier_gate": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ]
+        },
+        "clue_knowledge": {
+          "muddy_footprints_northwest": "discovered",
+          "minlead_exit_frontier_gate_old_milestone": "discovered",
+          "notice_patrol_route": "discovered"
+        },
+        "known_clue_ids": null,
+        "deferred_intentions": null,
+        "deferred_steps": null,
+        "time_pressure": 4,
+        "active_quests": null,
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "hp_current": 8,
+          "hp_max": 8,
+          "gold": null,
+          "resources": null,
+          "inventory_count": 1,
+          "inventory_ids": [
+            "spellbook"
+          ]
+        },
+        "world_clue_ids": [],
+        "authority_catalog": {
+          "npc_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "tavern_runner"
+          ],
+          "npcs": [
+            {
+              "id": "gate_guard",
+              "name": "Gate Guard",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "watch_command"
+              ]
+            },
+            {
+              "id": "gate_serjeant",
+              "name": "Gate Serjeant",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "route_change"
+              ]
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "patrol_rumor"
+              ]
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "pressure": 6,
+              "influence": 3,
+              "agenda_progress": 4
+            },
+            {
+              "id": "ash_cowl",
+              "pressure": 6,
+              "influence": 3,
+              "agenda_progress": 4
+            },
+            {
+              "id": "ordo_pyric",
+              "pressure": 5,
+              "influence": 2,
+              "agenda_progress": 4
+            }
+          ],
+          "world_event_log_len": 5,
+          "scenes": {
+            "frontier_gate": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Enter Cinderwatch",
+                  "target_scene_id": "market_quarter"
+                },
+                {
+                  "id": null,
+                  "label": "Follow the missing patrol rumor",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [
+                "notice_board"
+              ],
+              "addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher"
+              ]
+            },
+            "market_quarter": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to the Gate",
+                  "target_scene_id": "frontier_gate"
+                },
+                {
+                  "id": null,
+                  "label": "Seek the fortress trail",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [],
+              "addressable_ids": []
+            },
+            "old_milestone": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to Cinderwatch Gate",
+                  "target_scene_id": "frontier_gate"
+                }
+              ],
+              "interactable_ids": [
+                "milestone",
+                "prints"
+              ],
+              "addressable_ids": []
+            }
+          }
+        },
+        "documents_present": [
+          "campaign.json",
+          "character.json",
+          "combat.json",
+          "conditions.json",
+          "scenes/frontier_gate.json",
+          "scenes/market_quarter.json",
+          "scenes/old_milestone.json",
+          "session.json",
+          "session_log.jsonl",
+          "world.json"
+        ],
+        "observability_gaps": [
+          "active_quests",
+          "known_clues",
+          "character_resources"
+        ]
+      },
+      "state_after": {
+        "campaign_title": "Ashen Thrones",
+        "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+        "session_id": "5d7040aa8eb9b4e6f6b7c933",
+        "campaign_started": true,
+        "active_scene_id": "old_milestone",
+        "visited_scene_ids": [
+          "frontier_gate",
+          "old_milestone"
+        ],
+        "current_date": "Day 1",
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 5
+        },
+        "turn_counter": 5,
+        "chat_history_len": 0,
+        "log_entries": 6,
+        "discovered_clues_by_scene": {
+          "frontier_gate": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor",
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "old_milestone": [
+            "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          ]
+        },
+        "clue_knowledge": {
+          "muddy_footprints_northwest": "discovered",
+          "minlead_exit_frontier_gate_old_milestone": "discovered",
+          "notice_patrol_route": "discovered",
+          "milestone_mud_prints": "discovered"
+        },
+        "known_clue_ids": null,
+        "deferred_intentions": null,
+        "deferred_steps": null,
+        "time_pressure": 5,
+        "active_quests": null,
+        "character": {
+          "id": "galinor",
+          "name": "Galinor",
+          "hp_current": 8,
+          "hp_max": 8,
+          "gold": null,
+          "resources": null,
+          "inventory_count": 1,
+          "inventory_ids": [
+            "spellbook"
+          ]
+        },
+        "world_clue_ids": [],
+        "authority_catalog": {
+          "npc_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "tavern_runner"
+          ],
+          "npcs": [
+            {
+              "id": "gate_guard",
+              "name": "Gate Guard",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "watch_command"
+              ]
+            },
+            {
+              "id": "gate_serjeant",
+              "name": "Gate Serjeant",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "route_change"
+              ]
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "topic_ids": [
+                "patrol_rumor"
+              ]
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "pressure": 7,
+              "influence": 3,
+              "agenda_progress": 5
+            },
+            {
+              "id": "ash_cowl",
+              "pressure": 7,
+              "influence": 3,
+              "agenda_progress": 5
+            },
+            {
+              "id": "ordo_pyric",
+              "pressure": 6,
+              "influence": 2,
+              "agenda_progress": 5
+            }
+          ],
+          "world_event_log_len": 8,
+          "scenes": {
+            "frontier_gate": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Enter Cinderwatch",
+                  "target_scene_id": "market_quarter"
+                },
+                {
+                  "id": null,
+                  "label": "Follow the missing patrol rumor",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [
+                "notice_board"
+              ],
+              "addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher"
+              ]
+            },
+            "market_quarter": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to the Gate",
+                  "target_scene_id": "frontier_gate"
+                },
+                {
+                  "id": null,
+                  "label": "Seek the fortress trail",
+                  "target_scene_id": "old_milestone"
+                }
+              ],
+              "interactable_ids": [],
+              "addressable_ids": []
+            },
+            "old_milestone": {
+              "exit_labels": [
+                {
+                  "id": null,
+                  "label": "Return to Cinderwatch Gate",
+                  "target_scene_id": "frontier_gate"
+                }
+              ],
+              "interactable_ids": [
+                "milestone",
+                "prints"
+              ],
+              "addressable_ids": []
+            }
+          }
+        },
+        "documents_present": [
+          "campaign.json",
+          "character.json",
+          "combat.json",
+          "conditions.json",
+          "scenes/frontier_gate.json",
+          "scenes/market_quarter.json",
+          "scenes/old_milestone.json",
+          "session.json",
+          "session_log.jsonl",
+          "world.json"
+        ],
+        "observability_gaps": [
+          "active_quests",
+          "known_clues",
+          "character_resources"
+        ]
+      },
+      "state_delta": {
+        "authority_catalog": {
+          "before": {
+            "npc_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "tavern_runner"
+            ],
+            "npcs": [
+              {
+                "id": "gate_guard",
+                "name": "Gate Guard",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "watch_command"
+                ]
+              },
+              {
+                "id": "gate_serjeant",
+                "name": "Gate Serjeant",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "route_change"
+                ]
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "patrol_rumor"
+                ]
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "pressure": 6,
+                "influence": 3,
+                "agenda_progress": 4
+              },
+              {
+                "id": "ash_cowl",
+                "pressure": 6,
+                "influence": 3,
+                "agenda_progress": 4
+              },
+              {
+                "id": "ordo_pyric",
+                "pressure": 5,
+                "influence": 2,
+                "agenda_progress": 4
+              }
+            ],
+            "world_event_log_len": 5,
+            "scenes": {
+              "frontier_gate": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Enter Cinderwatch",
+                    "target_scene_id": "market_quarter"
+                  },
+                  {
+                    "id": null,
+                    "label": "Follow the missing patrol rumor",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [
+                  "notice_board"
+                ],
+                "addressable_ids": [
+                  "guard_captain",
+                  "tavern_runner",
+                  "refugee",
+                  "threadbare_watcher"
+                ]
+              },
+              "market_quarter": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to the Gate",
+                    "target_scene_id": "frontier_gate"
+                  },
+                  {
+                    "id": null,
+                    "label": "Seek the fortress trail",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [],
+                "addressable_ids": []
+              },
+              "old_milestone": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to Cinderwatch Gate",
+                    "target_scene_id": "frontier_gate"
+                  }
+                ],
+                "interactable_ids": [
+                  "milestone",
+                  "prints"
+                ],
+                "addressable_ids": []
+              }
+            }
+          },
+          "after": {
+            "npc_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "tavern_runner"
+            ],
+            "npcs": [
+              {
+                "id": "gate_guard",
+                "name": "Gate Guard",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "watch_command"
+                ]
+              },
+              {
+                "id": "gate_serjeant",
+                "name": "Gate Serjeant",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "route_change"
+                ]
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "topic_ids": [
+                  "patrol_rumor"
+                ]
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "pressure": 7,
+                "influence": 3,
+                "agenda_progress": 5
+              },
+              {
+                "id": "ash_cowl",
+                "pressure": 7,
+                "influence": 3,
+                "agenda_progress": 5
+              },
+              {
+                "id": "ordo_pyric",
+                "pressure": 6,
+                "influence": 2,
+                "agenda_progress": 5
+              }
+            ],
+            "world_event_log_len": 8,
+            "scenes": {
+              "frontier_gate": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Enter Cinderwatch",
+                    "target_scene_id": "market_quarter"
+                  },
+                  {
+                    "id": null,
+                    "label": "Follow the missing patrol rumor",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [
+                  "notice_board"
+                ],
+                "addressable_ids": [
+                  "guard_captain",
+                  "tavern_runner",
+                  "refugee",
+                  "threadbare_watcher"
+                ]
+              },
+              "market_quarter": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to the Gate",
+                    "target_scene_id": "frontier_gate"
+                  },
+                  {
+                    "id": null,
+                    "label": "Seek the fortress trail",
+                    "target_scene_id": "old_milestone"
+                  }
+                ],
+                "interactable_ids": [],
+                "addressable_ids": []
+              },
+              "old_milestone": {
+                "exit_labels": [
+                  {
+                    "id": null,
+                    "label": "Return to Cinderwatch Gate",
+                    "target_scene_id": "frontier_gate"
+                  }
+                ],
+                "interactable_ids": [
+                  "milestone",
+                  "prints"
+                ],
+                "addressable_ids": []
+              }
+            }
+          }
+        },
+        "clocks": {
+          "before": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 4
+          },
+          "after": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 5
+          }
+        },
+        "clue_knowledge": {
+          "before": {
+            "muddy_footprints_northwest": "discovered",
+            "minlead_exit_frontier_gate_old_milestone": "discovered",
+            "notice_patrol_route": "discovered"
+          },
+          "after": {
+            "muddy_footprints_northwest": "discovered",
+            "minlead_exit_frontier_gate_old_milestone": "discovered",
+            "notice_patrol_route": "discovered",
+            "milestone_mud_prints": "discovered"
+          }
+        },
+        "discovered_clues_by_scene": {
+          "before": {
+            "frontier_gate": [
+              "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+              "Follow the missing patrol rumor",
+              "The missing patrol was last seen taking the northwest mud track past the crates."
+            ]
+          },
+          "after": {
+            "frontier_gate": [
+              "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+              "Follow the missing patrol rumor",
+              "The missing patrol was last seen taking the northwest mud track past the crates."
+            ],
+            "old_milestone": [
+              "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+            ]
+          }
+        },
+        "log_entries": {
+          "before": 5,
+          "after": 6
+        },
+        "time_pressure": {
+          "before": 4,
+          "after": 5
+        },
+        "turn_counter": {
+          "before": 4,
+          "after": 5
+        }
+      },
+      "provider": [
+        {
+          "event": "admitted",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "total_tokens": null,
+          "latency_ms": null,
+          "completion_status": null,
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 5,
+          "budget_remaining": 5,
+          "fallback": null,
+          "retry_count": null
+        },
+        {
+          "event": "dispatch_attempted",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "total_tokens": null,
+          "latency_ms": null,
+          "completion_status": null,
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 5,
+          "budget_remaining": 5,
+          "fallback": null,
+          "retry_count": null
+        },
+        {
+          "event": "completed",
+          "stage": null,
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2586,
+          "output_tokens": 197,
+          "total_tokens": 2783,
+          "latency_ms": 2611.732,
+          "completion_status": "completed",
+          "error": null,
+          "classification": null,
+          "provider_status": null,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "refusal": null,
+          "admission": "admitted",
+          "semantic_classification": null,
+          "semantic_reasons": null,
+          "classification_reason": null,
+          "opening_accepted": null,
+          "gameplay_committed": null,
+          "recovery_classification": null,
+          "rejection_reason": null,
+          "final_validation_passed": null,
+          "structured_validation_result": null,
+          "narration_length": null,
+          "declaration_count": null,
+          "logical_operation": null,
+          "opening_recovery": null,
+          "sequence": 5,
+          "budget_remaining": 5,
+          "fallback": null,
+          "retry_count": null
+        }
+      ],
+      "api_latency_seconds": 4.999
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+[
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_closed_candidates_are_prepared_validated_and_sealed[authored_hidden-You pry up the hopper and pocket the brass token.]",
+    "phase": "call",
+    "traceback": "authority = 'authored_hidden'\nbad = 'You pry up the hopper and pocket the brass token.'\n\n    @pytest.mark.parametrize(\"authority,bad\", [\n        (\"authored_hidden\", \"You pry up the hopper and pocket the brass token.\"),\n        (\"authored_abstract_reference\", \"The ledger lists eight named crews bound for Glassport.\"),\n        (\"unsupported\", \"The kiln schedule names four new overseers.\"),\n    ])\n    def test_closed_candidates_are_prepared_validated_and_sealed(authority, bad):\n        resolution = closed(authority)\n        state = {\"inventory\": [], \"active_scene_id\": \"mill_loft\"}\n        before = copy.deepcopy((state, resolution))\n        gm = run(bad, resolution, session=state)\n        assert (state, resolution) == before\n        line = gm[\"player_facing_text\"]\n>       assert line != bad\nE       AssertionError: assert 'You pry up the hopper and pocket the brass token.' != 'You pry up the hopper and pocket the brass token.'\n\ntests\\test_pr_play_preseal_authority.py:40: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "authority",
+      "bad"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_closed_candidates_are_prepared_validated_and_sealed[authored_abstract_reference-The ledger lists eight named crews bound for Glassport.]",
+    "phase": "call",
+    "traceback": "authority = 'authored_abstract_reference'\nbad = 'The ledger lists eight named crews bound for Glassport.'\n\n    @pytest.mark.parametrize(\"authority,bad\", [\n        (\"authored_hidden\", \"You pry up the hopper and pocket the brass token.\"),\n        (\"authored_abstract_reference\", \"The ledger lists eight named crews bound for Glassport.\"),\n        (\"unsupported\", \"The kiln schedule names four new overseers.\"),\n    ])\n    def test_closed_candidates_are_prepared_validated_and_sealed(authority, bad):\n        resolution = closed(authority)\n        state = {\"inventory\": [], \"active_scene_id\": \"mill_loft\"}\n        before = copy.deepcopy((state, resolution))\n        gm = run(bad, resolution, session=state)\n        assert (state, resolution) == before\n        line = gm[\"player_facing_text\"]\n>       assert line != bad\nE       AssertionError: assert 'The ledger lists eight named crews bound for Glassport.' != 'The ledger lists eight named crews bound for Glassport.'\n\ntests\\test_pr_play_preseal_authority.py:40: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "authority",
+      "bad"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_closed_candidates_are_prepared_validated_and_sealed[unsupported-The kiln schedule names four new overseers.]",
+    "phase": "call",
+    "traceback": "authority = 'unsupported', bad = 'The kiln schedule names four new overseers.'\n\n    @pytest.mark.parametrize(\"authority,bad\", [\n        (\"authored_hidden\", \"You pry up the hopper and pocket the brass token.\"),\n        (\"authored_abstract_reference\", \"The ledger lists eight named crews bound for Glassport.\"),\n        (\"unsupported\", \"The kiln schedule names four new overseers.\"),\n    ])\n    def test_closed_candidates_are_prepared_validated_and_sealed(authority, bad):\n        resolution = closed(authority)\n        state = {\"inventory\": [], \"active_scene_id\": \"mill_loft\"}\n        before = copy.deepcopy((state, resolution))\n        gm = run(bad, resolution, session=state)\n        assert (state, resolution) == before\n        line = gm[\"player_facing_text\"]\n>       assert line != bad\nE       AssertionError: assert 'The kiln schedule names four new overseers.' != 'The kiln schedule names four new overseers.'\n\ntests\\test_pr_play_preseal_authority.py:40: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "authority",
+      "bad"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_http_publication_matches_prepared_authority[I inspect the brass token.-You pry up the hopper and pocket the brass token.-authored_hidden]",
+    "phase": "call",
+    "traceback": "tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_0')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001BDAE9C98B0>\nplayer_request = 'I inspect the brass token.'\nbad = 'You pry up the hopper and pocket the brass token.'\nauthority = 'authored_hidden'\n\n    @pytest.mark.parametrize(\"player_request,bad,authority\", [\n        (\"I inspect the brass token.\", \"You pry up the hopper and pocket the brass token.\", \"authored_hidden\"),\n        (\"I inspect the shipping ledger.\", \"The ledger lists eight named crews bound for Glassport.\", \"authored_abstract_reference\"),\n        (\"I inspect the glass kiln schedule.\", \"The kiln schedule names four new overseers.\", \"unsupported\"),\n    ])\n    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):\n        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())\n        before_character = copy.deepcopy(storage.load_character())\n        before_world = copy.deepcopy(storage.load_world())\n        data = _chat(monkeypatch, player_request, bad)\n        line = _facing(data)\n>       assert line and line != bad\nE       AssertionError: assert ('You pry up the hopper and pocket the brass token.' and 'You pry up the hopper and pocket the brass token.' != 'You pry up the hopper and pocket the brass token.')\n\ntests\\test_pr_play_preseal_authority.py:68: AssertionError",
+    "fixtures": [
+      "tmp_path_factory",
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "tmp_path",
+      "request",
+      "player_request",
+      "bad",
+      "authority"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_http_publication_matches_prepared_authority[I inspect the shipping ledger.-The ledger lists eight named crews bound for Glassport.-authored_abstract_reference]",
+    "phase": "call",
+    "traceback": "tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_1')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001BDAE9CBFE0>\nplayer_request = 'I inspect the shipping ledger.'\nbad = 'The ledger lists eight named crews bound for Glassport.'\nauthority = 'authored_abstract_reference'\n\n    @pytest.mark.parametrize(\"player_request,bad,authority\", [\n        (\"I inspect the brass token.\", \"You pry up the hopper and pocket the brass token.\", \"authored_hidden\"),\n        (\"I inspect the shipping ledger.\", \"The ledger lists eight named crews bound for Glassport.\", \"authored_abstract_reference\"),\n        (\"I inspect the glass kiln schedule.\", \"The kiln schedule names four new overseers.\", \"unsupported\"),\n    ])\n    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):\n        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())\n        before_character = copy.deepcopy(storage.load_character())\n        before_world = copy.deepcopy(storage.load_world())\n        data = _chat(monkeypatch, player_request, bad)\n        line = _facing(data)\n>       assert line and line != bad\nE       AssertionError: assert ('The ledger lists eight named crews bound for Glassport.' and 'The ledger lists eight named crews bound for Glassport.' != 'The ledger lists eight named crews bound for Glassport.')\n\ntests\\test_pr_play_preseal_authority.py:68: AssertionError",
+    "fixtures": [
+      "tmp_path_factory",
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "tmp_path",
+      "request",
+      "player_request",
+      "bad",
+      "authority"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_http_publication_matches_prepared_authority[I inspect the glass kiln schedule.-The kiln schedule names four new overseers.-unsupported]",
+    "phase": "call",
+    "traceback": "tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/preseal_focused_pytest/test_http_publication_matches_2')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001BDAB6A52E0>\nplayer_request = 'I inspect the glass kiln schedule.'\nbad = 'The kiln schedule names four new overseers.', authority = 'unsupported'\n\n    @pytest.mark.parametrize(\"player_request,bad,authority\", [\n        (\"I inspect the brass token.\", \"You pry up the hopper and pocket the brass token.\", \"authored_hidden\"),\n        (\"I inspect the shipping ledger.\", \"The ledger lists eight named crews bound for Glassport.\", \"authored_abstract_reference\"),\n        (\"I inspect the glass kiln schedule.\", \"The kiln schedule names four new overseers.\", \"unsupported\"),\n    ])\n    def test_http_publication_matches_prepared_authority(tmp_path, monkeypatch, player_request, bad, authority):\n        _seed_scene_runtime(tmp_path, monkeypatch, _mill_scene(), world=_mill_world())\n        before_character = copy.deepcopy(storage.load_character())\n        before_world = copy.deepcopy(storage.load_world())\n        data = _chat(monkeypatch, player_request, bad)\n        line = _facing(data)\n>       assert line and line != bad\nE       AssertionError: assert ('The kiln schedule names four new overseers.' and 'The kiln schedule names four new overseers.' != 'The kiln schedule names four new overseers.')\n\ntests\\test_pr_play_preseal_authority.py:68: AssertionError",
+    "fixtures": [
+      "tmp_path_factory",
+      "_forbid_live_model_calls",
+      "monkeypatch",
+      "tmp_path",
+      "request",
+      "player_request",
+      "bad",
+      "authority"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_selected_notice_clue_takes_precedence_over_stale_closed_classification",
+    "phase": "call",
+    "traceback": "def test_selected_notice_clue_takes_precedence_over_stale_closed_classification():\n        clue = \"The missing patrol was last seen on the northwest mud track.\"\n        resolution = closed(\"authored_hidden\", clue_text=clue)\n        gm = run(clue, resolution)\n        assert gm[\"player_facing_text\"] == clue\n>       assert not gm[\"metadata\"][\"closed_surface_preparation\"][\"eligible\"]\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       KeyError: 'closed_surface_preparation'\n\ntests\\test_pr_play_preseal_authority.py:91: KeyError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_resolved_acquisition_remains_narratable",
+    "phase": "call",
+    "traceback": "def test_resolved_acquisition_remains_narratable():\n        resolution = closed(\"authored_hidden\", state_changes={\"items_added\": [\"silver key\"]})\n        text = \"A silver key now rests among your possessions.\"\n        gm = run(text, resolution)\n        assert gm[\"player_facing_text\"] == text\n        assert ivr.accepted_record(gm)[\"hard_validation\"][\"hard_valid\"]\n>       assert not gm[\"metadata\"][\"closed_surface_preparation\"][\"eligible\"]\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       KeyError: 'closed_surface_preparation'\n\ntests\\test_pr_play_preseal_authority.py:101: KeyError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_resolved_physical_outcome_takes_precedence",
+    "phase": "call",
+    "traceback": "def test_resolved_physical_outcome_takes_precedence():\n        resolution = closed(state_changes={\"physical_operation\": \"open\", \"mutation\": True})\n        resolution[\"metadata\"][\"physical_adjudication\"] = {\"operation\": \"open\", \"target_id\": \"shutter\", \"mutation\": True}\n        text = \"You open the wooden shutter.\"\n        gm = run(text, resolution)\n        assert gm[\"player_facing_text\"] == text\n>       assert not gm[\"metadata\"][\"closed_surface_preparation\"][\"eligible\"]\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       KeyError: 'closed_surface_preparation'\n\ntests\\test_pr_play_preseal_authority.py:110: KeyError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_preparation_is_validated_before_replacement_and_never_retries",
+    "phase": "call",
+    "traceback": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001BDAEC9E420>\n\n    def test_preparation_is_validated_before_replacement_and_never_retries(monkeypatch):\n        calls = []\n        real_check = ivr.validate_generated_response\n        def fail_prepared(text, **kwargs):\n            calls.append(text)\n            checked = real_check(text, **kwargs)\n            if \"Nothing here matches\" in text:\n                return {**checked, \"hard_valid\": False, \"reasons\": [\"injected_validation_failure\"]}\n            return checked\n        monkeypatch.setattr(ivr, \"validate_generated_response\", fail_prepared)\n        retries = []\n        bad = \"The kiln schedule names four new overseers.\"\n        gm = ivr.run_preserve_if_valid({\"player_facing_text\": bad, \"metadata\": {}},\n            resolution=closed(), player_text=\"I inspect it.\", scene=_mill_scene(),\n            regenerate=lambda _: retries.append(True))\n        assert calls and retries == []\n>       assert \"overseers\" not in gm[\"player_facing_text\"]\nE       AssertionError: assert 'overseers' not in 'The kiln sc...w overseers.'\nE         \nE         'overseers' is contained here:\nE           The kiln schedule names four new overseers.\nE         ?                                  +++++++++\n\ntests\\test_pr_play_preseal_authority.py:162: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch"
+    ]
+  },
+  {
+    "nodeid": "tests/test_pr_play_preseal_authority.py::test_already_accepted_text_is_never_reprepared",
+    "phase": "call",
+    "traceback": "def test_already_accepted_text_is_never_reprepared():\n        gm = run(\"Rain taps the shutters.\", {\"kind\": \"observe\", \"success\": True})\n        before = copy.deepcopy(gm)\n>       assert ivr.run_preserve_if_valid(gm, resolution=closed(), player_text=\"I inspect it.\", regenerate=None) == before\nE       assert {'player_faci...dentity\":\"\"}'} == {'player_faci...dentity\":\"\"}'}\nE         \nE         Omitting 1 identical items, use -vv to show\nE         Differing items:\nE         {'_final_delivery_seal': '{\"addressee\":\"\",\"adoption_status\":\"candidate_accepted\",\"attempt\":1,\"authority_result\":\"accep...lution_kind\":\"investigate\",\"speaker\":\"\",\"subject\":\"\",\"target\":\"\",\"text\":\"Rain taps the shutters.\",\"turn_identity\":\"\"}'} != {'_final_delivery_seal': '{\"addressee\":\"\",\"adoption_status\":\"candidate_accepted\",\"attempt\":1,\"authority_result\":\"accep...resolution_kind\":\"observe\",\"speaker\":\"\",\"subject\":\"\",\"target\":\"\",\"text\":\"Rain taps the shutters.\",\"turn_identity\":\"\"}'}\nE         {'metadata': {'hard_validation_at...\nE         \nE         ...Full output truncated (2 lines hidden), use '-vv' to show\n\ntests\\test_pr_play_preseal_authority.py:171: AssertionError",
+    "fixtures": [
+      "_forbid_live_model_calls",
+      "monkeypatch"
+    ]
+  }
+]

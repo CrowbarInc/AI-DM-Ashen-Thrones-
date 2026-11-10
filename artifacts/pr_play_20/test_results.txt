@@ -1,0 +1,157 @@
+...............................................................FFF...... [ 38%]
+....................F.....F.FFFFF....................FF..............F.. [ 76%]
+...F.........FF.F............................                            [100%]
+================================== FAILURES ===================================
+_____________ test_start_campaign_emits_opening_and_sets_started ______________
+tests\test_start_campaign_api.py:175: in test_start_campaign_emits_opening_and_sets_started
+    assert response_text in RICH_OPENING_GPT_RESPONSE["player_facing_text"]
+E   assert "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. A... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush." in "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush."
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 2da738e63c51a5766d0e2619
+[PROMPT] fresh campaign prompt constructed
+_ test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text _
+tests\test_start_campaign_api.py:258: in test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text
+    assert emission_debug.get("post_final_emission_gate_text_len", 0) > 800
+E   AssertionError: assert 781 > 800
+E    +  where 781 = <built-in method get of dict object at 0x0000029210D27000>('post_final_emission_gate_text_len', 0)
+E    +    where <built-in method get of dict object at 0x0000029210D27000> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started b0003e454a4022a496c262aa
+[PROMPT] fresh campaign prompt constructed
+_____ test_start_campaign_promotes_valid_upstream_prepared_scene_opening ______
+tests\test_start_campaign_api.py:287: in test_start_campaign_promotes_valid_upstream_prepared_scene_opening
+    assert response_text in RICH_OPENING_GPT_RESPONSE["player_facing_text"]
+E   assert "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke." in "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush."
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started e00f5526b71ef8678fa96e40
+[PROMPT] fresh campaign prompt constructed
+_____ test_chat_fallback_preserves_endpoint_specific_no_resolution_shape ______
+tests\test_turn_pipeline_shared.py:317: in test_chat_fallback_preserves_endpoint_specific_no_resolution_shape
+    assert data.get("resolution") is None
+E   assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None
+E    +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x0000029210BDD7C0>('resolution')
+E    +    where <built-in method get of dict object at 0x0000029210BDD7C0> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_ test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback _
+tests\test_turn_pipeline_shared.py:494: in test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback
+    assert captured_inputs
+E   assert []
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+___________ test_chat_known_follow_up_bypasses_uncertainty_fallback ___________
+tests\test_turn_pipeline_shared.py:601: in test_chat_known_follow_up_bypasses_uncertainty_fallback
+    assert "retry_strategy:selected=unresolved_question" in read_turn_debug_notes(data)
+E   assert 'retry_strategy:selected=unresolved_question' in ''
+E    +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, "Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______________ test_chat_targeted_retry_unresolved_question_only ______________
+tests\test_turn_pipeline_shared.py:630: in test_chat_targeted_retry_unresolved_question_only
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+_______ test_chat_targeted_retry_prefers_highest_priority_failure_first _______
+tests\test_turn_pipeline_shared.py:670: in test_chat_targeted_retry_prefers_highest_priority_failure_first
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+__ test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback __
+tests\test_turn_pipeline_shared.py:700: in test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+_ test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback _
+tests\test_turn_pipeline_shared.py:738: in test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_social_pressure_line_prefers_dialogue_over_adjudication ______
+tests\test_turn_pipeline_shared.py:1272: in test_chat_social_pressure_line_prefers_dialogue_over_adjudication
+    assert data.get("resolution") is None
+E   assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None
+E    +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x000002920C1BCB80>('resolution')
+E    +    where <built-in method get of dict object at 0x000002920C1BCB80> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_active_target_direct_command_routes_to_social_exchange _______
+tests\test_turn_pipeline_shared.py:1309: in test_chat_active_target_direct_command_routes_to_social_exchange
+    assert_dialogue_lock_social_route_smoke(
+tests\helpers\emission_smoke_assertions.py:377: in assert_dialogue_lock_social_route_smoke
+    assert kind in allowed, (
+E   AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'
+________ test_chat_mixed_turn_preserves_embedded_adjudication_metadata ________
+tests\test_turn_pipeline_shared.py:1538: in test_chat_mixed_turn_preserves_embedded_adjudication_metadata
+    assert embedded.get("category") == "roll_requirement_query"
+E   AssertionError: assert None == 'roll_requirement_query'
+E    +  where None = <built-in method get of dict object at 0x0000029210D195C0>('category')
+E    +    where <built-in method get of dict object at 0x0000029210D195C0> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] desk_clue
+[PROMPT] fresh campaign prompt constructed
+___ test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane ___
+tests\test_turn_pipeline_shared.py:1719: in test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane
+    assert embedded.get("category") == "roll_requirement_query"
+E   AssertionError: assert None == 'roll_requirement_query'
+E    +  where None = <built-in method get of dict object at 0x0000029210FA0300>('category')
+E    +    where <built-in method get of dict object at 0x0000029210FA0300> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_______ test_chat_social_exchange_invalid_blob_is_repaired_before_emit ________
+tests\test_turn_pipeline_shared.py:2030: in test_chat_social_exchange_invalid_blob_is_repaired_before_emit
+    assert_emission_repair_evidence(
+tests\helpers\emission_smoke_assertions.py:356: in assert_emission_repair_evidence
+    assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_chat_social_exchange_blocks_advisory_prose_before_emit _________
+tests\test_turn_pipeline_shared.py:2058: in test_chat_social_exchange_blocks_advisory_prose_before_emit
+    assert_emission_repair_evidence(
+tests\helpers\emission_smoke_assertions.py:356: in assert_emission_repair_evidence
+    assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_ test_chat_repeated_interruption_progresses_without_losing_dialogue_contract _
+tests\test_turn_pipeline_shared.py:2134: in test_chat_repeated_interruption_progresses_without_losing_dialogue_contract
+    assert second_text != first_text
+E   assert 'Tavern Runner says, "I couldn\'t tell you."' != 'Tavern Runner says, "I couldn\'t tell you."'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_start_campaign_api.py::test_start_campaign_emits_opening_and_sets_started
+FAILED tests/test_start_campaign_api.py::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text
+FAILED tests/test_start_campaign_api.py::test_start_campaign_promotes_valid_upstream_prepared_scene_opening
+FAILED tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape
+FAILED tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication
+FAILED tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract
+17 failed, 172 passed, 1 warning in 76.13s (0:01:16)

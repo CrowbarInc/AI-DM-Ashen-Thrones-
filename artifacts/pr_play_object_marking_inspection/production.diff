@@ -1,0 +1,337 @@
+--- before/game/api.py
++++ after/game/api.py
+@@ -5721,7 +5721,41 @@
+         return result
+ 
+ 
++def inspect_inventory_object_markings(request: dict) -> dict:
++    """Internal authoritative read only. No player endpoint or observation grant."""
++    from game import storage
++    from game.integrated_play import ordered_turn
++    from game.object_marking import inspect_markings, _inspection_request_error
++    from copy import deepcopy
++
++    request = deepcopy(request)
++    error = _inspection_request_error(request)
++    if error:
++        return {'status':'rejected', 'error':error}
++    with ordered_turn(str(DATA_DIR), mutating=False):
++        with storage._runtime_persistence_guard('inspect_inventory_markings'):
++            # Existing loaders bootstrap absent files. Reads must never do so.
++            if not storage.CHARACTER_PATH.is_file() or not storage.SESSION_PATH.is_file():
++                return {'status':'rejected', 'error':'missing_runtime_state'}
++            try:
++                if storage.load_session().get('campaign_run_id') != request['campaign_run_id']:
++                    return {'status':'rejected', 'error':'campaign_mismatch'}
++                return inspect_markings(storage.load_character(), request)
++            except (ValueError, TypeError):
++                return {'status':'rejected', 'error':'invalid_runtime_state'}
++
++
+ def add_inventory_object_marking(request: dict) -> dict:
++    """Commit a trusted structured addition through existing state authority."""
++    return _mutate_inventory_object_marking(request)
++
++
++def remove_inventory_object_marking(request: dict) -> dict:
++    """Commit a trusted structured ID-specific removal; never a gameplay route."""
++    return _mutate_inventory_object_marking(request, remove=True)
++
++
++def _mutate_inventory_object_marking(request: dict, *, remove: bool = False) -> dict:
+     """Internal trusted structured entry. Never called by HTTP/gameplay routing.
+ 
+     Same lane as character identity and turns; durable dedupe is checked afresh,
+@@ -5729,27 +5763,30 @@
+     """
+     from game import storage
+     from game.integrated_play import ordered_turn
+-    from game.object_marking import prepare_marking, _request_error
++    from game.object_marking import prepare_marking, _request_error, prepare_removal, _removal_request_error
+     from copy import deepcopy
+ 
+     request = deepcopy(request)
+-    error = _request_error(request)
++    validate = _removal_request_error if remove else _request_error
++    prepare = prepare_removal if remove else prepare_marking
++    operation = 'remove_inventory_marking' if remove else 'add_inventory_marking'
++    error = validate(request)
+     if error:
+         return {'status':'rejected', 'error':error}
+     with ordered_turn(str(DATA_DIR), mutating=True):
+         # Hold the existing persistence guard across read/validate/save so an
+         # in-process snapshot restore cannot interleave this character operation.
+-        with storage._runtime_persistence_guard('add_inventory_marking'):
++        with storage._runtime_persistence_guard(operation):
+             if not storage.CHARACTER_PATH.is_file() or not storage.SESSION_PATH.is_file():
+                 return {'status':'rejected','error':'missing_runtime_state'}
+             if storage.load_session().get('campaign_run_id') != request['campaign_run_id']:
+                 return {'status':'rejected','error':'campaign_mismatch'}
+-            proposal = prepare_marking(storage.load_character(), request)
++            proposal = prepare(storage.load_character(), request)
+             if proposal['status'] == 'rejected':
+                 return proposal
+             if proposal['status'] == 'replay':
+                 return proposal['result']
+-            assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation='add_inventory_marking')
++            assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=operation)
+             original = storage.CHARACTER_PATH.read_bytes()
+             try:
+                 with storage.runtime_commit_scope():
+--- before/game/object_marking.py
++++ after/game/object_marking.py
+@@ -71,50 +71,6 @@
+         **{k:req[k] for k in ('campaign_run_id','character_id','instance_id','request_id','request_digest')},
+         modification_id=marking_id, previous_revision=req['expected_revision'],
+         resulting_revision=req['expected_revision']+1)
+-
+-
+-def _receipt_state_valid(character, campaign, actor):
+-    """Cross-check both directions; never trust an orphan/malformed cached result."""
+-    ledger = character.get(LEDGER, {'version':1, 'campaign_run_id':campaign, 'character_id':actor, 'entries':{}})
+-    if (not isinstance(ledger,dict) or set(ledger) != {'version','campaign_run_id','character_id','entries'}
+-            or type(ledger['version']) is not int or ledger['version'] != 1
+-            or ledger['campaign_run_id'] != campaign or ledger['character_id'] != actor
+-            or not isinstance(ledger['entries'],dict)):
+-        return False
+-    seen_requests, seen_ids = set(), set()
+-    for row in character['inventory']:
+-        if not isinstance(row, dict) or 'markings' not in row:
+-            continue
+-        marks = row['markings']
+-        if not _uuid(row.get('instance_id')) or not isinstance(marks,list) or len(marks)>16:
+-            return False
+-        total = 0
+-        last_revision = -1
+-        for mark in marks:
+-            if (not isinstance(mark,dict) or set(mark) != MARK_FIELDS
+-                    or type(mark['version']) is not int or mark['version'] != 1 or mark['type'] != 'add_marking'
+-                    or not _uuid(mark['modification_id']) or type(mark['applied_revision']) is not int
+-                    or not last_revision < mark['applied_revision'] <= row['revision']):
+-                return False
+-            reconstructed = dict(version=1, operation=mark['type'], campaign_run_id=campaign,
+-                character_id=actor, instance_id=row['instance_id'], expected_revision=mark['applied_revision']-1,
+-                **{k:mark[k] for k in ('content','source','authorization','request_id','request_digest')})
+-            if _request_error(reconstructed):
+-                return False
+-            key = mark['request_id']
+-            receipt = ledger['entries'].get(key)
+-            expected = _result(reconstructed, mark['modification_id'])
+-            if (key in seen_requests or mark['modification_id'] in seen_ids
+-                    or not isinstance(receipt,dict) or set(receipt) != RESULT_FIELDS or receipt != expected
+-                    or type(receipt['version']) is not int
+-                    or type(receipt['previous_revision']) is not int or type(receipt['resulting_revision']) is not int):
+-                return False
+-            seen_requests.add(key); seen_ids.add(mark['modification_id'])
+-            total += len(mark['content'].encode('utf-8'))
+-            last_revision = mark['applied_revision']
+-        if total > 8192:
+-            return False
+-    return seen_requests == set(ledger['entries'])
+ 
+ 
+ def prepare_marking(character: dict, request: dict) -> dict:
+@@ -149,7 +105,7 @@
+     if len(marks) >= 16 or sum(len(m['content'].encode('utf-8')) for m in marks)+len(request['content'].encode('utf-8'))>8192:
+         return _reject('marking_capacity')
+     marking_id = str(uuid4())
+-    if any(m['modification_id']==marking_id for r in inventory if isinstance(r,dict) for m in r.get('markings',[])):
++    if any(r['modification_id'] == marking_id for r in ledger.values()):
+         return _reject('modification_id_collision')
+     result = _result(request,marking_id)
+     candidate = copy.deepcopy(character)
+@@ -162,3 +118,194 @@
+     candidate.setdefault(LEDGER,dict(version=1, campaign_run_id=request['campaign_run_id'],
+         character_id=request['character_id'],entries={}))['entries'][request['request_id']] = copy.deepcopy(result)
+     return {'status':'validated', 'character':candidate, 'result':result}
++
++
++REMOVAL_PRECONDITIONS = frozenset({'target_exists', 'accessible', 'rights',
++                                  'marking_exists', 'removable', 'capability'})
++REMOVAL_FIELDS = (REQUEST_FIELDS - {'content', 'source'}) | {'modification_id'}
++REMOVAL_RESULT_FIELDS = RESULT_FIELDS | {'operation', 'request', 'removed_marking'}
++INSPECTION_FIELDS = frozenset({'version', 'operation', 'campaign_run_id',
++                              'character_id', 'instance_id', 'context'})
++
++
++def _removal_request_error(req):
++    if not isinstance(req, dict) or set(req) != REMOVAL_FIELDS | {'request_digest'}:
++        return 'invalid_request'
++    if (type(req['version']) is not int or req['version'] != 1 or req['operation'] != 'remove_marking'
++            or not all(_text(req[k]) for k in ('campaign_run_id', 'character_id', 'request_id'))
++            or not _uuid(req['instance_id']) or not _uuid(req['modification_id'])
++            or type(req['expected_revision']) is not int or req['expected_revision'] < 0):
++        return 'invalid_request'
++    auth = req['authorization']
++    if (not isinstance(auth, dict) or set(auth) != {'caller_id', 'decision_id', 'mechanics', 'preconditions'}
++            or not _text(auth['caller_id']) or not _text(auth['decision_id'])
++            or auth['mechanics'] != 'not_applicable'
++            or not isinstance(auth['preconditions'], dict)
++            or set(auth['preconditions']) != REMOVAL_PRECONDITIONS
++            or not all(_text(v) for v in auth['preconditions'].values())):
++        return 'unauthorized_removal'
++    if req['request_digest'] != request_digest(req):
++        return 'invalid_digest'
++    return None
++
++
++def _inspection_request_error(req):
++    if (not isinstance(req, dict) or set(req) != INSPECTION_FIELDS
++            or type(req['version']) is not int or req['version'] != 1
++            or req['operation'] != 'inspect_markings'
++            or not all(_text(req[k]) for k in ('campaign_run_id', 'character_id'))
++            or not _uuid(req['instance_id'])):
++        return 'invalid_request'
++    context = req['context']
++    if (not isinstance(context, dict) or set(context) != {'caller_id', 'purpose'}
++            or not _text(context['caller_id']) or context['purpose'] != 'authoritative_state'):
++        return 'invalid_internal_context'
++    return None
++
++
++def _target(character, req):
++    if not isinstance(character, dict) or character.get('id') != req['character_id']:
++        return None, 'character_mismatch'
++    inventory = character.get('inventory')
++    if not isinstance(inventory, list):
++        return None, 'invalid_inventory'
++    indices = [i for i, row in enumerate(inventory)
++               if isinstance(row, dict) and row.get('instance_id') == req['instance_id']]
++    if len(indices) != 1:
++        return None, 'missing_or_ambiguous_target'
++    identity = inspect_object_identity(character, indices[0], campaign_run_id=req['campaign_run_id'])
++    if identity.status != 'existing':
++        return None, identity.error or 'missing_identity'
++    if not _receipt_state_valid(character, req['campaign_run_id'], req['character_id']):
++        return None, 'invalid_receipt_state'
++    return indices[0], None
++
++
++def inspect_markings(character: dict, request: dict) -> dict:
++    """Pure internal authoritative read; this grants no player observation rights."""
++    error = _inspection_request_error(request)
++    if error:
++        return _reject(error)
++    index, error = _target(character, request)
++    if error:
++        return _reject(error)
++    row = character['inventory'][index]
++    return dict(version=1, status='inspected', campaign_run_id=request['campaign_run_id'],
++        character_id=request['character_id'], instance_id=row['instance_id'], revision=row['revision'],
++        markings=copy.deepcopy(row.get('markings', [])))
++
++
++def _removal_result(req, mark):
++    return dict(_result(req, req['modification_id']), operation='remove_marking',
++                request=copy.deepcopy(req), removed_marking=copy.deepcopy(mark))
++
++
++def prepare_removal(character: dict, request: dict) -> dict:
++    """Stage one ID-specific removal and its receipt in the same character."""
++    error = _removal_request_error(request)
++    if error:
++        return _reject(error)
++    index, error = _target(character, request)
++    if error:
++        return _reject(error)
++    receipt = character.get(LEDGER, {}).get('entries', {}).get(request['request_id'])
++    if receipt is not None:
++        if receipt['request_digest'] != request['request_digest']:
++            return _reject('conflicting_request')
++        return {'status':'replay', 'result':copy.deepcopy(receipt)}
++    row = character['inventory'][index]
++    if row['revision'] != request['expected_revision']:
++        return _reject('stale_revision')
++    mark = next((m for m in row.get('markings', [])
++                 if m['modification_id'] == request['modification_id']), None)
++    if mark is None:
++        return _reject('missing_marking')
++    result = _removal_result(request, mark)
++    candidate = copy.deepcopy(character)
++    target = candidate['inventory'][index] = copy.deepcopy(candidate['inventory'][index])
++    target['markings'] = [m for m in target['markings'] if m['modification_id'] != request['modification_id']]
++    target['revision'] = result['resulting_revision']
++    candidate[LEDGER]['entries'][request['request_id']] = copy.deepcopy(result)
++    return {'status':'validated', 'character':candidate, 'result':result}
++
++
++def _receipt_state_valid(character, campaign, actor):
++    """Validate active additions and historical removed additions bidirectionally.
++
++    V1 add receipts remain byte/shape compatible. A removal receipt retains only
++    its request and removed marking, never an object snapshot or current-state copy.
++    """
++    try:
++        return _validate_receipt_history(character, campaign, actor)
++    except (KeyError, TypeError, ValueError, AttributeError, UnicodeError):
++        return False
++
++
++def _validate_receipt_history(character, campaign, actor):
++    ledger = character.get(LEDGER, dict(version=1, campaign_run_id=campaign, character_id=actor, entries={}))
++    if (not isinstance(ledger, dict) or set(ledger) != {'version','campaign_run_id','character_id','entries'}
++            or type(ledger['version']) is not int or ledger['version'] != 1
++            or ledger['campaign_run_id'] != campaign or ledger['character_id'] != actor
++            or not isinstance(ledger['entries'], dict)):
++        return False
++    entries = ledger['entries']
++    rows = {r['instance_id']: r for r in character['inventory'] if isinstance(r, dict) and 'instance_id' in r}
++    seen_requests, seen_ids, revisions = set(), set(), set()
++
++    def addition(row, mark):
++        if (not isinstance(mark, dict) or set(mark) != MARK_FIELDS
++                or type(mark['version']) is not int or mark['version'] != 1 or mark['type'] != 'add_marking'
++                or not _uuid(mark['modification_id']) or type(mark['applied_revision']) is not int
++                or not 0 < mark['applied_revision'] <= row['revision']):
++            return False
++        req = dict(version=1, operation='add_marking', campaign_run_id=campaign,
++            character_id=actor, instance_id=row['instance_id'], expected_revision=mark['applied_revision']-1,
++            **{k:mark[k] for k in ('content','source','authorization','request_id','request_digest')})
++        if _request_error(req):
++            return False
++        key = mark['request_id']; receipt = entries.get(key)
++        token = (row['instance_id'], mark['applied_revision'])
++        if (key in seen_requests or mark['modification_id'] in seen_ids or token in revisions
++                or not isinstance(receipt, dict) or set(receipt) != RESULT_FIELDS
++                or receipt != _result(req, mark['modification_id'])
++                or any(type(receipt[k]) is not int for k in ('version','previous_revision','resulting_revision'))):
++            return False
++        seen_requests.add(key); seen_ids.add(mark['modification_id']); revisions.add(token)
++        return True
++
++    for row in character['inventory']:
++        if not isinstance(row, dict) or 'markings' not in row:
++            continue
++        marks = row['markings']
++        if not _uuid(row.get('instance_id')) or not isinstance(marks, list) or len(marks) > 16:
++            return False
++        last = 0; total = 0
++        for mark in marks:
++            if not addition(row, mark) or mark['applied_revision'] <= last:
++                return False
++            last = mark['applied_revision']; total += len(mark['content'].encode('utf-8'))
++        if total > 8192:
++            return False
++    for key, receipt in entries.items():
++        if isinstance(receipt, dict) and receipt.get('operation') == 'remove_marking':
++            if set(receipt) != REMOVAL_RESULT_FIELDS:
++                return False
++            req = receipt['request']
++            if _removal_request_error(req) or req['request_id'] != key or key in seen_requests:
++                return False
++            if req['campaign_run_id'] != campaign or req['character_id'] != actor:
++                return False
++            row = rows.get(req['instance_id']); mark = receipt['removed_marking']
++            if row is None or not addition(row, mark):
++                return False
++            if (req['modification_id'] != mark['modification_id']
++                    or req['expected_revision'] < mark['applied_revision']
++                    or receipt != _removal_result(req, mark)
++                    or any(type(receipt[k]) is not int for k in ('version','previous_revision','resulting_revision'))
++                    or receipt['resulting_revision'] > row['revision']):
++                return False
++            token = (row['instance_id'], receipt['resulting_revision'])
++            if token in revisions:
++                return False
++            revisions.add(token); seen_requests.add(key)
++    return seen_requests == set(entries)

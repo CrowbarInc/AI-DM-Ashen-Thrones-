@@ -1,0 +1,85 @@
+[
+  {
+    "path": "handoff\\CURRENT_REVIEW(20261108-172122).zip",
+    "size": 87040,
+    "sha256": "648317fb809da2e8f2dfb2baa3dc17a0be8c892d8cd9669272bad8507a14f540",
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Post-NPC Conversational Handoff Repair\nIdentifier: `pr_play_post_npc`\nDate: 2026-11-08\nGenerated: 2026-11-08T22:21:22.170598+00:00\nPurpose: Let a player leave the previous NPC response for a visible object, a reading, an improvised action, or a grounded recall without losing travel checks or explicit repeats.\n\n# Executive Summary\n\nVerdict A/PASS for the targeted orchestration repair. The game is not playable. Live provider calls: 0. PR-PLAY-80 was not opened. After the Guard Captain answered, walking to the notice board was an unknown destination, reading the notice and copying it replayed the captain, and asking what the notice said was an unaddressed ask. Thos",
+    "next_session_paths": [
+      "support/docs/NEXT_SESSION.md"
+    ],
+    "members": [
+      "CURRENT_REVIEW.md",
+      "REVIEW_MANIFEST.json",
+      "support/artifacts/pr_play_post_npc/baseline_trace.json",
+      "support/artifacts/pr_play_post_npc/baseline_trace.py",
+      "support/artifacts/pr_play_post_npc/comparison.json",
+      "support/artifacts/pr_play_post_npc/corrected_trace.json",
+      "support/artifacts/pr_play_post_npc/holdout_rerun.json",
+      "support/artifacts/pr_play_post_npc/implementation.diff",
+      "support/artifacts/pr_play_post_npc/protected_rehash.json",
+      "support/development/campaigns/product_realization/pr_play_post_npc/INTEGRITY.md",
+      "support/development/campaigns/product_realization/pr_play_post_npc/REGRESSION_RESULTS.md",
+      "support/development/campaigns/product_realization/pr_play_post_npc/ROOT_CAUSE.md",
+      "support/development/campaigns/product_realization/pr_play_post_npc/ROUTING_CONTRACT.md",
+      "support/development/campaigns/product_realization/pr_play_post_npc/SUMMARY.md",
+      "support/development/campaigns/product_realization/pr_play_post_npc/TWELVE_TURN_COMPARISON.md",
+      "support/docs/NEXT_SESSION.md",
+      "support/tests/test_pr_play_post_npc_handoff.py"
+    ]
+  },
+  {
+    "path": "handoff\\CURRENT_REVIEW(20261108-174500).zip",
+    "size": 89809,
+    "sha256": "4b1b8e9533aee81cc6d7a39155a2c4aae24f39bf3832a0c043577be2f57c5f2d",
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Adjacent Regression Reconciliation\nIdentifier: `pr_play_adjacent_regression`\nDate: 2026-11-08\nGenerated: 2026-11-08T22:45:00+00:00\nPurpose: Classify the twelve adjacent HTTP failures from the post-NPC handoff repair without changing production behavior.\n\n# Executive Summary\n\nAudit verdict A/PASS. The targeted handoff repair is accepted. The game is not playable. Live provider calls: 0. PR-PLAY-80 was not opened. The same 176-test selection failed the same 12 assertions. All 12 match a pre-handoff package that keeps authored travel and removes the handoff symbols. Zero are new regressions. Eight fail because the player body empties resolution while the log still ",
+    "next_session_paths": [
+      "support/docs/NEXT_SESSION.md"
+    ],
+    "members": [
+      "CURRENT_REVIEW.md",
+      "REVIEW_MANIFEST.json",
+      "support/artifacts/pr_play_adjacent_regression/adjacent_focus_junit.xml",
+      "support/artifacts/pr_play_adjacent_regression/classification_matrix.json",
+      "support/artifacts/pr_play_adjacent_regression/current_capture.json",
+      "support/artifacts/pr_play_adjacent_regression/handoff_junit.xml",
+      "support/artifacts/pr_play_adjacent_regression/historical_capture.json",
+      "support/artifacts/pr_play_adjacent_regression/overlay_manifest.json",
+      "support/development/campaigns/product_realization/pr_play_adjacent_regression/BASELINE_RECONSTRUCTION.md",
+      "support/development/campaigns/product_realization/pr_play_adjacent_regression/CONTRACT_ANALYSIS.md",
+      "support/development/campaigns/product_realization/pr_play_adjacent_regression/FAILURE_INVENTORY.md",
+      "support/development/campaigns/product_realization/pr_play_adjacent_regression/INTEGRITY.md",
+      "support/development/campaigns/product_realization/pr_play_adjacent_regression/NEXT_STEP_DECISION.md",
+      "support/development/campaigns/product_realization/pr_play_adjacent_regression/SUMMARY.md",
+      "support/development/campaigns/product_realization/pr_play_adjacent_regression/TARGETED_REPAIR_VERIFICATION.md",
+      "support/docs/NEXT_SESSION.md"
+    ]
+  },
+  {
+    "path": "handoff\\CURRENT_REVIEW.zip",
+    "size": 87040,
+    "sha256": "648317fb809da2e8f2dfb2baa3dc17a0be8c892d8cd9669272bad8507a14f540",
+    "summary_head": "# Campaign\n\nCampaign: PR-PLAY Post-NPC Conversational Handoff Repair\nIdentifier: `pr_play_post_npc`\nDate: 2026-11-08\nGenerated: 2026-11-08T22:21:22.170598+00:00\nPurpose: Let a player leave the previous NPC response for a visible object, a reading, an improvised action, or a grounded recall without losing travel checks or explicit repeats.\n\n# Executive Summary\n\nVerdict A/PASS for the targeted orchestration repair. The game is not playable. Live provider calls: 0. PR-PLAY-80 was not opened. After the Guard Captain answered, walking to the notice board was an unknown destination, reading the notice and copying it replayed the captain, and asking what the notice said was an unaddressed ask. Thos",
+    "next_session_paths": [
+      "support/docs/NEXT_SESSION.md"
+    ],
+    "members": [
+      "CURRENT_REVIEW.md",
+      "REVIEW_MANIFEST.json",
+      "support/artifacts/pr_play_post_npc/baseline_trace.json",
+      "support/artifacts/pr_play_post_npc/baseline_trace.py",
+      "support/artifacts/pr_play_post_npc/comparison.json",
+      "support/artifacts/pr_play_post_npc/corrected_trace.json",
+      "support/artifacts/pr_play_post_npc/holdout_rerun.json",
+      "support/artifacts/pr_play_post_npc/implementation.diff",
+      "support/artifacts/pr_play_post_npc/protected_rehash.json",
+      "support/development/campaigns/product_realization/pr_play_post_npc/INTEGRITY.md",
+      "support/development/campaigns/product_realization/pr_play_post_npc/REGRESSION_RESULTS.md",
+      "support/development/campaigns/product_realization/pr_play_post_npc/ROOT_CAUSE.md",
+      "support/development/campaigns/product_realization/pr_play_post_npc/ROUTING_CONTRACT.md",
+      "support/development/campaigns/product_realization/pr_play_post_npc/SUMMARY.md",
+      "support/development/campaigns/product_realization/pr_play_post_npc/TWELVE_TURN_COMPARISON.md",
+      "support/docs/NEXT_SESSION.md",
+      "support/tests/test_pr_play_post_npc_handoff.py"
+    ]
+  }
+]

@@ -1,0 +1,236 @@
+...................................................................FF.F. [ 16%]
+FF...FF................FF............................................... [ 33%]
+.................................................F.............F........ [ 50%]
+.........FF.................................................FF.F.....F.. [ 67%]
+........................................................................ [ 84%]
+..................FFF............................................        [100%]
+================================== FAILURES ===================================
+________ test_general_unknown_player_named_object_is_not_instantiated _________
+tests\test_referenced_surface_grounding_inspection_resolution.py:211: in test_general_unknown_player_named_object_is_not_instantiated
+    assert res.get("kind") == "investigate"
+E   AssertionError: assert None == 'investigate'
+E    +  where None = <built-in method get of dict object at 0x000001D5D79C0540>('kind')
+E    +    where <built-in method get of dict object at 0x000001D5D79C0540> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_general_narration_only_object_does_not_gain_authority __________
+tests\test_referenced_surface_grounding_inspection_resolution.py:222: in test_general_narration_only_object_does_not_gain_authority
+    assert (first.get("resolution") or {}).get("kind") == "observe"
+E   AssertionError: assert None == 'observe'
+E    +  where None = <built-in method get of dict object at 0x000001D5D78FFC80>('kind')
+E    +    where <built-in method get of dict object at 0x000001D5D78FFC80> = ({} or {}).get
+E    +      where {} = <built-in method get of dict object at 0x000001D5D6E05C00>('resolution')
+E    +        where <built-in method get of dict object at 0x000001D5D6E05C00> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_____________ test_general_readable_surface_communicates_contents _____________
+tests\test_referenced_surface_grounding_inspection_resolution.py:255: in test_general_readable_surface_communicates_contents
+    assert res.get("kind") in {"investigate", "discover_clue"}
+E   AssertionError: assert None in {'discover_clue', 'investigate'}
+E    +  where None = <built-in method get of dict object at 0x000001D5D78DA040>('kind')
+E    +    where <built-in method get of dict object at 0x000001D5D78DA040> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] tariff_slate_fees
+[PROMPT] fresh campaign prompt constructed
+_______ test_general_failed_inspection_then_observe_uses_current_scene ________
+tests\test_referenced_surface_grounding_inspection_resolution.py:279: in test_general_failed_inspection_then_observe_uses_current_scene
+    assert (first.get("resolution") or {}).get("kind") == "investigate"
+E   AssertionError: assert None == 'investigate'
+E    +  where None = <built-in method get of dict object at 0x000001D5D7851B80>('kind')
+E    +    where <built-in method get of dict object at 0x000001D5D7851B80> = ({} or {}).get
+E    +      where {} = <built-in method get of dict object at 0x000001D5D795EC80>('resolution')
+E    +        where <built-in method get of dict object at 0x000001D5D795EC80> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______________________ test_general_authored_alias_binds ______________________
+tests\test_referenced_surface_grounding_inspection_resolution.py:295: in test_general_authored_alias_binds
+    assert res.get("kind") in {"investigate", "discover_clue"}
+E   AssertionError: assert None in {'discover_clue', 'investigate'}
+E    +  where None = <built-in method get of dict object at 0x000001D5D7AF7200>('kind')
+E    +    where <built-in method get of dict object at 0x000001D5D7AF7200> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__________ test_frontier_gate_roster_http_does_not_use_observe_stock __________
+tests\test_referenced_surface_grounding_inspection_resolution.py:384: in test_frontier_gate_roster_http_does_not_use_observe_stock
+    assert (data.get("resolution") or {}).get("kind") == "investigate"
+E   AssertionError: assert None == 'investigate'
+E    +  where None = <built-in method get of dict object at 0x000001D5D79998C0>('kind')
+E    +    where <built-in method get of dict object at 0x000001D5D79998C0> = ({} or {}).get
+E    +      where {} = <built-in method get of dict object at 0x000001D5D76C3780>('resolution')
+E    +        where <built-in method get of dict object at 0x000001D5D76C3780> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...hoke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.', 'mode': 'social', ...}}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__________ test_observe_stock_replacement_keeps_notice_board_working __________
+tests\test_referenced_surface_grounding_inspection_resolution.py:398: in test_observe_stock_replacement_keeps_notice_board_working
+    assert res.get("kind") in {"investigate", "discover_clue"}
+E   AssertionError: assert None in {'discover_clue', 'investigate'}
+E    +  where None = <built-in method get of dict object at 0x000001D5D786EE00>('kind')
+E    +    where <built-in method get of dict object at 0x000001D5D786EE00> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] notice_patrol_route
+[PROMPT] fresh campaign prompt constructed
+__________ test_sequence_patrol_travel_reaches_the_movement_resolver __________
+tests\test_pr_play_39_action_admission.py:383: in test_sequence_patrol_travel_reaches_the_movement_resolver
+    assert body["resolution"]["resolved_transition"] is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'resolved_transition'
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[ENGINE] Scene transition -> old_milestone
+[PROMPT] fresh campaign prompt constructed
+______________ test_sequence_unsupported_actions_invent_nothing _______________
+tests\test_pr_play_39_action_admission.py:422: in test_sequence_unsupported_actions_invent_nothing
+    assert npc_body["resolution"]["resolved_transition"] is False
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'resolved_transition'
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+___________ test_raw_chat_stub_preserves_valid_and_contains_invalid ___________
+tests\test_pr_br_continuation18_immutable_boundary.py:561: in test_raw_chat_stub_preserves_valid_and_contains_invalid
+    assert "can't say what the stew costs" in visible
+E   assert "can't say what the stew costs" in 'Tavern Runner mutters, "Word is, hot stew and rumors for coin."'
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] social_frontier_gate_tavern_runner_stew
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] lead_frontier_gate_old_trading_crossroads
+________________ test_player_seeks_whisper_does_not_create_one ________________
+tests\test_perception_narration_authority_audible_non_invention.py:344: in test_player_seeks_whisper_does_not_create_one
+    assert (data.get("resolution") or {}).get("kind") == "observe"
+E   AssertionError: assert None == 'observe'
+E    +  where None = <built-in method get of dict object at 0x000001D5D78C58C0>('kind')
+E    +    where <built-in method get of dict object at 0x000001D5D78C58C0> = ({} or {}).get
+E    +      where {} = <built-in method get of dict object at 0x000001D5D7850E80>('resolution')
+E    +        where <built-in method get of dict object at 0x000001D5D7850E80> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+________________ test_http_empty_listen_complete_and_grounded _________________
+tests\test_perception_narration_authority_audible_non_invention.py:561: in test_http_empty_listen_complete_and_grounded
+    assert (data.get("resolution") or {}).get("kind") == "observe"
+E   AssertionError: assert None == 'observe'
+E    +  where None = <built-in method get of dict object at 0x000001D5D749F040>('kind')
+E    +    where <built-in method get of dict object at 0x000001D5D749F040> = ({} or {}).get
+E    +      where {} = <built-in method get of dict object at 0x000001D5D76A96C0>('resolution')
+E    +        where <built-in method get of dict object at 0x000001D5D76A96C0> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+___________________ test_http_authorized_speech_can_survive ___________________
+tests\test_perception_narration_authority_audible_non_invention.py:576: in test_http_authorized_speech_can_survive
+    assert (data.get("resolution") or {}).get("kind") == "observe"
+E   AssertionError: assert None == 'observe'
+E    +  where None = <built-in method get of dict object at 0x000001D5D78FDB40>('kind')
+E    +    where <built-in method get of dict object at 0x000001D5D78FDB40> = ({} or {}).get
+E    +      where {} = <built-in method get of dict object at 0x000001D5D3D106C0>('resolution')
+E    +        where <built-in method get of dict object at 0x000001D5D3D106C0> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...rass_quay', 'location': 'Brass Quay', 'summary': 'A clerk works the deserted quay.', 'mode': 'exploration', ...}}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+___________________ test_duplicate_refusal_does_not_publish ___________________
+tests\test_pr_play_79df3_classification.py:238: in test_duplicate_refusal_does_not_publish
+    assert not events.exists() or events.read_text(encoding="utf-8").strip() == ""
+E   assert (not True or '{"turn_id": ...s_code": 200}' == ''
+E    +  where True = exists()
+E    +    where exists = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/t06_after_pytest/test_duplicate_refusal_does_no0/events.jsonl').exists
+E     
+E     + {"turn_id": "9893357ae50f48b38df33f9bd80c873e", "publication_owner": "completed_runtime_response", "response_category": "engine_response", "source_handler": "api_chat", "provider_involvement": false, "provider_attempt_references": [], "accepted_expression_references": [], "published_expression_reference": "28b98fec2ae38822d271447810b01a9c55b3f3cc02db9202712449e1e8bab622", "final_player_facing_response": "Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted.", "validation_outcome": "engine_or_grounded_fallback", "status_code": 200})
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+__________________ test_two_refusals_then_gameplay_advances ___________________
+tests\test_pr_play_79df3_classification.py:251: in test_two_refusals_then_gameplay_advances
+    with TestClient(app) as client:
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:606: in close
+    self.__exit__(None, None, None)
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:598: in __exit__
+    raise exc_details[1]
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:583: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:466: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\from_thread.py:380: in start_task_soon
+    self._check_running()
+.venv\Lib\site-packages\anyio\from_thread.py:214: in _check_running
+    raise RuntimeError("This portal is not running")
+E   RuntimeError: This portal is not running
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+______________ test_save_reload_keeps_the_preceding_publication _______________
+tests\test_pr_play_79df3_classification.py:308: in test_save_reload_keeps_the_preceding_publication
+    assert any(item.get("log_meta", {}).get("response_class") == OPERATIONAL_REFUSAL for item in storage.load_log())
+E   assert False
+E    +  where False = any(<generator object test_save_reload_keeps_the_preceding_publication.<locals>.<genexpr> at 0x000001D5D3C5B760>)
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+______________ test_http_fallback_is_not_an_operational_refusal _______________
+tests\test_pr_play_79df3_classification.py:408: in test_http_fallback_is_not_an_operational_refusal
+    assert storage.load_session()["last_publication"]["visible"] == visible
+E   assert 'Gate Guard s...sing patrol."' == 'That request...en attempted.'
+E     
+E     - That request addresses someone. Nothing has been attempted.
+E     + Gate Guard says, "The notice board mentions a missing patrol."
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+__________ test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context __________
+tests\test_pr_de_exact_contract_deduplication.py:113: in test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context
+    assert payload["provider_context_projection"]["selected"] is True, label
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'provider_context_projection'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+________ test_full_context_classes_stay_unprojected_while_mirrors_drop ________
+tests\test_pr_de_exact_contract_deduplication.py:139: in test_full_context_classes_stay_unprojected_while_mirrors_drop
+    hidden = payload["scene"]["gm_only"]["hidden_facts"]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'gm_only'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+____ test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload _____
+tests\test_manual_play_latency.py:361: in test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload
+    assert compact_payload["social_context"]["answer_style_hints"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'social_context'
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_unknown_player_named_object_is_not_instantiated
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_narration_only_object_does_not_gain_authority
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_then_observe_uses_current_scene
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_alias_binds
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock
+FAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_observe_stock_replacement_keeps_notice_board_working
+FAILED tests/test_pr_play_39_action_admission.py::test_sequence_patrol_travel_reaches_the_movement_resolver
+FAILED tests/test_pr_play_39_action_admission.py::test_sequence_unsupported_actions_invent_nothing
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid
+FAILED tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_whisper_does_not_create_one
+FAILED tests/test_perception_narration_authority_audible_non_invention.py::test_http_empty_listen_complete_and_grounded
+FAILED tests/test_perception_narration_authority_audible_non_invention.py::test_http_authorized_speech_can_survive
+FAILED tests/test_pr_play_79df3_classification.py::test_duplicate_refusal_does_not_publish
+FAILED tests/test_pr_play_79df3_classification.py::test_two_refusals_then_gameplay_advances
+FAILED tests/test_pr_play_79df3_classification.py::test_save_reload_keeps_the_preceding_publication
+FAILED tests/test_pr_play_79df3_classification.py::test_http_fallback_is_not_an_operational_refusal
+FAILED tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context
+FAILED tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop
+FAILED tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload

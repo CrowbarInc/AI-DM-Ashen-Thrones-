@@ -1,0 +1,849 @@
+{
+  "step_id": "T4",
+  "intent": "authored travel",
+  "player_input": "I want to follow the trail connected to the missing patrol.",
+  "submitted": true,
+  "retried": false,
+  "current_scene_before": "frontier_gate",
+  "http_status": 200,
+  "api_latency_seconds": 0.91,
+  "player_facing_text": "You arrive at Old Milestone.",
+  "engine": {
+    "ok": true,
+    "status": null,
+    "error": null,
+    "resolution_keys": [
+      "action_id",
+      "clue_id",
+      "discovered_clues",
+      "hint",
+      "kind",
+      "label",
+      "metadata",
+      "originating_scene_id",
+      "prompt",
+      "resolved_transition",
+      "state_changes",
+      "success",
+      "target_scene_id",
+      "world_tick_events",
+      "world_updates"
+    ],
+    "action_type": null,
+    "intent": null,
+    "kind": "scene_transition",
+    "action_id": "leave_for_follow_the_missing_patrol_rumor",
+    "success": true,
+    "resolved_transition": true,
+    "target_scene_id": "old_milestone",
+    "originating_scene_id": "frontier_gate",
+    "prompt": "Go to Follow the missing patrol rumor.",
+    "discovered_clues": [],
+    "state_changes": {
+      "scene_changed": true,
+      "scene_transition_occurred": true,
+      "arrived_at_scene": true,
+      "new_scene_context_available": true
+    },
+    "noncombat_resolution": null,
+    "authoritative_mutation": null,
+    "processing_outcome": null,
+    "resolver_invoked": null,
+    "narration_invoked": null,
+    "gameplay_parser_invoked": null,
+    "provider_calls": null,
+    "resolution_metadata_keys": [
+      "blocked_incompatible_scene_transition",
+      "contract_before_resolver",
+      "contract_construction_source",
+      "destination_binding_conflict",
+      "destination_binding_conflict_candidates",
+      "destination_binding_resolution_reason",
+      "destination_binding_source",
+      "destination_compatibility_actual_kind",
+      "destination_compatibility_checked",
+      "destination_compatibility_expected_kind",
+      "destination_compatibility_failure_reason",
+      "destination_compatibility_passed",
+      "destination_semantic_kind",
+      "gm_resolution_decision",
+      "interaction_obligation",
+      "ordinary_contract_established",
+      "performance",
+      "prompt",
+      "resolution_contract",
+      "response_type_contract",
+      "selected_resolver",
+      "semantic_owner",
+      "stored_interpretation",
+      "turn_segmentation",
+      "unknown_legacy_keys"
+    ],
+    "conversational_decision": null,
+    "stored_interpretation_bridge": null,
+    "live_interpretation": null,
+    "tags": [
+      "deterministic_narration",
+      "provider_narration_skipped",
+      "resolved_scene_transition",
+      "live_bounded_improvisation_proposal",
+      "resolution_contract_semantic_preserved",
+      "authoritative_resolution_fact_preserved"
+    ],
+    "provenance": "initial_generation",
+    "hard_valid": true,
+    "expression_decision": null,
+    "gm_metadata_keys": [
+      "accepted_response",
+      "decision_review",
+      "hard_validation_attempt_1",
+      "live_resolution_mode",
+      "narration_provider_calls",
+      "narration_retry_count",
+      "narration_seam",
+      "provider_narration_skip_reason",
+      "provider_narration_skipped",
+      "regeneration_feedback",
+      "regeneration_invoked",
+      "response_policy_enforcement_applied",
+      "skipped_semantic_mutators"
+    ],
+    "missing_observability": [
+      "recognized_intent"
+    ]
+  },
+  "persisted_engine": {
+    "log_index": 4,
+    "player_input": "I want to follow the trail connected to the missing patrol.",
+    "player_facing_text": "You arrive at Old Milestone.",
+    "intent_classification": {
+      "raw_text": "Go to Follow the missing patrol rumor.",
+      "labels": [
+        "travel"
+      ],
+      "allow_discoverable_clues": false,
+      "confidence": "rule_based"
+    },
+    "resolution_kind": "scene_transition",
+    "action_id": "leave_for_follow_the_missing_patrol_rumor",
+    "action_type": null,
+    "success": true,
+    "resolved_transition": true,
+    "target_scene_id": "old_milestone",
+    "originating_scene_id": "frontier_gate",
+    "prompt": "Go to Follow the missing patrol rumor.",
+    "discovered_clues": [],
+    "state_changes": {
+      "scene_changed": true,
+      "scene_transition_occurred": true,
+      "arrived_at_scene": true,
+      "new_scene_context_available": true
+    },
+    "clocks_changed": {
+      "time_pressure": 4
+    },
+    "discovered_clues_added": [],
+    "approved_state_updates": {
+      "scene_update": null,
+      "world_updates": null,
+      "new_scene_draft": null
+    },
+    "rejected_state_updates": [],
+    "log_meta_keys": [
+      "approved_state_updates",
+      "clocks_changed",
+      "communication_mode",
+      "discovered_clues_added",
+      "gm_prompt_context_summary",
+      "gm_raw_output_meta",
+      "intent_classification",
+      "mode_source",
+      "player_input",
+      "processing_input",
+      "rejected_state_updates",
+      "response_type_contract",
+      "surfaced_clues_in_narration_non_authoritative"
+    ],
+    "resolution_metadata_keys": [
+      "blocked_incompatible_scene_transition",
+      "contract_before_resolver",
+      "contract_construction_source",
+      "destination_binding_conflict",
+      "destination_binding_conflict_candidates",
+      "destination_binding_resolution_reason",
+      "destination_binding_source",
+      "destination_compatibility_actual_kind",
+      "destination_compatibility_checked",
+      "destination_compatibility_expected_kind",
+      "destination_compatibility_failure_reason",
+      "destination_compatibility_passed",
+      "destination_semantic_kind",
+      "emission_debug",
+      "gm_resolution_decision",
+      "interaction_obligation",
+      "ordinary_contract_established",
+      "performance",
+      "prompt",
+      "resolution_contract",
+      "response_type_contract",
+      "selected_resolver",
+      "semantic_owner",
+      "stored_interpretation",
+      "turn_segmentation",
+      "unknown_legacy_keys"
+    ],
+    "processing_outcome": null,
+    "resolver_invoked": null,
+    "narration_invoked": null,
+    "gameplay_parser_invoked": null,
+    "conversational_decision": null,
+    "stored_interpretation_bridge": null,
+    "opening_recovery_debug": null,
+    "provenance": "initial_generation",
+    "hard_valid": true,
+    "response_type_contract": {
+      "required_response_type": "action_outcome",
+      "source_route": "exploration",
+      "allow_escalation": false,
+      "debug_reasons": [
+        "resolved_world_action_requires_action_outcome",
+        "non_hostile_world_action_guard"
+      ]
+    }
+  },
+  "provider": [],
+  "provider_completed_count": 0,
+  "state_before": {
+    "campaign_title": "Ashen Thrones",
+    "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+    "session_id": "5d7040aa8eb9b4e6f6b7c933",
+    "campaign_started": true,
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 3
+    },
+    "turn_counter": 3,
+    "chat_history_len": 0,
+    "log_entries": 4,
+    "discovered_clues_by_scene": {
+      "frontier_gate": [
+        "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+        "Follow the missing patrol rumor",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ]
+    },
+    "clue_knowledge": {
+      "muddy_footprints_northwest": "discovered",
+      "minlead_exit_frontier_gate_old_milestone": "discovered",
+      "notice_patrol_route": "discovered"
+    },
+    "known_clue_ids": null,
+    "deferred_intentions": null,
+    "deferred_steps": null,
+    "time_pressure": 3,
+    "active_quests": null,
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "hp_current": 8,
+      "hp_max": 8,
+      "gold": null,
+      "resources": null,
+      "inventory_count": 1,
+      "inventory_ids": [
+        "spellbook"
+      ]
+    },
+    "world_clue_ids": [],
+    "authority_catalog": {
+      "npc_ids": [
+        "gate_guard",
+        "gate_serjeant",
+        "tavern_runner"
+      ],
+      "npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "watch_command"
+          ]
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "route_change"
+          ]
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "patrol_rumor"
+          ]
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "pressure": 5,
+          "influence": 3,
+          "agenda_progress": 3
+        },
+        {
+          "id": "ash_cowl",
+          "pressure": 5,
+          "influence": 3,
+          "agenda_progress": 3
+        },
+        {
+          "id": "ordo_pyric",
+          "pressure": 4,
+          "influence": 2,
+          "agenda_progress": 3
+        }
+      ],
+      "world_event_log_len": 5,
+      "scenes": {
+        "frontier_gate": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Enter Cinderwatch",
+              "target_scene_id": "market_quarter"
+            },
+            {
+              "id": null,
+              "label": "Follow the missing patrol rumor",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [
+            "notice_board"
+          ],
+          "addressable_ids": [
+            "guard_captain",
+            "tavern_runner",
+            "refugee",
+            "threadbare_watcher"
+          ]
+        },
+        "market_quarter": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to the Gate",
+              "target_scene_id": "frontier_gate"
+            },
+            {
+              "id": null,
+              "label": "Seek the fortress trail",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [],
+          "addressable_ids": []
+        },
+        "old_milestone": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to Cinderwatch Gate",
+              "target_scene_id": "frontier_gate"
+            }
+          ],
+          "interactable_ids": [
+            "milestone",
+            "prints"
+          ],
+          "addressable_ids": []
+        }
+      }
+    },
+    "documents_present": [
+      "campaign.json",
+      "character.json",
+      "combat.json",
+      "conditions.json",
+      "scenes/frontier_gate.json",
+      "scenes/market_quarter.json",
+      "scenes/old_milestone.json",
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "observability_gaps": [
+      "active_quests",
+      "known_clues",
+      "character_resources"
+    ]
+  },
+  "state_after": {
+    "campaign_title": "Ashen Thrones",
+    "campaign_run_id": "5d7040aa8eb9b4e6f6b7c933",
+    "session_id": "5d7040aa8eb9b4e6f6b7c933",
+    "campaign_started": true,
+    "active_scene_id": "old_milestone",
+    "visited_scene_ids": [
+      "frontier_gate",
+      "old_milestone"
+    ],
+    "current_date": "Day 1",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 4
+    },
+    "turn_counter": 4,
+    "chat_history_len": 0,
+    "log_entries": 5,
+    "discovered_clues_by_scene": {
+      "frontier_gate": [
+        "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+        "Follow the missing patrol rumor",
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ]
+    },
+    "clue_knowledge": {
+      "muddy_footprints_northwest": "discovered",
+      "minlead_exit_frontier_gate_old_milestone": "discovered",
+      "notice_patrol_route": "discovered"
+    },
+    "known_clue_ids": null,
+    "deferred_intentions": null,
+    "deferred_steps": null,
+    "time_pressure": 4,
+    "active_quests": null,
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "hp_current": 8,
+      "hp_max": 8,
+      "gold": null,
+      "resources": null,
+      "inventory_count": 1,
+      "inventory_ids": [
+        "spellbook"
+      ]
+    },
+    "world_clue_ids": [],
+    "authority_catalog": {
+      "npc_ids": [
+        "gate_guard",
+        "gate_serjeant",
+        "tavern_runner"
+      ],
+      "npcs": [
+        {
+          "id": "gate_guard",
+          "name": "Gate Guard",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "watch_command"
+          ]
+        },
+        {
+          "id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "route_change"
+          ]
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "topic_ids": [
+            "patrol_rumor"
+          ]
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "pressure": 6,
+          "influence": 3,
+          "agenda_progress": 4
+        },
+        {
+          "id": "ash_cowl",
+          "pressure": 6,
+          "influence": 3,
+          "agenda_progress": 4
+        },
+        {
+          "id": "ordo_pyric",
+          "pressure": 5,
+          "influence": 2,
+          "agenda_progress": 4
+        }
+      ],
+      "world_event_log_len": 5,
+      "scenes": {
+        "frontier_gate": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Enter Cinderwatch",
+              "target_scene_id": "market_quarter"
+            },
+            {
+              "id": null,
+              "label": "Follow the missing patrol rumor",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [
+            "notice_board"
+          ],
+          "addressable_ids": [
+            "guard_captain",
+            "tavern_runner",
+            "refugee",
+            "threadbare_watcher"
+          ]
+        },
+        "market_quarter": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to the Gate",
+              "target_scene_id": "frontier_gate"
+            },
+            {
+              "id": null,
+              "label": "Seek the fortress trail",
+              "target_scene_id": "old_milestone"
+            }
+          ],
+          "interactable_ids": [],
+          "addressable_ids": []
+        },
+        "old_milestone": {
+          "exit_labels": [
+            {
+              "id": null,
+              "label": "Return to Cinderwatch Gate",
+              "target_scene_id": "frontier_gate"
+            }
+          ],
+          "interactable_ids": [
+            "milestone",
+            "prints"
+          ],
+          "addressable_ids": []
+        }
+      }
+    },
+    "documents_present": [
+      "campaign.json",
+      "character.json",
+      "combat.json",
+      "conditions.json",
+      "scenes/frontier_gate.json",
+      "scenes/market_quarter.json",
+      "scenes/old_milestone.json",
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "observability_gaps": [
+      "active_quests",
+      "known_clues",
+      "character_resources"
+    ]
+  },
+  "state_delta": {
+    "active_scene_id": {
+      "before": "frontier_gate",
+      "after": "old_milestone"
+    },
+    "authority_catalog": {
+      "before": {
+        "npc_ids": [
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "watch_command"
+            ]
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "route_change"
+            ]
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "patrol_rumor"
+            ]
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 5,
+            "influence": 3,
+            "agenda_progress": 3
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 5,
+            "influence": 3,
+            "agenda_progress": 3
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 4,
+            "influence": 2,
+            "agenda_progress": 3
+          }
+        ],
+        "world_event_log_len": 5,
+        "scenes": {
+          "frontier_gate": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Enter Cinderwatch",
+                "target_scene_id": "market_quarter"
+              },
+              {
+                "id": null,
+                "label": "Follow the missing patrol rumor",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [
+              "notice_board"
+            ],
+            "addressable_ids": [
+              "guard_captain",
+              "tavern_runner",
+              "refugee",
+              "threadbare_watcher"
+            ]
+          },
+          "market_quarter": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to the Gate",
+                "target_scene_id": "frontier_gate"
+              },
+              {
+                "id": null,
+                "label": "Seek the fortress trail",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [],
+            "addressable_ids": []
+          },
+          "old_milestone": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to Cinderwatch Gate",
+                "target_scene_id": "frontier_gate"
+              }
+            ],
+            "interactable_ids": [
+              "milestone",
+              "prints"
+            ],
+            "addressable_ids": []
+          }
+        }
+      },
+      "after": {
+        "npc_ids": [
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "watch_command"
+            ]
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "route_change"
+            ]
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "topic_ids": [
+              "patrol_rumor"
+            ]
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 6,
+            "influence": 3,
+            "agenda_progress": 4
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 6,
+            "influence": 3,
+            "agenda_progress": 4
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 5,
+            "influence": 2,
+            "agenda_progress": 4
+          }
+        ],
+        "world_event_log_len": 5,
+        "scenes": {
+          "frontier_gate": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Enter Cinderwatch",
+                "target_scene_id": "market_quarter"
+              },
+              {
+                "id": null,
+                "label": "Follow the missing patrol rumor",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [
+              "notice_board"
+            ],
+            "addressable_ids": [
+              "guard_captain",
+              "tavern_runner",
+              "refugee",
+              "threadbare_watcher"
+            ]
+          },
+          "market_quarter": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to the Gate",
+                "target_scene_id": "frontier_gate"
+              },
+              {
+                "id": null,
+                "label": "Seek the fortress trail",
+                "target_scene_id": "old_milestone"
+              }
+            ],
+            "interactable_ids": [],
+            "addressable_ids": []
+          },
+          "old_milestone": {
+            "exit_labels": [
+              {
+                "id": null,
+                "label": "Return to Cinderwatch Gate",
+                "target_scene_id": "frontier_gate"
+              }
+            ],
+            "interactable_ids": [
+              "milestone",
+              "prints"
+            ],
+            "addressable_ids": []
+          }
+        }
+      }
+    },
+    "clocks": {
+      "before": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 3
+      },
+      "after": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 4
+      }
+    },
+    "log_entries": {
+      "before": 4,
+      "after": 5
+    },
+    "time_pressure": {
+      "before": 3,
+      "after": 4
+    },
+    "turn_counter": {
+      "before": 3,
+      "after": 4
+    },
+    "visited_scene_ids": {
+      "before": [
+        "frontier_gate"
+      ],
+      "after": [
+        "frontier_gate",
+        "old_milestone"
+      ]
+    }
+  },
+  "changed_documents": [
+    "combat.json",
+    "session.json",
+    "session_log.jsonl",
+    "world.json"
+  ],
+  "usage_after": {
+    "dispatched_requests": 4,
+    "input_tokens": 34740,
+    "output_tokens": 2281,
+    "total_tokens": 37021,
+    "stopped": false,
+    "stop_reason": "",
+    "pending_requests": 0
+  }
+}

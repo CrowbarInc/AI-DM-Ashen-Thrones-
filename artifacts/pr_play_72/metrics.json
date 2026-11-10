@@ -1,0 +1,2385 @@
+{
+  "verdict": "B \u2014 PARTIAL / DETERMINISTIC INITIATIVE WITH VERIFICATION LIMITATIONS",
+  "head": "d40f1ed198236c604085f1c842ead267a8104ce2",
+  "branch": "feature/product-realization",
+  "protected": {
+    "entries": 150,
+    "preserved": 150,
+    "changed": [],
+    "session_log": "a6952ab704fabba72c92e4f88f4961c474705560cc7b2b1dea4d8fbbd90439e6",
+    "hashes": {
+      "data/campaign.json": "65d9e3063dcf13bcd9b155cd4e80e3ec23b867fa8ad326463fda831d8dacb8a8",
+      "data/character.json": "8f52309e6dff2626793fb609fd6226d8a0f0adad6e957cc1fc890d0402842795",
+      "data/combat.json": "c0dcc3d076c47b353710ee7b5595c6868b12a5bdf8f367d509f0837d9cd30431",
+      "data/conditions.json": "6cb4fa4d23897549005c2d26cf17f67d41d64d3dab80a145270619039b92ed7f",
+      "data/session.json": "91042e3b0d1c0fbc9f47b56be8d9468a61030658e5493338626a723a6882c2ef",
+      "data/session_log.jsonl": "a6952ab704fabba72c92e4f88f4961c474705560cc7b2b1dea4d8fbbd90439e6",
+      "data/world.json": "d7eeed2df4204f5c35baca02a71f246d16241bd273d091ec0584dbdd15bb5b6c",
+      "data/scenes/alley.json": "0a52cd2e11c46d5a8f56e6d68c9bae42b57d05ac961b60cac97dcc718cd800fb",
+      "data/scenes/alley_door.json": "1b56e11687a8adcd8efd24461eb723ffd1482c4920747d8cb7196c9adf6030af",
+      "data/scenes/arch_lane.json": "5b0a1b06bbb7578d1737c9c22806bd85fea4b05af46c627ae73d63346ad7b916",
+      "data/scenes/beacon_yard.json": "04fba1496eff9b778e67e27b42abb057ad56acf3cb7df220f45be11d8a708e45",
+      "data/scenes/bridge.json": "21c510f460745976cbf7aa7c85845331067e692b9514d88942aea70cffc31bfc",
+      "data/scenes/cedar_wharf.json": "87997f2133afb777c177110168cefd6b5aa519487797a90a6bf9d5f6f8ae4435",
+      "data/scenes/cellar.json": "a9b58af072dfdbf2851241e437e644590f08f6851c039b815a7a0ede67aa0018",
+      "data/scenes/checkpoint.json": "325a90f82230e2a7f6b3b2a4a2705fa0a9e165ad4822fd613b31a6434e2a9fea",
+      "data/scenes/crossroads.json": "668fac427b7dcd4b5c2ee9db81bda47837706edddde16bd08b05f7a025de2c4f",
+      "data/scenes/dock.json": "5fbacb02f70eb49266593e26f1072517ff04eb015e5a789031e12e3ae9e6977a",
+      "data/scenes/eastern_square.json": "1969fb33678002d2fe0487bcaff6444c06e44afb0941426394ce16f306a04fdb",
+      "data/scenes/ember_kiln.json": "d82ebed093f203522432a2c52f39eaa18671ec59941ba06a3a66682828e58fa0",
+      "data/scenes/empty_opening.json": "375021721dd09cd7931b7135495858aa159e4439dbb10fe4498315bd3c874bfb",
+      "data/scenes/frontier_gate.json": "d9b3ec634f71cb13c6a77be637a984f2889a82ca9301300ebcfd86115a05d0a9",
+      "data/scenes/gate.json": "e598ed7d49ef5f33b3d22976747dd2a275ec6f9405fd2376ecb55856b9195139",
+      "data/scenes/gate_yard.json": "56e5d532980d69e5f51aa6d4f4d84743e7298f4891edb48149a2cdac09815670",
+      "data/scenes/granary_scene.json": "5a8af517d5a100a632f5887da0d559b59e5e8f57d4d9638fe5e995b010606d13",
+      "data/scenes/hall.json": "ca966f5909ce320de4fd2f88448f512f1a05c536570669efc5733015976175a0",
+      "data/scenes/hidden_meeting_room.json": "06cb42d94c29b09f8bf1951b2dc5c74386234f26fd8530340da25ab92bb5353f",
+      "data/scenes/hut.json": "813d036397a59625abdb0add13fe0ac3fc77241a3c75c28b23bc1b6fdd1c95a3",
+      "data/scenes/kiln_yard.json": "61311205db52b69d7898f3468d6f5f4df8d011ae779b2ff23fa0ec39a71a4898",
+      "data/scenes/lane.json": "0f1965063de1e26ea8503ec2a4d419584a1947ab4aa41bddc605bbfc88a7ed26",
+      "data/scenes/lane_scene.json": "9798e327a5d5627f607c8efb3205eb4989e057f0caa9c557ef62afeadebb5b81",
+      "data/scenes/lower_ward.json": "71bb07d8035536e2b9a68c9565e72d820640b13fe67b6eb7413c8b8da290ddf4",
+      "data/scenes/m.json": "140c2dc3639159376a0f662c8f79d359e0ef639571ecd3a58f4594bc2dc978e8",
+      "data/scenes/market.json": "55545674b29aaf113a0f60353df95e6a19d04a6efb1e0060a58ad6ba108ebf7f",
+      "data/scenes/market_lane.json": "64ce9c7a889b339ae6d9fca7049b6f9d4903332eda396019d9943acddc6336b3",
+      "data/scenes/market_quarter.json": "766654fe0808cd01e2e288deb84072988a45c6d44a49e504f7ac475a11795ae3",
+      "data/scenes/market_square.json": "7b1d10f64512fb5e19d828beda45dd6b78aaf94c38c6d9604eed4011a957c0b2",
+      "data/scenes/market_yard.json": "33743c67d13fc365eb4025c9913f38273f64263168a11371bd93a1983a63ae8e",
+      "data/scenes/npc_repeat_scene_a.json": "a2f84cbdc19ee2d5d91800e9d6cfa607b5f00a5ce5606924df90147f6cce6962",
+      "data/scenes/npc_repeat_scene_b.json": "f056ec450af2b1c985d69eb9b89f98cab829c5a3ad8b7537b5f9e7b847f2d2b9",
+      "data/scenes/npc_repeat_scene_c.json": "8f20a8120129551b684f81a9ef9f4b118f14b6fc8f4c3f8896db96ade357839d",
+      "data/scenes/npc_repeat_scene_d.json": "23e215e996d5abc5ce0dc9639c4528a9c43e9e7e8a937affc1a38382712011fe",
+      "data/scenes/office.json": "46acf7ceba98aac712dbc7d5ada5e1faf14ac7e7be3cf2814e8ddbb5c6a5c6cf",
+      "data/scenes/old_milestone.json": "0b1f5e25f19d376cdb5c9510623488fea6fa831549a35458455edf92e92139e0",
+      "data/scenes/partial_scene.json": "397bdc970cb5e26bca111d4b316c804c4e04edf3a1dfe5e75b4c28ef9bbf9c40",
+      "data/scenes/pier.json": "28aca7433941a93a4071149841aa26c444995adfecedb82f7c56374825e21c82",
+      "data/scenes/river_arch.json": "4c9e79077c5e4377692f5ad9bf3b25216c36c543bc67a51512d4a6db67a9fec5",
+      "data/scenes/road.json": "2a6b27cd3871b7a25f267ac6eeb1a90f5622b6a0aa8630b84b7bba9cd35bdfec",
+      "data/scenes/rope_bridge.json": "6c3323d6e2bc5f11c702308cc975f7e8ae23df76b4e24b8db31a9c55f0f76c1e",
+      "data/scenes/s.json": "05d6a851e531220bea71cf0a8d0a4d59003bc2b767e41dbdbe4aefde3343fe3e",
+      "data/scenes/s1.json": "34f488e1b5eba58943e0713639a23f1ae03dcccd576de856bae3cffbe84167ef",
+      "data/scenes/scene.json": "8757fda26f89e1c9c420b07a1fbd7d7c11c07e727b5296fb7cdc40d970ea0119",
+      "data/scenes/scene_docks.json": "2c9f7046077797fa489fd1f39b8048503833979ee26abc0014b94a26ded44aa6",
+      "data/scenes/scene_investigate.json": "fe262671530ae454f111d74452b1c0acbf80ac7f376d13fb8957497b95fddff6",
+      "data/scenes/stone_quay.json": "40fdf9c32411a2be2796e165ff37c5338f85721dbcc298193bbe441457b267b7",
+      "data/scenes/storeroom.json": "a7c0d02084d064b0051707b71f008de4318636c72114874a1bb04339f11fbfff",
+      "data/scenes/street.json": "815af0612cc82af3954b17b91bd6ed9b3761ca41d0c1e93d0d2b2f9cccc9eb63",
+      "data/scenes/s_inn.json": "d6a464c687ee8ee91af870cafe373f7909f694d07c439397a473f11b42dc1e28",
+      "data/scenes/tavern.json": "cde36ea9572b1bf21603993af150ea51a649cf3aeb22e4b35a9b7d09c96a87a2",
+      "data/scenes/test.json": "a5287ae8befc054ee10ab39fa0151f4aace1a468ca78b6c27cb41008c9b63c1b",
+      "data/scenes/test_scene.json": "5d50ebcb99701d842869b6dc4b52afc4908168d63dbf56bee22ca5a4ff44848d",
+      "data/scenes/t_scene.json": "505cad3fc52a7609dbc151470f6a559a4463425fac936f1d10ca90dc3058f38b",
+      "data/scenes/wall.json": "02ee16e9b1e51309ea8187d33747d517c09319b2a027ac8b8907fd0b2e1b2c6c",
+      "data/scenes/ward.json": "045c5ac533d25b5386be4da58b4254039bfd40f5f43d3c812af922b716e656ab",
+      "data/scenes/ward_raid.json": "1404965e9326a471d25a46881fc15fa10da57b40c5c12c9e8e6a8928dc245495",
+      "data/scenes/watchtower.json": "4b8ea0b02a8c3c357b412939abf00f1d0e0f735d8201eb28c86e823d2d7889ec",
+      "data/scenes/watch_post.json": "490868aeb7a0c900fa11fefdf34d35a2367636f4cca7a1583acb21bcbe5d8643",
+      "data/scenes/wild_moors.json": "e8123964f23a723c0d9b77a7f3c64ec6f310eee951d6c4ac270e7d9abef66532",
+      "data/scenes/x.json": "227612a72711b282316b99259e7958f0ef4d4c0b43cbf575c68816f02dec5f89",
+      "data/scenes/yard.json": "1472d010834976117cc4203270242bdac0435b211f3eff4b9b47736ee6f91d23",
+      "data/validation/validation_family_registry.json": "62042467220ec6d07b73e3a86787d20043b011279d4c39e88daee034c714e6f3",
+      "data/validation/atgb/corpus.json": "a5cb2b58fd3831af8f6b1c080600c6ea04a40e64d632970b80bdb8fc4fceac1c",
+      "data/validation/atgb/README.md": "af14d8cbca3463eb03fa0598e3b4d680758a42db2e0759c8563fee5cbf106f53",
+      "data/validation/praf_arrival_destination/scenarios.json": "7480e11b856262b886378f2e130d719e1b0198999442c978c20e6a48cd3f8357",
+      "data/validation/prag_destination_exit_resolution/scenarios.json": "b1f1b7f7ae628d88d826559f55980054bc4c5fac859c4c379d7ff8f9c46e177d",
+      "data/validation/prah_grounded_observation/scenarios.json": "9070c23166df04d10c97e25572f0e50f3c56e82fd74f81c9828507a9544868c9",
+      "data/validation/prai_bound_speaker_knowledge/scenarios.json": "5d393761126762f4f3b7b47337902a4b501c055b3224b88a97462e1845d9cf39",
+      "data/validation/praj_authoritative_lead_provenance/scenarios.json": "563106781f0c793b5b8997e5ac806d59fb6fc1dec183b246c9eeadc0a29719e4",
+      "data/validation/prak_referenced_surface/scenarios.json": "425ac0ddcfa0b08ad4defc624984548c764d397622f277880a0e247159632133",
+      "data/validation/pral_social_question_relevance/scenarios.json": "576ab17211267179f2b5aa111d82e1d6fa498997f0cdcfa50deb10bac3006b34",
+      "data/validation/pram_explicit_world_action/scenarios.json": "bffe38d2193bd2d5c947568bd480f22d8a30403cea438096f325ca0d12cace15",
+      "data/validation/pran_question_dimension_answer_sufficiency/scenarios.json": "6e088a23e75074862d0c5fd88607c613f8ca73fd841a1b444e781c41a2a1cada",
+      "data/validation/prao_investigation_result_provenance/scenarios.json": "b7c5d8fa80cb1e2c703e8c57a388e6c4e077e277cd54afc0fd6f5cf83f7eebb8",
+      "data/validation/prap_grounded_refusal_realization/scenarios.json": "d2da42dadc80bfbcfec13ca6b98461f64de4510c6a8a72329b94ad8f7f7a0246",
+      "data/validation/praq_physical_action_typing/scenarios.json": "68c19a50e080c5a8776dbdbc6338308bb1aaffc98900022275d438873b1f540c",
+      "data/validation/prar_perception_narration_authority/scenarios.json": "0126c92b8214e112113b90362f44d30230b9ace2a5928dd67f012c61a40dc96a",
+      "data/validation/pras_observe_fallback_relevance/scenarios.json": "f63b7cc55aef9f68c0ef81656984c09a0bdddb87924e01c529d4051df8988dea",
+      "data/validation/review_handoffs/atgb_01_conversational_benchmark_design.json": "812c46e1d4637656c13ecc7f902eca11c719c72813c3083c132d790266ab45d3",
+      "data/validation/review_handoffs/atgb_02a_baseline_readiness.json": "39a20e714ff4aeee0f283c722ae2f73ab383bc3b433ead2bdcc4b51a078fada4",
+      "data/validation/review_handoffs/atgb_02_conversational_benchmark_infrastructure.json": "579b3030e658f5a9672198b257ea4ef86b41b9ba6c7d4c17cbd67ae5a32a680b",
+      "data/validation/review_handoffs/atgb_03a_provider_accounting.json": "e0a3b93f6ab49dc7c83f2ba31407adf601c0e0a74a1ac1f97e787f43d3a13321",
+      "data/validation/review_handoffs/atgb_03b_provider_accounting_integrity.json": "3f06a64b3c52fbb62b622ae042af6347b58624c2476af7acc55ff64698209bde",
+      "data/validation/review_handoffs/atgb_03c_live_baseline_continuation.json": "8a06d0873e3c89cc03458389d5e4456cbd6df109523ae42f321c9db794adaaf2",
+      "data/validation/review_handoffs/atgb_03_initial_live_baseline.json": "6085f8a006210d41adcb37dc0ce4a7674611ebfdad5b999e086d2b28cbde0b2d",
+      "data/validation/review_handoffs/atgb_04_human_evaluation_preparation.json": "fc79099fb8867efc51b50781cbc75354953ff87dfef2d88d3b8688fbc6c1edef",
+      "data/validation/review_handoffs/atgb_05a_assessment_import.json": "601613a21ea47d9ffc389737cc94757dd730142915cd8b3c25a1efbf4e61b0e0",
+      "data/validation/review_handoffs/atgb_05_baseline_preservation.json": "66604fd90f1197de1b0c8116b93ad417aa7198ca4cd4acba6d84ef3cd8165506",
+      "data/validation/review_handoffs/atgb_r1_01_s08_2_causal_trace.json": "94e8099d8f50f0219d2430dc1a8dc5fe53129d78cb3f2bfce1e65dcb63fd1ffd",
+      "data/validation/review_handoffs/atgb_r1_02_mechanical_revision_boundary.json": "caa1f0a177a36e96087afe03702c9fa675fa6c5e4561ead0c82178d6a904f5d4",
+      "data/validation/review_handoffs/atgb_r1_03_controlled_live_validation.json": "a271e1b576ed66958176461cb98d2c641aff754a71d0e1b4a19b42dcb3084927",
+      "data/validation/review_handoffs/atgb_r1_04_validation_readiness_recovery.json": "83f64a445223f1779e413df1b3385a47d3239335da4aaec9f1212edac6bac8ef",
+      "data/validation/review_handoffs/atgb_r2_02_speech_participant_grounding.json": "ab071cb231e18d115da7f52d5a3884641459caf059864c08af6974d7023dc3b6",
+      "data/validation/review_handoffs/atgb_r2_03_question_subject_evidence_binding.json": "32fbca32ce8a45cac5a6224abb68a013c129191671c97c39ce60b4d8dc1e4f69",
+      "data/validation/review_handoffs/confirmed_baseline_repair.json": "11fed9e3b2547854d9df3424c4d8df42d2edd15a9e7bb27fae9c55c29d25bbfe",
+      "data/validation/review_handoffs/constitution_progress_governance_amendment.json": "9f5aa3c8c089054bedca86d1925d90c43cad21f7c4d8612354d9ba51e0522e08",
+      "data/validation/review_handoffs/constitution_progress_governance_review.json": "05ae484622d7a606ce79a7b2d2a1dbfcb261b542150d1bd6fdfb28d1f84397e2",
+      "data/validation/review_handoffs/high_confidence_validation_rationalization.json": "7f57f6da2891079725a101e5fe52c7c0e0a936146ba983892b15f26a4df57473",
+      "data/validation/review_handoffs/pr_br_continuation6.json": "17f0b3ced7dcb7081eb8fa872641b8f3577022dbd452805409d3a3fbac07aae0",
+      "data/validation/review_handoffs/pr_play_04_opening_failure_acceptance.json": "02fe80b5b2ce8503f20a2c9488dbe370861f241f974dcdbc1786e81bb52caecf",
+      "data/validation/review_handoffs/rc10_rc21_policy_implementation.json": "2e409a85e49386b43aea1464b05d5b20b6165578863ad86fb9f6071cff9238f5",
+      "data/validation/review_handoffs/rc11_rc13_expectation_maintenance.json": "50ea13acda6a3231cdfd8dac2c3363c6a5a8e31ee106b02ecaceda6c740dd54e",
+      "data/validation/review_handoffs/rc11_rc13_unresolved_root_cause_investigation.json": "78130975a645bb803a0f0ed8411b66ae6278dcc194c64919dada6ce21b57d22e",
+      "data/validation/review_handoffs/remaining_baseline_triage.json": "4afc6cf17af11930a52c079b7279263d1a244e4b9ebc20d71d6f7dec46ed687f",
+      "data/validation/review_handoffs/validation_cleanup_governance_repair.json": "cd6e8b09aaabf7986dd96fbf0de9af909fcec49c605212e398b4e4b8dea18c47",
+      "data/validation/review_handoffs/validation_evidence_standard.json": "c85b56bb643fb71704665b076c790a26c2e87b89d4543c4517c27e997fdd7a8f",
+      "data/validation/review_handoffs/validation_portfolio_rationalization.json": "1cb36591dad4c7589bbfd62459a3267a0c4ad2dc146accfaba737cba6cd71b92",
+      "data/validation/scenario_spines/c1a_opening_convergence_paths.json": "ff74b8fe419b99dc53e3545568ce2e64318dff07bdc6ce63a2732902d7534e2d",
+      "data/validation/scenario_spines/frontier_gate_long_session.json": "e2a3d1741945c937ad131d16893d843163ed7c56e44360d45d5185314f72ba6f",
+      "data/validation/semantic_calibration/manifest.json": "eb6abb2964f910b1eb0c39f6e3bde9a5d91f46734b2fc7e0ab95296f230c91bd",
+      "data/validation/semantic_playability_calibration_r2/scenarios.json": "8be20cd609ad869f13232950e959d00481e19d0d10e4db3eaccb3a774eec382c",
+      "data/validation/atgb/held_out/S07.json": "0a8ddb6849b0ab0dc0c2c6e2d1abdef12c1c17c79e5bc2e9b760596ab3aa059e",
+      "data/validation/atgb/held_out/S09.json": "b0f0f737cbb246c915dad07eccfb90d9f6f409627cdb8b8f11234265a405c311",
+      "data/validation/atgb/held_out/S10.json": "cab3d7392ac2d8c527632522b3c1e029baf061c2eb261e58c7a8f34474ae8123",
+      "data/validation/atgb/visible/S01.json": "25d848e93ad9630001f4b9aa7031d8a7e107ef41db6d48f6103b5802520ec78a",
+      "data/validation/atgb/visible/S02.json": "0475cd91495a154afb2c5094dc6c1f827773e66d331254215ea09f34959a6ce1",
+      "data/validation/atgb/visible/S03.json": "30d6b2375a8aa4758987e8708fc8feeb9e4d92fc46b1a41dbdbfb7d5f7fb2a5c",
+      "data/validation/atgb/visible/S04.json": "8539f572a7ced3bbc1c6f9b76780129cee565d4c0fcd67a4b6044e3979bc89e6",
+      "data/validation/atgb/visible/S05.json": "cde2b732f15e1972d7c976cfa7d70411e38c7299b36df1c1b4566fa56656e1fc",
+      "data/validation/atgb/visible/S06.json": "2c2fe33b578a1d19f270d2a14d646cbe239b7ff572adeac780405c431aebf8ac",
+      "data/validation/atgb/visible/S08.json": "690e535d181f099548f2d1f4a20329f9756cd30862a1e73df1bbb8b6dcbcc3de",
+      "data/validation/atgb/baselines/frontier-gate-v1/campaign.json": "d8bc4a4831fadd3d1dae51d11edca3c95080d20a9c327b04f3a12e237a3fef41",
+      "data/validation/atgb/baselines/frontier-gate-v1/character.json": "d73253227f92b06796c6769a4737286f306d36d01f60e80e05dfd5f84147cae4",
+      "data/validation/atgb/baselines/frontier-gate-v1/conditions.json": "2e047d826ea779c2b1fa0d432fea553da4484931cdbc90488d18c3ba2757b4ca",
+      "data/validation/atgb/baselines/frontier-gate-v1/manifest.json": "9c390c78f3fcf7507793e1037eb0add59e5e373050d1996f29f0c26f3b7bf0ea",
+      "data/validation/atgb/baselines/frontier-gate-v1/world.json": "44d04db85e3e0d5f352d9aff17808acfc1e8dac8734e979b72bae76d3bc91ded",
+      "data/validation/atgb/baselines/frontier-gate-v1/scenes/frontier_gate.json": "05d6268b7fca019f4ae0ecd69d2d5c3548da342eb1cd49f93bfbec993296a8b1",
+      "data/validation/atgb/baselines/frontier-gate-v1/scenes/market_quarter.json": "9483166036331b2738a7d0ebee217bbb6b6f00bd1f181ec92d82e9e1c4106bc8",
+      "data/validation/atgb/baselines/frontier-gate-v1/scenes/old_milestone.json": "0b1f5e25f19d376cdb5c9510623488fea6fa831549a35458455edf92e92139e0",
+      "data/validation/semantic_calibration/cases/case_001_unanswered_direct_question.json": "55d381bab237dcfc2fbddd8bca1dd39332d5daf3c6e3126b2314ee80f849235b",
+      "data/validation/semantic_calibration/cases/case_002_broken_refusal_non_answer.json": "5cc4b3d88ed116f38337fb08ff95f862749c3095f3b55b408798796ee395e106",
+      "data/validation/semantic_calibration/cases/case_003_truncated_output.json": "96de428b0b768f34b62993a5f2b27b0c197f721e1a34caeed9b31bf2f255df0c",
+      "data/validation/semantic_calibration/cases/case_004_observation_not_fulfilled.json": "a277384095740bdf30007f0eb311e7aa1b54a2f8b84746e21295d56bd2bbcc05",
+      "data/validation/semantic_calibration/cases/case_005_valid_uncertainty.json": "d8e28756fe76a8e6e63b92118262d4a100384a2a7b625b419b719dce28a347c2",
+      "data/validation/semantic_calibration/cases/case_006_valid_npc_ignorance.json": "458e7105e9e56e4d6a2a4946b7c27e65dba359c2c8a0bb4a0748fd973f1156b7",
+      "data/validation/semantic_calibration/cases/case_007_valid_refusal.json": "25dfa45903dc6f0ee10fe3a01bf5f37ef6dcc14169ba1b205e66dac8bc1efa2f",
+      "data/validation/semantic_calibration/cases/case_008_valid_terse_dialogue.json": "d0fc15cdc704bade46c79a35353180cf2ebda2eb922edcc9795807d02f0516ad",
+      "data/validation/semantic_calibration/cases/case_009_valid_terse_observation.json": "c1808de3483cb3e3a8235ec9bca27234934bef5a2baee6cc5607dd6d0d2c3f6b",
+      "data/validation/semantic_calibration/cases/case_010_valid_ambiguity_clarification.json": "ebf15f4b5a6b142f754279af3ed3d4fcda1b73a73c9605886f1923f48599c856",
+      "data/validation/semantic_calibration/cases/case_011_valid_partial_answer.json": "8a96b27ab7a17ccb1179f5b0b6a0dc035266bd20f554c2f8d7451747594edc0c",
+      "data/validation/semantic_calibration/cases/case_012_valid_diegetic_redirection.json": "08335ab98f92ffd8b8618be273330f945ca39e0f854ddd51a81a850756cdee68",
+      "data/validation/semantic_calibration/cases/case_013_intentional_fragment.json": "35cfc092bcc56d2e1434d58706a88da293b186048087782544209ebae3d1ab0b"
+    },
+    "historical_original_recovered": false
+  },
+  "isolation": {
+    "storage_root": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72\\isolation_probe_final",
+    "session_log": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72\\isolation_probe_final\\session_log.jsonl",
+    "write_present": true,
+    "protected_write_blocked": true,
+    "blocked_paths": [
+      "data\\session_log.jsonl",
+      "artifacts\\pr_play_49\\evidence_pr72_forbidden.json"
+    ],
+    "protected_changed": [],
+    "historical_report_output_policy": "Collected test module OUT paths are redirected to disposable test_artifacts directories; historical artifact writes are rejected except an explicit run evidence subtree selected by ASHEN_TEST_EVIDENCE_DIR, an explicit storage root, or --junitxml.",
+    "early_run_limitation": "Initial combined regression regenerated legacy analysis outputs at module OUT paths. Entry hashes for those reports were not recorded, so their preservation is not claimed. All 150 production-like data entry hashes remained unchanged.",
+    "dynamic_guard_smoke": "11 passed; evidence subtree selected from a nested JUnit output path."
+  },
+  "development": {
+    "cases": 60,
+    "passed": 59,
+    "failed": 1,
+    "failures": [
+      "tests.test_pr_play_72_supplemental::test_explicit_npc_interaction_resolves"
+    ]
+  },
+  "holdout": {
+    "cases": 60,
+    "passed": 52,
+    "failed": [
+      {
+        "id": "H04",
+        "checks": [
+          "resolved_action"
+        ]
+      },
+      {
+        "id": "H05",
+        "checks": [
+          "resolved_action"
+        ]
+      },
+      {
+        "id": "H09",
+        "checks": [
+          "resolved_action"
+        ]
+      },
+      {
+        "id": "H10",
+        "checks": [
+          "resolved_action"
+        ]
+      },
+      {
+        "id": "H11",
+        "checks": [
+          "resolved_action"
+        ]
+      },
+      {
+        "id": "H15",
+        "checks": [
+          "resolved_action"
+        ]
+      },
+      {
+        "id": "H20",
+        "checks": [
+          "resolved_action"
+        ]
+      },
+      {
+        "id": "H38",
+        "checks": [
+          "category"
+        ]
+      }
+    ],
+    "manifest_sha256": "f9baae313a54716f910d34498e528abedd315cf052746ae5f9ec08eb65fdd131",
+    "executions": 1,
+    "authorship": "developer-authored; not independent external validation"
+  },
+  "regression": {
+    "focused": {
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_play_66_publication.py",
+        "tests/test_pr_play_65_authoritative_disclosure.py",
+        "tests/test_pr_play_64_discovery_language.py",
+        "tests/test_pr_play_63_disclosure.py",
+        "tests/test_state_authority.py",
+        "tests/test_pr_play_61_player_facing.py",
+        "tests/test_pr_play_62_investigation_quality.py",
+        "tests/test_pr_play_60_inventory_projection.py",
+        "tests/test_pr_play_60_gameplay_readiness.py",
+        "tests/test_pr_play_59_persistent_consequences.py",
+        "tests/test_pr_play_57_integrated_narration.py",
+        "tests/test_pr_play_58_semantic_coverage.py",
+        "tests/test_pr_play_55_discovery_claims.py",
+        "tests/test_pr_play_54_consequential_validation.py",
+        "tests/test_pr_play_53_quarantined_live.py",
+        "tests/test_pr_play_52_quarantined_integration.py",
+        "tests/test_pr_play_42_evidence_boundaries.py",
+        "tests/test_pr_play_51_geography_grounding.py",
+        "tests/test_pr_play_49_anchored_narration.py",
+        "tests/test_pr_play_47_controlled_renderer.py",
+        "tests/test_pr_play_45_narration_authority.py",
+        "tests/test_pr_play_46_mechanical_boundary.py",
+        "tests/test_pr_play_44_information_delivery.py",
+        "tests/test_pr_bu_lexical_scope.py",
+        "tests/test_provider_accounting_integrity.py",
+        "tests/test_pr_bw_narration_only_envelope.py",
+        "tests/test_diegetic_fallback_narration.py",
+        "tests/test_narration_state_consistency.py",
+        "tests/test_pr_play_68_structured_publication.py",
+        "tests/test_pr_play_69_target_references.py",
+        "tests/test_pr_play_70_branching.py",
+        "tests/test_pr_play_71_lifecycle.py",
+        "tests/test_pr_play_71_persistence_recovery.py",
+        "tests/test_pr_play_71v_verification.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72\\focused.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72\\focused_tmp"
+      ],
+      "exit_code": 1,
+      "passed": 1064,
+      "failed": [
+        "tests.test_pr_play_54_consequential_validation::test_corpus_validation_stays_fast_and_local",
+        "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+        "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+        "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+        "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[survey]",
+        "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[report]",
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[off]",
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[no_optin]",
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[other_identity]",
+        "tests.test_pr_play_71_lifecycle::test_duplicate_start",
+        "tests.test_pr_play_71_persistence_recovery::test_new_campaign_failure_restores_prior_runtime",
+        "tests.test_pr_play_71v_verification::test_new_campaign_rollback_on_each_runtime_file",
+        "tests.test_pr_play_71v_verification::test_new_campaign_identifier_failure_changes_nothing",
+        "tests.test_pr_play_71v_verification::test_opening_persistence_failure_does_not_publish_start",
+        "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[1]",
+        "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[3]",
+        "tests.test_pr_play_71v_verification::test_chat_permanent_rename_does_not_publish_success",
+        "tests.test_pr_play_71v_verification::test_transcript_and_authoritative_isolation",
+        "tests.test_pr_play_71v_verification::test_player_safe_projection_across_lifecycle",
+        "tests.test_pr_play_71v_verification::test_mandatory_disclosure_survives_rejected_narration",
+        "tests.test_pr_play_71v_verification::test_duplicate_request_does_not_duplicate_branch"
+      ]
+    },
+    "boundary": {
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_play_67_player_projection.py",
+        "tests/test_ui_mode_backend_integration.py",
+        "tests/test_ui_mode_regression_matrix_objective15.py",
+        "tests/test_frontend_ui_mode_hardening_objective15.py",
+        "tests/test_state_channels.py",
+        "tests/test_snapshots.py",
+        "tests/test_start_campaign_api.py",
+        "tests/test_pr_play_37_opening_recovery.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72\\boundary.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72\\boundary_tmp"
+      ],
+      "exit_code": 1,
+      "passed": 101,
+      "failed": [
+        "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+        "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+        "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+        "tests.test_start_campaign_api::test_failed_start_campaign_does_not_mark_started",
+        "tests.test_pr_play_37_opening_recovery::test_http_invalid_declaration_discards_provider_text",
+        "tests.test_pr_play_37_opening_recovery::test_http_composer_failure_does_not_commit"
+      ]
+    },
+    "broader": {
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_cx_authority_assurance.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72\\broader.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72\\broader_tmp"
+      ],
+      "exit_code": 1,
+      "passed": 0,
+      "failed": [
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]"
+      ]
+    },
+    "lifecycle_isolated": {
+      "command": [
+        "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pr_play_71_lifecycle.py",
+        "tests/test_pr_play_71_persistence_recovery.py",
+        "tests/test_pr_play_71v_verification.py",
+        "--tb=line",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72\\lifecycle_isolated.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_72\\lifecycle_isolated_tmp"
+      ],
+      "exit_code": 0,
+      "passed": 39,
+      "failed": []
+    }
+  },
+  "http": {
+    "campaigns": [
+      {
+        "branch": "survey",
+        "identity": "f5b11c7287d3af4ce78be685",
+        "snapshot_id": "2026-11-06T23-10-05_1f796970",
+        "followup_flag": "patrol_survey_recorded",
+        "information": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. The missing patrol was last seen taking the northwest mud track past the crates. The northwest mud track reaches an old milestone beyond the gate. The mud around the marker is churned; any trail beyond it is unclear. You commit to surveying the ground beyond the milestone yourself. Reporting to the watch is no longer your response to this discovery. You can now record the limits of your survey here. You record your survey: the overlapping prints remain inconclusive. Your survey is now recorded; you have not warned the watch. You can return to the gate or continue investigating here.",
+        "resumed": true,
+        "natural_followup": true,
+        "transcript_restored": true
+      },
+      {
+        "branch": "report",
+        "identity": "e9e75fb9d8c25f63a750e5bb",
+        "snapshot_id": "2026-11-06T23-11-39_f192f32d",
+        "followup_flag": "patrol_guards_warned",
+        "information": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. The missing patrol was last seen taking the northwest mud track past the crates. Follow the missing patrol rumor The patrol route changed after the Ash Compact census choke worsened. Cold rain needles Cinderwatch's eastern gate under frayed banners. The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline. A notice board announces new taxes and curfews, and names a missing patrol. A tavern runner is hawking hot stew and rumor for coin. A ragged stranger hangs back, watching the crowd more than the queue. You commit to bringing the uncertain trail to the watch instead of conducting a private survey. Return to Cinderwatch Gate to give your report. The watch receives your report that the patrol trail becomes unclear at the milestone. The watch has now been warned; no private survey was conducted. You can continue your inquiry at the gate or return to the milestone. You have no established report of further guard activity.",
+        "resumed": true,
+        "natural_followup": true,
+        "transcript_restored": true
+      }
+    ],
+    "requests": 36,
+    "mean_http_ms": 1623.9246027705829,
+    "median_http_ms": 1338.2852000067942,
+    "max_http_ms": 4556.402100017294,
+    "provider_requests": 0,
+    "provider_tokens": 0,
+    "hidden_exposures": 0,
+    "stage_timings": "Server function durations captured through ContextVar middleware; HTTP total measured separately. Replay interpretation is labeled separately."
+  },
+  "browser": {
+    "campaign_A": "BLOCKED",
+    "campaign_B": "BLOCKED",
+    "attempts": [
+      {
+        "action": "create IAB about:blank",
+        "result": "Timed out waiting for the Browser webview to attach for this browser-use page"
+      },
+      {
+        "action": "list IAB tabs",
+        "result": "empty tab list"
+      },
+      {
+        "action": "create IAB localhost:8073",
+        "result": "Timed out waiting for the Browser webview to attach for this browser-use page"
+      },
+      {
+        "action": "native Brave fallback window 16977288",
+        "result": "Computer Use stopped: could not determine current browser URL on Windows with enough confidence to enforce policy"
+      }
+    ],
+    "typed_submissions": 0,
+    "screenshots": [],
+    "visible_latency_ms": null
+  },
+  "provider_requests": 0,
+  "provider_tokens": 0,
+  "retries": 0,
+  "timeouts": 0,
+  "supplemental": {
+    "cases": 4,
+    "passed": 4,
+    "failed": 0,
+    "failures": []
+  },
+  "post_repair_regression": {
+    "cases": 54,
+    "passed": 42,
+    "failed": 12,
+    "failures": [
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[explicit_named_ask]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[explicit_role_ask]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[unique_pronoun]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[distinguishing_fact]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[gm_about_npc]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[direct_ask_conflicting_owner]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[npc_followup]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[confirm_single_candidate]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[incidental_glance]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[save_load_pending]",
+      "tests.test_pr_ef_r4_authorization::test_third_person_question_is_not_an_active_npc_continuation",
+      "tests.test_pr_ef_gm_authority::test_production_ten_turn_sequence"
+    ]
+  },
+  "report_output_isolation": {
+    "cases": 154,
+    "passed": 154,
+    "failed": 0,
+    "failures": []
+  },
+  "final_publication": {
+    "cases": 57,
+    "passed": 56,
+    "failed": 1,
+    "failures": [
+      "tests.test_pr_play_72_supplemental::test_explicit_npc_interaction_resolves"
+    ]
+  },
+  "final_social_disclosure": {
+    "cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failures": []
+  },
+  "cold_resume": {
+    "fresh_process": true,
+    "campaigns": [
+      {
+        "branch": "survey",
+        "identity": "f5b11c7287d3af4ce78be685",
+        "restored": true,
+        "branch_flag": true,
+        "journal": null,
+        "readonly": true,
+        "ambiguous": true,
+        "unsupported": true
+      },
+      {
+        "branch": "report",
+        "identity": "e9e75fb9d8c25f63a750e5bb",
+        "restored": true,
+        "branch_flag": true,
+        "journal": null,
+        "readonly": true,
+        "ambiguous": true,
+        "unsupported": true
+      }
+    ],
+    "provider_requests": 0,
+    "provider_tokens": 0
+  },
+  "mandatory_disclosure": {
+    "checks": [
+      {
+        "request": {
+          "path": "/api/chat",
+          "method": "POST",
+          "json": {
+            "text": "I examine the notice board."
+          }
+        },
+        "required": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "present": true
+      },
+      {
+        "request": {
+          "path": "/api/chat",
+          "method": "POST",
+          "json": {
+            "text": "I examine the weathered milestone."
+          }
+        },
+        "required": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "present": true
+      },
+      {
+        "request": {
+          "path": "/api/chat",
+          "method": "POST",
+          "json": {
+            "text": "I examine the notice board."
+          }
+        },
+        "required": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "present": true
+      },
+      {
+        "request": {
+          "path": "/api/chat",
+          "method": "POST",
+          "json": {
+            "text": "I examine the weathered milestone."
+          }
+        },
+        "required": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+        "present": true
+      },
+      {
+        "request": {
+          "path": "/api/chat",
+          "method": "POST",
+          "json": {
+            "text": "I ask the Gate Serjeant about the patrol route."
+          }
+        },
+        "required": "The patrol route changed after the Ash Compact census choke worsened.",
+        "present": true
+      }
+    ],
+    "omissions": [],
+    "matching": "Full authoritative sentence, case-insensitive; existing social formatter can lowercase the initial article within a quotation.",
+    "cycle_earlier_omissions": 1,
+    "scope": "Final real HTTP chat discovery resolutions; authored consequence checks separately covered by tests."
+  },
+  "same_action_latency": {
+    "rows": [
+      {
+        "method": "natural",
+        "repetition": 1,
+        "http_ms": 429.22230006661266,
+        "stages": {
+          "interpretation_ms": [
+            3.417
+          ],
+          "interpretation": {
+            "category": "EXECUTE",
+            "primary_intention": "I examine the mud prints again.",
+            "intent_family": "player_initiative",
+            "incidental_context": [],
+            "proposed_operation": "INSPECT",
+            "proposed_target": "prints",
+            "proposed_record": {
+              "communication_mode": "IN_WORLD_ACTION",
+              "interpretation_status": "INTERPRETED",
+              "player_intent": {
+                "summary": "I examine the mud prints again."
+              },
+              "action_components": [
+                {
+                  "operation_class": "INSPECT",
+                  "target_ref": "prints",
+                  "description": "I examine the mud prints again."
+                }
+              ],
+              "references": {
+                "resolved_references": [],
+                "unresolved_references": []
+              }
+            },
+            "missing_information": [],
+            "context_references": [],
+            "requires_authoritative_execution": true,
+            "reason": "initiative_grounded_inspect",
+            "confidence": 0.9,
+            "ambiguity": null,
+            "player_facing_text": "",
+            "context_update": null,
+            "intent_modality": "committed",
+            "secondary_intentions": [],
+            "execution_policy": "",
+            "communication_owner": "CHARACTER",
+            "communication_purpose": "ACTION",
+            "authorization": null
+          },
+          "resolver_ms": [
+            44.301
+          ],
+          "atomic_write_ms": [
+            5.742,
+            6.598,
+            5.04
+          ],
+          "publication_ms": [
+            0.682
+          ]
+        },
+        "resolution": {
+          "kind": "discover_clue",
+          "action_id": "prints",
+          "success": true
+        },
+        "world_unchanged": false,
+        "response": {
+          "campaign": {
+            "title": "Ashen Thrones"
+          },
+          "character": {
+            "id": "galinor",
+            "name": "Galinor",
+            "class": "Wizard",
+            "level": 1,
+            "ancestry": "Human",
+            "hp": {
+              "current": 8,
+              "max": 8,
+              "nonlethal": 0
+            },
+            "ac": {
+              "normal": 12,
+              "touch": 12,
+              "flat_footed": 10
+            },
+            "initiative_bonus": 2,
+            "speed": 30,
+            "bab": 0,
+            "cmb": 0,
+            "cmd": 12,
+            "ability_scores": {
+              "str": 10,
+              "dex": 14,
+              "con": 12,
+              "int": 18,
+              "wis": 12,
+              "cha": 10
+            },
+            "saves": {
+              "fort": 1,
+              "ref": 2,
+              "will": 3
+            },
+            "attacks": [
+              {
+                "id": "quarterstaff",
+                "name": "Quarterstaff",
+                "attack_bonus": 0,
+                "type": "melee",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 6,
+                  "bonus": 0,
+                  "type": "bludgeoning"
+                }
+              },
+              {
+                "id": "crossbow",
+                "name": "Light Crossbow",
+                "attack_bonus": 2,
+                "type": "ranged",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 8,
+                  "bonus": 0,
+                  "type": "piercing"
+                }
+              }
+            ],
+            "conditions": [],
+            "inventory": [
+              {
+                "id": "spellbook",
+                "name": "Spellbook",
+                "quantity": 1,
+                "usable": false
+              }
+            ],
+            "spells": {
+              "prepared": [
+                {
+                  "id": "daze",
+                  "name": "Daze",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "detect_magic",
+                  "name": "Detect Magic",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "magic_missile",
+                  "name": "Magic Missile",
+                  "cast": false,
+                  "level": 1
+                },
+                {
+                  "id": "shield",
+                  "name": "Shield",
+                  "cast": false,
+                  "level": 1
+                }
+              ],
+              "slots": {
+                "0": 3,
+                "1": 1
+              }
+            },
+            "skills": {
+              "knowledge_arcana": 8,
+              "spellcraft": 8,
+              "perception": 4,
+              "sense_motive": 4,
+              "stealth": 4,
+              "diplomacy": 4,
+              "intimidate": 2,
+              "bluff": 2
+            }
+          },
+          "session": {
+            "session_id": "f5b11c7287d3af4ce78be685",
+            "campaign_run_id": "f5b11c7287d3af4ce78be685",
+            "active_scene_id": "old_milestone",
+            "character_name": "Galinor",
+            "response_mode": "standard",
+            "campaign_started": true,
+            "turn_counter": 7,
+            "visited_scene_ids": [
+              "frontier_gate",
+              "old_milestone"
+            ]
+          },
+          "scene": {
+            "scene": {
+              "id": "old_milestone",
+              "location": "Old Milestone",
+              "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+              "mode": "exploration",
+              "visible_facts": [
+                "A weathered stone milestone leans beside the northwest mud track.",
+                "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+                "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+              ]
+            }
+          },
+          "combat": {
+            "in_combat": false,
+            "round": 0,
+            "active_actor_id": "",
+            "player_turn_used": false
+          },
+          "ui": {
+            "player_can_act": true,
+            "campaign_started": true,
+            "campaign_can_start": false,
+            "living_enemies": [],
+            "scene_ids": [
+              "frontier_gate",
+              "old_milestone"
+            ],
+            "affordances": [
+              {
+                "id": "milestone",
+                "label": "Examine the Weathered milestone (already searched)",
+                "type": "investigate",
+                "prompt": "I examine the Weathered milestone.",
+                "target_scene_id": "",
+                "target_id": "milestone",
+                "target_location_id": ""
+              },
+              {
+                "id": "prints",
+                "label": "Examine the Mud prints (already searched)",
+                "type": "investigate",
+                "prompt": "I examine the Mud prints.",
+                "target_scene_id": "",
+                "target_id": "prints",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_a_weathered_stone_milestone_leans_bes",
+                "label": "Examine A weathered stone milestone leans bes",
+                "type": "investigate",
+                "prompt": "I examine A weathered stone milestone leans bes.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_the_mud_around_the_marker_is_churned",
+                "label": "Examine The mud around the marker is churned",
+                "type": "investigate",
+                "prompt": "I examine The mud around the marker is churned.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_the_track_continues_a_short_way_past",
+                "label": "Examine The track continues a short way past",
+                "type": "investigate",
+                "prompt": "I examine The track continues a short way past.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              }
+            ],
+            "clues": {
+              "known": [
+                {
+                  "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                  "presentation": "explicit"
+                },
+                {
+                  "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                  "presentation": "explicit"
+                }
+              ],
+              "implicit": [],
+              "explicit": [
+                {
+                  "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                  "presentation": "explicit"
+                },
+                {
+                  "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                  "presentation": "explicit"
+                }
+              ],
+              "actionable": []
+            },
+            "scene_npcs": [],
+            "interaction": {
+              "active_interaction_target_id": "",
+              "active_interaction_kind": "investigate",
+              "interaction_mode": "activity"
+            }
+          },
+          "journal": {
+            "known_facts": [
+              "The northwest mud track reaches an old milestone beyond the gate.",
+              "The mud around the marker is churned; any trail beyond it is unclear."
+            ],
+            "discovered_clues": [
+              "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+            ],
+            "unresolved_leads": [
+              "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "The missing patrol was last seen taking the northwest mud track past the crates."
+            ],
+            "status_effects": [],
+            "suspicion_flags": [],
+            "active_leads": [
+              {
+                "id": "milestone_mud_prints",
+                "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "next_step": "",
+                "last_touched_turn": 7
+              },
+              {
+                "id": "notice_patrol_route",
+                "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "next_step": "",
+                "last_touched_turn": 2
+              }
+            ],
+            "pursued_leads": [],
+            "stale_leads": [],
+            "resolved_leads": [],
+            "obsolete_leads": [],
+            "lead_counts": {
+              "active": 2,
+              "pursued": 0,
+              "stale": 0,
+              "resolved": 0,
+              "obsolete": 0
+            }
+          },
+          "player_name": "Galinor",
+          "campaign_run_id": "f5b11c7287d3af4ce78be685",
+          "save_summary": {
+            "saved_at": "2026-11-06T23:14:18.824018Z",
+            "save_data_exists": true,
+            "active_scene_id": "old_milestone",
+            "discovered_clues": 2,
+            "chat_messages": 10
+          },
+          "snapshots": [
+            {
+              "id": "2026-11-06T23-11-39_f192f32d",
+              "created_at": "2026-11-06T23:11:39.761752Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T23-10-05_1f796970",
+              "created_at": "2026-11-06T23:10:05.574441Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-59-47_44db3c15",
+              "created_at": "2026-11-06T22:59:47.619239Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T22-58-15_903b8286",
+              "created_at": "2026-11-06T22:58:15.349042Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-49-38_6a1b495b",
+              "created_at": "2026-11-06T22:49:38.671288Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T22-47-58_a640d241",
+              "created_at": "2026-11-06T22:47:58.078981Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-42-17_51d9b95b",
+              "created_at": "2026-11-06T22:42:17.061214Z",
+              "label": "PR72 HTTP survey"
+            }
+          ],
+          "world": {},
+          "ok": true,
+          "gm_output": {
+            "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          },
+          "resolution": {}
+        }
+      },
+      {
+        "method": "natural",
+        "repetition": 2,
+        "http_ms": 593.7902999576181,
+        "stages": {
+          "interpretation_ms": [
+            0.282
+          ],
+          "interpretation": {
+            "category": "EXECUTE",
+            "primary_intention": "I examine the mud prints again.",
+            "intent_family": "player_initiative",
+            "incidental_context": [],
+            "proposed_operation": "INSPECT",
+            "proposed_target": "prints",
+            "proposed_record": {
+              "communication_mode": "IN_WORLD_ACTION",
+              "interpretation_status": "INTERPRETED",
+              "player_intent": {
+                "summary": "I examine the mud prints again."
+              },
+              "action_components": [
+                {
+                  "operation_class": "INSPECT",
+                  "target_ref": "prints",
+                  "description": "I examine the mud prints again."
+                }
+              ],
+              "references": {
+                "resolved_references": [],
+                "unresolved_references": []
+              }
+            },
+            "missing_information": [],
+            "context_references": [],
+            "requires_authoritative_execution": true,
+            "reason": "initiative_grounded_inspect",
+            "confidence": 0.9,
+            "ambiguity": null,
+            "player_facing_text": "",
+            "context_update": null,
+            "intent_modality": "committed",
+            "secondary_intentions": [],
+            "execution_policy": "",
+            "communication_owner": "CHARACTER",
+            "communication_purpose": "ACTION",
+            "authorization": null
+          },
+          "resolver_ms": [
+            78.983
+          ],
+          "atomic_write_ms": [
+            10.825,
+            9.54,
+            8.854
+          ],
+          "publication_ms": [
+            0.391
+          ]
+        },
+        "resolution": {
+          "kind": "discover_clue",
+          "action_id": "prints",
+          "success": true
+        },
+        "world_unchanged": false,
+        "response": {
+          "campaign": {
+            "title": "Ashen Thrones"
+          },
+          "character": {
+            "id": "galinor",
+            "name": "Galinor",
+            "class": "Wizard",
+            "level": 1,
+            "ancestry": "Human",
+            "hp": {
+              "current": 8,
+              "max": 8,
+              "nonlethal": 0
+            },
+            "ac": {
+              "normal": 12,
+              "touch": 12,
+              "flat_footed": 10
+            },
+            "initiative_bonus": 2,
+            "speed": 30,
+            "bab": 0,
+            "cmb": 0,
+            "cmd": 12,
+            "ability_scores": {
+              "str": 10,
+              "dex": 14,
+              "con": 12,
+              "int": 18,
+              "wis": 12,
+              "cha": 10
+            },
+            "saves": {
+              "fort": 1,
+              "ref": 2,
+              "will": 3
+            },
+            "attacks": [
+              {
+                "id": "quarterstaff",
+                "name": "Quarterstaff",
+                "attack_bonus": 0,
+                "type": "melee",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 6,
+                  "bonus": 0,
+                  "type": "bludgeoning"
+                }
+              },
+              {
+                "id": "crossbow",
+                "name": "Light Crossbow",
+                "attack_bonus": 2,
+                "type": "ranged",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 8,
+                  "bonus": 0,
+                  "type": "piercing"
+                }
+              }
+            ],
+            "conditions": [],
+            "inventory": [
+              {
+                "id": "spellbook",
+                "name": "Spellbook",
+                "quantity": 1,
+                "usable": false
+              }
+            ],
+            "spells": {
+              "prepared": [
+                {
+                  "id": "daze",
+                  "name": "Daze",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "detect_magic",
+                  "name": "Detect Magic",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "magic_missile",
+                  "name": "Magic Missile",
+                  "cast": false,
+                  "level": 1
+                },
+                {
+                  "id": "shield",
+                  "name": "Shield",
+                  "cast": false,
+                  "level": 1
+                }
+              ],
+              "slots": {
+                "0": 3,
+                "1": 1
+              }
+            },
+            "skills": {
+              "knowledge_arcana": 8,
+              "spellcraft": 8,
+              "perception": 4,
+              "sense_motive": 4,
+              "stealth": 4,
+              "diplomacy": 4,
+              "intimidate": 2,
+              "bluff": 2
+            }
+          },
+          "session": {
+            "session_id": "f5b11c7287d3af4ce78be685",
+            "campaign_run_id": "f5b11c7287d3af4ce78be685",
+            "active_scene_id": "old_milestone",
+            "character_name": "Galinor",
+            "response_mode": "standard",
+            "campaign_started": true,
+            "turn_counter": 7,
+            "visited_scene_ids": [
+              "frontier_gate",
+              "old_milestone"
+            ]
+          },
+          "scene": {
+            "scene": {
+              "id": "old_milestone",
+              "location": "Old Milestone",
+              "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+              "mode": "exploration",
+              "visible_facts": [
+                "A weathered stone milestone leans beside the northwest mud track.",
+                "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+                "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+              ]
+            }
+          },
+          "combat": {
+            "in_combat": false,
+            "round": 0,
+            "active_actor_id": "",
+            "player_turn_used": false
+          },
+          "ui": {
+            "player_can_act": true,
+            "campaign_started": true,
+            "campaign_can_start": false,
+            "living_enemies": [],
+            "scene_ids": [
+              "frontier_gate",
+              "old_milestone"
+            ],
+            "affordances": [
+              {
+                "id": "milestone",
+                "label": "Examine the Weathered milestone (already searched)",
+                "type": "investigate",
+                "prompt": "I examine the Weathered milestone.",
+                "target_scene_id": "",
+                "target_id": "milestone",
+                "target_location_id": ""
+              },
+              {
+                "id": "prints",
+                "label": "Examine the Mud prints (already searched)",
+                "type": "investigate",
+                "prompt": "I examine the Mud prints.",
+                "target_scene_id": "",
+                "target_id": "prints",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_a_weathered_stone_milestone_leans_bes",
+                "label": "Examine A weathered stone milestone leans bes",
+                "type": "investigate",
+                "prompt": "I examine A weathered stone milestone leans bes.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_the_mud_around_the_marker_is_churned",
+                "label": "Examine The mud around the marker is churned",
+                "type": "investigate",
+                "prompt": "I examine The mud around the marker is churned.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_the_track_continues_a_short_way_past",
+                "label": "Examine The track continues a short way past",
+                "type": "investigate",
+                "prompt": "I examine The track continues a short way past.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              }
+            ],
+            "clues": {
+              "known": [
+                {
+                  "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                  "presentation": "explicit"
+                },
+                {
+                  "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                  "presentation": "explicit"
+                }
+              ],
+              "implicit": [],
+              "explicit": [
+                {
+                  "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                  "presentation": "explicit"
+                },
+                {
+                  "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                  "presentation": "explicit"
+                }
+              ],
+              "actionable": []
+            },
+            "scene_npcs": [],
+            "interaction": {
+              "active_interaction_target_id": "",
+              "active_interaction_kind": "investigate",
+              "interaction_mode": "activity"
+            }
+          },
+          "journal": {
+            "known_facts": [
+              "The northwest mud track reaches an old milestone beyond the gate.",
+              "The mud around the marker is churned; any trail beyond it is unclear."
+            ],
+            "discovered_clues": [
+              "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+            ],
+            "unresolved_leads": [
+              "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "The missing patrol was last seen taking the northwest mud track past the crates."
+            ],
+            "status_effects": [],
+            "suspicion_flags": [],
+            "active_leads": [
+              {
+                "id": "milestone_mud_prints",
+                "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "next_step": "",
+                "last_touched_turn": 7
+              },
+              {
+                "id": "notice_patrol_route",
+                "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "next_step": "",
+                "last_touched_turn": 2
+              }
+            ],
+            "pursued_leads": [],
+            "stale_leads": [],
+            "resolved_leads": [],
+            "obsolete_leads": [],
+            "lead_counts": {
+              "active": 2,
+              "pursued": 0,
+              "stale": 0,
+              "resolved": 0,
+              "obsolete": 0
+            }
+          },
+          "player_name": "Galinor",
+          "campaign_run_id": "f5b11c7287d3af4ce78be685",
+          "save_summary": {
+            "saved_at": "2026-11-06T23:14:19.649141Z",
+            "save_data_exists": true,
+            "active_scene_id": "old_milestone",
+            "discovered_clues": 2,
+            "chat_messages": 10
+          },
+          "snapshots": [
+            {
+              "id": "2026-11-06T23-11-39_f192f32d",
+              "created_at": "2026-11-06T23:11:39.761752Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T23-10-05_1f796970",
+              "created_at": "2026-11-06T23:10:05.574441Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-59-47_44db3c15",
+              "created_at": "2026-11-06T22:59:47.619239Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T22-58-15_903b8286",
+              "created_at": "2026-11-06T22:58:15.349042Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-49-38_6a1b495b",
+              "created_at": "2026-11-06T22:49:38.671288Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T22-47-58_a640d241",
+              "created_at": "2026-11-06T22:47:58.078981Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-42-17_51d9b95b",
+              "created_at": "2026-11-06T22:42:17.061214Z",
+              "label": "PR72 HTTP survey"
+            }
+          ],
+          "world": {},
+          "ok": true,
+          "gm_output": {
+            "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          },
+          "resolution": {}
+        }
+      },
+      {
+        "method": "structured",
+        "repetition": 1,
+        "http_ms": 741.1402999423444,
+        "stages": {
+          "resolver_ms": [
+            82.193
+          ],
+          "atomic_write_ms": [
+            10.444,
+            7.902,
+            9.962
+          ],
+          "publication_ms": [
+            0.562
+          ]
+        },
+        "resolution": {
+          "kind": "discover_clue",
+          "action_id": "prints",
+          "success": true
+        },
+        "world_unchanged": true,
+        "response": {
+          "campaign": {
+            "title": "Ashen Thrones"
+          },
+          "character": {
+            "id": "galinor",
+            "name": "Galinor",
+            "class": "Wizard",
+            "level": 1,
+            "ancestry": "Human",
+            "hp": {
+              "current": 8,
+              "max": 8,
+              "nonlethal": 0
+            },
+            "ac": {
+              "normal": 12,
+              "touch": 12,
+              "flat_footed": 10
+            },
+            "initiative_bonus": 2,
+            "speed": 30,
+            "bab": 0,
+            "cmb": 0,
+            "cmd": 12,
+            "ability_scores": {
+              "str": 10,
+              "dex": 14,
+              "con": 12,
+              "int": 18,
+              "wis": 12,
+              "cha": 10
+            },
+            "saves": {
+              "fort": 1,
+              "ref": 2,
+              "will": 3
+            },
+            "attacks": [
+              {
+                "id": "quarterstaff",
+                "name": "Quarterstaff",
+                "attack_bonus": 0,
+                "type": "melee",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 6,
+                  "bonus": 0,
+                  "type": "bludgeoning"
+                }
+              },
+              {
+                "id": "crossbow",
+                "name": "Light Crossbow",
+                "attack_bonus": 2,
+                "type": "ranged",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 8,
+                  "bonus": 0,
+                  "type": "piercing"
+                }
+              }
+            ],
+            "conditions": [],
+            "inventory": [
+              {
+                "id": "spellbook",
+                "name": "Spellbook",
+                "quantity": 1,
+                "usable": false
+              }
+            ],
+            "spells": {
+              "prepared": [
+                {
+                  "id": "daze",
+                  "name": "Daze",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "detect_magic",
+                  "name": "Detect Magic",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "magic_missile",
+                  "name": "Magic Missile",
+                  "cast": false,
+                  "level": 1
+                },
+                {
+                  "id": "shield",
+                  "name": "Shield",
+                  "cast": false,
+                  "level": 1
+                }
+              ],
+              "slots": {
+                "0": 3,
+                "1": 1
+              }
+            },
+            "skills": {
+              "knowledge_arcana": 8,
+              "spellcraft": 8,
+              "perception": 4,
+              "sense_motive": 4,
+              "stealth": 4,
+              "diplomacy": 4,
+              "intimidate": 2,
+              "bluff": 2
+            }
+          },
+          "session": {
+            "session_id": "f5b11c7287d3af4ce78be685",
+            "campaign_run_id": "f5b11c7287d3af4ce78be685",
+            "active_scene_id": "old_milestone",
+            "character_name": "Galinor",
+            "response_mode": "standard",
+            "campaign_started": true,
+            "turn_counter": 6,
+            "visited_scene_ids": [
+              "frontier_gate",
+              "old_milestone"
+            ]
+          },
+          "scene": {
+            "scene": {
+              "id": "old_milestone",
+              "location": "Old Milestone",
+              "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+              "mode": "exploration",
+              "visible_facts": [
+                "A weathered stone milestone leans beside the northwest mud track.",
+                "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+                "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+              ]
+            }
+          },
+          "combat": {
+            "in_combat": false,
+            "round": 0,
+            "active_actor_id": "",
+            "player_turn_used": false
+          },
+          "ui": {
+            "player_can_act": true,
+            "campaign_started": true,
+            "campaign_can_start": false,
+            "living_enemies": [],
+            "scene_ids": [
+              "frontier_gate",
+              "old_milestone"
+            ],
+            "affordances": [
+              {
+                "id": "milestone",
+                "label": "Examine the Weathered milestone (already searched)",
+                "type": "investigate",
+                "prompt": "I examine the Weathered milestone.",
+                "target_scene_id": "",
+                "target_id": "milestone",
+                "target_location_id": ""
+              },
+              {
+                "id": "prints",
+                "label": "Examine the Mud prints (already searched)",
+                "type": "investigate",
+                "prompt": "I examine the Mud prints.",
+                "target_scene_id": "",
+                "target_id": "prints",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_a_weathered_stone_milestone_leans_bes",
+                "label": "Examine A weathered stone milestone leans bes",
+                "type": "investigate",
+                "prompt": "I examine A weathered stone milestone leans bes.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_the_mud_around_the_marker_is_churned",
+                "label": "Examine The mud around the marker is churned",
+                "type": "investigate",
+                "prompt": "I examine The mud around the marker is churned.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_the_track_continues_a_short_way_past",
+                "label": "Examine The track continues a short way past",
+                "type": "investigate",
+                "prompt": "I examine The track continues a short way past.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              }
+            ],
+            "clues": {
+              "known": [
+                {
+                  "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                  "presentation": "explicit"
+                },
+                {
+                  "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                  "presentation": "explicit"
+                }
+              ],
+              "implicit": [],
+              "explicit": [
+                {
+                  "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                  "presentation": "explicit"
+                },
+                {
+                  "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                  "presentation": "explicit"
+                }
+              ],
+              "actionable": []
+            },
+            "scene_npcs": [],
+            "interaction": {
+              "active_interaction_target_id": "",
+              "active_interaction_kind": "investigate",
+              "interaction_mode": "activity"
+            }
+          },
+          "journal": {
+            "known_facts": [
+              "The northwest mud track reaches an old milestone beyond the gate.",
+              "The mud around the marker is churned; any trail beyond it is unclear."
+            ],
+            "discovered_clues": [
+              "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+            ],
+            "unresolved_leads": [
+              "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "The missing patrol was last seen taking the northwest mud track past the crates."
+            ],
+            "status_effects": [],
+            "suspicion_flags": [],
+            "active_leads": [
+              {
+                "id": "milestone_mud_prints",
+                "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "next_step": "",
+                "last_touched_turn": 6
+              },
+              {
+                "id": "notice_patrol_route",
+                "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "next_step": "",
+                "last_touched_turn": 2
+              }
+            ],
+            "pursued_leads": [],
+            "stale_leads": [],
+            "resolved_leads": [],
+            "obsolete_leads": [],
+            "lead_counts": {
+              "active": 2,
+              "pursued": 0,
+              "stale": 0,
+              "resolved": 0,
+              "obsolete": 0
+            }
+          },
+          "player_name": "Galinor",
+          "campaign_run_id": "f5b11c7287d3af4ce78be685",
+          "save_summary": {
+            "saved_at": "2026-11-06T23:14:20.708425Z",
+            "save_data_exists": true,
+            "active_scene_id": "old_milestone",
+            "discovered_clues": 2,
+            "chat_messages": 10
+          },
+          "snapshots": [
+            {
+              "id": "2026-11-06T23-11-39_f192f32d",
+              "created_at": "2026-11-06T23:11:39.761752Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T23-10-05_1f796970",
+              "created_at": "2026-11-06T23:10:05.574441Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-59-47_44db3c15",
+              "created_at": "2026-11-06T22:59:47.619239Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T22-58-15_903b8286",
+              "created_at": "2026-11-06T22:58:15.349042Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-49-38_6a1b495b",
+              "created_at": "2026-11-06T22:49:38.671288Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T22-47-58_a640d241",
+              "created_at": "2026-11-06T22:47:58.078981Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-42-17_51d9b95b",
+              "created_at": "2026-11-06T22:42:17.061214Z",
+              "label": "PR72 HTTP survey"
+            }
+          ],
+          "world": {},
+          "ok": true,
+          "gm_output": {
+            "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          },
+          "resolution": {}
+        }
+      },
+      {
+        "method": "structured",
+        "repetition": 2,
+        "http_ms": 625.3345999866724,
+        "stages": {
+          "resolver_ms": [
+            82.891
+          ],
+          "atomic_write_ms": [
+            9.652,
+            8.885,
+            9.485
+          ],
+          "publication_ms": [
+            0.329
+          ]
+        },
+        "resolution": {
+          "kind": "discover_clue",
+          "action_id": "prints",
+          "success": true
+        },
+        "world_unchanged": true,
+        "response": {
+          "campaign": {
+            "title": "Ashen Thrones"
+          },
+          "character": {
+            "id": "galinor",
+            "name": "Galinor",
+            "class": "Wizard",
+            "level": 1,
+            "ancestry": "Human",
+            "hp": {
+              "current": 8,
+              "max": 8,
+              "nonlethal": 0
+            },
+            "ac": {
+              "normal": 12,
+              "touch": 12,
+              "flat_footed": 10
+            },
+            "initiative_bonus": 2,
+            "speed": 30,
+            "bab": 0,
+            "cmb": 0,
+            "cmd": 12,
+            "ability_scores": {
+              "str": 10,
+              "dex": 14,
+              "con": 12,
+              "int": 18,
+              "wis": 12,
+              "cha": 10
+            },
+            "saves": {
+              "fort": 1,
+              "ref": 2,
+              "will": 3
+            },
+            "attacks": [
+              {
+                "id": "quarterstaff",
+                "name": "Quarterstaff",
+                "attack_bonus": 0,
+                "type": "melee",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 6,
+                  "bonus": 0,
+                  "type": "bludgeoning"
+                }
+              },
+              {
+                "id": "crossbow",
+                "name": "Light Crossbow",
+                "attack_bonus": 2,
+                "type": "ranged",
+                "damage": {
+                  "dice_count": 1,
+                  "dice_sides": 8,
+                  "bonus": 0,
+                  "type": "piercing"
+                }
+              }
+            ],
+            "conditions": [],
+            "inventory": [
+              {
+                "id": "spellbook",
+                "name": "Spellbook",
+                "quantity": 1,
+                "usable": false
+              }
+            ],
+            "spells": {
+              "prepared": [
+                {
+                  "id": "daze",
+                  "name": "Daze",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "detect_magic",
+                  "name": "Detect Magic",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "magic_missile",
+                  "name": "Magic Missile",
+                  "cast": false,
+                  "level": 1
+                },
+                {
+                  "id": "shield",
+                  "name": "Shield",
+                  "cast": false,
+                  "level": 1
+                }
+              ],
+              "slots": {
+                "0": 3,
+                "1": 1
+              }
+            },
+            "skills": {
+              "knowledge_arcana": 8,
+              "spellcraft": 8,
+              "perception": 4,
+              "sense_motive": 4,
+              "stealth": 4,
+              "diplomacy": 4,
+              "intimidate": 2,
+              "bluff": 2
+            }
+          },
+          "session": {
+            "session_id": "f5b11c7287d3af4ce78be685",
+            "campaign_run_id": "f5b11c7287d3af4ce78be685",
+            "active_scene_id": "old_milestone",
+            "character_name": "Galinor",
+            "response_mode": "standard",
+            "campaign_started": true,
+            "turn_counter": 6,
+            "visited_scene_ids": [
+              "frontier_gate",
+              "old_milestone"
+            ]
+          },
+          "scene": {
+            "scene": {
+              "id": "old_milestone",
+              "location": "Old Milestone",
+              "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+              "mode": "exploration",
+              "visible_facts": [
+                "A weathered stone milestone leans beside the northwest mud track.",
+                "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+                "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+              ]
+            }
+          },
+          "combat": {
+            "in_combat": false,
+            "round": 0,
+            "active_actor_id": "",
+            "player_turn_used": false
+          },
+          "ui": {
+            "player_can_act": true,
+            "campaign_started": true,
+            "campaign_can_start": false,
+            "living_enemies": [],
+            "scene_ids": [
+              "frontier_gate",
+              "old_milestone"
+            ],
+            "affordances": [
+              {
+                "id": "milestone",
+                "label": "Examine the Weathered milestone (already searched)",
+                "type": "investigate",
+                "prompt": "I examine the Weathered milestone.",
+                "target_scene_id": "",
+                "target_id": "milestone",
+                "target_location_id": ""
+              },
+              {
+                "id": "prints",
+                "label": "Examine the Mud prints (already searched)",
+                "type": "investigate",
+                "prompt": "I examine the Mud prints.",
+                "target_scene_id": "",
+                "target_id": "prints",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_a_weathered_stone_milestone_leans_bes",
+                "label": "Examine A weathered stone milestone leans bes",
+                "type": "investigate",
+                "prompt": "I examine A weathered stone milestone leans bes.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_the_mud_around_the_marker_is_churned",
+                "label": "Examine The mud around the marker is churned",
+                "type": "investigate",
+                "prompt": "I examine The mud around the marker is churned.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              },
+              {
+                "id": "examine_the_track_continues_a_short_way_past",
+                "label": "Examine The track continues a short way past",
+                "type": "investigate",
+                "prompt": "I examine The track continues a short way past.",
+                "target_scene_id": "",
+                "target_id": "",
+                "target_location_id": ""
+              }
+            ],
+            "clues": {
+              "known": [
+                {
+                  "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                  "presentation": "explicit"
+                },
+                {
+                  "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                  "presentation": "explicit"
+                }
+              ],
+              "implicit": [],
+              "explicit": [
+                {
+                  "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                  "presentation": "explicit"
+                },
+                {
+                  "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                  "presentation": "explicit"
+                }
+              ],
+              "actionable": []
+            },
+            "scene_npcs": [],
+            "interaction": {
+              "active_interaction_target_id": "",
+              "active_interaction_kind": "investigate",
+              "interaction_mode": "activity"
+            }
+          },
+          "journal": {
+            "known_facts": [
+              "The northwest mud track reaches an old milestone beyond the gate.",
+              "The mud around the marker is churned; any trail beyond it is unclear."
+            ],
+            "discovered_clues": [
+              "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+            ],
+            "unresolved_leads": [
+              "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+              "The missing patrol was last seen taking the northwest mud track past the crates."
+            ],
+            "status_effects": [],
+            "suspicion_flags": [],
+            "active_leads": [
+              {
+                "id": "milestone_mud_prints",
+                "title": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "summary": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                "next_step": "",
+                "last_touched_turn": 6
+              },
+              {
+                "id": "notice_patrol_route",
+                "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "next_step": "",
+                "last_touched_turn": 2
+              }
+            ],
+            "pursued_leads": [],
+            "stale_leads": [],
+            "resolved_leads": [],
+            "obsolete_leads": [],
+            "lead_counts": {
+              "active": 2,
+              "pursued": 0,
+              "stale": 0,
+              "resolved": 0,
+              "obsolete": 0
+            }
+          },
+          "player_name": "Galinor",
+          "campaign_run_id": "f5b11c7287d3af4ce78be685",
+          "save_summary": {
+            "saved_at": "2026-11-06T23:14:22.030012Z",
+            "save_data_exists": true,
+            "active_scene_id": "old_milestone",
+            "discovered_clues": 2,
+            "chat_messages": 10
+          },
+          "snapshots": [
+            {
+              "id": "2026-11-06T23-11-39_f192f32d",
+              "created_at": "2026-11-06T23:11:39.761752Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T23-10-05_1f796970",
+              "created_at": "2026-11-06T23:10:05.574441Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-59-47_44db3c15",
+              "created_at": "2026-11-06T22:59:47.619239Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T22-58-15_903b8286",
+              "created_at": "2026-11-06T22:58:15.349042Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-49-38_6a1b495b",
+              "created_at": "2026-11-06T22:49:38.671288Z",
+              "label": "PR72 HTTP report"
+            },
+            {
+              "id": "2026-11-06T22-47-58_a640d241",
+              "created_at": "2026-11-06T22:47:58.078981Z",
+              "label": "PR72 HTTP survey"
+            },
+            {
+              "id": "2026-11-06T22-42-17_51d9b95b",
+              "created_at": "2026-11-06T22:42:17.061214Z",
+              "label": "PR72 HTTP survey"
+            }
+          ],
+          "world": {},
+          "ok": true,
+          "gm_output": {
+            "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          },
+          "resolution": {}
+        }
+      }
+    ],
+    "provider_requests": 0,
+    "provider_tokens": 0,
+    "browser_visible_ms": null,
+    "notes": "Two samples per entry path, same saved scene and target; instrumentation and concurrent verification add overhead.",
+    "natural_ms": {
+      "mean": 511.5063000121154,
+      "median": 511.5063000121154,
+      "maximum": 593.7902999576181
+    },
+    "structured_ms": {
+      "mean": 683.2374499645084,
+      "median": 683.2374499645084,
+      "maximum": 741.1402999423444
+    }
+  },
+  "regression_assessment": {
+    "focused": {
+      "same_failed_nodeids": [
+        "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+        "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+        "tests.test_pr_play_71_lifecycle::test_duplicate_start",
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[no_optin]",
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[off]",
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[other_identity]",
+        "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[report]",
+        "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[survey]",
+        "tests.test_pr_play_71_persistence_recovery::test_new_campaign_failure_restores_prior_runtime",
+        "tests.test_pr_play_71v_verification::test_chat_permanent_rename_does_not_publish_success",
+        "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[1]",
+        "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[3]",
+        "tests.test_pr_play_71v_verification::test_duplicate_request_does_not_duplicate_branch",
+        "tests.test_pr_play_71v_verification::test_mandatory_disclosure_survives_rejected_narration",
+        "tests.test_pr_play_71v_verification::test_new_campaign_identifier_failure_changes_nothing",
+        "tests.test_pr_play_71v_verification::test_new_campaign_rollback_on_each_runtime_file",
+        "tests.test_pr_play_71v_verification::test_opening_persistence_failure_does_not_publish_start",
+        "tests.test_pr_play_71v_verification::test_player_safe_projection_across_lifecycle",
+        "tests.test_pr_play_71v_verification::test_transcript_and_authoritative_isolation",
+        "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution"
+      ],
+      "new_failed_nodeids": [
+        "tests.test_pr_play_54_consequential_validation::test_corpus_validation_stays_fast_and_local"
+      ],
+      "prior_not_seen": [],
+      "retained_messages": {
+        "tests.test_pr_play_54_consequential_validation::test_corpus_validation_stays_fast_and_local": {
+          "current": "assert 2.452388699981384 < 2.0",
+          "prior": null
+        },
+        "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution": {
+          "current": "assert False",
+          "prior": "assert False"
+        },
+        "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues": {
+          "current": "assert set()\n +  where set() = get_all_known_clue_ids({})",
+          "prior": "assert set()\n +  where set() = get_all_known_clue_ids({})"
+        },
+        "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues": {
+          "current": "assert set()\n +  where set() = get_all_known_clue_ids({})",
+          "prior": "assert set()\n +  where set() = get_all_known_clue_ids({})"
+        },
+        "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[survey]": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[report]": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[off]": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[no_optin]": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[other_identity]": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71_lifecycle::test_duplicate_start": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71_persistence_recovery::test_new_campaign_failure_restores_prior_runtime": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71v_verification::test_new_campaign_rollback_on_each_runtime_file": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71v_verification::test_new_campaign_identifier_failure_changes_nothing": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71v_verification::test_opening_persistence_failure_does_not_publish_start": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[1]": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[3]": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71v_verification::test_chat_permanent_rename_does_not_publish_success": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71v_verification::test_transcript_and_authoritative_isolation": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71v_verification::test_player_safe_projection_across_lifecycle": {
+          "current": "assert 'Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.' in '{\"ok\":true,\"ui_mode\":\"player\",\"entries\":[{\"timestamp\":\"2026-11-06T22:57:23.808398Z\",\"player_input\":\"I examine the not...can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"}}]}'\n +  where '{\"ok\":true,\"ui_mode\":\"player\",\"entries\":[{\"timestamp\":\"2026-11-06T22:57:23.808398Z\",\"player_input\":\"I examine the not...can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"}}]}' = <Response [200 OK]>.text\n +    where <Response [200 OK]> = get('/api/log')\n +      where get = <starlette.testclient.TestClient object at 0x0000023494F63D70>.get",
+          "prior": "assert 'Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.' in '{\"ok\":true,\"ui_mode\":\"player\",\"entries\":[{\"timestamp\":\"2026-11-06T04:27:50.825786Z\",\"player_input\":\"I examine the not...can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"}}]}'\n +  where '{\"ok\":true,\"ui_mode\":\"player\",\"entries\":[{\"timestamp\":\"2026-11-06T04:27:50.825786Z\",\"player_input\":\"I examine the not...can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"}}]}' = <Response [200 OK]>.text\n +    where <Response [200 OK]> = get('/api/log')\n +      where get = <starlette.testclient.TestClient object at 0x000001E613AD2450>.get"
+        },
+        "tests.test_pr_play_71v_verification::test_mandatory_disclosure_survives_rejected_narration": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        },
+        "tests.test_pr_play_71v_verification::test_duplicate_request_does_not_duplicate_branch": {
+          "current": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code",
+          "prior": "AssertionError: {\"ok\":false,\"status\":\"blocked\",\"error\":\"Unable to complete this request. Refresh your session and try again.\"}\nassert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+        }
+      }
+    },
+    "boundary": {
+      "same_failed_nodeids": [
+        "tests.test_pr_play_37_opening_recovery::test_http_composer_failure_does_not_commit",
+        "tests.test_pr_play_37_opening_recovery::test_http_invalid_declaration_discards_provider_text",
+        "tests.test_start_campaign_api::test_failed_start_campaign_does_not_mark_started",
+        "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+        "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+        "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text"
+      ],
+      "new_failed_nodeids": [],
+      "prior_not_seen": [],
+      "retained_messages": {
+        "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started": {
+          "current": "AssertionError: assert None == 'scene_opening'\n +  where None = <built-in method get of dict object at 0x00000294C0B0ACC0>('kind')\n +    where <built-in method get of dict object at 0x00000294C0B0ACC0> = {}.get\n +      where {} = <built-in method get of dict object at 0x00000294BD587C00>('resolution', {})\n +        where <built-in method get of dict object at 0x00000294BD587C00> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...he brittle discipline of men who expect trouble, while old banners rot above the walls.', 'mode': 'social', ...}}, ...}.get",
+          "prior": "AssertionError: assert None == 'scene_opening'\n +  where None = <built-in method get of dict object at 0x00000276C5DB3DC0>('kind')\n +    where <built-in method get of dict object at 0x00000276C5DB3DC0> = {}.get\n +      where {} = <built-in method get of dict object at 0x00000276C8EA4400>('resolution', {})\n +        where <built-in method get of dict object at 0x00000276C8EA4400> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...he brittle discipline of men who expect trouble, while old banners rot above the walls.', 'mode': 'social', ...}}, ...}.get"
+        },
+        "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text": {
+          "current": "AssertionError: assert 781 > 800\n +  where 781 = <built-in method get of dict object at 0x00000294C0A7CB80>('post_final_emission_gate_text_len', 0)\n +    where <built-in method get of dict object at 0x00000294C0A7CB80> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get",
+          "prior": "AssertionError: assert 781 > 800\n +  where 781 = <built-in method get of dict object at 0x00000276C92CBF80>('post_final_emission_gate_text_len', 0)\n +    where <built-in method get of dict object at 0x00000276C92CBF80> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get"
+        },
+        "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening": {
+          "current": "assert \"You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.\" in \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"",
+          "prior": "assert \"You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.\" in \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\""
+        },
+        "tests.test_start_campaign_api::test_failed_start_campaign_does_not_mark_started": {
+          "current": "Failed: DID NOT RAISE RuntimeError",
+          "prior": "Failed: DID NOT RAISE RuntimeError"
+        },
+        "tests.test_pr_play_37_opening_recovery::test_http_invalid_declaration_discards_provider_text": {
+          "current": "AssertionError: assert None == 'safe_nonresolution'\n +  where None = <built-in method get of dict object at 0x00000294C0A17E40>('opening_failure_reason')\n +    where <built-in method get of dict object at 0x00000294C0A17E40> = {'ok': False, 'campaign_started': False, 'gameplay_committed': False, 'status': 'opening_failed', ...}.get",
+          "prior": "AssertionError: assert None == 'safe_nonresolution'\n +  where None = <built-in method get of dict object at 0x00000276C9316140>('opening_failure_reason')\n +    where <built-in method get of dict object at 0x00000276C9316140> = {'ok': False, 'campaign_started': False, 'gameplay_committed': False, 'status': 'opening_failed', ...}.get"
+        },
+        "tests.test_pr_play_37_opening_recovery::test_http_composer_failure_does_not_commit": {
+          "current": "AssertionError: assert None == 'safe_nonresolution'\n +  where None = <built-in method get of dict object at 0x00000294C084EB80>('opening_failure_reason')\n +    where <built-in method get of dict object at 0x00000294C084EB80> = {'ok': False, 'campaign_started': False, 'gameplay_committed': False, 'status': 'opening_failed', ...}.get",
+          "prior": "AssertionError: assert None == 'safe_nonresolution'\n +  where None = <built-in method get of dict object at 0x00000276C612E080>('opening_failure_reason')\n +    where <built-in method get of dict object at 0x00000276C612E080> = {'ok': False, 'campaign_started': False, 'gameplay_committed': False, 'status': 'opening_failed', ...}.get"
+        }
+      }
+    },
+    "broader": {
+      "same_failed_nodeids": [
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]"
+      ],
+      "new_failed_nodeids": [],
+      "prior_not_seen": [],
+      "retained_messages": {
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]": {
+          "current": "KeyError: 'hard_validation_attempt_1'",
+          "prior": "KeyError: 'hard_validation_attempt_1'"
+        },
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]": {
+          "current": "KeyError: 'hard_validation_attempt_1'",
+          "prior": "KeyError: 'hard_validation_attempt_1'"
+        },
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]": {
+          "current": "KeyError: 'hard_validation_attempt_1'",
+          "prior": "KeyError: 'hard_validation_attempt_1'"
+        },
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]": {
+          "current": "KeyError: 'hard_validation_attempt_1'",
+          "prior": "KeyError: 'hard_validation_attempt_1'"
+        },
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]": {
+          "current": "KeyError: 'hard_validation_attempt_1'",
+          "prior": "KeyError: 'hard_validation_attempt_1'"
+        },
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]": {
+          "current": "KeyError: 'hard_validation_attempt_1'",
+          "prior": "KeyError: 'hard_validation_attempt_1'"
+        },
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]": {
+          "current": "KeyError: 'hard_validation_attempt_1'",
+          "prior": "KeyError: 'hard_validation_attempt_1'"
+        },
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]": {
+          "current": "KeyError: 'hard_validation_attempt_1'",
+          "prior": "KeyError: 'hard_validation_attempt_1'"
+        },
+        "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]": {
+          "current": "KeyError: 'hard_validation_attempt_1'",
+          "prior": "KeyError: 'hard_validation_attempt_1'"
+        }
+      }
+    },
+    "scope": "Focused combined suite began before the final two routing repairs. Boundary, broader, clean lifecycle and post-repair owner tests run in separate fresh processes. This is not a full-suite claim.",
+    "post_repair_failed_nodeids": [
+      "tests.test_pr_ef_gm_authority::test_production_ten_turn_sequence",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[confirm_single_candidate]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[direct_ask_conflicting_owner]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[distinguishing_fact]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[explicit_named_ask]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[explicit_role_ask]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[gm_about_npc]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[incidental_glance]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[npc_followup]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[save_load_pending]",
+      "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[unique_pronoun]",
+      "tests.test_pr_ef_r4_authorization::test_third_person_question_is_not_an_active_npc_continuation"
+    ],
+    "owner_comparison": {
+      "new_failed_nodeids": [],
+      "same_failed_nodeids": [
+        "tests.test_pr_ef_gm_authority::test_production_ten_turn_sequence",
+        "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[confirm_single_candidate]",
+        "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[direct_ask_conflicting_owner]",
+        "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[distinguishing_fact]",
+        "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[explicit_named_ask]",
+        "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[explicit_role_ask]",
+        "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[gm_about_npc]",
+        "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[incidental_glance]",
+        "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[npc_followup]",
+        "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[save_load_pending]",
+        "tests.test_pr_ef_r4_authorization::test_frozen_authorization_holdout[unique_pronoun]",
+        "tests.test_pr_ef_r4_authorization::test_third_person_question_is_not_an_active_npc_continuation"
+      ],
+      "limits": "Targeted pre-repair owner loaded in memory; other current files remain current. See entry_owner_provenance.json."
+    },
+    "clean_lifecycle_failed_nodeids": [],
+    "timing_classification": "Newly observed combined-run timing assertion; not called historical. See isolated final rerun for reproducibility. Passed in the fresh post-repair process."
+  },
+  "latency_ms": {
+    "mean": 1623.9246027705829,
+    "median": 1338.2852000067942,
+    "maximum": 4556.402100017294
+  },
+  "natural_chat_ms": {
+    "mean": 1722.3823899927083,
+    "median": 1321.3822499965318,
+    "maximum": 3841.715899994597
+  },
+  "structured_choice_ms": {
+    "mean": 1743.7603499856777,
+    "median": 1743.7603499856777,
+    "maximum": 2284.6143000060692
+  },
+  "stages_ms": {
+    "interpretation_ms": {
+      "mean": 15.049,
+      "median": 0.6285000000000001,
+      "maximum": 81.308
+    },
+    "resolver_ms": {
+      "mean": 163.27992857142857,
+      "median": 100.34,
+      "maximum": 508.78
+    },
+    "atomic_write_ms": {
+      "mean": 162.68833333333333,
+      "median": 117.89750000000001,
+      "maximum": 897.678
+    },
+    "publication_ms": {
+      "mean": 0.45056250000000003,
+      "median": 0.053,
+      "maximum": 2.563
+    }
+  },
+  "latency_limits": "Natural/structured lifecycle aggregates are different actions; use latency_comparison.json for the same investigation if present. Function durations overlap total request time. No browser rendering or exact interstage intervals measured.",
+  "complete_payload_exposures": 0,
+  "source_freeze_preserved": true,
+  "next_step": "PR-PLAY-72 verification closure: complete both normal typed-browser campaign lifecycles against this frozen implementation."
+}

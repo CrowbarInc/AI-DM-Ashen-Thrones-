@@ -1,0 +1,128 @@
+[
+  {
+    "test_id": "tests.test_clue_idempotence::test_apply_socially_revealed_leads_twice_preserves_canonical_state",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "assert 0 == 1\n +  where 0 = len([])",
+    "current_message": "assert 0 == 1\n +  where 0 = len([])"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_social_lead_lands_discovered_clue_id_and_event",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "AssertionError: assert ('east_lanes' in [] or 'East road is dangerous.' in [])",
+    "current_message": "AssertionError: assert ('east_lanes' in [] or 'East road is dangerous.' in [])"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_social_lead_idempotent_no_duplicate_event",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "assert 0 == 1\n +  where 0 = len([])",
+    "current_message": "assert 0 == 1\n +  where 0 = len([])"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_social_topic_without_clue_id_gets_stable_synthetic_id",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "AssertionError: assert 'social_gate_runner_t1' in set()\n +  where set() = get_all_known_clue_ids({})",
+    "current_message": "AssertionError: assert 'social_gate_runner_t1' in set()\n +  where set() = get_all_known_clue_ids({})"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_social_lead_with_leads_to_scene_adds_pending_and_actionable",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "assert False\n +  where False = any(<generator object test_social_lead_with_leads_to_scene_adds_pending_and_actionable.<locals>.<genexpr> at 0x000002041EA55620>)",
+    "current_message": "assert False\n +  where False = any(<generator object test_social_lead_with_leads_to_scene_adds_pending_and_actionable.<locals>.<genexpr> at 0x0000020B580DEEA0>)"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_topic_text_old_milestone_creates_extracted_lead",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in set()\n +  where set() = get_all_known_clue_ids({})",
+    "current_message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in set()\n +  where set() = get_all_known_clue_ids({})"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_topic_text_guards_and_town_crier_create_leads",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "AssertionError: assert 'lead_frontier_gate_guards' in set()\n +  where set() = get_all_known_clue_ids({})",
+    "current_message": "AssertionError: assert 'lead_frontier_gate_guards' in set()\n +  where set() = get_all_known_clue_ids({})"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_structured_fact_scene_id_without_regex_creates_lead",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in set()\n +  where set() = get_all_known_clue_ids({})",
+    "current_message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in set()\n +  where set() = get_all_known_clue_ids({})"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_duplicate_social_resolution_does_not_duplicate_extracted_pending",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "assert 0 == 1\n +  where 0 = len([])",
+    "current_message": "assert 0 == 1\n +  where 0 = len([])"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_extracted_social_lead_creates_authoritative_registry_row",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "assert None is not None",
+    "current_message": "assert None is not None"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_lead_landing_metadata_reports_authoritative_outcomes",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "KeyError: 'lead_landing'",
+    "current_message": "KeyError: 'lead_landing'"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_clue_discovery_then_social_extract_updates_same_authoritative_row",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in ['gate_hint']",
+    "current_message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in ['gate_hint']"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_apply_socially_revealed_leads_reentrancy_one_authoritative_one_pending_idempotent_events",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "AssertionError: assert None is not None\n +  where None = get_lead({'scene_runtime': {}, 'clue_knowledge': {}, 'turn_counter': 1, 'lead_registry': {}}, 'lead_frontier_gate_old_milestone')",
+    "current_message": "AssertionError: assert None is not None\n +  where None = get_lead({'scene_runtime': {}, 'clue_knowledge': {}, 'turn_counter': 1, 'lead_registry': {}}, 'lead_frontier_gate_old_milestone')"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_ensure_minimum_actionable_skips_after_normal_social_landing_no_extra_rows",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "AssertionError: assert True is False\n +  where True = <built-in method get of dict object at 0x000002041B7559C0>('minimum_actionable_lead_enforced')\n +    where <built-in method get of dict object at 0x000002041B7559C0> = {'minimum_actionable_lead_enforced': True, 'enforced_lead_id': 'to_milestone', 'enforced_lead_source': 'extracted_social'}.get",
+    "current_message": "AssertionError: assert True is False\n +  where True = <built-in method get of dict object at 0x0000020B58120A80>('minimum_actionable_lead_enforced')\n +    where <built-in method get of dict object at 0x0000020B58120A80> = {'minimum_actionable_lead_enforced': True, 'enforced_lead_id': 'to_milestone', 'enforced_lead_source': 'extracted_social'}.get"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_first_pass_lead_landing_metadata_shape_actionable_matches_pending",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "KeyError: 'lead_landing'",
+    "current_message": "KeyError: 'lead_landing'"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_canonical_extracted_sibling_collapses_evidence_uses_one_extracted_trigger_cid",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "KeyError: 'lead_landing'",
+    "current_message": "KeyError: 'lead_landing'"
+  },
+  {
+    "test_id": "tests.test_social_lead_landing::test_social_extract_reinforced_second_disclosure_one_registry_row",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "assert None is not None",
+    "current_message": "assert None is not None"
+  },
+  {
+    "test_id": "tests.test_social_question_relevance_answer_selection::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance",
+    "classification": "preexisting_failure",
+    "relevance": "related_unresolved_failure",
+    "baseline_message": "AssertionError: assert 'authorized_host_speech' == 'initial_generation'\n  \n  - initial_generation\n  + authorized_host_speech",
+    "current_message": "AssertionError: assert 'authorized_host_speech' == 'initial_generation'\n  \n  - initial_generation\n  + authorized_host_speech"
+  }
+]

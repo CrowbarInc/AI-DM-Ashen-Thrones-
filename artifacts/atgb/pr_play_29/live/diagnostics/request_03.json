@@ -1,0 +1,22 @@
+{
+  "sequence": 3,
+  "attempt_id": "2d1b27f60d8741a4a72bdeb5638b6461",
+  "purpose": "expression",
+  "owner": "expressive_dialogue.request_expression",
+  "request": {
+    "model": "gpt-4.1-mini",
+    "input": [
+      {
+        "role": "system",
+        "content": "You write one sentence spoken by Tavern Runner to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only."
+      },
+      {
+        "role": "user",
+        "content": "Player question: I approach the tavern runner and ask what they're offering.\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- I offer hot stew and rumors.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger. For your own offerings, use I offer, I can offer you, I serve, or I've got. You may start with Well or end with to share, and reorder whole items. Use for sale only if the authority explicitly says sell. Keep every item description."
+      }
+    ],
+    "temperature": 0.2,
+    "max_output_tokens": 80
+  },
+  "label": "INTERNAL DIAGNOSTIC EVIDENCE"
+}

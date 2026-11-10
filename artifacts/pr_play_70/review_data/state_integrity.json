@@ -1,0 +1,30 @@
+{
+  "branches": {
+    "survey": {
+      "final_flags": {
+        "faction_house_verevin_agenda_advanced": true,
+        "faction_ash_cowl_agenda_advanced": true,
+        "faction_ordo_pyric_agenda_advanced": true,
+        "patrol_survey": true,
+        "patrol_survey_recorded": true
+      },
+      "persisted": true,
+      "exclusive": true,
+      "continuation": true
+    },
+    "report": {
+      "final_flags": {
+        "faction_house_verevin_agenda_advanced": true,
+        "faction_ash_cowl_agenda_advanced": true,
+        "faction_ordo_pyric_agenda_advanced": true,
+        "patrol_report": true,
+        "patrol_guards_warned": true
+      },
+      "persisted": true,
+      "exclusive": true,
+      "continuation": true
+    }
+  },
+  "experimental_isolation": "disabled and wrong-session tests passed",
+  "comparison": "World branch flags checked after every duplicate/incompatible request and snapshot restore; raw narration controls not rerun for this provider-free path."
+}

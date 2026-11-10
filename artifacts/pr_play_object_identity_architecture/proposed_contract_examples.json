@@ -1,0 +1,66 @@
+{
+  "status": "illustrative design data, not executable scaffolding",
+  "instance": {
+    "id": "legacy_shirt_id",
+    "name": "Travel shirt",
+    "quantity": 1,
+    "usable": false,
+    "instance_id": "<core UUID>",
+    "revision": 0,
+    "provenance": {
+      "campaign_id": "<campaign>",
+      "operation_id": "<explicit migration>",
+      "source_binding": "character.inventory singleton"
+    }
+  },
+  "proposal": {
+    "request_id": "<existing client_request_id or server-issued ID>",
+    "payload_digest": "<canonical semantic digest>",
+    "target": {
+      "campaign_id": "<campaign>",
+      "instance_id": "<UUID>",
+      "part": "left_sleeve"
+    },
+    "expected_revision": 0,
+    "operation": "add_marking",
+    "arguments": {
+      "text": "<exact disclosed text>",
+      "medium_ref": "<established evidence>"
+    },
+    "preconditions": [
+      "positive access",
+      "writable part",
+      "compatible accessible material",
+      "source disclosure",
+      "bound adapter decision"
+    ],
+    "proposed_delta": "engine generated",
+    "validation": "engine result"
+  },
+  "applied_receipt": {
+    "envelope": "ExplorationEngineResult",
+    "kind": "custom",
+    "success": true,
+    "state_changes": {
+      "object_modifications": [
+        {
+          "operation_id": "<ID>",
+          "instance_id": "<UUID>",
+          "from_revision": 0,
+          "to_revision": 1,
+          "marking_id": "<UUID>",
+          "delta_digest": "<digest>"
+        }
+      ]
+    },
+    "metadata": {
+      "object_action": {
+        "status": "completed",
+        "application": "applied",
+        "narrative_assertions": [
+          "<disclosure-approved result>"
+        ]
+      }
+    }
+  }
+}

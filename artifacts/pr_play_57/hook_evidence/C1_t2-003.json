@@ -1,0 +1,206 @@
+{
+  "enabled": true,
+  "player_text": "I examine the notice board.",
+  "provider_requests": 1,
+  "state_write_attempted": false,
+  "projection_build_ms": 0.301,
+  "hook_input": {
+    "eligible": true,
+    "player_text": "I examine the notice board.",
+    "target_id": "notice_board",
+    "resolution": {
+      "kind": "already_searched",
+      "success": false,
+      "action_id": "notice_board",
+      "interactable_id": "notice_board",
+      "discovered_clues": [],
+      "clue_text": "",
+      "state_changes": {
+        "already_searched": true
+      }
+    },
+    "narration_payload": {
+      "scene": {
+        "public": {
+          "location": "Cinderwatch Gate District",
+          "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ]
+        },
+        "discovered_clues": [
+          {
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    }
+  },
+  "eligible": true,
+  "mode": "quarantined_integrated",
+  "authorized_outcome_contract": {
+    "player_action": "I examine the notice board.",
+    "resolved_outcome": {
+      "status": "known",
+      "success": false
+    },
+    "must_communicate": [
+      {
+        "id": "outcome:0",
+        "source": "engine_status",
+        "status": "known",
+        "text": "The examination adds nothing new to what you already know."
+      },
+      {
+        "id": "outcome:1",
+        "source": "player_knowledge",
+        "status": "previously_known",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "may_reference": {
+      "visible_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "continuity": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ]
+    },
+    "authorized_consequences": [],
+    "must_not_establish": [
+      "Only communicate completed engine outcomes; never establish additional facts or effects.",
+      "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+      "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+    ]
+  },
+  "anchors": [
+    {
+      "order": 0,
+      "source": "engine_status",
+      "status": "known",
+      "text": "The examination adds nothing new to what you already know."
+    },
+    {
+      "order": 1,
+      "source": "player_knowledge",
+      "status": "previously_known",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+    }
+  ],
+  "assembled": "You take a closer look at the notice board, but it offers no new information beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The familiar postings of taxes, curfew rules, and warnings remain unchanged, providing no fresh clues.",
+  "raw_provider_text": "You take a closer look at the notice board, but it offers no new information beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The familiar postings of taxes, curfew rules, and warnings remain unchanged, providing no fresh clues.",
+  "used_fallback": false,
+  "generator_calls": 1,
+  "validation_ms": 23.445,
+  "validation": {
+    "decision": "PASS",
+    "semantic": {
+      "decision": "PASS",
+      "reasons": [],
+      "claims": [],
+      "provider_requests": 0,
+      "coverage": "deterministic_frames_not_semantic_proof"
+    },
+    "legacy": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [
+        {
+          "text": "You take a closer look at the notice board, but it offers no new information beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates.",
+          "kind": "incidental_fact",
+          "epistemic_status": "world_truth",
+          "grounded": false,
+          "consequential": false,
+          "family": "incidental"
+        }
+      ],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      },
+      "consequential_validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      }
+    },
+    "coverage": {
+      "decision": "PASS",
+      "facts": [
+        {
+          "id": "outcome:0",
+          "source": "engine_status",
+          "status": "known",
+          "text": "The examination adds nothing new to what you already know.",
+          "decision": "PASS",
+          "classification": "covered",
+          "evidence": "You take a closer look at the notice board, but it offers no new information beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates.",
+          "content_overlap": 0.571
+        },
+        {
+          "id": "outcome:1",
+          "source": "player_knowledge",
+          "status": "previously_known",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "decision": "PASS",
+          "classification": "covered",
+          "evidence": "You take a closer look at the notice board, but it offers no new information beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates.",
+          "content_overlap": 1.0
+        }
+      ],
+      "scope": "provisional_conservative_coverage_not_semantic_proof"
+    }
+  },
+  "review_required": true,
+  "live_provider": {
+    "enabled": true,
+    "provider": "openai",
+    "adapter": "game.expressive_dialogue.request_expression",
+    "purpose": "expression",
+    "configured_output_cap": 80,
+    "experiment_output_token_ceiling": 700,
+    "model": "gpt-4.1-mini-2025-04-14",
+    "request_started_at": "2026-11-04T00:27:57.042321+00:00",
+    "request_completed_at": "2026-11-04T00:27:59.633800+00:00",
+    "provider_latency_ms": 2569.432,
+    "outer_latency_ms": 2591.858,
+    "input_tokens": 449,
+    "output_tokens": 59,
+    "total_tokens": 508,
+    "retry_count": 0,
+    "sdk_max_retries": 0,
+    "timeout": false,
+    "provider_error": null,
+    "sent": true,
+    "estimated_cost": null,
+    "estimated_cost_reason": "no configured price table",
+    "sanitized_provider_user_message": "{\"player_action\": \"I examine the notice board.\", \"resolved_outcome\": {\"status\": \"known\", \"success\": false}, \"must_communicate\": [{\"id\": \"outcome:0\", \"source\": \"engine_status\", \"status\": \"known\", \"text\": \"The examination adds nothing new to what you already know.\"}, {\"id\": \"outcome:1\", \"source\": \"player_knowledge\", \"status\": \"previously_known\", \"text\": \"The missing patrol was last seen taking the northwest mud track past the crates.\"}], \"may_reference\": {\"visible_scene\": [\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"Ash Compact census delays have tightened the eastern caravan choke point.\"], \"continuity\": [\"The missing patrol was last seen taking the northwest mud track past the crates.\"]}, \"authorized_consequences\": [], \"must_not_establish\": [\"Only communicate completed engine outcomes; never establish additional facts or effects.\", \"Preserve failure, uncertainty and previously-known status; no misleading hints.\", \"No inventory, condition, NPC, quest, travel or other persistent changes are authorized.\"]}"
+  },
+  "promoted": false,
+  "diagnostic": "PASS",
+  "total_integrated_ms": 2616.406,
+  "hook_work_ms": 3164.293,
+  "evidence_write": "ok",
+  "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_57\\hook_evidence\\C1_t2-003.json",
+  "serialization_ms": 0.342,
+  "evidence_write_ms": 5.162,
+  "total_hook_ms": 3182.347
+}

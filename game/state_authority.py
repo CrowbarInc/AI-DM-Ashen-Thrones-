@@ -150,10 +150,12 @@ _REGISTRY: Final[Dict[str, StateDomainSpec]] = {
         meaning=(
             "Persistent campaign/world truth: settlements, factions, NPC records, projects, "
             "``world['world_state']`` flags/counters/clocks, clues ledger, and other world.json "
-            "fields mutated by the engine after authoritative resolution. ``game.storage`` participates "
+            "fields mutated by the engine after authoritative resolution; character-held object "
+            "identity is a narrow character.json facet owned by game.object_instances. "
+            "``game.storage`` participates "
             "via world.json load/save and read-time shape normalization only—not semantic policy."
         ),
-        runtime_owner_modules=("game.world", "game.storage"),
+        runtime_owner_modules=("game.world", "game.storage", "game.object_instances"),
         reads_allowed_from=frozenset({WORLD_STATE, SCENE_STATE}),
         forbidden_write_targets=frozenset(
             {SCENE_STATE, INTERACTION_STATE, PLAYER_VISIBLE_STATE, HIDDEN_STATE}
@@ -319,6 +321,12 @@ def assert_owner_can_mutate_domain(
     """Raise ``StateAuthorityError`` if this owner may not mutate the domain."""
     owner = _normalize_owner(owner_module)
     dom = _normalize_domain(domain)
+    # Object identity is a narrow world-state facet hosted in character.json.
+    # Do not grant this owner blanket world/character mechanics authority.
+    if owner == 'game.object_instances':
+        if dom == WORLD_STATE and operation == 'assign_inventory_identity':
+            return
+        raise StateAuthorityError('Object instance owner may only assign inventory identity')
     if owner in _NON_AUTHORITATIVE_MUTATION_OWNERS:
         op = f" (operation={operation!r})" if operation else ""
         raise StateAuthorityError(

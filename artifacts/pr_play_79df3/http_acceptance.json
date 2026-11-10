@@ -1,0 +1,50 @@
+{
+  "trace": [
+    {
+      "step": "gameplay",
+      "status": 200,
+      "visible": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "pointer": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "events": 1,
+      "requests": 0
+    },
+    {
+      "step": "admission_refusal",
+      "status": 200,
+      "visible": "I couldn't interpret that just now, so no gameplay action was taken.",
+      "pointer": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "events": 1,
+      "turn": 5,
+      "requests": 0,
+      "tokens": 0,
+      "world_unchanged": true,
+      "log_class": "operational_refusal"
+    },
+    {
+      "step": "reload",
+      "status": 200,
+      "pointer": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "turn": 5
+    },
+    {
+      "step": "continuation",
+      "status": 200,
+      "visible": "The notice board lists taxes, curfew rules, and a warning about a missing patrol sharpens when you look again, and ash compact census delays have tightened the eastern caravan choke point still competes for notice.",
+      "pointer": "The notice board lists taxes, curfew rules, and a warning about a missing patrol sharpens when you look again, and ash compact census delays have tightened the eastern caravan choke point still competes for notice.",
+      "events": 2,
+      "event_texts": [
+        "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol sharpens when you look again, and ash compact census delays have tightened the eastern caravan choke point still competes for notice."
+      ],
+      "requests": 1
+    }
+  ],
+  "gameplay_visible": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+  "gameplay_is_publication": true,
+  "refusal_visible": true,
+  "refusal_added_no_event": true,
+  "pointer_held_through_refusal_and_reload": true,
+  "turn_held": true,
+  "continuation_advances": true,
+  "requests_sent": 1
+}

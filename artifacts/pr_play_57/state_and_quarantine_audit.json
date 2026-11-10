@@ -1,0 +1,344 @@
+{
+  "all_checks_passed": true,
+  "envelope_integrity": [
+    {
+      "id": "A1",
+      "path": "combat.json",
+      "valid": true
+    },
+    {
+      "id": "A1",
+      "path": "session.json",
+      "valid": true
+    },
+    {
+      "id": "A2",
+      "path": "combat.json",
+      "valid": true
+    },
+    {
+      "id": "A2",
+      "path": "session.json",
+      "valid": true
+    },
+    {
+      "id": "B1",
+      "path": "combat.json",
+      "valid": true
+    },
+    {
+      "id": "B1",
+      "path": "session.json",
+      "valid": true
+    },
+    {
+      "id": "B2",
+      "path": "combat.json",
+      "valid": true
+    },
+    {
+      "id": "B2",
+      "path": "session.json",
+      "valid": true
+    },
+    {
+      "id": "C1",
+      "path": "combat.json",
+      "valid": true
+    },
+    {
+      "id": "C1",
+      "path": "session.json",
+      "valid": true
+    },
+    {
+      "id": "C2",
+      "path": "combat.json",
+      "valid": true
+    },
+    {
+      "id": "C2",
+      "path": "session.json",
+      "valid": true
+    },
+    {
+      "id": "D1",
+      "path": "combat.json",
+      "valid": true
+    },
+    {
+      "id": "D1",
+      "path": "session.json",
+      "valid": true
+    },
+    {
+      "id": "D2",
+      "path": "combat.json",
+      "valid": true
+    },
+    {
+      "id": "D2",
+      "path": "session.json",
+      "valid": true
+    }
+  ],
+  "pairs": [
+    {
+      "scenario": "A1",
+      "turn_count_match": true,
+      "player_facing_identical": [
+        true
+      ],
+      "mechanical_identical": [
+        true
+      ],
+      "authority_slice_differences": [],
+      "narration_persisted": [],
+      "context_leaks": [],
+      "provider_creates": 1,
+      "baseline_provider_creates": 0,
+      "full_persisted_differences": [
+        "$.combat.json.saved_at: values differ",
+        "$.session.json.integrity.payload_sha256: values differ",
+        "$.session.json.payload.debug_traces[14].performance.elapsed_ms: values differ",
+        "$.session.json.payload.debug_traces[14].performance.interpretation_ms: values differ",
+        "$.session.json.payload.debug_traces[14].performance.resolution_ms: values differ",
+        "$.session.json.payload.debug_traces[14].performance.validation_ms: values differ",
+        "$.session.json.payload.last_saved_at: values differ",
+        "$.session.json.saved_at: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.performance.elapsed_ms: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.performance.interpretation_ms: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.performance.resolution_ms: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.performance.validation_ms: values differ"
+      ],
+      "hook_state_differences": [],
+      "raw_candidate_in_persisted_state": false,
+      "authoritative_payload_differences": []
+    },
+    {
+      "scenario": "A2",
+      "turn_count_match": true,
+      "player_facing_identical": [
+        true
+      ],
+      "mechanical_identical": [
+        true
+      ],
+      "authority_slice_differences": [],
+      "narration_persisted": [],
+      "context_leaks": [],
+      "provider_creates": 1,
+      "baseline_provider_creates": 0,
+      "hook_state_differences": [],
+      "raw_candidate_in_persisted_state": false,
+      "original_encoding_differences": [
+        "$.campaign.json.starting_context: values differ",
+        "$.scenes/frontier_gate.json.scene.opening_seed_facts[4]: values differ",
+        "$.session.json._runtime_narration_plan_bundle_v1.renderer_inputs.response_policy.rule_priority_order[4]: values differ",
+        "$.session.json._runtime_narration_plan_bundle_v1.renderer_inputs.turn_packet.response_policy.rule_priority_order[4]: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.emission_debug.answer_shape_primacy_preview_after: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.emission_debug.answer_shape_primacy_preview_before: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.emission_debug.context_separation.debug_reason_marker: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.emission_debug.context_separation_debug_reason_marker: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.emission_debug.player_facing_narration_purity.preview_after: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.emission_debug.player_facing_narration_purity.preview_before: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.emission_debug.player_facing_narration_purity_preview_after: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.emission_debug.player_facing_narration_purity_preview_before: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.gm_resolution_decision.proposed_facts[9].text: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.gm_resolution_decision.realization_claims[9].text: values differ",
+        "$.session.json.debug_traces[14].resolution.metadata.unknown_legacy_keys.noncombat_resolution.surfaced_facts[1]: values differ",
+        "$.session.json.last_turn_response_policy.rule_priority_order[4]: values differ",
+        "$.session_log.jsonl[0].gm_output.internal_state.emission_debug_lane._final_emission_meta.answer_shape_primacy_preview_after: values differ",
+        "$.session_log.jsonl[0].gm_output.internal_state.emission_debug_lane._final_emission_meta.answer_shape_primacy_preview_before: values differ",
+        "$.session_log.jsonl[0].gm_output.internal_state.emission_debug_lane._final_emission_meta.context_separation_debug_reason_marker: values differ",
+        "$.session_log.jsonl[0].gm_output.internal_state.emission_debug_lane._final_emission_meta.player_facing_narration_purity_preview_after: values differ",
+        "$.session_log.jsonl[0].gm_output.internal_state.emission_debug_lane._final_emission_meta.player_facing_narration_purity_preview_before: values differ",
+        "$.session_log.jsonl[0].gm_output.metadata.emission_debug.answer_shape_primacy_preview_after: values differ",
+        "$.session_log.jsonl[0].gm_output.metadata.emission_debug.answer_shape_primacy_preview_before: values differ",
+        "$.session_log.jsonl[0].gm_output.metadata.emission_debug.context_separation.debug_reason_marker: values differ",
+        "$.session_log.jsonl[0].gm_output.metadata.emission_debug.context_separation_debug_reason_marker: values differ",
+        "$.session_log.jsonl[0].gm_output.metadata.emission_debug.player_facing_narration_purity.preview_after: values differ",
+        "$.session_log.jsonl[0].gm_output.metadata.emission_debug.player_facing_narration_purity.preview_before: values differ",
+        "$.session_log.jsonl[0].gm_output.metadata.emission_debug.player_facing_narration_purity_preview_after: values differ",
+        "$.session_log.jsonl[0].gm_output.metadata.emission_debug.player_facing_narration_purity_preview_before: values differ",
+        "$.session_log.jsonl[0].gm_output.response_policy.rule_priority_order[4]: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.emission_debug.answer_shape_primacy_preview_after: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.emission_debug.answer_shape_primacy_preview_before: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.emission_debug.context_separation.debug_reason_marker: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.emission_debug.context_separation_debug_reason_marker: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.emission_debug.player_facing_narration_purity.preview_after: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.emission_debug.player_facing_narration_purity.preview_before: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.emission_debug.player_facing_narration_purity_preview_after: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.emission_debug.player_facing_narration_purity_preview_before: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.gm_resolution_decision.proposed_facts[9].text: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.gm_resolution_decision.realization_claims[9].text: values differ",
+        "$.session_log.jsonl[0].resolution.metadata.unknown_legacy_keys.noncombat_resolution.surfaced_facts[1]: values differ"
+      ],
+      "authoritative_payload_differences": []
+    },
+    {
+      "scenario": "B1",
+      "turn_count_match": true,
+      "player_facing_identical": [
+        true
+      ],
+      "mechanical_identical": [
+        true
+      ],
+      "authority_slice_differences": [],
+      "narration_persisted": [],
+      "context_leaks": [],
+      "provider_creates": 1,
+      "baseline_provider_creates": 0,
+      "authoritative_payload_differences": [],
+      "hook_state_differences": [],
+      "raw_candidate_in_persisted_state": false
+    },
+    {
+      "scenario": "B2",
+      "turn_count_match": true,
+      "player_facing_identical": [
+        true
+      ],
+      "mechanical_identical": [
+        true
+      ],
+      "authority_slice_differences": [],
+      "narration_persisted": [],
+      "context_leaks": [],
+      "provider_creates": 1,
+      "baseline_provider_creates": 0,
+      "authoritative_payload_differences": [],
+      "hook_state_differences": [],
+      "raw_candidate_in_persisted_state": false
+    },
+    {
+      "scenario": "C1",
+      "turn_count_match": true,
+      "player_facing_identical": [
+        true,
+        true
+      ],
+      "mechanical_identical": [
+        true,
+        true
+      ],
+      "authority_slice_differences": [],
+      "narration_persisted": [],
+      "context_leaks": [],
+      "provider_creates": 1,
+      "baseline_provider_creates": 0,
+      "authoritative_payload_differences": [],
+      "hook_state_differences": [],
+      "raw_candidate_in_persisted_state": false
+    },
+    {
+      "scenario": "C2",
+      "turn_count_match": true,
+      "player_facing_identical": [
+        true,
+        true
+      ],
+      "mechanical_identical": [
+        true,
+        true
+      ],
+      "authority_slice_differences": [],
+      "narration_persisted": [],
+      "context_leaks": [],
+      "provider_creates": 1,
+      "baseline_provider_creates": 0,
+      "authoritative_payload_differences": [],
+      "hook_state_differences": [],
+      "raw_candidate_in_persisted_state": false
+    },
+    {
+      "scenario": "D1",
+      "turn_count_match": true,
+      "player_facing_identical": [
+        true
+      ],
+      "mechanical_identical": [
+        true
+      ],
+      "authority_slice_differences": [],
+      "narration_persisted": [],
+      "context_leaks": [],
+      "provider_creates": 1,
+      "baseline_provider_creates": 0,
+      "authoritative_payload_differences": [],
+      "hook_state_differences": [],
+      "raw_candidate_in_persisted_state": false
+    },
+    {
+      "scenario": "D2",
+      "turn_count_match": true,
+      "player_facing_identical": [
+        true
+      ],
+      "mechanical_identical": [
+        true
+      ],
+      "authority_slice_differences": [],
+      "narration_persisted": [],
+      "context_leaks": [],
+      "provider_creates": 1,
+      "baseline_provider_creates": 0,
+      "authoritative_payload_differences": [],
+      "hook_state_differences": [],
+      "raw_candidate_in_persisted_state": false
+    }
+  ],
+  "initial_stop": {
+    "initial_halt": "integrity_divergence:A1",
+    "raw_differences": [
+      "$.combat.json.saved_at: values differ",
+      "$.session.json.integrity.payload_sha256: values differ",
+      "$.session.json.payload.debug_traces[14].performance.elapsed_ms: values differ",
+      "$.session.json.payload.debug_traces[14].performance.interpretation_ms: values differ",
+      "$.session.json.payload.debug_traces[14].performance.resolution_ms: values differ",
+      "$.session.json.payload.debug_traces[14].performance.validation_ms: values differ",
+      "$.session.json.payload.last_saved_at: values differ",
+      "$.session.json.saved_at: values differ",
+      "$.session_log.jsonl[0].resolution.metadata.performance.elapsed_ms: values differ",
+      "$.session_log.jsonl[0].resolution.metadata.performance.interpretation_ms: values differ",
+      "$.session_log.jsonl[0].resolution.metadata.performance.resolution_ms: values differ",
+      "$.session_log.jsonl[0].resolution.metadata.performance.validation_ms: values differ"
+    ],
+    "authoritative_payload_differences": [],
+    "hook_exact_state_unchanged": true,
+    "classification": "operational_metadata_only",
+    "remaining_attempts": 7,
+    "remaining_total_tokens": 11536,
+    "remaining_output_tokens": 633
+  },
+  "second_stop": {
+    "initial_halt": "integrity_divergence:A2",
+    "raw_differences": [
+      "$.combat.json.saved_at: values differ",
+      "$.session.json.integrity.payload_sha256: values differ",
+      "$.session.json.payload.debug_traces[14].performance.elapsed_ms: values differ",
+      "$.session.json.payload.debug_traces[14].performance.interpretation_ms: values differ",
+      "$.session.json.payload.debug_traces[14].performance.resolution_ms: values differ",
+      "$.session.json.payload.debug_traces[14].performance.validation_ms: values differ",
+      "$.session.json.payload.last_saved_at: values differ",
+      "$.session.json.saved_at: values differ",
+      "$.session_log.jsonl[0].resolution.metadata.performance.elapsed_ms: values differ",
+      "$.session_log.jsonl[0].resolution.metadata.performance.interpretation_ms: values differ",
+      "$.session_log.jsonl[0].resolution.metadata.performance.resolution_ms: values differ",
+      "$.session_log.jsonl[0].resolution.metadata.performance.validation_ms: values differ"
+    ],
+    "authoritative_payload_differences": [],
+    "hook_exact_state_unchanged": true,
+    "classification": "UTF8_decode_error_and_process_randomized_diagnostic_clue_hash; game/noncombat_resolution.py:355 uses hash(slug)",
+    "remaining_attempts": 6,
+    "remaining_total_tokens": 11078,
+    "remaining_output_tokens": 572
+  },
+  "canonical_state": {
+    "canonical_campaign_unchanged": true,
+    "validator_unchanged": true,
+    "remaining_shard_requests": 6
+  },
+  "no_narration_promoted": true
+}

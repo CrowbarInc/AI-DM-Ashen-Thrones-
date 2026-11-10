@@ -591,13 +591,44 @@ def _content_words(nominal: str) -> list[str]:
     return [word for word in re.findall(r"[a-z0-9']+", nominal.lower()) if word not in _DETERMINERS]
 
 
-def _npc_public_blob(npc: Mapping[str, Any], scene: Mapping[str, Any] | None) -> str:
-    """Own description plus scene sentences that name this person.
+_NON_ADDRESSEE_OPERATIONS = frozenset({"INSPECT", "PERCEIVE", "MOVE"})
 
-    A shared scene sentence does not make every visible person the referent
-    of a distinguishing word.
+
+def player_text_addresses_someone(text: str) -> bool:
+    """True when the utterance itself asks, tells, or addresses a person.
+
+    Object inspection and route language do not count. A provider label is
+    not consulted here.
     """
-    from game.incidental_entity import public_scene_text
+    from game.interaction_completion import addressed_person_nominal
+
+    if addressed_person_nominal(text):
+        return True
+    return bool(_ASK_VERB_RE.search(text or ""))
+
+
+def addressee_authority_applies(*, operation: str | None, player_text: str) -> bool:
+    """Person grounding belongs to communication, not to an object or a route.
+
+    The player's own ask, tell, or address still requires an addressee when a
+    provider labeled that utterance as inspection or movement. An internal
+    processing summary is not a new command; callers pass the original line.
+    """
+    if player_text_addresses_someone(player_text):
+        return True
+    operation_name = str(operation or "").strip().upper()
+    if operation_name in _NON_ADDRESSEE_OPERATIONS:
+        return False
+    return True
+
+
+def _npc_public_blob(npc: Mapping[str, Any], scene: Mapping[str, Any] | None) -> str:
+    """Own description plus public facts that name this person.
+
+    Each structured fact stays intact. A fact that names two people can
+    support both. A neighboring fact does not, even when neither has a period.
+    """
+    from game.incidental_entity import public_evidence_units
 
     pieces = [
         str(npc.get("name") or ""),
@@ -605,11 +636,11 @@ def _npc_public_blob(npc: Mapping[str, Any], scene: Mapping[str, Any] | None) ->
         str(npc.get("summary") or ""),
         str(npc.get("role") or ""),
     ]
-    name = str(npc.get("name") or "").lower()
+    name = str(npc.get("name") or "").strip().lower()
     if name:
-        for sentence in re.split(r"[.!?]", public_scene_text(scene)):
-            if name in sentence.lower():
-                pieces.append(sentence)
+        for unit in public_evidence_units(scene):
+            if name in unit.lower():
+                pieces.append(unit)
     return " ".join(pieces).lower()
 
 
@@ -636,6 +667,92 @@ def _active_npc_id(session: Mapping[str, Any] | None, npcs: list[Mapping[str, An
 def _choice(npc: Mapping[str, Any]) -> dict[str, str]:
     label = str(npc.get("name") or npc.get("label") or npc.get("id") or "")
     return {"entity_id": str(npc.get("id") or ""), "label": label}
+
+
+_PUBLIC_REFERENCE_STOPWORDS = frozenset({
+    "have", "has", "had", "you", "your", "any", "some", "been", "what", "who",
+    "where", "when", "why", "how", "the", "and", "for", "with", "from", "that",
+    "this", "tell", "ask", "asked", "heard", "hear", "know", "knows", "known",
+    "about", "lately", "recently", "today", "here", "there", "please",
+    "interesting", "good", "new", "local", "recent", "anything", "something",
+    "around", "more", "else", "does", "did", "want", "just",
+})
+
+
+def _reference_token(word: str) -> str:
+    token = str(word or "").lower()
+    if len(token) > 4 and token.endswith("s") and not token.endswith("ss"):
+        return token[:-1]
+    return token
+
+
+def _npc_identity_keys(npc: Mapping[str, Any]) -> set[str]:
+    keys: set[str] = set()
+    ident = str(npc.get("id") or "").strip().lower()
+    if ident:
+        keys.add(ident)
+        keys.add(ident.replace("_", " "))
+    for part in (npc.get("name"), npc.get("label"), *(npc.get("aliases") or [])):
+        text = " ".join(str(part or "").lower().split())
+        if text:
+            keys.add(text)
+    return keys
+
+
+def _npcs_for_reference(reference: str | None, npcs: list[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
+    """Match a proposed id, display name, or alias. No partial or fuzzy hits."""
+    norm = " ".join(str(reference or "").lower().replace("_", " ").split())
+    if not norm:
+        return []
+    raw = str(reference or "").strip().lower()
+    hits = []
+    for npc in npcs:
+        keys = _npc_identity_keys(npc)
+        if norm in keys or raw in keys or raw == str(npc.get("id") or "").strip().lower():
+            hits.append(npc)
+    return hits
+
+
+def _npc_reference_words(npc: Mapping[str, Any], scene: Mapping[str, Any] | None) -> set[str]:
+    words = set(re.findall(r"[a-z0-9']+", _npc_public_blob(npc, scene)))
+    for key in _npc_identity_keys(npc):
+        words.update(re.findall(r"[a-z0-9']+", key))
+    return words | {_reference_token(word) for word in words}
+
+
+def _public_npc_candidates(
+    text: str,
+    npcs: list[Mapping[str, Any]],
+    scene: Mapping[str, Any] | None,
+) -> tuple[str, list[Mapping[str, Any]]]:
+    """Unique or ambiguous NPCs named by the utterance's own distinctive words.
+
+    A provider id is not consulted. Shared words and unknown words select nobody.
+    """
+    tokens: list[str] = []
+    for word in re.findall(r"[a-z0-9']+", str(text or "").lower()):
+        if len(word) < 4 or word in _PUBLIC_REFERENCE_STOPWORDS or word in _DETERMINERS:
+            continue
+        tokens.append(word)
+        stem = _reference_token(word)
+        if stem != word and stem not in _PUBLIC_REFERENCE_STOPWORDS and len(stem) >= 4:
+            tokens.append(stem)
+    unique: dict[str, Mapping[str, Any]] = {}
+    ambiguous: dict[str, Mapping[str, Any]] = {}
+    for token in tokens:
+        matched = [npc for npc in npcs if token in _npc_reference_words(npc, scene)]
+        if len(matched) == 1:
+            unique[str(matched[0].get("id") or "")] = matched[0]
+        elif len(matched) > 1:
+            for npc in matched:
+                ambiguous[str(npc.get("id") or "")] = npc
+    if len(unique) == 1 and not (set(ambiguous) - set(unique)):
+        return "unique", [next(iter(unique.values()))]
+    if len(unique) > 1 or ambiguous:
+        chosen = dict(unique)
+        chosen.update(ambiguous)
+        return "ambiguous", list(chosen.values())
+    return "none", []
 
 
 def _clarification_for(npcs: list[Mapping[str, Any]], *, single_offer: bool) -> str:
@@ -732,6 +849,54 @@ def assess_addressee_grounding(
                 }
             # An ask that names nobody is not an unresolved person reference.
             # Continuation, mixed intent, and the bridge decide it.
+        if not nominal:
+            if re.search(r"\b(?:look around|looking around|look about|glance around|what do i see|what can i see)\b", text, re.I):
+                return base
+            kind, chosen = _public_npc_candidates(text, npcs, scene if isinstance(scene, Mapping) else None)
+            if kind == "unique" and chosen:
+                npc = chosen[0]
+                target_id = str(npc.get("id") or "")
+                proper = (
+                    str(npc.get("name") or "").lower() in text.lower()
+                    or target_id.replace("_", " ") in text.lower()
+                )
+                proposed_ids = {str(row.get("id") or "") for row in _npcs_for_reference(proposed, npcs)}
+                conflict = "none"
+                details: dict[str, Any] = {}
+                if proposed and target_id not in proposed_ids:
+                    conflict = "resolved_by_explicit_wording"
+                    details = {"provider_target": proposed, "grounded_target": target_id}
+                provenance = "explicit_canonical" if proper else "unique_contextual"
+                return {
+                    **base,
+                    "communication_ownership": "npc_directed",
+                    "direct_address": True,
+                    "target_resolution": "explicit" if proper else "contextual",
+                    "target_provenance": provenance,
+                    "target_id": target_id,
+                    "candidate_target_ids": [target_id],
+                    "operation_eligibility": "executable",
+                    "mutation_eligibility": True,
+                    "allowed_operation": "ask",
+                    "pending_intention_relationship": "starts_new",
+                    "conflict_status": conflict,
+                    "conflict_details": details,
+                }
+            if kind == "ambiguous" and chosen:
+                return {
+                    **base,
+                    "direct_address": True,
+                    "communication_ownership": "ambiguous_unresolved",
+                    "target_resolution": "ambiguous",
+                    "target_provenance": "provider_candidate_only" if proposed else "none",
+                    "operation_eligibility": "requires_clarification",
+                    "mutation_eligibility": False,
+                    "clarification": _clarification_for(chosen, single_offer=False),
+                    "choices": [_choice(npc) for npc in chosen],
+                    "pending_intention_relationship": "requires_clarification",
+                    "conflict_status": "unresolved" if proposed else "none",
+                    "conflict_details": {"provider_target": proposed} if proposed else {},
+                }
         return base
 
     nonunique = bool(_NONUNIQUE_ADDRESSEE_RE.search(nominal)) or bool(
@@ -802,7 +967,11 @@ def assess_addressee_grounding(
                 "pending_intention_relationship": "continues" if provenance == "established_interlocutor" else "starts_new",
             }
 
-    hits = [npc for npc in npcs if set(words) & _npc_words(npc)]
+    # A complete public identity is stronger than a shared descriptive word
+    # (e.g. Gate Serjeant and Gate Guard both contain "gate"). Quantifiers and
+    # unresolved pronouns have already failed closed above this seam.
+    exact = _npcs_for_reference(re.sub(r"^the\s+", "", nominal, flags=re.IGNORECASE), npcs)
+    hits = exact if len(exact) == 1 else [npc for npc in npcs if set(words) & _npc_words(npc)]
     extras = [word for word in words if not any(word in _npc_words(npc) for npc in hits)]
     ambiguous_extras = False
     else_provenance = ""

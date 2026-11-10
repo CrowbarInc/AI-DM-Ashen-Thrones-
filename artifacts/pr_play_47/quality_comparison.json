@@ -1,0 +1,895 @@
+{
+  "provisional": true,
+  "assessor": "Implementing agent, unblinded editorial review; scores are judgments, not measured player preference.",
+  "rubric": {
+    "information_completeness": [
+      "Omits the result",
+      "Partial result or missing relevant known information",
+      "Result and relevant information complete"
+    ],
+    "mechanical_consistency": [
+      "Contradicts outcome",
+      "Ambiguous agreement",
+      "Agrees without extra consequences"
+    ],
+    "naturalness": [
+      "Fragmented or incoherent",
+      "Readable but formulaic or awkward",
+      "Fluent and economical"
+    ],
+    "expressive_range": [
+      "No selectable presentation variation",
+      "Limited compositional variation",
+      "Broad, outcome-appropriate variation"
+    ],
+    "atmosphere": [
+      "Absent or distracting",
+      "Some useful mood or sensory attention",
+      "Specific and well integrated"
+    ],
+    "investigative_clarity": [
+      "Result/uncertainty unclear",
+      "Some ambiguity or weak focus",
+      "Actionable result and limits clear"
+    ],
+    "repetition": [
+      "Conspicuous repeated wording/structure across corpus",
+      "Some repeated scaffolding",
+      "Little distracting repetition"
+    ],
+    "cohesion": [
+      "Disconnected fragments",
+      "Understandable but loosely joined",
+      "Details and outcome form a unified response"
+    ]
+  },
+  "category_order": [
+    "information_completeness",
+    "mechanical_consistency",
+    "naturalness",
+    "expressive_range",
+    "atmosphere",
+    "investigative_clarity",
+    "repetition",
+    "cohesion"
+  ],
+  "responses": [
+    {
+      "scenario": "failed",
+      "style": "host",
+      "text": "You inspect the target, but nothing new is established.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 0,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 1,
+        "cohesion": 2
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Clear, fluent failed-result sentence; no atmosphere or selectable presentation."
+    },
+    {
+      "scenario": "failed",
+      "style": "concise",
+      "text": "You examine the evidence. The attempt establishes nothing new.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 2
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Readable and complete; generic evidence opener repeated throughout corpus; no specific atmosphere."
+    },
+    {
+      "scenario": "failed",
+      "style": "atmospheric",
+      "text": "A seal lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The attempt establishes nothing new.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic."
+    },
+    {
+      "scenario": "failed",
+      "style": "investigative",
+      "text": "What does the evidence actually establish? The attempt establishes nothing new.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nA seal lies in plain view.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion."
+    },
+    {
+      "scenario": "frontier_gate",
+      "style": "host",
+      "text": "You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 0,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 1,
+        "cohesion": 2
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Exact clue delivered clearly; missing article in target phrase; economical but fixed scaffolding."
+    },
+    {
+      "scenario": "frontier_gate",
+      "style": "concise",
+      "text": "You examine the evidence. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 2
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Readable and complete; generic evidence opener repeated throughout corpus; no specific atmosphere."
+    },
+    {
+      "scenario": "frontier_gate",
+      "style": "atmospheric",
+      "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic."
+    },
+    {
+      "scenario": "frontier_gate",
+      "style": "investigative",
+      "text": "What does the evidence actually establish? The missing patrol was last seen taking the northwest mud track past the crates.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nThe notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion."
+    },
+    {
+      "scenario": "known",
+      "style": "host",
+      "text": "You inspect the target, but nothing new is established.",
+      "scores": {
+        "information_completeness": 1,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 0,
+        "atmosphere": 0,
+        "investigative_clarity": 1,
+        "repetition": 1,
+        "cohesion": 2
+      },
+      "total_of_16": 9,
+      "mechanical_of_2": 2,
+      "information_of_2": 1,
+      "narrative_of_12": 6,
+      "editorial_reason": "Clearly adds nothing new, but does not restate available prior knowledge."
+    },
+    {
+      "scenario": "known",
+      "style": "concise",
+      "text": "You examine the evidence. Already established: The rubbing bears the mason's mark; its date is unknown. The examination adds nothing new to what you already know.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 9,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 5,
+      "editorial_reason": "Prior clue preserved, but the Already established label and repeated examination framing feel assembled."
+    },
+    {
+      "scenario": "known",
+      "style": "atmospheric",
+      "text": "A rubbing lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. Already established: The rubbing bears the mason's mark; its date is unknown. The examination adds nothing new to what you already know.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic."
+    },
+    {
+      "scenario": "known",
+      "style": "investigative",
+      "text": "What does the evidence actually establish? Already established: The rubbing bears the mason's mark; its date is unknown. The examination adds nothing new to what you already know.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nA rubbing lies in plain view.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion."
+    },
+    {
+      "scenario": "mundane",
+      "style": "host",
+      "text": "basin",
+      "scores": {
+        "information_completeness": 0,
+        "mechanical_consistency": 2,
+        "naturalness": 0,
+        "expressive_range": 0,
+        "atmosphere": 0,
+        "investigative_clarity": 0,
+        "repetition": 1,
+        "cohesion": 0
+      },
+      "total_of_16": 3,
+      "mechanical_of_2": 2,
+      "information_of_2": 0,
+      "narrative_of_12": 1,
+      "editorial_reason": "Actual visible-surface emitter returns only the target label. Weak baseline; do not generalize improvement from this artifact."
+    },
+    {
+      "scenario": "mundane",
+      "style": "concise",
+      "text": "You examine the evidence. No new clue is established by this examination.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 2
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Readable and complete; generic evidence opener repeated throughout corpus; no specific atmosphere."
+    },
+    {
+      "scenario": "mundane",
+      "style": "atmospheric",
+      "text": "A basin lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. No new clue is established by this examination.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic."
+    },
+    {
+      "scenario": "mundane",
+      "style": "investigative",
+      "text": "What does the evidence actually establish? No new clue is established by this examination.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nA basin lies in plain view.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion."
+    },
+    {
+      "scenario": "no_clue",
+      "style": "host",
+      "text": "tile",
+      "scores": {
+        "information_completeness": 0,
+        "mechanical_consistency": 2,
+        "naturalness": 0,
+        "expressive_range": 0,
+        "atmosphere": 0,
+        "investigative_clarity": 0,
+        "repetition": 1,
+        "cohesion": 0
+      },
+      "total_of_16": 3,
+      "mechanical_of_2": 2,
+      "information_of_2": 0,
+      "narrative_of_12": 1,
+      "editorial_reason": "Actual visible-surface emitter returns only the target label. Weak baseline; do not generalize improvement from this artifact."
+    },
+    {
+      "scenario": "no_clue",
+      "style": "concise",
+      "text": "You examine the evidence. No new clue is established by this examination.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 2
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Readable and complete; generic evidence opener repeated throughout corpus; no specific atmosphere."
+    },
+    {
+      "scenario": "no_clue",
+      "style": "atmospheric",
+      "text": "A tile lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. No new clue is established by this examination.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic."
+    },
+    {
+      "scenario": "no_clue",
+      "style": "investigative",
+      "text": "What does the evidence actually establish? No new clue is established by this examination.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nA tile lies in plain view.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion."
+    },
+    {
+      "scenario": "npc",
+      "style": "host",
+      "text": "You inspect receipt. The receipt names porter Iven as the recipient, without explaining his involvement.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 0,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 1,
+        "cohesion": 2
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Exact clue delivered clearly; missing article in target phrase; economical but fixed scaffolding."
+    },
+    {
+      "scenario": "npc",
+      "style": "concise",
+      "text": "You examine the evidence. The receipt names porter Iven as the recipient, without explaining his involvement.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 2
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Readable and complete; generic evidence opener repeated throughout corpus; no specific atmosphere."
+    },
+    {
+      "scenario": "npc",
+      "style": "atmospheric",
+      "text": "A receipt lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The receipt names porter Iven as the recipient, without explaining his involvement.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic."
+    },
+    {
+      "scenario": "npc",
+      "style": "investigative",
+      "text": "What does the evidence actually establish? The receipt names porter Iven as the recipient, without explaining his involvement.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nA receipt lies in plain view.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion."
+    },
+    {
+      "scenario": "old_milestone",
+      "style": "host",
+      "text": "You inspect prints. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 0,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 1,
+        "cohesion": 2
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Exact clue delivered clearly; missing article in target phrase; economical but fixed scaffolding."
+    },
+    {
+      "scenario": "old_milestone",
+      "style": "concise",
+      "text": "You examine the evidence. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 2
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Readable and complete; generic evidence opener repeated throughout corpus; no specific atmosphere."
+    },
+    {
+      "scenario": "old_milestone",
+      "style": "atmospheric",
+      "text": "A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 2,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic. Existing milestone/mud observations provide useful, specific investigative mood."
+    },
+    {
+      "scenario": "old_milestone",
+      "style": "investigative",
+      "text": "What does the evidence actually establish? Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nA weathered stone milestone leans beside the northwest mud track.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion."
+    },
+    {
+      "scenario": "partial",
+      "style": "host",
+      "text": "You inspect cipher. Only the first symbol can be read: a crescent. The rest remains illegible.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 0,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 1,
+        "cohesion": 2
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Exact clue delivered clearly; missing article in target phrase; economical but fixed scaffolding."
+    },
+    {
+      "scenario": "partial",
+      "style": "concise",
+      "text": "You examine the evidence. Only the first symbol can be read: a crescent. The rest remains illegible.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 2
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Readable and complete; generic evidence opener repeated throughout corpus; no specific atmosphere."
+    },
+    {
+      "scenario": "partial",
+      "style": "atmospheric",
+      "text": "A cipher lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. Only the first symbol can be read: a crescent. The rest remains illegible.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic."
+    },
+    {
+      "scenario": "partial",
+      "style": "investigative",
+      "text": "What does the evidence actually establish? Only the first symbol can be read: a crescent. The rest remains illegible.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nA cipher lies in plain view.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion."
+    },
+    {
+      "scenario": "success",
+      "style": "host",
+      "text": "You inspect ledger. The ledger records twelve ingots arriving, but only nine entered stock.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 0,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 1,
+        "cohesion": 2
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Exact clue delivered clearly; missing article in target phrase; economical but fixed scaffolding."
+    },
+    {
+      "scenario": "success",
+      "style": "concise",
+      "text": "You examine the evidence. The ledger records twelve ingots arriving, but only nine entered stock.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 2
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Readable and complete; generic evidence opener repeated throughout corpus; no specific atmosphere."
+    },
+    {
+      "scenario": "success",
+      "style": "atmospheric",
+      "text": "A ledger lies in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The ledger records twelve ingots arriving, but only nine entered stock.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic."
+    },
+    {
+      "scenario": "success",
+      "style": "investigative",
+      "text": "What does the evidence actually establish? The ledger records twelve ingots arriving, but only nine entered stock.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nA ledger lies in plain view.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion."
+    },
+    {
+      "scenario": "uncertain",
+      "style": "host",
+      "text": "You inspect fibres. The fibres may be wool or flax; their source cannot be determined.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 0,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 1,
+        "cohesion": 2
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Exact clue delivered clearly; missing article in target phrase; economical but fixed scaffolding."
+    },
+    {
+      "scenario": "uncertain",
+      "style": "concise",
+      "text": "You examine the evidence. The fibres may be wool or flax; their source cannot be determined.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 2,
+        "expressive_range": 1,
+        "atmosphere": 0,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 2
+      },
+      "total_of_16": 11,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 7,
+      "editorial_reason": "Readable and complete; generic evidence opener repeated throughout corpus; no specific atmosphere."
+    },
+    {
+      "scenario": "uncertain",
+      "style": "atmospheric",
+      "text": "Loose fibres lie in plain view. Light catches the uneven surface. The examination moves from the whole to the smallest details; your gaze moves slowly across what is visible. You pause over the details. The fibres may be wool or flax; their source cannot be determined.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Public context adds texture; attention-and-pause clauses repeat, length delays the result, and joins feel generic."
+    },
+    {
+      "scenario": "uncertain",
+      "style": "investigative",
+      "text": "What does the evidence actually establish? The fibres may be wool or flax; their source cannot be determined.\n\nYou narrow your attention to the evidence before you. You attend to surface and texture, as well as shape.\n\nLoose fibres lie in plain view.",
+      "scores": {
+        "information_completeness": 2,
+        "mechanical_consistency": 2,
+        "naturalness": 1,
+        "expressive_range": 1,
+        "atmosphere": 1,
+        "investigative_clarity": 2,
+        "repetition": 0,
+        "cohesion": 1
+      },
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "editorial_reason": "Result-first order preserves clarity and uncertainty, but the repeated rhetorical question and later attention paragraph weaken cohesion."
+    }
+  ],
+  "means": {
+    "host": {
+      "total_of_16": 8.6,
+      "mechanical_of_2": 2,
+      "information_of_2": 1.5,
+      "narrative_of_12": 5.1,
+      "canonical_narrative_of_12": 6
+    },
+    "concise": {
+      "total_of_16": 10.8,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6.8,
+      "canonical_narrative_of_12": 7
+    },
+    "atmospheric": {
+      "total_of_16": 10.1,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6.1,
+      "canonical_narrative_of_12": 6.5
+    },
+    "investigative": {
+      "total_of_16": 10,
+      "mechanical_of_2": 2,
+      "information_of_2": 2,
+      "narrative_of_12": 6,
+      "canonical_narrative_of_12": 6
+    }
+  },
+  "limitations": [
+    "Only ten fixed outcomes; eight synthetic",
+    "No live-model creativity measured",
+    "Weak one-word mundane host baselines inflate aggregate improvement",
+    "Expressive range scored as family capability; repetition judged across corpus",
+    "No blinded independent review or player experience measurements"
+  ]
+}

@@ -1,0 +1,502 @@
+[
+  {
+    "id": "H01",
+    "group": "structured",
+    "input": "accepted",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H02",
+    "group": "structured",
+    "input": "rejected",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H03",
+    "group": "structured",
+    "input": "empty",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H04",
+    "group": "structured",
+    "input": "malformed",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H05",
+    "group": "structured",
+    "input": "unavailable",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H06",
+    "group": "structured",
+    "input": "timeout",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H07",
+    "group": "structured",
+    "input": "FAIL",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H08",
+    "group": "structured",
+    "input": "REVIEW_REQUIRED",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H09",
+    "group": "structured",
+    "input": "VALIDATION_ERROR",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H10",
+    "group": "structured",
+    "input": "legacy_refusal",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H11",
+    "group": "equivalence",
+    "input": "notice",
+    "scene": "frontier_gate",
+    "mandatory": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H12",
+    "group": "equivalence",
+    "input": "milestone",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H13",
+    "group": "equivalence",
+    "input": "notice_empty",
+    "scene": "frontier_gate",
+    "mandatory": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H14",
+    "group": "equivalence",
+    "input": "milestone_empty",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H15",
+    "group": "equivalence",
+    "input": "notice_timeout",
+    "scene": "frontier_gate",
+    "mandatory": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H16",
+    "group": "equivalence",
+    "input": "milestone_timeout",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H17",
+    "group": "equivalence",
+    "input": "notice_unsafe",
+    "scene": "frontier_gate",
+    "mandatory": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H18",
+    "group": "equivalence",
+    "input": "milestone_unsafe",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H19",
+    "group": "equivalence",
+    "input": "notice_duplicate",
+    "scene": "frontier_gate",
+    "mandatory": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H20",
+    "group": "equivalence",
+    "input": "milestone_duplicate",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H21",
+    "group": "safe",
+    "input": "You examine the weathered milestone.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H22",
+    "group": "safe",
+    "input": "You inspect the weathered milestone.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H23",
+    "group": "safe",
+    "input": "You study the weathered milestone.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H24",
+    "group": "safe",
+    "input": "You focus on the weathered milestone.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H25",
+    "group": "safe",
+    "input": "You examine the weathered milestone carefully.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H26",
+    "group": "safe",
+    "input": "You take a moment to examine the weathered milestone.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H27",
+    "group": "safe",
+    "input": "You pause to inspect the weathered milestone.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H28",
+    "group": "safe",
+    "input": "You turn your attention to the weathered milestone.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H29",
+    "group": "safe",
+    "input": "You look more closely at the weathered milestone.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H30",
+    "group": "safe",
+    "input": "You give the weathered milestone your attention.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H31",
+    "group": "unsafe",
+    "input": "The gate is permanently open.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H32",
+    "group": "unsafe",
+    "input": "You acquire a silver key.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H33",
+    "group": "unsafe",
+    "input": "The captain dies.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H34",
+    "group": "unsafe",
+    "input": "You discover a second patrol route.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H35",
+    "group": "unsafe",
+    "input": "Three prints lead southeast.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H36",
+    "group": "unsafe",
+    "input": "The milestone crumbles forever.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H37",
+    "group": "unsafe",
+    "input": "You gain ten gold.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H38",
+    "group": "unsafe",
+    "input": "The patrol has been killed.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H39",
+    "group": "unsafe",
+    "input": "A hidden passage opens.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H40",
+    "group": "unsafe",
+    "input": "You travel to the crystal palace.",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H41",
+    "group": "duplicate",
+    "input": "exact",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H42",
+    "group": "duplicate",
+    "input": "expanded",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H43",
+    "group": "duplicate",
+    "input": "contradicted",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H44",
+    "group": "duplicate",
+    "input": "historical",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H45",
+    "group": "duplicate",
+    "input": "atmospheric",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "published",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H46",
+    "group": "projection",
+    "input": "session",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H47",
+    "group": "projection",
+    "input": "world",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H48",
+    "group": "projection",
+    "input": "scene",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H49",
+    "group": "projection",
+    "input": "unknown",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  },
+  {
+    "id": "H50",
+    "group": "projection",
+    "input": "nested",
+    "scene": "old_milestone",
+    "mandatory": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "expected_optional": "fallback",
+    "expected_authority": "one resolution; one authorized discovery; no narration mutation",
+    "expected_response": "mandatory verbatim; no hidden values; optional only if validated"
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "schema_bytes": 820,
+  "plan_bytes": 213,
+  "authorized_context_bytes": 552,
+  "full_selection_payload_bytes": 1426,
+  "render": {
+    "median_us": 6.9,
+    "p95_us": 7.6,
+    "iterations": 500
+  },
+  "validate": {
+    "median_us": 2.6,
+    "p95_us": 2.9,
+    "iterations": 500
+  },
+  "fallback_end_to_end": {
+    "median_us": 210.1,
+    "p95_us": 11130.5,
+    "iterations": 500
+  },
+  "preview_end_to_end": {
+    "median_us": 237.4,
+    "p95_us": 11398.2,
+    "iterations": 500
+  },
+  "traced_peak_bytes": 31115,
+  "traced_retained_bytes": 22304,
+  "estimated_input_tokens_bytes_div_4": 356.5,
+  "estimated_output_tokens_bytes_div_4": 53.25,
+  "cost_method": "Rough UTF-8 bytes/4 estimate; not measured tokenizer usage or live billing.",
+  "latency_method": "Sequential local Python wall time, warm process; not a deployment guarantee."
+}

@@ -1,0 +1,54 @@
+{
+  "scenarios": [
+    {
+      "id": "A",
+      "category": "successful_discovery",
+      "scene": "frontier_gate",
+      "turns": [
+        {
+          "text": "I examine the notice board."
+        }
+      ],
+      "limitation": null
+    },
+    {
+      "id": "B",
+      "category": "unsuccessful_investigation",
+      "scene": "frontier_gate",
+      "turns": [
+        {
+          "text": "I examine the rain barrel."
+        }
+      ],
+      "limitation": "Mundane successful examination with no new clue; no deterministic failed skill-check fixture exists. This does not evaluate dice failure."
+    },
+    {
+      "id": "C",
+      "category": "repeated_investigation",
+      "scene": "frontier_gate",
+      "turns": [
+        {
+          "text": "I examine the notice board."
+        },
+        {
+          "text": "I examine the notice board."
+        }
+      ],
+      "limitation": null
+    },
+    {
+      "id": "D",
+      "category": "uncertain_observation",
+      "scene": "old_milestone",
+      "turns": [
+        {
+          "text": "I examine the footprints."
+        }
+      ],
+      "limitation": null
+    }
+  ],
+  "generations_per_scenario": 2,
+  "input_classification": "representative_player_behavior",
+  "automatic_retries": 0
+}

@@ -1,0 +1,1 @@
+Level 1 facts are scene facts, interactables, NPCs, inventory, and committed branch flags already in state. Level 2 texture or handhold wording is not stored. Level 3 passages, treasures, NPCs, enemies, and destinations are refused. Narration cannot promote a sentence into a fact. The provider cannot commit either level.

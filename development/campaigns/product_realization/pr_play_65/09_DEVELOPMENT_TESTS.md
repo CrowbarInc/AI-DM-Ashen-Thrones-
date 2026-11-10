@@ -1,0 +1,5 @@
+# DEVELOPMENT TESTS
+
+40 focused development tests pass, including engine provenance, multiple facts, mixed current/history, hidden and unauthorized claims, contradictions, direction/certainty changes, duplicates, provider faults, non-PASS validator gates, detached mutation, isolation and publication binding. Full case names/assertions: tests/test_pr_play_65_authoritative_disclosure.py; results in focused_final.xml. Initial development was 37/39 with two missed-safety cases; the bounded correction preceded source freeze. The later passing unit suite did not detect the legacy-publication suppression caught by HTTP.
+
+Gameplay-transition and continuity authority are demonstrated through saved HTTP traces/control comparisons rather than fabricated unit mechanics. Network interruption acknowledgement is unsupported, explicitly reported. The requested 40-item development matrix is covered by these controls and traces with that limitation; passing unit count is not equivalent to forty independent gameplay capabilities.

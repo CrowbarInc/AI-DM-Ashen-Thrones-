@@ -1,0 +1,78 @@
+F...........................F                                            [100%]
+================================== FAILURES ===================================
+__________________ test_successful_start_serialized_boundary __________________
+
+confidential_world = []
+
+    def test_successful_start_serialized_boundary(confidential_world):
+        before = _snap()
+        campaign_before = copy.deepcopy(st.load_campaign())
+        world_before = copy.deepcopy(st.load_world())
+        character_before = copy.deepcopy(st.load_character())
+        combat_before = copy.deepcopy(st.load_combat())
+        with TestClient(api.app) as client:
+            response = client.post("/api/start_campaign?ui_mode=player")
+            body = response.json()
+            public = client.get("/api/state").json()["public_state"]
+            repeated = client.post("/api/start_campaign")
+        summary = {"mode": "player", "endpoint": "/api/start_campaign", "status": response.status_code,
+                   "sentinel_in_http": SENTINEL in response.text, "sentinel_in_public_state": SENTINEL in json.dumps(public),
+                   "sentinel_in_authority": st.load_campaign()["character_secret"]["hidden_truth"] == SENTINEL,
+                   "mock_dispatches": len(confidential_world), "live_provider_requests": 0,
+                   "before": before, "after": _snap(), "repeat_status": repeated.status_code}
+        baseline = os.environ.get("ASHEN_PR_PLAY_20_BASELINE") == "1"
+        _record("baseline_summary.json" if baseline else "offline_summary.json", summary)
+        _record("baseline_response.json" if baseline else "repaired_response.json", body)
+        _record("public_state.json", public)
+        _record("rejected_repeat.json", repeated.json())
+>       assert response.status_code == 200
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests\test_pr_play_20_response_confidentiality.py:84: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 74e473fcc9c9f07795a898c5
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+[PROMPT] fresh campaign prompt constructed
+_______________ test_offline_initialization_and_ordinary_action _______________
+
+confidential_world = []
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000159EB300740>
+
+    def test_offline_initialization_and_ordinary_action(confidential_world, monkeypatch):
+        # Reuse PR-PLAY-20's guarded, temporary opening fixture and SDK transport.
+        monkeypatch.setattr(st, "SNAPSHOTS_DIR", st.DATA_DIR / "snapshots")
+        seen = []
+        _transport(monkeypatch, seen, lambda kw: plan_selecting_required(kw["input"]))
+        authority = copy.deepcopy(st.load_campaign())
+        with TestClient(api.app) as client:
+            started = client.post("/api/start_campaign")
+            public = client.get("/api/state")
+            denied = client.get("/api/state?ui_mode=author")
+            action = client.post("/api/action", json={"action_type": "roll_initiative"})
+>       assert started.status_code == public.status_code == action.status_code == 200
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+E        +  and   200 = <Response [200 OK]>.status_code
+
+tests\test_pr_play_21_privileged_reads.py:146: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 7fd241ff4a196686a370cfe8
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_20_response_confidentiality.py::test_successful_start_serialized_boundary
+FAILED tests/test_pr_play_21_privileged_reads.py::test_offline_initialization_and_ordinary_action

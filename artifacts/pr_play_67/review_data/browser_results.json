@@ -1,0 +1,22 @@
+{
+  "level": "browser_originated",
+  "target": "isolated localhost fixture; no live provider calls",
+  "verified": [
+    "initial scene display",
+    "character sheet",
+    "inventory",
+    "structured notice-board action",
+    "supported patrol exit navigation",
+    "Old Milestone scene display",
+    "exact authorized milestone discovery in journal",
+    "known discoveries persisted after action"
+  ],
+  "finding": "Structured milestone action displayed a generic narration refusal. Exact milestone fact remained in the player journal. Chat replay publishes the exact mandatory text. Offline entry-source comparison reproduces identical narration, confirming this predates the projection repair.",
+  "screenshot": "artifacts/pr_play_67/browser_smoke.png",
+  "not_verified_in_browser": [
+    "new campaign initialization",
+    "snapshot load",
+    "safe error display"
+  ],
+  "http_verification": "These paths are covered separately by TCP integration."
+}

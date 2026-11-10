@@ -1,0 +1,430 @@
+{
+  "before_combined": {
+    "total": 425,
+    "passed": 405,
+    "failed": 20,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_unknown_player_named_object_is_not_instantiated": "tests\\test_referenced_surface_grounding_inspection_resolution.py:211: in test_general_unknown_player_named_object_is_not_instantiated\n    assert res.get(\"kind\") == \"investigate\"\nE   AssertionError: assert None == 'investigate'\nE    +  where None = <built-in method get of dict object at 0x0000020A149C9E80>('kind')\nE    +    where <built-in method get of dict object at 0x0000020A149C9E80> = {}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_narration_only_object_does_not_gain_authority": "tests\\test_referenced_surface_grounding_inspection_resolution.py:222: in test_general_narration_only_object_does_not_gain_authority\n    assert (first.get(\"resolution\") or {}).get(\"kind\") == \"observe\"\nE   AssertionError: assert None == 'observe'\nE    +  where None = <built-in method get of dict object at 0x0000020A14945200>('kind')\nE    +    where <built-in method get of dict object at 0x0000020A14945200> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x0000020A14925980>('resolution')\nE    +        where <built-in method get of dict object at 0x0000020A14925980> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents": "tests\\test_referenced_surface_grounding_inspection_resolution.py:255: in test_general_readable_surface_communicates_contents\n    assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}\nE   AssertionError: assert None in {'discover_clue', 'investigate'}\nE    +  where None = <built-in method get of dict object at 0x0000020A149BB780>('kind')\nE    +    where <built-in method get of dict object at 0x0000020A149BB780> = {}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_then_observe_uses_current_scene": "tests\\test_referenced_surface_grounding_inspection_resolution.py:279: in test_general_failed_inspection_then_observe_uses_current_scene\n    assert (first.get(\"resolution\") or {}).get(\"kind\") == \"investigate\"\nE   AssertionError: assert None == 'investigate'\nE    +  where None = <built-in method get of dict object at 0x0000020A146B73C0>('kind')\nE    +    where <built-in method get of dict object at 0x0000020A146B73C0> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x0000020A11501B40>('resolution')\nE    +        where <built-in method get of dict object at 0x0000020A11501B40> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_alias_binds": "tests\\test_referenced_surface_grounding_inspection_resolution.py:295: in test_general_authored_alias_binds\n    assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}\nE   AssertionError: assert None in {'discover_clue', 'investigate'}\nE    +  where None = <built-in method get of dict object at 0x0000020A145E1840>('kind')\nE    +    where <built-in method get of dict object at 0x0000020A145E1840> = {}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock": "tests\\test_referenced_surface_grounding_inspection_resolution.py:384: in test_frontier_gate_roster_http_does_not_use_observe_stock\n    assert (data.get(\"resolution\") or {}).get(\"kind\") == \"investigate\"\nE   AssertionError: assert None == 'investigate'\nE    +  where None = <built-in method get of dict object at 0x0000020A14593580>('kind')\nE    +    where <built-in method get of dict object at 0x0000020A14593580> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x0000020A10F85D80>('resolution')\nE    +        where <built-in method get of dict object at 0x0000020A10F85D80> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...hoke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.', 'mode': 'social', ...}}, ...}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_observe_stock_replacement_keeps_notice_board_working": "tests\\test_referenced_surface_grounding_inspection_resolution.py:398: in test_observe_stock_replacement_keeps_notice_board_working\n    assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}\nE   AssertionError: assert None in {'discover_clue', 'investigate'}\nE    +  where None = <built-in method get of dict object at 0x0000020A14298F00>('kind')\nE    +    where <built-in method get of dict object at 0x0000020A14298F00> = {}.get",
+      "tests/test_pr_play_39_action_admission.py::test_sequence_patrol_travel_reaches_the_movement_resolver": "tests\\test_pr_play_39_action_admission.py:383: in test_sequence_patrol_travel_reaches_the_movement_resolver\n    assert body[\"resolution\"][\"resolved_transition\"] is True\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'resolved_transition'",
+      "tests/test_pr_play_39_action_admission.py::test_sequence_unsupported_actions_invent_nothing": "tests\\test_pr_play_39_action_admission.py:422: in test_sequence_unsupported_actions_invent_nothing\n    assert npc_body[\"resolution\"][\"resolved_transition\"] is False\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'resolved_transition'",
+      "tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid": "tests\\test_pr_br_continuation18_immutable_boundary.py:561: in test_raw_chat_stub_preserves_valid_and_contains_invalid\n    assert \"can't say what the stew costs\" in visible\nE   assert \"can't say what the stew costs\" in 'Tavern Runner mutters, \"Word is, hot stew and rumors for coin.\"'",
+      "tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_whisper_does_not_create_one": "tests\\test_perception_narration_authority_audible_non_invention.py:344: in test_player_seeks_whisper_does_not_create_one\n    assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"\nE   AssertionError: assert None == 'observe'\nE    +  where None = <built-in method get of dict object at 0x0000020A11C00380>('kind')\nE    +    where <built-in method get of dict object at 0x0000020A11C00380> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x0000020A11571300>('resolution')\nE    +        where <built-in method get of dict object at 0x0000020A11571300> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get",
+      "tests/test_perception_narration_authority_audible_non_invention.py::test_http_empty_listen_complete_and_grounded": "tests\\test_perception_narration_authority_audible_non_invention.py:561: in test_http_empty_listen_complete_and_grounded\n    assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"\nE   AssertionError: assert None == 'observe'\nE    +  where None = <built-in method get of dict object at 0x0000020A145315C0>('kind')\nE    +    where <built-in method get of dict object at 0x0000020A145315C0> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x0000020A148A7400>('resolution')\nE    +        where <built-in method get of dict object at 0x0000020A148A7400> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get",
+      "tests/test_perception_narration_authority_audible_non_invention.py::test_http_authorized_speech_can_survive": "tests\\test_perception_narration_authority_audible_non_invention.py:576: in test_http_authorized_speech_can_survive\n    assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"\nE   AssertionError: assert None == 'observe'\nE    +  where None = <built-in method get of dict object at 0x0000020A14A7F600>('kind')\nE    +    where <built-in method get of dict object at 0x0000020A14A7F600> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x0000020A14A7E080>('resolution')\nE    +        where <built-in method get of dict object at 0x0000020A14A7E080> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...rass_quay', 'location': 'Brass Quay', 'summary': 'A clerk works the deserted quay.', 'mode': 'exploration', ...}}, ...}.get",
+      "tests/test_pr_play_79df3_classification.py::test_duplicate_refusal_does_not_publish": "tests\\test_pr_play_79df3_classification.py:238: in test_duplicate_refusal_does_not_publish\n    assert not events.exists() or events.read_text(encoding=\"utf-8\").strip() == \"\"\nE   assert (not True or '{\"turn_id\": ...s_code\": 200}' == ''\nE    +  where True = exists()\nE    +    where exists = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/marking_inspection_before_combined_pytest/test_duplicate_refusal_does_no0/events.jsonl').exists\nE     \nE     + {\"turn_id\": \"6bd82f4862da4f21b2c388db42670845\", \"publication_owner\": \"completed_runtime_response\", \"response_category\": \"engine_response\", \"source_handler\": \"api_chat\", \"provider_involvement\": false, \"provider_attempt_references\": [], \"accepted_expression_references\": [], \"published_expression_reference\": \"28b98fec2ae38822d271447810b01a9c55b3f3cc02db9202712449e1e8bab622\", \"final_player_facing_response\": \"Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted.\", \"validation_outcome\": \"engine_or_grounded_fallback\", \"status_code\": 200})",
+      "tests/test_pr_play_79df3_classification.py::test_two_refusals_then_gameplay_advances": "tests\\test_pr_play_79df3_classification.py:251: in test_two_refusals_then_gameplay_advances\n    with TestClient(app) as client:\n.venv\\Lib\\site-packages\\starlette\\testclient.py:708: in __exit__\n    self.exit_stack.close()\n..\\..\\..\\..\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\contextlib.py:618: in close\n    self.__exit__(None, None, None)\n..\\..\\..\\..\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\contextlib.py:610: in __exit__\n    raise exc_details[1]\n..\\..\\..\\..\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\contextlib.py:595: in __exit__\n    if cb(*exc_details):\n       ^^^^^^^^^^^^^^^^\n..\\..\\..\\..\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\contextlib.py:478: in _exit_wrapper\n    callback(*args, **kwds)\n.venv\\Lib\\site-packages\\starlette\\testclient.py:701: in wait_shutdown\n    portal.call(self.wait_shutdown)\n.venv\\Lib\\site-packages\\anyio\\from_thread.py:338: in call\n    return cast(T_Retval, self.start_task_soon(func, *args).result())\n                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n.venv\\Lib\\site-packages\\anyio\\from_thread.py:380: in start_task_soon\n    self._check_running()\n.venv\\Lib\\site-packages\\anyio\\from_thread.py:214: in _check_running\n    raise RuntimeError(\"This portal is not running\")\nE   RuntimeError: This portal is not running",
+      "tests/test_pr_play_79df3_classification.py::test_save_reload_keeps_the_preceding_publication": "tests\\test_pr_play_79df3_classification.py:308: in test_save_reload_keeps_the_preceding_publication\n    assert any(item.get(\"log_meta\", {}).get(\"response_class\") == OPERATIONAL_REFUSAL for item in storage.load_log())\nE   assert False\nE    +  where False = any(<generator object test_save_reload_keeps_the_preceding_publication.<locals>.<genexpr> at 0x0000020A142F3BC0>)",
+      "tests/test_pr_play_79df3_classification.py::test_http_fallback_is_not_an_operational_refusal": "tests\\test_pr_play_79df3_classification.py:408: in test_http_fallback_is_not_an_operational_refusal\n    assert storage.load_session()[\"last_publication\"][\"visible\"] == visible\nE   assert 'Gate Guard s...sing patrol.\"' == 'That request...en attempted.'\nE     \nE     - That request addresses someone. Nothing has been attempted.\nE     + Gate Guard says, \"The notice board mentions a missing patrol.\"",
+      "tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context": "tests\\test_pr_de_exact_contract_deduplication.py:113: in test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context\n    assert payload[\"provider_context_projection\"][\"selected\"] is True, label\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'provider_context_projection'",
+      "tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop": "tests\\test_pr_de_exact_contract_deduplication.py:139: in test_full_context_classes_stay_unprojected_while_mirrors_drop\n    hidden = payload[\"scene\"][\"gm_only\"][\"hidden_facts\"]\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'gm_only'",
+      "tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload": "tests\\test_manual_play_latency.py:361: in test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload\n    assert compact_payload[\"social_context\"][\"answer_style_hints\"]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'social_context'"
+    },
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_pr_play_79a_continuity.py",
+        "tests/test_pr_eb_conversational_continuity.py",
+        "tests/test_pr_eg_r1_continuity.py",
+        "tests/test_referenced_surface_grounding_inspection_resolution.py",
+        "tests/test_pr_play_39_action_admission.py",
+        "tests/test_at_opt_02_retreat_and_budget.py",
+        "tests/test_at_opt_04_mixed_key_policy.py",
+        "tests/test_at_opt_06_instruction_eligibility.py",
+        "tests/test_at_opt_06_same_scene_transition.py",
+        "tests/test_narrative_planning_transition_node.py",
+        "tests/test_prompt_context_transition_node_consumption.py",
+        "tests/test_pr_ed_provider_efficiency.py",
+        "tests/test_pr_br_continuation18_immutable_boundary.py",
+        "tests/test_perception_narration_authority_audible_non_invention.py",
+        "tests/test_pr_play_post_npc_handoff.py",
+        "tests/test_pr_play_46_mechanical_boundary.py",
+        "tests/test_pr_play_79df3_classification.py",
+        "tests/test_pr_play_79b_integration.py",
+        "tests/test_pr_play_76_physical.py::test_flag_off_does_not_adjudicate",
+        "tests/test_pr_play_79c_publication.py::test_step_back_after_approach_names_the_milestone",
+        "tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome",
+        "tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context",
+        "tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop",
+        "tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload",
+        "tests/test_pr_play_preseal_authority.py",
+        "tests/test_pr_play_t05_composition.py",
+        "tests/test_pr_play_t04_local_action.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\before_combined_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_before_combined_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 1,
+      "elapsed_s": 309.598119399976,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "before_marking": {
+    "total": 76,
+    "passed": 76,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_object_marking.py",
+        "tests/test_atomic_character_save.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\before_marking_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_before_marking_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 49.43029429996386,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "before_identity": {
+    "total": 52,
+    "passed": 52,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_object_instances.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\before_identity_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_before_identity_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 16.639253700035624,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "before_inventory_snapshot": {
+    "total": 50,
+    "passed": 50,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_pr_play_60_inventory_projection.py",
+        "tests/test_snapshots.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\before_inventory_snapshot_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_before_inventory_snapshot_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 20.05573939997703,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "before_preservation": {
+    "total": 143,
+    "passed": 143,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_pr_play_76_physical.py",
+        "tests/test_pr_play_71_persistence_recovery.py",
+        "tests/test_pr_play_75_persistence.py",
+        "tests/test_state_authority.py",
+        "tests/test_pr_play_t06_persistent_manipulation.py",
+        "tests/test_pr_play_t04_local_action.py",
+        "tests/test_pr_play_t05_composition.py",
+        "tests/test_pr_play_preseal_authority.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\before_preservation_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_before_preservation_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 268.07076439994853,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "after_combined": {
+    "total": 425,
+    "passed": 405,
+    "failed": 20,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_unknown_player_named_object_is_not_instantiated": "tests\\test_referenced_surface_grounding_inspection_resolution.py:211: in test_general_unknown_player_named_object_is_not_instantiated\n    assert res.get(\"kind\") == \"investigate\"\nE   AssertionError: assert None == 'investigate'\nE    +  where None = <built-in method get of dict object at 0x00000126EA4E5FC0>('kind')\nE    +    where <built-in method get of dict object at 0x00000126EA4E5FC0> = {}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_narration_only_object_does_not_gain_authority": "tests\\test_referenced_surface_grounding_inspection_resolution.py:222: in test_general_narration_only_object_does_not_gain_authority\n    assert (first.get(\"resolution\") or {}).get(\"kind\") == \"observe\"\nE   AssertionError: assert None == 'observe'\nE    +  where None = <built-in method get of dict object at 0x00000126EA3F4480>('kind')\nE    +    where <built-in method get of dict object at 0x00000126EA3F4480> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x00000126EA2F7DC0>('resolution')\nE    +        where <built-in method get of dict object at 0x00000126EA2F7DC0> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents": "tests\\test_referenced_surface_grounding_inspection_resolution.py:255: in test_general_readable_surface_communicates_contents\n    assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}\nE   AssertionError: assert None in {'discover_clue', 'investigate'}\nE    +  where None = <built-in method get of dict object at 0x00000126EA3979C0>('kind')\nE    +    where <built-in method get of dict object at 0x00000126EA3979C0> = {}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_then_observe_uses_current_scene": "tests\\test_referenced_surface_grounding_inspection_resolution.py:279: in test_general_failed_inspection_then_observe_uses_current_scene\n    assert (first.get(\"resolution\") or {}).get(\"kind\") == \"investigate\"\nE   AssertionError: assert None == 'investigate'\nE    +  where None = <built-in method get of dict object at 0x00000126EA0952C0>('kind')\nE    +    where <built-in method get of dict object at 0x00000126EA0952C0> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x00000126E70B7940>('resolution')\nE    +        where <built-in method get of dict object at 0x00000126E70B7940> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...Sacks of cracked maize lean against the hopper braces.', 'A tariff slate hangs from a nail by the loft stair.']}}, ...}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_alias_binds": "tests\\test_referenced_surface_grounding_inspection_resolution.py:295: in test_general_authored_alias_binds\n    assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}\nE   AssertionError: assert None in {'discover_clue', 'investigate'}\nE    +  where None = <built-in method get of dict object at 0x00000126E9FC2D80>('kind')\nE    +    where <built-in method get of dict object at 0x00000126E9FC2D80> = {}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock": "tests\\test_referenced_surface_grounding_inspection_resolution.py:384: in test_frontier_gate_roster_http_does_not_use_observe_stock\n    assert (data.get(\"resolution\") or {}).get(\"kind\") == \"investigate\"\nE   AssertionError: assert None == 'investigate'\nE    +  where None = <built-in method get of dict object at 0x00000126EA096980>('kind')\nE    +    where <built-in method get of dict object at 0x00000126EA096980> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x00000126E69B7A80>('resolution')\nE    +        where <built-in method get of dict object at 0x00000126E69B7A80> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...hoke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.', 'mode': 'social', ...}}, ...}.get",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_observe_stock_replacement_keeps_notice_board_working": "tests\\test_referenced_surface_grounding_inspection_resolution.py:398: in test_observe_stock_replacement_keeps_notice_board_working\n    assert res.get(\"kind\") in {\"investigate\", \"discover_clue\"}\nE   AssertionError: assert None in {'discover_clue', 'investigate'}\nE    +  where None = <built-in method get of dict object at 0x00000126EA03E640>('kind')\nE    +    where <built-in method get of dict object at 0x00000126EA03E640> = {}.get",
+      "tests/test_pr_play_39_action_admission.py::test_sequence_patrol_travel_reaches_the_movement_resolver": "tests\\test_pr_play_39_action_admission.py:383: in test_sequence_patrol_travel_reaches_the_movement_resolver\n    assert body[\"resolution\"][\"resolved_transition\"] is True\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'resolved_transition'",
+      "tests/test_pr_play_39_action_admission.py::test_sequence_unsupported_actions_invent_nothing": "tests\\test_pr_play_39_action_admission.py:422: in test_sequence_unsupported_actions_invent_nothing\n    assert npc_body[\"resolution\"][\"resolved_transition\"] is False\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'resolved_transition'",
+      "tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid": "tests\\test_pr_br_continuation18_immutable_boundary.py:561: in test_raw_chat_stub_preserves_valid_and_contains_invalid\n    assert \"can't say what the stew costs\" in visible\nE   assert \"can't say what the stew costs\" in 'Tavern Runner mutters, \"Word is, hot stew and rumors for coin.\"'",
+      "tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_whisper_does_not_create_one": "tests\\test_perception_narration_authority_audible_non_invention.py:344: in test_player_seeks_whisper_does_not_create_one\n    assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"\nE   AssertionError: assert None == 'observe'\nE    +  where None = <built-in method get of dict object at 0x00000126EA4DEC40>('kind')\nE    +    where <built-in method get of dict object at 0x00000126EA4DEC40> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x00000126E7900780>('resolution')\nE    +        where <built-in method get of dict object at 0x00000126E7900780> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get",
+      "tests/test_perception_narration_authority_audible_non_invention.py::test_http_empty_listen_complete_and_grounded": "tests\\test_perception_narration_authority_audible_non_invention.py:561: in test_http_empty_listen_complete_and_grounded\n    assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"\nE   AssertionError: assert None == 'observe'\nE    +  where None = <built-in method get of dict object at 0x00000126EA02A6C0>('kind')\nE    +    where <built-in method get of dict object at 0x00000126EA02A6C0> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x00000126EA465900>('resolution')\nE    +        where <built-in method get of dict object at 0x00000126EA465900> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...'location': 'Ember Kiln Alcove', 'summary': 'A cold kiln stands in a brick alcove.', 'mode': 'exploration', ...}}, ...}.get",
+      "tests/test_perception_narration_authority_audible_non_invention.py::test_http_authorized_speech_can_survive": "tests\\test_perception_narration_authority_audible_non_invention.py:576: in test_http_authorized_speech_can_survive\n    assert (data.get(\"resolution\") or {}).get(\"kind\") == \"observe\"\nE   AssertionError: assert None == 'observe'\nE    +  where None = <built-in method get of dict object at 0x00000126E9F19240>('kind')\nE    +    where <built-in method get of dict object at 0x00000126E9F19240> = ({} or {}).get\nE    +      where {} = <built-in method get of dict object at 0x00000126E70B7940>('resolution')\nE    +        where <built-in method get of dict object at 0x00000126E70B7940> = {'campaign': {'title': 'Ashen Thrones'}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level':...rass_quay', 'location': 'Brass Quay', 'summary': 'A clerk works the deserted quay.', 'mode': 'exploration', ...}}, ...}.get",
+      "tests/test_pr_play_79df3_classification.py::test_duplicate_refusal_does_not_publish": "tests\\test_pr_play_79df3_classification.py:238: in test_duplicate_refusal_does_not_publish\n    assert not events.exists() or events.read_text(encoding=\"utf-8\").strip() == \"\"\nE   assert (not True or '{\"turn_id\": ...s_code\": 200}' == ''\nE    +  where True = exists()\nE    +    where exists = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/marking_inspection_after_combined_pytest/test_duplicate_refusal_does_no0/events.jsonl').exists\nE     \nE     + {\"turn_id\": \"0ae62a8069294d6f958805cd5fc7a310\", \"publication_owner\": \"completed_runtime_response\", \"response_category\": \"engine_response\", \"source_handler\": \"api_chat\", \"provider_involvement\": false, \"provider_attempt_references\": [], \"accepted_expression_references\": [], \"published_expression_reference\": \"28b98fec2ae38822d271447810b01a9c55b3f3cc02db9202712449e1e8bab622\", \"final_player_facing_response\": \"Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted.\", \"validation_outcome\": \"engine_or_grounded_fallback\", \"status_code\": 200})",
+      "tests/test_pr_play_79df3_classification.py::test_two_refusals_then_gameplay_advances": "tests\\test_pr_play_79df3_classification.py:251: in test_two_refusals_then_gameplay_advances\n    with TestClient(app) as client:\n.venv\\Lib\\site-packages\\starlette\\testclient.py:708: in __exit__\n    self.exit_stack.close()\n..\\..\\..\\..\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\contextlib.py:618: in close\n    self.__exit__(None, None, None)\n..\\..\\..\\..\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\contextlib.py:610: in __exit__\n    raise exc_details[1]\n..\\..\\..\\..\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\contextlib.py:595: in __exit__\n    if cb(*exc_details):\n       ^^^^^^^^^^^^^^^^\n..\\..\\..\\..\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\contextlib.py:478: in _exit_wrapper\n    callback(*args, **kwds)\n.venv\\Lib\\site-packages\\starlette\\testclient.py:701: in wait_shutdown\n    portal.call(self.wait_shutdown)\n.venv\\Lib\\site-packages\\anyio\\from_thread.py:338: in call\n    return cast(T_Retval, self.start_task_soon(func, *args).result())\n                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n.venv\\Lib\\site-packages\\anyio\\from_thread.py:380: in start_task_soon\n    self._check_running()\n.venv\\Lib\\site-packages\\anyio\\from_thread.py:214: in _check_running\n    raise RuntimeError(\"This portal is not running\")\nE   RuntimeError: This portal is not running",
+      "tests/test_pr_play_79df3_classification.py::test_save_reload_keeps_the_preceding_publication": "tests\\test_pr_play_79df3_classification.py:308: in test_save_reload_keeps_the_preceding_publication\n    assert any(item.get(\"log_meta\", {}).get(\"response_class\") == OPERATIONAL_REFUSAL for item in storage.load_log())\nE   assert False\nE    +  where False = any(<generator object test_save_reload_keeps_the_preceding_publication.<locals>.<genexpr> at 0x00000126E9CC51C0>)",
+      "tests/test_pr_play_79df3_classification.py::test_http_fallback_is_not_an_operational_refusal": "tests\\test_pr_play_79df3_classification.py:408: in test_http_fallback_is_not_an_operational_refusal\n    assert storage.load_session()[\"last_publication\"][\"visible\"] == visible\nE   assert 'Gate Guard s...sing patrol.\"' == 'That request...en attempted.'\nE     \nE     - That request addresses someone. Nothing has been attempted.\nE     + Gate Guard says, \"The notice board mentions a missing patrol.\"",
+      "tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context": "tests\\test_pr_de_exact_contract_deduplication.py:113: in test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context\n    assert payload[\"provider_context_projection\"][\"selected\"] is True, label\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'provider_context_projection'",
+      "tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop": "tests\\test_pr_de_exact_contract_deduplication.py:139: in test_full_context_classes_stay_unprojected_while_mirrors_drop\n    hidden = payload[\"scene\"][\"gm_only\"][\"hidden_facts\"]\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'gm_only'",
+      "tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload": "tests\\test_manual_play_latency.py:361: in test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload\n    assert compact_payload[\"social_context\"][\"answer_style_hints\"]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'social_context'"
+    },
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_pr_play_79a_continuity.py",
+        "tests/test_pr_eb_conversational_continuity.py",
+        "tests/test_pr_eg_r1_continuity.py",
+        "tests/test_referenced_surface_grounding_inspection_resolution.py",
+        "tests/test_pr_play_39_action_admission.py",
+        "tests/test_at_opt_02_retreat_and_budget.py",
+        "tests/test_at_opt_04_mixed_key_policy.py",
+        "tests/test_at_opt_06_instruction_eligibility.py",
+        "tests/test_at_opt_06_same_scene_transition.py",
+        "tests/test_narrative_planning_transition_node.py",
+        "tests/test_prompt_context_transition_node_consumption.py",
+        "tests/test_pr_ed_provider_efficiency.py",
+        "tests/test_pr_br_continuation18_immutable_boundary.py",
+        "tests/test_perception_narration_authority_audible_non_invention.py",
+        "tests/test_pr_play_post_npc_handoff.py",
+        "tests/test_pr_play_46_mechanical_boundary.py",
+        "tests/test_pr_play_79df3_classification.py",
+        "tests/test_pr_play_79b_integration.py",
+        "tests/test_pr_play_76_physical.py::test_flag_off_does_not_adjudicate",
+        "tests/test_pr_play_79c_publication.py::test_step_back_after_approach_names_the_milestone",
+        "tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome",
+        "tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context",
+        "tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop",
+        "tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload",
+        "tests/test_pr_play_preseal_authority.py",
+        "tests/test_pr_play_t05_composition.py",
+        "tests/test_pr_play_t04_local_action.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\after_combined_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_after_combined_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 1,
+      "elapsed_s": 299.84037630003877,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "after_marking": {
+    "total": 76,
+    "passed": 76,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_object_marking.py",
+        "tests/test_atomic_character_save.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\after_marking_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_after_marking_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 28.58491670002695,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "after_identity": {
+    "total": 52,
+    "passed": 52,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_object_instances.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\after_identity_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_after_identity_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 8.104289200040512,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "after_inventory_snapshot": {
+    "total": 50,
+    "passed": 50,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_pr_play_60_inventory_projection.py",
+        "tests/test_snapshots.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\after_inventory_snapshot_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_after_inventory_snapshot_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 11.652261000010185,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "after_preservation": {
+    "total": 143,
+    "passed": 143,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_pr_play_76_physical.py",
+        "tests/test_pr_play_71_persistence_recovery.py",
+        "tests/test_pr_play_75_persistence.py",
+        "tests/test_state_authority.py",
+        "tests/test_pr_play_t06_persistent_manipulation.py",
+        "tests/test_pr_play_t04_local_action.py",
+        "tests/test_pr_play_t05_composition.py",
+        "tests/test_pr_play_preseal_authority.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\after_preservation_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_after_preservation_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 254.443040400045,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "final_inspection": {
+    "total": 72,
+    "passed": 72,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_object_marking_inspection.py",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\final_inspection_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_final_inspection_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 57.133782899938524,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "bounded_performance": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failures": {},
+    "command": {
+      "executable": "C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "args": [
+        "tests/test_object_marking_inspection.py::test_bounded_measurements",
+        "-q",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_object_marking_inspection\\bounded_performance_junit.xml",
+        "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\marking_inspection_bounded_performance_pytest"
+      ]
+    },
+    "execution": {
+      "exit_code": 0,
+      "elapsed_s": 3.556710800039582,
+      "network_blocks": [],
+      "live_provider_calls": 0
+    }
+  },
+  "new_failures": [],
+  "newly_passing": [],
+  "live_provider_calls": 0,
+  "startup_note": "Initial launcher attempts used the unavailable Windows Python alias, then omitted repository site-packages. Both failed before test execution; corrected to the documented runtime and PYTHONPATH. No source change or provider call."
+}

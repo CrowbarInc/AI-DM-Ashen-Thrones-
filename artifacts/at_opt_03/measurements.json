@@ -1,0 +1,1736 @@
+{
+  "classification": "RECONSTRUCTED",
+  "provider_calls": 0,
+  "provider_client_constructed": false,
+  "recorded_provider_input_tokens": 22777,
+  "opt01_reconstruction_blob_bytes": 83902,
+  "opt01_admission_estimate": 28031,
+  "basis": "F3 snapshot 2026-11-08T16-50-45_8caf7aff session, F3 http_data scene files, current working-tree build_messages, resolution None, prompt_profile manual_play_auto. Not the captured provider payload.",
+  "full_system_prompt_bytes": 9568,
+  "narration_only_system_prompt_bytes": 4170,
+  "baseline": {
+    "message_count": 2,
+    "system_bytes": 9558,
+    "system_chars": 9554,
+    "user_bytes": 68675,
+    "user_chars": 68643,
+    "blob_bytes": 83040,
+    "admission_estimate_tokens": 27744,
+    "label": "f3_snapshot_resolution_none",
+    "top_sections": [
+      {
+        "key": "response_policy",
+        "bytes": 21638,
+        "chars": 21636
+      },
+      {
+        "key": "instructions",
+        "bytes": 12596,
+        "chars": 12568
+      },
+      {
+        "key": "turn_packet",
+        "bytes": 10642,
+        "chars": 10640
+      },
+      {
+        "key": "narrative_plan",
+        "bytes": 5031,
+        "chars": 5031
+      },
+      {
+        "key": "referent_tracking",
+        "bytes": 2650,
+        "chars": 2650
+      },
+      {
+        "key": "dialogue_social_plan",
+        "bytes": 2245,
+        "chars": 2245
+      },
+      {
+        "key": "lead_context",
+        "bytes": 2145,
+        "chars": 2145
+      },
+      {
+        "key": "speaker_selection",
+        "bytes": 1169,
+        "chars": 1169
+      },
+      {
+        "key": "scene",
+        "bytes": 1098,
+        "chars": 1098
+      },
+      {
+        "key": "character",
+        "bytes": 1059,
+        "chars": 1059
+      },
+      {
+        "key": "scene_state_anchor_contract",
+        "bytes": 1005,
+        "chars": 1005
+      },
+      {
+        "key": "mechanical_resolution",
+        "bytes": 646,
+        "chars": 646
+      },
+      {
+        "key": "narration_visibility",
+        "bytes": 615,
+        "chars": 615
+      },
+      {
+        "key": "selected_conversational_memory",
+        "bytes": 585,
+        "chars": 585
+      },
+      {
+        "key": "transition",
+        "bytes": 535,
+        "chars": 535
+      },
+      {
+        "key": "narration_obligations",
+        "bytes": 402,
+        "chars": 402
+      },
+      {
+        "key": "turn_summary",
+        "bytes": 391,
+        "chars": 391
+      },
+      {
+        "key": "campaign",
+        "bytes": 381,
+        "chars": 381
+      },
+      {
+        "key": "clues",
+        "bytes": 361,
+        "chars": 361
+      },
+      {
+        "key": "bounded_improvisation",
+        "bytes": 359,
+        "chars": 359
+      },
+      {
+        "key": "session",
+        "bytes": 340,
+        "chars": 340
+      },
+      {
+        "key": "recent_log",
+        "bytes": 306,
+        "chars": 306
+      },
+      {
+        "key": "interlocutor_lead_context",
+        "bytes": 270,
+        "chars": 270
+      },
+      {
+        "key": "interaction_continuity",
+        "bytes": 230,
+        "chars": 230
+      },
+      {
+        "key": "player_expression_contract",
+        "bytes": 210,
+        "chars": 210
+      }
+    ],
+    "system_is_narration_only": false
+  },
+  "matches_opt01_blob_bytes": false,
+  "estimate_minus_recorded": 4967,
+  "section_attribution": [
+    {
+      "key": "response_policy",
+      "bytes": 21638,
+      "chars": 21636,
+      "share_of_user_json": 0.3151,
+      "bytes_div_3": 7212
+    },
+    {
+      "key": "instructions",
+      "bytes": 12596,
+      "chars": 12568,
+      "share_of_user_json": 0.1834,
+      "bytes_div_3": 4198
+    },
+    {
+      "key": "turn_packet",
+      "bytes": 10642,
+      "chars": 10640,
+      "share_of_user_json": 0.155,
+      "bytes_div_3": 3547
+    },
+    {
+      "key": "narrative_plan",
+      "bytes": 5031,
+      "chars": 5031,
+      "share_of_user_json": 0.0733,
+      "bytes_div_3": 1677
+    },
+    {
+      "key": "referent_tracking",
+      "bytes": 2650,
+      "chars": 2650,
+      "share_of_user_json": 0.0386,
+      "bytes_div_3": 883
+    },
+    {
+      "key": "dialogue_social_plan",
+      "bytes": 2245,
+      "chars": 2245,
+      "share_of_user_json": 0.0327,
+      "bytes_div_3": 748
+    },
+    {
+      "key": "lead_context",
+      "bytes": 2145,
+      "chars": 2145,
+      "share_of_user_json": 0.0312,
+      "bytes_div_3": 715
+    },
+    {
+      "key": "speaker_selection",
+      "bytes": 1169,
+      "chars": 1169,
+      "share_of_user_json": 0.017,
+      "bytes_div_3": 389
+    },
+    {
+      "key": "scene",
+      "bytes": 1098,
+      "chars": 1098,
+      "share_of_user_json": 0.016,
+      "bytes_div_3": 366
+    },
+    {
+      "key": "character",
+      "bytes": 1059,
+      "chars": 1059,
+      "share_of_user_json": 0.0154,
+      "bytes_div_3": 353
+    },
+    {
+      "key": "scene_state_anchor_contract",
+      "bytes": 1005,
+      "chars": 1005,
+      "share_of_user_json": 0.0146,
+      "bytes_div_3": 335
+    },
+    {
+      "key": "mechanical_resolution",
+      "bytes": 646,
+      "chars": 646,
+      "share_of_user_json": 0.0094,
+      "bytes_div_3": 215
+    },
+    {
+      "key": "narration_visibility",
+      "bytes": 615,
+      "chars": 615,
+      "share_of_user_json": 0.009,
+      "bytes_div_3": 205
+    },
+    {
+      "key": "selected_conversational_memory",
+      "bytes": 585,
+      "chars": 585,
+      "share_of_user_json": 0.0085,
+      "bytes_div_3": 195
+    },
+    {
+      "key": "transition",
+      "bytes": 535,
+      "chars": 535,
+      "share_of_user_json": 0.0078,
+      "bytes_div_3": 178
+    },
+    {
+      "key": "narration_obligations",
+      "bytes": 402,
+      "chars": 402,
+      "share_of_user_json": 0.0059,
+      "bytes_div_3": 134
+    },
+    {
+      "key": "turn_summary",
+      "bytes": 391,
+      "chars": 391,
+      "share_of_user_json": 0.0057,
+      "bytes_div_3": 130
+    },
+    {
+      "key": "campaign",
+      "bytes": 381,
+      "chars": 381,
+      "share_of_user_json": 0.0055,
+      "bytes_div_3": 127
+    },
+    {
+      "key": "clues",
+      "bytes": 361,
+      "chars": 361,
+      "share_of_user_json": 0.0053,
+      "bytes_div_3": 120
+    },
+    {
+      "key": "bounded_improvisation",
+      "bytes": 359,
+      "chars": 359,
+      "share_of_user_json": 0.0052,
+      "bytes_div_3": 119
+    },
+    {
+      "key": "session",
+      "bytes": 340,
+      "chars": 340,
+      "share_of_user_json": 0.005,
+      "bytes_div_3": 113
+    },
+    {
+      "key": "recent_log",
+      "bytes": 306,
+      "chars": 306,
+      "share_of_user_json": 0.0045,
+      "bytes_div_3": 102
+    },
+    {
+      "key": "interlocutor_lead_context",
+      "bytes": 270,
+      "chars": 270,
+      "share_of_user_json": 0.0039,
+      "bytes_div_3": 90
+    },
+    {
+      "key": "interaction_continuity",
+      "bytes": 230,
+      "chars": 230,
+      "share_of_user_json": 0.0033,
+      "bytes_div_3": 76
+    },
+    {
+      "key": "player_expression_contract",
+      "bytes": 210,
+      "chars": 210,
+      "share_of_user_json": 0.0031,
+      "bytes_div_3": 70
+    }
+  ],
+  "scaffold_bytes": 58792,
+  "gameplay_state_bytes": 6921,
+  "response_policy_children": [
+    {
+      "key": "context_separation",
+      "bytes": 3675
+    },
+    {
+      "key": "answer_completeness",
+      "bytes": 2054
+    },
+    {
+      "key": "interaction_continuity",
+      "bytes": 1805
+    },
+    {
+      "key": "response_delta",
+      "bytes": 1739
+    },
+    {
+      "key": "narrative_authenticity",
+      "bytes": 1674
+    },
+    {
+      "key": "tone_escalation",
+      "bytes": 1628
+    },
+    {
+      "key": "anti_railroading",
+      "bytes": 1551
+    },
+    {
+      "key": "narrative_authority",
+      "bytes": 1421
+    },
+    {
+      "key": "fallback_behavior",
+      "bytes": 1315
+    },
+    {
+      "key": "conversational_memory_window",
+      "bytes": 790
+    },
+    {
+      "key": "rule_priority_order",
+      "bytes": 735
+    },
+    {
+      "key": "no_validator_voice",
+      "bytes": 633
+    },
+    {
+      "key": "social_response_structure",
+      "bytes": 628
+    },
+    {
+      "key": "response_type_contract",
+      "bytes": 450
+    },
+    {
+      "key": "player_facing_narration_purity",
+      "bytes": 369
+    },
+    {
+      "key": "uncertainty",
+      "bytes": 355
+    }
+  ],
+  "turn_packet_children": [
+    {
+      "key": "response_policy",
+      "bytes": 6016
+    },
+    {
+      "key": "contracts",
+      "bytes": 3755
+    },
+    {
+      "key": "debug",
+      "bytes": 287
+    },
+    {
+      "key": "referent_tracking_compact",
+      "bytes": 140
+    },
+    {
+      "key": "route",
+      "bytes": 114
+    },
+    {
+      "key": "continuity",
+      "bytes": 40
+    },
+    {
+      "key": "player_text",
+      "bytes": 29
+    },
+    {
+      "key": "fallback",
+      "bytes": 29
+    },
+    {
+      "key": "scene_id",
+      "bytes": 15
+    },
+    {
+      "key": "resolution_kind",
+      "bytes": 15
+    },
+    {
+      "key": "turn_id",
+      "bytes": 4
+    },
+    {
+      "key": "version",
+      "bytes": 1
+    }
+  ],
+  "narrative_plan_children": [
+    {
+      "key": "narrative_roles",
+      "bytes": 1321
+    },
+    {
+      "key": "answer_exposition_plan",
+      "bytes": 680
+    },
+    {
+      "key": "action_outcome",
+      "bytes": 626
+    },
+    {
+      "key": "transition_node",
+      "bytes": 535
+    },
+    {
+      "key": "narrative_mode_contract",
+      "bytes": 462
+    },
+    {
+      "key": "scene_anchors",
+      "bytes": 334
+    },
+    {
+      "key": "required_new_information",
+      "bytes": 296
+    },
+    {
+      "key": "allowable_entity_references",
+      "bytes": 258
+    },
+    {
+      "key": "active_pressures",
+      "bytes": 151
+    },
+    {
+      "key": "role_allocation",
+      "bytes": 74
+    },
+    {
+      "key": "narrative_mode",
+      "bytes": 16
+    },
+    {
+      "key": "version",
+      "bytes": 1
+    }
+  ],
+  "nested_policy_compare": [
+    {
+      "key": "rule_priority_order",
+      "nested_bytes": 735,
+      "root_bytes": 735,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "must_answer",
+      "nested_bytes": 4,
+      "root_bytes": 4,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "forbid_state_invention",
+      "nested_bytes": 4,
+      "root_bytes": 4,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "forbid_secret_leak",
+      "nested_bytes": 4,
+      "root_bytes": 4,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "allow_partial_answer",
+      "nested_bytes": 4,
+      "root_bytes": 4,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "response_delta",
+      "nested_bytes": 1764,
+      "root_bytes": 1739,
+      "present_on_root": true,
+      "json_equal_to_root": false,
+      "unequal_detail": {
+        "nested_type": "dict",
+        "root_type": "dict",
+        "keys_only_in_nested": [],
+        "keys_only_in_root": []
+      }
+    },
+    {
+      "key": "diegetic_only",
+      "nested_bytes": 4,
+      "root_bytes": 4,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "prefer_scene_momentum",
+      "nested_bytes": 4,
+      "root_bytes": 4,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "prefer_specificity",
+      "nested_bytes": 4,
+      "root_bytes": 4,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "no_validator_voice",
+      "nested_bytes": 633,
+      "root_bytes": 633,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "scene_momentum_due",
+      "nested_bytes": 5,
+      "root_bytes": 5,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "uncertainty",
+      "nested_bytes": 355,
+      "root_bytes": 355,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    },
+    {
+      "key": "answer_completeness",
+      "nested_bytes": 1371,
+      "root_bytes": 2054,
+      "present_on_root": true,
+      "json_equal_to_root": false,
+      "unequal_detail": {
+        "nested_type": "dict",
+        "root_type": "dict",
+        "keys_only_in_nested": [],
+        "keys_only_in_root": [
+          "answer_exposition_plan"
+        ]
+      }
+    },
+    {
+      "key": "planner_seam_trace",
+      "nested_bytes": 323,
+      "root_bytes": 111,
+      "present_on_root": true,
+      "json_equal_to_root": false,
+      "unequal_detail": {
+        "nested_type": "dict",
+        "root_type": "dict",
+        "keys_only_in_nested": [
+          "response_type_contract_resolution"
+        ],
+        "keys_only_in_root": []
+      }
+    },
+    {
+      "key": "response_type_contract",
+      "nested_bytes": 450,
+      "root_bytes": 450,
+      "present_on_root": true,
+      "json_equal_to_root": true,
+      "unequal_detail": null
+    }
+  ],
+  "turn_packet_contract_compare": [
+    {
+      "key": "answer_completeness",
+      "bytes": 1371,
+      "json_equal_to_root_policy": false
+    },
+    {
+      "key": "response_delta",
+      "bytes": 1764,
+      "json_equal_to_root_policy": false
+    },
+    {
+      "key": "fallback_behavior",
+      "bytes": 4,
+      "json_equal_to_root_policy": false
+    },
+    {
+      "key": "tone_escalation",
+      "bytes": 4,
+      "json_equal_to_root_policy": false
+    },
+    {
+      "key": "anti_railroading",
+      "bytes": 4,
+      "json_equal_to_root_policy": false
+    },
+    {
+      "key": "context_separation",
+      "bytes": 4,
+      "json_equal_to_root_policy": false
+    },
+    {
+      "key": "response_type",
+      "bytes": 450,
+      "json_equal_to_root_policy": false
+    }
+  ],
+  "partial_policy_info": {
+    "applied": true,
+    "dropped_keys": [
+      "rule_priority_order",
+      "must_answer",
+      "forbid_state_invention",
+      "forbid_secret_leak",
+      "allow_partial_answer",
+      "diegetic_only",
+      "prefer_scene_momentum",
+      "prefer_specificity",
+      "no_validator_voice",
+      "scene_momentum_due",
+      "uncertainty",
+      "response_type_contract"
+    ],
+    "kept_keys": [
+      "response_delta",
+      "answer_completeness",
+      "planner_seam_trace"
+    ],
+    "dropped_bytes": 2206
+  },
+  "duplicate_strings": {
+    "strings_at_least_80_chars": 62,
+    "duplicate_groups": 7,
+    "extra_bytes_if_later_copies_removed": 1365,
+    "largest_groups": [
+      {
+        "copies": 8,
+        "bytes_each": 80,
+        "paths": [
+          "lead_context.top_active_leads[0].title",
+          "lead_context.top_active_leads[0].summary",
+          "lead_context.recent_lead_changes[0].title",
+          "lead_context.recent_lead_changes[0].summary",
+          "response_policy.anti_railroading.surfaced_lead_labels[0]",
+          "response_policy.context_separation.allowed_contextual_topics[0]",
+          "clues.known[0].text",
+          "clues.explicit[0].text"
+        ]
+      },
+      {
+        "copies": 2,
+        "bytes_each": 345,
+        "paths": [
+          "response_policy.no_validator_voice.rule",
+          "turn_packet.response_policy.no_validator_voice.rule"
+        ]
+      },
+      {
+        "copies": 2,
+        "bytes_each": 105,
+        "paths": [
+          "response_policy.rule_priority_order[7]",
+          "turn_packet.response_policy.rule_priority_order[7]"
+        ]
+      },
+      {
+        "copies": 2,
+        "bytes_each": 95,
+        "paths": [
+          "response_policy.rule_priority_order[4]",
+          "turn_packet.response_policy.rule_priority_order[4]"
+        ]
+      },
+      {
+        "copies": 2,
+        "bytes_each": 95,
+        "paths": [
+          "character.role",
+          "campaign.character_role"
+        ]
+      },
+      {
+        "copies": 2,
+        "bytes_each": 85,
+        "paths": [
+          "response_policy.rule_priority_order[6]",
+          "turn_packet.response_policy.rule_priority_order[6]"
+        ]
+      },
+      {
+        "copies": 2,
+        "bytes_each": 80,
+        "paths": [
+          "response_policy.narrative_authority.visible_fact_strings[0]",
+          "narration_visibility.visible_facts[0]"
+        ]
+      }
+    ]
+  },
+  "compact_gate": {
+    "payload_visible_blockers": [
+      "narration_obligations_opening_or_advance"
+    ],
+    "would_be_blocked_by_visible_fields": true,
+    "uncertainty_hint": null,
+    "follow_up_pressure": null,
+    "active_topic_anchor": {
+      "active": false,
+      "focus_fragment": "",
+      "suppress_lead_thread_bias": false
+    },
+    "obligation_flags": {
+      "is_opening_scene": false,
+      "must_advance_scene": true,
+      "active_npc_reply_expected": false
+    }
+  },
+  "instruction_count": 78,
+  "compact_instruction_count": 10,
+  "compact_instruction_bytes": 2741,
+  "experiments": [
+    {
+      "name": "partial_equal_turn_packet_policy",
+      "note": "Equal turn_packet.response_policy children are removed. Unequal children stay. Root response_policy stays.",
+      "removed_or_transformed": [
+        "rule_priority_order",
+        "must_answer",
+        "forbid_state_invention",
+        "forbid_secret_leak",
+        "allow_partial_answer",
+        "diegetic_only",
+        "prefer_scene_momentum",
+        "prefer_specificity",
+        "no_validator_voice",
+        "scene_momentum_due",
+        "uncertainty",
+        "response_type_contract"
+      ],
+      "blob_bytes": 80403,
+      "user_bytes": 66186,
+      "system_bytes": 9558,
+      "admission_estimate_tokens": 26865,
+      "blob_bytes_delta": -2637,
+      "estimate_delta": -879,
+      "authority_note": "Equal turn_packet.response_policy children are removed. Unequal children stay. Root response_policy stays."
+    },
+    {
+      "name": "drop_nested_debug_keys",
+      "note": "Every object key named debug is removed from a copy. This includes referent and packet debug.",
+      "removed_or_transformed": [
+        "debug"
+      ],
+      "blob_bytes": 80635,
+      "user_bytes": 66446,
+      "system_bytes": 9558,
+      "admission_estimate_tokens": 26942,
+      "blob_bytes_delta": -2405,
+      "estimate_delta": -802,
+      "authority_note": "Every object key named debug is removed from a copy. This includes referent and packet debug."
+    },
+    {
+      "name": "drop_opening_keys_when_opening_mode_false",
+      "note": "opening_* keys are removed only when the payload already says this is not an opening.",
+      "removed_or_transformed": [
+        "opening_narration_obligations",
+        "opening_scene_realization",
+        "opening_inputs_are_curated",
+        "opening_selector_source_used",
+        "opening_selector_selected_facts",
+        "opening_curated_facts"
+      ],
+      "blob_bytes": 82515,
+      "user_bytes": 68186,
+      "system_bytes": 9558,
+      "admission_estimate_tokens": 27569,
+      "blob_bytes_delta": -525,
+      "estimate_delta": -175,
+      "authority_note": "opening_* keys are removed only when the payload already says this is not an opening."
+    },
+    {
+      "name": "drop_dialogue_validator",
+      "note": "dialogue_social_plan.validator is removed from the copy. The rest of the plan stays.",
+      "removed_or_transformed": [
+        "dialogue_social_plan.validator"
+      ],
+      "blob_bytes": 81695,
+      "user_bytes": 67464,
+      "system_bytes": 9558,
+      "admission_estimate_tokens": 27295,
+      "blob_bytes_delta": -1345,
+      "estimate_delta": -449,
+      "authority_note": "dialogue_social_plan.validator is removed from the copy. The rest of the plan stays."
+    },
+    {
+      "name": "replace_instructions_with_existing_compact_list",
+      "note": "User instructions are replaced by the existing compact-instruction helper. Response policy stays. Narrative-mode lines were not copied into the compact list, so this understates the compact instruction block.",
+      "removed_or_transformed": [
+        "instructions"
+      ],
+      "blob_bytes": 73029,
+      "user_bytes": 58820,
+      "system_bytes": 9558,
+      "admission_estimate_tokens": 24407,
+      "blob_bytes_delta": -10011,
+      "estimate_delta": -3337,
+      "authority_note": "User instructions are replaced by the existing compact-instruction helper. Response policy stays. Narrative-mode lines were not copied into the compact list, so this understates the compact instruction block."
+    },
+    {
+      "name": "narration_only_system_prompt_on_same_user_payload",
+      "note": "System text is swapped for the narration-only prompt. The user payload, including structured-claim instructions, is unchanged. This is not a legal envelope change.",
+      "removed_or_transformed": [
+        "system_prompt_schema"
+      ],
+      "blob_bytes": 77379,
+      "admission_estimate_tokens": 25857,
+      "blob_bytes_delta": -5661,
+      "estimate_delta": -1887
+    },
+    {
+      "name": "combined_equal_policy_debug_opening_validator",
+      "note": "Stacks the equal-policy, debug, closed-opening, and validator removals. Does not remove unequal policy or the standing instruction list.",
+      "removed_or_transformed": [
+        "rule_priority_order",
+        "must_answer",
+        "forbid_state_invention",
+        "forbid_secret_leak",
+        "allow_partial_answer",
+        "diegetic_only",
+        "prefer_scene_momentum",
+        "prefer_specificity",
+        "no_validator_voice",
+        "scene_momentum_due",
+        "uncertainty",
+        "response_type_contract",
+        "debug",
+        "opening_narration_obligations",
+        "opening_scene_realization",
+        "opening_inputs_are_curated",
+        "opening_selector_source_used",
+        "opening_selector_selected_facts",
+        "opening_curated_facts",
+        "validator"
+      ],
+      "blob_bytes": 76128,
+      "admission_estimate_tokens": 25440,
+      "blob_bytes_delta": -6912,
+      "estimate_delta": -2304
+    }
+  ],
+  "utterances_resolution_none": [
+    {
+      "player_text": "I step back from the notice board.",
+      "retreat_skip_sentence": "That part is not supported here. It was not carried out.",
+      "blob_bytes": 83040,
+      "admission_estimate_tokens": 27744,
+      "system_is_narration_only": false,
+      "instruction_bytes": 12596,
+      "response_policy_bytes": 21638,
+      "recent_log_bytes": 306,
+      "player_input_bytes": null,
+      "compact_gate": {
+        "payload_visible_blockers": [
+          "narration_obligations_opening_or_advance"
+        ],
+        "would_be_blocked_by_visible_fields": true,
+        "uncertainty_hint": null,
+        "follow_up_pressure": null,
+        "active_topic_anchor": {
+          "active": false,
+          "focus_fragment": "",
+          "suppress_lead_thread_bias": false
+        },
+        "obligation_flags": {
+          "is_opening_scene": false,
+          "must_advance_scene": true,
+          "active_npc_reply_expected": false
+        }
+      },
+      "delta_blob_vs_step_back": 0
+    },
+    {
+      "player_text": "What do I see?",
+      "retreat_skip_sentence": null,
+      "blob_bytes": 87471,
+      "admission_estimate_tokens": 29221,
+      "system_is_narration_only": false,
+      "instruction_bytes": 12596,
+      "response_policy_bytes": 21930,
+      "recent_log_bytes": 306,
+      "player_input_bytes": null,
+      "compact_gate": {
+        "payload_visible_blockers": [
+          "narration_obligations_opening_or_advance",
+          "uncertainty_hint_nonempty"
+        ],
+        "would_be_blocked_by_visible_fields": true,
+        "uncertainty_hint": {
+          "bytes": 3831
+        },
+        "follow_up_pressure": null,
+        "active_topic_anchor": {
+          "active": false,
+          "focus_fragment": "",
+          "suppress_lead_thread_bias": false
+        },
+        "obligation_flags": {
+          "is_opening_scene": false,
+          "must_advance_scene": true,
+          "active_npc_reply_expected": false
+        }
+      },
+      "delta_blob_vs_step_back": 4431
+    },
+    {
+      "player_text": "Hello, Gate Guard.",
+      "retreat_skip_sentence": null,
+      "blob_bytes": 84288,
+      "admission_estimate_tokens": 28160,
+      "system_is_narration_only": false,
+      "instruction_bytes": 13389,
+      "response_policy_bytes": 21651,
+      "recent_log_bytes": 306,
+      "player_input_bytes": null,
+      "compact_gate": {
+        "payload_visible_blockers": [
+          "narration_obligations_opening_or_advance",
+          "follow_up_pressure_nonempty"
+        ],
+        "would_be_blocked_by_visible_fields": true,
+        "uncertainty_hint": null,
+        "follow_up_pressure": {
+          "bytes": 432
+        },
+        "active_topic_anchor": {
+          "active": false,
+          "focus_fragment": "",
+          "suppress_lead_thread_bias": false
+        },
+        "obligation_flags": {
+          "is_opening_scene": false,
+          "must_advance_scene": true,
+          "active_npc_reply_expected": false
+        }
+      },
+      "delta_blob_vs_step_back": 1248
+    },
+    {
+      "player_text": "I look closely at the notice board.",
+      "retreat_skip_sentence": null,
+      "blob_bytes": 83046,
+      "admission_estimate_tokens": 27746,
+      "system_is_narration_only": false,
+      "instruction_bytes": 12596,
+      "response_policy_bytes": 21642,
+      "recent_log_bytes": 306,
+      "player_input_bytes": null,
+      "compact_gate": {
+        "payload_visible_blockers": [
+          "narration_obligations_opening_or_advance"
+        ],
+        "would_be_blocked_by_visible_fields": true,
+        "uncertainty_hint": null,
+        "follow_up_pressure": null,
+        "active_topic_anchor": {
+          "active": false,
+          "focus_fragment": "",
+          "suppress_lead_thread_bias": false
+        },
+        "obligation_flags": {
+          "is_opening_scene": false,
+          "must_advance_scene": true,
+          "active_npc_reply_expected": false
+        }
+      },
+      "delta_blob_vs_step_back": 6
+    },
+    {
+      "player_text": "I push the nearest crate.",
+      "retreat_skip_sentence": null,
+      "blob_bytes": 83027,
+      "admission_estimate_tokens": 27739,
+      "system_is_narration_only": false,
+      "instruction_bytes": 12596,
+      "response_policy_bytes": 21641,
+      "recent_log_bytes": 306,
+      "player_input_bytes": null,
+      "compact_gate": {
+        "payload_visible_blockers": [
+          "narration_obligations_opening_or_advance"
+        ],
+        "would_be_blocked_by_visible_fields": true,
+        "uncertainty_hint": null,
+        "follow_up_pressure": null,
+        "active_topic_anchor": {
+          "active": false,
+          "focus_fragment": "",
+          "suppress_lead_thread_bias": false
+        },
+        "obligation_flags": {
+          "is_opening_scene": false,
+          "must_advance_scene": true,
+          "active_npc_reply_expected": false
+        }
+      },
+      "delta_blob_vs_step_back": -13
+    },
+    {
+      "player_text": "What did we already learn about the patrol?",
+      "retreat_skip_sentence": null,
+      "blob_bytes": 85527,
+      "admission_estimate_tokens": 28573,
+      "system_is_narration_only": false,
+      "instruction_bytes": 12749,
+      "response_policy_bytes": 21915,
+      "recent_log_bytes": 306,
+      "player_input_bytes": null,
+      "compact_gate": {
+        "payload_visible_blockers": [
+          "narration_obligations_opening_or_advance"
+        ],
+        "would_be_blocked_by_visible_fields": true,
+        "uncertainty_hint": null,
+        "follow_up_pressure": null,
+        "active_topic_anchor": {
+          "active": false,
+          "focus_fragment": "",
+          "suppress_lead_thread_bias": false
+        },
+        "obligation_flags": {
+          "is_opening_scene": false,
+          "must_advance_scene": true,
+          "active_npc_reply_expected": false
+        }
+      },
+      "delta_blob_vs_step_back": 2487
+    },
+    {
+      "player_text": "I wait and listen.",
+      "retreat_skip_sentence": null,
+      "blob_bytes": 83347,
+      "admission_estimate_tokens": 27846,
+      "system_is_narration_only": false,
+      "instruction_bytes": 12817,
+      "response_policy_bytes": 21624,
+      "recent_log_bytes": 306,
+      "player_input_bytes": null,
+      "compact_gate": {
+        "payload_visible_blockers": [
+          "narration_obligations_opening_or_advance"
+        ],
+        "would_be_blocked_by_visible_fields": true,
+        "uncertainty_hint": null,
+        "follow_up_pressure": null,
+        "active_topic_anchor": {
+          "active": false,
+          "focus_fragment": "",
+          "suppress_lead_thread_bias": false
+        },
+        "obligation_flags": {
+          "is_opening_scene": false,
+          "must_advance_scene": true,
+          "active_npc_reply_expected": false
+        }
+      },
+      "delta_blob_vs_step_back": 307
+    },
+    {
+      "player_text": "Something feels wrong here. What should I do?",
+      "retreat_skip_sentence": null,
+      "blob_bytes": 87668,
+      "admission_estimate_tokens": 29286,
+      "system_is_narration_only": false,
+      "instruction_bytes": 12596,
+      "response_policy_bytes": 21985,
+      "recent_log_bytes": 306,
+      "player_input_bytes": null,
+      "compact_gate": {
+        "payload_visible_blockers": [
+          "narration_obligations_opening_or_advance",
+          "uncertainty_hint_nonempty"
+        ],
+        "would_be_blocked_by_visible_fields": true,
+        "uncertainty_hint": {
+          "bytes": 3899
+        },
+        "follow_up_pressure": null,
+        "active_topic_anchor": {
+          "active": false,
+          "focus_fragment": "",
+          "suppress_lead_thread_bias": false
+        },
+        "obligation_flags": {
+          "is_opening_scene": false,
+          "must_advance_scene": true,
+          "active_npc_reply_expected": false
+        }
+      },
+      "delta_blob_vs_step_back": 4628
+    }
+  ],
+  "production_route_samples": [
+    {
+      "player_text": "I step back from the notice board.",
+      "build_messages_calls": 0,
+      "call_gpt_entries": 0,
+      "visible_prefix": "That part is not supported here. It was not carried out.",
+      "tags": [
+        "deterministic_narration",
+        "provider_narration_skipped",
+        "unresolved_retreat_without_adjudication",
+        "non_mutating"
+      ],
+      "error": null
+    },
+    {
+      "player_text": "What do I see?",
+      "build_messages_calls": 1,
+      "call_gpt_entries": 0,
+      "visible_prefix": "Threadbare watchers and refugees cluster along the muddy gate line holds the eye, while a gate serjeant manages the crowd and keeps one eye on the roster board stays impossible to ignore.",
+      "tags": [
+        "deterministic_narration",
+        "provider_narration_skipped",
+        "local_observation",
+        "final_emission_gate_replaced",
+        "final_emission_gate:passive_scene_pressure_grounded_observe",
+        "resolution_contract_semantic_preserved"
+      ],
+      "error": null
+    },
+    {
+      "player_text": "Hello, Gate Guard.",
+      "build_messages_calls": 1,
+      "call_gpt_entries": 1,
+      "visible_prefix": "Threadbare watchers and refugees cluster along the muddy gate line holds the eye, while a tavern runner trades hot stew and rumors near the rain barrel stays impossible to ignore.",
+      "tags": [
+        "provider_calls_disabled",
+        "deterministic_fallback",
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted"
+      ],
+      "error": null
+    }
+  ],
+  "retry_instruction_samples": [
+    {
+      "source": "build_retry_prompt_for_failure",
+      "failure_class": "validator_voice",
+      "bytes": 3828,
+      "chars": 3820
+    },
+    {
+      "source": "build_retry_prompt_for_failure",
+      "failure_class": "echo_or_repetition",
+      "bytes": 3620,
+      "chars": 3612
+    },
+    {
+      "source": "build_retry_prompt_for_failure",
+      "failure_class": "scene_stall",
+      "bytes": 3911,
+      "chars": 3901
+    },
+    {
+      "source": "build_retry_prompt_for_failure",
+      "failure_class": "unresolved_question",
+      "bytes": 3882,
+      "chars": 3874
+    },
+    {
+      "source": "regeneration_feedback_without_resolution",
+      "bytes": 460,
+      "chars": 460
+    }
+  ],
+  "historical_over_20000": [
+    {
+      "cycle": "79",
+      "attempt_id": "15df9ff963974f57a4a233ba7623209c",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "input_tokens": 25294,
+      "output_tokens": 1382,
+      "total_tokens": 26676,
+      "latency_ms": 9758.784,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T01:48:52.627489+00:00",
+      "prompt_stored": false
+    },
+    {
+      "cycle": "79",
+      "attempt_id": "b06c87bdbd50411d84b5aeb05d3aa80b",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "input_tokens": 22961,
+      "output_tokens": 600,
+      "total_tokens": 23561,
+      "latency_ms": 4312.177,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T01:49:11.652950+00:00",
+      "prompt_stored": false
+    },
+    {
+      "cycle": "79",
+      "attempt_id": "a6f4df8e93fa40a18144bd5a3e058ab2",
+      "purpose": "retry_escalation",
+      "owner": "gm.call_gpt",
+      "input_tokens": 28425,
+      "output_tokens": 314,
+      "total_tokens": 28739,
+      "latency_ms": 3254.451,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T01:49:15.377113+00:00",
+      "prompt_stored": false
+    },
+    {
+      "cycle": "79",
+      "attempt_id": "1ab49aabd22748399e810eaed24344c1",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "input_tokens": 23178,
+      "output_tokens": 600,
+      "total_tokens": 23778,
+      "latency_ms": 4344.5,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T01:49:23.848417+00:00",
+      "prompt_stored": false
+    },
+    {
+      "cycle": "79",
+      "attempt_id": "1bc932f2b5af46449c627386d4fae0d7",
+      "purpose": "retry_escalation",
+      "owner": "gm.call_gpt",
+      "input_tokens": 28650,
+      "output_tokens": 307,
+      "total_tokens": 28957,
+      "latency_ms": 2681.839,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T01:49:26.931188+00:00",
+      "prompt_stored": false
+    },
+    {
+      "cycle": "79A",
+      "attempt_id": "e2a22ccee0f141f58c5ca5ba6f3e8f31",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "input_tokens": 25294,
+      "output_tokens": 1924,
+      "total_tokens": 27218,
+      "latency_ms": 13107.816,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T02:51:20.346495+00:00",
+      "prompt_stored": false
+    },
+    {
+      "cycle": "79A",
+      "attempt_id": "af601fdae7d7468e8bc38345eb411259",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "input_tokens": 25294,
+      "output_tokens": 1944,
+      "total_tokens": 27238,
+      "latency_ms": 11579.405,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T02:51:56.616509+00:00",
+      "prompt_stored": false
+    },
+    {
+      "cycle": "79A",
+      "attempt_id": "fb0ee2b240324c62be515723bf17a649",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "input_tokens": 23669,
+      "output_tokens": 600,
+      "total_tokens": 24269,
+      "latency_ms": 4151.64,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T02:52:10.155527+00:00",
+      "prompt_stored": false
+    },
+    {
+      "cycle": "79B",
+      "attempt_id": "fcb878a3c0b14cf8ad3dae34d5dbf7ff",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "input_tokens": 25294,
+      "output_tokens": 1662,
+      "total_tokens": 26956,
+      "latency_ms": 11334.169,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T03:55:24.253783+00:00",
+      "prompt_stored": false
+    },
+    {
+      "cycle": "79C",
+      "attempt_id": "f49dbc8eea004c81abc8f3e5ff09968b",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "input_tokens": 25294,
+      "output_tokens": 1363,
+      "total_tokens": 26657,
+      "latency_ms": 11866.995,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T04:40:06.047406+00:00",
+      "prompt_stored": false
+    },
+    {
+      "cycle": "79D-F3",
+      "attempt_id": "12e9b94b02cb49cf984cf975b5e58d5e",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "input_tokens": 22777,
+      "output_tokens": 600,
+      "total_tokens": 23377,
+      "latency_ms": 5339.716,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "refusal": null,
+      "completion_status": "completed",
+      "time": "2026-11-08T16:50:51.318855+00:00",
+      "prompt_stored": false
+    }
+  ],
+  "session_log_samples": {
+    "79": {
+      "entries": 44,
+      "keys_in_first_entries": [
+        "gm_output",
+        "log_meta",
+        "player_facing_text",
+        "player_input",
+        "request",
+        "resolution",
+        "timestamp"
+      ],
+      "text_samples": [
+        {
+          "key": "player_input",
+          "text": "Hello, captain."
+        },
+        {
+          "key": "player_facing_text",
+          "text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted."
+        },
+        {
+          "key": "player_input",
+          "text": "Who are you?"
+        },
+        {
+          "key": "player_facing_text",
+          "text": "Which NPC do you want to ask 'Who are you?' to: Gate Guard, Gate Serjeant, or Tavern Runner?"
+        },
+        {
+          "key": "player_input",
+          "text": "What is this place like?"
+        },
+        {
+          "key": "player_facing_text",
+          "text": "Which NPC or entity do you want to ask 'What is this place like?' to: Gate Guard, Gate Serjeant, or Tavern Runner?"
+        },
+        {
+          "key": "player_input",
+          "text": "Have you seen the patrol?"
+        },
+        {
+          "key": "player_facing_text",
+          "text": "Nothing was attempted. That is not available here yet."
+        }
+      ]
+    },
+    "79A": {
+      "entries": 9,
+      "keys_in_first_entries": [
+        "gm_output",
+        "log_meta",
+        "player_facing_text",
+        "player_input",
+        "request",
+        "resolution",
+        "timestamp"
+      ],
+      "text_samples": [
+        {
+          "key": "player_input",
+          "text": "I examine the notice board."
+        },
+        {
+          "key": "player_input",
+          "text": "I follow the missing patrol rumor."
+        },
+        {
+          "key": "player_input",
+          "text": "I examine the weathered milestone."
+        },
+        {
+          "key": "player_input",
+          "text": "I look at the mud prints."
+        },
+        {
+          "key": "player_input",
+          "text": "Look around."
+        },
+        {
+          "key": "player_input",
+          "text": "I step back from the milestone."
+        },
+        {
+          "key": "player_input",
+          "text": "What do we know about the prints?"
+        },
+        {
+          "key": "player_facing_text",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. The missing patrol was last seen taking the northwest mud trac"
+        }
+      ]
+    },
+    "79B": {
+      "entries": 18,
+      "keys_in_first_entries": [
+        "gm_output",
+        "log_meta",
+        "player_input",
+        "request",
+        "resolution",
+        "timestamp"
+      ],
+      "text_samples": [
+        {
+          "key": "player_input",
+          "text": "Hello, Gate Guard."
+        },
+        {
+          "key": "player_input",
+          "text": "Who are you?"
+        },
+        {
+          "key": "player_input",
+          "text": "What do you know about the missing patrol?"
+        },
+        {
+          "key": "player_input",
+          "text": "When did you last hear about them?"
+        },
+        {
+          "key": "player_input",
+          "text": "Do you think something happened?"
+        },
+        {
+          "key": "player_input",
+          "text": "What is this place like?"
+        },
+        {
+          "key": "player_input",
+          "text": "What about the patrol again?"
+        },
+        {
+          "key": "player_input",
+          "text": "I look at the notice board."
+        }
+      ]
+    },
+    "79C": {
+      "entries": 19,
+      "keys_in_first_entries": [
+        "gm_output",
+        "log_meta",
+        "player_input",
+        "request",
+        "resolution",
+        "timestamp"
+      ],
+      "text_samples": [
+        {
+          "key": "player_input",
+          "text": "Hello, Gate Guard."
+        },
+        {
+          "key": "player_input",
+          "text": "Who are you?"
+        },
+        {
+          "key": "player_input",
+          "text": "What do you know about the missing patrol?"
+        },
+        {
+          "key": "player_input",
+          "text": "When did you last hear about them?"
+        },
+        {
+          "key": "player_input",
+          "text": "Do you think something happened?"
+        },
+        {
+          "key": "player_input",
+          "text": "What is this place like?"
+        },
+        {
+          "key": "player_input",
+          "text": "What about the patrol again?"
+        },
+        {
+          "key": "player_input",
+          "text": "You mentioned the patrol earlier. What else?"
+        }
+      ]
+    },
+    "79D-F3": {
+      "entries": 3,
+      "keys_in_first_entries": [
+        "gm_output",
+        "log_meta",
+        "player_facing_text",
+        "player_input",
+        "request",
+        "resolution",
+        "timestamp"
+      ],
+      "text_samples": [
+        {
+          "key": "player_input",
+          "text": "I examine the notice board."
+        },
+        {
+          "key": "player_input",
+          "text": "Good day, Gate Guard."
+        },
+        {
+          "key": "player_facing_text",
+          "text": "I couldn't interpret that just now, so no gameplay action was taken."
+        },
+        {
+          "key": "player_input",
+          "text": "I step back from the notice board."
+        }
+      ]
+    }
+  },
+  "recent_log_entries_loaded": 2,
+  "transition_keys": [
+    "after_anchor",
+    "before_anchor",
+    "continuity_anchor_ids",
+    "derivation_codes",
+    "source_fields",
+    "transition_required",
+    "transition_type"
+  ],
+  "transition_required": true,
+  "debug_key_paths": [
+    {
+      "path": "narrative_plan.narrative_mode_contract.debug",
+      "bytes": 77,
+      "child_keys": [
+        "derivation_codes"
+      ]
+    },
+    {
+      "path": "narrative_plan.answer_exposition_plan.debug",
+      "bytes": 55,
+      "child_keys": [
+        "derivation_codes"
+      ]
+    },
+    {
+      "path": "speaker_selection.debug",
+      "bytes": 546,
+      "child_keys": [
+        "authoritative_reason",
+        "authoritative_source",
+        "grounding_fallback_applied",
+        "grounding_reason_code",
+        "interruption_tracker_active",
+        "merged_player_prompt_preview",
+        "neutral_reply_bridge",
+        "resolution_path",
+        "strict_social_active",
+        "why_continuity_locked_or_not",
+        "why_speaker_chosen",
+        "why_switch_permitted_or_not"
+      ]
+    },
+    {
+      "path": "response_policy.answer_completeness.answer_exposition_plan.debug",
+      "bytes": 55,
+      "child_keys": [
+        "derivation_codes"
+      ]
+    },
+    {
+      "path": "response_policy.interaction_continuity.speaker_selection_contract.debug",
+      "bytes": 519,
+      "child_keys": [
+        "authoritative_reason",
+        "authoritative_source",
+        "grounding_fallback_applied",
+        "grounding_reason_code",
+        "interruption_tracker_active",
+        "merged_player_prompt_preview",
+        "neutral_reply_bridge",
+        "resolution_path",
+        "strict_social_active",
+        "why_continuity_locked_or_not",
+        "why_speaker_chosen",
+        "why_switch_permitted_or_not"
+      ]
+    },
+    {
+      "path": "response_policy.interaction_continuity.debug",
+      "bytes": 103,
+      "child_keys": [
+        "response_type_required",
+        "scene_scope_validated",
+        "source_of_anchor"
+      ]
+    },
+    {
+      "path": "response_policy.fallback_behavior.debug",
+      "bytes": 92,
+      "child_keys": [
+        "activation_reasons",
+        "clarifying_question_allowed",
+        "partial_preferred"
+      ]
+    },
+    {
+      "path": "referent_tracking.debug",
+      "bytes": 396,
+      "child_keys": [
+        "conflicting_target_signals",
+        "derivation_codes",
+        "memory_window_entity_ids",
+        "person_like_visible_count",
+        "sources_used",
+        "target_resolution_trace",
+        "visible_entity_count"
+      ]
+    },
+    {
+      "path": "turn_packet.debug",
+      "bytes": 287,
+      "child_keys": [
+        "missing_contracts",
+        "sources_used",
+        "world_progression"
+      ]
+    }
+  ],
+  "instruction_lines_mentioning_debug": 0,
+  "active_scene_id": "frontier_gate",
+  "turn_counter": 5
+}

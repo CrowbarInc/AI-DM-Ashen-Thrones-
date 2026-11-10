@@ -1,0 +1,5 @@
+# Negative Controls
+
+Milestone: `pr_play_object_marking_mutation`. Date: 2026-11-09.
+
+New tests cover missing/malformed/duplicate identity, stacks, malformed state, mismatched campaign/character, unknown operation/fields, blank/oversized/unencodable text, byte/aggregate/count limits, missing/invalid authorization and all eight missing evidence references, stale revisions, bad digest, conflicting replay, tampered/orphan receipts and modified content. Unknown legacy data and PF/non-PF opaque extensions remain equal. Concurrency: same request yields one durable result; distinct same-revision requests yield one applied and one stale rejection. Persistence faults raise with no success or partial authoritative receipt/marking; retry with original ID succeeds once after recovery. No endpoint or gameplay route invokes marking, and unchanged twelve-turn character states show no implicit marking or identity migration. Test identities and complete outcomes in verified_marking_junit.xml; no frozen fixtures changed.

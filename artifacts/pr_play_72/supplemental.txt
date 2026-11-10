@@ -1,0 +1,48 @@
+..FF                                                                     [100%]
+================================== FAILURES ===================================
+______________ test_reinspection_may_authoritatively_add_nothing ______________
+
+campaigns = (<starlette.testclient.TestClient object at 0x0000016D2C468B30>, {'survey': '2026-11-06T22-52-28_d5cbd727', 'report': '2026-11-06T22-52-51_294fe115'})
+
+    def test_reinspection_may_authoritatively_add_nothing(campaigns):
+        cl = restore(campaigns, "report")
+        world_before = storage.load_world()
+        response = cl.post("/api/chat", json={"text": "Please examine the notice board again."})
+        resolution = storage.load_log()[-1]["resolution"]
+        assert response.status_code == 200
+        assert resolution["action_id"] == "notice_board"
+        assert resolution["kind"] == "already_searched" and resolution["success"] is False
+>       assert storage.load_world() == world_before
+E       AssertionError: assert {'settlements...cts': [], ...} == {'settlements...cts': [], ...}
+E         
+E         Omitting 9 identical items, use -vv to show
+E         Differing items:
+E         {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]} != {'factions': [{'id': 'house_verevin', 'name': 'House Verevin', 'type': 'noble_house', 'attitude': 'wary', ...}, {'id':...tunistic', ...}, {'id': 'ordo_pyric', 'name': 'Ordo Pyric', 'type': 'religious_order', 'attitude': 'suspicious', ...}]}
+E         Use -v to get more diff
+
+tests\test_pr_play_72_supplemental.py:27: AssertionError
+___________________ test_explicit_npc_interaction_resolves ____________________
+
+campaigns = (<starlette.testclient.TestClient object at 0x0000016D2C468B30>, {'survey': '2026-11-06T22-52-28_d5cbd727', 'report': '2026-11-06T22-52-51_294fe115'})
+
+    def test_explicit_npc_interaction_resolves(campaigns):
+        cl = restore(campaigns, "report")
+        response = cl.post("/api/chat", json={"text": "I ask the Gate Serjeant about the patrol route."})
+        resolution = storage.load_log()[-1]["resolution"]
+        assert response.status_code == 200
+>       assert resolution.get("kind") not in {"conversational_clarify", "conversational_decline"}
+E       AssertionError: assert 'conversational_clarify' not in {'conversational_clarify', 'conversational_decline'}
+E        +  where 'conversational_clarify' = <built-in method get of dict object at 0x0000016D2DD2ED40>('kind')
+E        +    where <built-in method get of dict object at 0x0000016D2DD2ED40> = {'kind': 'conversational_clarify', 'action_id': 'conversational_clarify', 'label': 'I ask the Gate Serjeant about the patrol route.', 'prompt': 'I ask the Gate Serjeant about the patrol route.', ...}.get
+
+tests\test_pr_play_72_supplemental.py:35: AssertionError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_72_supplemental.py::test_reinspection_may_authoritatively_add_nothing
+FAILED tests/test_pr_play_72_supplemental.py::test_explicit_npc_interaction_resolves
+2 failed, 2 passed, 1 warning in 65.52s (0:01:05)

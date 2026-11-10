@@ -11,21 +11,14 @@
   ],
   "schema_version": 1,
   "summary": {
-    "attributable_first_mutations": 1,
-    "bucket_distribution": {
-      "sanitizer": 1
-    },
+    "attributable_first_mutations": 0,
+    "bucket_distribution": {},
     "first_source_coverage_rate": 1.0,
-    "mutated_turns": 1,
+    "mutated_turns": 0,
     "representative_high_risk_turns": [],
-    "semantic_mutation_risk_max": 10,
-    "semantic_mutation_risk_mean": 10.0,
-    "top_mutation_sources": [
-      {
-        "count": 1,
-        "source": "game.output_sanitizer.sanitize_player_facing_output"
-      }
-    ],
+    "semantic_mutation_risk_max": 0,
+    "semantic_mutation_risk_mean": 0.0,
+    "top_mutation_sources": [],
     "total_turns": 8,
     "unknown_first_source_count": 0
   },
@@ -82,15 +75,15 @@
       "turn_index": 1
     },
     {
-      "final_text_hash": "e5a4429a2ef51f40",
-      "first_semantic_mutation_bucket": "sanitizer",
-      "first_semantic_mutation_checkpoint_id": "sanitizer_output",
-      "first_semantic_mutation_source": "game.output_sanitizer.sanitize_player_facing_output",
+      "final_text_hash": "1da231fb4495bfdf",
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_checkpoint_id": null,
+      "first_semantic_mutation_source": null,
       "post_gate_mutation_detected": null,
       "scenario_id": "sanitizer_scaffold_leakage",
-      "semantic_mutation_changed_count": 2,
+      "semantic_mutation_changed_count": 0,
       "semantic_mutation_risk_band": "low",
-      "semantic_mutation_risk_score": 10,
+      "semantic_mutation_risk_score": 0,
       "semantic_mutation_trace_complete": true,
       "semantic_mutation_unknown_count": 0,
       "trace_continuity": true,

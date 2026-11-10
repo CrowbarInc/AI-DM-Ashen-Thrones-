@@ -1,0 +1,28 @@
+.......................E.....................F.............E............ [ 88%]
+.........                                                                [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_production_diagnostic_matrix[D6-json_parse_failure-False] _
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_production_diagnostic_mat5\\data\\combat.json.tmp.bb70c72c13fc146a' -> 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_production_diagnostic_mat5\\data\\combat.json'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+______________ ERROR at setup of test_semantic_matrix[S2-False] _______________
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_semantic_matrix_S2_False_0\\data\\session.json.tmp.ec00554567ebaa22' -> 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_semantic_matrix_S2_False_0\\data\\session.json'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+================================== FAILURES ===================================
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_opening_fixtures_over_6000\\data\\session.json.tmp.f8b321ade4cdc91b' -> 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_opening_fixtures_over_6000\\data\\session.json'
+
+During handling of the above exception, another exception occurred:
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_opening_fixtures_over_6000\\data\\session.json.tmp.e0cbdbaff13db75f' -> 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_opening_fixtures_over_6000\\data\\session.json'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 2291d5a3fa960f4985d16e5d
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\storage.py:139: PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_opening_fixtures_over_6000\\data\\session.json.tmp.e0cbdbaff13db75f' -> 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_opening_fixtures_over_6000\\data\\session.json'
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_06_opening_budget.py::test_opening_fixtures[over_600]
+ERROR tests/test_pr_play_05_diagnostics.py::test_production_diagnostic_matrix[D6-json_parse_failure-False]
+ERROR tests/test_pr_play_07_semantic_acceptance.py::test_semantic_matrix[S2-False]
+

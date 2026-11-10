@@ -1,0 +1,377 @@
+[
+  {
+    "request_id": "A1",
+    "sample": "A1",
+    "investigation_id": "notice_board",
+    "fixture": "frontier_gate",
+    "player_action": "I examine the notice board.",
+    "authoritative_discovery": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "provider": "openai",
+    "configured_model": "gpt-4.1-mini",
+    "generation_settings": {
+      "temperature": 0.2,
+      "max_output_tokens": 80,
+      "timeout_seconds": 45.0,
+      "sdk_max_retries": 0,
+      "adapter": "game.expressive_dialogue.request_expression"
+    },
+    "sanitized_provider_messages": [
+      {
+        "role": "system",
+        "content": "The investigation is already complete. Its mechanical result is authoritative. Write one descriptive prelude of about 20 to 60 words, and end on a complete sentence. You are writing prose only. Do not decide the outcome. Do not invent rewards, possessions, currency, health, conditions, travel, quests, or any other mechanical change. Do not invent definitive conclusions, culprits, counts, links, or destinations. Preserve uncertainty that the result leaves open. Do not reveal information that is absent from the supplied context. Harmless incidental atmosphere is allowed and creates no new facts or mechanics. Avoid generic filler. Do not repeat the authorized discovery; the engine appends that sentence separately."
+      },
+      {
+        "role": "user",
+        "content": "{\"player_action\": \"I examine the notice board.\", \"requested_prelude_length\": \"about 20-60 words\", \"authorized_narration_projection\": {\"authorized_investigation\": {\"target\": \"notice_board\", \"status\": \"discovered\", \"success\": true, \"newly_discovered\": [\"The missing patrol was last seen taking the northwest mud track past the crates.\"], \"previously_known\": []}, \"public_scene\": {\"observations\": [\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"Ash Compact census delays have tightened the eastern caravan choke point.\"]}, \"descriptive_constraints\": [\"Write only a descriptive prelude to the examination, ending a complete sentence.\", \"Do not repeat or reinterpret discoveries; the engine appends them verbatim.\", \"Preserve uncertainty. Do not establish culprits, counts, links or destinations.\", \"No possessions, rewards, health, conditions, travel, quests or persistent changes.\", \"Compatible incidental texture is ephemeral and grants no world facts or mechanics.\"], \"max_output_utf8_bytes\": 1600}}"
+      }
+    ],
+    "raw_provider_response": {
+      "create_index": 1,
+      "ok": false,
+      "error_type": "AttributeError",
+      "error": "'Responses' object has no attribute 'responses'"
+    },
+    "extracted_narration_text": "",
+    "adapter_result": {
+      "ok": false,
+      "sent": true,
+      "error": "AttributeError",
+      "latency_ms": 498.884
+    },
+    "provider_reported_usage": null,
+    "wall_clock_latency_ms": 498.884,
+    "outer_latency_ms": 500.388,
+    "provider_error": {
+      "sent": true,
+      "reason": null,
+      "error": "AttributeError"
+    },
+    "create_calls_after": 1,
+    "sink_calls_after": [],
+    "evidence_timestamp": "2026-11-03T01:09:43.595262+00:00",
+    "validator_not_run": true,
+    "assembled_preview": null,
+    "fallback_output": null
+  },
+  {
+    "request_id": "A2",
+    "sample": "A2",
+    "investigation_id": "notice_board",
+    "fixture": "frontier_gate",
+    "player_action": "I examine the notice board.",
+    "authoritative_discovery": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "provider": "openai",
+    "configured_model": "gpt-4.1-mini",
+    "generation_settings": {
+      "temperature": 0.2,
+      "max_output_tokens": 80,
+      "timeout_seconds": 45.0,
+      "sdk_max_retries": 0,
+      "adapter": "game.expressive_dialogue.request_expression"
+    },
+    "sanitized_provider_messages": [
+      {
+        "role": "system",
+        "content": "The investigation is already complete. Its mechanical result is authoritative. Write one descriptive prelude of about 20 to 60 words, and end on a complete sentence. You are writing prose only. Do not decide the outcome. Do not invent rewards, possessions, currency, health, conditions, travel, quests, or any other mechanical change. Do not invent definitive conclusions, culprits, counts, links, or destinations. Preserve uncertainty that the result leaves open. Do not reveal information that is absent from the supplied context. Harmless incidental atmosphere is allowed and creates no new facts or mechanics. Avoid generic filler. Do not repeat the authorized discovery; the engine appends that sentence separately."
+      },
+      {
+        "role": "user",
+        "content": "{\"player_action\": \"I examine the notice board.\", \"requested_prelude_length\": \"about 20-60 words\", \"authorized_narration_projection\": {\"authorized_investigation\": {\"target\": \"notice_board\", \"status\": \"discovered\", \"success\": true, \"newly_discovered\": [\"The missing patrol was last seen taking the northwest mud track past the crates.\"], \"previously_known\": []}, \"public_scene\": {\"observations\": [\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"Ash Compact census delays have tightened the eastern caravan choke point.\"]}, \"descriptive_constraints\": [\"Write only a descriptive prelude to the examination, ending a complete sentence.\", \"Do not repeat or reinterpret discoveries; the engine appends them verbatim.\", \"Preserve uncertainty. Do not establish culprits, counts, links or destinations.\", \"No possessions, rewards, health, conditions, travel, quests or persistent changes.\", \"Compatible incidental texture is ephemeral and grants no world facts or mechanics.\"], \"max_output_utf8_bytes\": 1600}}"
+      }
+    ],
+    "raw_provider_response": {
+      "create_index": 1,
+      "ok": false,
+      "error_type": "AttributeError",
+      "error": "'Responses' object has no attribute 'responses'"
+    },
+    "extracted_narration_text": "",
+    "adapter_result": {
+      "ok": false,
+      "sent": false,
+      "reason": "provider usage accounting unavailable",
+      "usage": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "b4d9ccc4a6a34710865740c959774efd",
+        "attempt_id": "55ff5f906af146f9add511d8044623a8",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": null,
+        "time": "2026-11-03T01:09:43.657701+00:00",
+        "sequence": null,
+        "admission": "rejected",
+        "budget_remaining": 3,
+        "sdk_retries": 0,
+        "host_retries": "disabled",
+        "sent": false,
+        "request_id": null,
+        "model": "gpt-4.1-mini",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "usage_consistent": false,
+        "refusal": "provider usage accounting unavailable",
+        "completion_status": "not_dispatched",
+        "dispatch_attempted": false,
+        "latency_ms": null
+      },
+      "latency_ms": 0
+    },
+    "provider_reported_usage": {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "b4d9ccc4a6a34710865740c959774efd",
+      "attempt_id": "55ff5f906af146f9add511d8044623a8",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": null,
+      "time": "2026-11-03T01:09:43.657701+00:00",
+      "sequence": null,
+      "admission": "rejected",
+      "budget_remaining": 3,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "sent": false,
+      "request_id": null,
+      "model": "gpt-4.1-mini",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "usage_consistent": false,
+      "refusal": "provider usage accounting unavailable",
+      "completion_status": "not_dispatched",
+      "dispatch_attempted": false,
+      "latency_ms": null
+    },
+    "wall_clock_latency_ms": 0,
+    "outer_latency_ms": 61.753,
+    "provider_error": {
+      "sent": false,
+      "reason": "provider usage accounting unavailable",
+      "error": null
+    },
+    "create_calls_after": 1,
+    "sink_calls_after": [],
+    "evidence_timestamp": "2026-11-03T01:09:43.657763+00:00",
+    "validator_not_run": true,
+    "assembled_preview": null,
+    "fallback_output": null
+  },
+  {
+    "request_id": "B1",
+    "sample": "B1",
+    "investigation_id": "footprints",
+    "fixture": "old_milestone",
+    "player_action": "I examine the footprints.",
+    "authoritative_discovery": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "provider": "openai",
+    "configured_model": "gpt-4.1-mini",
+    "generation_settings": {
+      "temperature": 0.2,
+      "max_output_tokens": 80,
+      "timeout_seconds": 45.0,
+      "sdk_max_retries": 0,
+      "adapter": "game.expressive_dialogue.request_expression"
+    },
+    "sanitized_provider_messages": [
+      {
+        "role": "system",
+        "content": "The investigation is already complete. Its mechanical result is authoritative. Write one descriptive prelude of about 20 to 60 words, and end on a complete sentence. You are writing prose only. Do not decide the outcome. Do not invent rewards, possessions, currency, health, conditions, travel, quests, or any other mechanical change. Do not invent definitive conclusions, culprits, counts, links, or destinations. Preserve uncertainty that the result leaves open. Do not reveal information that is absent from the supplied context. Harmless incidental atmosphere is allowed and creates no new facts or mechanics. Avoid generic filler. Do not repeat the authorized discovery; the engine appends that sentence separately."
+      },
+      {
+        "role": "user",
+        "content": "{\"player_action\": \"I examine the footprints.\", \"requested_prelude_length\": \"about 20-60 words\", \"authorized_narration_projection\": {\"authorized_investigation\": {\"target\": \"prints\", \"status\": \"discovered\", \"success\": true, \"newly_discovered\": [\"Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.\"], \"previously_known\": []}, \"public_scene\": {\"observations\": [\"A weathered stone milestone leans beside the northwest mud track.\", \"The mud around the marker is churned with faint overlapping prints that fade into the scrub.\", \"The track continues a short way past the stone before rainwater and brush make the next step unclear.\"]}, \"descriptive_constraints\": [\"Write only a descriptive prelude to the examination, ending a complete sentence.\", \"Do not repeat or reinterpret discoveries; the engine appends them verbatim.\", \"Preserve uncertainty. Do not establish culprits, counts, links or destinations.\", \"No possessions, rewards, health, conditions, travel, quests or persistent changes.\", \"Compatible incidental texture is ephemeral and grants no world facts or mechanics.\"], \"max_output_utf8_bytes\": 1600}}"
+      }
+    ],
+    "raw_provider_response": {
+      "create_index": 1,
+      "ok": false,
+      "error_type": "AttributeError",
+      "error": "'Responses' object has no attribute 'responses'"
+    },
+    "extracted_narration_text": "",
+    "adapter_result": {
+      "ok": false,
+      "sent": false,
+      "reason": "provider usage accounting unavailable",
+      "usage": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "b4d9ccc4a6a34710865740c959774efd",
+        "attempt_id": "f7b01b3a696c4e479d622356cff1bb59",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": null,
+        "time": "2026-11-03T01:09:43.661055+00:00",
+        "sequence": null,
+        "admission": "rejected",
+        "budget_remaining": 3,
+        "sdk_retries": 0,
+        "host_retries": "disabled",
+        "sent": false,
+        "request_id": null,
+        "model": "gpt-4.1-mini",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "usage_consistent": false,
+        "refusal": "provider usage accounting unavailable",
+        "completion_status": "not_dispatched",
+        "dispatch_attempted": false,
+        "latency_ms": null
+      },
+      "latency_ms": 0
+    },
+    "provider_reported_usage": {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "b4d9ccc4a6a34710865740c959774efd",
+      "attempt_id": "f7b01b3a696c4e479d622356cff1bb59",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": null,
+      "time": "2026-11-03T01:09:43.661055+00:00",
+      "sequence": null,
+      "admission": "rejected",
+      "budget_remaining": 3,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "sent": false,
+      "request_id": null,
+      "model": "gpt-4.1-mini",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "usage_consistent": false,
+      "refusal": "provider usage accounting unavailable",
+      "completion_status": "not_dispatched",
+      "dispatch_attempted": false,
+      "latency_ms": null
+    },
+    "wall_clock_latency_ms": 0,
+    "outer_latency_ms": 2.009,
+    "provider_error": {
+      "sent": false,
+      "reason": "provider usage accounting unavailable",
+      "error": null
+    },
+    "create_calls_after": 1,
+    "sink_calls_after": [],
+    "evidence_timestamp": "2026-11-03T01:09:43.661095+00:00",
+    "validator_not_run": true,
+    "assembled_preview": null,
+    "fallback_output": null
+  },
+  {
+    "request_id": "B2",
+    "sample": "B2",
+    "investigation_id": "footprints",
+    "fixture": "old_milestone",
+    "player_action": "I examine the footprints.",
+    "authoritative_discovery": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+    "provider": "openai",
+    "configured_model": "gpt-4.1-mini",
+    "generation_settings": {
+      "temperature": 0.2,
+      "max_output_tokens": 80,
+      "timeout_seconds": 45.0,
+      "sdk_max_retries": 0,
+      "adapter": "game.expressive_dialogue.request_expression"
+    },
+    "sanitized_provider_messages": [
+      {
+        "role": "system",
+        "content": "The investigation is already complete. Its mechanical result is authoritative. Write one descriptive prelude of about 20 to 60 words, and end on a complete sentence. You are writing prose only. Do not decide the outcome. Do not invent rewards, possessions, currency, health, conditions, travel, quests, or any other mechanical change. Do not invent definitive conclusions, culprits, counts, links, or destinations. Preserve uncertainty that the result leaves open. Do not reveal information that is absent from the supplied context. Harmless incidental atmosphere is allowed and creates no new facts or mechanics. Avoid generic filler. Do not repeat the authorized discovery; the engine appends that sentence separately."
+      },
+      {
+        "role": "user",
+        "content": "{\"player_action\": \"I examine the footprints.\", \"requested_prelude_length\": \"about 20-60 words\", \"authorized_narration_projection\": {\"authorized_investigation\": {\"target\": \"prints\", \"status\": \"discovered\", \"success\": true, \"newly_discovered\": [\"Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.\"], \"previously_known\": []}, \"public_scene\": {\"observations\": [\"A weathered stone milestone leans beside the northwest mud track.\", \"The mud around the marker is churned with faint overlapping prints that fade into the scrub.\", \"The track continues a short way past the stone before rainwater and brush make the next step unclear.\"]}, \"descriptive_constraints\": [\"Write only a descriptive prelude to the examination, ending a complete sentence.\", \"Do not repeat or reinterpret discoveries; the engine appends them verbatim.\", \"Preserve uncertainty. Do not establish culprits, counts, links or destinations.\", \"No possessions, rewards, health, conditions, travel, quests or persistent changes.\", \"Compatible incidental texture is ephemeral and grants no world facts or mechanics.\"], \"max_output_utf8_bytes\": 1600}}"
+      }
+    ],
+    "raw_provider_response": {
+      "create_index": 1,
+      "ok": false,
+      "error_type": "AttributeError",
+      "error": "'Responses' object has no attribute 'responses'"
+    },
+    "extracted_narration_text": "",
+    "adapter_result": {
+      "ok": false,
+      "sent": false,
+      "reason": "provider usage accounting unavailable",
+      "usage": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "b4d9ccc4a6a34710865740c959774efd",
+        "attempt_id": "8df383b790d54342a12ccbc32b924076",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": null,
+        "time": "2026-11-03T01:09:43.663302+00:00",
+        "sequence": null,
+        "admission": "rejected",
+        "budget_remaining": 3,
+        "sdk_retries": 0,
+        "host_retries": "disabled",
+        "sent": false,
+        "request_id": null,
+        "model": "gpt-4.1-mini",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "usage_consistent": false,
+        "refusal": "provider usage accounting unavailable",
+        "completion_status": "not_dispatched",
+        "dispatch_attempted": false,
+        "latency_ms": null
+      },
+      "latency_ms": 0
+    },
+    "provider_reported_usage": {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "b4d9ccc4a6a34710865740c959774efd",
+      "attempt_id": "8df383b790d54342a12ccbc32b924076",
+      "purpose": "expression",
+      "owner": "expressive_dialogue.request_expression",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": null,
+      "time": "2026-11-03T01:09:43.663302+00:00",
+      "sequence": null,
+      "admission": "rejected",
+      "budget_remaining": 3,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "sent": false,
+      "request_id": null,
+      "model": "gpt-4.1-mini",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "usage_consistent": false,
+      "refusal": "provider usage accounting unavailable",
+      "completion_status": "not_dispatched",
+      "dispatch_attempted": false,
+      "latency_ms": null
+    },
+    "wall_clock_latency_ms": 0,
+    "outer_latency_ms": 1.275,
+    "provider_error": {
+      "sent": false,
+      "reason": "provider usage accounting unavailable",
+      "error": null
+    },
+    "create_calls_after": 1,
+    "sink_calls_after": [],
+    "evidence_timestamp": "2026-11-03T01:09:43.663337+00:00",
+    "validator_not_run": true,
+    "assembled_preview": null,
+    "fallback_output": null
+  }
+]

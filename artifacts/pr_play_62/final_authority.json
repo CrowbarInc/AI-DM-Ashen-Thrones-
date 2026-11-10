@@ -1,0 +1,133 @@
+{
+  "campaign_run_id": "10681b965b12bd8b400f86ac",
+  "scene": "frontier_gate",
+  "visited": [
+    "frontier_gate"
+  ],
+  "player": "galinor",
+  "hp": {
+    "current": 8,
+    "max": 8,
+    "nonlethal": 0
+  },
+  "inventory": [
+    {
+      "id": "spellbook",
+      "name": "Spellbook",
+      "quantity": 1,
+      "usable": false
+    }
+  ],
+  "equipment": null,
+  "clues": [
+    "The missing patrol was last seen taking the northwest mud track past the crates."
+  ],
+  "state_flags": {},
+  "npcs": {
+    "guard_captain": {
+      "attitude": 0,
+      "trust": 0,
+      "fear": 0,
+      "suspicion": 0,
+      "known_topics": [],
+      "revealed_topics": [],
+      "last_interaction_turn": null
+    },
+    "tavern_runner": {
+      "attitude": 0,
+      "trust": 0,
+      "fear": 0,
+      "suspicion": 0,
+      "known_topics": [],
+      "revealed_topics": [],
+      "last_interaction_turn": null
+    }
+  },
+  "quests": [
+    {
+      "secret": "CANARY_QUEST_TWIST"
+    }
+  ],
+  "conditions": {
+    "dazed": {
+      "name": "Dazed",
+      "kind": "condition",
+      "default_effects": {
+        "no_actions": true
+      }
+    },
+    "shaken": {
+      "name": "Shaken",
+      "kind": "condition",
+      "default_effects": {
+        "attack_penalty": 2,
+        "save_penalty": 2,
+        "skill_penalty": 2
+      }
+    },
+    "sickened": {
+      "name": "Sickened",
+      "kind": "condition",
+      "default_effects": {
+        "attack_penalty": 2,
+        "damage_penalty": 2,
+        "save_penalty": 2,
+        "skill_penalty": 2
+      }
+    },
+    "blinded": {
+      "name": "Blinded",
+      "kind": "condition",
+      "default_effects": {
+        "ac_penalty": 2,
+        "lose_dex_to_ac": true
+      }
+    },
+    "stunned": {
+      "name": "Stunned",
+      "kind": "condition",
+      "default_effects": {
+        "no_actions": true,
+        "ac_penalty": 2,
+        "lose_dex_to_ac": true
+      }
+    },
+    "risky_strike": {
+      "name": "Risky Strike",
+      "kind": "combat_toggle",
+      "default_effects": {}
+    },
+    "defensive_stance": {
+      "name": "Defensive Stance",
+      "kind": "combat_toggle",
+      "default_effects": {}
+    },
+    "shield": {
+      "name": "Shield",
+      "kind": "spell_effect",
+      "default_effects": {
+        "ac_bonus": 4
+      }
+    }
+  },
+  "combat": {
+    "in_combat": false,
+    "round": 0,
+    "initiative_order": [],
+    "turn_index": 0,
+    "active_actor_id": null,
+    "player_turn_used": false
+  },
+  "world_flags": {
+    "faction_house_verevin_agenda_advanced": true,
+    "faction_ash_cowl_agenda_advanced": true,
+    "faction_ordo_pyric_agenda_advanced": true
+  },
+  "clocks": {
+    "suspicion": 0,
+    "unrest": 0,
+    "danger": 0,
+    "occult_instability": 0,
+    "time_pressure": 5
+  }
+}

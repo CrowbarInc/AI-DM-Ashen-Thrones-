@@ -1,0 +1,100 @@
+{
+  "verdict": "B \u2014 PARTIAL / BOUNDED IMPROVISATION DEMONSTRATED",
+  "protected": {
+    "entries": 150,
+    "preserved": 150,
+    "changed": []
+  },
+  "development": {
+    "passed": 88,
+    "failed": 0
+  },
+  "inherited": {
+    "passed": 105,
+    "failed": 0
+  },
+  "holdout": {
+    "passed": 80,
+    "total": 80,
+    "note": "Structural validation only. Persistence expectations require separate lifecycle evidence."
+  },
+  "http": {
+    "campaigns": [
+      {
+        "branch": "survey",
+        "identity": "7bfa221bb6802cf5b18b0ae4",
+        "snapshot_id": "2026-11-07T15-12-31_523192b9",
+        "entity_id": "wf_6727ea2dfdda9dd05db0",
+        "resumed": true,
+        "texts": {
+          "Describe the stone surface.": "The stone has a rough, uneven surface.",
+          "Is there anything nearby I could sit on?": "An ordinary low stone beside the established stonework offers a place to sit.",
+          "I examine the stone seat.": "An ordinary low stone beside the established stonework offers a place to sit. You check ordinary stone seat. Nothing concealed is established there. No passage, treasure, or new evidence is revealed."
+        },
+        "npc_creation": "not requested"
+      },
+      {
+        "branch": "report",
+        "identity": "ab44dd5d6e2a47f92d23de63",
+        "snapshot_id": "2026-11-07T15-12-43_7afb74f2",
+        "entity_id": "wf_c2255c70eafcfef7aed6",
+        "resumed": true,
+        "texts": {
+          "npc_attempt": "Guard Captain says, \"I couldn't tell you.\"",
+          "Describe the stone surface.": "The stone has a rough, uneven surface.",
+          "Is there anything nearby I could sit on?": "An ordinary low stone beside the established stonework offers a place to sit.",
+          "I examine the stone seat.": "An ordinary low stone beside the established stonework offers a place to sit. You check ordinary stone seat. Nothing concealed is established there. No passage, treasure, or new evidence is revealed."
+        },
+        "npc_creation": "deferred"
+      }
+    ],
+    "requests": 37,
+    "mean_http_ms": 313.29841082412247,
+    "median_http_ms": 319.4610000355169,
+    "max_http_ms": 807.7806000364944,
+    "provider_requests": 0,
+    "provider_tokens": 0,
+    "hidden_exposures": 0
+  },
+  "browser": {
+    "campaign_A": "PASS: typed environmental/object proposal, inspect, snapshot, reload/load, same object pronoun",
+    "campaign_B": "PARTIAL: report lifecycle and authored NPC resume; improvised NPC creation deferred",
+    "typed_requests": 17,
+    "hidden_exposures": 0,
+    "server_chat_ms": {
+      "count": 17,
+      "mean": 599.535,
+      "median": 323.547,
+      "maximum": 2364.618
+    },
+    "browser_visible_latency": null,
+    "paint_timing": "not instrumented",
+    "screenshots": [
+      "browser_A_resume.png",
+      "browser_B_report.png",
+      "browser_B_resume.png"
+    ],
+    "initial_attachment": "first attach timed out; second attach succeeded",
+    "isolation": "browser_data separate from http_data; an initial pre-gameplay host was replaced before recorded campaigns"
+  },
+  "provider_requests": 2,
+  "provider_tokens": 360,
+  "provider_retries": 0,
+  "provider_shadow_accepted": 2,
+  "provider_shadow_rejected": 0,
+  "holdout_accepted": 16,
+  "holdout_rejected": 64,
+  "gameplay_committed_facts": {
+    "final_http": 4,
+    "browser_survey": 2,
+    "browser_report": 0
+  },
+  "unauthorized_promotions_final": 0,
+  "hidden_exposures_final": 0,
+  "mandatory_fixture_omissions_final": 0,
+  "critical_unsafe_publications_final_observed": 0,
+  "new_regression_identities": 0,
+  "experimental_isolation": "PASS in executed lanes; gate default off",
+  "state_integrity": "PASS in exercised persistence/lifecycle lanes",
+  "development_failures_retained": "Unknown reference initially selected focused object in pure planner; tightening reference grammar exposed unsupported move-it fallthrough mutating a turn in two branch development tests. Narrow guard repaired before freeze. See development_final.txt and development_repaired.txt. No holdout edits/rerun."
+}

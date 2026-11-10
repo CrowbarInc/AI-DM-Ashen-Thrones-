@@ -1,0 +1,4 @@
+# PROVIDER RESULTS
+Live requests: 0. Provider tokens: 0. Live accepted/published presentations: 0/0. No key or connectivity probe was needed. Existing provider configuration was not changed. This optional experiment instead used the exact saved historical candidate, synthetic accepted introductions, and controlled unavailable/timeout faults. Synthetic sequence accepted/published: 1/1; deterministic experimental fallbacks: 3. Movement is a separate ordinary deterministic response.
+
+Provider latency for saved/faulted cases is not live-provider latency. Ordinary narration is locally stubbed; its internal legacy attempt counters do not represent actual network requests. Each optional hook makes at most one generator call; provider-free repeat makes zero. Fallback adds no provider call or retry. No claim that live acceptance/naturalness improved.

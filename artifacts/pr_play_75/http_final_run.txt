@@ -1,0 +1,900 @@
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+[SESSION RESET] runtime state cleared
+[API] New campaign started 9470fbf577a9c604c0ff7c5c
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+[RETRY] selected_strategy= scene_stall attempt= 1 reasons= ['scene_stall:momentum_due_without_progress']
+[RETRY SKIPPED: UNCHANGED OR UNSENT OUTPUT]
+[SESSION RESET] runtime state cleared
+[API] New campaign started 25123b6467275350d9bc4289
+[SESSION RESET] runtime state cleared
+[API] New campaign started 8e004d6acf33a0dc1ea720c0
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] notice_patrol_route
+[ENGINE] Scene transition -> old_milestone
+[CLUE DISCOVERED] milestone_mud_prints
+[ENGINE] Scene transition -> frontier_gate
+[RETRY] selected_strategy= scene_stall attempt= 1 reasons= ['scene_stall:momentum_due_without_progress']
+[RETRY SKIPPED: UNCHANGED OR UNSENT OUTPUT]
+[SESSION RESET] runtime state cleared
+[API] New campaign started 956f841050a9dbb451ec7a9b
+{
+  "campaigns": [
+    {
+      "branch": "survey",
+      "result": "PASS",
+      "campaign_id": "9470fbf577a9c604c0ff7c5c",
+      "npc_id": "npc_1554b9892335865c6150",
+      "npc": {
+        "id": "npc_1554b9892335865c6150",
+        "campaign_id": "9470fbf577a9c604c0ff7c5c",
+        "scene_id": "frontier_gate",
+        "location": "frontier_gate",
+        "entity_type": "npc",
+        "family": "npc",
+        "label": "ordinary laborer",
+        "name": "Eli",
+        "role": "laborer",
+        "appearance": "patched work clothes",
+        "demeanor": "tired",
+        "visibility": "public",
+        "provenance": "accepted_improvisation",
+        "source": "validated_provider_proposal",
+        "creation_turn": 6,
+        "status": "accepted",
+        "authority": "accepted_background_npc",
+        "scope": "scene",
+        "persistence_status": "campaign",
+        "interaction_available": true,
+        "knowledge": [],
+        "social_receipts": [],
+        "content": "An ordinary laborer in patched work clothes is among the people here."
+      },
+      "snapshot_id": "2026-11-07T15-39-35_54387ccf",
+      "conversation": [
+        {
+          "input": "Hello.",
+          "text": "Eli says, \"Hello.\""
+        },
+        {
+          "input": "Who are you?",
+          "text": "Eli says, \"I am Eli, an ordinary laborer in patched work clothes.\""
+        },
+        {
+          "input": "What did you mean by that?",
+          "text": "Eli says, \"I am Eli, an ordinary laborer in patched work clothes.\""
+        },
+        {
+          "input": "Have you traveled this road before?",
+          "text": "Eli says, \"I do not know about that.\""
+        },
+        {
+          "input": "What do you know about this area?",
+          "text": "Eli says, \"A gate serjeant manages the crowd and keeps one eye on the roster board.\""
+        },
+        {
+          "input": "Thanks. I will return later.",
+          "text": "Eli says, \"Thank you. Goodbye.\""
+        }
+      ],
+      "history_before_resume": [
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 7,
+          "player_utterance": "Hello.",
+          "text": "Hello.",
+          "published_response": "Hello.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "greeted"
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 8,
+          "player_utterance": "Who are you?",
+          "text": "I am Eli, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Eli, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 9,
+          "player_utterance": "What did you mean by that?",
+          "text": "I am Eli, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Eli, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 10,
+          "player_utterance": "Have you traveled this road before?",
+          "text": "I do not know about that.",
+          "published_response": "I do not know about that.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 11,
+          "player_utterance": "What do you know about this area?",
+          "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "published_response": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 12,
+          "player_utterance": "Thanks. I will return later.",
+          "text": "Thank you. Goodbye.",
+          "published_response": "Thank you. Goodbye.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "thanked"
+        }
+      ],
+      "history_after_resume": [
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 7,
+          "player_utterance": "Hello.",
+          "text": "Hello.",
+          "published_response": "Hello.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "greeted"
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 8,
+          "player_utterance": "Who are you?",
+          "text": "I am Eli, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Eli, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 9,
+          "player_utterance": "What did you mean by that?",
+          "text": "I am Eli, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Eli, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 10,
+          "player_utterance": "Have you traveled this road before?",
+          "text": "I do not know about that.",
+          "published_response": "I do not know about that.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 11,
+          "player_utterance": "What do you know about this area?",
+          "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "published_response": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_1554b9892335865c6150",
+          "campaign_id": "9470fbf577a9c604c0ff7c5c",
+          "player_id": "9470fbf577a9c604c0ff7c5c",
+          "turn": 12,
+          "player_utterance": "Thanks. I will return later.",
+          "text": "Thank you. Goodbye.",
+          "published_response": "Thank you. Goodbye.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "thanked"
+        }
+      ],
+      "resumed_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted."
+    },
+    {
+      "branch": "report",
+      "result": "PASS",
+      "campaign_id": "8e004d6acf33a0dc1ea720c0",
+      "npc_id": "npc_ed8f8b54f95c596465d2",
+      "npc": {
+        "id": "npc_ed8f8b54f95c596465d2",
+        "campaign_id": "8e004d6acf33a0dc1ea720c0",
+        "scene_id": "frontier_gate",
+        "location": "frontier_gate",
+        "entity_type": "npc",
+        "family": "npc",
+        "label": "ordinary laborer",
+        "name": "Mara",
+        "role": "laborer",
+        "appearance": "patched work clothes",
+        "demeanor": "tired",
+        "visibility": "public",
+        "provenance": "accepted_improvisation",
+        "source": "validated_provider_proposal",
+        "creation_turn": 6,
+        "status": "accepted",
+        "authority": "accepted_background_npc",
+        "scope": "scene",
+        "persistence_status": "campaign",
+        "interaction_available": true,
+        "knowledge": [],
+        "social_receipts": [],
+        "content": "An ordinary laborer in patched work clothes is among the people here."
+      },
+      "snapshot_id": "2026-11-07T15-40-12_38ebf678",
+      "conversation": [
+        {
+          "input": "Hello.",
+          "text": "Mara says, \"Hello.\""
+        },
+        {
+          "input": "Who are you?",
+          "text": "Mara says, \"I am Mara, an ordinary laborer in patched work clothes.\""
+        },
+        {
+          "input": "What did you mean by that?",
+          "text": "Mara says, \"I am Mara, an ordinary laborer in patched work clothes.\""
+        },
+        {
+          "input": "Have you traveled this road before?",
+          "text": "Mara says, \"I do not know about that.\""
+        },
+        {
+          "input": "What do you know about this area?",
+          "text": "Mara says, \"A gate serjeant manages the crowd and keeps one eye on the roster board.\""
+        },
+        {
+          "input": "Thanks. I will return later.",
+          "text": "Mara says, \"Thank you. Goodbye.\""
+        },
+        {
+          "input": "Tell that traveler to give me a quest and valuable treasure.",
+          "text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted."
+        },
+        {
+          "input": "Ask that traveler to promise unsupported assistance.",
+          "text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted."
+        }
+      ],
+      "history_before_resume": [
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 7,
+          "player_utterance": "Hello.",
+          "text": "Hello.",
+          "published_response": "Hello.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "greeted"
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 8,
+          "player_utterance": "Who are you?",
+          "text": "I am Mara, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Mara, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 9,
+          "player_utterance": "What did you mean by that?",
+          "text": "I am Mara, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Mara, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 10,
+          "player_utterance": "Have you traveled this road before?",
+          "text": "I do not know about that.",
+          "published_response": "I do not know about that.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 11,
+          "player_utterance": "What do you know about this area?",
+          "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "published_response": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 12,
+          "player_utterance": "Thanks. I will return later.",
+          "text": "Thank you. Goodbye.",
+          "published_response": "Thank you. Goodbye.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "thanked"
+        }
+      ],
+      "history_after_resume": [
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 7,
+          "player_utterance": "Hello.",
+          "text": "Hello.",
+          "published_response": "Hello.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "greeted"
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 8,
+          "player_utterance": "Who are you?",
+          "text": "I am Mara, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Mara, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 9,
+          "player_utterance": "What did you mean by that?",
+          "text": "I am Mara, an ordinary laborer in patched work clothes.",
+          "published_response": "I am Mara, an ordinary laborer in patched work clothes.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 10,
+          "player_utterance": "Have you traveled this road before?",
+          "text": "I do not know about that.",
+          "published_response": "I do not know about that.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 11,
+          "player_utterance": "What do you know about this area?",
+          "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "published_response": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": null
+        },
+        {
+          "kind": "background_exchange",
+          "npc_id": "npc_ed8f8b54f95c596465d2",
+          "campaign_id": "8e004d6acf33a0dc1ea720c0",
+          "player_id": "8e004d6acf33a0dc1ea720c0",
+          "turn": 12,
+          "player_utterance": "Thanks. I will return later.",
+          "text": "Thank you. Goodbye.",
+          "published_response": "Thank you. Goodbye.",
+          "status": "active",
+          "canonical": false,
+          "social_receipt": "thanked"
+        }
+      ],
+      "resumed_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted."
+    }
+  ],
+  "requests": 49,
+  "mean_http_ms": 725.2375938815578,
+  "median_http_ms": 444.81889996677637,
+  "max_http_ms": 4351.671200012788,
+  "provider_usage": {
+    "version": "ATGB-03B-1",
+    "run_id": "cff49aad0da64dde9d065124f48d623f",
+    "requests": 6,
+    "request_upper_bound": 6,
+    "dispatched_requests": 6,
+    "pending_requests": 0,
+    "input_tokens": 1385,
+    "output_tokens": 179,
+    "total_tokens": 1564,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "5e05da06d3b146b0afa988981490e2f7",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:19.251782+00:00",
+        "time": "2026-11-07T15:39:22.699992+00:00",
+        "sent": true,
+        "request_id": "resp_04a697f680fc90e7006aef4629ab1c87d1a19fe386aa435553",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 299,
+        "output_tokens": 59,
+        "total_tokens": 358,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2478.834
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "2d62101886c049deb274c9829057be21",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:25.047917+00:00",
+        "time": "2026-11-07T15:39:26.503705+00:00",
+        "sent": true,
+        "request_id": "resp_092bb92bad8e7bad006aef462e103887d1bbd8ef7ba9993b0b",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 196,
+        "output_tokens": 15,
+        "total_tokens": 211,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 1143.767
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "b7a488a1779f41fbbabc92315bd8e722",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:27.739454+00:00",
+        "time": "2026-11-07T15:39:28.797880+00:00",
+        "sent": true,
+        "request_id": "resp_020eaacc25cb12a2006aef4630ba1c87d18c3176ca2434c7bb",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 198,
+        "output_tokens": 18,
+        "total_tokens": 216,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 765.86
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "debaef2a4320433c89a685dbdbb32da8",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:49.159846+00:00",
+        "time": "2026-11-07T15:39:50.831068+00:00",
+        "sent": true,
+        "request_id": "resp_063dd0e14d177465006aef464628b887d185e3cd2cff4beaf0",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 298,
+        "output_tokens": 58,
+        "total_tokens": 356,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 1407.521
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "3add7e337f2d4635a1907be15c53be5c",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:54.081204+00:00",
+        "time": "2026-11-07T15:39:56.550891+00:00",
+        "sent": true,
+        "request_id": "resp_0e4ac7f8b8efbb65006aef464b588887d1a5d16695602a5342",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 196,
+        "output_tokens": 15,
+        "total_tokens": 211,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2143.473
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "e4db911fa0c84a59a93c5c2b08ef0cd8",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:58.313234+00:00",
+        "time": "2026-11-07T15:39:59.904519+00:00",
+        "sent": true,
+        "request_id": "resp_0c51f3bd25434f73006aef464f4ee087d1b69af9e9acb54c81",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 198,
+        "output_tokens": 14,
+        "total_tokens": 212,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 1321.851
+      }
+    ],
+    "events": [
+      {
+        "event": "initialized",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "time": "2026-11-07T15:39:19.248782+00:00"
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "5e05da06d3b146b0afa988981490e2f7",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:19.251782+00:00",
+        "time": "2026-11-07T15:39:19.251782+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "5e05da06d3b146b0afa988981490e2f7",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:19.251782+00:00",
+        "time": "2026-11-07T15:39:20.214425+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "5e05da06d3b146b0afa988981490e2f7",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:19.251782+00:00",
+        "time": "2026-11-07T15:39:22.699992+00:00",
+        "sent": true,
+        "request_id": "resp_04a697f680fc90e7006aef4629ab1c87d1a19fe386aa435553",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 299,
+        "output_tokens": 59,
+        "total_tokens": 358,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2478.834
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "2d62101886c049deb274c9829057be21",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:25.047917+00:00",
+        "time": "2026-11-07T15:39:25.047917+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "2d62101886c049deb274c9829057be21",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:25.047917+00:00",
+        "time": "2026-11-07T15:39:25.354481+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "2d62101886c049deb274c9829057be21",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:25.047917+00:00",
+        "time": "2026-11-07T15:39:26.503705+00:00",
+        "sent": true,
+        "request_id": "resp_092bb92bad8e7bad006aef462e103887d1bbd8ef7ba9993b0b",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 196,
+        "output_tokens": 15,
+        "total_tokens": 211,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 1143.767
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "b7a488a1779f41fbbabc92315bd8e722",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:27.739454+00:00",
+        "time": "2026-11-07T15:39:27.739454+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "b7a488a1779f41fbbabc92315bd8e722",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:27.739454+00:00",
+        "time": "2026-11-07T15:39:28.026006+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "b7a488a1779f41fbbabc92315bd8e722",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:27.739454+00:00",
+        "time": "2026-11-07T15:39:28.797880+00:00",
+        "sent": true,
+        "request_id": "resp_020eaacc25cb12a2006aef4630ba1c87d18c3176ca2434c7bb",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 198,
+        "output_tokens": 18,
+        "total_tokens": 216,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 765.86
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "debaef2a4320433c89a685dbdbb32da8",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:49.159846+00:00",
+        "time": "2026-11-07T15:39:49.159846+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "debaef2a4320433c89a685dbdbb32da8",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:49.159846+00:00",
+        "time": "2026-11-07T15:39:49.418236+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "debaef2a4320433c89a685dbdbb32da8",
+        "purpose": "background_npc_proposal",
+        "owner": "bounded_improvisation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:49.159846+00:00",
+        "time": "2026-11-07T15:39:50.831068+00:00",
+        "sent": true,
+        "request_id": "resp_063dd0e14d177465006aef464628b887d185e3cd2cff4beaf0",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 298,
+        "output_tokens": 58,
+        "total_tokens": 356,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 1407.521
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "3add7e337f2d4635a1907be15c53be5c",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:54.081204+00:00",
+        "time": "2026-11-07T15:39:54.081204+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "3add7e337f2d4635a1907be15c53be5c",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:54.081204+00:00",
+        "time": "2026-11-07T15:39:54.404775+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "3add7e337f2d4635a1907be15c53be5c",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:54.081204+00:00",
+        "time": "2026-11-07T15:39:56.550891+00:00",
+        "sent": true,
+        "request_id": "resp_0e4ac7f8b8efbb65006aef464b588887d1a5d16695602a5342",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 196,
+        "output_tokens": 15,
+        "total_tokens": 211,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2143.473
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "e4db911fa0c84a59a93c5c2b08ef0cd8",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:58.313234+00:00",
+        "time": "2026-11-07T15:39:58.313234+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "e4db911fa0c84a59a93c5c2b08ef0cd8",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:58.313234+00:00",
+        "time": "2026-11-07T15:39:58.579273+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "cff49aad0da64dde9d065124f48d623f",
+        "attempt_id": "e4db911fa0c84a59a93c5c2b08ef0cd8",
+        "purpose": "expression",
+        "owner": "expressive_dialogue.request_expression",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-11-07T15:39:58.313234+00:00",
+        "time": "2026-11-07T15:39:59.904519+00:00",
+        "sent": true,
+        "request_id": "resp_0c51f3bd25434f73006aef464f4ee087d1b69af9e9acb54c81",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 198,
+        "output_tokens": 14,
+        "total_tokens": 212,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 1321.851
+      }
+    ]
+  },
+  "hidden_exposures": 0
+}

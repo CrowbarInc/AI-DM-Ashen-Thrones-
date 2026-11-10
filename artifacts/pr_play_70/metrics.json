@@ -1,0 +1,98 @@
+{
+  "http": {
+    "requests": 27,
+    "gameplay_actions": 19,
+    "hidden_exposures": 0,
+    "average_ms": 1966.1781518521752,
+    "maximum_ms": 3718.508899968583,
+    "rejected_choice_attempts": 6,
+    "successful_gameplay_actions": 13
+  },
+  "development": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "42",
+    "time": "107.628",
+    "timestamp": "2026-11-05T18:51:06.596145-05:00",
+    "hostname": "DESKTOP-NG8DRCH"
+  },
+  "holdout": {
+    "cases": 50,
+    "correct": 50,
+    "failed": 0,
+    "fixture_sha256": "5748b71172f8711bc194cdd5592cb3598d025fb70c2b675a0edfde980bbd36fe",
+    "developer_authored": true,
+    "executions": 1
+  },
+  "provider": {
+    "requests": 4,
+    "total_tokens": 1287,
+    "input_tokens": 1011,
+    "output_tokens": 276
+  },
+  "ai_accepted": 0,
+  "ai_published": 0,
+  "shadow_candidates": 4,
+  "deterministic_investigation_fallbacks": 6,
+  "deterministic_consequence_responses": 10,
+  "mandatory_omissions": 0,
+  "unsafe_publications": 0,
+  "hidden_exposures": 0,
+  "browser": {
+    "status": "verified_with_limits",
+    "gameplay_actions": 13,
+    "branches": {
+      "survey": {
+        "gameplay_actions": 6,
+        "persisted_after_reload": true,
+        "continuation": true,
+        "final_flags": {
+          "patrol_survey": true,
+          "patrol_survey_recorded": true
+        },
+        "statuses": [
+          200,
+          200,
+          200,
+          200,
+          200,
+          200
+        ]
+      },
+      "report": {
+        "gameplay_actions": 7,
+        "persisted_after_reload": true,
+        "continuation": true,
+        "final_flags": {
+          "patrol_report": true,
+          "patrol_guards_warned": true
+        },
+        "statuses": [
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200
+        ]
+      }
+    },
+    "initial_attachment": "First about:blank attachment timed out; second recovered.",
+    "interaction_recovery": "Report selection click dispatch timeout; AX confirmed no selection before single retry. Network confirms one committed report request.",
+    "mode": "Actual existing UI; clean seeded prestarted campaigns",
+    "screenshots": [
+      "browser_report_choices.png",
+      "browser_report_full.png",
+      "browser_report_reload.png",
+      "browser_survey_reload.png"
+    ],
+    "browser_visible_latency": null,
+    "limitations": [
+      "Normal New Campaign/Start Campaign and browser snapshot loading not tested.",
+      "Host screenshot viewport clips normal captures. Full-page report screenshot also retained."
+    ]
+  }
+}

@@ -1,0 +1,1378 @@
+{
+  "baseline": {
+    "passed": 1490,
+    "failed": 113,
+    "error": 0,
+    "skipped": 0
+  },
+  "current": {
+    "passed": 1490,
+    "failed": 113,
+    "error": 0,
+    "skipped": 0
+  },
+  "focused": {
+    "passed": 101,
+    "failed": 0,
+    "error": 0,
+    "skipped": 0
+  },
+  "failures": [
+    {
+      "test_id": "tests/test_authored_knowledge_realization.py::test_http_notice_question_communicates_patrol_fact",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 'northwest' in 'gate guard says, \"i do not know enough to answer that.\"'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 'northwest' in 'gate guard says, \"i do not know enough to answer that.\"'"
+      }
+    },
+    {
+      "test_id": "tests/test_authored_knowledge_realization.py::test_http_read_notice_board_speaks_written_clue",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'northwest' in 'you read the notice board, and you turn up a concrete clue.'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'northwest' in 'you read the notice board, and you turn up a concrete clue.'"
+      }
+    },
+    {
+      "test_id": "tests/test_authoritative_lead_provenance_social_prose_non_ingestion.py::test_calibration_http_captain_answer_does_not_mint_narration_ctx",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert None == 'guard_captain'\n +  where None = <built-in method get of dict object at 0x00000223FC50FC00>('active_interaction_target_id')\n +    where <built-in method get of dict object at 0x00000223FC50FC00> = {'active_interaction_target_id': None, 'active_interaction_kind': None, 'interaction_mode': 'none', 'engagement_level': 'none', ...}.get\n +      where {'active_interaction_target_id': None, 'active_interaction_kind': None, 'interaction_mode': 'none', 'engagement_level': 'none', ...} = inspect_interaction_context({'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['frontier_gate'], 'current_date': 'Day 1', 'turn_counter': 1, ...})"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert None == 'guard_captain'\n +  where None = <built-in method get of dict object at 0x000001BACBE24FC0>('active_interaction_target_id')\n +    where <built-in method get of dict object at 0x000001BACBE24FC0> = {'active_interaction_target_id': None, 'active_interaction_kind': None, 'interaction_mode': 'none', 'engagement_level': 'none', ...}.get\n +      where {'active_interaction_target_id': None, 'active_interaction_kind': None, 'interaction_mode': 'none', 'engagement_level': 'none', ...} = inspect_interaction_context({'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['frontier_gate'], 'current_date': 'Day 1', 'turn_counter': 1, ...})"
+      }
+    },
+    {
+      "test_id": "tests/test_authoritative_lead_provenance_social_prose_non_ingestion.py::test_general_http_existing_lead_mention_does_not_duplicate",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert () == ('kelp_shed_key',)\n  \n  Right contains one more item: 'kelp_shed_key'\n  Use -v to get more diff"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert () == ('kelp_shed_key',)\n  \n  Right contains one more item: 'kelp_shed_key'\n  Use -v to get more diff"
+      }
+    },
+    {
+      "test_id": "tests/test_authoritative_lead_provenance_social_prose_non_ingestion.py::test_general_http_informational_social_prose_mints_no_lead",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert ('trestle' in 'harbor clerk says, \"i couldn\\'t tell you.\"' or 'coal loft' in 'harbor clerk says, \"i couldn\\'t tell you.\"')\n +  where 'harbor clerk says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x00000223FC4EEB50>()\n +    where <built-in method lower of str object at 0x00000223FC4EEB50> = 'Harbor Clerk says, \"I couldn\\'t tell you.\"'.lower\n +      where 'Harbor Clerk says, \"I couldn\\'t tell you.\"' = _facing({'ok': True, 'gm_output': {'player_facing_text': 'Harbor Clerk says, \"I couldn\\'t tell you.\"', 'tags': ['deterministic...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})\n +  and   'harbor clerk says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x00000223FC4EEB50>()\n +    where <built-in method lower of str object at 0x00000223FC4EEB50> = 'Harbor Clerk says, \"I couldn\\'t tell you.\"'.lower\n +      where 'Harbor Clerk says, \"I couldn\\'t tell you.\"' = _facing({'ok': True, 'gm_output': {'player_facing_text': 'Harbor Clerk says, \"I couldn\\'t tell you.\"', 'tags': ['deterministic...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert ('trestle' in 'harbor clerk says, \"i couldn\\'t tell you.\"' or 'coal loft' in 'harbor clerk says, \"i couldn\\'t tell you.\"')\n +  where 'harbor clerk says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x000001BACCA4ABB0>()\n +    where <built-in method lower of str object at 0x000001BACCA4ABB0> = 'Harbor Clerk says, \"I couldn\\'t tell you.\"'.lower\n +      where 'Harbor Clerk says, \"I couldn\\'t tell you.\"' = _facing({'ok': True, 'gm_output': {'player_facing_text': 'Harbor Clerk says, \"I couldn\\'t tell you.\"', 'tags': ['deterministic...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})\n +  and   'harbor clerk says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x000001BACCA4ABB0>()\n +    where <built-in method lower of str object at 0x000001BACCA4ABB0> = 'Harbor Clerk says, \"I couldn\\'t tell you.\"'.lower\n +      where 'Harbor Clerk says, \"I couldn\\'t tell you.\"' = _facing({'ok': True, 'gm_output': {'player_facing_text': 'Harbor Clerk says, \"I couldn\\'t tell you.\"', 'tags': ['deterministic...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})"
+      }
+    },
+    {
+      "test_id": "tests/test_bound_speaker_knowledge_resolution.py::test_general_http_owned_topic_first_ask",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'first light' in 'the action cannot currently be completed.'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'first light' in 'the action cannot currently be completed.'"
+      }
+    },
+    {
+      "test_id": "tests/test_bound_speaker_knowledge_resolution.py::test_http_bound_captain_first_ask_no_warmup",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 'thoran' in 'guard captain shakes their head. \"i don\\'t know.\"'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 'thoran' in 'guard captain shakes their head. \"i don\\'t know.\"'"
+      }
+    },
+    {
+      "test_id": "tests/test_bound_speaker_knowledge_resolution.py::test_http_bound_captain_natural_paraphrase",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 'thoran' in 'guard captain shakes their head. \"i don\\'t know.\"'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 'thoran' in 'guard captain shakes their head. \"i don\\'t know.\"'"
+      }
+    },
+    {
+      "test_id": "tests/test_by3_strict_social_semantic_mutation.py::test_by3_generate_repo_artifacts",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert False is True"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert False is True"
+      }
+    },
+    {
+      "test_id": "tests/test_by3_strict_social_semantic_mutation.py::test_by3_report_schema_and_gap_closure",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert False is True"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert False is True"
+      }
+    },
+    {
+      "test_id": "tests/test_by3_strict_social_semantic_mutation.py::test_by3_strict_social_hidden_mutation_detected",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert None is True"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert None is True"
+      }
+    },
+    {
+      "test_id": "tests/test_by3_strict_social_semantic_mutation.py::test_by3_writer_raw_checkpoint_present_on_strict_social_turn",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'normalized_social_candidate' in {'policy_output', 'replay_final_text', 'writer_raw_candidate'}"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'normalized_social_candidate' in {'policy_output', 'replay_final_text', 'writer_raw_candidate'}"
+      }
+    },
+    {
+      "test_id": "tests/test_by3_strict_social_semantic_mutation.py::test_by3_wrong_speaker_fixture_has_attributable_trace",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert ''\n +  where '' = <built-in method strip of str object at 0x00007FFCE5071D00>()\n +    where <built-in method strip of str object at 0x00007FFCE5071D00> = ''.strip\n +      where '' = str((None or ''))\n +        where None = <built-in method get of dict object at 0x00000223FC58FCC0>('first_semantic_mutation_source')\n +          where <built-in method get of dict object at 0x00000223FC58FCC0> = {'turn_identity': 'wrong_speaker_strict_social_emission|idx:0', 'scenario_id': 'wrong_speaker_strict_social_emission', 'turn_index': 0, 'turn_id': None, ...}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert ''\n +  where '' = <built-in method strip of str object at 0x00007FFCE5071D00>()\n +    where <built-in method strip of str object at 0x00007FFCE5071D00> = ''.strip\n +      where '' = str((None or ''))\n +        where None = <built-in method get of dict object at 0x000001BACCAD6F80>('first_semantic_mutation_source')\n +          where <built-in method get of dict object at 0x000001BACCAD6F80> = {'turn_identity': 'wrong_speaker_strict_social_emission|idx:0', 'scenario_id': 'wrong_speaker_strict_social_emission', 'turn_index': 0, 'turn_id': None, ...}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_dialogue_interaction_establishment.py::test_generic_to_the_guard_redirects_from_prior_stranger_target",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert False is True"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert False is True"
+      }
+    },
+    {
+      "test_id": "tests/test_dialogue_plan_final_emission_gate.py::test_missing_dialogue_intent_fails",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert '\"' not in 'Tavern Runn...on\\'t know.\"'\n  \n  '\"' is contained here:\n    Tavern Runner shakes their head. \"I don't know.\"\n  ?                                  +"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert '\"' not in 'Tavern Runn...on\\'t know.\"'\n  \n  '\"' is contained here:\n    Tavern Runner shakes their head. \"I don't know.\"\n  ?                                  +"
+      }
+    },
+    {
+      "test_id": "tests/test_dialogue_plan_final_emission_gate.py::test_missing_speaker_id_fails",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert '\"' not in 'Tavern Runn...on\\'t know.\"'\n  \n  '\"' is contained here:\n    Tavern Runner shakes their head. \"I don't know.\"\n  ?                                  +"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert '\"' not in 'Tavern Runn...on\\'t know.\"'\n  \n  '\"' is contained here:\n    Tavern Runner shakes their head. \"I don't know.\"\n  ?                                  +"
+      }
+    },
+    {
+      "test_id": "tests/test_dialogue_plan_final_emission_gate.py::test_quoted_npc_line_without_plan_fails_closed",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert '\"' not in 'Tavern Runn...on\\'t know.\"'\n  \n  '\"' is contained here:\n    Tavern Runner shakes their head. \"I don't know.\"\n  ?                                  +"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert '\"' not in 'Tavern Runn...on\\'t know.\"'\n  \n  '\"' is contained here:\n    Tavern Runner shakes their head. \"I don't know.\"\n  ?                                  +"
+      }
+    },
+    {
+      "test_id": "tests/test_dialogue_plan_final_emission_gate.py::test_wrong_attributed_speaker_fails_closed",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert '\"' not in 'Tavern Runn...on\\'t know.\"'\n  \n  '\"' is contained here:\n    Tavern Runner shakes their head. \"I don't know.\"\n  ?                                  +"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert '\"' not in 'Tavern Runn...on\\'t know.\"'\n  \n  '\"' is contained here:\n    Tavern Runner shakes their head. \"I don't know.\"\n  ?                                  +"
+      }
+    },
+    {
+      "test_id": "tests/test_directed_social_routing.py::test_chat_hailing_runner_with_can_you_question_routes_social",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'conversational_clarify' == 'question'\n  \n  - question\n  + conversational_clarify"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'conversational_clarify' == 'question'\n  \n  - question\n  + conversational_clarify"
+      }
+    },
+    {
+      "test_id": "tests/test_empty_social_retry_regressions.py::test_api_repairs_empty_social_after_force_terminal_retry_fallback",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 0 == 1\n +  where 0 = len([])"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 0 == 1\n +  where 0 = len([])"
+      }
+    },
+    {
+      "test_id": "tests/test_explicit_world_action_social_lock_override.py::test_http_class_b_visible_feature_is_not_swallowed_by_social",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'second flood' not in 'the inner l...econd flood.'\n  \n  'second flood' is contained here:\n    the inner lamps are trimmed before the second flood.\n  ?                                        ++++++++++++"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'second flood' not in 'the inner l...econd flood.'\n  \n  'second flood' is contained here:\n    the inner lamps are trimmed before the second flood.\n  ?                                        ++++++++++++"
+      }
+    },
+    {
+      "test_id": "tests/test_explicit_world_action_social_lock_override.py::test_http_leave_while_bound_still_moves",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert None == 'scene_transition'\n +  where None = <built-in method get of dict object at 0x00000223FD6E0F40>('kind')\n +    where <built-in method get of dict object at 0x00000223FD6E0F40> = {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...ene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': \"I'll climb the quay stair.\"}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert None == 'scene_transition'\n +  where None = <built-in method get of dict object at 0x000001BACDC1F580>('kind')\n +    where <built-in method get of dict object at 0x000001BACDC1F580> = {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...ene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': \"I'll climb the quay stair.\"}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_explicit_world_action_social_lock_override.py::test_http_read_while_bound_communicates_authored_contents",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert ('silt' in 'in harbor wharf, a wet quay, a tide marker, and a brass plaque' or 'two marks' in 'in harbor wharf, a wet quay, a tide marker, and a brass plaque' or 'spring tide' in 'in harbor wharf, a wet quay, a tide marker, and a brass plaque')"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert ('silt' in 'in harbor wharf, a wet quay, a tide marker, and a brass plaque' or 'two marks' in 'in harbor wharf, a wet quay, a tide marker, and a brass plaque' or 'spring tide' in 'in harbor wharf, a wet quay, a tide marker, and a brass plaque')"
+      }
+    },
+    {
+      "test_id": "tests/test_explicit_world_action_social_lock_override.py::test_http_stale_topic_does_not_mutate_world_action",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'second flood' not in 'the inner l...econd flood.'\n  \n  'second flood' is contained here:\n    the inner lamps are trimmed before the second flood.\n  ?                                        ++++++++++++"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'second flood' not in 'the inner l...econd flood.'\n  \n  'second flood' is contained here:\n    the inner lamps are trimmed before the second flood.\n  ?                                        ++++++++++++"
+      }
+    },
+    {
+      "test_id": "tests/test_explicit_world_action_social_lock_override.py::test_http_t13_glance_back_at_notice_board_is_world_action",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'question' in {'already_searched', 'discover_clue', 'investigate'}\n +  where 'question' = <built-in method get of dict object at 0x00000223FC684540>('kind')\n +    where <built-in method get of dict object at 0x00000223FC684540> = {'kind': 'question', 'action_id': 'tavern_runner', 'label': 'Tavern Runner', 'prompt': 'I glance back at the notice board after that.', ...}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'question' in {'already_searched', 'discover_clue', 'investigate'}\n +  where 'question' = <built-in method get of dict object at 0x000001BACCA22A40>('kind')\n +    where <built-in method get of dict object at 0x000001BACCA22A40> = {'kind': 'question', 'action_id': 'tavern_runner', 'label': 'Tavern Runner', 'prompt': 'I glance back at the notice board after that.', ...}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_grounded_social_absence_live_model_non_invention.py::test_engine_has_grounded_absence_before_realization",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'refusal'\n  \n  - refusal\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'refusal'\n  \n  - refusal\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_grounded_social_absence_live_model_non_invention.py::test_http_refusal_grammar_still_intact",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert ('from what i know' in 'night porter says, \"i couldn\\'t tell you.\"' or \"don't know\" in 'night porter says, \"i couldn\\'t tell you.\"' or 'do not know' in 'night porter says, \"i couldn\\'t tell you.\"')\n +  where 'night porter says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x00000223FD777630>()\n +    where <built-in method lower of str object at 0x00000223FD777630> = 'Night Porter says, \"I couldn\\'t tell you.\"'.lower\n +  and   'night porter says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x00000223FD777630>()\n +    where <built-in method lower of str object at 0x00000223FD777630> = 'Night Porter says, \"I couldn\\'t tell you.\"'.lower\n +  and   'night porter says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x00000223FD777630>()\n +    where <built-in method lower of str object at 0x00000223FD777630> = 'Night Porter says, \"I couldn\\'t tell you.\"'.lower"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert ('from what i know' in 'night porter says, \"i couldn\\'t tell you.\"' or \"don't know\" in 'night porter says, \"i couldn\\'t tell you.\"' or 'do not know' in 'night porter says, \"i couldn\\'t tell you.\"')\n +  where 'night porter says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x000001BACDC537B0>()\n +    where <built-in method lower of str object at 0x000001BACDC537B0> = 'Night Porter says, \"I couldn\\'t tell you.\"'.lower\n +  and   'night porter says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x000001BACDC537B0>()\n +    where <built-in method lower of str object at 0x000001BACDC537B0> = 'Night Porter says, \"I couldn\\'t tell you.\"'.lower\n +  and   'night porter says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x000001BACDC537B0>()\n +    where <built-in method lower of str object at 0x000001BACDC537B0> = 'Night Porter says, \"I couldn\\'t tell you.\"'.lower"
+      }
+    },
+    {
+      "test_id": "tests/test_nearby_place_existence_knowledge_ownership.py::test_question_rule_does_not_rewrite_resolved_place_existence",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert True is False\n +  where True = <built-in method get of dict object at 0x00000223FC67BD00>('applies')\n +    where <built-in method get of dict object at 0x00000223FC67BD00> = {'applies': True, 'ok': True, 'reasons': []}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert True is False\n +  where True = <built-in method get of dict object at 0x000001BACE273100>('applies')\n +    where <built-in method get of dict object at 0x000001BACE273100> = {'applies': True, 'ok': True, 'reasons': []}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[biography-The guard captain was born in Blackharbor and served for twenty years.-False]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[certainty-The captain confirms that bandits murdered the missing patrol.-False]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[discovery-You discover a hidden map beneath the notice board.-False]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[geography-The old milestone lies east beyond the trading crossroads.-False]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[hidden_information-A secret tunnel runs beneath the gate into the keep.-False]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[npc_action-The captain unlocks the gate and lets you pass.-False]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[objective_fact-The gate tax is five silver coins for every traveler.-False]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_adversarial_validation_matches_full_context[state_change-The captain gives you ten gold coins and a signed entry permit.-False]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[baker_preference-baker-Baker, which loaf do you usually keep for yourself?-history1]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[captain_preference-guard_captain-Guard Captain, do you prefer standing watch in the rain, or somewhere dry?-history0]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[followup-baker-Baker, which loaf would you recommend to me?-history3]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[recent_history-guard_captain-Guard Captain, which weather do you prefer for a watch?-history4]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_cw_social_context_projection.py::test_pr_cw_harmless_incidental_dialogue_uses_reduced_context[subjective_opinion-guard_captain-Guard Captain, which view of the square do you like best?-history2]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'hard_validation_attempt_1'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_dy_live_gameplay.py::test_pr_dy_clarification_does_not_mutate",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.\nsite: game.semantic_interpreter._invoke_interpretation_model\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 118, in pytest_runtest_protocol\n    runtestprotocol(item, nextitem=nextitem)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 139, in runtestprotocol\n    reports.append(call_and_report(item, \"call\", log))\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 249, in call_and_report\n    call = CallInfo.from_call(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 361, in from_call\n    result: TResult | None = func()\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 250, in <lambda>\n    lambda: runtest_hook(item=item, **kwds),\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 184, in pytest_runtest_call\n    item.runtest()\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\python.py\", line 1707, in runtest\n    self.ihook.pytest_pyfunc_call(pyfuncitem=self)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\python.py\", line 167, in pytest_pyfunc_call\n    result = testfunction(**testargs)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_pr_dy_live_gameplay.py\", line 179, in test_pr_dy_clarification_does_not_mutate\n    data = chat(ChatRequest(text=\"Look at that.\", ui_mode=\"player\"))\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\api.py\", line 6636, in chat\n    return _chat_turn(req, ui_mode=ui_mode)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\api.py\", line 7154, in _chat_turn\n    ordinary_contract = establish_ordinary_gameplay_contract(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\ordinary_semantic_ownership.py\", line 266, in establish_ordinary_gameplay_contract\n    _attach(True)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\ordinary_semantic_ownership.py\", line 172, in _attach\n    attach_interaction_obligation(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\live_resolution.py\", line 441, in attach_interaction_obligation\n    contract = construct_resolution_contract(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\resolution_contract.py\", line 1750, in construct_resolution_contract\n    interpreted = model_interpreter(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\semantic_interpreter.py\", line 262, in interpret_for_contract\n    text = _invoke_interpretation_model(messages)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\live_model_guard.py\", line 76, in _blocked_interpretation\n    raise LiveModelCallForbidden(\"game.semantic_interpreter._invoke_interpretation_model\")\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\live_model_guard.py\", line 30, in __init__\n    stack = \"\".join(traceback.format_stack(limit=25))"
+      },
+      "after": {
+        "status": "failed",
+        "message": "tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.\nsite: game.semantic_interpreter._invoke_interpretation_model\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 118, in pytest_runtest_protocol\n    runtestprotocol(item, nextitem=nextitem)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 139, in runtestprotocol\n    reports.append(call_and_report(item, \"call\", log))\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 249, in call_and_report\n    call = CallInfo.from_call(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 361, in from_call\n    result: TResult | None = func()\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 250, in <lambda>\n    lambda: runtest_hook(item=item, **kwds),\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 184, in pytest_runtest_call\n    item.runtest()\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\python.py\", line 1707, in runtest\n    self.ihook.pytest_pyfunc_call(pyfuncitem=self)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\python.py\", line 167, in pytest_pyfunc_call\n    result = testfunction(**testargs)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_pr_dy_live_gameplay.py\", line 179, in test_pr_dy_clarification_does_not_mutate\n    data = chat(ChatRequest(text=\"Look at that.\", ui_mode=\"player\"))\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\api.py\", line 6636, in chat\n    return _chat_turn(req, ui_mode=ui_mode)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\api.py\", line 7154, in _chat_turn\n    ordinary_contract = establish_ordinary_gameplay_contract(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\ordinary_semantic_ownership.py\", line 266, in establish_ordinary_gameplay_contract\n    _attach(True)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\ordinary_semantic_ownership.py\", line 172, in _attach\n    attach_interaction_obligation(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\live_resolution.py\", line 441, in attach_interaction_obligation\n    contract = construct_resolution_contract(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\resolution_contract.py\", line 1750, in construct_resolution_contract\n    interpreted = model_interpreter(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\semantic_interpreter.py\", line 262, in interpret_for_contract\n    text = _invoke_interpretation_model(messages)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\live_model_guard.py\", line 76, in _blocked_interpretation\n    raise LiveModelCallForbidden(\"game.semantic_interpreter._invoke_interpretation_model\")\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\live_model_guard.py\", line 30, in __init__\n    stack = \"\".join(traceback.format_stack(limit=25))"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r3_r1_expression_semantics.py::test_t19_t23_answer_sufficiency_and_refusal",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'answer_sufficiency'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'answer_sufficiency'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_grounding.py::test_bad_prior_target_cannot_launder_history[correction]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_grounding.py::test_bad_prior_target_cannot_launder_history[follow_up]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_grounding.py::test_forged_authority_or_entity_rejected[change0]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_grounding.py::test_forged_authority_or_entity_rejected[change1]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_grounding.py::test_forged_authority_or_entity_rejected[change2]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_r1_referents.py::test_unqualified_historical_id_cannot_override_focus",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'bound_referent_id'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'bound_referent_id'"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[cross_conversation]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[field]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[forged]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[operation]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[speaker]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[stale]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[substitution]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[unwitnessed]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'unknown' == 'clarification'\n  \n  - clarification\n  + unknown"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_eg_r6_r3_r1_candidates.py::test_t60_provider_call_accounting",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 0 == 1"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 0 == 1"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_play_20_response_confidentiality.py::test_successful_start_serialized_boundary",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_play_21_privileged_reads.py::test_offline_initialization_and_ordinary_action",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code\n +  and   200 = <Response [200 OK]>.status_code"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code\n +  and   200 = <Response [200 OK]>.status_code"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_play_23_local_interaction.py::test_opening_to_interaction_publication[False]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_play_23_local_interaction.py::test_opening_to_interaction_publication[True]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[embellishment]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[host]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[offerings]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[price]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[secret]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      }
+    },
+    {
+      "test_id": "tests/test_pr_play_25_public_fact_dialogue.py::test_offline_opening_to_http[unknown]",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 422 == 200\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+      }
+    },
+    {
+      "test_id": "tests/test_social_emission_quality.py::test_emission_quality_anyone_else_talk_to_manifests_preserves_redirect_not_fragment",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'topic_pressure:last_answer' == 'topic_pressu...swer:redirect'\n  \n  - topic_pressure:last_answer:redirect\n  ?                           ---------\n  + topic_pressure:last_answer"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'topic_pressure:last_answer' == 'topic_pressu...swer:redirect'\n  \n  - topic_pressure:last_answer:redirect\n  ?                           ---------\n  + topic_pressure:last_answer"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_apply_socially_revealed_leads_reentrancy_one_authoritative_one_pending_idempotent_events",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert None is not None\n +  where None = get_lead({'scene_runtime': {}, 'clue_knowledge': {}, 'turn_counter': 1, 'lead_registry': {}}, 'lead_frontier_gate_old_milestone')"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert None is not None\n +  where None = get_lead({'scene_runtime': {}, 'clue_knowledge': {}, 'turn_counter': 1, 'lead_registry': {}}, 'lead_frontier_gate_old_milestone')"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_canonical_extracted_sibling_collapses_evidence_uses_one_extracted_trigger_cid",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'lead_landing'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'lead_landing'"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_clue_discovery_then_social_extract_updates_same_authoritative_row",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in ['gate_hint']"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in ['gate_hint']"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_duplicate_social_resolution_does_not_duplicate_extracted_pending",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 0 == 1\n +  where 0 = len([])"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 0 == 1\n +  where 0 = len([])"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_ensure_minimum_actionable_skips_after_normal_social_landing_no_extra_rows",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert True is False\n +  where True = <built-in method get of dict object at 0x00000223804515C0>('minimum_actionable_lead_enforced')\n +    where <built-in method get of dict object at 0x00000223804515C0> = {'minimum_actionable_lead_enforced': True, 'enforced_lead_id': 'to_milestone', 'enforced_lead_source': 'extracted_social'}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert True is False\n +  where True = <built-in method get of dict object at 0x000001BAD286F780>('minimum_actionable_lead_enforced')\n +    where <built-in method get of dict object at 0x000001BAD286F780> = {'minimum_actionable_lead_enforced': True, 'enforced_lead_id': 'to_milestone', 'enforced_lead_source': 'extracted_social'}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_extracted_social_lead_creates_authoritative_registry_row",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert None is not None"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert None is not None"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_first_pass_lead_landing_metadata_shape_actionable_matches_pending",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'lead_landing'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'lead_landing'"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_empty",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'discoverable_clue' == 'exit'\n  \n  - exit\n  + discoverable_clue"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'discoverable_clue' == 'exit'\n  \n  - exit\n  + discoverable_clue"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_lead_landing_metadata_reports_authoritative_outcomes",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'lead_landing'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'lead_landing'"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_minimum_actionable_lead_double_call_does_not_duplicate_pending",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 0 == 1\n +  where 0 = len([])"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 0 == 1\n +  where 0 = len([])"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_social_extract_reinforced_second_disclosure_one_registry_row",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert None is not None"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert None is not None"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_social_lead_idempotent_no_duplicate_event",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 0 == 1\n +  where 0 = len([])"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 0 == 1\n +  where 0 = len([])"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_social_lead_lands_discovered_clue_id_and_event",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert ('east_lanes' in [] or 'East road is dangerous.' in [])"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert ('east_lanes' in [] or 'East road is dangerous.' in [])"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_social_lead_with_leads_to_scene_adds_pending_and_actionable",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert False\n +  where False = any(<generator object test_social_lead_with_leads_to_scene_adds_pending_and_actionable.<locals>.<genexpr> at 0x00000223822633E0>)"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert False\n +  where False = any(<generator object test_social_lead_with_leads_to_scene_adds_pending_and_actionable.<locals>.<genexpr> at 0x000001BACDDFCAC0>)"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_social_topic_without_clue_id_gets_stable_synthetic_id",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'social_gate_runner_t1' in set()\n +  where set() = get_all_known_clue_ids({})"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'social_gate_runner_t1' in set()\n +  where set() = get_all_known_clue_ids({})"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_structured_fact_scene_id_without_regex_creates_lead",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in set()\n +  where set() = get_all_known_clue_ids({})"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in set()\n +  where set() = get_all_known_clue_ids({})"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_topic_text_guards_and_town_crier_create_leads",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'lead_frontier_gate_guards' in set()\n +  where set() = get_all_known_clue_ids({})"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'lead_frontier_gate_guards' in set()\n +  where set() = get_all_known_clue_ids({})"
+      }
+    },
+    {
+      "test_id": "tests/test_social_lead_landing.py::test_topic_text_old_milestone_creates_extracted_lead",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in set()\n +  where set() = get_all_known_clue_ids({})"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'lead_frontier_gate_old_milestone' in set()\n +  where set() = get_all_known_clue_ids({})"
+      }
+    },
+    {
+      "test_id": "tests/test_social_probe_determinism.py::test_transactional_probe_after_runner_topic_exhausted_yields_redirect_contract",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "KeyError: 'social_probe_move'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "KeyError: 'social_probe_move'"
+      }
+    },
+    {
+      "test_id": "tests/test_social_question_relevance_answer_selection.py::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'authorized_host_speech' == 'initial_generation'\n  \n  - initial_generation\n  + authorized_host_speech"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'authorized_host_speech' == 'initial_generation'\n  \n  - initial_generation\n  + authorized_host_speech"
+      }
+    },
+    {
+      "test_id": "tests/test_social_speaker_grounding.py::test_transcript_runner_asks_about_aldric_followup_stays_runner",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert None is True\n +  where None = <built-in method get of dict object at 0x0000022382DF9800>('success')\n +    where <built-in method get of dict object at 0x0000022382DF9800> = {'kind': 'question', 'action_id': 'question_tavern_runner', 'label': 'Runner, what do you think Lord Aldric would say about the patrol schedule?', 'prompt': 'Runner, what do you think Lord Aldric would say about the patrol schedule?', ...}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert None is True\n +  where None = <built-in method get of dict object at 0x000001BACCBE8A00>('success')\n +    where <built-in method get of dict object at 0x000001BACCBE8A00> = {'kind': 'question', 'action_id': 'question_tavern_runner', 'label': 'Runner, what do you think Lord Aldric would say about the patrol schedule?', 'prompt': 'Runner, what do you think Lord Aldric would say about the patrol schedule?', ...}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_social_speaker_grounding.py::test_transcript_where_is_aldric_repeated_followups_stay_runner",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert None is True\n +  where None = <built-in method get of dict object at 0x0000022382DBDDC0>('success')\n +    where <built-in method get of dict object at 0x0000022382DBDDC0> = {'kind': 'question', 'action_id': 'q_where', 'label': 'Runner, where can I find Lord Aldric?', 'prompt': 'Runner, where can I find Lord Aldric?', ...}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert None is True\n +  where None = <built-in method get of dict object at 0x000001BAD22C9E00>('success')\n +    where <built-in method get of dict object at 0x000001BAD22C9E00> = {'kind': 'question', 'action_id': 'q_where', 'label': 'Runner, where can I find Lord Aldric?', 'prompt': 'Runner, where can I find Lord Aldric?', ...}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_start_campaign_api.py::test_start_campaign_emits_opening_and_sets_started",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 0 == 1\n +  where 0 = len([])"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 0 == 1\n +  where 0 = len([])"
+      }
+    },
+    {
+      "test_id": "tests/test_start_campaign_api.py::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert \"You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.\" in \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\""
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert \"You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.\" in \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\""
+      }
+    },
+    {
+      "test_id": "tests/test_start_campaign_api.py::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 781 > 800\n +  where 781 = <built-in method get of dict object at 0x00000223827EA6C0>('post_final_emission_gate_text_len', 0)\n +    where <built-in method get of dict object at 0x00000223827EA6C0> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 781 > 800\n +  where 781 = <built-in method get of dict object at 0x000001BAD0942880>('post_final_emission_gate_text_len', 0)\n +    where <built-in method get of dict object at 0x000001BAD0942880> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_stay_leave_social_lock_override.py::test_heading_out_after_them_binds_authored_exit",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert None is not None"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert None is not None"
+      }
+    },
+    {
+      "test_id": "tests/test_stay_leave_social_lock_override.py::test_http_explicit_leave_overrides_dialogue_lock",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 'conversational_clarify' in {'scene_transition', 'travel'}\n +  where 'conversational_clarify' = <built-in method get of dict object at 0x0000022382379BC0>('kind')\n +    where <built-in method get of dict object at 0x0000022382379BC0> = {'kind': 'conversational_clarify', 'action_id': 'conversational_clarify', 'label': \"I'm leaving. I'll head down the road after the patrol.\", 'prompt': \"I'm leaving. I'll head down the road after the patrol.\", ...}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 'conversational_clarify' in {'scene_transition', 'travel'}\n +  where 'conversational_clarify' = <built-in method get of dict object at 0x000001BAD09AF880>('kind')\n +    where <built-in method get of dict object at 0x000001BAD09AF880> = {'kind': 'conversational_clarify', 'action_id': 'conversational_clarify', 'label': \"I'm leaving. I'll head down the road after the patrol.\", 'prompt': \"I'm leaving. I'll head down the road after the patrol.\", ...}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_stay_leave_social_lock_override.py::test_http_explicit_stay_does_not_enter_cinderwatch",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert 'enter cinderwatch' not in 'you leave t...cinderwatch.'\n  \n  'enter cinderwatch' is contained here:\n    you leave the gate and enter cinderwatch."
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert 'enter cinderwatch' not in 'you leave t...cinderwatch.'\n  \n  'enter cinderwatch' is contained here:\n    you leave the gate and enter cinderwatch."
+      }
+    },
+    {
+      "test_id": "tests/test_stay_leave_social_lock_override.py::test_http_pursuit_while_socially_engaged_leaves_the_gate",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert False\n +  where False = any(<generator object test_http_pursuit_while_socially_engaged_leaves_the_gate.<locals>.<genexpr> at 0x0000022382E03D30>)"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert False\n +  where False = any(<generator object test_http_pursuit_while_socially_engaged_leaves_the_gate.<locals>.<genexpr> at 0x000001BAD1E61970>)"
+      }
+    },
+    {
+      "test_id": "tests/test_stay_leave_social_lock_override.py::test_http_unavailable_travel_does_not_invent_house_verevin",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert None == 'frontier_gate'\n +  where None = <built-in method get of dict object at 0x0000022382E66100>('active_scene_id')\n +    where <built-in method get of dict object at 0x0000022382E66100> = {}.get\n +      where {} = <built-in method get of dict object at 0x00000223FD6EE800>('session', {})\n +        where <built-in method get of dict object at 0x00000223FD6EE800> = {'ok': True, 'gm_output': {'player_facing_text': 'You want to reach House Verevin, but that is not an established dest...ction_id': 'conversational_decline', 'label': \"I'll go to House Verevin.\", 'prompt': \"I'll go to House Verevin.\", ...}}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert None == 'frontier_gate'\n +  where None = <built-in method get of dict object at 0x000001BACE2E02C0>('active_scene_id')\n +    where <built-in method get of dict object at 0x000001BACE2E02C0> = {}.get\n +      where {} = <built-in method get of dict object at 0x000001BACCB17AC0>('session', {})\n +        where <built-in method get of dict object at 0x000001BACCB17AC0> = {'ok': True, 'gm_output': {'player_facing_text': 'You want to reach House Verevin, but that is not an established dest...ction_id': 'conversational_decline', 'label': \"I'll go to House Verevin.\", 'prompt': \"I'll go to House Verevin.\", ...}}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None\n +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x00000223FC545AC0>('resolution')\n +    where <built-in method get of dict object at 0x00000223FC545AC0> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None\n +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x000001BAD00B7F80>('resolution')\n +    where <built-in method get of dict object at 0x000001BAD00B7F80> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 'retry_strategy:selected=unresolved_question' in ''\n +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, \"Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 'retry_strategy:selected=unresolved_question' in ''\n +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, \"Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert None == 'roll_requirement_query'\n +  where None = <built-in method get of dict object at 0x00000223804288C0>('category')\n +    where <built-in method get of dict object at 0x00000223804288C0> = {}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert None == 'roll_requirement_query'\n +  where None = <built-in method get of dict object at 0x000001BAD0100600>('category')\n +    where <built-in method get of dict object at 0x000001BAD0100600> = {}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError: assert None == 'roll_requirement_query'\n +  where None = <built-in method get of dict object at 0x000002238237BA40>('category')\n +    where <built-in method get of dict object at 0x000002238237BA40> = {}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError: assert None == 'roll_requirement_query'\n +  where None = <built-in method get of dict object at 0x000001BACE173C00>('category')\n +    where <built-in method get of dict object at 0x000001BACE173C00> = {}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 'Tavern Runner says, \"I couldn\\'t tell you.\"' != 'Tavern Runner says, \"I couldn\\'t tell you.\"'"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 'Tavern Runner says, \"I couldn\\'t tell you.\"' != 'Tavern Runner says, \"I couldn\\'t tell you.\"'"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "AssertionError"
+      },
+      "after": {
+        "status": "failed",
+        "message": "AssertionError"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None\n +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x0000022380434BC0>('resolution')\n +    where <built-in method get of dict object at 0x0000022380434BC0> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None\n +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x000001BACC8F5EC0>('resolution')\n +    where <built-in method get of dict object at 0x000001BACC8F5EC0> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 0 == 2\n +  where 0 = len([])"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 0 == 2\n +  where 0 = len([])"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 0 == 2\n +  where 0 = len([])"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 0 == 2\n +  where 0 = len([])"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 0 == 2\n +  where 0 = len([])"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 0 == 2\n +  where 0 = len([])"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert 0 == 2\n +  where 0 = len([])"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert 0 == 2\n +  where 0 = len([])"
+      }
+    },
+    {
+      "test_id": "tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback",
+      "classification": "preexisting",
+      "before": {
+        "status": "failed",
+        "message": "assert []"
+      },
+      "after": {
+        "status": "failed",
+        "message": "assert []"
+      }
+    }
+  ]
+}

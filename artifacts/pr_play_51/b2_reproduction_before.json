@@ -1,0 +1,22 @@
+{
+  "when": "before the edit, same process session, validate_prelude on the saved prelude",
+  "input_text": "The ground near the weathered milestone is soft and disturbed, bearing the faint impressions of footsteps that overlap and blur together. The muddied earth tells of recent passage, yet the details remain elusive beneath the shifting layers of soil and rain.",
+  "authorized_context": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+  "authored_corpus_source": "mechanical_fallback of the investigation resolution; discovered clue text only",
+  "decision_supplied": false,
+  "hard_valid": false,
+  "reasons": [
+    "ungrounded_authoritative_rule"
+  ],
+  "family": "geography",
+  "kind": "consequential_proposal",
+  "matched_span": "passage, yet the details remain elusive beneath",
+  "triggering_rule": "_GEOGRAPHY_RE first alternative in game/proposition_authority.py",
+  "validator_function": "validate_prelude -> validate_generated_response -> unauthorized_authoritative_rules",
+  "mechanical_claim_audit": {
+    "claims": [],
+    "reasons": []
+  },
+  "source_location": "game/proposition_authority.py _GEOGRAPHY_RE; called from game/immutable_valid_response.py",
+  "relationship_to_mechanical_claims": "Mechanical-claim validation did not fire. The geography family is a separate proposition class. It becomes ungrounded_authoritative_rule only when the sentence is a consequential world-truth claim and the mechanical corpus does not already contain it."
+}

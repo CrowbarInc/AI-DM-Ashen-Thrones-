@@ -1,0 +1,76 @@
+[
+  {
+    "action": "I examine the notice board.",
+    "candidate": "You take a moment to examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+    "publication": {
+      "decision": "fallback",
+      "trusted_disclosure": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "mandatory_disclosures": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "final_text": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "invariant": "PASS",
+      "recovery_reason": null,
+      "server_constructed": true,
+      "client_received": "unknown"
+    },
+    "classification": "correct duplicate rejection"
+  },
+  {
+    "action": "I follow the missing patrol rumor.",
+    "candidate": null,
+    "publication": null,
+    "classification": "deterministic movement; no provider"
+  },
+  {
+    "action": "I examine the weathered milestone.",
+    "candidate": "You take a moment to examine the weathered milestone.",
+    "publication": {
+      "decision": "published",
+      "trusted_disclosure": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "mandatory_disclosures": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "final_text": "You take a moment to examine the weathered milestone. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "invariant": "PASS",
+      "recovery_reason": null,
+      "server_constructed": true,
+      "client_received": "unknown"
+    },
+    "classification": "safe accepted/published"
+  },
+  {
+    "action": "I examine the weathered milestone again.",
+    "candidate": "You take a moment to examine the weathered milestone again. The examination adds nothing new to what you already know.",
+    "publication": {
+      "decision": "fallback",
+      "trusted_disclosure": "The examination adds nothing new to what you already know.",
+      "mandatory_disclosures": [
+        "The examination adds nothing new to what you already know."
+      ],
+      "final_text": "You examine what is visible again; nothing new is established. The examination adds nothing new to what you already know.",
+      "invariant": "PASS",
+      "recovery_reason": null,
+      "server_constructed": true,
+      "client_received": "unknown"
+    },
+    "classification": "correct duplicate rejection"
+  },
+  {
+    "action": "I examine the mud prints.",
+    "candidate": "You take a moment to examine the mud prints.",
+    "publication": {
+      "decision": "fallback",
+      "trusted_disclosure": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "mandatory_disclosures": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "final_text": "You examine what is visible. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "invariant": "PASS",
+      "recovery_reason": null,
+      "server_constructed": true,
+      "client_received": "unknown"
+    },
+    "classification": "false rejection of harmless target reference"
+  }
+]

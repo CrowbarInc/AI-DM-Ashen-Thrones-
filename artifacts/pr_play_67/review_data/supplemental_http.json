@@ -1,0 +1,222 @@
+[
+  {
+    "enabled": false,
+    "valid_sheet": true,
+    "request": {
+      "method": "POST",
+      "path": "/api/import_sheet",
+      "fixture": "default player sheet with internal annotation"
+    },
+    "status": 200,
+    "body": {
+      "character": {
+        "id": "character",
+        "name": "Unknown",
+        "class": "Unknown",
+        "level": 1,
+        "ancestry": "",
+        "hp": {
+          "current": 1,
+          "max": 1,
+          "nonlethal": 0
+        },
+        "ac": {
+          "normal": 10,
+          "touch": 10,
+          "flat_footed": 10
+        },
+        "initiative_bonus": 0,
+        "speed": 30,
+        "bab": 0,
+        "cmb": 0,
+        "cmd": 10,
+        "ability_scores": {
+          "str": 10,
+          "dex": 10,
+          "con": 10,
+          "int": 10,
+          "wis": 10,
+          "cha": 10
+        },
+        "saves": {
+          "fort": 0,
+          "ref": 0,
+          "will": 0
+        },
+        "attacks": [],
+        "conditions": [],
+        "inventory": [],
+        "spells": {
+          "prepared": [],
+          "slots": {
+            "0": 0,
+            "1": 0
+          }
+        },
+        "skills": {}
+      },
+      "ok": true,
+      "ui_mode": "player"
+    },
+    "bytes": 477,
+    "http_ms": 41.273800015915185,
+    "hidden_exposures": []
+  },
+  {
+    "enabled": false,
+    "valid_sheet": false,
+    "request": {
+      "method": "POST",
+      "path": "/api/import_sheet",
+      "fixture": "malformed synthetic JSON"
+    },
+    "status": 500,
+    "body": {
+      "ok": false,
+      "error": "Unable to complete this request. Refresh your session and try again."
+    },
+    "bytes": 91,
+    "http_ms": 8.940600033383816,
+    "hidden_exposures": []
+  },
+  {
+    "request": {
+      "path": "/api/new_campaign",
+      "method": "POST",
+      "json": {}
+    },
+    "status": 500,
+    "body": {
+      "ok": false,
+      "error": "Unable to complete this request. Refresh your session and try again."
+    },
+    "bytes": 91,
+    "http_ms": 3.91139998100698,
+    "hidden_exposures": []
+  },
+  {
+    "request": {
+      "path": "/api/start_campaign",
+      "method": "POST",
+      "json": {}
+    },
+    "status": 500,
+    "body": {
+      "ok": false,
+      "error": "Unable to complete this request. Refresh your session and try again."
+    },
+    "bytes": 91,
+    "http_ms": 3.9085999596863985,
+    "hidden_exposures": []
+  },
+  {
+    "enabled": true,
+    "valid_sheet": true,
+    "request": {
+      "method": "POST",
+      "path": "/api/import_sheet",
+      "fixture": "default player sheet with internal annotation"
+    },
+    "status": 200,
+    "body": {
+      "character": {
+        "id": "character",
+        "name": "Unknown",
+        "class": "Unknown",
+        "level": 1,
+        "ancestry": "",
+        "hp": {
+          "current": 1,
+          "max": 1,
+          "nonlethal": 0
+        },
+        "ac": {
+          "normal": 10,
+          "touch": 10,
+          "flat_footed": 10
+        },
+        "initiative_bonus": 0,
+        "speed": 30,
+        "bab": 0,
+        "cmb": 0,
+        "cmd": 10,
+        "ability_scores": {
+          "str": 10,
+          "dex": 10,
+          "con": 10,
+          "int": 10,
+          "wis": 10,
+          "cha": 10
+        },
+        "saves": {
+          "fort": 0,
+          "ref": 0,
+          "will": 0
+        },
+        "attacks": [],
+        "conditions": [],
+        "inventory": [],
+        "spells": {
+          "prepared": [],
+          "slots": {
+            "0": 0,
+            "1": 0
+          }
+        },
+        "skills": {}
+      },
+      "ok": true,
+      "ui_mode": "player"
+    },
+    "bytes": 477,
+    "http_ms": 10.022300004493445,
+    "hidden_exposures": []
+  },
+  {
+    "enabled": true,
+    "valid_sheet": false,
+    "request": {
+      "method": "POST",
+      "path": "/api/import_sheet",
+      "fixture": "malformed synthetic JSON"
+    },
+    "status": 500,
+    "body": {
+      "ok": false,
+      "error": "Unable to complete this request. Refresh your session and try again."
+    },
+    "bytes": 91,
+    "http_ms": 4.489200015086681,
+    "hidden_exposures": []
+  },
+  {
+    "request": {
+      "path": "/api/new_campaign",
+      "method": "POST",
+      "json": {}
+    },
+    "status": 500,
+    "body": {
+      "ok": false,
+      "error": "Unable to complete this request. Refresh your session and try again."
+    },
+    "bytes": 91,
+    "http_ms": 3.319899959024042,
+    "hidden_exposures": []
+  },
+  {
+    "request": {
+      "path": "/api/start_campaign",
+      "method": "POST",
+      "json": {}
+    },
+    "status": 500,
+    "body": {
+      "ok": false,
+      "error": "Unable to complete this request. Refresh your session and try again."
+    },
+    "bytes": 91,
+    "http_ms": 13.875000004190952,
+    "hidden_exposures": []
+  }
+]

@@ -1,0 +1,64 @@
+{
+  "focused": {
+    "exit_code": 1,
+    "passed": 1065,
+    "failed_count": 20,
+    "failed": [
+      "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+      "tests.test_narration_state_consistency::test_refusal_text_with_location_repair_updates_state_and_clues",
+      "tests.test_narration_state_consistency::test_usable_location_in_text_updates_structured_topic_and_clues",
+      "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[survey]",
+      "tests.test_pr_play_71_lifecycle::test_normal_lifecycle[report]",
+      "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[off]",
+      "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[no_optin]",
+      "tests.test_pr_play_71_lifecycle::test_enrollment_isolation[other_identity]",
+      "tests.test_pr_play_71_lifecycle::test_duplicate_start",
+      "tests.test_pr_play_71_persistence_recovery::test_new_campaign_failure_restores_prior_runtime",
+      "tests.test_pr_play_71v_verification::test_new_campaign_rollback_on_each_runtime_file",
+      "tests.test_pr_play_71v_verification::test_new_campaign_identifier_failure_changes_nothing",
+      "tests.test_pr_play_71v_verification::test_opening_persistence_failure_does_not_publish_start",
+      "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[1]",
+      "tests.test_pr_play_71v_verification::test_chat_transient_rename_commits_one_turn[3]",
+      "tests.test_pr_play_71v_verification::test_chat_permanent_rename_does_not_publish_success",
+      "tests.test_pr_play_71v_verification::test_transcript_and_authoritative_isolation",
+      "tests.test_pr_play_71v_verification::test_player_safe_projection_across_lifecycle",
+      "tests.test_pr_play_71v_verification::test_mandatory_disclosure_survives_rejected_narration",
+      "tests.test_pr_play_71v_verification::test_duplicate_request_does_not_duplicate_branch"
+    ],
+    "new_vs_pr_play_78": [],
+    "cleared_vs_pr_play_78": []
+  },
+  "boundary": {
+    "exit_code": 1,
+    "passed": 101,
+    "failed_count": 6,
+    "failed": [
+      "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+      "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+      "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+      "tests.test_start_campaign_api::test_failed_start_campaign_does_not_mark_started",
+      "tests.test_pr_play_37_opening_recovery::test_http_invalid_declaration_discards_provider_text",
+      "tests.test_pr_play_37_opening_recovery::test_http_composer_failure_does_not_commit"
+    ],
+    "new_vs_pr_play_78": [],
+    "cleared_vs_pr_play_78": []
+  },
+  "broader": {
+    "exit_code": 1,
+    "passed": 0,
+    "failed_count": 9,
+    "failed": [
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[biography-The guard captain was born in Blackharbor and served for twenty years.-biography]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[geography-The old milestone lies east beyond the trading crossroads.-geography]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[hidden_information-A secret tunnel runs beneath the gate into the keep.-hidden_information]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[npc_action-The captain unlocks the gate and lets you pass.-npc_action]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_rejects_inherited_objective_authority_violations[discovery-You discover a hidden map beneath the notice board.-discovery]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[preference-The guard captain says, \"I prefer a dry watch.\"]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[opinion-The guard captain says, \"I like the square best after rain.\"]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[incidental_characterization-The guard captain shrugs and nods.]",
+      "tests.test_pr_cx_authority_assurance::test_pr_cx_preserves_harmless_dialogue_and_grounded_observation[grounded_observation-A notice board lists new taxes, curfews, and a posted warning about a missing patrol.]"
+    ],
+    "new_vs_pr_play_78": [],
+    "cleared_vs_pr_play_78": []
+  }
+}

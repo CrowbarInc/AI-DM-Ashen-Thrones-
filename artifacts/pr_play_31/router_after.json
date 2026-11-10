@@ -1,0 +1,94 @@
+{
+  "destination": "northwest of the crates",
+  "purpose": "investigate the muddy footprints",
+  "clause": {
+    "text": "I head northwest of the crates to investigate the muddy footprints.",
+    "operation": "MOVE",
+    "destination": "northwest of the crates",
+    "consequential": true,
+    "incidental": false,
+    "back": false,
+    "purpose": "investigate the muddy footprints"
+  },
+  "decision": {
+    "category": "CLARIFY",
+    "primary_intention": "I head northwest of the crates to investigate the muddy footprints.",
+    "intent_family": "movement",
+    "incidental_context": [],
+    "proposed_operation": null,
+    "proposed_target": null,
+    "proposed_record": null,
+    "missing_information": [
+      "destination"
+    ],
+    "context_references": [
+      "muddy_footprints_northwest"
+    ],
+    "requires_authoritative_execution": false,
+    "reason": "clue_route_clarification",
+    "confidence": 0.84,
+    "ambiguity": "More than one established destination could match.",
+    "player_facing_text": "I cannot establish which route reaches the place you mean. Available routes: Enter Cinderwatch; Follow the missing patrol rumor. Which route do you want to take? Your intention to investigate the muddy footprints is still pending; nothing has been attempted.",
+    "context_update": {
+      "conversational_context": {
+        "pending_clarification": {
+          "kind": "ambiguous_destination",
+          "operation": "MOVE",
+          "original_text": "I head northwest of the crates to investigate the muddy footprints.",
+          "choices": [
+            {
+              "entity_id": "leave_for_enter_cinderwatch",
+              "label": "Enter Cinderwatch"
+            },
+            {
+              "entity_id": "leave_for_follow_the_missing_patrol_rumor",
+              "label": "Follow the missing patrol rumor"
+            }
+          ],
+          "scene_id": "frontier_gate",
+          "deferred_steps": [
+            {
+              "text": "investigate the muddy footprints",
+              "operation": "INSPECT",
+              "status": "pending",
+              "dependency": "after_travel",
+              "supported": false,
+              "target_id": "",
+              "consequential": true
+            }
+          ]
+        }
+      },
+      "interaction_context": {
+        "active_interaction_target_id": null,
+        "active_interaction_kind": null,
+        "interaction_mode": "none",
+        "engagement_level": "none"
+      }
+    },
+    "intent_modality": "committed",
+    "secondary_intentions": [
+      {
+        "text": "investigate the muddy footprints",
+        "operation": "INSPECT",
+        "status": "pending",
+        "dependency": "after_travel",
+        "supported": false,
+        "target_id": "",
+        "consequential": true
+      }
+    ],
+    "execution_policy": "clarify_before_execution",
+    "communication_owner": "GM",
+    "communication_purpose": "CLARIFICATION",
+    "authorization": {
+      "route_decision": "NO_AUTHORIZED_ROUTE",
+      "requested_destination": "northwest of the crates",
+      "purpose": "investigate the muddy footprints",
+      "referenced_clues": [
+        "muddy_footprints_northwest"
+      ],
+      "selection_evidence": "no_authored_clue_route_link"
+    }
+  }
+}

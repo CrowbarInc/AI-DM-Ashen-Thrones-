@@ -1,0 +1,13 @@
+{
+  "status": "PARTIAL",
+  "overall_verdict": "B",
+  "first_answer_quality": "PASS",
+  "continuity": "NOT TESTED",
+  "knowledge_transition": "NOT TESTED",
+  "stop_reason": "expression_validation_rejected_unsupported_addition",
+  "raw_controller_stop_reason": "first_response_not_pass",
+  "raw_label_correction": "The manual gate used first_response_pass=false to prohibit continuation after validation rejection. That boolean is permission to continue, not answer quality. The published answer PASSES relevance/usefulness/grounding. Native structural classifier does not stop on safely rejected optional expression; section 13 requires the stricter experiment stop.",
+  "followup_attempted": false,
+  "provider_requests": 3,
+  "remaining_requests": 2
+}

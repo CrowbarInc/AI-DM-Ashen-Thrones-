@@ -1,0 +1,1946 @@
+{
+  "milestone": "pr_play_claim_acceptance_audit",
+  "baseline_reference": "artifacts/pr_play_baseline_provenance/test_results.json",
+  "runs": [
+    {
+      "counts": {
+        "passed": 219,
+        "failed": 16,
+        "error": 0,
+        "skipped": 0,
+        "tests": 235
+      },
+      "nodes": [
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_greeting_creates_the_active_interlocutor",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_followups_stay_with_the_gate_guard[follow-0]",
+          "outcome": "passed",
+          "seconds": "0.010"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_followups_stay_with_the_gate_guard[follow-1]",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_followups_stay_with_the_gate_guard[follow-2]",
+          "outcome": "passed",
+          "seconds": "0.006"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_followups_stay_with_the_gate_guard[follow-3]",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_followups_stay_with_the_gate_guard[follow-4]",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_player_need_not_repeat_the_name",
+          "outcome": "passed",
+          "seconds": "0.022"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_non_npc_questions_are_not_routed_to_the_guard[board]",
+          "outcome": "passed",
+          "seconds": "0.013"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_non_npc_questions_are_not_routed_to_the_guard[place]",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_non_npc_questions_are_not_routed_to_the_guard[memory]",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_explicit_switch_overrides_the_guard",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_goodbye_ends_the_interlocutor",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_leaving_the_scene_drops_the_interlocutor",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_campaign_change_does_not_keep_the_guard",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_hidden_patrol_route_is_not_spoken",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_save_roundtrip_keeps_the_interlocutor",
+          "outcome": "passed",
+          "seconds": "0.028"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_established_fact_paraphrase[narr-0]",
+          "outcome": "passed",
+          "seconds": "0.036"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_established_fact_paraphrase[narr-1]",
+          "outcome": "passed",
+          "seconds": "0.035"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_established_fact_paraphrase[narr-2]",
+          "outcome": "passed",
+          "seconds": "0.045"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_established_fact_paraphrase[narr-3]",
+          "outcome": "passed",
+          "seconds": "0.125"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_established_fact_paraphrase[narr-4]",
+          "outcome": "passed",
+          "seconds": "0.049"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_established_fact_paraphrase[narr-5]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_established_fact_paraphrase[narr-6]",
+          "outcome": "passed",
+          "seconds": "0.037"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_established_fact_paraphrase[narr-7]",
+          "outcome": "passed",
+          "seconds": "0.042"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_established_fact_paraphrase[narr-8]",
+          "outcome": "passed",
+          "seconds": "0.039"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_established_fact_paraphrase[narr-9]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_discovered_direction_is_reusable_when_the_sentence_omits_it",
+          "outcome": "passed",
+          "seconds": "0.050"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_identical_narration_is_not_a_variation",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_primary_narration_is_skipped_after_a_committed_line",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_six_live_lines_publish_when_they_stay_inside_authority",
+          "outcome": "passed",
+          "seconds": "0.018"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_dialogue_prompt_names_the_question_and_not_the_hidden_route",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_expression_boundary[pay]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_expression_boundary[hedge]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_expression_boundary[route]",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_expression_boundary[uncertain]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_unambiguous_followup_does_not_ask_the_provider_to_pick_a_person",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_genuine_ambiguity_still_clarifies[ask]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_genuine_ambiguity_still_clarifies[look]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_genuine_ambiguity_still_clarifies[move]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79a_continuity.py::test_recent_exchange_is_bounded",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_eb_conversational_continuity.py::test_pr_eb_active_npc_followup_routes_to_existing_social_resolver",
+          "outcome": "passed",
+          "seconds": "0.554"
+        },
+        {
+          "nodeid": "tests/test_pr_eb_conversational_continuity.py::test_pr_eb_conversation_exit_clears_active_interlocutor_without_world_mutation",
+          "outcome": "passed",
+          "seconds": "0.150"
+        },
+        {
+          "nodeid": "tests/test_pr_eb_conversational_continuity.py::test_pr_eb_ambiguous_pronoun_inspection_resumes_after_clarification",
+          "outcome": "passed",
+          "seconds": "0.581"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[immediate_clarification]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[pronoun_followup]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[paraphrase_followup]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[earlier_topic]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[explicit_addressee_change]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[gm_about_npc_statement]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[ordinary_preference]",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[repeated_preference]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[conversational_correction]",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[pending_action_correction]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[executed_undo]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[negotiation_request]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[unauthorized_promise]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[npc_uncertainty]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[hidden_information]",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[absent_npc_reference]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[ambiguous_history]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[save_load_exchange]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[rejected_narration_not_history]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_frozen_continuity_holdout[bounded_commitments]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_personal_ignorance_is_replaced_without_a_retry",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_eg_r1_continuity.py::test_followup_quotes_the_delivered_line_without_narration",
+          "outcome": "passed",
+          "seconds": "0.439"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_interactable_resolves",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_visible_non_interactable_is_acknowledged_without_invention",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_unknown_player_named_object_is_not_instantiated",
+          "outcome": "failed",
+          "seconds": "0.532"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_narration_only_object_does_not_gain_authority",
+          "outcome": "failed",
+          "seconds": "0.599"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_abstract_reference_does_not_become_physical",
+          "outcome": "failed",
+          "seconds": "0.527"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents",
+          "outcome": "failed",
+          "seconds": "0.778"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_hidden_object_is_not_revealed_by_naming",
+          "outcome": "failed",
+          "seconds": "0.631"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_then_observe_uses_current_scene",
+          "outcome": "failed",
+          "seconds": "0.624"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_authored_alias_binds",
+          "outcome": "failed",
+          "seconds": "0.535"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_creates_no_world_facts",
+          "outcome": "failed",
+          "seconds": "0.977"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_short_alias_does_not_steal_more_specific_visible_feature",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_is_visible_not_inspectable",
+          "outcome": "passed",
+          "seconds": "0.010"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock",
+          "outcome": "failed",
+          "seconds": "0.891"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_observe_stock_replacement_keeps_notice_board_working",
+          "outcome": "failed",
+          "seconds": "0.933"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_anti_overfitting_generic_engine_has_no_calibration_special_case",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_referenced_surface_grounding_inspection_resolution.py::test_perception_hook_replaces_observe_stock_for_visible_feature",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_canonical_npc_target_resolves",
+          "outcome": "passed",
+          "seconds": "0.015"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_display_name_and_alias_resolve_to_the_same_npc",
+          "outcome": "passed",
+          "seconds": "0.021"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_unknown_npc_is_not_admitted",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_ambiguous_npc_reference_requires_clarification",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_captured_rumor_request_is_no_longer_ungrounded",
+          "outcome": "passed",
+          "seconds": "0.014"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_canonical_and_natural_patrol_exit_are_selected",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_unknown_exit_does_not_create_a_route",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_ambiguous_exit_requires_clarification",
+          "outcome": "passed",
+          "seconds": "0.007"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_blocked_exit_does_not_authorize_movement",
+          "outcome": "passed",
+          "seconds": "0.008"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_optional_method_is_not_required_for_the_patrol_route",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_missing_footprints_are_not_created",
+          "outcome": "passed",
+          "seconds": "0.051"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_rejected_decisions_do_not_mutate_state",
+          "outcome": "passed",
+          "seconds": "0.036"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_second_person_without_a_unique_referent_still_clarifies",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_sequence_rumor_interaction_reaches_the_social_resolver",
+          "outcome": "passed",
+          "seconds": "0.956"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_sequence_patrol_travel_reaches_the_movement_resolver",
+          "outcome": "failed",
+          "seconds": "1.103"
+        },
+        {
+          "nodeid": "tests/test_pr_play_39_action_admission.py::test_sequence_unsupported_actions_invent_nothing",
+          "outcome": "failed",
+          "seconds": "0.387"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_f3_retreat_is_not_primary_narration_when_physical_is_disabled",
+          "outcome": "passed",
+          "seconds": "0.338"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_natural_retreat_paraphrase_uses_the_same_refusal",
+          "outcome": "passed",
+          "seconds": "0.376"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_enabled_retreat_remains_on_the_physical_pathway",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_unrelated_unresolved_utterance_keeps_primary_narration_eligible",
+          "outcome": "passed",
+          "seconds": "1.198"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_scene_information_stays_on_the_conversational_pathway",
+          "outcome": "passed",
+          "seconds": "0.600"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_greeting_is_not_reclassified_as_a_retreat",
+          "outcome": "passed",
+          "seconds": "1.434"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_enabled_dialogue_pathway_still_publishes_host_speech",
+          "outcome": "passed",
+          "seconds": "0.019"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_ambiguous_step_back_reference_does_not_move_position",
+          "outcome": "passed",
+          "seconds": "3.794"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_compound_and_directed_step_back_are_not_intercepted",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_owned_dialogue_publication_is_not_replaced_by_the_retreat_backstop",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_disabled_refusal_is_not_completed_gameplay",
+          "outcome": "passed",
+          "seconds": "0.550"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_verification_profile_installs_three_thousand_tokens",
+          "outcome": "passed",
+          "seconds": "0.015"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_missing_malformed_and_historical_ceilings_do_not_become_two_hundred_thousand",
+          "outcome": "passed",
+          "seconds": "0.021"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_explicit_override_is_recorded",
+          "outcome": "passed",
+          "seconds": "0.017"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_oversized_estimate_is_refused_before_dispatch",
+          "outcome": "passed",
+          "seconds": "0.030"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_within_budget_request_reaches_the_provider_boundary",
+          "outcome": "passed",
+          "seconds": "0.040"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_aggregate_budget_exhaustion_refuses_the_next_request",
+          "outcome": "passed",
+          "seconds": "0.051"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_budget_refusal_is_not_completed_gameplay",
+          "outcome": "passed",
+          "seconds": "0.015"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_retreat_refusal_stamp_is_unsupported_and_operational",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_02_retreat_and_budget.py::test_http_script_uses_the_verification_profile",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_all_nested_keys_identical_omits_nested_policy",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_all_nested_keys_different_preserves_nested_policy",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_mixed_keys_remove_only_identical_values",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_root_absent_nested_key_is_preserved",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_empty_root_policy_preserves_nested_policy",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_empty_nested_policy_is_preserved",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_missing_root_policy_is_unchanged",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_missing_nested_policy_is_unchanged",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_nested_object_differing_by_one_child_stays_intact",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_identical_lists_and_dicts_are_removed",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_boolean_and_numeric_values_are_not_collapsed",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_null_and_missing_key_stay_distinct",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_unrelated_turn_packet_fields_stay",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_input_objects_are_not_mutated",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_repeated_invocation_is_idempotent",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_malformed_policy_structures_are_preserved",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_04_mixed_key_policy.py::test_f3_primary_narration_assembly_drops_only_equal_nested_keys",
+          "outcome": "passed",
+          "seconds": "2.636"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_instruction_eligibility.py::test_predicate_holds_plan_backed_auto_off_compact",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_instruction_eligibility.py::test_plan_backed_auto_keeps_full_instructions_when_transition_is_false",
+          "outcome": "passed",
+          "seconds": "0.082"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_instruction_eligibility.py::test_plan_backed_auto_keeps_full_instructions_when_transition_is_true",
+          "outcome": "passed",
+          "seconds": "0.067"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_instruction_eligibility.py::test_explicit_compact_profile_still_compacts_a_plan_backed_request",
+          "outcome": "passed",
+          "seconds": "0.264"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_instruction_eligibility.py::test_detached_no_resolution_request_stays_compact",
+          "outcome": "passed",
+          "seconds": "0.033"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_instruction_eligibility.py::test_same_text_without_a_plan_does_not_inherit_full_instructions",
+          "outcome": "passed",
+          "seconds": "0.060"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_instruction_eligibility.py::test_inspection_and_dialogue_keep_authority_without_a_location_change",
+          "outcome": "passed",
+          "seconds": "0.105"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_instruction_eligibility.py::test_assembled_instruction_list_is_stable",
+          "outcome": "passed",
+          "seconds": "0.072"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_instruction_eligibility.py::test_operational_refusal_is_not_completed_gameplay",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_same_scene_id_is_not_a_location_change",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_canonical_scene_id_whitespace_still_matches",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_different_scene_id_remains_a_location_change",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_explicit_scene_activation_remains_required",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_same_scene_activation_does_not_cancel_the_activation_signal",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_resolved_transition_remains_required_on_the_same_scene_stamp",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_resolved_transition_without_a_new_target_is_not_cleared_by_scene_equality",
+          "outcome": "passed",
+          "seconds": "0.006"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_arrival_at_another_scene_remains_required",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_time_skip_remains_required_with_a_same_scene_stamp",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_same_scene_ordinary_actions_do_not_require_advancement",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_missing_current_scene_id_keeps_the_prior_stamp_signal",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_missing_destination_scene_id_does_not_invent_a_change",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_both_scene_ids_missing_does_not_invent_a_location_change",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_same_scene_state_change_flag_stays_required",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_at_opt_06_same_scene_transition.py::test_repeated_derivation_is_stable_and_does_not_mutate_inputs",
+          "outcome": "passed",
+          "seconds": "0.007"
+        },
+        {
+          "nodeid": "tests/test_narrative_planning_transition_node.py::test_target_scene_id_creates_transition_node",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_narrative_planning_transition_node.py::test_resolved_transition_creates_transition_node",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_narrative_planning_transition_node.py::test_state_mutations_scene_activates_transition_node",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_narrative_planning_transition_node.py::test_time_skip_creates_time_anchors",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_narrative_planning_transition_node.py::test_no_transition_signal_produces_none_type",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_narrative_planning_transition_node.py::test_transition_node_rejects_prose_keys",
+          "outcome": "passed",
+          "seconds": "0.008"
+        },
+        {
+          "nodeid": "tests/test_prompt_context_transition_node_consumption.py::test_valid_transition_node_exposed_in_prompt_context",
+          "outcome": "passed",
+          "seconds": "0.040"
+        },
+        {
+          "nodeid": "tests/test_prompt_context_transition_node_consumption.py::test_prompt_context_does_not_infer_transition_when_plan_node_missing",
+          "outcome": "passed",
+          "seconds": "0.017"
+        },
+        {
+          "nodeid": "tests/test_prompt_context_transition_node_consumption.py::test_missing_plan_node_produces_seam_metadata_not_payload",
+          "outcome": "passed",
+          "seconds": "0.040"
+        },
+        {
+          "nodeid": "tests/test_prompt_context_transition_node_consumption.py::test_required_transition_with_incomplete_anchors_is_seam_issue",
+          "outcome": "passed",
+          "seconds": "0.029"
+        },
+        {
+          "nodeid": "tests/test_prompt_context_transition_node_consumption.py::test_no_transition_node_remains_stable",
+          "outcome": "passed",
+          "seconds": "0.041"
+        },
+        {
+          "nodeid": "tests/test_pr_ed_provider_efficiency.py::test_duplicate_turn_packet_policy_is_omitted_without_mutating_input",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_ed_provider_efficiency.py::test_unequal_turn_packet_policy_stays",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_ed_provider_efficiency.py::test_narration_retry_stops_for_unsent_or_identical_output",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_ed_provider_efficiency.py::test_completed_move_skips_provider_and_keeps_resolver_arrival",
+          "outcome": "passed",
+          "seconds": "0.950"
+        },
+        {
+          "nodeid": "tests/test_pr_ed_provider_efficiency.py::test_authorized_dialogue_skips_provider_restatement",
+          "outcome": "passed",
+          "seconds": "1.024"
+        },
+        {
+          "nodeid": "tests/test_pr_ed_provider_efficiency.py::test_context_question_then_move_then_followup_stays_grounded",
+          "outcome": "passed",
+          "seconds": "1.635"
+        },
+        {
+          "nodeid": "tests/test_pr_ed_provider_efficiency.py::test_local_observation_skip_does_not_require_a_provider",
+          "outcome": "passed",
+          "seconds": "0.357"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_mutator_inventory_has_no_ambiguous_status",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_sixteen_turn_counterfactual_classifies_c17_boundary",
+          "outcome": "passed",
+          "seconds": "0.933"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_seven_downstream_created_failures_stay_preserved",
+          "outcome": "passed",
+          "seconds": "0.134"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_c16_turn3_locate_false_positive_is_soft_only",
+          "outcome": "passed",
+          "seconds": "0.034"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_low_confidence_heuristic_does_not_replace_text",
+          "outcome": "passed",
+          "seconds": "0.013"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_case_a_invalid_then_valid_emits_attempt_two_unchanged",
+          "outcome": "passed",
+          "seconds": "0.010"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_case_b_double_invalid_emits_safe_nonresolution_and_stops",
+          "outcome": "passed",
+          "seconds": "0.013"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_case_c_valid_initial_does_not_retry",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_rejected_bounded_invention_does_not_persist_and_attempt_two_does",
+          "outcome": "passed",
+          "seconds": "0.006"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_rejected_npc_claim_does_not_become_active_claim",
+          "outcome": "passed",
+          "seconds": "0.007"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_mechanical_contradiction_regenerates_then_accepts_the_failure",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_attribution_shell_regenerates_to_a_real_answer",
+          "outcome": "passed",
+          "seconds": "0.007"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_historical_hard_invalid_patterns_stay_blocked",
+          "outcome": "passed",
+          "seconds": "0.020"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_internal_heading_guard_preserves_world_prose_and_quoted_speech[The carpenter checks the scaffold.]",
+          "outcome": "passed",
+          "seconds": "0.006"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_internal_heading_guard_preserves_world_prose_and_quoted_speech[Mara says, \"Planner: that is the title written on his badge.\"]",
+          "outcome": "passed",
+          "seconds": "0.007"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_safe_nonresolution_does_not_invent_or_quote",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_presentation_normalization_keeps_semantic_text",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid",
+          "outcome": "failed",
+          "seconds": "1.513"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_each_hard_invalid_initial_is_blocked[c16-1]",
+          "outcome": "passed",
+          "seconds": "0.029"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_each_hard_invalid_initial_is_blocked[smoke-4]",
+          "outcome": "passed",
+          "seconds": "0.031"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_each_hard_invalid_initial_is_blocked[smoke-5]",
+          "outcome": "passed",
+          "seconds": "0.040"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_each_hard_invalid_initial_is_blocked[smoke-7]",
+          "outcome": "passed",
+          "seconds": "0.050"
+        },
+        {
+          "nodeid": "tests/test_pr_br_continuation18_immutable_boundary.py::test_each_hard_invalid_initial_is_blocked[smoke-9]",
+          "outcome": "passed",
+          "seconds": "0.067"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_empty_listen_is_grounded_absence",
+          "outcome": "passed",
+          "seconds": "0.014"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_authorized_water_sound_may_be_realized",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_unsupported_footsteps_fail_closed",
+          "outcome": "passed",
+          "seconds": "0.020"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_authorized_footsteps_survive",
+          "outcome": "passed",
+          "seconds": "0.024"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_unsupported_mutter_fails_closed_on_observe",
+          "outcome": "passed",
+          "seconds": "0.015"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_unsupported_whisper_fails_closed_even_with_npc_present",
+          "outcome": "passed",
+          "seconds": "0.016"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_authorized_speech_survives",
+          "outcome": "passed",
+          "seconds": "0.015"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_npc_presence_is_not_speaking_group",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_whisper_does_not_create_one",
+          "outcome": "failed",
+          "seconds": "1.554"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_player_seeks_footsteps_does_not_create_them",
+          "outcome": "passed",
+          "seconds": "1.472"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_unsupported_bell_fails_closed",
+          "outcome": "passed",
+          "seconds": "0.015"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_authorized_bell_survives",
+          "outcome": "passed",
+          "seconds": "0.019"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_unsupported_visual_blood_fails_closed",
+          "outcome": "passed",
+          "seconds": "0.019"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_authorized_visual_blood_survives",
+          "outcome": "passed",
+          "seconds": "0.023"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_unsupported_smoke_fails_closed",
+          "outcome": "passed",
+          "seconds": "0.020"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_unsupported_tracks_fail_closed",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_unsupported_moving_figure_fails_closed",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_grounded_paraphrase_of_authorized_sound_survives",
+          "outcome": "passed",
+          "seconds": "0.022"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_unsupported_expansion_of_authorized_sound_fails_closed",
+          "outcome": "passed",
+          "seconds": "0.023"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_repeated_empty_listen_does_not_escalate",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_targeted_empty_listen_does_not_invent_sound",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_recent_prose_does_not_become_perception_authority",
+          "outcome": "passed",
+          "seconds": "3.199"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_unsupported_speech_mints_no_lead_or_npc",
+          "outcome": "passed",
+          "seconds": "1.628"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_fallback_does_not_replace_whisper_with_other_event",
+          "outcome": "passed",
+          "seconds": "0.022"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_cross_modal_authority_uses_category_not_auditory_noun",
+          "outcome": "passed",
+          "seconds": "0.032"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_t16_remains_typed_observe_and_rejects_invented_speech",
+          "outcome": "passed",
+          "seconds": "0.025"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_http_empty_listen_complete_and_grounded",
+          "outcome": "failed",
+          "seconds": "1.442"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_http_authorized_speech_can_survive",
+          "outcome": "failed",
+          "seconds": "1.573"
+        },
+        {
+          "nodeid": "tests/test_perception_narration_authority_audible_non_invention.py::test_anti_overfitting_no_calibration_special_case_or_noun_blacklist",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_post_npc_handoff.py::test_recorded_handoff_leaves_the_previous_npc_line",
+          "outcome": "passed",
+          "seconds": "10.902"
+        },
+        {
+          "nodeid": "tests/test_pr_play_post_npc_handoff.py::test_explicit_repetition_stays_with_the_captain",
+          "outcome": "passed",
+          "seconds": "3.493"
+        },
+        {
+          "nodeid": "tests/test_pr_play_post_npc_handoff.py::test_follow_up_can_return_to_the_captain_after_the_notice",
+          "outcome": "passed",
+          "seconds": "4.254"
+        },
+        {
+          "nodeid": "tests/test_pr_play_post_npc_handoff.py::test_genuine_travel_still_changes_scene",
+          "outcome": "passed",
+          "seconds": "2.382"
+        },
+        {
+          "nodeid": "tests/test_pr_play_post_npc_handoff.py::test_unknown_destination_and_unknown_object_stay_uninvented",
+          "outcome": "passed",
+          "seconds": "3.633"
+        },
+        {
+          "nodeid": "tests/test_pr_play_post_npc_handoff.py::test_hidden_notice_detail_and_unknown_patrol_color_are_not_invented",
+          "outcome": "passed",
+          "seconds": "5.606"
+        },
+        {
+          "nodeid": "tests/test_pr_play_post_npc_handoff.py::test_two_named_targets_are_not_collapsed_to_the_notice",
+          "outcome": "passed",
+          "seconds": "6.624"
+        }
+      ]
+    },
+    {
+      "counts": {
+        "passed": 139,
+        "failed": 7,
+        "error": 0,
+        "skipped": 0,
+        "tests": 146
+      },
+      "nodes": [
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[Your purse now holds fifty more gold coins.-changes0-False]",
+          "outcome": "passed",
+          "seconds": "0.044"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[A silver key now rests among your possessions.-changes1-False]",
+          "outcome": "passed",
+          "seconds": "0.007"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[Your purse now holds fifty more gold coins.-changes2-True]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[A silver key now rests among your possessions.-changes3-True]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[Your pack contains an obsidian brooch.-changes4-False]",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[An obsidian brooch lies in your inventory.-changes5-True]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[Your bag holds 12 additional copper coins.-changes6-True]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[Your bag holds 12 additional copper coins.-changes7-False]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[Your purse holds fifty gold coins.-changes8-False]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[Your pack contains a flute and a ruby.-changes9-False]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[The porter says, \"A silver key now rests among your possessions.\"-changes10-True]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[The porter says, \"Morning.\" A silver key now rests among your possessions.-changes11-False]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[The room feels like a treasure vault.-changes12-True]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[If your purse now holds fifty more gold coins, you could pay.-changes13-True]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_bounded_possession_contract[Your purse does not contain fifty gold coins.-changes14-True]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_originals_fallback_preserves_clue_without_retry",
+          "outcome": "passed",
+          "seconds": "0.041"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_envelope_is_read_only_and_idempotent",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_cross_scenario[merchant]",
+          "outcome": "passed",
+          "seconds": "0.005"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_cross_scenario[wilderness]",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_cross_scenario[dungeon]",
+          "outcome": "passed",
+          "seconds": "0.004"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_cross_scenario[conversation]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_cross_scenario[failed_travel]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_cross_scenario[quiet_exploration]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_record_adversarial_census",
+          "outcome": "passed",
+          "seconds": "0.467"
+        },
+        {
+          "nodeid": "tests/test_pr_play_46_mechanical_boundary.py::test_record_offline_performance",
+          "outcome": "passed",
+          "seconds": "0.852"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_request_ceiling_is_operational",
+          "outcome": "passed",
+          "seconds": "0.743"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_input_ceiling_is_operational",
+          "outcome": "passed",
+          "seconds": "0.684"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_output_ceiling_is_operational",
+          "outcome": "passed",
+          "seconds": "0.624"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_total_ceiling_is_operational",
+          "outcome": "passed",
+          "seconds": "0.548"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_accounting_unavailable_is_operational",
+          "outcome": "passed",
+          "seconds": "0.685"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_playtest_ceiling_is_operational",
+          "outcome": "passed",
+          "seconds": "0.644"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_token_estimate_unavailable_is_operational",
+          "outcome": "passed",
+          "seconds": "0.600"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_provider_exception_is_operational",
+          "outcome": "passed",
+          "seconds": "0.503"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_model_mismatch_is_operational",
+          "outcome": "passed",
+          "seconds": "0.664"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_malformed_provider_output_stays_gameplay",
+          "outcome": "passed",
+          "seconds": "0.675"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_context_leak_stays_a_gameplay_refusal",
+          "outcome": "passed",
+          "seconds": "0.799"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_clarification_remains_gameplay",
+          "outcome": "passed",
+          "seconds": "0.882"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_unsupported_action_remains_gameplay",
+          "outcome": "passed",
+          "seconds": "0.833"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_direct_recorder_drops_operational_class",
+          "outcome": "passed",
+          "seconds": "0.037"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_server_error_is_not_a_successful_gameplay_publication",
+          "outcome": "passed",
+          "seconds": "0.040"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_projection_and_frontend_shape",
+          "outcome": "passed",
+          "seconds": "0.922"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_duplicate_refusal_does_not_publish",
+          "outcome": "failed",
+          "seconds": "1.075"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_two_refusals_then_gameplay_advances",
+          "outcome": "failed",
+          "seconds": "1.972"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_repeat_investigation_does_not_add_a_hidden_canary",
+          "outcome": "passed",
+          "seconds": "7.516"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_save_reload_keeps_the_preceding_publication",
+          "outcome": "failed",
+          "seconds": "3.315"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_cross_campaign_refusal_does_not_touch_the_other_store",
+          "outcome": "passed",
+          "seconds": "4.565"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_accepted_dialogue_record_is_still_gameplay",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_grounded_fallback_record_is_still_gameplay",
+          "outcome": "passed",
+          "seconds": "0.093"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_physical_narration_remains_one_expression",
+          "outcome": "passed",
+          "seconds": "0.503"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_second_expression_is_not_requested",
+          "outcome": "passed",
+          "seconds": "0.330"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_http_fallback_is_not_an_operational_refusal",
+          "outcome": "failed",
+          "seconds": "1.877"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79df3_classification.py::test_classifier_does_not_treat_state_stillness_as_operational",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_ordinary_npc_questions_are_not_authored_choices[npc-0]",
+          "outcome": "passed",
+          "seconds": "0.035"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_ordinary_npc_questions_are_not_authored_choices[npc-1]",
+          "outcome": "passed",
+          "seconds": "0.033"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_ordinary_npc_questions_are_not_authored_choices[npc-2]",
+          "outcome": "passed",
+          "seconds": "0.061"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_ordinary_npc_questions_are_not_authored_choices[npc-3]",
+          "outcome": "passed",
+          "seconds": "0.016"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_ordinary_npc_questions_are_not_authored_choices[npc-4]",
+          "outcome": "passed",
+          "seconds": "0.030"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_ordinary_npc_questions_are_not_authored_choices[npc-5]",
+          "outcome": "passed",
+          "seconds": "0.051"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_ordinary_npc_questions_are_not_authored_choices[npc-6]",
+          "outcome": "passed",
+          "seconds": "0.040"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_ordinary_npc_questions_are_not_authored_choices[npc-7]",
+          "outcome": "passed",
+          "seconds": "0.013"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_six_followups_stay_with_the_guard",
+          "outcome": "passed",
+          "seconds": "0.039"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_non_npc_questions_stay_out_of_authored_matching[board]",
+          "outcome": "passed",
+          "seconds": "0.037"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_non_npc_questions_stay_out_of_authored_matching[place]",
+          "outcome": "passed",
+          "seconds": "0.024"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_non_npc_questions_stay_out_of_authored_matching[memory]",
+          "outcome": "passed",
+          "seconds": "0.031"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_asking_the_guard_is_not_an_authored_execution",
+          "outcome": "passed",
+          "seconds": "0.033"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_reporting_findings_can_still_select_the_authored_action",
+          "outcome": "passed",
+          "seconds": "0.014"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_survey_question_does_not_execute_the_choice",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_completed_contracts_skip_primary_narration[final]",
+          "outcome": "passed",
+          "seconds": "0.013"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_completed_contracts_skip_primary_narration[clarify]",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_completed_contracts_skip_primary_narration[unsupported]",
+          "outcome": "passed",
+          "seconds": "0.022"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_completed_contracts_skip_primary_narration[failure]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_nonempty_text_without_a_contract_does_not_skip_primary",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_already_searched_is_a_final_engine_response",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_adjudication_uses_one_bounded_expression_then_stops",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_rejected_expression_keeps_the_mechanical_line",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_live_expression_request_is_not_inferred_from_text_alone",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_narration_must_mention_the_committed_outcome[rel-0]",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_narration_must_mention_the_committed_outcome[rel-1]",
+          "outcome": "passed",
+          "seconds": "0.185"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_narration_must_mention_the_committed_outcome[rel-2]",
+          "outcome": "passed",
+          "seconds": "0.227"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_narration_must_mention_the_committed_outcome[rel-3]",
+          "outcome": "passed",
+          "seconds": "0.181"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_narration_must_mention_the_committed_outcome[rel-4]",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_narration_must_mention_the_committed_outcome[rel-5]",
+          "outcome": "passed",
+          "seconds": "0.178"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_established_northwest_paraphrase_remains_allowed",
+          "outcome": "passed",
+          "seconds": "0.192"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_conversation_survives_save_and_resume",
+          "outcome": "passed",
+          "seconds": "0.021"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_other_campaign_does_not_keep_the_guard",
+          "outcome": "passed",
+          "seconds": "0.019"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_leaving_the_scene_drops_the_question_route",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_goodbye_then_a_patrol_question_does_not_resume",
+          "outcome": "passed",
+          "seconds": "0.032"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_active_guard_questions_skip_the_authored_menu[route-0]",
+          "outcome": "passed",
+          "seconds": "0.021"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_active_guard_questions_skip_the_authored_menu[route-1]",
+          "outcome": "passed",
+          "seconds": "0.013"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_active_guard_questions_skip_the_authored_menu[route-2]",
+          "outcome": "passed",
+          "seconds": "0.013"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_active_guard_questions_skip_the_authored_menu[route-3]",
+          "outcome": "passed",
+          "seconds": "0.035"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_active_guard_questions_skip_the_authored_menu[route-4]",
+          "outcome": "passed",
+          "seconds": "0.022"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_active_guard_questions_skip_the_authored_menu[route-5]",
+          "outcome": "passed",
+          "seconds": "0.023"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_active_guard_questions_skip_the_authored_menu[route-6]",
+          "outcome": "passed",
+          "seconds": "0.024"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_active_guard_questions_skip_the_authored_menu[route-7]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_active_guard_questions_skip_the_authored_menu[route-8]",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_active_guard_questions_skip_the_authored_menu[route-9]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_authority_rejections_keep_their_reasons[auth-0]",
+          "outcome": "passed",
+          "seconds": "0.091"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_authority_rejections_keep_their_reasons[auth-1]",
+          "outcome": "passed",
+          "seconds": "0.090"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_authority_rejections_keep_their_reasons[auth-2]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_authority_rejections_keep_their_reasons[auth-3]",
+          "outcome": "passed",
+          "seconds": "0.077"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_authority_rejections_keep_their_reasons[auth-4]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_authority_rejections_keep_their_reasons[auth-5]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_authority_rejections_keep_their_reasons[auth-6]",
+          "outcome": "passed",
+          "seconds": "0.152"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_authority_rejections_keep_their_reasons[auth-7]",
+          "outcome": "passed",
+          "seconds": "0.014"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_grounded_paraphrase_is_accepted[ground-0]",
+          "outcome": "passed",
+          "seconds": "0.135"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_grounded_paraphrase_is_accepted[ground-1]",
+          "outcome": "passed",
+          "seconds": "0.010"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_grounded_paraphrase_is_accepted[ground-2]",
+          "outcome": "passed",
+          "seconds": "0.153"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_grounded_paraphrase_is_accepted[ground-3]",
+          "outcome": "passed",
+          "seconds": "0.010"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_grounded_paraphrase_is_accepted[ground-4]",
+          "outcome": "passed",
+          "seconds": "0.154"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_contract_without_a_sentence_does_not_skip_primary[empty-0]",
+          "outcome": "passed",
+          "seconds": "0.010"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_contract_without_a_sentence_does_not_skip_primary[empty-1]",
+          "outcome": "passed",
+          "seconds": "0.010"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_contract_without_a_sentence_does_not_skip_primary[empty-2]",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_contract_without_a_sentence_does_not_skip_primary[empty-3]",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_contract_without_a_sentence_does_not_skip_primary[empty-4]",
+          "outcome": "passed",
+          "seconds": "0.010"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_more_committed_outcomes_can_be_paraphrased[more-0]",
+          "outcome": "passed",
+          "seconds": "0.187"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_more_committed_outcomes_can_be_paraphrased[more-1]",
+          "outcome": "passed",
+          "seconds": "0.138"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_more_committed_outcomes_can_be_paraphrased[more-2]",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_more_committed_outcomes_can_be_paraphrased[more-3]",
+          "outcome": "passed",
+          "seconds": "0.170"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_more_committed_outcomes_can_be_paraphrased[more-4]",
+          "outcome": "passed",
+          "seconds": "0.173"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_more_committed_outcomes_can_be_paraphrased[more-5]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_more_committed_outcomes_can_be_paraphrased[more-6]",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_more_committed_outcomes_can_be_paraphrased[more-7]",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_provider_rows_are_counted_without_duplicate_traces[acct-0]",
+          "outcome": "passed",
+          "seconds": "0.010"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_provider_rows_are_counted_without_duplicate_traces[acct-1]",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_provider_rows_are_counted_without_duplicate_traces[acct-2]",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_provider_rows_are_counted_without_duplicate_traces[acct-3]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_provider_rows_are_counted_without_duplicate_traces[acct-4]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_provider_rows_are_counted_without_duplicate_traces[acct-5]",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_provider_rows_are_counted_without_duplicate_traces[acct-6]",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_provider_rows_are_counted_without_duplicate_traces[acct-7]",
+          "outcome": "passed",
+          "seconds": "0.002"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_duplicate_provider_traces_count_once",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79b_integration.py::test_duplicate_skip_does_not_call_expression_twice",
+          "outcome": "passed",
+          "seconds": "0.001"
+        },
+        {
+          "nodeid": "tests/test_pr_play_76_physical.py::test_flag_off_does_not_adjudicate",
+          "outcome": "passed",
+          "seconds": "0.009"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79c_publication.py::test_step_back_after_approach_names_the_milestone",
+          "outcome": "passed",
+          "seconds": "0.015"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome[step-back-noop]",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome[step-back-bare]",
+          "outcome": "passed",
+          "seconds": "0.012"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome[open]",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome[already]",
+          "outcome": "passed",
+          "seconds": "0.006"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome[move-unknown]",
+          "outcome": "passed",
+          "seconds": "0.003"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome[climb]",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome[wait]",
+          "outcome": "passed",
+          "seconds": "0.011"
+        },
+        {
+          "nodeid": "tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome[struggle]",
+          "outcome": "passed",
+          "seconds": "0.013"
+        },
+        {
+          "nodeid": "tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context",
+          "outcome": "failed",
+          "seconds": "0.715"
+        },
+        {
+          "nodeid": "tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop",
+          "outcome": "failed",
+          "seconds": "0.438"
+        },
+        {
+          "nodeid": "tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload",
+          "outcome": "failed",
+          "seconds": "0.211"
+        }
+      ]
+    }
+  ],
+  "comparison": {
+    "main_failed_ids_identical": true,
+    "authority_failed_ids_identical": true
+  },
+  "additional_mechanical_tests": 25,
+  "counts": {
+    "tests": 381,
+    "passed": 358,
+    "failed": 23,
+    "errors": 0,
+    "skipped": 0
+  },
+  "live_provider_calls": 0
+}

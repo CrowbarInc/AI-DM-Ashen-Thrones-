@@ -7,6 +7,11 @@ import sys
 
 import pytest
 
+# Run before collection imports game.storage or application initialization.
+from tests.helpers.storage_isolation import install as _install_storage_isolation
+
+_TEST_STORAGE_ROOT = _install_storage_isolation()
+
 # Default on in CI / local pytest so importing ``game.api`` + TestClient does not hit the network.
 os.environ.setdefault("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", "1")
 # Interpretation model calls are live-only. Pytest keeps the deterministic boundary.
@@ -69,6 +74,16 @@ def _failure_dashboard_probe_requested(config) -> bool:
 
 
 def pytest_collection_modifyitems(config, items):
+    # Older analysis suites use a module-level OUT for generated reports. Keep
+    # their read-only ROOT fixtures intact while isolating report destinations.
+    from pathlib import Path
+    from tests.helpers.storage_isolation import ARTIFACTS
+    for module in {item.module for item in items}:
+        output = getattr(module, "OUT", None)
+        if isinstance(output, Path) and (output.resolve() == ARTIFACTS or ARTIFACTS in output.resolve().parents):
+            isolated_output = _TEST_STORAGE_ROOT / "test_artifacts" / module.__name__
+            isolated_output.mkdir(parents=True, exist_ok=True)
+            module.OUT = isolated_output
     if _failure_dashboard_probe_requested(config):
         return
     skip_probe = pytest.mark.skip(

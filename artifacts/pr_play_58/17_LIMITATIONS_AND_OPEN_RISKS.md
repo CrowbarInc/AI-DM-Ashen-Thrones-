@@ -1,0 +1,5 @@
+# Limits and open risks
+
+Critical H41 unsupported persistent gate opening is accepted. H12 context-insensitive beyond→past normalization causes a false rejection. D15 is still blocked by an existing mechanical claim frame despite complete coverage. Most contradictory controls receive review rather than explicit contradiction. Finite parsing cannot infer arbitrary subject roles, temporal entailment, scope, negation, geographic equivalence or anaphora; uncertainty observation uses bounded term retention and predicates, not general semantic proof. Unknown fact types retain literal matching.
+
+Expected classifications are provisional same-session judgments. Frozen holdout independence is limited. Metrics distinguish coverage recognition from combined acceptance, quarantine from outright rejection, and synthetic controls from representative gameplay. Eight original candidates are real historical provider output but no new live quality evidence or ATGB score is claimed. No ordinary-player narration enablement is authorized.

@@ -1,0 +1,218 @@
+--- entry/game/offline_investigation_projection.py
++++ game/offline_investigation_projection.py
+@@ -5,6 +5,7 @@
+ """
+ from __future__ import annotations
+ from dataclasses import dataclass
++import json
+ from game.authorized_information import revealed_information
+ from game.mechanical_claims import mechanical_fallback
+ from game.narration_authorization import project_narration_payload
+@@ -25,6 +26,8 @@
+     known: tuple[str, ...]
+     observations: tuple[str, ...]
+     consequences: str
++    # Detached, disclosure-approved resolver deltas, never inferred from prose.
++    inventory_effects_json: str = '{}'
+ 
+ 
+ def _strings(rows):
+@@ -65,7 +68,8 @@
+     success = resolution.get('success')
+     success = success if type(success) is bool else None
+     return AuthorizedInvestigation(status, success, target, new, known,
+-        _strings(scene['public'].get('visible_facts') or []), consequences)
++        _strings(scene['public'].get('visible_facts') or []), consequences,
++        json.dumps({k: effects[k] for k in ('items_added', 'items_removed') if k in effects}, sort_keys=True))
+ 
+ 
+ def deterministic_fallback(view: AuthorizedInvestigation) -> str:
+--- entry/game/anchored_investigation_narration.py
++++ game/anchored_investigation_narration.py
+@@ -41,14 +41,16 @@
+     anchors: tuple[DiscoveryAnchor, ...]
+ 
+ 
+-def authorize_anchored_investigation(resolution: dict, payload: dict) -> AnchoredInvestigation:
+-    """Reuse the existing projection; support only investigations without effects.
++def authorize_anchored_investigation(resolution: dict, payload: dict, *, inventory: bool = False) -> AnchoredInvestigation:
++    """Reuse the existing projection; inventory deltas require explicit opt-in.
+ 
+     Failed/repeated/mundane cases are offline boundary fixtures. Resolver-selected
+-    text is trusted authoring; no candidate can enter this constructor.
++    text is trusted authoring; no candidate can enter this constructor. Ordinary
++    quarantine hooks retain the disclosure-only default.
+     """
+     effects = mechanical_outcome(resolution)
+-    if any(v for k, v in effects.items() if k != 'revealed'):
++    allowed = {'revealed', 'items_added', 'items_removed'} if inventory else {'revealed'}
++    if any(v for k, v in effects.items() if k not in allowed):
+         raise ValueError('side_effects_outside_offline_slice')
+     view = authorize_investigation(resolution, payload)
+     records = [('resolved_action', 'newly_revealed', t) for t in view.revealed]
+@@ -97,7 +99,8 @@
+     # Engine-owned validator input; never accept grants from generated prose.
+     v = contract.outcome
+     return {'kind': 'investigate', 'success': v.success,
+-            'discovered_clues': list(v.revealed), 'state_changes': {}}
++            'discovered_clues': list(v.revealed),
++            'state_changes': json.loads(v.inventory_effects_json)}
+ 
+ 
+ def validate_prelude(contract: AnchoredInvestigation, raw: object) -> tuple[str, dict]:
+--- entry/game/integrated_investigation_narration.py
++++ game/integrated_investigation_narration.py
+@@ -23,21 +23,21 @@
+     "For a repeated examination, acknowledge what was already known and that nothing new emerged. "
+     "Respond directly to the action, maintain continuity, and use concise, engaging description. "
+     "May_reference facts are optional. Harmless incidental sensory texture is allowed. "
+-    "Do not resolve another action, invent discoveries or hints, award items, change success/failure, "
++    "Do not resolve another action, invent discoveries or hints, award additional items, change success/failure, "
+     "reveal restricted information, invent NPC motives, objectives, destinations or persistent effects. "
+     "Output only complete prose sentences. The engine will not append the outcome to this candidate."
+ )
+ CONSTRAINTS = (
+     "Only communicate completed engine outcomes; never establish additional facts or effects.",
+     "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+-    "No inventory, condition, NPC, quest, travel or other persistent changes are authorized.",
++    "Only explicitly supplied inventory deltas are authorized; no additional persistent changes.",
+ )
+ 
+ 
+ def outcome_contract(hook_input: dict):
+     """Ephemeral projection of existing authority; no campaign objects or candidate input."""
+     contract = anchored.authorize_anchored_investigation(
+-        hook_input['resolution'], hook_input['narration_payload'])
++        hook_input['resolution'], hook_input['narration_payload'], inventory=True)
+     facts = []
+     for anchor in contract.anchors:
+         # Ordinary scene observations are optional. Repeated knowledge is kept
+@@ -47,13 +47,17 @@
+         facts.append({'id': f'outcome:{anchor.order}', 'source': anchor.source,
+                       'status': anchor.status, 'text': anchor.text})
+     v = contract.outcome
++    effects = json.loads(v.inventory_effects_json)
++    if effects:
++        facts.append({'id': 'outcome:inventory', 'source': 'inventory_effect',
++                      'status': 'resolved', 'text': v.consequences})
+     request = {
+         'player_action': str(hook_input.get('player_text') or '')[:1000],
+         'resolved_outcome': {'status': v.status, 'success': v.success},
+         'must_communicate': facts,
+         'may_reference': {'visible_scene': list(v.observations),
+                           'continuity': list(v.known)},
+-        'authorized_consequences': [],
++        'authorized_consequences': effects if effects else [],
+         'must_not_establish': list(CONSTRAINTS),
+     }
+     # Refuse oversized input rather than silently dropping required information.
+--- entry/game/consequential_narration_validation.py
++++ game/consequential_narration_validation.py
+@@ -10,6 +10,7 @@
+ from __future__ import annotations
+ 
+ import re
++import json
+ from collections.abc import Mapping
+ from dataclasses import dataclass
+ from game.persistent_consequence_claims import assertions as persistent_assertions, validate_persistent
+@@ -167,11 +168,15 @@
+     outcomes = tuple(anchor.text for anchor in contract.anchors if anchor.source == "engine_status")
+     if view.consequences:
+         outcomes = outcomes + (view.consequences,)
++    from game.mechanical_claims import _values
++    effects = json.loads(view.inventory_effects_json)
+     return SemanticAuthority(
+         observable_scene=tuple(view.observations),
+         authorized_discoveries=tuple(view.revealed) + tuple(view.known),
+         authorized_outcomes=outcomes,
+         success=view.success if isinstance(view.success, bool) else None,
++        items_added=tuple(_values(effects.get('items_added'))),
++        items_removed=tuple(_values(effects.get('items_removed'))),
+     )
+ 
+ 
+--- entry/game/mechanical_claims.py
++++ game/mechanical_claims.py
+@@ -57,7 +57,9 @@
+ def _values(value):
+     if isinstance(value, Mapping):
+         if 'name' in value or 'id' in value:
+-            return [str(value.get('name') or value.get('id'))]
++            name = str(value.get('name') or value.get('id'))
++            quantity = value.get('quantity', 1)
++            return [name if quantity == 1 else f'{quantity} {name}']
+         return [f'{v} {k}' for k, v in value.items()]
+     if isinstance(value, list):
+         return [x for row in value for x in _values(row)]
+@@ -66,7 +68,12 @@
+ 
+ def _supported(claim, value):
+     c = _norm(claim)
+-    return any(c.removeprefix('1 ') == _norm(v).removeprefix('1 ') for v in _values(value))
++    def item_key(text):
++        words = text.removeprefix('1 ').split()
++        if words and words[-1].endswith('s') and not words[-1].endswith('ss'):
++            words[-1] = words[-1][:-1]
++        return ' '.join(words)
++    return any(item_key(c) == item_key(_norm(v)) for v in _values(value))
+ 
+ 
+ def mechanical_fallback(resolution):
+@@ -141,10 +148,23 @@
+     # Speech is attributed belief, never an engine event. Adjacent narrator
+     # clauses remain checked. No blanket exemption for a hedge elsewhere.
+     narrator = re.sub(r'\b(?:says|said|replies|replied|asks|asked|whispers|speculates),?\s*["“][^"”]*["”]', '', str(text or ''), flags=re.I)
++    for sentence in re.split(r'[.!?;\n]+', narrator):
++        if (re.search(r'\b(?:hands|gives|awards) you\s+', sentence, re.I)
++                and not re.search(r'\b(?:if|might|could|would|not|never|try|tries|attempt)\b', sentence, re.I)):
++            # Player deltas contain no transfer-source authorization.
++            claims.append(('inventory_source', sentence.strip(), False))
+     # Normalize common passive/transfer frames into the same consequence audit.
+     narrator = re.sub(r'\b([^.!?;]+?)\s+is added to your (?:inventory|pack|bag)\b', r'you receive \1', narrator, flags=re.I)
+     narrator = re.sub(r'\b[^.!?;]+?\s+(?:hands|gives|awards) you\s+', 'you receive ', narrator, flags=re.I)
+     narrator = re.sub(r'\byou now own\s+', 'you receive ', narrator, flags=re.I)
++    # Existing "now yours" negatives belong to the consequential gate. Here
++    # normalize that form only for the new explicit-delta acceptance path.
++    possession = 'now yours|yours now' if effects.get('items_added') else 'yours now'
++    narrator = re.sub(r'\b([^.!?;]+?)\s+is\s+(?:' + possession + r')\b', r'you receive \1', narrator, flags=re.I)
++    narrator = re.sub(r'\byou\s+(?:take possession of|retrieve|now possess)\s+', 'you receive ', narrator, flags=re.I)
++    # An adjacent placement of the same acquired object is not a second item.
++    # Keep all other conjunctions (including additional item grants) audited.
++    narrator = re.sub(r'\s+and\s+(?:place|put|stow)\s+it\s+in\s+your\s+(?:pack|bag|satchel)\b', '', narrator, flags=re.I)
+     # Named actors are not exempt simply because the narrator uses third person.
+     # A named-actor consequence needs an actor-specific grant; player-only deltas
+     # cannot grant an arbitrary NPC a possession or injury.
+@@ -174,6 +194,10 @@
+                 continue
+             if re.search(r'\byou\s+(?:do not|don.t|cannot|can.t|never)\b', clause, re.I):
+                 continue
++            if re.search(r'\byou\s+(?:drink|consume|equip|unequip|transfer)\s+', clause, re.I):
++                # Delta-only inventory authority has no consumption, equipment
++                # slot, source or destination contract. Do not invent one.
++                claims.append(('unsupported_inventory_operation', clause, False))
+             claims.extend(_possession_state_claims(clause, effects))
+             m = re.search(r'\byou\s+(?:now\s+)?(receive|collect|gain|acquire|obtain|pick up|are given|lose|spend|pay|hand over)\s+(.+)', clause, re.I)
+             if m:
+--- entry/game/mandatory_outcome_coverage.py
++++ game/mandatory_outcome_coverage.py
+@@ -143,7 +143,18 @@
+     normalized = _normal(text)
+     for fact in request['must_communicate']:
+         result = None
+-        if fact['source'] == 'engine_status':
++        if fact['source'] == 'inventory_effect':
++            from game.mechanical_claims import audit_mechanical_claims, _values, _supported
++            effects = request.get('authorized_consequences') or {}
++            audit = audit_mechanical_claims(text, {'state_changes': effects})
++            claims = audit['claims']
++            expected = [(k, v) for k in ('items_added', 'items_removed') for v in _values(effects.get(k))]
++            covered = bool(expected) and not audit['reasons'] and all(
++                any(c['category'] == k and c['supported'] and
++                    _supported(c['claim'], [v])
++                    for c in claims) for k, v in expected)
++            result = ('covered' if covered else 'missing', text if covered else None, {})
++        elif fact['source'] == 'engine_status':
+             no_new = any(_has(_NO_NEW,s) and not _has(_DOUBT+'|'+r'\bnot (?:true|nothing|no new)\b',s)
+                          for s in re.split(r'(?<=[.!?])\s+',normalized))
+             repeat = fact['status'] != 'known' or _has(_CONTINUITY, normalized)

@@ -1,0 +1,38 @@
+{
+  "A": {
+    "complexity": "Lowest immediate change; recurring grammar repairs",
+    "reliability": "Heuristic free-form coverage",
+    "consequences": "Existing gates",
+    "hidden": "Existing gates, known gaps",
+    "naturalness": "High potential",
+    "duplication": "Low",
+    "latency": "One provider call",
+    "compatibility": "Existing",
+    "reversibility": "High",
+    "regression": "Growing validator surface"
+  },
+  "B": {
+    "complexity": "Small hook plus publication provenance",
+    "reliability": "Engine segment deterministic; publication seam must guarantee delivery",
+    "consequences": "All gates plus finite optional surface",
+    "hidden": "No hidden projection; finite optional surface",
+    "naturalness": "Limited but coherent introductions",
+    "duplication": "Prompt responsibility plus whole-segment omission",
+    "latency": "One provider call",
+    "compatibility": "Reuses hook and publication helper",
+    "reversibility": "Default-off flag",
+    "regression": "Two production files"
+  },
+  "C": {
+    "complexity": "New provider schema and segment orchestration",
+    "reliability": "Strong if segment schema and publisher cooperate",
+    "consequences": "Still needs segment and final gates",
+    "hidden": "Still needs segment and final gates",
+    "naturalness": "Potentially greater control",
+    "duplication": "Explicit slots",
+    "latency": "One call possible",
+    "compatibility": "Additional response/schema surface",
+    "reversibility": "Medium",
+    "regression": "Larger than B"
+  }
+}

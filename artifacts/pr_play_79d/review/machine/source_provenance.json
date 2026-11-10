@@ -1,0 +1,40 @@
+{
+  "original_input": "I examine the notice board again.",
+  "original_response": "You examine the notice board again. Previously disclosed here: The missing patrol was last seen taking the northwest mud track past the crates. The examination adds nothing new to what you already know.",
+  "disclosed_records": {
+    "notice_patrol_route": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "explicit",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "source_interactable": "notice_board"
+    }
+  },
+  "records_after": {
+    "notice_patrol_route": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "explicit",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "source_interactable": "notice_board"
+    }
+  },
+  "knowledge_unchanged": true,
+  "publication_records": [
+    {
+      "turn_id": "8d9b6781a2c4408b9cfa22ebd7693fd3",
+      "publication_owner": "completed_runtime_response",
+      "response_category": "engine_response",
+      "source_handler": "api_chat",
+      "provider_involvement": true,
+      "provider_attempt_references": [
+        "5d35cc65e1774ad69d0c5b8cad4a4b57"
+      ],
+      "accepted_expression_references": [],
+      "published_expression_reference": "6ffa6d6c6ae6451cd50a20fbb624a92b40896fc75b18b021f57a1cfa61af4a5b",
+      "final_player_facing_response": "You examine the notice board again. Previously disclosed here: The missing patrol was last seen taking the northwest mud track past the crates. The examination adds nothing new to what you already know.",
+      "validation_outcome": "engine_or_grounded_fallback",
+      "status_code": 200
+    }
+  ]
+}

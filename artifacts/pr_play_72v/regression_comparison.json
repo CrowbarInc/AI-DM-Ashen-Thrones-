@@ -1,0 +1,26 @@
+{
+  "focused": {
+    "new_failures": [
+      "tests.test_pr_play_46_mechanical_boundary::test_record_adversarial_census",
+      "tests.test_pr_play_60_gameplay_readiness::test_investigation_then_repeat_preserves_persisted_state"
+    ],
+    "resolved": [
+      "tests.test_pr_play_54_consequential_validation::test_corpus_validation_stays_fast_and_local"
+    ]
+  },
+  "boundary": {
+    "new_failures": [],
+    "resolved": []
+  },
+  "broader": {
+    "new_failures": [],
+    "resolved": []
+  },
+  "lifecycle_isolated": {
+    "new_failures": [
+      "tests.test_pr_play_71v_verification::test_atomic_replace_succeeds_within_budget[0]"
+    ],
+    "resolved": []
+  },
+  "interpretation": "The two additional focused failures are test-isolation boundary defects, not historical labels: a redirected read fixture and a hardcoded historical report write. Both repaired and verified separately. Other failures are compared by exact test identity; lifecycle isolated is separate evidence."
+}

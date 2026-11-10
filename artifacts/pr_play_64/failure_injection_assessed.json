@@ -1,0 +1,115 @@
+{
+  "passed": 12,
+  "cases": 12,
+  "rows": [
+    {
+      "name": "provider_unavailable",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "timeout",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "empty",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "malformed",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "validation_FAIL",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "REVIEW_REQUIRED",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "VALIDATION_ERROR",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "unauthorized_discovery",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "persistent_consequence",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "item_acquisition",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "missing_disclosure",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    },
+    {
+      "name": "hidden_disclosure",
+      "passed": true,
+      "fallback_published": true,
+      "fallback_valid": "PASS",
+      "equal_disabled_control": true,
+      "continued_http": 200,
+      "raw_stability_assertion": false
+    }
+  ],
+  "assessment_note": "The initial before/after invariant incorrectly included npc_runtime: normal first-turn resolver initialization populates the two visible NPC records. Raw failed assertions are preserved. Full bounded authority and mechanical resolution equal the disabled control for every injected fault; no narration-induced change. This is an assessment correction, not a rerun or change in expected safety."
+}

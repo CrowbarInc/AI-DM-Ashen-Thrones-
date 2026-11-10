@@ -1,0 +1,59 @@
+.....................................EE.F                                [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_two_turn_http[I've got hot stew and rumors to share.-What sort of rumors have you heard?] _
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest'
+_ ERROR at setup of test_two_turn_http[I've got hot stew and rumors to share.-What have you heard about the patrol?] _
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest'
+================================== FAILURES ===================================
+_ test_two_turn_http[Stew costs three copper.-What have you heard about the patrol?] _
+tests\test_pr_play_27_expression_recovery.py:126: in test_two_turn_http
+    assert len(additions)==2 and all(e.get('type')=='clue_discovered' for e in additions)
+E   AssertionError: assert (2 == 2 and False)
+E    +  where 2 = len([{'type': 'social_lead_revealed', 'clue_id': 'muddy_footprints_northwest', 'scene_id': 'frontier_gate', 'npc_id': 'tav...ntier_gate_old_trading_crossroads', 'scene_id': 'frontier_gate', 'source': 'discoverable_clue:old_trading_crossroads'}])
+E    +  and   False = all(<generator object test_two_turn_http.<locals>.<genexpr> at 0x00000248C30E1F20>)
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started bcf928004020d836cdeaabfc
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[CLUE DISCOVERED] muddy_footprints_northwest
+[CLUE DISCOVERED] lead_frontier_gate_old_trading_crossroads
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_pr_play_27_expression_recovery.py::test_two_turn_http[I've got hot stew and rumors to share.-What sort of rumors have you heard?]
+tests/test_pr_play_27_expression_recovery.py::test_two_turn_http[I've got hot stew and rumors to share.-What have you heard about the patrol?]
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\pathlib.py:95: PytestWarning: (rm_rf) error removing \\?\C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\development\tmp\pytest
+  <class 'OSError'>: [WinError 145] The directory is not empty: '\\\\?\\C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest'
+    warnings.warn(
+
+tests/test_pr_play_27_expression_recovery.py::test_two_turn_http[I've got hot stew and rumors to share.-What have you heard about the patrol?]
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\pathlib.py:95: PytestWarning: (rm_rf) error removing \\?\C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\development\tmp\pytest\test_by3_probe_does_not_affect0\probed\data
+  <class 'OSError'>: [WinError 145] The directory is not empty: '\\\\?\\C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_by3_probe_does_not_affect0\\probed\\data'
+    warnings.warn(
+
+tests/test_pr_play_27_expression_recovery.py::test_two_turn_http[I've got hot stew and rumors to share.-What have you heard about the patrol?]
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\pathlib.py:95: PytestWarning: (rm_rf) error removing \\?\C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\development\tmp\pytest\test_by3_probe_does_not_affect0\probed
+  <class 'OSError'>: [WinError 145] The directory is not empty: '\\\\?\\C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_by3_probe_does_not_affect0\\probed'
+    warnings.warn(
+
+tests/test_pr_play_27_expression_recovery.py::test_two_turn_http[I've got hot stew and rumors to share.-What have you heard about the patrol?]
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\pathlib.py:95: PytestWarning: (rm_rf) error removing \\?\C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\development\tmp\pytest\test_by3_probe_does_not_affect0
+  <class 'OSError'>: [WinError 145] The directory is not empty: '\\\\?\\C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pytest\\test_by3_probe_does_not_affect0'
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_27_expression_recovery.py::test_two_turn_http[Stew costs three copper.-What have you heard about the patrol?]
+ERROR tests/test_pr_play_27_expression_recovery.py::test_two_turn_http[I've got hot stew and rumors to share.-What sort of rumors have you heard?]
+ERROR tests/test_pr_play_27_expression_recovery.py::test_two_turn_http[I've got hot stew and rumors to share.-What have you heard about the patrol?]

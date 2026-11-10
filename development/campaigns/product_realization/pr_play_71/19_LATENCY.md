@@ -1,0 +1,5 @@
+# LATENCY
+
+metrics.json, browser_console.json and browser_measurements.json contain retained timing evidence. Refreshed browser ASHEN_UI_READY records resume/continuation through frontend state/log refresh and next frame. B normal startup was observed within a 17.712-second complete tool call; this is only an upper bound including tool overhead/screenshot, not a recovered exact click-to-action measurement. A exact startup timing unavailable. Initial cached-context measured variables were lost when the bounded resume wait reset the automation kernel; missing data is not fabricated.
+
+HTTP timings and server middleware processing are reported separately. Precise network transport versus render cost and full initialization/provider substage split remain unavailable. Provider ledger records actual per-request latency. Slowest visible class is live opening/provider work; background tests and Windows file I/O also affected elapsed times. Targeted next performance work, if later warranted, is opening prompt cost and readiness instrumentation retention; no broad performance redesign was attempted.

@@ -1,0 +1,14 @@
+[
+  {"id": "T01", "kind": "observe", "resolver": "exploration", "intent_labels": ["observation", "passive_pause"], "conversational_reason": null, "call_gpt": 1, "call_gpt_purpose": ["strict_social"], "response_class": null},
+  {"id": "T02", "kind": "question", "resolver": "social", "intent_labels": ["general"], "conversational_reason": null, "call_gpt": 0, "response_class": null},
+  {"id": "T03", "kind": "question", "resolver": "social", "intent_labels": ["general"], "conversational_reason": null, "call_gpt": 0, "response_class": null},
+  {"id": "T04", "kind": "conversational_decline", "resolver": null, "intent_labels": [], "conversational_reason": "destination_not_established", "call_gpt": 0, "response_class": null},
+  {"id": "T05", "kind": "conversational_answer", "resolver": null, "intent_labels": [], "conversational_reason": "repeat_delivered_statement", "call_gpt": 0, "response_class": null},
+  {"id": "T06", "kind": "conversational_answer", "resolver": null, "intent_labels": [], "conversational_reason": "repeat_delivered_statement", "call_gpt": 0, "response_class": null},
+  {"id": "T07", "kind": null, "resolver": "generation", "intent_labels": ["general"], "conversational_reason": null, "call_gpt": 1, "call_gpt_purpose": ["generation path; retry escape"], "response_class": null},
+  {"id": "T08", "kind": "question", "resolver": "social", "intent_labels": ["general"], "conversational_reason": null, "call_gpt": 2, "call_gpt_purpose": ["strict_social", "retry_escalation"], "response_class": null},
+  {"id": "T09", "kind": "conversational_clarify", "resolver": null, "intent_labels": [], "conversational_reason": "ungrounded_provider_target", "call_gpt": 0, "response_class": null},
+  {"id": "T10", "kind": "adjudication_query", "resolver": "adjudication", "intent_labels": ["general"], "conversational_reason": null, "call_gpt": 0, "response_class": null},
+  {"id": "T11", "kind": "scene_transition", "resolver": "travel", "intent_labels": ["travel"], "normalized_input": "Go to Follow the missing patrol rumor.", "conversational_reason": null, "call_gpt": 0, "response_class": null},
+  {"id": "T12", "kind": "interact", "resolver": null, "intent_labels": [], "conversational_reason": null, "call_gpt": 0, "response_class": "operational_refusal", "refusal_category": "unresolved_retreat_without_adjudication"}
+]

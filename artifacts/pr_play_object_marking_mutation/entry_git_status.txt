@@ -1,0 +1,837 @@
+ M artifacts/by2/protected_semantic_mutation_report.json
+ M artifacts/by2/protected_semantic_mutation_report.md
+ M artifacts/by3/strict_social_semantic_mutation_report.json
+ M artifacts/by3/strict_social_semantic_mutation_report.md
+ M artifacts/pr_eg_r4_r1/replay_state/data/session.json
+ M artifacts/pr_play_05/diagnostics/D1.json
+ M artifacts/pr_play_05/diagnostics/D10.json
+ M artifacts/pr_play_05/diagnostics/D2.json
+ M artifacts/pr_play_05/diagnostics/D3.json
+ M artifacts/pr_play_05/diagnostics/D4.json
+ M artifacts/pr_play_05/diagnostics/D5.json
+ M artifacts/pr_play_05/diagnostics/D6.json
+ M artifacts/pr_play_05/diagnostics/D7.json
+ M artifacts/pr_play_05/diagnostics/D8.json
+ M artifacts/pr_play_05/diagnostics/D9.json
+ M artifacts/pr_play_05/diagnostics/budget.json
+ M artifacts/pr_play_05/diagnostics/concurrent.json
+ M artifacts/pr_play_05/diagnostics/extraction.json
+ M artifacts/pr_play_05/diagnostics/placeholder.json
+ M artifacts/pr_play_05/diagnostics/repeat.json
+ M artifacts/pr_play_05/diagnostics/retry.json
+ M artifacts/pr_play_05/diagnostics/validation.json
+ M artifacts/pr_play_06/aggregate_refusal.json
+ M artifacts/pr_play_06/incomplete_content_filter.json
+ M artifacts/pr_play_06/incomplete_max_output_tokens.json
+ M artifacts/pr_play_06/measurements/declarations.json
+ M artifacts/pr_play_06/measurements/minimal.json
+ M artifacts/pr_play_06/measurements/multiple_details.json
+ M artifacts/pr_play_06/measurements/npc.json
+ M artifacts/pr_play_06/measurements/over_600.json
+ M artifacts/pr_play_06/measurements/rich.json
+ M artifacts/pr_play_06/measurements/typical.json
+ M artifacts/pr_play_06/requests/declarations.json
+ M artifacts/pr_play_06/requests/multiple_details.json
+ M artifacts/pr_play_06/requests/npc.json
+ M artifacts/pr_play_06/requests/over_600.json
+ M artifacts/pr_play_06/requests/rich.json
+ M artifacts/pr_play_06/requests/typical.json
+ M artifacts/pr_play_07/matrix/S1.json
+ M artifacts/pr_play_07/matrix/S10.json
+ M artifacts/pr_play_07/matrix/S11.json
+ M artifacts/pr_play_07/matrix/S12.json
+ M artifacts/pr_play_07/matrix/S2.json
+ M artifacts/pr_play_07/matrix/S3.json
+ M artifacts/pr_play_07/matrix/S4.json
+ M artifacts/pr_play_07/matrix/S5.json
+ M artifacts/pr_play_07/matrix/S6.json
+ M artifacts/pr_play_07/matrix/S7.json
+ M artifacts/pr_play_07/matrix/S8.json
+ M artifacts/pr_play_07/matrix/S9.json
+ M artifacts/pr_play_08/matrix_runs.json
+ M artifacts/pr_play_09/example_run.json
+ M artifacts/pr_play_10/O1.json
+ M artifacts/pr_play_10/O14.json
+ M artifacts/pr_play_10/O5.json
+ M artifacts/pr_play_10/O6.json
+ M artifacts/pr_play_10/concurrent_overlay.json
+ M artifacts/pr_play_10/replay.json
+ M artifacts/pr_play_11/20261030T183848Z-5fe421902485_replay.json
+ M artifacts/pr_play_11/20261030T191257Z-ecc1b6062bdc_replay.json
+ M artifacts/pr_play_11/20261031T015747Z-5a6c03c902e3_replay.json
+ M artifacts/pr_play_11/conservative_generation.json
+ M data/combat.json
+ M data/scenes/market_quarter.json
+ M data/scenes/old_milestone.json
+ M data/session.json
+ M data/session_log.jsonl
+ M data/validation/atgb/baselines/frontier-gate-v1/manifest.json
+ M data/validation/atgb/baselines/frontier-gate-v1/world.json
+ M data/world.json
+ M docs/NEXT_SESSION.md
+ M docs/state_authority_model.md
+ M game/api.py
+ M game/api_turn_support.py
+ M game/api_ui_mode.py
+ M game/bounded_improvisation.py
+ M game/campaign_reset.py
+ M game/conversational_continuity.py
+ M game/conversational_orchestration.py
+ M game/dialogue_authority.py
+ M game/exploration.py
+ M game/expressive_dialogue.py
+ M game/gm.py
+ M game/gm_resolution_decision.py
+ M game/immutable_valid_response.py
+ M game/incidental_entity.py
+ M game/intent_parser.py
+ M game/interaction_completion.py
+ M game/live_chat_interpretation.py
+ M game/models.py
+ M game/narrative_planning.py
+ M game/ordinary_semantic_ownership.py
+ M game/player_interpretation_bridge.py
+ M game/prompt_context.py
+ M game/proposition_authority.py
+ M game/provider_budget.py
+ M game/referenced_surface.py
+ M game/response_policy_enforcement.py
+ M game/social.py
+ M game/state_authority.py
+ M game/storage.py
+ M game/upstream_response_repairs.py
+ D handoff/CURRENT_REVIEW(20261018-215535).zip
+ D handoff/CURRENT_REVIEW(20261019-051157).zip
+ D handoff/CURRENT_REVIEW(20261019-052942).zip
+ D handoff/CURRENT_REVIEW(20261019-054240).zip
+ D handoff/CURRENT_REVIEW(20261019-055834).zip
+ D handoff/CURRENT_REVIEW(20261019-062339).zip
+ D handoff/CURRENT_REVIEW(20261019-064632).zip
+ D handoff/CURRENT_REVIEW(20261019-070553).zip
+ D handoff/CURRENT_REVIEW(20261019-070606).zip
+ D handoff/CURRENT_REVIEW(20261019-073308).zip
+ D handoff/CURRENT_REVIEW(20261019-075507).zip
+ D handoff/CURRENT_REVIEW(20261019-173603).zip
+ D handoff/CURRENT_REVIEW(20261019-175928).zip
+ D handoff/CURRENT_REVIEW(20261019-181208).zip
+ D handoff/CURRENT_REVIEW(20261019-182836).zip
+ D handoff/CURRENT_REVIEW(20261026-204131).zip
+ D handoff/CURRENT_REVIEW(20261026-211119).zip
+ D handoff/CURRENT_REVIEW(20261027-042122).zip
+ D handoff/CURRENT_REVIEW(20261028-221836).zip
+ D handoff/CURRENT_REVIEW(20261029-204914).zip
+ D handoff/CURRENT_REVIEW(20261029-212146).zip
+ D handoff/CURRENT_REVIEW(20261030-150309).zip
+ D handoff/CURRENT_REVIEW(20261030-212347).zip
+ D handoff/CURRENT_REVIEW(20261030-222931).zip
+ D handoff/CURRENT_REVIEW(20261031-141539).zip
+ M handoff/CURRENT_REVIEW.md
+ M handoff/CURRENT_REVIEW.zip
+ D handoff/CURRENT_REVIEW_PRBQ/REVIEW_MANIFEST.json
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/campaign_summary.json
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/campaign_summary.md
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/curious_explorer/run.json
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/curious_explorer/transcript.md
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/failure_clusters.md
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/goal_oriented/run.json
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/goal_oriented/transcript.md
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/mundane_actor/run.json
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/mundane_actor/transcript.md
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/social_persistent/run.json
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/social_persistent/transcript.md
+ D handoff/CURRENT_REVIEW_PRBQ/artifacts/pr_bp_synthetic_gate/20260927T220411Z/test_results.md
+ D handoff/CURRENT_REVIEW_PRBQ/docs/audits/PR-BP_live_resolution_and_synthetic_gate.md
+ D handoff/CURRENT_REVIEW_PRBQ/docs/audits/discovery/PR-BQ_semantic_resolution_and_discourse_architecture.md
+ D handoff/CURRENT_REVIEW_PRBR/artifacts/pr_br/sample_resolution_contract.json
+ D handoff/CURRENT_REVIEW_PRBR/artifacts/pr_br/test_results.md
+ D handoff/CURRENT_REVIEW_PRBR/docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md
+ D handoff/CURRENT_REVIEW_PRBR/game/discourse_state.py
+ D handoff/CURRENT_REVIEW_PRBR/game/resolution_contract.py
+ D handoff/CURRENT_REVIEW_PRBR/handoff/CURRENT_REVIEW.md
+ D handoff/CURRENT_REVIEW_PRBR/handoff/REVIEW_MANIFEST.json
+ D handoff/CURRENT_REVIEW_PRBR/tests/test_pr_br_resolution_contract.py
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/artifacts/pr_br_resolution_decision_slice/implementation_report.md
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/artifacts/pr_br_resolution_decision_slice/second_gate_static_audit.json
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/game/bounded_improvisation.py
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/game/gm_resolution_decision.py
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/game/immutable_valid_response.py
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/game/live_resolution.py
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/game/proposition_authority.py
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/game/resolution_contract.py
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/tests/test_pr_br_decision_owned_realization_claims.py
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/tests/test_pr_br_gm_resolution_decision.py
+ D handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/tools/audit_gm_resolution_decisions.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/CURRENT_REVIEW.md
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/REVIEW_MANIFEST.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_resolution_reassessment/PR-BR_resolution_world_authoring_reassessment.md
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_resolution_reassessment/turn_population.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_resolution_reassessment/turn_population.md
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/audit.md
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/freeze.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/manual_review.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/per_turn_telemetry.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/generation_calls.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/inbox.jsonl
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/interpretation_calls.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/review_index.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/turns/turn_01.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/turns/turn_02.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/turns/turn_03.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/turns/turn_04.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/turns/turn_05.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/turns/turn_06.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/turns/turn_07.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/turns/turn_08.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/turns/turn_09.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/turns/turn_10.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_a/visible.md
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/generation_calls.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/inbox.jsonl
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/interpretation_calls.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/review_index.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/turns/turn_01.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/turns/turn_02.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/turns/turn_03.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/turns/turn_04.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/turns/turn_05.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/turns/turn_06.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/turns/turn_07.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/turns/turn_08.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/turns/turn_09.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/turns/turn_10.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_b/visible.md
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/generation_calls.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/inbox.jsonl
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/interpretation_calls.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/review_index.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/turns/turn_01.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/turns/turn_02.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/turns/turn_03.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/turns/turn_04.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/turns/turn_05.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/turns/turn_06.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/turns/turn_07.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/turns/turn_08.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/turns/turn_09.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/turns/turn_10.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_c/visible.md
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/generation_calls.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/inbox.jsonl
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/interpretation_calls.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/review_index.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/turns/turn_01.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/turns/turn_02.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/turns/turn_03.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/turns/turn_04.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/turns/turn_05.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/turns/turn_06.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/turns/turn_07.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/turns/turn_08.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/turns/turn_09.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/turns/turn_10.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/persona_d/visible.md
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/scorecard.json
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/artifacts/pr_br_second_full_gate/20261003T142725Z/scorecard.md
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/game/api_turn_support.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/game/bounded_improvisation.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/game/contract_adjudication_bridge.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/game/discourse_state.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/game/live_resolution.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/game/proposition_authority.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/game/resolution_contract.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/game/scene_destination_binding.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/tests/test_pr_br_continuation19_hard_authority.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/tests/test_pr_br_continuation20_incidental_entity.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/tests/test_pr_br_continuation26_semantic_closure.py
+ D handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/support/tests/test_pr_br_continuation27_structural_subject.py
+ D handoff/CURRENT_REVIEW_PRBS/CURRENT_REVIEW.md
+ D handoff/CURRENT_REVIEW_PRBS/PR-BS_cooperative_realization_discovery.md
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_br_closeout_live_revalidation/A1_decision_1.json
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_br_closeout_live_revalidation/A1_digest.json
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_br_closeout_live_revalidation/A1_raw_envelope_attempt_1.json
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_br_closeout_live_revalidation/A1_raw_envelope_attempt_2.json
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_br_closeout_live_revalidation/B1_decision_4.json
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_br_closeout_live_revalidation/B1_digest.json
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_br_closeout_live_revalidation/B1_raw_envelope_attempt_1.json
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_br_closeout_live_revalidation/B1_raw_envelope_attempt_2.json
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_br_closeout_live_revalidation/REPORT.md
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_br_closeout_live_revalidation/model_calls.json
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_bs_cooperative_realization_discovery/call_chain_evidence.md
+ D handoff/CURRENT_REVIEW_PRBS/artifacts/pr_bs_cooperative_realization_discovery/context_inventory.json
+ D handoff/CURRENT_REVIEW_PRBS/handoff/PR_BR_REVIEW_MANIFEST.json
+ D handoff/CURRENT_REVIEW_PRBS/handoff/payload_breakdown.json
+ D handoff/CURRENT_REVIEW_PRBT/CURRENT_REVIEW.md
+ D handoff/CURRENT_REVIEW_PRBT/REVIEW_MANIFEST.json
+ D handoff/CURRENT_REVIEW_PRBT/support/PR-BT_provider_context_canonicalization_discovery.md
+ D handoff/CURRENT_REVIEW_PRBT/support/PR-BT_provider_payload_inventory.json
+ D handoff/CURRENT_REVIEW_PRBT/support/payload_measurements.md
+ D handoff/CURRENT_REVIEW_PRBT/support/pr_bs_provider_requests/P1_digest.json
+ D handoff/CURRENT_REVIEW_PRBT/support/pr_bs_provider_requests/P1_provider_request_attempt_generation_1.json
+ D handoff/CURRENT_REVIEW_PRBT/support/pr_bs_provider_requests/P2_digest.json
+ D handoff/CURRENT_REVIEW_PRBT/support/pr_bs_provider_requests/P2_provider_request_attempt_generation_1.json
+ D handoff/CURRENT_REVIEW_PRBT/support/pr_bs_provider_requests/P3_digest.json
+ D handoff/CURRENT_REVIEW_PRBT/support/pr_bs_provider_requests/P3_provider_request_attempt_generation_1.json
+ D handoff/CURRENT_REVIEW_PRBT/support/pr_bs_provider_requests/model_calls.json
+ D handoff/CURRENT_REVIEW_PRBT/support/source_evidence.md
+ M handoff/REVIEW_MANIFEST.json
+ M static/app.js
+ M tests/conftest.py
+ M tests/test_exploration_skill_checks.py
+ M tests/test_five_turn_gameplay.py
+ M tests/test_pr_play_11_claim_authority.py
+ M tests/test_prompt_context.py
+ M tests/test_start_campaign_api.py
+ M tests/test_turn_pipeline_shared.py
+ M tests/test_ui_mode_backend_integration.py
+ M tests/test_ui_mode_regression_matrix_objective15.py
+ M tools/atgb/baseline.py
+ M tools/playtest/gameplay.py
+ M tools/playtest/overlays.py
+ M tools/playtest/runner.py
+ M tools/playtest/worker.py
+?? CURRENT_REVIEW(20261107-195623).zip
+?? CURRENT_REVIEW(20261107-210010).zip
+?? artifacts/at_opt_01/
+?? artifacts/at_opt_02/
+?? artifacts/at_opt_03/
+?? artifacts/at_opt_04/
+?? artifacts/at_opt_05/
+?? artifacts/at_opt_06/
+?? artifacts/atgb/automated_playtests/20261101T143924Z-7d196fb8a158/
+?? artifacts/atgb/automated_playtests/20261101T143927Z-8e2a53a2d005/
+?? artifacts/atgb/automated_playtests/20261101T143930Z-22b1c1b4a373/
+?? artifacts/atgb/automated_playtests/20261101T143933Z-283ae9f0a045/
+?? artifacts/atgb/automated_playtests/20261101T143936Z-40c31fbd54ec/
+?? artifacts/atgb/automated_playtests/20261101T143939Z-6bde72653989/
+?? artifacts/atgb/automated_playtests/20261101T143942Z-aff38d13f526/
+?? artifacts/atgb/automated_playtests/20261101T143946Z-910b79d8bfed/
+?? artifacts/atgb/automated_playtests/20261101T143950Z-46cf4d2dfdba/
+?? artifacts/atgb/automated_playtests/20261101T143954Z-b4d2c81291bf/
+?? artifacts/atgb/automated_playtests/20261101T144001Z-cad313ac9d7d/
+?? artifacts/atgb/automated_playtests/20261101T144002Z-e9586819cfb0/
+?? artifacts/atgb/automated_playtests/20261101T144003Z-606f738a2be2/
+?? artifacts/atgb/automated_playtests/20261101T144007Z-1b71720ecfb1/
+?? artifacts/atgb/automated_playtests/20261101T144012Z-8026389bf089/
+?? artifacts/atgb/automated_playtests/20261101T144012Z-afed35eb45b2/
+?? artifacts/atgb/automated_playtests/20261101T144013Z-e2289c3d6dd1/
+?? artifacts/atgb/automated_playtests/20261101T144018Z-53ebf115a009/
+?? artifacts/atgb/automated_playtests/20261101T144025Z-5c6500b2cea2/
+?? artifacts/atgb/automated_playtests/20261101T144028Z-0113eec126e4/
+?? artifacts/atgb/automated_playtests/20261101T144036Z-9699d3502056/
+?? artifacts/atgb/automated_playtests/20261101T144048Z-0c273bdd5ab4/
+?? artifacts/atgb/automated_playtests/20261101T144053Z-0df2e2d22d8a/
+?? artifacts/atgb/automated_playtests/20261101T144057Z-dbff7662fea7/
+?? artifacts/atgb/automated_playtests/20261101T144103Z-228aeb3fb550/
+?? artifacts/atgb/automated_playtests/20261101T144104Z-dea7ecfaf0d5/
+?? artifacts/atgb/automated_playtests/20261101T144600Z-9da53a6e64f8/
+?? artifacts/atgb/automated_playtests/20261101T144720Z-13a83218994b/
+?? artifacts/atgb/automated_playtests/20261101T144743Z-14b8c942e340/
+?? artifacts/atgb/automated_playtests/20261101T150418Z-2c4a2a1e0fe1/
+?? artifacts/atgb/automated_playtests/20261101T151611Z-ec1454c08765/
+?? artifacts/atgb/automated_playtests/20261101T151616Z-3b96c69644cd/
+?? artifacts/atgb/automated_playtests/20261101T151620Z-c57eefd03bbc/
+?? artifacts/atgb/automated_playtests/20261101T151624Z-4e1b225855ab/
+?? artifacts/atgb/automated_playtests/20261101T151630Z-8326504f2b6e/
+?? artifacts/atgb/automated_playtests/20261101T151635Z-84faa318b02c/
+?? artifacts/atgb/automated_playtests/20261101T151640Z-eabede371c6f/
+?? artifacts/atgb/automated_playtests/20261101T151645Z-c20a9ac091e1/
+?? artifacts/atgb/automated_playtests/20261101T151649Z-396efc2dde84/
+?? artifacts/atgb/automated_playtests/20261101T151654Z-442f2f0ed770/
+?? artifacts/atgb/automated_playtests/20261101T151703Z-8e36e1f09668/
+?? artifacts/atgb/automated_playtests/20261101T151704Z-034eef97d048/
+?? artifacts/atgb/automated_playtests/20261101T151705Z-ddca086bc65f/
+?? artifacts/atgb/automated_playtests/20261101T151708Z-be5628187700/
+?? artifacts/atgb/automated_playtests/20261101T151716Z-056e41b28bdd/
+?? artifacts/atgb/automated_playtests/20261101T151717Z-3f7566ecc985/
+?? artifacts/atgb/automated_playtests/20261101T151719Z-03ca8617d270/
+?? artifacts/atgb/automated_playtests/20261101T151725Z-2e41ba7bbd37/
+?? artifacts/atgb/automated_playtests/20261101T153625Z-02fc6545bc28/
+?? artifacts/atgb/automated_playtests/20261101T183719Z-bb9b956b87c6/
+?? artifacts/atgb/automated_playtests/20261101T183723Z-4fb1ebae81e5/
+?? artifacts/atgb/automated_playtests/20261101T183728Z-e021343fc530/
+?? artifacts/atgb/automated_playtests/20261101T183732Z-385b4003f02e/
+?? artifacts/atgb/automated_playtests/20261101T183737Z-7334e2c46ab3/
+?? artifacts/atgb/automated_playtests/20261101T183741Z-312dc3bb2f0e/
+?? artifacts/atgb/automated_playtests/20261101T183747Z-efca1f66e18b/
+?? artifacts/atgb/automated_playtests/20261101T183748Z-55b2cd18d2d2/
+?? artifacts/atgb/automated_playtests/20261101T184021Z-df2d49703957/
+?? artifacts/atgb/automated_playtests/20261101T184024Z-31daf130ca57/
+?? artifacts/atgb/automated_playtests/20261101T184032Z-c4f4b1f689a1/
+?? artifacts/atgb/automated_playtests/20261101T184040Z-86b4efb1f09e/
+?? artifacts/atgb/automated_playtests/20261101T184050Z-7b73f0b32554/
+?? artifacts/atgb/automated_playtests/20261101T184101Z-1e71d155d478/
+?? artifacts/atgb/automated_playtests/20261101T184112Z-1ddf761f5842/
+?? artifacts/atgb/automated_playtests/20261101T184114Z-9c8d474b0dbd/
+?? artifacts/atgb/automated_playtests/20261101T184115Z-3c097ccda902/
+?? artifacts/atgb/automated_playtests/20261101T184121Z-c878164ca479/
+?? artifacts/atgb/automated_playtests/20261101T184127Z-74d44aaaf0ce/
+?? artifacts/atgb/automated_playtests/20261101T184133Z-d34d9811f6ad/
+?? artifacts/atgb/automated_playtests/20261101T184139Z-ff40b01dde02/
+?? artifacts/atgb/automated_playtests/20261101T184146Z-57a92ebb27e5/
+?? artifacts/atgb/automated_playtests/20261101T184152Z-fcdf04eb328c/
+?? artifacts/atgb/automated_playtests/20261101T184159Z-4b779e573d29/
+?? artifacts/atgb/automated_playtests/20261101T184206Z-891c4aa2d851/
+?? artifacts/atgb/automated_playtests/20261101T184213Z-3ae4f79c1805/
+?? artifacts/atgb/automated_playtests/20261101T184222Z-f05618491891/
+?? artifacts/atgb/automated_playtests/20261101T184223Z-c11ce0b7aac3/
+?? artifacts/atgb/automated_playtests/20261101T184224Z-81842504658b/
+?? artifacts/atgb/automated_playtests/20261101T184229Z-fd6733615165/
+?? artifacts/atgb/automated_playtests/20261101T184240Z-2b12705dfb3e/
+?? artifacts/atgb/automated_playtests/20261101T184241Z-28c47418ab4c/
+?? artifacts/atgb/automated_playtests/20261101T184243Z-b228c711f23a/
+?? artifacts/atgb/automated_playtests/20261101T184256Z-185b5dffda70/
+?? artifacts/atgb/automated_playtests/20261101T184511Z-991ec1994e71/
+?? artifacts/atgb/automated_playtests/20261101T184514Z-de8e46c9abf6/
+?? artifacts/atgb/automated_playtests/20261101T184520Z-8e8e6be03f8e/
+?? artifacts/atgb/automated_playtests/20261101T184527Z-b277fc88fac2/
+?? artifacts/atgb/automated_playtests/20261101T184531Z-22bb75307fa4/
+?? artifacts/atgb/automated_playtests/20261101T184537Z-8d30970afe79/
+?? artifacts/atgb/automated_playtests/20261101T184545Z-26161d88134e/
+?? artifacts/atgb/automated_playtests/20261101T184546Z-bc39621685b9/
+?? artifacts/atgb/automated_playtests/20261101T184709Z-91b0ed128e44/
+?? artifacts/atgb/automated_playtests/20261101T184713Z-0720fc44361b/
+?? artifacts/atgb/automated_playtests/20261101T184719Z-1528f4dbb678/
+?? artifacts/atgb/automated_playtests/20261101T184728Z-de2f93d97eea/
+?? artifacts/atgb/automated_playtests/20261101T184734Z-0f11aba3a796/
+?? artifacts/atgb/automated_playtests/20261101T184746Z-5ab7fbff402f/
+?? artifacts/atgb/automated_playtests/20261101T184757Z-ec85eb4ac4df/
+?? artifacts/atgb/automated_playtests/20261101T184758Z-f8edebb736c3/
+?? artifacts/atgb/automated_playtests/20261101T212341Z-af822d003e61/
+?? artifacts/atgb/automated_playtests/20261101T212346Z-5baeb2aa5150/
+?? artifacts/atgb/automated_playtests/20261101T212351Z-5eaa4bebbb7d/
+?? artifacts/atgb/automated_playtests/20261101T212357Z-698bfae47a73/
+?? artifacts/atgb/automated_playtests/20261101T212402Z-a6d380eeb772/
+?? artifacts/atgb/automated_playtests/20261101T212408Z-1faef4b9b581/
+?? artifacts/atgb/automated_playtests/20261101T212416Z-a03d4925bdb9/
+?? artifacts/atgb/automated_playtests/20261101T212418Z-ee48c1eed397/
+?? artifacts/atgb/automated_playtests/20261101T212904Z-fc7b240fab67/
+?? artifacts/atgb/automated_playtests/20261101T212908Z-4c13b89b5201/
+?? artifacts/atgb/automated_playtests/20261101T212914Z-bac530862438/
+?? artifacts/atgb/automated_playtests/20261101T212920Z-e2d31bcc7dd2/
+?? artifacts/atgb/automated_playtests/20261101T212925Z-5065d4518c86/
+?? artifacts/atgb/automated_playtests/20261101T212932Z-f63b5337b57c/
+?? artifacts/atgb/automated_playtests/20261101T212940Z-e5d16a9d0c75/
+?? artifacts/atgb/automated_playtests/20261101T212941Z-42c74500232c/
+?? artifacts/atgb/automated_playtests/20261101T213139Z-7c38ce2488bd/
+?? artifacts/atgb/automated_playtests/20261101T213144Z-9c504c3b06b6/
+?? artifacts/atgb/automated_playtests/20261101T213150Z-d62561c4442c/
+?? artifacts/atgb/automated_playtests/20261101T213156Z-c5ec53960716/
+?? artifacts/atgb/automated_playtests/20261101T213201Z-b9cae5222bfd/
+?? artifacts/atgb/automated_playtests/20261101T213207Z-a6a766c3dd15/
+?? artifacts/atgb/automated_playtests/20261101T213214Z-6e8db8cdb3eb/
+?? artifacts/atgb/automated_playtests/20261101T213215Z-bf45457806b7/
+?? artifacts/atgb/automated_playtests/20261101T213404Z-8e5aed002bfe/
+?? artifacts/atgb/automated_playtests/20261101T213409Z-631ebdb60329/
+?? artifacts/atgb/automated_playtests/20261101T213415Z-0acba5336bce/
+?? artifacts/atgb/automated_playtests/20261101T213422Z-24b58da4879c/
+?? artifacts/atgb/automated_playtests/20261101T213428Z-96a0f07c2dac/
+?? artifacts/atgb/automated_playtests/20261101T213435Z-1637a29d9f6e/
+?? artifacts/atgb/automated_playtests/20261101T213443Z-4768a13c6ea2/
+?? artifacts/atgb/automated_playtests/20261101T213443Z-e61425a006ed/
+?? artifacts/atgb/automated_playtests/20261101T220807Z-c1a13986d2ad/
+?? artifacts/atgb/automated_playtests/20261101T220811Z-f0279e8454d9/
+?? artifacts/atgb/automated_playtests/20261101T220824Z-138ba1979c22/
+?? artifacts/atgb/automated_playtests/20261101T220838Z-08441a0316e9/
+?? artifacts/atgb/automated_playtests/20261101T220847Z-6113b07bb54d/
+?? artifacts/atgb/automated_playtests/20261101T220903Z-551485228005/
+?? artifacts/atgb/automated_playtests/20261101T220914Z-2dfa7755187b/
+?? artifacts/atgb/automated_playtests/20261101T220916Z-dd49c83c56ea/
+?? artifacts/atgb/automated_playtests/20261101T221213Z-d0e076bd4a01/
+?? artifacts/atgb/automated_playtests/20261101T221220Z-0c9d16745569/
+?? artifacts/atgb/automated_playtests/20261101T221235Z-c7e4b9f9d4c9/
+?? artifacts/atgb/automated_playtests/20261101T221250Z-2a6dcbd04c21/
+?? artifacts/atgb/automated_playtests/20261101T221300Z-5ff661986e0c/
+?? artifacts/atgb/automated_playtests/20261101T221315Z-1bc71fd20cf5/
+?? artifacts/atgb/automated_playtests/20261101T221325Z-d51c728754bd/
+?? artifacts/atgb/automated_playtests/20261101T221326Z-d06cb02e18a6/
+?? artifacts/atgb/automated_playtests/20261101T222522Z-a918c22664b7/
+?? artifacts/atgb/automated_playtests/20261101T222526Z-d5d8898c1392/
+?? artifacts/atgb/automated_playtests/20261101T222531Z-65a36f6443c2/
+?? artifacts/atgb/automated_playtests/20261101T222537Z-1f23db36df3e/
+?? artifacts/atgb/automated_playtests/20261101T222542Z-2c1045b1568a/
+?? artifacts/atgb/automated_playtests/20261101T222548Z-c95e12380a71/
+?? artifacts/atgb/automated_playtests/20261101T222555Z-87f895906fe8/
+?? artifacts/atgb/automated_playtests/20261101T222556Z-5b7a63f198fa/
+?? artifacts/atgb/automated_playtests/20261101T222756Z-68a7a5b654c3/
+?? artifacts/atgb/automated_playtests/20261101T222801Z-7f1539d7fbb0/
+?? artifacts/atgb/automated_playtests/20261101T222807Z-489aa0ed8510/
+?? artifacts/atgb/automated_playtests/20261101T222813Z-147b0c319d7f/
+?? artifacts/atgb/automated_playtests/20261101T222819Z-f09111de936e/
+?? artifacts/atgb/automated_playtests/20261101T222825Z-b15802b19e20/
+?? artifacts/atgb/automated_playtests/20261101T222832Z-ed5c9f071458/
+?? artifacts/atgb/automated_playtests/20261101T222833Z-32beead65976/
+?? artifacts/atgb/pr_play_15/
+?? artifacts/atgb/pr_play_17/
+?? artifacts/atgb/pr_play_19/
+?? artifacts/atgb/pr_play_22/
+?? artifacts/atgb/pr_play_24/
+?? artifacts/atgb/pr_play_26/
+?? artifacts/atgb/pr_play_29/
+?? artifacts/atgb/pr_play_32/
+?? artifacts/atgb/pr_play_33/
+?? artifacts/atgb/pr_play_34/
+?? artifacts/atgb/pr_play_35/
+?? artifacts/atgb/pr_play_38/
+?? artifacts/atgb/pr_play_41/
+?? artifacts/atgb/pr_play_43/
+?? artifacts/combined_repair_integration_report.md
+?? artifacts/content_lint_failure_investigation.md
+?? artifacts/conversational_continuity_c01_c03_repair.md
+?? artifacts/pr_play_05/diagnostics/placeholder_http.json
+?? artifacts/pr_play_13/
+?? artifacts/pr_play_14/
+?? artifacts/pr_play_15/
+?? artifacts/pr_play_16/
+?? artifacts/pr_play_17/
+?? artifacts/pr_play_18/
+?? artifacts/pr_play_19/
+?? artifacts/pr_play_20/
+?? artifacts/pr_play_21/
+?? artifacts/pr_play_22/
+?? artifacts/pr_play_23/
+?? artifacts/pr_play_24/
+?? artifacts/pr_play_25/
+?? artifacts/pr_play_26/
+?? artifacts/pr_play_27/
+?? artifacts/pr_play_28/
+?? artifacts/pr_play_29/
+?? artifacts/pr_play_30/
+?? artifacts/pr_play_31/
+?? artifacts/pr_play_32/
+?? artifacts/pr_play_33/
+?? artifacts/pr_play_34/
+?? artifacts/pr_play_35/
+?? artifacts/pr_play_36/
+?? artifacts/pr_play_37/
+?? artifacts/pr_play_38/
+?? artifacts/pr_play_39/
+?? artifacts/pr_play_40/
+?? artifacts/pr_play_41/
+?? artifacts/pr_play_42/
+?? artifacts/pr_play_43/
+?? artifacts/pr_play_44/
+?? artifacts/pr_play_44_baseline.txt
+?? artifacts/pr_play_45/
+?? artifacts/pr_play_46/
+?? artifacts/pr_play_47/
+?? artifacts/pr_play_48/
+?? artifacts/pr_play_49/
+?? artifacts/pr_play_50/
+?? artifacts/pr_play_51/
+?? artifacts/pr_play_52/
+?? artifacts/pr_play_53/
+?? artifacts/pr_play_54/
+?? artifacts/pr_play_55/
+?? artifacts/pr_play_56/
+?? artifacts/pr_play_57/
+?? artifacts/pr_play_58/
+?? artifacts/pr_play_59/
+?? artifacts/pr_play_60/
+?? artifacts/pr_play_61/
+?? artifacts/pr_play_62/
+?? artifacts/pr_play_63/
+?? artifacts/pr_play_64/
+?? artifacts/pr_play_65/
+?? artifacts/pr_play_66/
+?? artifacts/pr_play_67/
+?? artifacts/pr_play_68/
+?? artifacts/pr_play_69/
+?? artifacts/pr_play_70/
+?? artifacts/pr_play_71/
+?? artifacts/pr_play_71v/
+?? artifacts/pr_play_72/
+?? artifacts/pr_play_72v/
+?? artifacts/pr_play_73/
+?? artifacts/pr_play_74/
+?? artifacts/pr_play_75/
+?? artifacts/pr_play_76/
+?? artifacts/pr_play_77/
+?? artifacts/pr_play_78/
+?? artifacts/pr_play_78a/
+?? artifacts/pr_play_79/
+?? artifacts/pr_play_79a/
+?? artifacts/pr_play_79b/
+?? artifacts/pr_play_79c/
+?? artifacts/pr_play_79d/
+?? artifacts/pr_play_79df/
+?? artifacts/pr_play_79df2/
+?? artifacts/pr_play_79df3/
+?? artifacts/pr_play_adjacent_regression/
+?? artifacts/pr_play_adjacent_regression_recovery/
+?? artifacts/pr_play_baseline_provenance/
+?? artifacts/pr_play_claim_acceptance_audit/
+?? artifacts/pr_play_object_identity_architecture/
+?? artifacts/pr_play_object_instance_identity/
+?? artifacts/pr_play_object_marking_mutation/
+?? artifacts/pr_play_post_npc/
+?? artifacts/pr_play_post_opt/
+?? artifacts/pr_play_preseal_authority/
+?? artifacts/pr_play_t04_local_action/
+?? artifacts/pr_play_t05_composition/
+?? artifacts/pr_play_t06_persistent_manipulation/
+?? artifacts/storage_cleanup_audit.md
+?? artifacts/storage_cleanup_development_handoff.md
+?? artifacts/storage_cleanup_final_closeout.md
+?? artifacts/storage_cleanup_phase1_report.md
+?? artifacts/storage_cleanup_phase2_audit.md
+?? artifacts/storage_cleanup_phase2a_closeout.md
+?? artifacts/storage_cleanup_phase2a_manifest.json
+?? artifacts/storage_cleanup_phase2a_regression_investigation.md
+?? artifacts/storage_cleanup_phase2a_report.md
+?? artifacts/storage_cleanup_phase2b_c1_manifest.json
+?? artifacts/storage_cleanup_phase2b_c1_report.md
+?? artifacts/storage_cleanup_phase2b_c2_manifest.json
+?? artifacts/storage_cleanup_phase2b_c2_report.md
+?? artifacts/storage_cleanup_phase2b_c3_manifest.json
+?? artifacts/storage_cleanup_phase2b_c3_report.md
+?? artifacts/storage_cleanup_phase2b_c4_manifest.json
+?? artifacts/storage_cleanup_phase2b_c4_report.md
+?? artifacts/storage_cleanup_phase2c_recovery_manifest.json
+?? artifacts/storage_cleanup_phase2c_recovery_report.md
+?? artifacts/storage_cleanup_phase2c_report.md
+?? artifacts/storage_cleanup_phase2d_zip_audit.md
+?? artifacts/storage_cleanup_phase2d_zip_inventory.json
+?? artifacts/validation_evidence/pr_play_66/
+?? artifacts/validation_evidence/pr_play_70/
+?? data/publication_events.jsonl
+?? development/campaigns/product_realization/at_opt_01/
+?? development/campaigns/product_realization/at_opt_02/
+?? development/campaigns/product_realization/at_opt_03/
+?? development/campaigns/product_realization/at_opt_04/
+?? development/campaigns/product_realization/at_opt_05/
+?? development/campaigns/product_realization/at_opt_06/
+?? development/campaigns/product_realization/pr_play_13/
+?? development/campaigns/product_realization/pr_play_59/
+?? development/campaigns/product_realization/pr_play_60/
+?? development/campaigns/product_realization/pr_play_61/
+?? development/campaigns/product_realization/pr_play_62/
+?? development/campaigns/product_realization/pr_play_63/
+?? development/campaigns/product_realization/pr_play_64/
+?? development/campaigns/product_realization/pr_play_65/
+?? development/campaigns/product_realization/pr_play_66/
+?? development/campaigns/product_realization/pr_play_67/
+?? development/campaigns/product_realization/pr_play_68/
+?? development/campaigns/product_realization/pr_play_69/
+?? development/campaigns/product_realization/pr_play_70/
+?? development/campaigns/product_realization/pr_play_71/
+?? development/campaigns/product_realization/pr_play_71v/
+?? development/campaigns/product_realization/pr_play_72/
+?? development/campaigns/product_realization/pr_play_72v/
+?? development/campaigns/product_realization/pr_play_73/
+?? development/campaigns/product_realization/pr_play_74/
+?? development/campaigns/product_realization/pr_play_75/
+?? development/campaigns/product_realization/pr_play_76/
+?? development/campaigns/product_realization/pr_play_77/
+?? development/campaigns/product_realization/pr_play_78/
+?? development/campaigns/product_realization/pr_play_adjacent_regression/
+?? development/campaigns/product_realization/pr_play_adjacent_regression_recovery/
+?? development/campaigns/product_realization/pr_play_baseline_provenance/
+?? development/campaigns/product_realization/pr_play_claim_acceptance_audit/
+?? development/campaigns/product_realization/pr_play_object_identity_architecture/
+?? development/campaigns/product_realization/pr_play_object_instance_identity/
+?? development/campaigns/product_realization/pr_play_post_npc/
+?? development/campaigns/product_realization/pr_play_post_opt/
+?? development/campaigns/product_realization/pr_play_preseal_authority/
+?? development/campaigns/product_realization/pr_play_t04_local_action/
+?? development/campaigns/product_realization/pr_play_t05_composition/
+?? development/campaigns/product_realization/pr_play_t06_persistent_manipulation/
+?? experiments/pr_play_70/
+?? game/anchored_investigation_narration.py
+?? game/authored_action_language.py
+?? game/authored_consequences.py
+?? game/authorized_information.py
+?? game/consequential_narration_validation.py
+?? game/controlled_investigation_renderer.py
+?? game/general_purpose_actions.py
+?? game/integrated_investigation_narration.py
+?? game/integrated_play.py
+?? game/local_interaction.py
+?? game/mandatory_outcome_coverage.py
+?? game/mechanical_claims.py
+?? game/narration_authorization.py
+?? game/narrative_consistency.py
+?? game/object_instances.py
+?? game/offline_investigation_projection.py
+?? game/opening_initialization_recovery.py
+?? game/opening_presentation_renderer.py
+?? game/persistent_consequence_claims.py
+?? game/physical_adjudication.py
+?? game/player_http_boundary.py
+?? game/player_http_projection.py
+?? game/player_initiative.py
+?? game/public_fact_dialogue.py
+?? game/publication_contract.py
+?? game/quarantined_investigation_narration.py
+?? game/route_authority.py
+?? game/verification_budget.py
+?? handoff/CURRENT_REVIEW(20261106-181537).zip
+?? handoff/CURRENT_REVIEW(20261106-213835).zip
+?? handoff/CURRENT_REVIEW(20261106-221226).zip
+?? handoff/CURRENT_REVIEW(20261107-101924).zip
+?? handoff/CURRENT_REVIEW(20261107-110651).zip
+?? handoff/CURRENT_REVIEW(20261107-121730).zip
+?? handoff/CURRENT_REVIEW(20261107-121730)/
+?? handoff/CURRENT_REVIEW(20261107-152806).zip
+?? handoff/CURRENT_REVIEW(20261107-175518).zip
+?? handoff/CURRENT_REVIEW(20261107-210010).zip
+?? handoff/CURRENT_REVIEW(20261107-215430).zip
+?? handoff/CURRENT_REVIEW(20261107-225721).zip
+?? handoff/CURRENT_REVIEW(20261107-235457).zip
+?? handoff/CURRENT_REVIEW(20261108-075338).zip
+?? handoff/CURRENT_REVIEW(20261108-075513).zip
+?? handoff/CURRENT_REVIEW(20261108-082936).zip
+?? handoff/CURRENT_REVIEW(20261108-122657).zip
+?? handoff/CURRENT_REVIEW(20261108-125717).zip
+?? handoff/CURRENT_REVIEW(20261108-132042).zip
+?? handoff/CURRENT_REVIEW(20261108-142618).zip
+?? handoff/CURRENT_REVIEW(20261108-172122).zip
+?? handoff/CURRENT_REVIEW(20261108-174500).zip
+?? handoff/CURRENT_REVIEW(20261108-194409).zip
+?? handoff/CURRENT_REVIEW(20261108-194430).zip
+?? handoff/CURRENT_REVIEW(20261108-202641).zip
+?? handoff/CURRENT_REVIEW(20261108-214008).zip
+?? handoff/CURRENT_REVIEW(20261108-214032).zip
+?? handoff/CURRENT_REVIEW(20261108-214131).zip
+?? handoff/CURRENT_REVIEW(20261108-231413).zip
+?? handoff/CURRENT_REVIEW(20261108-233903).zip
+?? handoff/CURRENT_REVIEW(20261108-233929).zip
+?? handoff/CURRENT_REVIEW(20261109-002122).zip
+?? handoff/CURRENT_REVIEW(20261109-051345).zip
+?? handoff/CURRENT_REVIEW(20261109-051408).zip
+?? handoff/CURRENT_REVIEW(20261109-055256).zip
+?? handoff/CURRENT_REVIEW(20261109-055320).zip
+?? handoff/CURRENT_REVIEW(20261109-055332).zip
+?? handoff/CURRENT_REVIEW(20261109-061946).zip
+?? handoff/CURRENT_REVIEW(20261109-062012).zip
+?? handoff/CURRENT_REVIEW(20261109-062034).zip
+?? handoff/history/at_opt_02/
+?? handoff/history/at_opt_03/
+?? handoff/history/at_opt_04/
+?? handoff/history/at_opt_05/
+?? handoff/history/at_opt_06/
+?? handoff/history/pr_play_13/
+?? handoff/history/pr_play_adjacent_regression/
+?? handoff/history/pr_play_object_identity_architecture/
+?? handoff/history/pr_play_object_instance_identity/
+?? handoff/history/pr_play_post_npc/
+?? handoff/history/pr_play_post_opt/
+?? handoff/history/pr_play_t04_local_action/
+?? tests/fixtures/pr_play_78_holdout.json
+?? tests/fixtures/pr_play_79a_holdout.json
+?? tests/fixtures/pr_play_79b_holdout.json
+?? tests/fixtures/pr_play_79c_holdout.json
+?? tests/fixtures/pr_play_79df2_holdout.json
+?? tests/fixtures/pr_play_79df3_holdout.json
+?? tests/fixtures/pr_play_79df3_holdout.sha256
+?? tests/fixtures/pr_play_79df_holdout.json
+?? tests/helpers/storage_isolation.py
+?? tests/pr_play_54_corpus.py
+?? tests/pr_play_55_development.py
+?? tests/pr_play_55_evaluate.py
+?? tests/pr_play_55_holdout.json
+?? tests/pr_play_55_holdout_manifest.json
+?? tests/pr_play_58_development.py
+?? tests/pr_play_59_development.py
+?? tests/pr_play_64_development.py
+?? tests/pr_play_79df2_executor.py
+?? tests/pr_play_79df3_harness.py
+?? tests/pr_play_79df_executor.py
+?? tests/test_at_opt_02_retreat_and_budget.py
+?? tests/test_at_opt_04_mixed_key_policy.py
+?? tests/test_at_opt_06_instruction_eligibility.py
+?? tests/test_at_opt_06_same_scene_transition.py
+?? tests/test_object_instances.py
+?? tests/test_playtest_startup_readiness.py
+?? tests/test_pr_play_13_opening_renderer.py
+?? tests/test_pr_play_18_contract_alignment.py
+?? tests/test_pr_play_20_response_confidentiality.py
+?? tests/test_pr_play_21_privileged_reads.py
+?? tests/test_pr_play_23_harness.py
+?? tests/test_pr_play_23_local_interaction.py
+?? tests/test_pr_play_25_public_fact_dialogue.py
+?? tests/test_pr_play_27_expression_recovery.py
+?? tests/test_pr_play_28_baseline_reproduction.py
+?? tests/test_pr_play_28_topic_authority.py
+?? tests/test_pr_play_31_purpose_routing.py
+?? tests/test_pr_play_33_process_ownership.py
+?? tests/test_pr_play_34_readiness_diagnostics.py
+?? tests/test_pr_play_36_opening_rejection.py
+?? tests/test_pr_play_37_opening_recovery.py
+?? tests/test_pr_play_39_action_admission.py
+?? tests/test_pr_play_40_scenario_generalization.py
+?? tests/test_pr_play_42_evidence_boundaries.py
+?? tests/test_pr_play_44_information_delivery.py
+?? tests/test_pr_play_45_narration_authority.py
+?? tests/test_pr_play_46_mechanical_boundary.py
+?? tests/test_pr_play_47_controlled_renderer.py
+?? tests/test_pr_play_49_anchored_narration.py
+?? tests/test_pr_play_51_geography_grounding.py
+?? tests/test_pr_play_52_quarantined_integration.py
+?? tests/test_pr_play_53_quarantined_live.py
+?? tests/test_pr_play_54_consequential_validation.py
+?? tests/test_pr_play_55_discovery_claims.py
+?? tests/test_pr_play_55_holdout.py
+?? tests/test_pr_play_57_integrated_narration.py
+?? tests/test_pr_play_58_semantic_coverage.py
+?? tests/test_pr_play_59_persistent_consequences.py
+?? tests/test_pr_play_60_gameplay_readiness.py
+?? tests/test_pr_play_60_inventory_projection.py
+?? tests/test_pr_play_61_player_facing.py
+?? tests/test_pr_play_62_investigation_quality.py
+?? tests/test_pr_play_63_disclosure.py
+?? tests/test_pr_play_64_discovery_language.py
+?? tests/test_pr_play_65_authoritative_disclosure.py
+?? tests/test_pr_play_66_publication.py
+?? tests/test_pr_play_67_player_projection.py
+?? tests/test_pr_play_68_structured_publication.py
+?? tests/test_pr_play_69_target_references.py
+?? tests/test_pr_play_70_branching.py
+?? tests/test_pr_play_71_lifecycle.py
+?? tests/test_pr_play_71_persistence_recovery.py
+?? tests/test_pr_play_71v_verification.py
+?? tests/test_pr_play_72_boundary_repairs.py
+?? tests/test_pr_play_72_failures.py
+?? tests/test_pr_play_72_initiative.py
+?? tests/test_pr_play_72_supplemental.py
+?? tests/test_pr_play_72v_post_holdout.py
+?? tests/test_pr_play_72v_resolution.py
+?? tests/test_pr_play_73_general_purpose.py
+?? tests/test_pr_play_73_inherited_safety.py
+?? tests/test_pr_play_74_controlled_world.py
+?? tests/test_pr_play_75_dynamic_npcs.py
+?? tests/test_pr_play_75_persistence.py
+?? tests/test_pr_play_76_holdout.py
+?? tests/test_pr_play_76_http_trace.py
+?? tests/test_pr_play_76_matrix.py
+?? tests/test_pr_play_76_physical.py
+?? tests/test_pr_play_77_holdout.py
+?? tests/test_pr_play_77_http.py
+?? tests/test_pr_play_77_multistep.py
+?? tests/test_pr_play_78_holdout.py
+?? tests/test_pr_play_78_http.py
+?? tests/test_pr_play_78_integrated.py
+?? tests/test_pr_play_78a_authored.py
+?? tests/test_pr_play_79_agency.py
+?? tests/test_pr_play_79a_continuity.py
+?? tests/test_pr_play_79a_holdout.py
+?? tests/test_pr_play_79a_matrix.py
+?? tests/test_pr_play_79b_holdout.py
+?? tests/test_pr_play_79b_integration.py
+?? tests/test_pr_play_79c_holdout.py
+?? tests/test_pr_play_79c_publication.py
+?? tests/test_pr_play_79d_closeout.py
+?? tests/test_pr_play_79d_holdout.py
+?? tests/test_pr_play_79df2_holdout.py
+?? tests/test_pr_play_79df2_publication.py
+?? tests/test_pr_play_79df3_classification.py
+?? tests/test_pr_play_79df3_holdout.py
+?? tests/test_pr_play_79df_holdout.py
+?? tests/test_pr_play_79df_verification.py
+?? tests/test_pr_play_post_npc_handoff.py
+?? tests/test_pr_play_preseal_authority.py
+?? tests/test_pr_play_t04_local_action.py
+?? tests/test_pr_play_t05_composition.py
+?? tests/test_pr_play_t06_persistent_manipulation.py
+?? tools/playtest/investigation_overlay_authority.py
+?? tools/playtest/social_overlay_authority.py
+?? tools/playtest/validate_startup.py

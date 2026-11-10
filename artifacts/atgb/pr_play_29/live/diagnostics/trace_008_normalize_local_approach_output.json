@@ -1,0 +1,79 @@
+{
+  "function": "game.local_interaction.normalize_local_approach",
+  "result": {
+    "communication_mode": "IN_WORLD_ACTION",
+    "interpretation_status": "INTERPRETED",
+    "player_intent": {
+      "summary": "Approach the tavern runner and ask what they are offering."
+    },
+    "asserted_premises": [
+      {
+        "text": "The player is at Cinderwatch Gate District where a tavern runner is present offering hot stew and rumors.",
+        "canon_status": "PLAYER_CLAIM"
+      }
+    ],
+    "requested_outcomes": [
+      {
+        "text": "The tavern runner responds with what they are offering.",
+        "adjudication_status": "UNADJUDICATED"
+      }
+    ],
+    "action_components": [
+      {
+        "order": 2,
+        "description": "Ask the tavern runner what they are offering.",
+        "target_ref": "tavern_runner",
+        "operation_class": "ASK"
+      }
+    ],
+    "references": {
+      "permitted_entity_ids": [
+        "tavern_runner"
+      ],
+      "unresolved_references": []
+    },
+    "clarification_question": "",
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "communication": {
+      "recipient": "NPC",
+      "purpose": "QUESTION",
+      "subject": "offerings of the tavern runner",
+      "evidence_refs": [
+        "visible:2",
+        "reply:0"
+      ]
+    },
+    "incidental_context": [],
+    "reference_reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": ""
+    },
+    "public_evidence": {
+      "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "reply:0": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. A tavern runner shouts offers of hot stew and paid rumor. A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+    },
+    "local_approach_normalization": {
+      "rule": "authored_same_scene_interaction_preamble",
+      "target_id": "tavern_runner",
+      "original_components": [
+        {
+          "order": 1,
+          "description": "Approach the tavern runner.",
+          "target_ref": "tavern_runner",
+          "operation_class": "MOVE"
+        },
+        {
+          "order": 2,
+          "description": "Ask the tavern runner what they are offering.",
+          "target_ref": "tavern_runner",
+          "operation_class": "ASK"
+        }
+      ],
+      "movement_executed": false
+    }
+  }
+}

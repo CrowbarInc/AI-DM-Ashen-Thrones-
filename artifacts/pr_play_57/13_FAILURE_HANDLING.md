@@ -1,0 +1,3 @@
+# Failure handling
+
+28 deterministic new-module tests pass. failure_handling.json maps required fault classes to executable evidence. Provider timeout/exception, invalid responses, semantic failure/review/error, validator exceptions, omission, inventory claims and contradictory outcomes retain fallback. Accepted and rejected candidates both pass HTTP player-response and full gameplay-state equality checks; storage writes while the hook is active are prohibited. Real provider failures: zero. No quality retry. A legacy inventory test preserves the known PR55 blind spot and proves the existing mechanical check still rejects the claim.

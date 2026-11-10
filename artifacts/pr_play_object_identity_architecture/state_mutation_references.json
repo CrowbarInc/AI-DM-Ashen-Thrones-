@@ -1,0 +1,802 @@
+[
+  {
+    "path": "game/api.py",
+    "line": 79,
+    "text": "runtime_commit_scope,"
+  },
+  {
+    "path": "game/api.py",
+    "line": 154,
+    "text": "assert_owner_can_mutate_domain,"
+  },
+  {
+    "path": "game/api.py",
+    "line": 224,
+    "text": "from game.world import advance_world_tick, apply_resolution_world_updates"
+  },
+  {
+    "path": "game/api.py",
+    "line": 1356,
+    "text": "assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation=\"authoritative_scene_transition\")"
+  },
+  {
+    "path": "game/api.py",
+    "line": 2219,
+    "text": "assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation=\"apply_gm_scene_update_layers\")"
+  },
+  {
+    "path": "game/api.py",
+    "line": 2329,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"apply_gm_world_updates\")"
+  },
+  {
+    "path": "game/api.py",
+    "line": 2630,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"authoritative_resolution_mutation\")"
+  },
+  {
+    "path": "game/api.py",
+    "line": 2631,
+    "text": "assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation=\"authoritative_resolution_mutation\")"
+  },
+  {
+    "path": "game/api.py",
+    "line": 2642,
+    "text": "apply_resolution_world_updates(world, wu)"
+  },
+  {
+    "path": "game/api.py",
+    "line": 5748,
+    "text": "with runtime_commit_scope():"
+  },
+  {
+    "path": "game/api.py",
+    "line": 6864,
+    "text": "with runtime_commit_scope():"
+  },
+  {
+    "path": "game/api.py",
+    "line": 7138,
+    "text": "with runtime_commit_scope():"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 39,
+    "text": "assert_owner_can_mutate_domain,"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 263,
+    "text": "``assert_owner_can_mutate_domain`` (documented deferral; see"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 308,
+    "text": "assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation=\"set_social_exchange_interruption_tracker\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 346,
+    "text": "assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation=\"enroll_emergent_scene_actor\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 788,
+    "text": "assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation=\"synchronize_scene_addressability\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 872,
+    "text": "assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation=\"rebuild_active_scene_entities\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1056,
+    "text": "assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation=\"set_interaction_mode\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1069,
+    "text": "assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation=\"set_engagement_level\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1080,
+    "text": "assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation=\"set_social_target\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1115,
+    "text": "assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation=\"clear_stale_social_interlocutor_continuity\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1133,
+    "text": "assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation=\"set_privacy\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1142,
+    "text": "assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation=\"set_position_context\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1150,
+    "text": "assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation=\"clear_emergent_scene_actors_on_scene_change\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1156,
+    "text": "assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation=\"clear_for_scene_change\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1184,
+    "text": "assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation=\"set_non_social_activity\")"
+  },
+  {
+    "path": "game/interaction_context.py",
+    "line": 1214,
+    "text": "assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation=\"update_after_resolved_action\")"
+  },
+  {
+    "path": "game/journal.py",
+    "line": 24,
+    "text": "assert_owner_can_mutate_domain,"
+  },
+  {
+    "path": "game/journal.py",
+    "line": 341,
+    "text": "assert_owner_can_mutate_domain(__name__, PLAYER_VISIBLE_STATE, operation=\"journal_suspicion_flags_merge\")"
+  },
+  {
+    "path": "game/journal.py",
+    "line": 360,
+    "text": "assert_owner_can_mutate_domain(__name__, PLAYER_VISIBLE_STATE, operation=\"journal_known_facts_merge\")"
+  },
+  {
+    "path": "game/physical_adjudication.py",
+    "line": 960,
+    "text": "def _write_props(session, row, props):"
+  },
+  {
+    "path": "game/state_authority.py",
+    "line": 313,
+    "text": "def assert_owner_can_mutate_domain("
+  },
+  {
+    "path": "game/storage.py",
+    "line": 209,
+    "text": "def runtime_commit_scope():"
+  },
+  {
+    "path": "game/world.py",
+    "line": 5,
+    "text": "from game.state_authority import WORLD_STATE, assert_owner_can_mutate_domain"
+  },
+  {
+    "path": "game/world.py",
+    "line": 78,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"upsert_world_npc\")"
+  },
+  {
+    "path": "game/world.py",
+    "line": 333,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"advance_world_tick\")"
+  },
+  {
+    "path": "game/world.py",
+    "line": 424,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"apply_world_updates\")"
+  },
+  {
+    "path": "game/world.py",
+    "line": 454,
+    "text": "same deterministic rules as :func:`apply_resolution_world_updates`."
+  },
+  {
+    "path": "game/world.py",
+    "line": 456,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"apply_normalized_world_updates\")"
+  },
+  {
+    "path": "game/world.py",
+    "line": 563,
+    "text": "apply_resolution_world_updates(world, res_frag)"
+  },
+  {
+    "path": "game/world.py",
+    "line": 566,
+    "text": "def apply_resolution_world_updates(world: Dict[str, Any], resolution_updates: Dict[str, Any]) -> None:"
+  },
+  {
+    "path": "game/world.py",
+    "line": 574,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"apply_resolution_world_updates\")"
+  },
+  {
+    "path": "game/world.py",
+    "line": 625,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"reset_world_playthrough_state\")"
+  },
+  {
+    "path": "game/world_progression.py",
+    "line": 12,
+    "text": "from game.state_authority import WORLD_STATE, assert_owner_can_mutate_domain"
+  },
+  {
+    "path": "game/world_progression.py",
+    "line": 988,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"advance_progression_node\")"
+  },
+  {
+    "path": "game/world_progression.py",
+    "line": 1007,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"set_progression_node_value\")"
+  },
+  {
+    "path": "game/world_progression.py",
+    "line": 1025,
+    "text": "assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation=\"apply_progression_delta\")"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 69,
+    "text": "class ordered_turn:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 72,
+    "text": "def __init__(self, scope: str, *, mutating: bool, request_key: str | None = None, text: str = \"\"):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 75,
+    "text": "self.request_key = (request_key or \"\").strip() or None"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 88,
+    "text": "keys = [key for key in (self.request_key, self.text_key) if key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 91,
+    "text": "if key in lane.completed and self.request_key:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 93,
+    "text": "self.result = lane.completed[key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 96,
+    "text": "box = lane.inflight.get(key)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 112,
+    "text": "lane.inflight[key] = box"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 128,
+    "text": "lane.writer = True"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 143,
+    "text": "lane.writer = False"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 149,
+    "text": "if self.request_key and exc is None:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 150,
+    "text": "lane.completed[self.request_key] = self.result"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 151,
+    "text": "if len(lane.completed) > 32:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 152,
+    "text": "lane.completed.pop(next(iter(lane.completed)))"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 153,
+    "text": "for key in (self.request_key, self.text_key):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 155,
+    "text": "lane.inflight.pop(key, None)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 69,
+    "text": "class ordered_turn:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 72,
+    "text": "def __init__(self, scope: str, *, mutating: bool, request_key: str | None = None, text: str = \"\"):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 75,
+    "text": "self.request_key = (request_key or \"\").strip() or None"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 88,
+    "text": "keys = [key for key in (self.request_key, self.text_key) if key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 91,
+    "text": "if key in lane.completed and self.request_key:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 93,
+    "text": "self.result = lane.completed[key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 96,
+    "text": "box = lane.inflight.get(key)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 112,
+    "text": "lane.inflight[key] = box"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 128,
+    "text": "lane.writer = True"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 143,
+    "text": "lane.writer = False"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 149,
+    "text": "if self.request_key and exc is None:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 150,
+    "text": "lane.completed[self.request_key] = self.result"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 151,
+    "text": "if len(lane.completed) > 32:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 152,
+    "text": "lane.completed.pop(next(iter(lane.completed)))"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 153,
+    "text": "for key in (self.request_key, self.text_key):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 155,
+    "text": "lane.inflight.pop(key, None)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 69,
+    "text": "class ordered_turn:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 72,
+    "text": "def __init__(self, scope: str, *, mutating: bool, request_key: str | None = None, text: str = \"\"):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 75,
+    "text": "self.request_key = (request_key or \"\").strip() or None"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 88,
+    "text": "keys = [key for key in (self.request_key, self.text_key) if key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 91,
+    "text": "if key in lane.completed and self.request_key:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 93,
+    "text": "self.result = lane.completed[key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 96,
+    "text": "box = lane.inflight.get(key)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 112,
+    "text": "lane.inflight[key] = box"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 128,
+    "text": "lane.writer = True"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 143,
+    "text": "lane.writer = False"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 149,
+    "text": "if self.request_key and exc is None:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 150,
+    "text": "lane.completed[self.request_key] = self.result"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 151,
+    "text": "if len(lane.completed) > 32:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 152,
+    "text": "lane.completed.pop(next(iter(lane.completed)))"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 153,
+    "text": "for key in (self.request_key, self.text_key):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 155,
+    "text": "lane.inflight.pop(key, None)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 69,
+    "text": "class ordered_turn:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 72,
+    "text": "def __init__(self, scope: str, *, mutating: bool, request_key: str | None = None, text: str = \"\"):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 75,
+    "text": "self.request_key = (request_key or \"\").strip() or None"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 88,
+    "text": "keys = [key for key in (self.request_key, self.text_key) if key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 91,
+    "text": "if key in lane.completed and self.request_key:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 93,
+    "text": "self.result = lane.completed[key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 96,
+    "text": "box = lane.inflight.get(key)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 112,
+    "text": "lane.inflight[key] = box"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 128,
+    "text": "lane.writer = True"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 143,
+    "text": "lane.writer = False"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 149,
+    "text": "if self.request_key and exc is None:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 150,
+    "text": "lane.completed[self.request_key] = self.result"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 151,
+    "text": "if len(lane.completed) > 32:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 152,
+    "text": "lane.completed.pop(next(iter(lane.completed)))"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 153,
+    "text": "for key in (self.request_key, self.text_key):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 155,
+    "text": "lane.inflight.pop(key, None)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 69,
+    "text": "class ordered_turn:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 72,
+    "text": "def __init__(self, scope: str, *, mutating: bool, request_key: str | None = None, text: str = \"\"):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 75,
+    "text": "self.request_key = (request_key or \"\").strip() or None"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 88,
+    "text": "keys = [key for key in (self.request_key, self.text_key) if key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 91,
+    "text": "if key in lane.completed and self.request_key:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 93,
+    "text": "self.result = lane.completed[key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 96,
+    "text": "box = lane.inflight.get(key)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 112,
+    "text": "lane.inflight[key] = box"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 128,
+    "text": "lane.writer = True"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 143,
+    "text": "lane.writer = False"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 149,
+    "text": "if self.request_key and exc is None:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 150,
+    "text": "lane.completed[self.request_key] = self.result"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 151,
+    "text": "if len(lane.completed) > 32:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 152,
+    "text": "lane.completed.pop(next(iter(lane.completed)))"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 153,
+    "text": "for key in (self.request_key, self.text_key):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 155,
+    "text": "lane.inflight.pop(key, None)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 69,
+    "text": "class ordered_turn:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 72,
+    "text": "def __init__(self, scope: str, *, mutating: bool, request_key: str | None = None, text: str = \"\"):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 75,
+    "text": "self.request_key = (request_key or \"\").strip() or None"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 88,
+    "text": "keys = [key for key in (self.request_key, self.text_key) if key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 91,
+    "text": "if key in lane.completed and self.request_key:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 93,
+    "text": "self.result = lane.completed[key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 96,
+    "text": "box = lane.inflight.get(key)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 112,
+    "text": "lane.inflight[key] = box"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 128,
+    "text": "lane.writer = True"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 143,
+    "text": "lane.writer = False"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 149,
+    "text": "if self.request_key and exc is None:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 150,
+    "text": "lane.completed[self.request_key] = self.result"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 151,
+    "text": "if len(lane.completed) > 32:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 152,
+    "text": "lane.completed.pop(next(iter(lane.completed)))"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 153,
+    "text": "for key in (self.request_key, self.text_key):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 155,
+    "text": "lane.inflight.pop(key, None)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 69,
+    "text": "class ordered_turn:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 72,
+    "text": "def __init__(self, scope: str, *, mutating: bool, request_key: str | None = None, text: str = \"\"):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 75,
+    "text": "self.request_key = (request_key or \"\").strip() or None"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 88,
+    "text": "keys = [key for key in (self.request_key, self.text_key) if key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 91,
+    "text": "if key in lane.completed and self.request_key:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 93,
+    "text": "self.result = lane.completed[key]"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 96,
+    "text": "box = lane.inflight.get(key)"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 112,
+    "text": "lane.inflight[key] = box"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 128,
+    "text": "lane.writer = True"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 143,
+    "text": "lane.writer = False"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 149,
+    "text": "if self.request_key and exc is None:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 150,
+    "text": "lane.completed[self.request_key] = self.result"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 151,
+    "text": "if len(lane.completed) > 32:"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 152,
+    "text": "lane.completed.pop(next(iter(lane.completed)))"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 153,
+    "text": "for key in (self.request_key, self.text_key):"
+  },
+  {
+    "path": "game/integrated_play.py",
+    "line": 155,
+    "text": "lane.inflight.pop(key, None)"
+  }
+]

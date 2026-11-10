@@ -1,0 +1,399 @@
+{
+  "step_id": "T3",
+  "intent": "investigate footprints",
+  "player_input": "I want to investigate the footprints.",
+  "http_status": 200,
+  "api_latency_seconds": 3.297,
+  "player_facing_text": "Who or what do you want to investigate the footprints with, or how do you want to proceed?",
+  "engine": {
+    "ok": true,
+    "status": null,
+    "error": null,
+    "resolution_keys": [
+      "action_id",
+      "discovered_clues",
+      "kind",
+      "label",
+      "metadata",
+      "prompt",
+      "resolved_transition",
+      "state_changes",
+      "success",
+      "target_scene_id",
+      "world_updates"
+    ],
+    "action_type": null,
+    "intent": null,
+    "success": null,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "prompt": "I want to investigate the footprints.",
+    "noncombat_resolution": null,
+    "authoritative_mutation": false,
+    "resolution_metadata_keys": [
+      "authoritative_mutation",
+      "communication_mode",
+      "conversational_decision",
+      "gameplay_parser_invoked",
+      "live_chat_interpretation",
+      "mode_source",
+      "narration_invoked",
+      "performance",
+      "processing_outcome",
+      "provider_calls",
+      "resolver_invoked",
+      "stored_interpretation_bridge"
+    ],
+    "live_interpretation": {
+      "status": "blocked",
+      "reason": "clarification_required",
+      "eligibility_disposition": "NEEDS_CLARIFICATION",
+      "model_communication_mode": "CLARIFICATION",
+      "interpretation_status": "CLARIFICATION_REQUIRED",
+      "raw_interpretation": "{\"communication\":{\"recipient\":\"AMBIGUOUS\",\"purpose\":\"ACTION\",\"subject\":\"investigate footprints\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"CLARIFICATION_REQUIRED\",\"player_intent\":{\"summary\":\"Investigate the footprints\"},\"asserted_premises\":[{\"text\":\"The player wants to investigate footprints in the current scene.\"}],\"requested_outcomes\":[{\"text\":\"Clarify who or what the player intends to investigate the footprints with or how.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"leave_for_enter_cinderwatch\",\"leave_...[870 chars]",
+      "provider_requests": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "4d544ff8bccb445497610bd7bc3fe960",
+          "attempt_id": "1533f31fa05b4c79ab40b5386b055bcf",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-11-02T02:11:01.823014+00:00",
+          "time": "2026-11-02T02:11:04.899002+00:00",
+          "sequence": 4,
+          "admission": "admitted",
+          "budget_remaining": 6,
+          "sdk_retries": 0,
+          "host_retries": "disabled",
+          "sent": true,
+          "request_id": "resp_00aeb853102b1037006ae7f137d2d487d1b52d5b807b043d1b",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2679,
+          "output_tokens": 193,
+          "total_tokens": 2872,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2360.078
+        }
+      ],
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "player_intent": {
+          "summary": "Investigate the footprints"
+        },
+        "asserted_premises": [
+          {
+            "text": "The player wants to investigate footprints in the current scene.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarify who or what the player intends to investigate the footprints with or how.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "leave_for_enter_cinderwatch",
+            "leave_for_follow_the_missing_patrol_rumor",
+            "notice_board",
+            "tavern_runner"
+          ],
+          "unresolved_references": [
+            "footprints"
+          ]
+        },
+        "clarification_question": "Who or what do you want to investigate the footprints with, or how do you want to proceed?",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        },
+        "communication": {
+          "recipient": "AMBIGUOUS",
+          "purpose": "ACTION",
+          "subject": "investigate footprints",
+          "evidence_refs": []
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": ""
+        },
+        "public_evidence": {}
+      }
+    },
+    "tags": [
+      "conversational_orchestration",
+      "clarify",
+      "non_mutating"
+    ],
+    "hard_valid": true,
+    "gm_metadata_keys": [
+      "accepted_response"
+    ],
+    "missing_observability": [
+      "selected_action"
+    ]
+  },
+  "persisted_engine": {
+    "log_index": 3,
+    "player_input": "I want to investigate the footprints.",
+    "player_facing_text": "Who or what do you want to investigate the footprints with, or how do you want to proceed?",
+    "intent_classification": null,
+    "resolution_kind": "conversational_clarify",
+    "action_id": "conversational_clarify",
+    "action_type": null,
+    "success": null,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "originating_scene_id": null,
+    "prompt": "I want to investigate the footprints.",
+    "clocks_changed": null,
+    "discovered_clues_added": null,
+    "approved_state_updates": null,
+    "rejected_state_updates": null,
+    "opening_recovery_debug": null,
+    "provenance": "authorized_host_speech",
+    "hard_valid": true,
+    "response_type_contract": null
+  },
+  "provider": [
+    {
+      "event": "admitted",
+      "stage": null,
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null
+    },
+    {
+      "event": "dispatch_attempted",
+      "stage": null,
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "latency_ms": null,
+      "completion_status": null,
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null
+    },
+    {
+      "event": "completed",
+      "stage": null,
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "input_tokens": 2679,
+      "output_tokens": 193,
+      "total_tokens": 2872,
+      "latency_ms": 2360.078,
+      "completion_status": "completed",
+      "error": null,
+      "classification": null,
+      "provider_status": null,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": null,
+      "admission": "admitted",
+      "semantic_classification": null,
+      "semantic_reasons": null,
+      "classification_reason": null,
+      "opening_accepted": null,
+      "gameplay_committed": null,
+      "recovery_classification": null,
+      "rejection_reason": null,
+      "final_validation_passed": null,
+      "structured_validation_result": null,
+      "narration_length": null,
+      "declaration_count": null,
+      "logical_operation": null,
+      "opening_recovery": null
+    }
+  ],
+  "provider_completed_count": 1,
+  "state_before": {
+    "campaign_title": "Ashen Thrones",
+    "campaign_run_id": "93940d8e2321312dad4c7323",
+    "session_id": "93940d8e2321312dad4c7323",
+    "campaign_started": true,
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 1
+    },
+    "turn_counter": 1,
+    "chat_history_len": 0,
+    "log_entries": 3,
+    "discovered_clues_by_scene": {},
+    "clue_knowledge": {},
+    "deferred_intentions": null,
+    "deferred_steps": null,
+    "time_pressure": 1,
+    "active_quests": null,
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "hp_current": 8,
+      "hp_max": 8,
+      "gold": null,
+      "inventory_count": 1,
+      "inventory_ids": [
+        "spellbook"
+      ]
+    },
+    "world_clue_ids": [],
+    "documents_present": [
+      "campaign.json",
+      "character.json",
+      "combat.json",
+      "conditions.json",
+      "scenes/frontier_gate.json",
+      "scenes/market_quarter.json",
+      "scenes/old_milestone.json",
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "observability_gaps": [
+      "active_quests"
+    ]
+  },
+  "state_after": {
+    "campaign_title": "Ashen Thrones",
+    "campaign_run_id": "93940d8e2321312dad4c7323",
+    "session_id": "93940d8e2321312dad4c7323",
+    "campaign_started": true,
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 1
+    },
+    "turn_counter": 1,
+    "chat_history_len": 0,
+    "log_entries": 4,
+    "discovered_clues_by_scene": {},
+    "clue_knowledge": {},
+    "deferred_intentions": null,
+    "deferred_steps": null,
+    "time_pressure": 1,
+    "active_quests": null,
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "hp_current": 8,
+      "hp_max": 8,
+      "gold": null,
+      "inventory_count": 1,
+      "inventory_ids": [
+        "spellbook"
+      ]
+    },
+    "world_clue_ids": [],
+    "documents_present": [
+      "campaign.json",
+      "character.json",
+      "combat.json",
+      "conditions.json",
+      "scenes/frontier_gate.json",
+      "scenes/market_quarter.json",
+      "scenes/old_milestone.json",
+      "session.json",
+      "session_log.jsonl",
+      "world.json"
+    ],
+    "observability_gaps": [
+      "active_quests"
+    ]
+  },
+  "state_delta": {
+    "log_entries": {
+      "before": 3,
+      "after": 4
+    }
+  },
+  "changed_documents": [
+    "session.json",
+    "session_log.jsonl"
+  ],
+  "usage_after": {
+    "dispatched_requests": 4,
+    "input_tokens": 34242,
+    "output_tokens": 2065,
+    "total_tokens": 36307,
+    "stopped": false,
+    "stop_reason": "",
+    "pending_requests": 0
+  }
+}

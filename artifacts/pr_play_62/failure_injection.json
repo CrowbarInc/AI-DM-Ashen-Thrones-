@@ -1,0 +1,2156 @@
+[
+  {
+    "name": "provider_unavailable",
+    "before_clues": null,
+    "after_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I examine the notice board.",
+      "status_code": 200,
+      "http_ms": 1690.341,
+      "facing": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "3b474d8b49a4e4d9dfe205f4",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": {
+        "eligible": true,
+        "diagnostic": "VALIDATION_ERROR",
+        "error_type": "RuntimeError",
+        "mode": "quarantined_integrated",
+        "used_fallback": true,
+        "player_facing_published": null,
+        "decision": null,
+        "semantic_decision": null,
+        "coverage_decision": null,
+        "legacy_hard_valid": null,
+        "raw_provider_text": null,
+        "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "provider_requests": 0,
+        "validation_ms": null,
+        "total_integrated_ms": 8.761,
+        "provider_latency_ms": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "model": null,
+        "anchors": [
+          {
+            "order": 0,
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": "published",
+      "facing": "You examine the board again and nothing new is established. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "decision": "PASS"
+    }
+  },
+  {
+    "name": "provider_timeout",
+    "before_clues": null,
+    "after_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I examine the notice board.",
+      "status_code": 200,
+      "http_ms": 2012.341,
+      "facing": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "05b4efd830da0366980e8d83",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": {
+        "eligible": true,
+        "diagnostic": "provider_timeout",
+        "error_type": "TimeoutError",
+        "mode": "quarantined_integrated",
+        "used_fallback": true,
+        "player_facing_published": null,
+        "decision": null,
+        "semantic_decision": null,
+        "coverage_decision": null,
+        "legacy_hard_valid": null,
+        "raw_provider_text": null,
+        "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "provider_requests": 0,
+        "validation_ms": null,
+        "total_integrated_ms": 0.269,
+        "provider_latency_ms": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "model": null,
+        "anchors": [
+          {
+            "order": 0,
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": "published",
+      "facing": "You examine the board again and nothing new is established. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "decision": "PASS"
+    }
+  },
+  {
+    "name": "empty",
+    "before_clues": null,
+    "after_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I examine the notice board.",
+      "status_code": 200,
+      "http_ms": 2033.337,
+      "facing": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "17b9708ce84e3bb6df9c610c",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": {
+        "eligible": true,
+        "diagnostic": "VALIDATION_ERROR",
+        "error_type": "ValueError",
+        "mode": "quarantined_integrated",
+        "used_fallback": true,
+        "player_facing_published": null,
+        "decision": null,
+        "semantic_decision": null,
+        "coverage_decision": null,
+        "legacy_hard_valid": null,
+        "raw_provider_text": "",
+        "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "provider_requests": 0,
+        "validation_ms": 0.007,
+        "total_integrated_ms": 0.276,
+        "provider_latency_ms": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "model": null,
+        "anchors": [
+          {
+            "order": 0,
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": "published",
+      "facing": "You examine the board again and nothing new is established. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "decision": "PASS"
+    }
+  },
+  {
+    "name": "malformed",
+    "before_clues": null,
+    "after_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I examine the notice board.",
+      "status_code": 200,
+      "http_ms": 1986.0,
+      "facing": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "10343caeff6d46de0044ad0e",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": {
+        "eligible": true,
+        "diagnostic": "VALIDATION_ERROR",
+        "error_type": "ValueError",
+        "mode": "quarantined_integrated",
+        "used_fallback": true,
+        "player_facing_published": null,
+        "decision": null,
+        "semantic_decision": null,
+        "coverage_decision": null,
+        "legacy_hard_valid": null,
+        "raw_provider_text": null,
+        "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "provider_requests": 0,
+        "validation_ms": 0.007,
+        "total_integrated_ms": 0.286,
+        "provider_latency_ms": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "model": null,
+        "anchors": [
+          {
+            "order": 0,
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": "published",
+      "facing": "You examine the board again and nothing new is established. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "decision": "PASS"
+    }
+  },
+  {
+    "name": "validation_fail",
+    "before_clues": null,
+    "after_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I examine the notice board.",
+      "status_code": 200,
+      "http_ms": 1972.754,
+      "facing": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "9e92c71b8aff1d72d949f5ab",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": {
+        "eligible": true,
+        "diagnostic": "FAIL",
+        "error_type": null,
+        "mode": "quarantined_integrated",
+        "used_fallback": true,
+        "player_facing_published": null,
+        "decision": "FAIL",
+        "semantic_decision": "FAIL",
+        "coverage_decision": "REVIEW_REQUIRED",
+        "legacy_hard_valid": false,
+        "raw_provider_text": "You find a silver key beneath the board.",
+        "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "provider_requests": 0,
+        "validation_ms": 25.952,
+        "total_integrated_ms": 26.228,
+        "provider_latency_ms": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "model": null,
+        "anchors": [
+          {
+            "order": 0,
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": "published",
+      "facing": "You examine the board again and nothing new is established. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "decision": "PASS"
+    }
+  },
+  {
+    "name": "review_required",
+    "before_clues": null,
+    "after_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I examine the notice board.",
+      "status_code": 200,
+      "http_ms": 1652.536,
+      "facing": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "d8c40b96c12f450fa283f191",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": {
+        "eligible": true,
+        "diagnostic": "REVIEW_REQUIRED",
+        "error_type": null,
+        "mode": "quarantined_integrated",
+        "used_fallback": true,
+        "player_facing_published": null,
+        "decision": "REVIEW_REQUIRED",
+        "semantic_decision": "PASS",
+        "coverage_decision": "REVIEW_REQUIRED",
+        "legacy_hard_valid": true,
+        "raw_provider_text": "You examine the evidence carefully.",
+        "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "provider_requests": 0,
+        "validation_ms": 7.505,
+        "total_integrated_ms": 7.777,
+        "provider_latency_ms": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "model": null,
+        "anchors": [
+          {
+            "order": 0,
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": "published",
+      "facing": "You examine the board again and nothing new is established. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "decision": "PASS"
+    }
+  },
+  {
+    "name": "validation_error",
+    "before_clues": null,
+    "after_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I examine the notice board.",
+      "status_code": 200,
+      "http_ms": 1885.447,
+      "facing": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "1fab1e428f134714430244bb",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": {
+        "eligible": true,
+        "diagnostic": "VALIDATION_ERROR",
+        "error_type": "ValueError",
+        "mode": "quarantined_integrated",
+        "used_fallback": true,
+        "player_facing_published": null,
+        "decision": null,
+        "semantic_decision": null,
+        "coverage_decision": null,
+        "legacy_hard_valid": null,
+        "raw_provider_text": null,
+        "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "provider_requests": 0,
+        "validation_ms": 0.006,
+        "total_integrated_ms": 0.296,
+        "provider_latency_ms": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "model": null,
+        "anchors": [
+          {
+            "order": 0,
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": "published",
+      "facing": "You examine the board again and nothing new is established. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "decision": "PASS"
+    }
+  },
+  {
+    "name": "unauthorized_inventory",
+    "before_clues": null,
+    "after_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I examine the notice board.",
+      "status_code": 200,
+      "http_ms": 2067.529,
+      "facing": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "821267abab45807dfe524903",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": {
+        "eligible": true,
+        "diagnostic": "FAIL",
+        "error_type": null,
+        "mode": "quarantined_integrated",
+        "used_fallback": true,
+        "player_facing_published": null,
+        "decision": "FAIL",
+        "semantic_decision": "FAIL",
+        "coverage_decision": "REVIEW_REQUIRED",
+        "legacy_hard_valid": false,
+        "raw_provider_text": "You find a silver key beneath the board.",
+        "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "provider_requests": 0,
+        "validation_ms": 16.804,
+        "total_integrated_ms": 17.073,
+        "provider_latency_ms": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "model": null,
+        "anchors": [
+          {
+            "order": 0,
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": "published",
+      "facing": "You examine the board again and nothing new is established. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "decision": "PASS"
+    }
+  },
+  {
+    "name": "unauthorized_persistent",
+    "before_clues": null,
+    "after_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I examine the notice board.",
+      "status_code": 200,
+      "http_ms": 1901.54,
+      "facing": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "26f3ffcb6ee998e42f6dfd1e",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": {
+        "eligible": true,
+        "diagnostic": "FAIL",
+        "error_type": null,
+        "mode": "quarantined_integrated",
+        "used_fallback": true,
+        "player_facing_published": null,
+        "decision": "FAIL",
+        "semantic_decision": "FAIL",
+        "coverage_decision": "REVIEW_REQUIRED",
+        "legacy_hard_valid": false,
+        "raw_provider_text": "The guard captain dies where he stands. The eastern gate remains open.",
+        "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "provider_requests": 0,
+        "validation_ms": 28.722,
+        "total_integrated_ms": 28.989,
+        "provider_latency_ms": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "model": null,
+        "anchors": [
+          {
+            "order": 0,
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": "published",
+      "facing": "You examine the board again and nothing new is established. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "decision": "PASS"
+    }
+  },
+  {
+    "name": "missing_discovery",
+    "before_clues": null,
+    "after_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I examine the notice board.",
+      "status_code": 200,
+      "http_ms": 1685.14,
+      "facing": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": "discover_clue",
+        "success": true,
+        "action_id": "notice_board",
+        "interactable_id": "notice_board",
+        "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+        "discovered_clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_changes": {
+          "clue_revealed": true,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "709b7d43d0a9d77c374f7a51",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [
+          "The missing patrol was last seen taking the northwest mud track past the crates."
+        ],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": {
+        "eligible": true,
+        "diagnostic": "REVIEW_REQUIRED",
+        "error_type": null,
+        "mode": "quarantined_integrated",
+        "used_fallback": true,
+        "player_facing_published": null,
+        "decision": "REVIEW_REQUIRED",
+        "semantic_decision": "PASS",
+        "coverage_decision": "REVIEW_REQUIRED",
+        "legacy_hard_valid": true,
+        "raw_provider_text": "You examine the evidence carefully.",
+        "assembled": "You examine the notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+        "provider_requests": 0,
+        "validation_ms": 1.191,
+        "total_integrated_ms": 1.475,
+        "provider_latency_ms": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "model": null,
+        "anchors": [
+          {
+            "order": 0,
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": "published",
+      "facing": "You examine the board again and nothing new is established. The missing patrol was last seen taking the northwest mud track past the crates.",
+      "decision": "PASS"
+    }
+  },
+  {
+    "name": "take_key",
+    "before_clues": null,
+    "after_clues": [],
+    "inventory_unchanged": true,
+    "hp_unchanged": true,
+    "npcs_unchanged": false,
+    "scene_unchanged": true,
+    "action": {
+      "input": "I take the silver key from the notice board.",
+      "status_code": 200,
+      "http_ms": 1255.412,
+      "facing": "Provider calls are disabled for this run, so no live narration was generated.",
+      "published_marker": null,
+      "mechanical": {
+        "kind": null,
+        "success": null,
+        "action_id": null,
+        "interactable_id": null,
+        "clue_text": null,
+        "discovered_clues": null,
+        "state_changes": {
+          "clue_revealed": null,
+          "already_searched": null,
+          "items_added": null,
+          "npc_changes": null
+        }
+      },
+      "authority": {
+        "campaign_run_id": "cbaf1c4cac82a66723f83e2a",
+        "scene": "frontier_gate",
+        "visited": [
+          "frontier_gate"
+        ],
+        "player": "galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "equipment": null,
+        "clues": [],
+        "state_flags": {},
+        "npcs": {
+          "guard_captain": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          },
+          "tavern_runner": {
+            "attitude": 0,
+            "trust": 0,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [],
+            "last_interaction_turn": null
+          }
+        },
+        "quests": [
+          {
+            "secret": "CANARY_QUEST_TWIST"
+          }
+        ],
+        "conditions": {
+          "dazed": {
+            "name": "Dazed",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true
+            }
+          },
+          "shaken": {
+            "name": "Shaken",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "sickened": {
+            "name": "Sickened",
+            "kind": "condition",
+            "default_effects": {
+              "attack_penalty": 2,
+              "damage_penalty": 2,
+              "save_penalty": 2,
+              "skill_penalty": 2
+            }
+          },
+          "blinded": {
+            "name": "Blinded",
+            "kind": "condition",
+            "default_effects": {
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "stunned": {
+            "name": "Stunned",
+            "kind": "condition",
+            "default_effects": {
+              "no_actions": true,
+              "ac_penalty": 2,
+              "lose_dex_to_ac": true
+            }
+          },
+          "risky_strike": {
+            "name": "Risky Strike",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "defensive_stance": {
+            "name": "Defensive Stance",
+            "kind": "combat_toggle",
+            "default_effects": {}
+          },
+          "shield": {
+            "name": "Shield",
+            "kind": "spell_effect",
+            "default_effects": {
+              "ac_bonus": 4
+            }
+          }
+        },
+        "combat": {
+          "in_combat": false,
+          "round": 0,
+          "initiative_order": [],
+          "turn_index": 0,
+          "active_actor_id": null,
+          "player_turn_used": false
+        },
+        "world_flags": {},
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        }
+      },
+      "quarantine": null
+    },
+    "continuation": {
+      "status_code": 200,
+      "published": null,
+      "facing": "The missing patrol was last seen taking the northwest mud track past the crates. Someone jabs at the board in Cinderwatch Gate District, impatient with anyone who reads too long.",
+      "decision": "FAIL"
+    }
+  }
+]

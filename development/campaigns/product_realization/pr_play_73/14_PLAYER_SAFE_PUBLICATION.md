@@ -1,0 +1,1 @@
+Player HTTP responses are still projected to player-facing text. Development and HTTP scans reject `hidden_facts`, `gm_notes`, `proposed_record`, and `SENTINEL_` in the serialized body. Hidden-information requests are declined as concealed. The browser pages show the same player sentences, not internal proposals.

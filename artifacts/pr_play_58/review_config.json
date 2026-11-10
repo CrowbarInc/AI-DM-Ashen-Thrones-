@@ -1,0 +1,564 @@
+{
+  "campaign_id": "pr_play_58",
+  "campaign_name": "PR-PLAY-58 — Semantic Outcome Coverage",
+  "campaign_date": "2026-11-03",
+  "purpose": "Recognize authorized semantic paraphrases while preserving quarantine and combined authority gates.",
+  "objective_status": "C — FAIL / REMEDIATION REQUIRED",
+  "executive_summary": "# PR-PLAY-58 — C — FAIL / REMEDIATION REQUIRED\n\nBounded semantic coverage improves the eight original PR-PLAY-57 samples from 4/8 to 8/8 covered. Combined decisions improve from 4 PASS / 1 FAIL / 3 REVIEW_REQUIRED to 7 PASS / 1 FAIL. A1 remains rejected for the unsupported \"new, urgent update\" discovery. Exact UTF-8 provider text and authority are preserved; all archived previous combined decisions reproduce.\n\nThe single frozen holdout pass finds a critical false acceptance: H41 appends \"The gate is now permanently open.\" to the authorized patrol fact and receives PASS. This is an unsupported persistent consequence. Implementation remains frozen after evaluation; no holdout tuning or rerun occurred. A safe player-facing experiment is not authorized.\n\nDevelopment: 43 cases; legitimate combined acceptance 14/15 (coverage 15/15); omissions blocked 6/6; contradictions blocked 11/11; expansions rejected 9/9; ambiguous review 2/2. Zero critical false acceptances; one legacy false rejection; 18 reviews.\n\nHoldout: 50 cases; legitimate acceptance 14/15; omissions blocked 10/10; contradictions blocked 10/10; expansions rejected 9/10; ambiguous review 5/5. One critical false acceptance, one false rejection, 25 reviews, zero validation errors. Most contradictions are quarantined for review, not explicitly rejected; exact confusion matrices remain available. Same-session authored holdout is not independent blind validation.\n\nWarmed coverage: 0.214 ms average / 0.713 ms maximum. Combined: 4.399 / 128.673 ms. 800 measurements per series during local regression activity. Zero provider requests / tokens.\n\nRegression: 601 passed / 3 failed / 0 errors / 0 skipped of 604 focused cases. Final-source checks: 204 passed of 204. PR55 holdout wrapper and known broader results are recorded separately. No campaign state, deterministic response, quarantine gate, protected fixture, commit or push change.\n\nPrimary next step: repair the unsupported persistent-consequence detection gap exposed by H41 in a subsequent bounded validation cycle. Preserve this failed holdout and quarantine.\n",
+  "primary_report": "artifacts/pr_play_58/01_EXECUTIVE_SUMMARY.md",
+  "evidence_packets": [
+    "artifacts/pr_play_58"
+  ],
+  "max_file_bytes": 33554432,
+  "changes": {
+    "production": [
+      "No gameplay or publication change."
+    ],
+    "validation": [
+      "Bounded movement/uncertainty/status coverage leaf; narrow consequential assertion controls in existing PR55 owner."
+    ],
+    "tooling": [
+      "Frozen corpora, one-pass holdout runner, baseline replay, local measurements and integrity verification."
+    ],
+    "documentation": [
+      "18 requested campaign reports."
+    ],
+    "generated_artifacts": [
+      "Raw original samples, all layer audits and review export."
+    ]
+  },
+  "testing": {
+    "focused": "601 passed / 3 known failures of 604; final frozen-source lane 204/204 passed (overlaps focused lane).",
+    "broader": "PR55 holdout wrapper passed; nine known authority-assurance metadata failures reproduced.",
+    "full_suite": "Not executed.",
+    "runtime_validation": "Eight fixed local sample replays, 43 development controls and one frozen 50-case holdout pass.",
+    "model_runtime_boundary": "No provider requests; quarantine remains mandatory.",
+    "new_regressions": "No unexplained new regression-test failure; H41 semantic false acceptance remains.",
+    "pre_existing_failures": "Three focused failures and nine hard_validation_attempt_1 failures."
+  },
+  "decisions_requiring_human_review": [
+    "Review C verdict and preserved H41 failure; no action or player-facing enablement requested."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "H41 unsupported permanent gate opening passes; H12 legitimate repeat is reviewed; D15 legacy rejection remains."
+    ],
+    "pre_existing": [
+      "Three focused and nine broader known regression failures."
+    ]
+  },
+  "missing_concepts": [
+    "General assertion entailment, grammatical scope and robust temporal/coreference reasoning."
+  ],
+  "does_not_prove": [
+    "Semantic completeness, independent blind holdout validation, live gameplay quality, ATGB score or safe player-facing narration."
+  ],
+  "recommended_next_step": "Repair unsupported persistent-consequence detection exposed by H41 in a subsequent bounded validation cycle; preserve quarantine.",
+  "self_contained_review_test": "All 18 reports, fixed corpora/authority, result audits, incremental source diff and regression summaries present; ZIP CRC and included-file hashes verified.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_58/01_EXECUTIVE_SUMMARY.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/02_BASELINE_AND_SCOPE.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/03_PR_PLAY_57_FAILURE_ANALYSIS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/04_SEMANTIC_COVERAGE_CONTRACT.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/05_IMPLEMENTATION_CHANGES.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/06_PARAPHRASE_RECOGNITION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/07_UNCERTAINTY_PRESERVATION.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/08_REPEATED_INVESTIGATION.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/09_NEGATIVE_CONTROL_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/10_POSITIVE_CONTROL_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/11_FIXED_SAMPLE_REEVALUATION.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/12_HOLDOUT_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/13_COMBINED_VALIDATION_INTEGRITY.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/14_PERFORMANCE_AND_USAGE.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/15_STATE_AND_QUARANTINE_INTEGRITY.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/16_REGRESSION_RESULTS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/17_LIMITATIONS_AND_OPEN_RISKS.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/18_NEXT_SESSION.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/broader_hard_validation_final.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/broader_hard_validation_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/consequential_before.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/development_corpus.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/development_error_examples.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/development_initial.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/development_results.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/development_tests.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/entry_hashes.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/entry_status.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/evaluate.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/evidence_manifest.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/evidence_summary.md",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/export_scan.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/final_frozen_source_final.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/final_frozen_source_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/final_source_tests.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/fixed_results.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/fixed_results_invalid_windows_decoding.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/fixed_samples.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/focused_final.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/focused_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/holdout.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/holdout_error_examples.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/holdout_final.txt",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/holdout_final.xml",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/holdout_manifest.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/holdout_results.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/holdout_started.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/implementation.diff",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/implementation_frozen.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/integrated_before.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/integrity.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/measure.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/metrics.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/package_review.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/performance.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/prepare.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/previous_coverage.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/previous_decisions_original.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/raw_provider_responses_original.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/raw_text_integrity.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/regression_summary_final.json",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": true
+    },
+    {
+      "path": "artifacts/pr_play_58/report.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "artifacts/pr_play_58/run_regression.py",
+      "role": "campaign_evidence",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/anchored_investigation_narration.py",
+      "role": "source",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/consequential_narration_validation.py",
+      "role": "source",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/integrated_investigation_narration.py",
+      "role": "source",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/mandatory_outcome_coverage.py",
+      "role": "source",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/offline_investigation_projection.py",
+      "role": "source",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "game/quarantined_investigation_narration.py",
+      "role": "source",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/pr_play_58_development.py",
+      "role": "source",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_57_integrated_narration.py",
+      "role": "source",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    },
+    {
+      "path": "tests/test_pr_play_58_semantic_coverage.py",
+      "role": "source",
+      "why": "Explicit PR58 change, original evidence or validation result.",
+      "human_review_required": true,
+      "behavioral_evidence": false
+    }
+  ]
+}

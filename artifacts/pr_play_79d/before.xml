@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="8" time="45.465" timestamp="2026-11-08T07:18:44.431977-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_66_publication" name="test_publication_http[no_new]" time="6.274"><failure message="KeyError: 'publication'">tests\test_pr_play_66_publication.py:123: in test_publication_http
+    assert trace['publication']['invariant']=='PASS'
+           ^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'publication'</failure></testcase><testcase classname="tests.test_pr_play_66_publication" name="test_publication_http[continuity]" time="3.012"><failure message="KeyError: 'publication'">tests\test_pr_play_66_publication.py:123: in test_publication_http
+    assert trace['publication']['invariant']=='PASS'
+           ^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'publication'</failure></testcase><testcase classname="tests.test_pr_play_66_publication" name="test_publication_http[fast_path]" time="2.230"><failure message="KeyError: 'publication'">tests\test_pr_play_66_publication.py:123: in test_publication_http
+    assert trace['publication']['invariant']=='PASS'
+           ^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'publication'</failure></testcase><testcase classname="tests.test_pr_play_61_player_facing" name="test_four_actions_keep_authority_and_recover" time="6.630"><failure message="AssertionError: assert 'The missing patrol was last seen taking the northwest mud track past the crates.' in 'You examine the notice board again. The examination adds nothing new to what you already know.'">tests\test_pr_play_61_player_facing.py:184: in test_four_actions_keep_authority_and_recover
+    assert ROUTE in played[2]["gm_output"]["player_facing_text"]
+E   AssertionError: assert 'The missing patrol was last seen taking the northwest mud track past the crates.' in 'You examine the notice board again. The examination adds nothing new to what you already know.'</failure></testcase><testcase classname="tests.test_pr_play_62_investigation_quality" name="test_action_specific_fallback_and_recovery" time="6.903" /><testcase classname="tests.test_pr_play_47_controlled_renderer" name="test_matrix[5]" time="0.019"><failure message="AssertionError: assert {'id': 'known....', ...}, ...} == {'id': 'known....', ...}, ...}&#10;  &#10;  Omitting 6 identical items, use -vv to show&#10;  Differing items:&#10;  {'resolution': {'kind': 'already_searched', 'action_id': 'rubbing', 'label': 'rubbing', 'prompt': 'I examine the rubbing.', ...}} != {'resolution': {'kind': 'already_searched', 'action_id': 'rubbing', 'label': 'rubbing', 'prompt': 'I examine the rubbing.', ...}}&#10;  Use -v to get more diff">tests\test_pr_play_47_controlled_renderer.py:156: in test_matrix
+    assert row == original
+E   AssertionError: assert {'id': 'known....', ...}, ...} == {'id': 'known....', ...}, ...}
+E     
+E     Omitting 6 identical items, use -vv to show
+E     Differing items:
+E     {'resolution': {'kind': 'already_searched', 'action_id': 'rubbing', 'label': 'rubbing', 'prompt': 'I examine the rubbing.', ...}} != {'resolution': {'kind': 'already_searched', 'action_id': 'rubbing', 'label': 'rubbing', 'prompt': 'I examine the rubbing.', ...}}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_pr_play_69_target_references" name="test_repeat_sequence[structured]" time="4.407" /><testcase classname="tests.test_pr_play_69_target_references" name="test_repeat_sequence[chat]" time="3.648" /></testsuite></testsuites>

@@ -1,0 +1,3 @@
+# PR-PLAY-32 dialogue quality
+
+No actual opening, dialogue, clarification, travel or examination narration was produced. Each requested quality dimension—conversational relevance, conversational continuity, investigation continuity, clarification quality, travel narration, investigation narration, narrative consistency, agency, pacing, mechanical leakage and overall playability—is **NOT EVALUATED**. PASS/PARTIAL/FAIL cannot be assigned honestly without transcript evidence. Gameplay success and failure are both unestablished; overall experiment verdict D reflects instrumentation, not dialogue quality.

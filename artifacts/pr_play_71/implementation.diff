@@ -1,0 +1,266 @@
+--- entry/game/api.py
++++ final/game/api.py
+@@ -4493,8 +4493,18 @@
+ 
+ def _finalize_investigation_publication(gm, canonical_gm, response_payload, resolution, session, player_text):
+     """Shared post-persistence PR66 boundary for chat and structured actions."""
+-    from game.authored_consequences import trusted_text
++    from game.authored_consequences import trusted_text, enabled_for_session
+     text = trusted_text(resolution)
++    from game.quarantined_investigation_narration import experimental_publication_enabled
++    optional_publication = (os.environ.get('ASHEN_EXPERIMENTAL_AUTHORITATIVE_DISCLOSURE', '').strip() == '1'
++                            and experimental_publication_enabled(
++                                str(session.get('campaign_run_id') or session.get('session_id') or '')))
++    if not text and enabled_for_session(session) and not optional_publication:
++        # The enrolled branch lifecycle requires its prerequisite discovery to
++        # reach the player even when optional AI presentation is disabled.
++        # Reuse the existing current-resolver-only disclosure contract.
++        from game.quarantined_investigation_narration import current_lifecycle_disclosure
++        text = current_lifecycle_disclosure(resolution, player_text)
+     if text:
+         for item in (gm, canonical_gm, response_payload.get('gm_output')):
+             if isinstance(item, dict):
+--- entry/game/authored_consequences.py
++++ final/game/authored_consequences.py
+@@ -6,12 +6,20 @@
+ 
+ GATE = 'ASHEN_EXPERIMENTAL_BRANCHING'
+ SESSION = 'ASHEN_EXPERIMENTAL_BRANCHING_SESSION'
++NEW_CAMPAIGNS = 'ASHEN_EXPERIMENTAL_BRANCHING_NEW_CAMPAIGNS'
++ENROLLMENT = '_experimental_branching_campaign'
+ FIXTURE = Path(__file__).resolve().parents[1] / 'experiments/pr_play_70/scene_actions.json'
+ 
+ 
++def enabled_for_session(session):
++    sid = str(session.get('campaign_run_id') or session.get('session_id') or '')
++    enrolled = (os.environ.get(NEW_CAMPAIGNS) == '1'
++                and session.get(ENROLLMENT) == sid)
++    return bool(os.environ.get(GATE) == '1' and sid and (os.environ.get(SESSION) == sid or enrolled))
++
++
+ def overlay(scene, session):
+-    sid = str(session.get('campaign_run_id') or session.get('session_id') or '')
+-    if os.environ.get(GATE) != '1' or not sid or os.environ.get(SESSION) != sid:
++    if not enabled_for_session(session):
+         return scene
+     actions = json.loads(FIXTURE.read_text(encoding='utf-8')).get(scene.get('scene', {}).get('id'), [])
+     result = copy.deepcopy(scene)
+--- entry/game/campaign_reset.py
++++ final/game/campaign_reset.py
+@@ -39,21 +39,40 @@
+     from game.storage import _runtime_persistence_guard
+ 
+     with _runtime_persistence_guard("new_campaign_hard_reset"):
+-        session = load_session()
+-        # Root replacement: stale keys from older engines cannot survive.
+-        reset_session_state(session)
+-        save_session(session)
++        from game import storage
++        targets = (storage.SESSION_PATH, storage.WORLD_PATH, storage.COMBAT_PATH, storage.SESSION_LOG_PATH)
++        originals = {path: storage._read_bytes_if_exists(path) for path in targets}
++        try:
++            session = load_session()
++            # Root replacement: stale keys from older engines cannot survive.
++            reset_session_state(session)
++            # Explicit opt-in binds only this newly created identity.
++            import os
++            from game.authored_consequences import GATE, NEW_CAMPAIGNS, ENROLLMENT
++            if os.environ.get(GATE) == '1' and os.environ.get(NEW_CAMPAIGNS) == '1':
++                session[ENROLLMENT] = session['campaign_run_id']
++            save_session(session)
+ 
+-        world = load_world()
+-        reset_world_playthrough_state(world)
+-        save_world(world)
++            world = load_world()
++            reset_world_playthrough_state(world)
++            save_world(world)
+ 
+-        combat = load_combat()
+-        combat.clear()
+-        combat.update(create_fresh_combat_state())
+-        save_combat(combat)
+-
+-        clear_log()
++            combat = load_combat()
++            combat.clear()
++            combat.update(create_fresh_combat_state())
++            save_combat(combat)
++            clear_log()
++        except Exception:
++            # Match snapshot restore's validate/commit recovery convention. Do
++            # not replace an unchanged locked file while restoring prior state.
++            for path, raw in reversed(list(originals.items())):
++                if storage._read_bytes_if_exists(path) == raw:
++                    continue
++                if raw is None:
++                    path.unlink(missing_ok=True)
++                else:
++                    storage._atomic_write_bytes(path, raw)
++            raise
+     # Invariant (NC2): New Campaign is a silent reset — no persisted transcript rows until a turn runs.
+     tail = load_log()
+     if tail:
+--- entry/game/quarantined_investigation_narration.py
++++ final/game/quarantined_investigation_narration.py
+@@ -679,6 +679,16 @@
+     path.write_text(json.dumps(evidence, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+ 
+ 
++def current_lifecycle_disclosure(resolution, player_text):
++    """Trusted current-result text for an enrolled lifecycle, without AI prose."""
++    from game import integrated_investigation_narration as integrated
++    hook = build_hook_input(resolution=resolution, scene={}, known_clue_texts=(), player_text=player_text)
++    if not hook.get('eligible'):
++        return None
++    _contract, disclosure = integrated.outcome_contract(hook)
++    return integrated.trusted_disclosure(disclosure)
++
++
+ def experimental_publication_enabled(session_id: str | None) -> bool:
+     """Default off. Requires the existing integrated quarantine gate and one session id.
+ 
+--- entry/game/storage.py
++++ final/game/storage.py
+@@ -26,6 +26,7 @@
+ import os
+ import secrets
+ import threading
++import time
+ from contextlib import contextmanager
+ from typing import Any, Dict, List, Optional
+ 
+@@ -136,7 +137,16 @@
+             f.write(content)
+             f.flush()
+             os.fsync(f.fileno())
+-        os.replace(tmp, path)
++        # Windows readers (including file scanners) can briefly deny replacement.
++        # Retry only the same prepared rename, never its enclosing gameplay turn.
++        for delay in (0.01, 0.03, 0.09, None):
++            try:
++                os.replace(tmp, path)
++                break
++            except PermissionError as exc:
++                if getattr(exc, 'winerror', None) != 5 or delay is None:
++                    raise
++                time.sleep(delay)
+         # Best-effort directory fsync for durability; may not be supported on all platforms.
+         try:
+             dfd = os.open(path.parent, os.O_RDONLY)
+--- entry/static/app.js
++++ final/static/app.js
+@@ -1,6 +1,7 @@
+ const API = '/api';
+ let state = null; // Legacy local cache for public lane only (player mode helpers).
+ let startCampaignBusy = false;
++let newCampaignBusy = false;
+ 
+ /** Developer-facing copy for blocked new campaign (infra/billing/preflight — not narrative). */
+ function formatBlockedNewCampaignMessage(data){
+@@ -574,7 +575,14 @@
+ 
+ async function reloadAll(){ await loadState(); await loadLog(); }
+ 
++// Local browser diagnostics: elapsed time ends on the next rendered frame.
++// No player text or campaign data is logged.
++function recordPlayerReady(operation, started){
++  requestAnimationFrame(()=>console.info('ASHEN_UI_READY '+JSON.stringify({operation, elapsed_ms:performance.now()-started})));
++}
++
+ async function sendChat(){
++  const readinessStarted = performance.now();
+   if(currentUIMode !== "player") return;
+   const text = $('chatInput').value.trim();
+   if(!text) return;
+@@ -586,6 +594,7 @@
+   if(!data.ok){ replaceMessage(thinking,'error','Error',data.error || 'Unknown error'); return; }
+   replaceMessage(thinking,'gm','GM',data.gm_output?.player_facing_text || '(no narration)');
+   await reloadAll();
++  recordPlayerReady('chat', readinessStarted);
+ }
+ 
+ async function submitAction(){
+@@ -635,6 +644,10 @@
+   await loadState();
+ });
+ $('newCampaignBtn').addEventListener('click', async ()=>{
++  if(newCampaignBusy || startCampaignBusy) return;
++  newCampaignBusy = true;
++  $('newCampaignBtn').disabled = true;
++  try {
+   const data = await fetchJSON(apiUrl('/new_campaign', {ui_mode: currentUIMode}), {method:'POST'});
+   if (!data || data.ok === false || data.status === 'blocked' || data.status !== 'ok'){
+     const msg = formatBlockedNewCampaignMessage(data);
+@@ -644,20 +657,28 @@
+   console.log('Campaign reset complete', data.campaign_run_id || '');
+   state = null;
+   location.reload();
++  } finally {
++    newCampaignBusy = false;
++    $('newCampaignBtn').disabled = false;
++  }
+ });
+ 
+ const startCampaignBtn = $('startCampaignBtn');
+ if(startCampaignBtn){
+   startCampaignBtn.addEventListener('click', async ()=>{
++    const readinessStarted = performance.now();
+     if(currentUIMode !== "player") return;
+     if(startCampaignBusy) return;
+     if(!state?.ui?.campaign_can_start) return;
+     startCampaignBusy = true;
+     startCampaignBtn.disabled = true;
++    $('newCampaignBtn').disabled = true;
++    const controller = new AbortController();
++    const deadline = setTimeout(()=>controller.abort(), 90000);
+     const thinking = addMessage('system','System','Preparing opening…');
+     const openingFailure = 'Campaign opening could not be completed. Your campaign has not started, and no gameplay progress was committed. You can try again.';
+     try {
+-      const res = await fetch(apiUrl('/start_campaign', {ui_mode: currentUIMode}), {method:'POST'});
++      const res = await fetch(apiUrl('/start_campaign', {ui_mode: currentUIMode}), {method:'POST', signal:controller.signal});
+       const data = await res.json();
+       if(res.status === 503 || data.status === 'blocked'){
+         replaceMessage(thinking,'error','System', formatBlockedNewCampaignMessage(data), newCampaignBlockedDetails(data));
+@@ -676,11 +697,14 @@
+       }
+       replaceMessage(thinking,'gm','GM', data.gm_output?.player_facing_text || '(no narration)', data.resolution);
+       await reloadAll();
++      recordPlayerReady('start_campaign', readinessStarted);
+     } catch (_error) {
+       replaceMessage(thinking,'error','System', 'The opening request could not be confirmed. Refresh campaign state before trying again.');
+       try { await loadState(); } catch (_refreshError) { /* Keep visible feedback. */ }
+     } finally {
++      clearTimeout(deadline);
+       startCampaignBusy = false;
++      $('newCampaignBtn').disabled = false;
+       if(state) updateCampaignBootstrapUI(state);
+     }
+   });
+@@ -706,8 +730,9 @@
+     if(currentUIMode !== "player") return;
+     const btn = e.target.closest('.load-snapshot-btn');
+     if (!btn || !btn.dataset.id) return;
++    const readinessStarted = performance.now();
+     const data = await fetchJSON(apiUrl('/snapshots/load', {ui_mode: currentUIMode}), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ snapshot_id: btn.dataset.id, ui_mode: currentUIMode }) });
+-    if (data.ok) { addMessage('system', 'System', 'Snapshot restored.'); await loadState(); }
++    if (data.ok) { await reloadAll(); addMessage('system', 'System', 'Snapshot restored.'); recordPlayerReady('resume', readinessStarted); }
+     else addMessage('error', 'Error', data.error || 'Failed to load snapshot.');
+   });
+ }
+@@ -726,6 +751,7 @@
+ 
+ /** Submit a structured exploration action (affordance) to /api/action. Uses same log/error pattern as submitDirect. */
+ async function submitExplorationAction(affordance){
++  const readinessStarted = performance.now();
+   if(currentUIMode !== "player") return;
+   const label = affordance.label || (affordance.metadata && affordance.metadata.prompt) || 'Action';
+   const prompt = (affordance.metadata && affordance.metadata.prompt) || affordance.prompt || label;
+@@ -760,6 +786,7 @@
+   if(!data.ok){ replaceMessage(thinking,'error','Error',data.error || 'Unknown error'); return; }
+   replaceMessage(thinking,'gm','GM',data.gm_output?.player_facing_text || '(no narration)', data.resolution);
+   await reloadAll();
++  recordPlayerReady('exploration_action', readinessStarted);
+ }
+ 
+ async function saveCampaign(){

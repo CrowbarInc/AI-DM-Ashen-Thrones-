@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="29.624" timestamp="2026-11-08T20:23:38.878707-05:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_79df3_classification" name="test_duplicate_refusal_does_not_publish" time="1.877"><failure message="assert (not True or '{&quot;turn_id&quot;: ...s_code&quot;: 200}' == ''&#10; +  where True = exists()&#10; +    where exists = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/baseline_authority_followup_pytest/test_duplicate_refusal_does_no0/events.jsonl').exists&#10;  &#10;  + {&quot;turn_id&quot;: &quot;afa8e7aff6774600beaee5eec5f8b902&quot;, &quot;publication_owner&quot;: &quot;completed_runtime_response&quot;, &quot;response_category&quot;: &quot;engine_response&quot;, &quot;source_handler&quot;: &quot;api_chat&quot;, &quot;provider_involvement&quot;: false, &quot;provider_attempt_references&quot;: [], &quot;accepted_expression_references&quot;: [], &quot;published_expression_reference&quot;: &quot;28b98fec2ae38822d271447810b01a9c55b3f3cc02db9202712449e1e8bab622&quot;, &quot;final_player_facing_response&quot;: &quot;Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted.&quot;, &quot;validation_outcome&quot;: &quot;engine_or_grounded_fallback&quot;, &quot;status_code&quot;: 200})">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/baseline_authority_followup_pytest/test_duplicate_refusal_does_no0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020937126330&gt;
+
+    def test_duplicate_refusal_does_not_publish(tmp_path, monkeypatch):
+        seed_gate(tmp_path, monkeypatch)
+        events = tmp_path / "events.jsonl"
+        monkeypatch.setenv("ASHEN_PUBLICATION_TRACE_PATH", str(events))
+        monkeypatch.setenv("ASHEN_PROVIDER_REQUEST_LIMIT", "0")
+        monkeypatch.setenv("ASHEN_DISABLE_EXPRESSION_GENERATION", "1")
+        monkeypatch.delenv("ASHEN_DISABLE_LIVE_INTERPRETATION", raising=False)
+        monkeypatch.delenv("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES", raising=False)
+        with TestClient(app) as client:
+            reset_budget(tmp_path / "usage.jsonl")
+            first = client.post("/api/chat?ui_mode=player", json={"text": PHRASE, "client_request_id": "same"})
+            second = client.post("/api/chat?ui_mode=player", json={"text": PHRASE, "client_request_id": "same"})
+        assert first.status_code == second.status_code == 200
+        assert first.json()["gm_output"]["player_facing_text"] == second.json()["gm_output"]["player_facing_text"]
+&gt;       assert not events.exists() or events.read_text(encoding="utf-8").strip() == ""
+E       assert (not True or '{"turn_id": ...s_code": 200}' == ''
+E        +  where True = exists()
+E        +    where exists = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/baseline_authority_followup_pytest/test_duplicate_refusal_does_no0/events.jsonl').exists
+E         
+E         + {"turn_id": "afa8e7aff6774600beaee5eec5f8b902", "publication_owner": "completed_runtime_response", "response_category": "engine_response", "source_handler": "api_chat", "provider_involvement": false, "provider_attempt_references": [], "accepted_expression_references": [], "published_expression_reference": "28b98fec2ae38822d271447810b01a9c55b3f3cc02db9202712449e1e8bab622", "final_player_facing_response": "Which person do you mean: Guard Captain or Tavern Runner? Nothing has been attempted.", "validation_outcome": "engine_or_grounded_fallback", "status_code": 200})
+
+tests\test_pr_play_79df3_classification.py:238: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_79df3_classification" name="test_two_refusals_then_gameplay_advances" time="1.250"><failure message="RuntimeError: This portal is not running">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/baseline_authority_followup_pytest/test_two_refusals_then_gamepla0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002093A61B9B0&gt;
+
+    def test_two_refusals_then_gameplay_advances(tmp_path, monkeypatch):
+        seed_gate(tmp_path, monkeypatch)
+        events = tmp_path / "events.jsonl"
+        monkeypatch.setenv("ASHEN_PUBLICATION_TRACE_PATH", str(events))
+        monkeypatch.setenv("ASHEN_PROVIDER_REQUEST_LIMIT", "0")
+        monkeypatch.setenv("ASHEN_DISABLE_EXPRESSION_GENERATION", "1")
+        monkeypatch.delenv("ASHEN_DISABLE_LIVE_INTERPRETATION", raising=False)
+        monkeypatch.delenv("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES", raising=False)
+&gt;       with TestClient(app) as client:
+
+tests\test_pr_play_79df3_classification.py:251: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;starlette.testclient.TestClient object at 0x000002093A446480&gt;
+args = (&lt;class 'tests.helpers.live_model_guard.LiveModelCallForbidden'&gt;, LiveModelCallForbidden('Unexpected live model/API cl...e 30, in __init__\n    stack = "".join(traceback.format_stack(limit=25))\n'), &lt;traceback object at 0x000002093A87F4C0&gt;)
+
+    def __exit__(self, *args: Any) -&gt; None:
+&gt;       self.exit_stack.close()
+
+.venv\Lib\site-packages\starlette\testclient.py:708: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;contextlib.ExitStack object at 0x000002093A65B9E0&gt;
+
+    def close(self):
+        """Immediately unwind the context stack."""
+&gt;       self.__exit__(None, None, None)
+
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:606: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;contextlib.ExitStack object at 0x000002093A65B9E0&gt;
+exc_details = (&lt;class 'RuntimeError'&gt;, RuntimeError('This portal is not running'), &lt;traceback object at 0x000002093A87F680&gt;)
+
+    def __exit__(self, *exc_details):
+        received_exc = exc_details[0] is not None
+    
+        # We manipulate the exception state so it behaves as though
+        # we were actually nesting multiple with statements
+        frame_exc = sys.exc_info()[1]
+        def _fix_exception_context(new_exc, old_exc):
+            # Context may not be correct, so find the end of the chain
+            while 1:
+                exc_context = new_exc.__context__
+                if exc_context is None or exc_context is old_exc:
+                    # Context is already set correctly (see issue 20317)
+                    return
+                if exc_context is frame_exc:
+                    break
+                new_exc = exc_context
+            # Change the end of the chain to point to the exception
+            # we expect it to reference
+            new_exc.__context__ = old_exc
+    
+        # Callbacks are invoked in LIFO order to match the behaviour of
+        # nested context managers
+        suppressed_exc = False
+        pending_raise = False
+        while self._exit_callbacks:
+            is_sync, cb = self._exit_callbacks.pop()
+            assert is_sync
+            try:
+                if cb(*exc_details):
+                    suppressed_exc = True
+                    pending_raise = False
+                    exc_details = (None, None, None)
+            except:
+                new_exc_details = sys.exc_info()
+                # simulate the stack of exceptions by setting the context
+                _fix_exception_context(new_exc_details[1], exc_details[1])
+                pending_raise = True
+                exc_details = new_exc_details
+        if pending_raise:
+            try:
+                # bare "raise exc_details[1]" replaces our carefully
+                # set-up context
+                fixed_ctx = exc_details[1].__context__
+&gt;               raise exc_details[1]
+
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:598: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;contextlib.ExitStack object at 0x000002093A65B9E0&gt;
+exc_details = (&lt;class 'RuntimeError'&gt;, RuntimeError('This portal is not running'), &lt;traceback object at 0x000002093A87F680&gt;)
+
+    def __exit__(self, *exc_details):
+        received_exc = exc_details[0] is not None
+    
+        # We manipulate the exception state so it behaves as though
+        # we were actually nesting multiple with statements
+        frame_exc = sys.exc_info()[1]
+        def _fix_exception_context(new_exc, old_exc):
+            # Context may not be correct, so find the end of the chain
+            while 1:
+                exc_context = new_exc.__context__
+                if exc_context is None or exc_context is old_exc:
+                    # Context is already set correctly (see issue 20317)
+                    return
+                if exc_context is frame_exc:
+                    break
+                new_exc = exc_context
+            # Change the end of the chain to point to the exception
+            # we expect it to reference
+            new_exc.__context__ = old_exc
+    
+        # Callbacks are invoked in LIFO order to match the behaviour of
+        # nested context managers
+        suppressed_exc = False
+        pending_raise = False
+        while self._exit_callbacks:
+            is_sync, cb = self._exit_callbacks.pop()
+            assert is_sync
+            try:
+&gt;               if cb(*exc_details):
+                   ^^^^^^^^^^^^^^^^
+
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:583: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+exc_type = None, exc = None, tb = None
+
+    def _exit_wrapper(exc_type, exc, tb):
+&gt;       callback(*args, **kwds)
+
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:466: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    @stack.callback
+    def wait_shutdown() -&gt; None:
+&gt;       portal.call(self.wait_shutdown)
+
+.venv\Lib\site-packages\starlette\testclient.py:701: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;anyio.from_thread.BlockingPortal object at 0x000002093A754770&gt;
+func = &lt;bound method TestClient.wait_shutdown of &lt;starlette.testclient.TestClient object at 0x000002093A446480&gt;&gt;
+args = ()
+
+    def call(
+        self,
+        func: Callable[[Unpack[PosArgsT]], Awaitable[T_Retval] | T_Retval],
+        *args: Unpack[PosArgsT],
+    ) -&gt; T_Retval:
+        """
+        Call the given function in the event loop thread.
+    
+        If the callable returns a coroutine object, it is awaited on.
+    
+        :param func: any callable
+        :raises RuntimeError: if the portal is not running or if this method is called
+            from within the event loop thread
+    
+        """
+&gt;       return cast(T_Retval, self.start_task_soon(func, *args).result())
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv\Lib\site-packages\anyio\from_thread.py:338: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;anyio.from_thread.BlockingPortal object at 0x000002093A754770&gt;
+func = &lt;bound method TestClient.wait_shutdown of &lt;starlette.testclient.TestClient object at 0x000002093A446480&gt;&gt;
+name = None, args = ()
+
+    def start_task_soon(
+        self,
+        func: Callable[[Unpack[PosArgsT]], Awaitable[T_Retval] | T_Retval],
+        *args: Unpack[PosArgsT],
+        name: object = None,
+    ) -&gt; Future[T_Retval]:
+        """
+        Start a task in the portal's task group.
+    
+        The task will be run inside a cancel scope which can be cancelled by cancelling
+        the returned future.
+    
+        :param func: the target function
+        :param args: positional arguments passed to ``func``
+        :param name: name of the task (will be coerced to a string if not ``None``)
+        :return: a future that resolves with the return value of the callable if the
+            task completes successfully, or with the exception raised in the task
+        :raises RuntimeError: if the portal is not running or if this method is called
+            from within the event loop thread
+        :rtype: concurrent.futures.Future[T_Retval]
+    
+        .. versionadded:: 3.0
+    
+        """
+&gt;       self._check_running()
+
+.venv\Lib\site-packages\anyio\from_thread.py:380: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;anyio.from_thread.BlockingPortal object at 0x000002093A754770&gt;
+
+    def _check_running(self) -&gt; None:
+        if self._event_loop_thread_id is None:
+&gt;           raise RuntimeError("This portal is not running")
+E           RuntimeError: This portal is not running
+
+.venv\Lib\site-packages\anyio\from_thread.py:214: RuntimeError</failure></testcase><testcase classname="tests.test_pr_play_79df3_classification" name="test_save_reload_keeps_the_preceding_publication" time="2.140"><failure message="assert False&#10; +  where False = any(&lt;generator object test_save_reload_keeps_the_preceding_publication.&lt;locals&gt;.&lt;genexpr&gt; at 0x000002093A3FD460&gt;)">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/baseline_authority_followup_pytest/test_save_reload_keeps_the_pre0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002093A740FB0&gt;
+
+    def test_save_reload_keeps_the_preceding_publication(tmp_path, monkeypatch):
+        seed_gate(tmp_path, monkeypatch)
+        monkeypatch.setenv("ASHEN_PUBLICATION_TRACE_PATH", str(tmp_path / "events.jsonl"))
+        monkeypatch.setenv("ASHEN_PROVIDER_REQUEST_LIMIT", "0")
+        monkeypatch.delenv("ASHEN_DISABLE_LIVE_INTERPRETATION", raising=False)
+        monkeypatch.delenv("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES", raising=False)
+        with TestClient(app) as client:
+            reset_budget(tmp_path / "usage.jsonl")
+            refused = client.post("/api/chat?ui_mode=player", json={"text": PHRASE, "client_request_id": "save"})
+            created = client.post("/api/snapshots?ui_mode=player", json={"label": "after-refusal"})
+            snapshot_id = created.json()["snapshot"]["id"]
+            loaded = client.post("/api/snapshots/load?ui_mode=player", json={"snapshot_id": snapshot_id})
+        assert refused.status_code == 200
+        assert loaded.status_code == 200
+        assert storage.load_session()["last_publication"]["visible"] == PRIOR
+        assert storage.load_session()["turn_counter"] == 4
+&gt;       assert any(item.get("log_meta", {}).get("response_class") == OPERATIONAL_REFUSAL for item in storage.load_log())
+E       assert False
+E        +  where False = any(&lt;generator object test_save_reload_keeps_the_preceding_publication.&lt;locals&gt;.&lt;genexpr&gt; at 0x000002093A3FD460&gt;)
+
+tests\test_pr_play_79df3_classification.py:308: AssertionError</failure></testcase><testcase classname="tests.test_pr_play_79df3_classification" name="test_http_fallback_is_not_an_operational_refusal" time="1.258"><failure message="assert 'Gate Guard s...sing patrol.&quot;' == 'That request...en attempted.'&#10;  &#10;  - That request addresses someone. Nothing has been attempted.&#10;  + Gate Guard says, &quot;The notice board mentions a missing patrol.&quot;">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/baseline_authority_followup_pytest/test_http_fallback_is_not_an_o0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002093AB68140&gt;
+
+    def test_http_fallback_is_not_an_operational_refusal(tmp_path, monkeypatch):
+        from game.expressive_dialogue import set_expression_transport
+        from tests.test_pr_play_62_investigation_quality import setup_session
+    
+        setup_session(tmp_path, monkeypatch)
+        monkeypatch.delenv("ASHEN_DISABLE_EXPRESSION_GENERATION", raising=False)
+        monkeypatch.setenv("ASHEN_PUBLICATION_TRACE_PATH", str(tmp_path / "events.jsonl"))
+        session = storage.load_session()
+        session["last_publication"] = {
+            "owner": "integrated_play.commit_integrated",
+            "contract": "FINAL_ENGINE_RESPONSE",
+            "final": True,
+            "dialogue_accepted": True,
+            "dialogue_published": True,
+            "visible": PRIOR,
+            "turn": 1,
+            "campaign_run_id": session.get("campaign_run_id"),
+        }
+        storage.save_session(session)
+        set_expression_transport(lambda _contract: "They were last seen taking the northwest mud track, and the king paid them.")
+        try:
+            with TestClient(app) as client:
+                response = client.post(
+                    "/api/chat?ui_mode=player",
+                    json={"text": "Gate Guard, what does the notice board say about the patrol?", "client_request_id": uuid.uuid4().hex},
+                )
+        finally:
+            set_expression_transport(None)
+        assert response.status_code == 200
+        visible = response.json()["gm_output"]["player_facing_text"]
+        assert "king paid" not in visible.casefold()
+&gt;       assert storage.load_session()["last_publication"]["visible"] == visible
+E       assert 'Gate Guard s...sing patrol."' == 'That request...en attempted.'
+E         
+E         - That request addresses someone. Nothing has been attempted.
+E         + Gate Guard says, "The notice board mentions a missing patrol."
+
+tests\test_pr_play_79df3_classification.py:408: AssertionError</failure></testcase></testsuite></testsuites>

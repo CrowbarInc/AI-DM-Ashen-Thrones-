@@ -1,0 +1,3 @@
+# ROOT CAUSE
+
+Primary failure class: implementation. Earliest demonstrated incorrect decision: action() skipped PR66 final publication after resolving/persisting a valid discovery. It returned legacy refusal even though quarantine held trusted fallback. Chat had a separate publisher-inclusive completion path. Neither player-safe projection nor UI rendering caused the discrepancy. PR67 historical entry-source comparison supports age; this cycle independently reproduced current behavior in browser. Repair reuses PR66 prepare/publish/verify rather than inventing another structured fallback owner.

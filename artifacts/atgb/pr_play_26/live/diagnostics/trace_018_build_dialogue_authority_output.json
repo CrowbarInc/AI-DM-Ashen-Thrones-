@@ -1,0 +1,79 @@
+{
+  "function": "game.dialogue_authority.build_dialogue_authority",
+  "result": {
+    "topic_grounding": {
+      "speaker_id": "tavern_runner",
+      "addressee": "player",
+      "requested_subject": "approach they're offering",
+      "requested_information": "general",
+      "reference": "current_request",
+      "candidate_sources": [
+        "scene:frontier_gate:visible:2"
+      ],
+      "selected_source": "scene:frontier_gate:visible:2",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "requested_information": "general",
+    "subject": "approach they're offering",
+    "knowledge_posture": "established",
+    "answer_relation": "sufficient",
+    "answer_sufficiency": "directly_answers",
+    "proposition_id": "statement:bf3939512215",
+    "authorized_proposition": "I offer hot stew and rumors.",
+    "public_fact_selection": {
+      "candidate_sources": [
+        "scene:frontier_gate:visible:2"
+      ],
+      "selected_source": "scene:frontier_gate:visible:2",
+      "reason": "authorized",
+      "fact": {
+        "source_id": "scene:frontier_gate:visible:2",
+        "source_text": "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "npc_id": "tavern_runner",
+        "relation": "own_offerings",
+        "items": "hot stew and rumors",
+        "text": "I offer hot stew and rumors."
+      }
+    },
+    "public_fact_source": {
+      "source_id": "scene:frontier_gate:visible:2",
+      "source_text": "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "npc_id": "tavern_runner",
+      "relation": "own_offerings",
+      "items": "hot stew and rumors",
+      "text": "I offer hot stew and rumors."
+    },
+    "improvisation_permitted": false,
+    "improvisation_scope": "none",
+    "narration_determined": true,
+    "player_line": "Tavern Runner says, \"I offer hot stew and rumors.\"",
+    "canonical": false,
+    "npc_id": "tavern_runner",
+    "npc_name": "Tavern Runner",
+    "npc_role": "",
+    "npc_disposition": "friendly",
+    "prohibited_claims": [
+      "consequential_world_fact",
+      "hidden_disclosure",
+      "mechanical_change",
+      "new_obligation",
+      "invented_answer"
+    ],
+    "prior_commitments": [],
+    "reconciled_plan": "",
+    "reuse_prior_speech": false,
+    "authorization_provenance": {
+      "authority_category": "world_source",
+      "speaker_id": "tavern_runner",
+      "addressee": "player",
+      "operation": "disclose",
+      "authorized_proposition": "I offer hot stew and rumors.",
+      "source_id": "scene:frontier_gate:visible:2",
+      "epistemic_status": "established_public",
+      "validation": "authorized",
+      "provenance_id": "f6f64fbc2fd12cca",
+      "policy_version": "pr-eg-r6-r1-r1"
+    }
+  }
+}

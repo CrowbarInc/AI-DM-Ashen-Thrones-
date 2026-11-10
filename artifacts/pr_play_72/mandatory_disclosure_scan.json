@@ -1,0 +1,63 @@
+{
+  "checks": [
+    {
+      "request": {
+        "path": "/api/chat",
+        "method": "POST",
+        "json": {
+          "text": "I examine the notice board."
+        }
+      },
+      "required": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "present": true
+    },
+    {
+      "request": {
+        "path": "/api/chat",
+        "method": "POST",
+        "json": {
+          "text": "I examine the weathered milestone."
+        }
+      },
+      "required": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "present": true
+    },
+    {
+      "request": {
+        "path": "/api/chat",
+        "method": "POST",
+        "json": {
+          "text": "I examine the notice board."
+        }
+      },
+      "required": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "present": true
+    },
+    {
+      "request": {
+        "path": "/api/chat",
+        "method": "POST",
+        "json": {
+          "text": "I examine the weathered milestone."
+        }
+      },
+      "required": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "present": true
+    },
+    {
+      "request": {
+        "path": "/api/chat",
+        "method": "POST",
+        "json": {
+          "text": "I ask the Gate Serjeant about the patrol route."
+        }
+      },
+      "required": "The patrol route changed after the Ash Compact census choke worsened.",
+      "present": true
+    }
+  ],
+  "omissions": [],
+  "matching": "Full authoritative sentence, case-insensitive; existing social formatter can lowercase the initial article within a quotation.",
+  "cycle_earlier_omissions": 1,
+  "scope": "Final real HTTP chat discovery resolutions; authored consequence checks separately covered by tests."
+}

@@ -1,0 +1,19 @@
+--- before/data/validation/atgb/baselines/frontier-gate-v1/manifest.json
++++ after/data/validation/atgb/baselines/frontier-gate-v1/manifest.json
+@@ -2,7 +2,7 @@
+   "baseline_version": "frontier-gate-v1",
+   "schema_version": 1,
+   "source_revision": "b012c3d7e5887fdfb09d10bb9cc0f0220de09df9",
+-  "source_note": "Frozen authored output of existing seed_frontier_gate_world plus default campaign, character, conditions and exit scenes. Source hashes identify worktree bytes, not HEAD alone. No canonical data copied. Session seed intentionally omitted; existing hard reset owns runtime.",
++  "source_note": "Frozen authored output of existing seed_frontier_gate_world plus default campaign, character, conditions and exit scenes. Source hashes identify worktree bytes, not HEAD alone. No canonical data copied. Session seed intentionally omitted; existing hard reset owns runtime. PR-PLAY-28: explicit rumor discovery eligibility added only to the existing tavern_runner patrol_rumor row; authored text and clue unchanged.",
+   "sources": {
+     "game/defaults.py": "2243d1e03c4a2209345055629387c2661fd07db4612b0432614790dbb72f2ed1",
+     "tests/helpers/golden_replay_fixtures.py": "035a5e007a1b6bd3e2018cdc8317f81d084da64e81875e767fc35b792cf83c5a"
+@@ -14,6 +14,6 @@
+     "scenes/frontier_gate.json": "05d6268b7fca019f4ae0ecd69d2d5c3548da342eb1cd49f93bfbec993296a8b1",
+     "scenes/market_quarter.json": "9483166036331b2738a7d0ebee217bbb6b6f00bd1f181ec92d82e9e1c4106bc8",
+     "scenes/old_milestone.json": "0b1f5e25f19d376cdb5c9510623488fea6fa831549a35458455edf92e92139e0",
+-    "world.json": "7e32fdbbdca5742f2956e52a1238b1f07b7504feb6a3e15e7f44e8b22c086296"
++    "world.json": "44d04db85e3e0d5f352d9aff17808acfc1e8dac8734e979b72bae76d3bc91ded"
+   }
+ }

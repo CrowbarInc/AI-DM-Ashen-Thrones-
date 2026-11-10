@@ -1,0 +1,194 @@
+[
+  {
+    "turn": 1,
+    "stable_roots": {
+      "character": true,
+      "campaign": true,
+      "combat": true,
+      "conditions": true
+    },
+    "world_tick_and_authorized_events": true,
+    "added_world_events": [],
+    "turn_delta": 1,
+    "time_pressure_delta": 1,
+    "active_scene": "frontier_gate",
+    "overlay_comparison": {
+      "integrity": true,
+      "changes": [],
+      "omitted_entries": 0,
+      "total_changes": 0
+    },
+    "unauthorized_state_findings": [],
+    "changed_session_roots": [
+      "last_action_debug",
+      "npc_runtime",
+      "_runtime_narration_plan_bundle_stamp_v1",
+      "debug_traces",
+      "discourse_focus",
+      "interpretation_telemetry",
+      "clocks",
+      "conversational_context",
+      "_runtime_narration_plan_bundle_v1",
+      "scene_state",
+      "turn_counter",
+      "interaction_context",
+      "_runtime_canonical_ctir_v1",
+      "scene_runtime",
+      "last_saved_at",
+      "last_turn_response_policy",
+      "_runtime_progression_nodes_fingerprint_v1",
+      "_runtime_canonical_ctir_stamp_v1"
+    ],
+    "pass": true
+  },
+  {
+    "turn": 2,
+    "stable_roots": {
+      "character": true,
+      "campaign": true,
+      "combat": true,
+      "conditions": true
+    },
+    "world_tick_and_authorized_events": true,
+    "added_world_events": [
+      {
+        "type": "social_lead_revealed",
+        "clue_id": "muddy_footprints_northwest",
+        "scene_id": "frontier_gate",
+        "npc_id": "tavern_runner",
+        "topic_id": "patrol_rumor"
+      },
+      {
+        "type": "social_extracted_lead",
+        "clue_id": "minlead_exit_frontier_gate_old_milestone",
+        "scene_id": "frontier_gate",
+        "source": "author_exit"
+      }
+    ],
+    "turn_delta": 1,
+    "time_pressure_delta": 1,
+    "active_scene": "frontier_gate",
+    "overlay_comparison": {
+      "integrity": true,
+      "changes": [
+        {
+          "path": "session.json:/runtime_scene_overlays/frontier_gate/discovered_clues",
+          "change": "modified",
+          "before": [],
+          "after": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "scene_id": "frontier_gate",
+          "overlay_id": "frontier_gate",
+          "classification": "authorized_gameplay_mutation",
+          "reason": "authored_social_clue_projection",
+          "authority_evidence": {
+            "source": "game.clues.apply_socially_revealed_leads; game.clues.ensure_scene_has_minimum_actionable_lead",
+            "native_operation": "authored_social_clue_projection",
+            "authored_scene": "scenes/frontier_gate.json",
+            "ordinary_turn": {
+              "operation": "authored_social_clue_projection",
+              "action_id": "tavern_runner",
+              "player_input": "What sort of rumors have you heard?",
+              "source_id": "npc:tavern_runner:patrol_rumor",
+              "disclosure": {
+                "speaker_id": "tavern_runner",
+                "addressee": "player",
+                "source_id": "npc:tavern_runner:patrol_rumor",
+                "classification": "public",
+                "knowledge_status": "known",
+                "permission": true,
+                "epistemic_status": "npc_knowledge",
+                "operation": "disclose",
+                "authorized_proposition": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+                "canonical": false,
+                "authorized_clue_text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+                "authorized_clue_id": "muddy_footprints_northwest",
+                "provenance": "authored_npc_source",
+                "validation": "authorized"
+              },
+              "events": [
+                {
+                  "type": "social_lead_revealed",
+                  "clue_id": "muddy_footprints_northwest",
+                  "scene_id": "frontier_gate",
+                  "npc_id": "tavern_runner",
+                  "topic_id": "patrol_rumor"
+                },
+                {
+                  "type": "social_extracted_lead",
+                  "clue_id": "minlead_exit_frontier_gate_old_milestone",
+                  "scene_id": "frontier_gate",
+                  "source": "author_exit"
+                }
+              ],
+              "minimum_lead": {
+                "minimum_actionable_lead_enforced": true,
+                "enforced_lead_id": "minlead_exit_frontier_gate_old_milestone",
+                "enforced_lead_source": "exit"
+              }
+            }
+          }
+        }
+      ],
+      "omitted_entries": 0,
+      "total_changes": 1,
+      "snapshots_preserved": true
+    },
+    "unauthorized_state_findings": [],
+    "changed_session_roots": [
+      "last_action_debug",
+      "npc_runtime",
+      "_runtime_narration_plan_bundle_stamp_v1",
+      "debug_traces",
+      "runtime_scene_overlays",
+      "discourse_focus",
+      "interpretation_telemetry",
+      "clocks",
+      "lead_registry",
+      "conversational_context",
+      "_runtime_narration_plan_bundle_v1",
+      "bounded_improvisation",
+      "last_bounded_improvisation_promotion",
+      "turn_counter",
+      "social_lead_event_ids",
+      "_runtime_canonical_ctir_v1",
+      "scene_runtime",
+      "clue_knowledge",
+      "last_saved_at",
+      "last_turn_response_policy",
+      "_runtime_progression_nodes_fingerprint_v1",
+      "_runtime_canonical_ctir_stamp_v1"
+    ],
+    "pass": true
+  },
+  {
+    "turn": 3,
+    "stable_roots": {
+      "character": true,
+      "campaign": true,
+      "combat": true,
+      "conditions": true
+    },
+    "world_tick_and_authorized_events": true,
+    "added_world_events": [],
+    "turn_delta": 0,
+    "time_pressure_delta": 0,
+    "active_scene": "frontier_gate",
+    "overlay_comparison": {
+      "integrity": true,
+      "changes": [],
+      "omitted_entries": 0,
+      "total_changes": 0
+    },
+    "unauthorized_state_findings": [],
+    "changed_session_roots": [
+      "conversational_context",
+      "scene_state",
+      "interaction_context",
+      "last_saved_at"
+    ],
+    "pass": true
+  }
+]

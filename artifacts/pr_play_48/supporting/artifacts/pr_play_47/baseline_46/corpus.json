@@ -1,0 +1,984 @@
+[
+  {
+    "id": "direct_item",
+    "group": "unsupported",
+    "category": "inventory",
+    "text": "You receive a silver key.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "original_item",
+    "group": "unsupported",
+    "category": "resulting_inventory",
+    "text": "A silver key now rests among your possessions.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "direct_currency",
+    "group": "unsupported",
+    "category": "currency",
+    "text": "You gain fifty gold coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "original_currency",
+    "group": "unsupported",
+    "category": "resulting_currency",
+    "text": "Your purse now holds fifty more gold coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "other_item",
+    "group": "unsupported",
+    "category": "resulting_inventory",
+    "text": "An obsidian brooch lies in your inventory.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "container_item",
+    "group": "unsupported",
+    "category": "resulting_inventory",
+    "text": "Your pack now contains a cedar flute.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "other_currency",
+    "group": "unsupported",
+    "category": "resulting_currency",
+    "text": "Your bag contains 12 additional copper coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "total_balance",
+    "group": "unsupported",
+    "category": "resulting_currency",
+    "text": "Your purse now holds fifty gold coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "damage",
+    "group": "unsupported",
+    "category": "damage",
+    "text": "You take six damage.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "healing",
+    "group": "unsupported",
+    "category": "healing",
+    "text": "You recover 4 health.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "condition",
+    "group": "unsupported",
+    "category": "conditions",
+    "text": "You become poisoned.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "condition_removed",
+    "group": "unsupported",
+    "category": "conditions",
+    "text": "You are no longer poisoned.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "travel",
+    "group": "unsupported",
+    "category": "travel",
+    "text": "You arrive at the watchtower.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "discovery",
+    "group": "unsupported",
+    "category": "discovery",
+    "text": "You discover a hidden entrance.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "quest",
+    "group": "unsupported",
+    "category": "objective",
+    "text": "You complete the rescue objective.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "npc",
+    "group": "unsupported",
+    "category": "npc_state",
+    "text": "The ferryman dies.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "spend",
+    "group": "unsupported",
+    "category": "resource",
+    "text": "You spend 3 copper coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "remove",
+    "group": "unsupported",
+    "category": "resource",
+    "text": "You lose a rope.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "indirect_heal",
+    "group": "unsupported",
+    "category": "status_result",
+    "text": "Your wounds have healed.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "indirect_condition",
+    "group": "unsupported",
+    "category": "status_result",
+    "text": "The poison has worn off.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "indirect_travel",
+    "group": "unsupported",
+    "category": "location_result",
+    "text": "You find yourself inside the crypt.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "indirect_quest",
+    "group": "unsupported",
+    "category": "objective_result",
+    "text": "The quest is complete.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "indirect_npc",
+    "group": "unsupported",
+    "category": "npc_result",
+    "text": "The guards now consider you an ally.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "unfamiliar_possession",
+    "group": "unsupported",
+    "category": "resulting_inventory",
+    "text": "Your belongings include a sapphire.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "hedge_launder",
+    "group": "unsupported",
+    "category": "resulting_inventory",
+    "text": "Perhaps rain will fall, but a silver key now rests among your possessions.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "synonym_balance",
+    "group": "unsupported",
+    "category": "resulting_currency",
+    "text": "Your wealth has increased by fifty gold coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "item_ok",
+    "group": "authorized",
+    "category": "inventory",
+    "text": "You receive a linen cloak.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "items_added": [
+          "linen cloak"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "item_state_ok",
+    "group": "authorized",
+    "category": "resulting_inventory",
+    "text": "A linen cloak now rests among your possessions.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "items_added": [
+          "linen cloak"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "container_ok",
+    "group": "authorized",
+    "category": "resulting_inventory",
+    "text": "Your inventory contains a cedar flute.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "items_added": [
+          "cedar flute"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "currency_ok",
+    "group": "authorized",
+    "category": "currency",
+    "text": "You collect fifty gold coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "currency_gained": [
+          "50 gold coins"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "currency_state_ok",
+    "group": "authorized",
+    "category": "resulting_currency",
+    "text": "Your purse now holds fifty more gold coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "currency_gained": [
+          "50 gold coins"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "currency_other_ok",
+    "group": "authorized",
+    "category": "resulting_currency",
+    "text": "Your bag contains 12 additional copper coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "currency_gained": [
+          "12 copper coins"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "damage_ok",
+    "group": "authorized",
+    "category": "damage",
+    "text": "You suffer 3 damage.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "damage_taken": 3
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "healing_ok",
+    "group": "authorized",
+    "category": "healing",
+    "text": "You recover 4 health.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "health_recovered": 4
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "condition_ok",
+    "group": "authorized",
+    "category": "conditions",
+    "text": "You become poisoned.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "conditions_applied": [
+          "poisoned"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "removed_ok",
+    "group": "authorized",
+    "category": "conditions",
+    "text": "You are no longer poisoned.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "conditions_removed": [
+          "poisoned"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "quest_ok",
+    "group": "authorized",
+    "category": "objective",
+    "text": "You complete the rescue objective.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "objectives_completed": [
+          "rescue objective"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "npc_ok",
+    "group": "authorized",
+    "category": "npc_state",
+    "text": "The ferryman dies.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "npc_changes": [
+          "The ferryman dies"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "spend_ok",
+    "group": "authorized",
+    "category": "resource",
+    "text": "You spend 3 copper coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "currency_spent": [
+          "3 copper coins"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "remove_ok",
+    "group": "authorized",
+    "category": "resource",
+    "text": "You lose a rope.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "items_removed": [
+          "rope"
+        ]
+      }
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "travel_ok",
+    "group": "authorized",
+    "category": "travel",
+    "text": "You arrive at the watchtower.",
+    "resolution": {
+      "kind": "travel",
+      "success": true,
+      "state_changes": {},
+      "resolved_transition": true,
+      "target_scene_id": "watchtower"
+    },
+    "scenario": "failed_travel",
+    "context": ""
+  },
+  {
+    "id": "clue_ok",
+    "group": "authorized",
+    "category": "discovery",
+    "text": "The marks may indicate a burrow; their age remains unknown.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "state_changes": {
+        "clue_revealed": true
+      },
+      "clue_text": "The marks may indicate a burrow; their age remains unknown.",
+      "discovered_clues": [
+        "The marks may indicate a burrow; their age remains unknown."
+      ]
+    },
+    "scenario": "dungeon",
+    "context": ""
+  },
+  {
+    "id": "atmosphere",
+    "group": "harmless",
+    "category": "atmosphere",
+    "text": "Rain taps against the shutters.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "gesture",
+    "group": "harmless",
+    "category": "gesture",
+    "text": "The porter rubs his chin.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "emotion",
+    "group": "harmless",
+    "category": "emotion",
+    "text": "The porter looks relieved.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "sensory",
+    "group": "harmless",
+    "category": "sensory",
+    "text": "You smell wet cedar.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "travel_air",
+    "group": "harmless",
+    "category": "travel_atmosphere",
+    "text": "Wind whistles along the blocked trail.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "investigation",
+    "group": "harmless",
+    "category": "investigation_texture",
+    "text": "Dust curls around the dial as you lean closer.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "uncertain",
+    "group": "harmless",
+    "category": "uncertain_observation",
+    "text": "A shadow seems to flicker beyond the shutters.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "figurative",
+    "group": "harmless",
+    "category": "figurative",
+    "text": "The revelation strikes like a hammer.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "vault_metaphor",
+    "group": "harmless",
+    "category": "figurative",
+    "text": "The room feels like a treasure vault.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "speculation",
+    "group": "harmless",
+    "category": "speculation",
+    "text": "The merchant claims the road is safe.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "dialogue",
+    "group": "harmless",
+    "category": "dialogue",
+    "text": "The porter says, \"Morning again, is it?\"",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "quoted_item",
+    "group": "harmless",
+    "category": "dialogue",
+    "text": "The merchant says, \"A silver key now rests among your possessions.\"",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "incidental_dust",
+    "group": "harmless",
+    "category": "environmental_texture",
+    "text": "Dust rests in your pack.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "negation",
+    "group": "harmless",
+    "category": "negation",
+    "text": "Your purse does not contain fifty gold coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "conditional",
+    "group": "harmless",
+    "category": "conditional",
+    "text": "If your purse now holds fifty more gold coins, you could pay.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "mixed_clue",
+    "group": "unsupported",
+    "category": "mixed",
+    "text": "The marks may indicate a burrow; their age remains unknown. A silver key now rests among your possessions.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "state_changes": {
+        "clue_revealed": true
+      },
+      "clue_text": "The marks may indicate a burrow; their age remains unknown.",
+      "discovered_clues": [
+        "The marks may indicate a burrow; their age remains unknown."
+      ]
+    },
+    "scenario": "dungeon",
+    "context": ""
+  },
+  {
+    "id": "mixed_travel",
+    "group": "unsupported",
+    "category": "mixed",
+    "text": "You arrive at the watchtower. You suffer 7 damage.",
+    "resolution": {
+      "kind": "travel",
+      "success": true,
+      "state_changes": {},
+      "resolved_transition": true,
+      "target_scene_id": "watchtower"
+    },
+    "scenario": "failed_travel",
+    "context": ""
+  },
+  {
+    "id": "mixed_dialogue",
+    "group": "unsupported",
+    "category": "mixed",
+    "text": "The porter says, \"Morning again.\" You complete the rescue objective.",
+    "resolution": {
+      "kind": "social",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "conversation",
+    "context": ""
+  },
+  {
+    "id": "mixed_air",
+    "group": "unsupported",
+    "category": "mixed",
+    "text": "Rain taps the shutters. Your pack contains a cedar flute.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": ""
+  },
+  {
+    "id": "merchant_bonus",
+    "group": "unsupported",
+    "category": "mixed",
+    "text": "You receive a linen cloak. You spend 3 copper coins. A bonus ruby lies in your inventory.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "items_added": [
+          "linen cloak"
+        ],
+        "currency_spent": [
+          "3 copper coins"
+        ]
+      }
+    },
+    "scenario": "merchant",
+    "context": ""
+  },
+  {
+    "id": "wilderness_extra",
+    "group": "unsupported",
+    "category": "mixed",
+    "text": "You suffer 3 damage. You become poisoned.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {
+        "damage_taken": 3
+      }
+    },
+    "scenario": "wilderness",
+    "context": ""
+  },
+  {
+    "id": "partial_certainty",
+    "group": "unsupported",
+    "category": "certainty",
+    "text": "The marks definitely prove a dragon burrow.",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "state_changes": {
+        "clue_revealed": true
+      },
+      "clue_text": "The marks may indicate a burrow; their age remains unknown.",
+      "discovered_clues": [
+        "The marks may indicate a burrow; their age remains unknown."
+      ]
+    },
+    "scenario": "dungeon",
+    "context": ""
+  },
+  {
+    "id": "failed_arrival",
+    "group": "unsupported",
+    "category": "travel",
+    "text": "You arrive at the watchtower.",
+    "resolution": {
+      "kind": "travel",
+      "success": false,
+      "state_changes": {},
+      "resolved_transition": false,
+      "target_scene_id": "watchtower"
+    },
+    "scenario": "failed_travel",
+    "context": ""
+  },
+  {
+    "id": "stronger",
+    "group": "ambiguous",
+    "category": "context_dependent",
+    "text": "You feel stronger.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": "A subjective feeling is harmless; a strength-stat increase would require a resolver grant. No such grant here."
+  },
+  {
+    "id": "passage",
+    "group": "ambiguous",
+    "category": "context_dependent",
+    "text": "The passage seems open.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": "A visual impression is permitted; route-unlock or traversability is not established."
+  },
+  {
+    "id": "old_item",
+    "group": "ambiguous",
+    "category": "context_dependent",
+    "text": "A silver key rests in your inventory.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": "Fixture assumes a previously owned key, absent from this delta. Correct total-state validation needs an observable pre/post-state adapter."
+  },
+  {
+    "id": "old_balance",
+    "group": "ambiguous",
+    "category": "context_dependent",
+    "text": "Your purse holds fifty gold coins.",
+    "resolution": {
+      "kind": "investigate",
+      "success": true,
+      "state_changes": {}
+    },
+    "scenario": "quiet_exploration",
+    "context": "Fixture assumes a pre-existing balance of fifty; a no-change outcome cannot verify the absolute balance."
+  }
+]

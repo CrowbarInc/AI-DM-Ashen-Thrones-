@@ -1,0 +1,614 @@
+--- a/game/api.py
++++ b/game/api.py
+@@ -2635,6 +2635,10 @@
+         inter_id = resolution.get('interactable_id')
+         if isinstance(inter_id, str) and inter_id.strip():
+             mark_interactable_resolved(session, scene['scene']['id'], inter_id.strip())
++            known = (session.get('clue_knowledge') or {}).get(resolution.get('clue_id'))
++            if (isinstance(known, dict) and known.get('source_scene') == scene['scene']['id']
++                    and known.get('text') == resolution.get('clue_text')):
++                known.setdefault('source_interactable', inter_id.strip())
+         # Also mark action_id so affordances keyed by it get relabeled.
+         action_id = resolution.get('action_id') or (normalized_action.get('id') if normalized_action else None)
+         if action_id:
+@@ -4538,6 +4542,8 @@
+         for item in (gm, canonical_gm, response_payload.get("gm_output") if isinstance(response_payload, dict) else None):
+             if isinstance(item, dict):
+                 item["player_facing_text"] = engine_text
++        from game.quarantined_investigation_narration import verify_engine_publication
++        verify_engine_publication(resolution, session, player_text, engine_text)
+         return
+     from game.authored_consequences import trusted_text, enabled_for_session
+     text = trusted_text(resolution)
+@@ -5595,14 +5601,25 @@
+ 
+ @app.post('/api/action')
+ def api_action(request: Request, req: ActionRequest):
+-    from game.integrated_play import ordered_turn
++    from game.integrated_play import ordered_turn, presentation_usage
++    from game.provider_budget import snapshot as provider_snapshot
+     try:
+         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+         with ordered_turn(str(DATA_DIR), mutating=True, text=str(getattr(req, "intent", "") or req.action_type or "action")) as turn:
+             if turn.duplicate:
++                request.state.skip_publication_trace = True
+                 return turn.result
++            usage_start = len(presentation_usage()['log'])
++            provider_start = len(provider_snapshot()['records'])
+             with runtime_commit_scope():
+-                result = _project_player_runtime_response(action(req, ui_mode=ui_mode))
++                raw_result = action(req, ui_mode=ui_mode)
++                result = _project_player_runtime_response(raw_result)
++            request.state.publication_provenance = dict(source_handler='api_action',
++                presentation_rows=presentation_usage()['log'][usage_start:],
++                provider_rows=provider_snapshot()['records'][provider_start:],
++                publication_context=load_session().get('last_publication'),
++                publication_contract=(((raw_result.get('resolution') or {}).get('metadata') or {}).get('publication_contract')
++                                      if isinstance(raw_result, dict) else None))
+             turn.result = result
+             return result
+     except UiModePolicyError as e:
+@@ -6936,15 +6953,26 @@
+ 
+ @app.post('/api/chat')
+ def api_chat(request: Request, req: ChatRequest):
+-    from game.integrated_play import ordered_turn
++    from game.integrated_play import ordered_turn, presentation_usage
++    from game.provider_budget import snapshot as provider_snapshot
+     try:
+         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+         key = (req.client_request_id or "").strip() or None
+         with ordered_turn(str(DATA_DIR), mutating=True, request_key=key, text=req.text or "") as turn:
+             if turn.duplicate:
++                request.state.skip_publication_trace = True
+                 return turn.result
++            usage_start = len(presentation_usage()['log'])
++            provider_start = len(provider_snapshot()['records'])
+             with runtime_commit_scope():
+-                result = _project_player_runtime_response(chat(req, ui_mode=ui_mode))
++                raw_result = chat(req, ui_mode=ui_mode)
++                result = _project_player_runtime_response(raw_result)
++            request.state.publication_provenance = dict(source_handler='api_chat',
++                presentation_rows=presentation_usage()['log'][usage_start:],
++                provider_rows=provider_snapshot()['records'][provider_start:],
++                publication_context=load_session().get('last_publication'),
++                publication_contract=(((raw_result.get('resolution') or {}).get('metadata') or {}).get('publication_contract')
++                                      if isinstance(raw_result, dict) else None))
+             turn.result = result
+             return result
+     except UiModePolicyError as e:
+--- a/game/exploration.py
++++ b/game/exploration.py
+@@ -31,7 +31,7 @@
+ EXPLORATION_KINDS = ("scene_transition", "travel", "observe", "investigate", "interact", "custom", "discover_clue", "already_searched")
+ 
+ 
+-def _repeat_publication(metadata: Dict[str, Any] | None, valid_repeat: bool, player_text: str = "") -> Dict[str, Any]:
++def _repeat_publication(metadata: Dict[str, Any] | None, valid_repeat: bool, player_text: str = "", *, recalled=()) -> Dict[str, Any]:
+     """A repeated search names the examined thing and the no-new result."""
+     import re
+ 
+@@ -44,8 +44,46 @@
+     target = re.sub(r"\s+", " ", re.sub(r"\bagain$", "", extract_inspection_target(player_text) or "", flags=re.I)).strip(" ,.")
+     if target and not re.match(r"^(?:the|a|an)\b", target, re.I):
+         target = "the " + target
+-    line = f"You examine {target} again. {KNOWN_REPEAT_LINE}" if target else KNOWN_REPEAT_LINE
++    prior = "Previously disclosed here: " + " ".join(recalled) + " " if recalled else ""
++    line = (f"You examine {target} again. " if target else "") + prior + KNOWN_REPEAT_LINE
++    if recalled:
++        base["recalled_facts"] = list(recalled)
+     return stamp(base, "FINAL_ENGINE_RESPONSE", publication=line)
++
++
++def _source_disclosed_facts(scene, session, interactable):
++    """Read only explicit knowledge bound to this still-present, unchanged source.
++
++    The catalog verifies validity; it never supplies publication text. Legacy
++    records require both the same scene and exact disclosed text/identity.
++    Ambiguous, inferred, invalidated or modified records are omitted.
++    """
++    cid = interactable.get("reveals_clue")
++    knowledge = session.get("clue_knowledge") or {}
++    entry = knowledge.get(cid) if isinstance(knowledge, dict) else None
++    if not isinstance(entry, dict):
++        return ()
++    if (entry.get("state") != "discovered" or entry.get("presentation") not in {"explicit", "actionable"}
++            or entry.get("source_scene") != scene.get("id")
++            or entry.get("valid") is False or entry.get("stale") or entry.get("superseded_by")):
++        return ()
++    source = entry.get("source_interactable")
++    if source and source != interactable.get("id"):
++        return ()
++    # A historical record without object provenance is usable only if the
++    # current authored binding is unique. Never dump global player knowledge.
++    matches = [i for i in scene.get("interactables") or []
++               if isinstance(i, dict) and i.get("reveals_clue") == cid]
++    if not source and len(matches) != 1:
++        return ()
++    text = entry.get("text")
++    current = [c for c in scene.get("discoverable_clues") or []
++               if isinstance(c, dict) and c.get("id") == cid]
++    if (not isinstance(text, str) or not text.strip() or len(current) != 1
++            or current[0].get("text") != text or current[0].get("valid") is False
++            or current[0].get("stale") or current[0].get("superseded_by")):
++        return ()
++    return (text.strip(),)
+ 
+ 
+ def _accessible_repeat(scene, world, session, target_id):
+@@ -427,7 +465,8 @@
+                         state_changes={"already_searched": True, "interactable_id": i_id},
+                         hint=f"Player has already searched [{i_id}]. Narrate that they find nothing new.",
+                         interactable_id=i_id,
+-                        metadata=_repeat_publication(classified_meta, valid_repeat, raw_player_text or prompt),
++                        metadata=_repeat_publication(classified_meta, valid_repeat, raw_player_text or prompt,
++                            recalled=_source_disclosed_facts(scene, session, i)),
+                     )
+                     return result.to_dict()
+                 # Skill check authority: engine decides when to roll
+--- a/game/bounded_improvisation.py
++++ b/game/bounded_improvisation.py
+@@ -1031,6 +1031,11 @@
+             if narrated:
+                 result['metadata']['engine_publication'] = narrated['text']
+                 result['metadata']['live_narration'] = True
++            from game.publication_contract import stamp, FINAL_ENGINE_RESPONSE
++            result['metadata']['bounded_expression_attempted'] = True
++            result['metadata']['live_expression_published'] = bool(narrated)
++            stamp(result['metadata'], FINAL_ENGINE_RESPONSE,
++                  publication=result['metadata'].get('engine_publication'))
+         return result
+     elif plan.get('routine') == 'sit':
+         ledger = ensure_bounded_improvisation_ledger(session)
+--- a/game/publication_contract.py
++++ b/game/publication_contract.py
+@@ -25,6 +25,60 @@
+ })
+ 
+ 
++def record_completed_publication(response, *, source_handler: str, presentation_rows=(), provider_rows=(), publication_context=None, publication_contract=None):
++    """Record the committed, player-projected response once at the HTTP boundary.
++
++    Retries returning the ordered-turn cache never reach this boundary. Only
++    visible text and hashes of actually published accepted expressions leave
++    it; rejected provider prose and hidden resolver fields are excluded.
++    """
++    import hashlib
++    import json
++    import os
++    import uuid
++    from pathlib import Path
++    from game import storage
++
++    status = getattr(response, 'status_code', 200)
++    body = json.loads(response.body) if hasattr(response, 'body') else response
++    if not isinstance(body, dict):
++        return None
++    gm = body.get('gm_output') or {}
++    text = str(gm.get('player_facing_text') or body.get('error') or body.get('message') or '')
++    if not text:
++        return None
++    def ref(value):
++        return hashlib.sha256(value.encode('utf-8')).hexdigest()
++    accepted = [r for r in presentation_rows if r.get('decision') == 'accepted'
++                and r.get('text') and r['text'] in text]
++    context = publication_context if isinstance(publication_context, dict) else {}
++    if context.get('visible') == text and any(r.get('sent') is True for r in provider_rows):
++        if context.get('dialogue_accepted') and context.get('dialogue_published'):
++            if not any(r.get('kind') == 'dialogue' for r in accepted):
++                accepted.append(dict(kind='dialogue', text=text))
++        if context.get('narration_accepted') and context.get('narration_published'):
++            if not any(r.get('kind') == 'narration' for r in accepted):
++                accepted.append(dict(kind='narration', text=text))
++    kinds = {r.get('kind') for r in accepted}
++    category = ('error' if status >= 400 else 'mixed' if len(kinds) > 1 else
++                'dialogue' if 'dialogue' in kinds else 'live_narration' if 'narration' in kinds else
++                'clarification' if publication_contract == CLARIFICATION_REQUIRED else
++                'unsupported_action' if publication_contract == UNSUPPORTED_ACTION else
++                'failure' if publication_contract == FAILURE else
++                'engine_response')
++    row = dict(turn_id=uuid.uuid4().hex, publication_owner=context.get('owner') if context.get('visible') == text else 'completed_runtime_response',
++               response_category=category, source_handler=source_handler,
++               provider_involvement=bool(presentation_rows) or any(r.get('sent') is True for r in provider_rows),
++               provider_attempt_references=[r['attempt_id'] for r in provider_rows if r.get('sent') is True and r.get('attempt_id')],
++               accepted_expression_references=[ref(r['text']) for r in accepted],
++               published_expression_reference=ref(text), final_player_facing_response=text,
++               validation_outcome='accepted_expression' if accepted else 'engine_or_grounded_fallback',
++               status_code=status)
++    path = Path(os.environ.get('ASHEN_PUBLICATION_TRACE_PATH') or storage.DATA_DIR / 'publication_events.jsonl')
++    path.parent.mkdir(parents=True, exist_ok=True)
++    with path.open('a', encoding='utf-8') as handle:
++        handle.write(json.dumps(row, ensure_ascii=False)+'\n')
++    return row
+ # These already have the sentence the player should read.
+ SKIP_PRIMARY = frozenset({
+     FINAL_ENGINE_RESPONSE,
+@@ -62,7 +116,6 @@
+     meta = resolution.get("metadata")
+     if not isinstance(meta, dict):
+         meta = {}
+-        resolution["metadata"] = meta
+     contract = str(meta.get("publication_contract") or "")
+     published = str(meta.get("engine_publication") or "").strip()
+     kind = str(resolution.get("kind") or "").strip().lower()
+@@ -78,7 +131,6 @@
+         kind in {"investigate", "observe"} and meta.get("action_outcome") == "valid_no_new_information"
+     ):
+         line = published or KNOWN_REPEAT_LINE
+-        stamp(meta, FINAL_ENGINE_RESPONSE, publication=line)
+         return line, "final_engine_response"
+     return None
+ 
+--- a/game/quarantined_investigation_narration.py
++++ b/game/quarantined_investigation_narration.py
+@@ -756,6 +756,37 @@
+     return plan
+ 
+ 
++def verify_engine_publication(resolution, session, player_text, text):
++    """Consume the same request-local binding for a direct engine publication.
++
++    No candidate selection, generation or narration is needed. Retain PR66's
++    invariant on its existing evidence record without claiming AI publication.
++    """
++    binding = _PUBLICATION.get()
++    _PUBLICATION.set(None)
++    sid = str(session.get('campaign_run_id') or session.get('session_id') or '')
++    if not binding or not experimental_publication_enabled(sid):
++        return
++    evidence, bound_resolution, bound_session = binding
++    if (resolution is not bound_resolution or sid != bound_session
++            or evidence.get('player_text') != player_text or not evidence.get('eligible')):
++        return
++    request = evidence.get('authorized_outcome_contract') or {}
++    facts = [f['text'] for f in request.get('must_communicate', [])]
++    if not all(f in text for f in facts):
++        raise ValueError('mandatory_disclosure_publication_failed')
++    evidence['publication'] = dict(decision='fallback', owner='engine', trusted_disclosure='',
++        mandatory_disclosures=facts, final_text=text, invariant='PASS', recovery_reason=None,
++        server_constructed=True, client_received='unknown')
++    evidence['player_facing_published'] = False
++    path = evidence.get('evidence_path')
++    if path and evidence.get('evidence_write') == 'ok':
++        try:
++            Path(path).write_text(json.dumps(evidence, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
++        except OSError:
++            evidence['publication_evidence_write_error'] = 'OSError'
++
++
+ def verify_authoritative_publication(plan, targets, *, failure=None):
+     """Final server-body invariant. One deterministic recovery, no provider/resolver calls."""
+     facts = [f['text'] for f in plan['request']['must_communicate']]
+--- a/game/player_http_boundary.py
++++ b/game/player_http_boundary.py
+@@ -23,16 +23,28 @@
+                 content = project_player_response(payload)
+                 headers = {k:v for k,v in response.headers.items()
+                            if k.lower() not in ('content-length','content-type')}
+-                return JSONResponse(content=content,status_code=response.status_code,
++                final = JSONResponse(content=content,status_code=response.status_code,
+                                     headers=headers,background=response.background)
+             except RequestValidationError:
+-                return JSONResponse(status_code=422,content={'ok':False,'error':'Check the request fields and try again.'})
++                final = JSONResponse(status_code=422,content={'ok':False,'error':'Check the request fields and try again.'})
+             except HTTPException as error:
+-                return JSONResponse(status_code=error.status_code,content={'ok':False,'error':GENERIC_ERROR})
++                final = JSONResponse(status_code=error.status_code,content={'ok':False,'error':GENERIC_ERROR})
+             except Exception:
+                 # Detailed exceptions stay in server logs. Never serialize input,
+                 # exception text, stack frames, prompts or partial internal state.
+                 log.exception('Player HTTP request failed: %s', request.url.path)
+-                return JSONResponse(status_code=500,content={'ok':False,'error':GENERIC_ERROR})
++                final = JSONResponse(status_code=500,content={'ok':False,'error':GENERIC_ERROR})
++            if (request.url.path in {'/api/chat','/api/action','/api/start_campaign'}
++                    and not getattr(request.state, 'skip_publication_trace', False)):
++                from game.publication_contract import record_completed_publication
++                provenance = getattr(request.state, 'publication_provenance', None) or {
++                    'source_handler': request.url.path}
++                try:
++                    record_completed_publication(final, **provenance)
++                except OSError:
++                    # Observability failure cannot undo an already committed turn
++                    # or turn success into a retry that would repeat gameplay.
++                    log.exception('Completed publication trace write failed')
++            return final
+ 
+         return handle
+--- a/tests/test_pr_play_61_player_facing.py
++++ b/tests/test_pr_play_61_player_facing.py
+@@ -189,7 +189,11 @@
+     assert authority["npcs"] == plain_authority["npcs"]
+     assert authority["scene"] == "frontier_gate"
+     published = [row.get("player_facing_published") is True for row in q.evidence_records()]
+-    assert published == [True, True, True, True]
++    # A repeat is a direct engine recall, not the accepted AI candidate.
++    assert published == [True, True, False, True]
++    repeat = q.evidence_records()[2]['publication']
++    assert repeat['owner'] == 'engine' and repeat['invariant'] == 'PASS'
++    assert ROUTE in repeat['final_text']
+     decisions = [row["validation"]["decision"] for row in q.evidence_records()]
+     assert decisions == ["PASS", "PASS", "PASS", "PASS"]
+ 
+@@ -208,6 +212,7 @@
+     continued = _session([REPEAT])[0]
+     assert UNSAFE not in failed["gm_output"]["player_facing_text"]
+     assert q.evidence_records()[0].get("player_facing_published") is not True
+-    assert continued["gm_output"]["player_facing_text"].startswith("You examine the board again")
++    assert continued["gm_output"]["player_facing_text"].startswith("You examine the notice board again")
++    assert ROUTE in continued["gm_output"]["player_facing_text"]
+     assert _authority()["clues"] == [ROUTE]
+     assert json.dumps(_authority()).count("silver key") == 0
+--- a/tests/test_pr_play_62_investigation_quality.py
++++ b/tests/test_pr_play_62_investigation_quality.py
+@@ -33,12 +33,12 @@
+     texts = [r['gm_output']['player_facing_text'] for r in rows]
+     assert texts[0].startswith('You examine the notice board.')
+     assert texts[1].startswith('You examine the rain barrel; no new clue is established.')
+-    assert texts[2] == ('You examine the notice board again. '
+-                        'The examination adds nothing new to what you already know.')
++    assert texts[2].startswith('You examine the notice board again.')
++    assert ROUTE in texts[2] and 'nothing new' in texts[2]
+     assert texts[3].startswith('You examine the gate; no new clue is established.')
+     assert all('silver key' not in t and 'census' not in t for t in texts)
+     assert ROUTE in texts[0]
+-    assert all(ROUTE not in t for t in texts[1:])
++    assert all(ROUTE not in texts[index] for index in (1, 3, 4))
+     after = _authority()
+     assert after['clues'] == [ROUTE]
+     assert after == expected
+--- a/tests/test_pr_play_69_target_references.py
++++ b/tests/test_pr_play_69_target_references.py
+@@ -101,7 +101,11 @@
+     assert rows[0]['journal']['discovered_clues']==rows[-1]['journal']['discovered_clues']
+     for row in rows[1:3]:
+         text=row['gm_output']['player_facing_text']
+-        assert text=='You examine the weathered milestone again. The examination adds nothing new to what you already know.'
++        assert text.startswith('You examine the weathered milestone again.')
++        assert 'nothing new' in text
++        # Source-bound recall must retain the same disclosed clue, without
++        # adding a discovery or accepting the empty provider candidate.
++        assert all(clue in text for clue in rows[0]['journal']['discovered_clues'])
+     assert calls==[1,1,1,1] and len(resolutions)==4
+ 
+ @pytest.mark.parametrize('path',['structured','chat'])
+--- /dev/null
++++ b/tests/test_pr_play_79d_closeout.py
+@@ -0,0 +1,215 @@
++"""Source recall and completed-publication behavior; offline providers only."""
++import copy
++import hashlib
++import json
++from pathlib import Path
++
++import pytest
++
++from game import storage
++from game.exploration import _source_disclosed_facts, resolve_exploration_action
++from game.defaults import default_session, default_character, default_world
++from game.publication_contract import narration_skip, record_completed_publication
++
++CONDITIONS = ['known','third','reload','travel_return','conversation','other_discovery',
++              'hidden','other_source','modified','removed','stale','implicit', 'contradiction',
++              'partial', 'failed', 'invalid', 'cross_campaign', 'ambiguous', 'legacy', 'wrong_scene']
++
++
++def recall_fixture(source, fact, condition):
++    session = default_session()
++    session['active_scene_id'] = 'observatory'
++    entry = dict(state='discovered', presentation='explicit', source_scene='observatory',
++                 source_interactable=source, text=fact)
++    scene = dict(id='observatory', visible_facts=[f'A {source} is visible.'],
++                 interactables=[dict(id=source, label=source, type='investigate', reveals_clue='fact')],
++                 discoverable_clues=[dict(id='fact', text=fact), dict(id='hidden', text='CANARY_HIDDEN')])
++    session['clue_knowledge'] = {'fact': entry}
++    if condition in {'hidden','failed','cross_campaign'}: session['clue_knowledge'] = {}
++    if condition == 'other_source': entry['source_interactable'] = 'different'
++    if condition == 'wrong_scene': entry['source_scene'] = 'elsewhere'
++    if condition in {'modified','contradiction'}: scene['discoverable_clues'][0]['text'] = 'CANARY_HIDDEN modified text'
++    if condition == 'removed': scene['interactables'] = []
++    if condition == 'stale': entry['stale'] = True
++    if condition == 'invalid': entry['valid'] = False
++    if condition == 'implicit': entry['presentation'] = 'implicit'
++    if condition == 'legacy': entry.pop('source_interactable')
++    if condition == 'ambiguous':
++        entry.pop('source_interactable')
++        scene['interactables'].append(dict(id='other', reveals_clue='fact'))
++    if condition == 'other_discovery': session['clue_knowledge']['other'] = dict(entry, text='CANARY_HIDDEN unrelated')
++    if condition == 'conversation': session['active_interlocutor'] = 'astronomer'
++    if condition == 'travel_return': session['visited_scene_ids'] = ['observatory','garden','observatory']
++    if condition == 'reload': session = json.loads(json.dumps(session))
++    return scene, session
++
++
++def exercise_recall(source, fact, condition):
++    scene, session = recall_fixture(source, fact, condition)
++    before = copy.deepcopy((scene, session))
++    items = scene['interactables']
++    recalled = _source_disclosed_facts(scene, session, items[0]) if items else ()
++    assert (scene, session) == before
++    assert 'CANARY_' not in json.dumps(recalled)
++    return recalled
++
++
++@pytest.mark.parametrize('source,fact', [('chart','The chart records four moons.'), ('plaque','The plaque names the mason Eda.')])
++@pytest.mark.parametrize('condition', CONDITIONS)
++def test_source_recall(source, fact, condition):
++    expected = condition in {'known','third','reload','travel_return','conversation','other_discovery','partial','legacy'}
++    assert exercise_recall(source, fact, condition) == ((fact,) if expected else ())
++
++
++@pytest.mark.parametrize('kind', ['dialogue','narration','mixed','fallback','clarification','unsupported','error','rejected'])
++def test_completed_record(tmp_path, monkeypatch, kind):
++    path = tmp_path/'publication.jsonl'
++    monkeypatch.setenv('ASHEN_PUBLICATION_TRACE_PATH', str(path))
++    text = 'Aster says, "The charts are old."'
++    rows = []
++    if kind in {'dialogue','mixed'}: rows.append(dict(kind='dialogue',decision='accepted',text=text))
++    if kind in {'narration','mixed'}: rows.append(dict(kind='narration',decision='accepted',text='You step away.'))
++    if kind == 'rejected': rows.append(dict(kind='dialogue',decision='rejected',text='CANARY_HIDDEN'))
++    text = ('You step away. '+text) if kind in {'narration','mixed'} else text
++    body = {'gm_output': {'player_facing_text': text}}
++    if kind == 'error':
++        from fastapi.responses import JSONResponse
++        body = JSONResponse(status_code=409, content={'error': 'Please retry.'})
++    record = record_completed_publication(body, source_handler='test', presentation_rows=rows)
++    saved = [json.loads(s) for s in path.read_text(encoding='utf-8').splitlines()]
++    assert saved == [record]
++    assert record['published_expression_reference'] == hashlib.sha256(record['final_player_facing_response'].encode()).hexdigest()
++    assert 'CANARY_HIDDEN' not in path.read_text()
++    assert bool(record['accepted_expression_references']) == (kind in {'dialogue','narration','mixed'})
++
++
++def test_repeat_resolution_read_only():
++    scene, session = recall_fixture('chart', 'The chart records four moons.', 'known')
++    from game.storage import mark_interactable_resolved
++    mark_interactable_resolved(session, 'observatory', 'chart')
++    before = copy.deepcopy((scene,session))
++    result = resolve_exploration_action({'scene': scene}, session, default_world(),
++        dict(id='chart',target_id='chart',type='investigate',prompt='I examine the chart again.'),
++        raw_player_text='I examine the chart again.', character=default_character())
++    assert (scene,session) == before
++    assert result['discovered_clues'] == []
++    assert 'The chart records four moons.' in result['metadata']['engine_publication']
++    untouched = copy.deepcopy(result)
++    assert narration_skip(result)[0] == result['metadata']['engine_publication']
++    assert result == untouched
++
++
++def test_no_unpublished_candidate_reference(tmp_path, monkeypatch):
++    monkeypatch.setenv('ASHEN_PUBLICATION_TRACE_PATH', str(tmp_path/'p.jsonl'))
++    row = record_completed_publication({'gm_output': {'player_facing_text':'You find nothing new.'}},
++        source_handler='test', presentation_rows=[dict(kind='dialogue', decision='accepted', text='Unpublished candidate')])
++    assert row['accepted_expression_references'] == []
++    assert row['validation_outcome'] == 'engine_or_grounded_fallback'
++
++
++def test_alternate_dialogue_owner_provenance(tmp_path, monkeypatch):
++    monkeypatch.setenv('ASHEN_PUBLICATION_TRACE_PATH', str(tmp_path/'p.jsonl'))
++    text = 'The astronomer says, "I do not know."'
++    context = dict(owner='bounded_improvisation.conversation', visible=text,
++                   dialogue_accepted=True, dialogue_published=True)
++    row = record_completed_publication({'gm_output':{'player_facing_text':text}},
++        source_handler='api_chat', publication_context=context,
++        provider_rows=[dict(sent=True, attempt_id='current')])
++    assert row['response_category'] == 'dialogue' and row['provider_involvement']
++    assert row['provider_attempt_references'] == ['current']
++    assert len(row['accepted_expression_references']) == 1
++    stale = record_completed_publication({'gm_output':{'player_facing_text':text}},
++        source_handler='api_chat', publication_context=context)
++    assert stale['accepted_expression_references'] == []
++
++
++@pytest.mark.parametrize('contract,category', [('CLARIFICATION_REQUIRED','clarification'),('UNSUPPORTED_ACTION','unsupported_action'),('FAILURE','failure')])
++def test_response_categories(tmp_path, monkeypatch, contract, category):
++    monkeypatch.setenv('ASHEN_PUBLICATION_TRACE_PATH', str(tmp_path/'p.jsonl'))
++    row = record_completed_publication({'gm_output':{'player_facing_text':'A grounded response.'}},
++        source_handler='api_chat', publication_contract=contract)
++    assert row['response_category'] == category
++
++
++def test_http_error_publication(tmp_path, monkeypatch):
++    from fastapi.testclient import TestClient
++    from game import api
++    path = tmp_path/'p.jsonl'
++    monkeypatch.setenv('ASHEN_PUBLICATION_TRACE_PATH', str(path))
++    with TestClient(api.app) as client:
++        response = client.post('/api/chat?ui_mode=player', json={'text':{'invalid':'CANARY_HIDDEN'}})
++    assert response.status_code == 422
++    rows = [json.loads(s) for s in path.read_text().splitlines()]
++    assert len(rows) == 1 and rows[0]['response_category'] == 'error'
++    assert 'CANARY_' not in path.read_text()
++
++
++@pytest.mark.parametrize('accepted', [True,False])
++def test_physical_expression_is_settled_once(ready_physical, monkeypatch, accepted):
++    from game import bounded_improvisation as bounded, integrated_play
++    from game.publication_contract import ADJUDICATION_RESULT
++    from game.physical_adjudication import plan_physical
++    session, scene, world = ready_physical
++    text = 'I approach the notice board.'
++    calls = []
++    def narrate(facts, **kwargs):
++        calls.append(facts)
++        return {'text':facts} if accepted else None
++    monkeypatch.setattr(integrated_play, 'maybe_narrate', narrate)
++    plan = bounded.controlled_request(text, session=session, scene=scene, world=world)
++    assert plan and plan.get('physical')
++    result = bounded.resolve_controlled_fact(scene, session, world,
++        {'id':plan['id'],'target_id':plan['id']}, prompt=text, action_id=plan['id'], label='approach')
++    assert result and result['metadata']['bounded_expression_attempted']
++    assert narration_skip(result, scene=scene, session=session)
++    assert len(calls) == 1
++
++
++@pytest.fixture
++def ready_physical(monkeypatch):
++    from tests.test_pr_play_76_physical import enable
++    from tests.test_pr_play_79a_continuity import gate
++    enable(monkeypatch)
++    monkeypatch.setenv('ASHEN_EXPERIMENTAL_INTEGRATED_NARRATION','1')
++    session, scene, world = gate()
++    scene['scene']['interactables'] = [{'id':'notice_board','label':'Notice board','type':'investigate'}]
++    return session, scene, world
++
++
++def test_duplicate_chat_records_once(tmp_path, monkeypatch):
++    from tests.test_pr_play_62_investigation_quality import setup_session
++    from fastapi.testclient import TestClient
++    from game import api
++    setup_session(tmp_path, monkeypatch)
++    trace = tmp_path/'completed.jsonl'
++    monkeypatch.setenv('ASHEN_PUBLICATION_TRACE_PATH', str(trace))
++    with TestClient(api.app) as client:
++        request = {'text':'I examine the notice board.', 'client_request_id':'79d-once'}
++        first = client.post('/api/chat?ui_mode=player', json=request)
++        after = copy.deepcopy(storage.load_session())
++        second = client.post('/api/chat?ui_mode=player', json=request)
++    assert first.status_code == second.status_code == 200
++    assert first.json() == second.json()
++    assert after == storage.load_session()
++    assert len(trace.read_text().splitlines()) == 1
++
++
++def test_snapshot_restores_source_knowledge(tmp_path, monkeypatch):
++    from tests.test_pr_play_62_investigation_quality import setup_session
++    from fastapi.testclient import TestClient
++    from game import api
++    setup_session(tmp_path, monkeypatch)
++    monkeypatch.setattr(storage, 'SNAPSHOTS_DIR', tmp_path/'snapshots')
++    with TestClient(api.app) as client:
++        first = client.post('/api/chat?ui_mode=player', json={'text':'I examine the notice board.'})
++        assert first.status_code == 200
++        known = copy.deepcopy(storage.load_session()['clue_knowledge'])
++        snapshot = storage.create_snapshot('79d recall')
++        session = storage.load_session()
++        session['clue_knowledge'] = {}
++        storage.save_session(session)
++        storage.load_snapshot(snapshot['id'])
++        assert storage.load_session()['clue_knowledge'] == known
++        repeated = client.post('/api/chat?ui_mode=player', json={'text':'I examine the notice board again.'})
++    assert 'northwest mud track past the crates' in repeated.json()['gm_output']['player_facing_text']
++    assert storage.load_session()['clue_knowledge'] == known
+--- /dev/null
++++ b/tests/test_pr_play_79d_holdout.py
+@@ -0,0 +1,20 @@
++"""Run frozen developer-authored recall holdout once, retaining original results."""
++import json
++from pathlib import Path
++import pytest
++from tests.test_pr_play_79d_closeout import exercise_recall
++
++ROOT = Path(__file__).resolve().parents[1]
++ROWS = json.loads((ROOT/'artifacts/pr_play_79d/holdout.json').read_text())
++
++@pytest.mark.parametrize('row', ROWS, ids=[r['id'] for r in ROWS])
++def test_frozen(row, tmp_path, monkeypatch):
++    recalled = exercise_recall(row['source'], row['fact'], row['condition'])
++    assert recalled == ((row['fact'],) if row['expected_recall'] else ())
++    from game.exploration import _repeat_publication
++    from game.publication_contract import record_completed_publication
++    text = _repeat_publication({}, True, row['input'], recalled=recalled)['engine_publication']
++    monkeypatch.setenv('ASHEN_PUBLICATION_TRACE_PATH', str(tmp_path/'publication.jsonl'))
++    trace = record_completed_publication({'gm_output': {'player_facing_text':text}}, source_handler='holdout')
++    assert trace['final_player_facing_response'] == text
++    assert 'nothing new' in text and 'CANARY_' not in text

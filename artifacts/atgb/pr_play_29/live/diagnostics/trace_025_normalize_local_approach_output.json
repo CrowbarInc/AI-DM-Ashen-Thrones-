@@ -1,0 +1,66 @@
+{
+  "function": "game.local_interaction.normalize_local_approach",
+  "result": {
+    "communication_mode": "IN_WORLD_ACTION",
+    "interpretation_status": "INTERPRETED",
+    "player_intent": {
+      "summary": "Ask the tavern runner about rumors they have heard."
+    },
+    "asserted_premises": [
+      {
+        "text": "The tavern runner offers hot stew and rumors.",
+        "canon_status": "PLAYER_CLAIM"
+      },
+      {
+        "text": "The scene includes a missing patrol inquiry and gate watch pressure.",
+        "canon_status": "PLAYER_CLAIM"
+      }
+    ],
+    "requested_outcomes": [
+      {
+        "text": "Receive information about rumors the tavern runner has heard.",
+        "adjudication_status": "UNADJUDICATED"
+      }
+    ],
+    "action_components": [
+      {
+        "order": 1,
+        "description": "Ask the tavern runner what sort of rumors they have heard.",
+        "target_ref": "tavern_runner",
+        "operation_class": "ASK"
+      }
+    ],
+    "references": {
+      "permitted_entity_ids": [
+        "tavern_runner"
+      ],
+      "unresolved_references": []
+    },
+    "clarification_question": "",
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "communication": {
+      "recipient": "NPC",
+      "purpose": "QUESTION",
+      "subject": "rumors heard",
+      "evidence_refs": [
+        "npc_latest_reply",
+        "visible:2",
+        "visible:4"
+      ]
+    },
+    "incidental_context": [],
+    "reference_reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "public_evidence": {
+      "npc_latest_reply": "Tavern Runner says, \"Well, I've got hot stew and rumors to share.\"",
+      "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point."
+    }
+  }
+}

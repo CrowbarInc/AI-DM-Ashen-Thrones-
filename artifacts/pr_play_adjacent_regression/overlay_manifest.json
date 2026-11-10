@@ -1,0 +1,24 @@
+{
+  "purpose": "Isolated pre-handoff package used only for comparison. The working repository was not checked out, reset, or edited.",
+  "location": "Outside the repository, under the user temp directory pr_play_adj_audit/overlay.",
+  "base": "A copy of the current game package, excluding bytecode.",
+  "static_link": "A junction to the repository static directory so api import can mount StaticFiles. The repository static tree was not modified.",
+  "files_replaced_with_HEAD": [
+    "game/conversational_continuity.py",
+    "game/intent_parser.py",
+    "game/referenced_surface.py"
+  ],
+  "head_reason": "git diff HEAD for those three files contains only the post-NPC handoff hunks recorded in artifacts/pr_play_post_npc/implementation.diff. HEAD of those files is the pre-handoff text.",
+  "orchestration": "Current conversational_orchestration.py with the handoff insertions removed: local-presence decline, grounded-object question, ambiguous named-object clarify, unbound physical decline, object abstain in the dialogue follow-up, and the named-object guard on recent-visible answers. authored_travel_admission remains.",
+  "removed_tokens_absent_after_edit": [
+    "_local_presence_decision",
+    "_grounded_object_question",
+    "_unbound_physical_decline",
+    "established_scene_object_ids",
+    "local_object_not_a_destination",
+    "unsupported_physical_manipulation",
+    "ambiguous_scene_object"
+  ],
+  "not_claimed": "This is not a byte-for-byte saved copy of the dirty tree from the moment before the handoff edit. No such copy exists. The twelve HTTP captures on this package match the current captures exactly.",
+  "comparison_result": "current_capture.json records equal historical_capture.json for every recorded turn and every conversational-decision probe in the twelve cases."
+}

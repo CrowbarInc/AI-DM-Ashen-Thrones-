@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 BASELINE_VERSION = "frontier-gate-v1"
-MANIFEST_SHA256 = "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9"
+MANIFEST_SHA256 = "9c390c78f3fcf7507793e1037eb0add59e5e373050d1996f29f0c26f3b7bf0ea"
 FILES = frozenset({"campaign.json", "character.json", "conditions.json", "world.json",
                    "scenes/frontier_gate.json", "scenes/market_quarter.json", "scenes/old_milestone.json"})
 

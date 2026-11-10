@@ -1,0 +1,18 @@
+........................................................................ [ 68%]
+...............................F.                                        [100%]
+================================== FAILURES ===================================
+______________ test_reinspection_may_authoritatively_add_nothing ______________
+tests\test_pr_play_72_supplemental.py:26: in test_reinspection_may_authoritatively_add_nothing
+    assert resolution["kind"] == "already_searched" and resolution["success"] is False
+E   AssertionError: assert ('already_searched' == 'already_searched'
+E     
+E       already_searched and True is False)
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_72_supplemental.py::test_reinspection_may_authoritatively_add_nothing
+1 failed, 104 passed, 1 warning in 584.08s (0:09:44)

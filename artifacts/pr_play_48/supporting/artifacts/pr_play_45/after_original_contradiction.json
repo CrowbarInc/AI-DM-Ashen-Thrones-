@@ -1,0 +1,175 @@
+{
+  "player_facing_text": "The ledger lists twelve ingots, with three missing.",
+  "metadata": {
+    "authorized_information_delivery": {
+      "source": "resolved_action",
+      "supplemented": [
+        {
+          "text": "The ledger lists twelve ingots, with three missing.",
+          "source": "resolved_action",
+          "status": "newly_revealed"
+        }
+      ]
+    },
+    "hard_validation_attempt_1": {
+      "hard_valid": false,
+      "reasons": [
+        "unsupported_mechanical_claim:currency_gained",
+        "unsupported_mechanical_claim:items_added"
+      ],
+      "soft_flags": [],
+      "text": "You receive fifty gold coins and a silver key. The ledger lists twelve ingots, with three missing."
+    },
+    "accepted_response": {
+      "immutable": true,
+      "text": "The ledger lists twelve ingots, with three missing.",
+      "provenance": "safe_nonresolution",
+      "attempt": 1,
+      "player_input": "I inspect the ledger.",
+      "turn_identity": "rc_e499d7524f12",
+      "speaker": "",
+      "addressee": "",
+      "target": "ledger",
+      "operation": "inspect",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [],
+        "gm_resolution_decision_audit": {
+          "decision_id": "rc_e499d7524f12",
+          "hard_valid": true,
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "The ledger lists twelve ingots, with three missing.",
+              "provenance": "authored_world_fact",
+              "consequence": "consequential",
+              "authorized": true,
+              "reason_codes": [
+                "resolver_selected_public_clue"
+              ],
+              "authority": "world_truth",
+              "persistence": "do_not_persist",
+              "source_ref": "resolution.clue_text",
+              "outcome_classification": "established_or_retrieved",
+              "semantic_identity": {}
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "The ledger lists twelve ingots, with three missing.",
+              "semantic_identity": {},
+              "provenance": "authored_world_fact",
+              "authority": "world_truth",
+              "epistemic_status": "established",
+              "relation_kind": "ordinary_predicate",
+              "persistence": "do_not_persist",
+              "authorized": true,
+              "source_ref": "resolution.clue_text",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "resolver_selected_public_clue"
+              ]
+            }
+          ]
+        },
+        "decision_acceptance_why": "mechanical_outcome_fallback"
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "rc_e499d7524f12",
+        "operation": "inspect",
+        "interlocutor_id": "",
+        "expected_resolution": "answer"
+      },
+      "resolution_kind": "discover_clue",
+      "generation_attempts": 1,
+      "skipped_mutators": [],
+      "subject": "ledger",
+      "authorization_source": "safe_nonresolution",
+      "adoption_status": "safe_fallback_selected",
+      "integrity_digest": "9a3c08270db3047ac1f2589d9e90de1ebaa5cc50f50ef704867beb37d7d410ef"
+    },
+    "rejected_mechanical_draft": "You receive fifty gold coins and a silver key. The ledger lists twelve ingots, with three missing.",
+    "rejected_provider_output": "You receive fifty gold coins and a silver key.",
+    "mechanical_rejection_reasons": [
+      "unsupported_mechanical_claim:currency_gained",
+      "unsupported_mechanical_claim:items_added"
+    ],
+    "regeneration_invoked": false,
+    "emission_debug": {
+      "accepted_response_provenance": "safe_nonresolution",
+      "generation_attempts": 1,
+      "legacy_emission_authority": false,
+      "semantic_degradation": false,
+      "semantic_degradation_reasons": [],
+      "resolution_contract_semantic": {
+        "status": "legitimate_nonresolution",
+        "reasons": [],
+        "preserved": false
+      }
+    },
+    "decision_review": {
+      "governing_decision_contract_id": "rc_e499d7524f12",
+      "outcome_classification": "state_mutation",
+      "attempt_1": {
+        "text": "You receive fifty gold coins and a silver key. The ledger lists twelve ingots, with three missing.",
+        "reasons": [
+          "unsupported_mechanical_claim:currency_gained",
+          "unsupported_mechanical_claim:items_added"
+        ],
+        "gm_resolution_decision_audit": {
+          "decision_id": "rc_e499d7524f12",
+          "hard_valid": true,
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "The ledger lists twelve ingots, with three missing.",
+              "provenance": "authored_world_fact",
+              "consequence": "consequential",
+              "authorized": true,
+              "reason_codes": [
+                "resolver_selected_public_clue"
+              ],
+              "authority": "world_truth",
+              "persistence": "do_not_persist",
+              "source_ref": "resolution.clue_text",
+              "outcome_classification": "established_or_retrieved",
+              "semantic_identity": {}
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "The ledger lists twelve ingots, with three missing.",
+              "semantic_identity": {},
+              "provenance": "authored_world_fact",
+              "authority": "world_truth",
+              "epistemic_status": "established",
+              "relation_kind": "ordinary_predicate",
+              "persistence": "do_not_persist",
+              "authorized": true,
+              "source_ref": "resolution.clue_text",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "resolver_selected_public_clue"
+              ]
+            }
+          ]
+        }
+      },
+      "retry_context": "",
+      "attempt_2": null,
+      "acceptance": {
+        "why": "mechanical_outcome_fallback",
+        "text": "The ledger lists twelve ingots, with three missing."
+      }
+    }
+  },
+  "_final_delivery_seal": "{\"addressee\":\"\",\"adoption_status\":\"safe_fallback_selected\",\"attempt\":1,\"authority_result\":\"accepted\",\"authorization_source\":\"safe_nonresolution\",\"contract\":{\"contract_id\":\"rc_e499d7524f12\",\"expected_resolution\":\"answer\",\"interlocutor_id\":\"\",\"operation\":\"inspect\"},\"contract_satisfying\":true,\"generation_attempts\":1,\"grounding_result\":\"not_a_replacement_trigger\",\"hard_validation\":{\"authority\":[],\"decision_acceptance_why\":\"mechanical_outcome_fallback\",\"gm_resolution_decision_audit\":{\"claim_results\":[{\"authority\":\"world_truth\",\"authorized\":true,\"epistemic_status\":\"established\",\"persistence\":\"do_not_persist\",\"provenance\":\"authored_world_fact\",\"reason_codes\":[\"resolver_selected_public_clue\"],\"relation_kind\":\"ordinary_predicate\",\"semantic_identity\":{},\"source_ref\":\"resolution.clue_text\",\"source_scene\":\"\",\"source_turn\":null,\"text\":\"The ledger lists twelve ingots, with three missing.\"}],\"decision_id\":\"rc_e499d7524f12\",\"hard_valid\":true,\"proposed_facts\":[{\"authority\":\"world_truth\",\"authorized\":true,\"consequence\":\"consequential\",\"outcome_classification\":\"established_or_retrieved\",\"persistence\":\"do_not_persist\",\"provenance\":\"authored_world_fact\",\"reason_codes\":[\"resolver_selected_public_clue\"],\"semantic_identity\":{},\"source_ref\":\"resolution.clue_text\",\"text\":\"The ledger lists twelve ingots, with three missing.\"}],\"violations\":[]},\"hard_valid\":true,\"reasons\":[],\"soft_flags\":[]},\"immutable\":true,\"interaction_completion\":true,\"operation\":\"inspect\",\"player_input\":\"I inspect the ledger.\",\"provenance\":\"safe_nonresolution\",\"resolution_kind\":\"discover_clue\",\"speaker\":\"\",\"subject\":\"ledger\",\"target\":\"ledger\",\"text\":\"The ledger lists twelve ingots, with three missing.\",\"turn_identity\":\"rc_e499d7524f12\"}"
+}

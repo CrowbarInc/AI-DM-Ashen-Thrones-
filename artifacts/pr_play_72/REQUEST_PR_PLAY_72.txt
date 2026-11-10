@@ -1,0 +1,1861 @@
+ASHEN THRONES — ATGB / PRODUCT REALIZATION
+PR-PLAY-72: CONSEQUENCE-AWARE PLAYER INITIATIVE
+
+MISSION
+Demonstrate that Ashen Thrones can understand and
+respond to naturally expressed player intentions
+while preserving authoritative gameplay state.
+
+The player should not need to select a predefined
+button or know an internal command name to perform
+an otherwise supported action.
+
+The engine must distinguish between:
+
+1. What the player wants to accomplish.
+2. What the character is attempting.
+3. What the current world state permits.
+4. What the authoritative mechanics resolve.
+5. What the player is allowed to learn.
+6. What the AI-DM may narrate.
+
+The AI may help interpret intent.
+
+The AI may help present the outcome.
+
+The AI must not independently invent or commit
+authoritative consequences.
+
+PRIMARY QUESTION
+
+CAN A PLAYER EXPRESS A REASONABLE INTENTION IN
+ORDINARY LANGUAGE AND RECEIVE A CONTEXT-AWARE,
+AUTHORITATIVE RESPONSE THAT REFLECTS THEIR
+PREVIOUS DECISIONS?
+
+SECONDARY QUESTION
+
+CAN THE ENGINE DISTINGUISH BETWEEN:
+
+- Supported intentions.
+- Ambiguous intentions.
+- Unsupported intentions.
+- Impossible intentions.
+- Information requests.
+- Attempts to perform actions.
+- Attempts to obtain hidden information.
+
+WITHOUT REDUCING ALL OF THEM TO GENERIC REFUSALS?
+
+THIS IS A GAMEPLAY-CAPABILITY EXPANSION CYCLE.
+
+It is not a general narration-polishing cycle.
+
+It is not a campaign-generation redesign.
+
+It is not a broad AI-agent architecture rewrite.
+
+It is not an unrestricted natural-language
+world-generation experiment.
+
+Do not commit or push without explicit authorization.
+
+======================================================================
+0. ESTABLISHED BASELINE
+======================================================================
+
+PR-PLAY-71V reported:
+
+VERDICT:
+Qualified A/PASS.
+
+VERIFIED:
+
+- Normal campaign creation.
+- Normal campaign initialization.
+- Opening-scene gameplay.
+- Investigation and discovery.
+- Supported movement.
+- Meaningful branching.
+- Persistent consequences.
+- Save/resume.
+- Cross-campaign transcript restoration.
+- Windows persistence recovery.
+- Failed-operation rollback.
+- Player-safe HTTP publication.
+
+PR-PLAY-71V EVIDENCE:
+
+- Normal HTTP lifecycles: 2/2 PASS.
+- Normal browser lifecycles: 2/2 PASS.
+- Isolated lifecycle/persistence tests: 39/39 PASS.
+- Frozen holdout: 59/60, one harness error.
+- Focused regression: 1,065 passed, 20 failed.
+- Boundary regression: 101 passed, 6 failed.
+- Broader regression: 9 historical failures.
+- Live provider requests: 0.
+- Hidden-information exposures: 0 observed.
+- Mandatory disclosure omissions: 0 observed.
+- Unsafe AI publications: 0 observed.
+
+IMPORTANT REPOSITORY INTEGRITY EXCEPTION:
+
+PR-PLAY-71V reported that:
+
+data/session_log.jsonl
+
+was overwritten during testing.
+
+Its original uncommitted contents were not recovered.
+
+The protected working-tree comparison ended at:
+
+149/150 files preserved.
+
+This issue must be addressed BEFORE running
+additional tests that can mutate repository data.
+
+Do not assume the original contents are recoverable.
+
+Do not silently restore the file from Git.
+
+Do not overwrite it again.
+
+======================================================================
+1. MANDATORY PRECONDITION — TEST-DATA ISOLATION
+======================================================================
+
+This is a P0 prerequisite.
+
+Before implementation or gameplay testing:
+
+1. Inspect repository status.
+
+2. Read applicable governance.
+
+3. Identify protected files.
+
+4. Record protected-file hashes.
+
+5. Record the current hash of:
+
+   data/session_log.jsonl
+
+6. Record the expected historical protected hash
+   if available.
+
+7. Preserve the current file.
+
+8. Search existing legitimate recovery sources
+   without modifying them.
+
+9. Document whether original contents can be
+   recovered.
+
+10. Do not claim recovery without byte-for-byte
+    evidence.
+
+11. Identify all tests that write to data/.
+
+12. Identify all tests that create campaigns.
+
+13. Identify all tests that create sessions.
+
+14. Identify all tests that persist chat turns.
+
+15. Identify all tests that mutate save files.
+
+16. Identify all tests that modify provider logs.
+
+17. Identify all tests that can write during import.
+
+18. Identify all tests that can write during
+    application initialization.
+
+19. Identify browser and HTTP test storage roots.
+
+20. Establish isolated temporary storage for
+    development and verification.
+
+REQUIRED ISOLATION:
+
+Tests must not write into protected production-like
+repository data.
+
+Use existing configuration and test fixtures
+where possible.
+
+Prefer:
+
+- Temporary directories.
+- Explicit test storage roots.
+- Isolated campaign directories.
+- Isolated session directories.
+- Isolated provider-usage logs.
+- Isolated save directories.
+
+Do not create a parallel persistence system.
+
+Do not modify authoritative storage semantics.
+
+If existing configuration cannot isolate test data:
+
+Implement the smallest safe configuration change.
+
+Test isolation must apply to:
+
+- Unit tests.
+- Integration tests.
+- HTTP tests.
+- Browser tests.
+- Provider experiments.
+- Failure injection.
+- Holdout tests.
+
+Verify isolation with an intentional write test.
+
+Then compare protected hashes.
+
+If isolation cannot be established:
+
+STOP MUTATING TEST EXECUTION.
+
+Return BLOCKED with evidence.
+
+Do not proceed by accepting further protected-file loss.
+
+======================================================================
+2. BASELINE ARCHITECTURE DISCOVERY
+======================================================================
+
+Inspect the existing gameplay architecture.
+
+Identify:
+
+A. Chat submission entry point.
+
+B. Natural-language input handling.
+
+C. Intent interpretation.
+
+D. Structured action parsing.
+
+E. Action validation.
+
+F. Authoritative action resolution.
+
+G. World-state lookup.
+
+H. Scene context.
+
+I. Discovery context.
+
+J. Branch flags.
+
+K. Available-action generation.
+
+L. Mandatory disclosure publication.
+
+M. Optional AI narration.
+
+N. Deterministic fallback.
+
+O. Persistence.
+
+P. Player-safe HTTP projection.
+
+Q. Frontend action submission.
+
+R. Existing provider interfaces.
+
+S. Existing experimental feature flags.
+
+Produce a concise architecture map:
+
+PLAYER TEXT
+     |
+     v
+INTENT INTERPRETATION
+     |
+     v
+CONTEXTUAL VALIDATION
+     |
+     v
+SUPPORTED ACTION RESOLUTION
+     |
+     v
+AUTHORITATIVE STATE TRANSITION
+     |
+     v
+PERSISTENCE
+     |
+     v
+PLAYER-SAFE PUBLICATION
+     |
+     v
+OPTIONAL AI PRESENTATION
+     |
+     v
+FRONTEND
+
+Identify which stages already exist.
+
+Do not create duplicate systems.
+
+Prefer extending existing action interpretation
+and resolver interfaces.
+
+======================================================================
+3. PLAYER INITIATIVE CONTRACT
+======================================================================
+
+Define a clear contract for natural intentions.
+
+An interpreted intention should contain
+only the information necessary to resolve
+a supported action.
+
+Conceptual fields:
+
+- Intent category.
+- Requested action.
+- Referenced target.
+- Current scene.
+- Relevant authoritative context.
+- Interpretation confidence.
+- Ambiguity status.
+- Required clarification.
+- Supported action mapping.
+
+Use existing schemas where possible.
+
+Do not introduce a new schema merely because
+the conceptual model above lists fields.
+
+The interpreter may propose an action.
+
+The interpreter may not commit state.
+
+The interpreter may not invent world facts.
+
+The interpreter may not invent new inventory.
+
+The interpreter may not reveal hidden information.
+
+The interpreter may not bypass prerequisites.
+
+The authoritative resolver remains responsible
+for deciding whether the action succeeds.
+
+The publication layer remains responsible
+for deciding what the player may learn.
+
+======================================================================
+4. DISTINGUISH INTENT FROM OUTCOME
+======================================================================
+
+The engine must distinguish:
+
+PLAYER INTENTION:
+
+"I want to find out whether the guards
+are searching for the patrol."
+
+from:
+
+AUTHORITATIVE OUTCOME:
+
+"The guards have begun searching."
+
+The first is a request.
+
+The second is a world-state claim.
+
+The interpreter must not transform the first
+into the second without authoritative support.
+
+Likewise:
+
+PLAYER INTENTION:
+
+"I want to follow the footprints."
+
+does not automatically mean:
+
+"The footprints lead to a hidden camp."
+
+The engine must determine:
+
+1. Whether the footprints are known.
+
+2. Whether they are currently accessible.
+
+3. Whether following them is supported.
+
+4. Whether prerequisites are satisfied.
+
+5. Whether a relevant action exists.
+
+6. Whether resolution changes state.
+
+7. What information can be published.
+
+If the action is not supported:
+
+The engine should explain the limitation
+without fabricating a successful outcome.
+
+Where an existing supported alternative exists,
+the engine may suggest it.
+
+Do not default to a generic refusal when
+a narrower, useful response is possible.
+
+======================================================================
+5. CONSEQUENCE-AWARE CONTEXT
+======================================================================
+
+Use the PR-PLAY-70 branching scenario.
+
+BRANCH A:
+
+Survey the uncertain trail.
+
+Expected authoritative context:
+
+patrol_survey = true
+
+patrol_survey_recorded = true
+after supported follow-up.
+
+BRANCH B:
+
+Report the uncertain trail to the watch.
+
+Expected authoritative context:
+
+patrol_report = true
+
+patrol_guards_warned = true
+after supported follow-up.
+
+Use actual repository identifiers if different.
+
+The interpreter must consider the selected branch.
+
+It must not treat both campaigns as equivalent.
+
+It must not expose unchosen branch consequences.
+
+It must not assume a branch outcome solely from
+the player's wording.
+
+The authoritative campaign state is the source
+of truth.
+
+======================================================================
+6. INITIAL NATURAL-INTENTION SCENARIOS
+======================================================================
+
+Demonstrate a small, meaningful set of intentions.
+
+Use the existing campaign and action mechanics.
+
+Do not create new campaign content merely to
+satisfy the examples.
+
+SCENARIO A1 — SURVEY FOLLOW-UP
+
+Player:
+
+"Can I take another look at where the tracks
+seem to disappear?"
+
+Expected:
+
+- Recognize an investigation intention.
+- Resolve against current scene.
+- Use existing supported investigation mechanics.
+- Respect previous discoveries.
+- Avoid inventing new clues.
+- Provide context-aware publication.
+
+SCENARIO A2 — SURVEY INFORMATION REQUEST
+
+Player:
+
+"What have I actually learned about the trail?"
+
+Expected:
+
+- Recognize an information request.
+- Use player-known discoveries.
+- Avoid unnecessary state mutation.
+- Avoid revealing hidden information.
+- Distinguish established facts from uncertainty.
+
+SCENARIO A3 — SURVEY UNSUPPORTED INTENTION
+
+Player:
+
+"I want to follow the tracks all the way
+to whoever left them."
+
+Expected:
+
+- Recognize the requested intention.
+- Determine whether further pursuit is supported.
+- Do not invent a destination.
+- Do not invent an encounter.
+- Explain limitations accurately.
+- Offer supported continuation if available.
+
+SCENARIO B1 — WATCH FOLLOW-UP
+
+Player:
+
+"I want to check whether the guards have
+acted on my warning."
+
+Expected:
+
+- Recognize a follow-up information intention.
+- Consider the report branch.
+- Use established authoritative facts.
+- Do not invent a search party.
+- Do not invent guard activity.
+- Resolve through existing supported mechanics
+  where possible.
+
+SCENARIO B2 — WATCH INTERACTION
+
+Player:
+
+"Can I speak to the watch about the
+missing patrol again?"
+
+Expected:
+
+- Recognize an interaction intention.
+- Check current location and accessibility.
+- Use existing supported interaction mechanics.
+- Respect prior report state.
+- Avoid duplicating the report consequence.
+
+SCENARIO B3 — WATCH UNSUPPORTED INTENTION
+
+Player:
+
+"I want the guards to send a patrol
+after the missing soldiers immediately."
+
+Expected:
+
+- Recognize a request to influence NPC behavior.
+- Do not automatically grant command authority.
+- Do not invent an NPC decision.
+- Determine whether a supported interaction exists.
+- Provide a useful, grounded response.
+
+These examples are test scenarios.
+
+They are NOT instructions to hardcode
+the exact player sentences.
+
+======================================================================
+7. GENERALIZATION REQUIREMENT
+======================================================================
+
+This is a critical acceptance requirement.
+
+Do not implement PR-PLAY-72 as a lookup table
+of six example sentences.
+
+The mechanism should recognize reasonable
+paraphrases and grammatical variations.
+
+Examples:
+
+"Look at the tracks again."
+
+"Examine where the footprints end."
+
+"Can I inspect the ground more closely?"
+
+"Tell me what I've discovered."
+
+"What do I know about the missing patrol?"
+
+"Ask the guards about their search."
+
+"Speak with the watch."
+
+"Check whether my report changed anything."
+
+Test:
+
+- Different wording.
+- Different sentence structure.
+- Questions.
+- Imperatives.
+- First-person intentions.
+- Short commands.
+- References to known targets.
+- References to unavailable targets.
+- References to prior branch outcomes.
+
+Do not overfit to exact text.
+
+Do not implement a large unrestricted
+language-understanding framework.
+
+Use the smallest reusable mechanism supported
+by the current architecture.
+
+======================================================================
+8. AMBIGUITY HANDLING
+======================================================================
+
+Test ambiguous intentions.
+
+Examples:
+
+"Check it again."
+
+"Ask them about it."
+
+"Go back there."
+
+"See what happened."
+
+If the target can be resolved safely from
+current player-visible context:
+
+Use the existing supported reference mechanism.
+
+If multiple plausible targets remain:
+
+Ask a concise clarification question.
+
+Do not guess hidden context.
+
+Do not invent a target.
+
+Do not mutate authoritative state while
+awaiting clarification.
+
+If clarification state is already supported:
+
+Use the existing mechanism.
+
+Do not introduce persistent clarification state
+unless required for a demonstrated scenario.
+
+======================================================================
+9. UNSUPPORTED ACTION HANDLING
+======================================================================
+
+The engine must distinguish:
+
+A. Supported action.
+
+B. Supported action with unmet prerequisite.
+
+C. Known target but unsupported action.
+
+D. Unknown target.
+
+E. Inaccessible target.
+
+F. Ambiguous target.
+
+G. Impossible action.
+
+H. Hidden-information request.
+
+I. Out-of-scope world modification.
+
+J. Request for information already known.
+
+Avoid one generic refusal for every category.
+
+Expected behavior:
+
+- Explain what prevents resolution.
+- Preserve authoritative state.
+- Avoid fabricating success.
+- Suggest a valid alternative where appropriate.
+- Avoid exposing hidden prerequisites.
+- Avoid leaking internal implementation details.
+
+Player-facing responses should sound like
+a Dungeon Master, not a debugging interface.
+
+However, do not optimize prose at the expense
+of correctness.
+
+======================================================================
+10. INFORMATION REQUESTS
+======================================================================
+
+Support read-only questions about known facts.
+
+Examples:
+
+"What do I know about the missing patrol?"
+
+"What did I find at the milestone?"
+
+"Have I already warned the watch?"
+
+"What happened when I surveyed the trail?"
+
+Expected:
+
+- Use player-visible campaign knowledge.
+- Respect branch-specific discoveries.
+- Distinguish known facts from uncertainty.
+- Avoid hidden-state exposure.
+- Avoid unnecessary authoritative mutation.
+- Avoid unnecessary provider calls.
+
+Use existing journal and discovery mechanisms.
+
+Do not create a second knowledge database.
+
+Do not expose raw world-state flags.
+
+Do not expose internal resolver metadata.
+
+======================================================================
+11. ACTION RESOLUTION
+======================================================================
+
+Natural-language interpretation must feed
+existing authoritative mechanics.
+
+Required:
+
+1. Interpret player intent.
+
+2. Identify supported action.
+
+3. Validate current scene.
+
+4. Validate target.
+
+5. Validate prerequisites.
+
+6. Resolve through existing mechanics.
+
+7. Commit authoritative effects.
+
+8. Persist state.
+
+9. Publish mandatory outcome.
+
+10. Optionally narrate.
+
+Do not let the language model skip steps.
+
+Do not let the interpreter write directly
+to campaign state.
+
+Do not let optional narration determine
+whether the action succeeded.
+
+Do not let a failed interpretation mutate state.
+
+Do not let repeated wording duplicate
+one-time consequences.
+
+======================================================================
+12. BRANCH-SPECIFIC DIFFERENTIATION
+======================================================================
+
+Use two independent campaigns.
+
+CAMPAIGN A:
+
+Survey branch committed.
+
+CAMPAIGN B:
+
+Report branch committed.
+
+Submit equivalent or closely related
+natural-language intentions.
+
+Examples:
+
+"What have we done about the missing patrol?"
+
+"What do I know about the trail?"
+
+"Can I follow up on what happened?"
+
+"Who have I told about this?"
+
+Expected:
+
+- Different authoritative context.
+- Different player-known facts.
+- Different available follow-ups where supported.
+- No cross-branch information leakage.
+- No fabricated shared outcome.
+
+The same sentence should not always produce
+the same answer regardless of campaign state.
+
+However, do not force different outcomes
+where the authoritative facts are identical.
+
+======================================================================
+13. PERSISTENCE AND RESUME
+======================================================================
+
+After successful natural-intention resolution:
+
+1. Save campaign.
+
+2. Reload application.
+
+3. Resume campaign.
+
+4. Verify authoritative state.
+
+5. Verify transcript.
+
+6. Verify journal.
+
+7. Verify available actions.
+
+8. Submit a related natural-language intention.
+
+9. Verify previous consequences are recognized.
+
+10. Verify no duplicate state changes.
+
+Repeat for both branches.
+
+Preserve PR-PLAY-71V persistence guarantees.
+
+Do not weaken Windows atomic-write recovery.
+
+Do not introduce duplicate writes.
+
+Do not create parallel session state.
+
+======================================================================
+14. PLAYER-SAFE PROJECTION
+======================================================================
+
+Preserve PR-PLAY-67.
+
+Natural-language interpretation must not
+increase hidden-information exposure.
+
+The player may receive:
+
+- Authorized discoveries.
+- Current scene.
+- Known NPC information.
+- Available supported actions.
+- Committed consequences.
+- Appropriate clarification questions.
+- Grounded unsupported-action responses.
+
+The player must not receive:
+
+- GM notes.
+- Hidden branch conditions.
+- Undiscovered clues.
+- Private NPC motivations.
+- Secret future events.
+- Internal interpretation prompts.
+- Raw resolver metadata.
+- Hidden state flags.
+- Provider validation traces.
+- Raw authoritative state.
+
+Test complete serialized HTTP responses.
+
+Use hidden sentinels.
+
+Unknown fields must fail closed.
+
+======================================================================
+15. OPTIONAL AI INTERPRETATION
+======================================================================
+
+Inspect existing provider-assisted
+interpretation capabilities.
+
+Prefer reusing them.
+
+If provider assistance is necessary:
+
+- Use constrained interpretation output.
+- Validate against existing action schemas.
+- Validate targets against authorized context.
+- Reject unsupported invented entities.
+- Reject invented consequences.
+- Reject hidden-information references.
+- Apply deterministic fallback.
+- Bound retries.
+- Record provider usage.
+
+The provider may propose:
+
+"Investigate known footprints."
+
+It may not independently assert:
+
+"The footprints lead to a concealed camp."
+
+If provider output is malformed:
+
+- Reject it.
+- Preserve state.
+- Use existing fallback where possible.
+- Avoid infinite retry loops.
+
+Do not add an unrestricted autonomous agent.
+
+Do not introduce new provider dependencies.
+
+======================================================================
+16. PLAYER-FACING PUBLICATION
+======================================================================
+
+Preserve:
+
+- Mandatory discovery publication.
+- Mandatory consequence publication.
+- Structured-action publication.
+- Deterministic fallback.
+- Contextual target references.
+- Branch-aware follow-up.
+- Player-safe projection.
+
+For supported actions:
+
+Publish what actually happened.
+
+For information requests:
+
+Publish what the player already knows.
+
+For ambiguous intentions:
+
+Ask what the player means.
+
+For unsupported intentions:
+
+Explain the limitation without inventing success.
+
+For impossible intentions:
+
+Do not fabricate an outcome.
+
+For hidden-information requests:
+
+Do not reveal hidden facts.
+
+Do not return internal error codes as narration.
+
+Do not present a successful interpretation
+as a successful action unless resolution succeeded.
+
+======================================================================
+17. DEVELOPMENT TEST MATRIX
+======================================================================
+
+Create focused tests covering:
+
+01. Natural investigation intention.
+
+02. Natural movement intention.
+
+03. Natural interaction intention.
+
+04. Natural information request.
+
+05. Natural branch follow-up.
+
+06. Survey-specific interpretation.
+
+07. Report-specific interpretation.
+
+08. Equivalent intent paraphrases.
+
+09. First-person intention.
+
+10. Imperative intention.
+
+11. Question-form intention.
+
+12. Short command.
+
+13. Known target reference.
+
+14. Unknown target reference.
+
+15. Ambiguous target reference.
+
+16. Unavailable target.
+
+17. Unsupported action.
+
+18. Unmet prerequisite.
+
+19. Impossible action.
+
+20. Hidden-information request.
+
+21. Read-only information request.
+
+22. No mutation during clarification.
+
+23. No mutation during unsupported action.
+
+24. No mutation during information request.
+
+25. Authoritative action resolution.
+
+26. Branch-aware response.
+
+27. Branch exclusivity.
+
+28. No invented consequence.
+
+29. No invented discovery.
+
+30. No invented NPC activity.
+
+31. No invented destination.
+
+32. No duplicate one-time consequence.
+
+33. No duplicate provider request.
+
+34. Mandatory disclosure publication.
+
+35. Deterministic fallback.
+
+36. Provider timeout.
+
+37. Malformed provider output.
+
+38. Invalid action mapping.
+
+39. Player-safe projection.
+
+40. Hidden sentinel exclusion.
+
+41. Survey persistence.
+
+42. Report persistence.
+
+43. Survey resume.
+
+44. Report resume.
+
+45. Transcript restoration.
+
+46. Cross-campaign isolation.
+
+47. Existing movement compatibility.
+
+48. Existing investigation compatibility.
+
+49. Existing interaction compatibility.
+
+50. Existing branching compatibility.
+
+51. Windows persistence compatibility.
+
+52. Experimental isolation.
+
+53. State integrity.
+
+54. Normal HTTP chat entry point.
+
+55. Normal browser text submission.
+
+56. Read-only question after resume.
+
+57. Unsupported intention after resume.
+
+58. Ambiguous intention after resume.
+
+59. Context-aware continuation.
+
+60. No protected repository-data mutation.
+
+Prefer extending existing test infrastructure.
+
+Do not create a duplicate testing framework.
+
+======================================================================
+18. FROZEN HOLDOUT
+======================================================================
+
+Create a developer-authored frozen holdout
+before implementation changes.
+
+Target:
+
+60 cases.
+
+Suggested distribution:
+
+15 supported natural intentions.
+
+10 paraphrase/generalization cases.
+
+10 branch-aware context cases.
+
+10 unsupported/ambiguous cases.
+
+5 information-request cases.
+
+5 player-safe projection cases.
+
+5 persistence/resume cases.
+
+Freeze:
+
+- Input text.
+- Starting authoritative state.
+- Player-visible context.
+- Expected interpretation category.
+- Expected action mapping.
+- Expected authoritative outcome.
+- Expected publication constraints.
+- Expected persistence behavior.
+- Manifest.
+- Content hash.
+
+Run once after implementation is frozen.
+
+Do not tune against holdout failures.
+
+If a critical defect is discovered:
+
+Preserve the failed holdout.
+
+Repair through separate development tests.
+
+Create a new holdout only if another
+independent final verification is necessary.
+
+Do not claim developer-authored holdout
+is independent external validation.
+
+======================================================================
+19. FAILURE INJECTION
+======================================================================
+
+Test:
+
+A. Provider unavailable.
+
+B. Provider timeout.
+
+C. Malformed interpretation.
+
+D. Unsupported action proposal.
+
+E. Invented target proposal.
+
+F. Hidden-information proposal.
+
+G. Duplicate player submission.
+
+H. Stale scene reference.
+
+I. Stale branch context.
+
+J. Persistence failure.
+
+K. Resume with stale frontend state.
+
+L. Cross-campaign context confusion.
+
+M. Ambiguous reference.
+
+N. Invalid action schema.
+
+O. Publication rejection.
+
+Expected:
+
+- No unauthorized state mutation.
+- No duplicate authoritative effect.
+- No hidden-information exposure.
+- No invented consequence.
+- No false successful action.
+- No unbounded retries.
+- No unnecessary provider calls.
+- Appropriate fallback or clarification.
+
+======================================================================
+20. REAL HTTP GAMEPLAY
+======================================================================
+
+Run real HTTP gameplay through the normal
+application entry points.
+
+Do not directly invoke internal resolver methods.
+
+Do not seed campaign state through developer-only APIs.
+
+Create two normal campaigns.
+
+CAMPAIGN A:
+
+1. New Campaign.
+2. Start Campaign.
+3. Reach Old Milestone.
+4. Select survey branch.
+5. Complete survey follow-up.
+6. Submit natural investigation intention.
+7. Submit natural information request.
+8. Submit unsupported intention.
+9. Save.
+10. Resume.
+11. Submit another natural intention.
+
+CAMPAIGN B:
+
+1. New Campaign.
+2. Start Campaign.
+3. Reach Old Milestone.
+4. Select report branch.
+5. Complete report follow-up.
+6. Submit natural watch-related intention.
+7. Submit natural information request.
+8. Submit unsupported intention.
+9. Save.
+10. Resume.
+11. Submit another natural intention.
+
+Capture:
+
+- Original player text.
+- Interpretation result.
+- Action mapping.
+- Authoritative before/after state.
+- Player-safe response.
+- Published narration.
+- Persistence evidence.
+- Provider usage.
+- Latency.
+
+Do not claim an action succeeded merely
+because the interpreter recognized it.
+
+======================================================================
+21. BROWSER GAMEPLAY
+======================================================================
+
+Attempt browser attachment early.
+
+Use existing browser infrastructure.
+
+Do not create a replacement browser framework.
+
+Run both campaigns through the normal UI.
+
+Required:
+
+BROWSER CAMPAIGN A
+
+New Campaign
+-> Start Campaign
+-> Investigation
+-> Movement
+-> Survey Branch
+-> Survey Follow-up
+-> Natural Typed Intention
+-> Natural Information Request
+-> Save
+-> Reload
+-> Resume
+-> Natural Follow-up
+
+BROWSER CAMPAIGN B
+
+New Campaign
+-> Start Campaign
+-> Investigation
+-> Movement
+-> Report Branch
+-> Report Follow-up
+-> Natural Typed Intention
+-> Natural Information Request
+-> Save
+-> Reload
+-> Resume
+-> Natural Follow-up
+
+Use actual text entry.
+
+Do not substitute button clicks for the
+natural-intention portion.
+
+Capture:
+
+- Player input.
+- Visible response.
+- Network trace.
+- Interpretation result.
+- Authoritative outcome.
+- Persistence evidence.
+- Browser screenshots.
+- Latency.
+
+If browser unavailable:
+
+Record the exact failure.
+
+Attempt bounded recovery.
+
+Continue HTTP verification.
+
+Mark browser verification blocked.
+
+Do not claim browser success from HTTP-only evidence.
+
+======================================================================
+22. GENERALIZATION EVALUATION
+======================================================================
+
+Evaluate whether the mechanism handles
+previously unseen wording.
+
+Use held-out paraphrases.
+
+Do not reuse only implementation examples.
+
+Include:
+
+- Synonyms.
+- Different grammar.
+- Short requests.
+- Long requests.
+- Polite questions.
+- Direct commands.
+- First-person intentions.
+- Indirect references.
+- Context-dependent references.
+- Branch-dependent references.
+
+Report:
+
+- Correct interpretation.
+- Incorrect interpretation.
+- Ambiguous interpretation.
+- Unsupported mapping.
+- Unsafe mapping.
+- Incorrect state mutation.
+- Hidden-information exposure.
+- Unnecessary refusal.
+
+A system that recognizes only the six
+demonstration sentences does not pass.
+
+======================================================================
+23. REGRESSION PRESERVATION
+======================================================================
+
+Preserve PR-PLAY-55 through PR-PLAY-71V.
+
+Required:
+
+- Campaign creation.
+- Campaign initialization.
+- Opening scene.
+- Investigation.
+- Movement.
+- Discovery journal.
+- Mandatory disclosure.
+- Structured-action publication.
+- Chat-action publication.
+- Player-safe HTTP projection.
+- Hidden-information isolation.
+- Contextual target references.
+- Deterministic fallback.
+- Branch A resolution.
+- Branch B resolution.
+- Branch exclusivity.
+- Branch persistence.
+- Branch-specific follow-up.
+- Save/resume.
+- Transcript restoration.
+- Windows atomic-write recovery.
+- Failed-operation rollback.
+- Experimental isolation.
+- State integrity.
+
+Use isolated test processes where necessary.
+
+PR-PLAY-71V observed combined-suite failures
+associated with unhealthy in-process preflight
+cache behavior.
+
+Do not conceal those failures.
+
+Report isolated and combined results separately.
+
+Do not classify new failures as historical
+without supporting evidence.
+
+Do not expand into unrelated regression repair
+unless a failure blocks PR-PLAY-72.
+
+======================================================================
+24. PROVIDER BUDGET
+======================================================================
+
+PR-PLAY-71 consumed:
+
+189,036 provider tokens.
+
+Avoid another high-cost experiment.
+
+Prefer deterministic fixtures for:
+
+- Intent mapping.
+- Branch context.
+- Persistence.
+- Safety.
+- Failure injection.
+- Regression testing.
+
+Use live provider calls only where necessary
+to demonstrate actual interpretation behavior.
+
+Suggested discretionary budget:
+
+Maximum 6 live provider requests.
+
+Maximum 12,000 discretionary provider tokens.
+
+No unbounded retries.
+
+No repeated generation solely for better prose.
+
+No unnecessary preflight loops.
+
+Record all provider usage.
+
+Distinguish:
+
+- Deterministic interpretation.
+- Provider-assisted interpretation.
+- Shadow provider evaluation.
+- Accepted provider interpretation.
+- Published provider narration.
+
+Do not claim live AI interpretation succeeded
+if only deterministic parsing was tested.
+
+Do not claim published AI narration if
+provider output was never published.
+
+======================================================================
+25. LATENCY
+======================================================================
+
+Measure:
+
+A. Intent submission to interpretation.
+
+B. Interpretation to authoritative resolution.
+
+C. Resolution to persistence.
+
+D. Persistence to publication.
+
+E. Publication to browser rendering.
+
+F. Total player-visible response time.
+
+Report:
+
+- Mean.
+- Median.
+- Maximum.
+- Individual request timings.
+- Provider calls.
+- Provider tokens.
+- Retries.
+- Timeouts.
+
+Compare natural-intention latency against
+equivalent structured-action latency.
+
+Do not optimize unrelated performance paths.
+
+Do not confuse HTTP latency with
+player-visible latency.
+
+======================================================================
+26. CRITICAL FAILURE CONDITIONS
+======================================================================
+
+Stop the affected experimental pathway if:
+
+1. Interpreter mutates authoritative state directly.
+
+2. Unsupported intention commits an outcome.
+
+3. Ambiguous intention commits an outcome.
+
+4. Information request mutates gameplay state.
+
+5. Invented target becomes authoritative.
+
+6. Invented NPC activity becomes authoritative.
+
+7. Unchosen branch consequences are published.
+
+8. Hidden information reaches the player.
+
+9. Mandatory disclosure is omitted.
+
+10. Rejected AI output suppresses required facts.
+
+11. Persistence retry duplicates gameplay effects.
+
+12. Cross-campaign state leaks.
+
+13. Experimental isolation fails.
+
+14. Protected repository data is modified by tests.
+
+15. State integrity fails.
+
+Preserve evidence.
+
+Disable the affected experimental pathway
+where feasible.
+
+Apply only narrowly justified repairs.
+
+======================================================================
+27. SUCCESS CRITERIA
+======================================================================
+
+PR-PLAY-72 succeeds when:
+
+1. Test-data isolation is verified.
+
+2. Protected repository files remain unchanged.
+
+3. Natural investigation intention is recognized.
+
+4. Natural interaction intention is recognized.
+
+5. Natural information request is recognized.
+
+6. Supported intentions resolve authoritatively.
+
+7. Unmet prerequisites are respected.
+
+8. Unsupported intentions do not fabricate success.
+
+9. Ambiguous intentions do not mutate state.
+
+10. Read-only questions do not mutate state.
+
+11. Branch context influences interpretation.
+
+12. Branch context influences publication.
+
+13. Unchosen branch information remains hidden.
+
+14. Reasonable paraphrases are supported.
+
+15. No exact-phrase-only implementation.
+
+16. No invented discoveries.
+
+17. No invented NPC activity.
+
+18. No invented destinations.
+
+19. No duplicate one-time consequences.
+
+20. Mandatory disclosures remain correct.
+
+21. Player-safe projection remains correct.
+
+22. Both campaigns persist.
+
+23. Both campaigns resume.
+
+24. Natural follow-up works after resume.
+
+25. Real HTTP gameplay is verified.
+
+26. Browser typed-input gameplay is verified.
+
+27. Frozen holdout completes.
+
+28. No critical unsafe publications.
+
+29. No hidden-information exposures.
+
+30. No significant new regressions.
+
+31. Experimental isolation remains intact.
+
+32. State integrity remains intact.
+
+======================================================================
+28. EVIDENCE PACKAGE
+======================================================================
+
+Generate:
+
+CURRENT_REVIEW(YYYYMMDD-HHMMSS).zip
+
+Use established review-export conventions.
+
+Include:
+
+01_EXECUTIVE_SUMMARY.md
+02_REPOSITORY_BASELINE.md
+03_TEST_DATA_ISOLATION.md
+04_INTENT_ARCHITECTURE.md
+05_INTENT_CONTRACT.md
+06_SUPPORTED_INTENTIONS.md
+07_BRANCH_CONTEXT.md
+08_AMBIGUITY_HANDLING.md
+09_UNSUPPORTED_INTENTIONS.md
+10_INFORMATION_REQUESTS.md
+11_AUTHORITATIVE_RESOLUTION.md
+12_PLAYER_SAFE_PUBLICATION.md
+13_PERSISTENCE_AND_RESUME.md
+14_GENERALIZATION.md
+15_DEVELOPMENT_TESTS.md
+16_FROZEN_HOLDOUT.md
+17_FAILURE_INJECTION.md
+18_REAL_HTTP_GAMEPLAY.md
+19_BROWSER_GAMEPLAY.md
+20_PROVIDER_USAGE.md
+21_LATENCY.md
+22_REGRESSION_RESULTS.md
+23_LIMITATIONS_AND_OPEN_RISKS.md
+24_NEXT_SESSION.md
+
+Include machine-readable evidence:
+
+- Repository baseline.
+- Protected-file hashes.
+- Test isolation configuration.
+- Relevant implementation diffs.
+- Intent interpretation traces.
+- Supported-action mappings.
+- Ambiguity traces.
+- Unsupported-action traces.
+- Information-request traces.
+- Authoritative before/after snapshots.
+- Branch A HTTP traces.
+- Branch B HTTP traces.
+- Branch A browser traces.
+- Branch B browser traces.
+- Save/resume evidence.
+- Frozen holdout manifest.
+- Frozen holdout hash.
+- Frozen holdout results.
+- Failure-injection results.
+- Browser screenshots.
+- Complete-payload leakage scans.
+- Regression summaries.
+- Provider usage.
+- Latency measurements.
+
+Preserve original player text.
+
+Preserve original player-facing responses.
+
+Redact credentials and sensitive configuration.
+
+Do not fabricate missing evidence.
+
+======================================================================
+29. VERDICT CRITERIA
+======================================================================
+
+A — PASS / CONSEQUENCE-AWARE INITIATIVE VERIFIED
+
+Requirements:
+
+- Test-data isolation verified.
+- Protected files preserved.
+- Natural intentions recognized.
+- Supported intentions resolve authoritatively.
+- Branch context influences outcomes.
+- Read-only questions remain read-only.
+- Ambiguity handled safely.
+- Unsupported actions handled safely.
+- Paraphrase generalization demonstrated.
+- No exact-phrase-only implementation.
+- Both HTTP campaigns verified.
+- Both browser campaigns verified.
+- Persistence/resume verified.
+- Frozen holdout completed.
+- No critical unsafe publications.
+- No mandatory disclosure omissions.
+- No hidden-information exposures.
+- No significant new regressions.
+
+B — PARTIAL / INITIATIVE WORKS WITH LIMITATIONS
+
+Examples:
+
+- Deterministic interpretation works but
+  live provider interpretation unverified.
+
+- HTTP gameplay works but browser unavailable.
+
+- Generalization remains narrow.
+
+- Some supported intentions map incorrectly
+  without causing unsafe state changes.
+
+- A noncritical verification requirement remains.
+
+C — FAIL / PLAYER INITIATIVE UNSAFE OR NONFUNCTIONAL
+
+Examples:
+
+- Intent interpreter invents consequences.
+
+- Unsupported action commits state.
+
+- Ambiguous action commits state.
+
+- Hidden information exposed.
+
+- Branch context ignored.
+
+- Only exact demonstration phrases recognized.
+
+- Natural typed input cannot reach gameplay.
+
+- Persistence corrupted.
+
+- Cross-campaign state leakage.
+
+BLOCKED — REQUIRED PRECONDITION UNAVAILABLE
+
+Examples:
+
+- Test-data isolation cannot be established.
+
+- Repository state prevents safe execution.
+
+- Required application entry points unavailable.
+
+Do not award A/PASS solely because
+unit tests pass.
+
+======================================================================
+30. NEXT-CYCLE RECOMMENDATION
+======================================================================
+
+Recommend exactly one primary next step.
+
+IF PR-PLAY-72 PASSES:
+
+Recommend:
+
+PR-PLAY-73:
+OPEN-ENDED PLAYER INTENT & WORLD RESPONSE
+
+Goal:
+
+Expand from a small supported intention set
+toward flexible player initiative.
+
+The engine should distinguish between:
+
+- Actions already supported by world mechanics.
+- Actions that can be resolved through existing
+  general-purpose mechanics.
+- Actions requiring clarification.
+- Actions requiring new authoritative content.
+- Actions that cannot currently be resolved.
+
+Avoid hardcoding every possible player request.
+
+Avoid allowing the AI to invent arbitrary
+persistent state.
+
+Do not automatically implement PR-PLAY-73.
+
+IF PR-PLAY-72 IS PARTIAL:
+
+Identify the smallest blocker preventing
+reliable natural-intention gameplay.
+
+IF PR-PLAY-72 FAILS:
+
+Repair the critical interpretation or
+authority-boundary defect.
+
+Do not return to broad narration polishing.
+
+======================================================================
+31. FINAL CODEX RESPONSE
+======================================================================
+
+Return:
+
+1. PR-PLAY-72 verdict.
+2. Repository baseline.
+3. Protected-file preservation result.
+4. Test-data isolation result.
+5. Files changed.
+6. Intent architecture.
+7. Supported intention results.
+8. Branch A interpretation results.
+9. Branch B interpretation results.
+10. Ambiguity handling results.
+11. Unsupported intention results.
+12. Information-request results.
+13. Generalization results.
+14. Authoritative resolution result.
+15. Mandatory disclosure result.
+16. Player-safe projection result.
+17. Persistence/resume result.
+18. Development test results.
+19. Frozen holdout results.
+20. Failure-injection results.
+21. Real HTTP Campaign A result.
+22. Real HTTP Campaign B result.
+23. Browser Campaign A result.
+24. Browser Campaign B result.
+25. Provider requests.
+26. Provider tokens.
+27. Mean HTTP latency.
+28. Maximum HTTP latency.
+29. Browser-visible latency.
+30. Mandatory disclosure omissions.
+31. Critical unsafe publications.
+32. Hidden-information exposures.
+33. New regression count.
+34. State-integrity result.
+35. Experimental-isolation result.
+36. Remaining limitations.
+37. Exact CURRENT_REVIEW archive path.
+38. Recommended next cycle.
+
+Do not commit or push.
+
+END PR-PLAY-72

@@ -1,0 +1,31 @@
+{
+  "title": "Opening public catalog entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "catalog_id",
+    "source_claim_ref",
+    "source_claim_id",
+    "text",
+    "disclosure",
+    "required",
+    "variants",
+    "sequence",
+    "order_constrained"
+  ],
+  "properties": {
+    "catalog_id": {"type": "string"},
+    "source_claim_ref": {"type": "string"},
+    "source_claim_id": {"type": "string"},
+    "text": {"type": "string"},
+    "disclosure": {"const": "public"},
+    "required": {"type": "boolean"},
+    "variants": {
+      "type": "object",
+      "additionalProperties": {"type": "string"},
+      "required": ["authored"]
+    },
+    "sequence": {"type": "integer"},
+    "order_constrained": {"type": "boolean"}
+  }
+}

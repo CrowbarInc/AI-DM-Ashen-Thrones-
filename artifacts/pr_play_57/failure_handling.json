@@ -1,0 +1,25 @@
+{
+  "evidence": "new_tests_final.xml and tests/test_pr_play_57_integrated_narration.py",
+  "covered": [
+    "timeout",
+    "provider exception",
+    "empty",
+    "malformed",
+    "incomplete",
+    "FAIL",
+    "REVIEW_REQUIRED",
+    "VALIDATION_ERROR",
+    "validator exception",
+    "missing outcome",
+    "unauthorized discovery",
+    "contradictory route",
+    "unauthorized inventory",
+    "uncertainty lost",
+    "usage accounting absent",
+    "eight-request ceiling",
+    "accepted HTTP quarantine",
+    "rejected HTTP fallback"
+  ],
+  "live_provider_failure": "none; faults are deterministic injections",
+  "fallback": "API player response remains deterministic for every candidate"
+}

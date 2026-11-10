@@ -1,0 +1,303 @@
+296: @asynccontextmanager
+297: async def lifespan(app: FastAPI):
+298:     """Lifespan context manager: startup (ensure data files) and optional shutdown."""
+299:     ensure_data_files_exist()
+300:     log_upstream_api_preflight_at_startup()
+301:     print_upstream_gate_startup_operator_summary(compute_upstream_dependent_run_gate())
+302:     yield
+303: 
+304: 
+305: app = FastAPI(title='Ashen Thrones AI GM', lifespan=lifespan)  # noqa: E302
+306: app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=False, allow_methods=['*'], allow_headers=['*'])
+307: 
+308: STATIC_DIR = BASE_DIR / 'static'
+309: app.mount('/static', StaticFiles(directory=STATIC_DIR), name='static')
+310: 
+311: @app.get('/')
+312: def index():
+313:     return FileResponse(STATIC_DIR / 'index.html')
+314: 
+315: 
+
+4946: def compose_state():
+4947:     """Assemble the client-visible state snapshot (reads + derived views).
+4948: 
+4949:     ``journal`` from ``build_player_journal`` and mirrored ``scene_state`` are
+4950:     **publication** fields for the UI—not alternate persistence roots for authoritative
+4951:     domains (see ``docs/state_authority_model.md``).
+4952:     """
+4953:     campaign = load_campaign()
+4954:     character = load_character()
+4955:     session = load_session()
+4956:     world = load_world()
+4957:     combat = load_combat()
+4958:     conditions = load_conditions()
+4959:     scene = load_active_scene()
+4960:     synchronize_scene_addressability(session, scene, world)
+4961:     scene["scene_state"] = session.get("scene_state")
+4962:     state = {
+4963:         'campaign': campaign,
+4964:         'character': character,
+4965:         'session': session,
+4966:         'world': world,
+4967:         'combat': combat,
+4968:         'conditions': conditions,
+4969:         'scene': scene,
+4970:         'ui': {
+4971:             'player_can_act': player_can_act(character, combat, conditions),
+4972:             'living_enemies': [
+4973:                 {'id': e['id'], 'name': e['name'], 'hp': e['hp']['current'], 'max_hp': e['hp']['max']}
+4974:                 for e in scene['scene'].get('enemies', []) if e['hp']['current'] > 0
+4975:             ],
+4976:             'scene_ids': list_scene_ids(),
+4977:             'affordances': get_available_affordances(scene, session, world, mode=scene['scene'].get('mode', 'exploration'), list_scene_ids_fn=list_scene_ids, scene_graph=build_scene_graph(list_scene_ids, lambda sid: get_effective_scene(session, sid))),
+4978:             'clues': {
+4979:                 'known': get_known_clues_with_presentation(session),
+4980:             },
+4981:             'scene_npcs': build_scene_npc_player_snapshot(session, world, scene),
+4982:             'interaction': _compose_ui_interaction_snapshot(session, world),
+4983:         }
+4984:     }
+4985:     _log_entries = load_log()
+4986:     _can_start = _session_allows_structured_start_campaign(session, _log_entries)
+4987:     # Mirrors persisted session (authoritative). Do not infer from transcript alone.
+4988:     state['ui']['campaign_started'] = bool(session.get('campaign_started'))
+4989:     state['ui']['campaign_can_start'] = bool(_can_start)
+4990:     state['ui']['clues']['implicit'] = [c for c in state['ui']['clues']['known'] if c.get('presentation') == 'implicit']
+4991:     state['ui']['clues']['explicit'] = [c for c in state['ui']['clues']['known'] if c.get('presentation') == 'explicit']
+4992:     state['ui']['clues']['actionable'] = [c for c in state['ui']['clues']['known'] if c.get('presentation') == 'actionable']
+4993:     # Ensure clocks are initialized for the session so callers can rely on presence.
+4994:     had_clocks = isinstance(session.get('clocks'), dict) and set(session.get('clocks', {}).keys()) >= set(DEFAULT_CLOCKS.keys())
+4995:     get_or_init_clocks(session)
+4996:     if not had_clocks:
+4997:         save_session(session)
+4998:     # Sync session.character_name from character when loading (startup, import, etc.)
+4999:     char_name = (character.get('name') or '').strip() or 'You'
+5000:     if session.get('character_name') != char_name:
+5001:         session['character_name'] = char_name
+5002:         save_session(session)
+5003:     state['player_name'] = session.get('character_name') or char_name
+5004:     state['journal'] = build_player_journal(
+5005:         session, world, scene, character=character, condition_definitions=conditions
+5006:     )
+5007:     if session.get('last_action_debug'):
+5008:         state['debug'] = session['last_action_debug']
+5009:     state['debug_traces'] = session.get('debug_traces') or []
+5010:     state['save_summary'] = get_save_summary()
+5011:     state['snapshots'] = list_snapshots()
+5012:     state['campaign_run_id'] = session.get('campaign_run_id')
+5013:     return state
+5014: 
+5015: 
+5016: def _ui_mode_error_response(err: UiModePolicyError) -> JSONResponse:
+5017:     msg = str(err) or "ui mode policy violation"
+5018:     lowered = msg.lower()
+5019:     if "unknown ui mode" in lowered:
+5020:         return JSONResponse(status_code=400, content={"ok": False, "error": msg})
+5021:     return JSONResponse(status_code=403, content={"ok": False, "error": msg})
+5022: 
+5023: 
+5024: def _project_state_for_ui_mode(full_state: dict, ui_mode: str) -> dict:
+5025:     # Always compute projections from the single internal snapshot.
+5026:     public_state = deep_project_public_payload(full_state)
+5027:     out: dict = {"ui_mode": ui_mode, "public_state": public_state}
+5028:     if ui_mode == "author":
+5029:         out["author_state"] = deep_project_author_payload(full_state)
+5030:     elif ui_mode == "debug":
+5031:         out["debug_state"] = deep_project_debug_payload(full_state)
+5032:     return out
+5033: 
+5034: 
+
+5093: def _project_log_entry_for_ui_mode(entry: dict, ui_mode: str) -> dict:
+5094:     enriched = _log_entry_with_public_player_input(entry)
+5095:     if ui_mode == "debug":
+5096:         return enriched
+5097: 
+5098:     gm_output = enriched.get("gm_output") if isinstance(enriched.get("gm_output"), dict) else {}
+5099:     return {
+5100:         "timestamp": enriched.get("timestamp"),
+5101:         "player_input": enriched.get("player_input") or "",
+5102:         "gm_output": {
+5103:             "player_facing_text": str(gm_output.get("player_facing_text") or "")
+5104:         },
+5105:     }
+5106: 
+5107: 
+5108: @app.get('/api/state')
+5109: def get_state(request: Request):
+5110:     try:
+5111:         ui_mode = resolve_requested_ui_mode(request)
+5112:         st = compose_state()
+5113:         return _project_state_for_ui_mode(st, ui_mode)
+5114:     except UiModePolicyError as e:
+5115:         return _ui_mode_error_response(e)
+5116: 
+5117: 
+5118: @app.get('/api/log')
+5119: def get_log(request: Request):
+5120:     try:
+5121:         ui_mode = resolve_requested_ui_mode(request)
+5122:     except UiModePolicyError as e:
+5123:         return _ui_mode_error_response(e)
+5124:     entries = [_project_log_entry_for_ui_mode(entry, ui_mode) for entry in load_log()]
+5125:     return {'ok': True, 'ui_mode': ui_mode, 'entries': entries}
+5126: 
+5127: 
+5128: @app.get('/api/debug_trace')
+5129: def get_debug_trace(request: Request):
+5130:     try:
+5131:         ui_mode = resolve_requested_ui_mode(request)
+5132:         assert_mode_allows_debug_read(ui_mode)
+5133:     except UiModePolicyError as e:
+5134:         return _ui_mode_error_response(e)
+5135:     session = load_session()
+5136:     return {'ok': True, 'ui_mode': ui_mode, 'traces': session.get('debug_traces') or []}
+5137: 
+5138: 
+5139: @app.post('/api/clear_log')
+5140: def api_clear_log(request: Request):
+5141:     try:
+5142:         ui_mode = resolve_requested_ui_mode(request)
+5143:         assert_mode_allows_runtime_action(ui_mode)
+5144:     except UiModePolicyError as e:
+5145:         return _ui_mode_error_response(e)
+5146:     clear_log()
+5147:     return {'ok': True, 'ui_mode': ui_mode}
+5148: 
+5149: 
+5150: @app.post('/api/campaign')
+5151: def update_campaign(request: Request, payload: dict):
+5152:     try:
+5153:         ui_mode = resolve_requested_ui_mode(request, payload)
+5154:         assert_mode_allows_author_write(ui_mode)
+5155:     except UiModePolicyError as e:
+5156:         return _ui_mode_error_response(e)
+5157:     save_campaign(payload)
+5158:     return {'ok': True, 'ui_mode': ui_mode, 'campaign': load_campaign()}
+5159: 
+5160: 
+5161: @app.post('/api/scene')
+5162: def update_scene(request: Request, payload: dict):
+5163:     try:
+5164:         ui_mode = resolve_requested_ui_mode(request, payload)
+5165:         assert_mode_allows_author_write(ui_mode)
+5166:     except UiModePolicyError as e:
+5167:         return _ui_mode_error_response(e)
+5168:     save_scene(payload)
+5169:     return {'ok': True, 'ui_mode': ui_mode, 'scene': payload}
+5170: 
+5171: 
+5172: @app.post('/api/scene/activate')
+5173: def api_activate_scene(request: Request, payload: dict):
+5174:     try:
+5175:         ui_mode = resolve_requested_ui_mode(request, payload)
+5176:         assert_mode_allows_runtime_action(ui_mode)
+5177:     except UiModePolicyError as e:
+5178:         return _ui_mode_error_response(e)
+5179:     scene_id = (payload.get('scene_id') or '').strip()
+5180:     if not is_known_scene_id(scene_id):
+5181:         return {'ok': False, 'error': 'Unknown or invalid scene ID.'}
+5182:     scene = load_active_scene()
+5183:     session = load_session()
+5184:     combat = load_combat()
+5185:     world = load_world()
+5186:     scene, session, combat = _apply_authoritative_scene_transition(scene_id, scene, session, combat, world)
+5187:     save_session(session)
+5188:     save_combat(combat)
+5189:     return {'ok': True, 'ui_mode': ui_mode, 'scene': scene, 'session': session}
+5190: 
+5191: 
+5192: @app.post('/api/character')
+5193: def update_character(request: Request, payload: dict):
+5194:     try:
+5195:         ui_mode = resolve_requested_ui_mode(request, payload)
+5196:         assert_mode_allows_runtime_action(ui_mode)
+5197:     except UiModePolicyError as e:
+5198:         return _ui_mode_error_response(e)
+5199:     save_character(payload)
+5200:     return {'ok': True, 'ui_mode': ui_mode, 'character': payload}
+5201: 
+5202: 
+5203: @app.post('/api/world')
+5204: def update_world(request: Request, payload: dict):
+5205:     try:
+5206:         ui_mode = resolve_requested_ui_mode(request, payload)
+5207:         assert_mode_allows_author_write(ui_mode)
+5208:     except UiModePolicyError as e:
+5209:         return _ui_mode_error_response(e)
+5210:     save_world(payload)
+5211:     return {'ok': True, 'ui_mode': ui_mode, 'world': payload}
+
+5298: @app.post('/api/reset_session')
+5299: def api_reset_session(request: Request):
+5300:     """Reset runtime session state; preserves campaign/world data."""
+5301:     try:
+5302:         ui_mode = resolve_requested_ui_mode(request)
+5303:         assert_mode_allows_runtime_action(ui_mode)
+5304:     except UiModePolicyError as e:
+5305:         return _ui_mode_error_response(e)
+5306:     session = load_session()
+5307:     reset_session_state(session)
+5308:     save_session(session)
+5309:     clear_log()
+5310:     combat = load_combat()
+5311:     combat.clear()
+5312:     combat.update(create_fresh_combat_state())
+5313:     save_combat(combat)
+5314:     st = compose_state()
+5315:     return {'ok': True, **_project_state_for_ui_mode(st, ui_mode)}
+5316: 
+5317: 
+5318: @app.get('/api/snapshots')
+5319: def api_list_snapshots(request: Request):
+5320:     """List all save snapshots (id, created_at, label)."""
+5321:     try:
+5322:         ui_mode = resolve_requested_ui_mode(request)
+5323:         assert_mode_allows_runtime_action(ui_mode)
+5324:     except UiModePolicyError as e:
+5325:         return _ui_mode_error_response(e)
+5326:     return {'ok': True, 'ui_mode': ui_mode, 'snapshots': list_snapshots()}
+5327: 
+5328: 
+5329: @app.post('/api/snapshots')
+5330: def api_create_snapshot(request: Request, req: SnapshotCreateRequest):
+5331:     """Create a snapshot of current runtime state. Optional label for playtesting."""
+5332:     try:
+5333:         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+5334:         assert_mode_allows_runtime_action(ui_mode)
+5335:     except UiModePolicyError as e:
+5336:         return _ui_mode_error_response(e)
+5337:     meta = create_snapshot(label=req.label)
+5338:     st = compose_state()
+5339:     return {'ok': True, 'ui_mode': ui_mode, 'snapshot': meta, **_project_state_for_ui_mode(st, ui_mode)}
+5340: 
+5341: 
+5342: @app.post('/api/snapshots/load')
+5343: def api_load_snapshot(request: Request, payload: dict):
+5344:     """Load a snapshot by id. Restores session, world, combat, character, log."""
+5345:     try:
+5346:         ui_mode = resolve_requested_ui_mode(request, payload)
+5347:         assert_mode_allows_runtime_action(ui_mode)
+5348:     except UiModePolicyError as e:
+5349:         return _ui_mode_error_response(e)
+5350:     snapshot_id = (payload.get('snapshot_id') or payload.get('id') or '').strip()
+5351:     if not snapshot_id:
+5352:         return {'ok': False, 'error': 'snapshot_id required'}
+5353:     meta = load_snapshot(snapshot_id)
+5354:     if meta is None:
+5355:         return {'ok': False, 'error': 'Snapshot not found'}
+5356:     _sess_resume = load_session()
+5357:     mark_session_narration_resume_entry_pending(_sess_resume)
+5358:     save_session(_sess_resume)
+5359:     st = compose_state()
+5360:     return {'ok': True, 'ui_mode': ui_mode, 'snapshot': meta, **_project_state_for_ui_mode(st, ui_mode)}
+5361: 
+5362: 
+5363: @app.post('/api/action')
+5364: def api_action(request: Request, req: ActionRequest):
+5365:     try:
+5366:         ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+5367:         return _project_player_runtime_response(action(req, ui_mode=ui_mode))
+5368:     except UiModePolicyError as e:
+5369:         return _ui_mode_error_response(e)

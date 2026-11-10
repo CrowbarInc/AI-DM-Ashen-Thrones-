@@ -1,0 +1,1 @@
+Outcomes stay distinct. Established observation and search can succeed without a discovery. Diplomacy can succeed or fail without NPC compliance. An unestablished object cannot be attempted. A climb of a real feature is a missing mechanic, not a success. A secret passage requires authority and is not created. Clarification and read-only answers change no flags, clues, or scene.

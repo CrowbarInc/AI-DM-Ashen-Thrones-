@@ -1,0 +1,65 @@
+{
+  "result": {
+    "version": 1,
+    "status": "observed",
+    "target": {
+      "campaign_run_id": "identity-test-campaign",
+      "instance_id": "8e5a978e-96ce-4e28-a6fc-03d7fe9d33c4"
+    },
+    "properties": [
+      {
+        "category": "markings",
+        "knowledge": "known_present",
+        "coverage": "subset",
+        "values": [
+          {
+            "content": "visible-one",
+            "presentation": "inscription",
+            "evidence_ref": "observation:markings:0",
+            "content_sha256": "be9e34c496c1588371c322a3c3b95f8ec2bde04cf6505dbca57bb57ba506df0c"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      "partial_observation_scope"
+    ],
+    "evidence": [
+      {
+        "reference": "observation:markings:0",
+        "category": "markings",
+        "content_sha256": "be9e34c496c1588371c322a3c3b95f8ec2bde04cf6505dbca57bb57ba506df0c"
+      }
+    ]
+  },
+  "prohibited_values": [
+    "CONCEALED-CONTENT",
+    "RESTRICTED-CONTENT",
+    "LEGACY-CONTENT",
+    "UNRELATED-PROPERTY",
+    "PRIVATE-DECISION",
+    "PRIVATE-VISIBILITY",
+    "PRIVATE-ACCESS",
+    "authorization",
+    "request_id",
+    "request_digest",
+    "modification_id",
+    "provenance",
+    "applied_revision",
+    "revision",
+    "marking_visibility",
+    "2569f04e-108b-4acf-9e7c-0157d2cf2751",
+    "add-visible",
+    "71d68bbd1cf4f3417a7f96b9e1dd1aae9d522f1f0df9a5f0ccc412ce2ba72519",
+    "bb894bcd-1e37-4a18-b267-303eae5614bb",
+    "add-concealed",
+    "47ac78b39909e8f8a7f110bd7a3662e9a364ec3f0c89228e37793b942d77600e",
+    "66f58be0-9bb9-41be-a373-66f1bbd5c73e",
+    "add-restricted",
+    "2de600ca0591f97c1e95fd5a2ab62095d34cf5be753ee0fea8bfbebc28941ca1",
+    "685b74cd-d3cb-4891-b7d8-14cbd1042f1e",
+    "add-legacy",
+    "c45d7de81bf126b1882e9ec09fbe7f6e63add2a1ae02d20acad7fa45289da77e"
+  ],
+  "leaks": []
+}

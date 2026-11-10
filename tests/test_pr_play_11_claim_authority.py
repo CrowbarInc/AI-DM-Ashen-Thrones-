@@ -47,7 +47,7 @@ def install_history(opening_world, monkeypatch, run=REJECTED):
     return parsed, traces, requests
 
 
-@pytest.mark.parametrize('run,expected', [(REJECTED, 422), (ACCEPTED, 200),
+@pytest.mark.parametrize('run,expected', [(REJECTED, 200), (ACCEPTED, 200),
     ('20261030T183848Z-5fe421902485', 200)])
 def test_historical_production_replay(opening_world, monkeypatch, run, expected):
     parsed, traces, requests = install_history(opening_world, monkeypatch, run)
@@ -57,7 +57,9 @@ def test_historical_production_replay(opening_world, monkeypatch, run, expected)
     assert status == expected, body
     assert len(opening_world['calls']) == 1
     assert traces[0]['inputs']['declared_claims'] == parsed['declared_claims']
-    if expected == 422:
+    if run == REJECTED:
+        # The grim sentence stays unauthorized. Recovery discards it and starts
+        # from authoritative opening facts; it does not accept the narration.
         assert 'unauthorized_resolution_decision_fact' in traces[0]['result']['reasons']
         audit = traces[0]['result']['gm_resolution_decision_audit']
         assert audit['declaration_validation']['rejected_claims'] == []
@@ -65,12 +67,11 @@ def test_historical_production_replay(opening_world, monkeypatch, run, expected)
         assert len(audit['violations']) == 1
         assert audit['violations'][0]['reason_codes'] == ['notice_roster_history']
         assert audit['violations'][0]['text'].startswith('The board itself lists grim new taxes')
-        assert before == after
-        assert after['can_start']
-    else:
-        assert after['turn_counter'] == before['turn_counter'] + 1
-        assert _start()[1] == 409
-        assert len(opening_world['calls']) == 1
+        delivered = json.dumps(body.get('gm_output') or {})
+        assert 'grim new taxes' not in delivered.lower()
+    assert after['turn_counter'] == before['turn_counter'] + 1
+    assert _start()[1] == 409
+    assert len(opening_world['calls']) == 1
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / (run + '_replay.json')).write_text(json.dumps(dict(
         status=status, before=before, after=after, traces=traces,
@@ -81,7 +82,9 @@ def test_historical_production_replay(opening_world, monkeypatch, run, expected)
 def test_notice_claim_causal_metadata_controls(opening_world, monkeypatch):
     from game.gm_resolution_decision import validate_declared_claims_against_decision
     parsed, traces, _ = install_history(opening_world, monkeypatch)
-    assert _start()[1] == 422
+    body, status = _start()
+    assert status == 200, body
+    assert 'grim new taxes' not in json.dumps(body.get('gm_output') or {}).lower()
     decision = traces[0]['inputs']['decision']
     original = parsed['declared_claims'][0]
     outcomes = {}

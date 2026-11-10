@@ -1,0 +1,310 @@
+[
+  {
+    "id": "A1",
+    "player_action": "I examine the notice board.",
+    "authorized_scene_context": {
+      "visible_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "continuity": []
+    },
+    "mandatory_outcome_facts": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "raw_narration": "You take a closer look at the notice board amid the bustling gate area. Among the posted taxes and curfew rules, you find a new, urgent update: the missing patrol was last seen heading northwest along the muddy track past the crates. This detail stands out against the usual announcements, offering a crucial lead in the ongoing search.",
+    "validator_decision": "FAIL",
+    "candidate_consequential_claims": [
+      "The missing patrol was last seen heading northwest along the muddy track past the crates."
+    ],
+    "potential_unauthorized_additions": [
+      "“new, urgent update” and “crucial lead” add unverified emphasis; no additional location, object or causal claim."
+    ],
+    "potential_omitted_outcomes": [],
+    "continuity_concerns": "No contradiction identified; limited multi-turn evidence.",
+    "proposed_semantic_classification": "FAITHFUL_OUTCOME_WITH_PROVISIONAL_EMPHASIS_REVIEW",
+    "supporting_evidence": "The authorized patrol/last-seen/northwest/mud-track/past-crates relation is present. Taking→heading and mud→muddy are natural paraphrases. PR55 nevertheless rejects an object phrase around “urgent update.”",
+    "uncertainty_notes": "No human review. Whether “urgent” overstates priority requires judgment; no confirmed consequential fabrication.",
+    "assessment_status": "provisional_automated_reading_of_raw_text_not_independent_ground_truth",
+    "human_confirmed": false,
+    "independent_external_review": "pending"
+  },
+  {
+    "id": "A2",
+    "player_action": "I examine the notice board.",
+    "authorized_scene_context": {
+      "visible_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "continuity": []
+    },
+    "mandatory_outcome_facts": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "raw_narration": "You study the notice board carefully and discover a new detail: the missing patrol was last seen taking the northwest mud track past the crates. This piece of information stands out amid the usual listings of taxes, curfew rules, and warnings, offering a fresh lead in the midst of the bustling gate area.",
+    "validator_decision": "PASS",
+    "candidate_consequential_claims": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "potential_unauthorized_additions": [
+      "“fresh lead” is generic emphasis rather than a new objective."
+    ],
+    "potential_omitted_outcomes": [],
+    "continuity_concerns": "No contradiction identified; limited multi-turn evidence.",
+    "proposed_semantic_classification": "FAITHFUL_AUTHORIZED_DISCOVERY",
+    "supporting_evidence": "The exact route relation is embedded in the action sentence, not appended as a separate engine statement.",
+    "uncertainty_notes": "No human review; generic filler remains.",
+    "assessment_status": "provisional_automated_reading_of_raw_text_not_independent_ground_truth",
+    "human_confirmed": false,
+    "independent_external_review": "pending"
+  },
+  {
+    "id": "B1",
+    "player_action": "I examine the rain barrel.",
+    "authorized_scene_context": {
+      "visible_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "continuity": []
+    },
+    "mandatory_outcome_facts": [
+      {
+        "id": "outcome:0",
+        "source": "engine_status",
+        "status": "observed",
+        "text": "No new clue is established by this examination."
+      }
+    ],
+    "raw_narration": "You take a careful look at the rain barrel, noting its worn wood and the faint scent of damp earth nearby. Despite your scrutiny, nothing new or unusual catches your attention this time—no fresh clues emerge from this inspection.",
+    "validator_decision": "PASS",
+    "candidate_consequential_claims": [
+      "No fresh clues emerge from this inspection."
+    ],
+    "potential_unauthorized_additions": [
+      "Worn wood and damp-earth scent are incidental sensory texture."
+    ],
+    "potential_omitted_outcomes": [],
+    "continuity_concerns": "No contradiction identified; limited multi-turn evidence.",
+    "proposed_semantic_classification": "FAITHFUL_NO_NEW_DISCOVERY",
+    "supporting_evidence": "“nothing new or unusual” and “no fresh clues” communicate the no-clue result without implying hidden discoveries.",
+    "uncertainty_notes": "This is mundane examination, not failed dice mechanics.",
+    "assessment_status": "provisional_automated_reading_of_raw_text_not_independent_ground_truth",
+    "human_confirmed": false,
+    "independent_external_review": "pending"
+  },
+  {
+    "id": "B2",
+    "player_action": "I examine the rain barrel.",
+    "authorized_scene_context": {
+      "visible_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "continuity": []
+    },
+    "mandatory_outcome_facts": [
+      {
+        "id": "outcome:0",
+        "source": "engine_status",
+        "status": "observed",
+        "text": "No new clue is established by this examination."
+      }
+    ],
+    "raw_narration": "You take a closer look at the rain barrel, noting its worn surface and the faint scent of damp wood mingling with the stew nearby. Despite your careful inspection, nothing new stands out—no hidden compartments or unusual markings catch your eye this time. The barrel remains just what it seems, an ordinary container amidst the bustling gate line.",
+    "validator_decision": "PASS",
+    "candidate_consequential_claims": [
+      "Nothing new stands out during inspection."
+    ],
+    "potential_unauthorized_additions": [
+      "“no hidden compartments or unusual markings catch your eye” is qualified negative-search wording; preserve for external judgment."
+    ],
+    "potential_omitted_outcomes": [],
+    "continuity_concerns": "No contradiction identified; limited multi-turn evidence.",
+    "proposed_semantic_classification": "PROVISIONALLY_FAITHFUL_NEGATIVE_SEARCH_REVIEW",
+    "supporting_evidence": "The sentence says no such detail catches the player’s eye, rather than establishing an authoritative exhaustive absence. It gives no object, reward or actionable lead.",
+    "uncertainty_notes": "Negative compartment wording could be overread as an exhaustive search claim. Not treated as independently proven safe.",
+    "assessment_status": "provisional_automated_reading_of_raw_text_not_independent_ground_truth",
+    "human_confirmed": false,
+    "independent_external_review": "pending"
+  },
+  {
+    "id": "C1",
+    "player_action": "I examine the notice board.",
+    "authorized_scene_context": {
+      "visible_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "continuity": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ]
+    },
+    "mandatory_outcome_facts": [
+      {
+        "id": "outcome:0",
+        "source": "engine_status",
+        "status": "known",
+        "text": "The examination adds nothing new to what you already know."
+      },
+      {
+        "id": "outcome:1",
+        "source": "player_knowledge",
+        "status": "previously_known",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "raw_narration": "You take a closer look at the notice board, but it offers no new information beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The familiar postings of taxes, curfew rules, and warnings remain unchanged, providing no fresh clues.",
+    "validator_decision": "PASS",
+    "candidate_consequential_claims": [
+      "No new information beyond already-known patrol route."
+    ],
+    "potential_unauthorized_additions": [],
+    "potential_omitted_outcomes": [],
+    "continuity_concerns": "No new-discovery framing; repetition acknowledged.",
+    "proposed_semantic_classification": "FAITHFUL_CONTINUITY",
+    "supporting_evidence": "“beyond what you already know” frames the northwest route as established knowledge; “no fresh clues” prevents a new discovery reading.",
+    "uncertainty_notes": "No human review. Same two-turn fixture only.",
+    "assessment_status": "provisional_automated_reading_of_raw_text_not_independent_ground_truth",
+    "human_confirmed": false,
+    "independent_external_review": "pending"
+  },
+  {
+    "id": "C2",
+    "player_action": "I examine the notice board.",
+    "authorized_scene_context": {
+      "visible_scene": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "continuity": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ]
+    },
+    "mandatory_outcome_facts": [
+      {
+        "id": "outcome:0",
+        "source": "engine_status",
+        "status": "known",
+        "text": "The examination adds nothing new to what you already know."
+      },
+      {
+        "id": "outcome:1",
+        "source": "player_knowledge",
+        "status": "previously_known",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "raw_narration": "You take a careful look at the notice board once more, but nothing new catches your eye beyond what you already know: the missing patrol was last spotted heading along the northwest mud track past the crates. The familiar postings about taxes, curfew, and the warning remain unchanged, offering no fresh clues.",
+    "validator_decision": "REVIEW_REQUIRED",
+    "candidate_consequential_claims": [
+      "Nothing new; missing patrol previously spotted heading northwest past crates."
+    ],
+    "potential_unauthorized_additions": [],
+    "potential_omitted_outcomes": [],
+    "continuity_concerns": "No new-discovery framing; repetition acknowledged.",
+    "proposed_semantic_classification": "FAITHFUL_CONTINUITY_PARAPHRASE",
+    "supporting_evidence": "“once more” and “already know” acknowledge repetition. Spotted→seen is a natural paraphrase; the coverage heuristic reviews it.",
+    "uncertainty_notes": "No human review; validator coverage is inconclusive despite a provisionally faithful reading.",
+    "assessment_status": "provisional_automated_reading_of_raw_text_not_independent_ground_truth",
+    "human_confirmed": false,
+    "independent_external_review": "pending"
+  },
+  {
+    "id": "D1",
+    "player_action": "I examine the footprints.",
+    "authorized_scene_context": {
+      "visible_scene": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+        "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      ],
+      "continuity": []
+    },
+    "mandatory_outcome_facts": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      }
+    ],
+    "raw_narration": "You crouch by the weathered milestone, carefully studying the mud churned with faint, overlapping footprints. Though you discern their presence clearly, the exact number of prints, their origin, and the direction they lead remain frustratingly unclear, fading into the scrub beyond the track.",
+    "validator_decision": "REVIEW_REQUIRED",
+    "candidate_consequential_claims": [
+      "Faint overlapping prints exist; exact number, origin and direction remain unclear."
+    ],
+    "potential_unauthorized_additions": [],
+    "potential_omitted_outcomes": [],
+    "continuity_concerns": "No contradiction identified; limited multi-turn evidence.",
+    "proposed_semantic_classification": "FAITHFUL_UNCERTAINTY",
+    "supporting_evidence": "Both existence of prints and all three uncertainty facets are explicit. Fading into scrub is already in the visible scene projection. Coverage fails to bind the fact across two sentences.",
+    "uncertainty_notes": "No hidden direction, count or origin is asserted. Automated review is provisional.",
+    "assessment_status": "provisional_automated_reading_of_raw_text_not_independent_ground_truth",
+    "human_confirmed": false,
+    "independent_external_review": "pending"
+  },
+  {
+    "id": "D2",
+    "player_action": "I examine the footprints.",
+    "authorized_scene_context": {
+      "visible_scene": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+        "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      ],
+      "continuity": []
+    },
+    "mandatory_outcome_facts": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      }
+    ],
+    "raw_narration": "You carefully study the mud around the weathered milestone, noting faint overlapping footprints pressed into the earth. Though the prints are clear enough to see, their exact number, origin, and direction remain frustratingly indistinct, blending into the scrub and fading before you can trace them further along the track.",
+    "validator_decision": "REVIEW_REQUIRED",
+    "candidate_consequential_claims": [
+      "Faint overlapping footprints exist; exact number, origin and direction are indistinct."
+    ],
+    "potential_unauthorized_additions": [],
+    "potential_omitted_outcomes": [],
+    "continuity_concerns": "No contradiction identified; limited multi-turn evidence.",
+    "proposed_semantic_classification": "FAITHFUL_UNCERTAINTY_PARAPHRASE",
+    "supporting_evidence": "“clear enough to see” affirms existence, while “number, origin, and direction ... indistinct” preserves interpretation uncertainty. Fading into scrub/track is authorized visible context.",
+    "uncertainty_notes": "Indistinct is a paraphrase of unclear. No human review or general semantic-completeness claim.",
+    "assessment_status": "provisional_automated_reading_of_raw_text_not_independent_ground_truth",
+    "human_confirmed": false,
+    "independent_external_review": "pending"
+  }
+]

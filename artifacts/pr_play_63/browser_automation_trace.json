@@ -1,0 +1,28 @@
+{
+  "status": "NOT TESTED",
+  "browser_originated_actions": 0,
+  "previous_cycle": "Two embedded-webview timeouts, no tab. Unchanged attachment configuration not retried in PR63.",
+  "current_attempts": [
+    {
+      "tool": "sky.list_apps",
+      "result": "No Chrome/Edge/Firefox window; native Opera available in full inventory."
+    },
+    {
+      "tool": "cua.getState",
+      "result": "Native Opera and empty in-app browser; no standalone browser connector."
+    },
+    {
+      "tool": "cua.getApp(Opera window)",
+      "result": "Computer Use stopped: could not determine current browser URL on Windows with enough confidence to enforce policy.",
+      "elapsed_seconds": 93.278
+    }
+  ],
+  "stopped_ui": true,
+  "retry_count_same_configuration": 0,
+  "frontend_http_reachable": true,
+  "rendered_frontend": false,
+  "screenshots": [],
+  "repository_e2e_framework": "No Playwright/Selenium dependency or configuration found in inspected requirements/tests/tools.",
+  "classification": "External automation URL/policy limitation, not demonstrated app defect.",
+  "server_stopped": true
+}

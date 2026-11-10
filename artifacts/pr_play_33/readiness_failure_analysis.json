@@ -1,0 +1,40 @@
+{
+  "readiness_attempts": 1,
+  "retries": 0,
+  "controller_started": true,
+  "worker_started": true,
+  "pid": 35756,
+  "ownership_verified": true,
+  "isolation_verified": true,
+  "http_status": 200,
+  "startup_seconds": 2.36,
+  "cleanup": {
+    "owned": true,
+    "pid": 35756,
+    "stopped": true,
+    "exit_code": 1,
+    "shutdown_seconds": 0.015
+  },
+  "remaining_owned_processes": [],
+  "port_released": true,
+  "campaign_post_requests": 0,
+  "gameplay_turns": 0,
+  "campaign_started": false,
+  "bootstrap_session_created": true,
+  "provider_requests": 0,
+  "provider_tokens": 0,
+  "readiness_diagnostic_pass": false,
+  "controller_failure": {
+    "type": "AssertionError",
+    "stage": "application_startup_failure"
+  },
+  "controller_verdict": "BLOCKED",
+  "failure": "Controller caught AssertionError in diagnostic wait wrapper after successful HTTP readiness; exact assertion unavailable because snapshot was not persisted. Outer diagnostic then asserted session.json absence, but bootstrap session is present at turn zero.",
+  "unrun": [
+    "observer-worker readiness",
+    "occupied-port failure cleanup for module worker",
+    "occupied-port failure cleanup for observer worker"
+  ],
+  "verdict": "B \u2014 PARTIAL",
+  "instruction": "Stop honored: no readiness rerun; no live gameplay."
+}

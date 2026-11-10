@@ -1,0 +1,15 @@
+--- before/tools/playtest/runner.py
++++ after/tools/playtest/runner.py
+@@ -397,10 +397,10 @@
+             result['steps'].append(row)
+             try:
+                 if kind == 'player_turn':
+-                    from tools.playtest.gameplay import execute_turn, prerequisite_failure
++                    from tools.playtest.gameplay import execute_turn, prerequisite_failure, can_start_interaction
+                     usage_path = run/'diagnostics/budget_snapshot.json'
+                     current_usage = json.loads(usage_path.read_text(encoding='utf-8')) if usage_path.exists() else {}
+-                    if current_usage.get('dispatched_requests', 0) >= int(env['ASHEN_PROVIDER_REQUEST_LIMIT']):
++                    if not can_start_interaction(current_usage, int(env['ASHEN_PROVIDER_REQUEST_LIMIT'])):
+                         result['steps'].pop()
+                         result['stop_reason'] = 'provider_budget_exhaustion'
+                         break

@@ -1,0 +1,54 @@
+{
+  "live_provider_calls": 0,
+  "baseline_before": {
+    "command": "pytest tests/test_narrative_planning_transition_node.py tests/test_prompt_context_transition_node_consumption.py tests/test_pr_de_exact_contract_deduplication.py tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload -q --tb=line",
+    "tests": 18,
+    "passed": 15,
+    "failed": 3,
+    "skipped": 0,
+    "failed_tests": [
+      "tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context",
+      "tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop",
+      "tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload"
+    ],
+    "errors": ["KeyError: provider_context_projection", "KeyError: gm_only", "KeyError: social_context"]
+  },
+  "focused_after": {
+    "command": "pytest tests/test_at_opt_06_same_scene_transition.py tests/test_at_opt_06_instruction_eligibility.py tests/test_narrative_planning_transition_node.py tests/test_prompt_context_transition_node_consumption.py tests/test_pr_ed_provider_efficiency.py -q --tb=line",
+    "tests": 42,
+    "passed": 42,
+    "failed": 0,
+    "skipped": 0,
+    "new_tests": 24,
+    "existing_tests": 18
+  },
+  "baseline_after": {
+    "command": "pytest tests/test_narrative_planning_transition_node.py tests/test_prompt_context_transition_node_consumption.py tests/test_pr_de_exact_contract_deduplication.py tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload -q --tb=line",
+    "tests": 18,
+    "passed": 15,
+    "failed": 3,
+    "skipped": 0,
+    "same_identities_as_baseline": true
+  },
+  "adjacent": {
+    "command": "pytest tests/test_pr_play_79df3_classification.py tests/test_pr_play_79b_integration.py tests/test_pr_play_76_physical.py::test_flag_off_does_not_adjudicate tests/test_pr_play_79c_publication.py::test_step_back_after_approach_names_the_milestone tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome -q --tb=line",
+    "tests": 118,
+    "passed": 118,
+    "failed": 0,
+    "skipped": 0
+  },
+  "holdout": {
+    "passed": 28,
+    "failed": 0,
+    "digest": "917d67fd5b997699d850311dfe4b405933f8c4b84989c39f5dfbdfdf8c3f6945",
+    "blocked_nonlocal_connections": 0,
+    "historical_results_rewritten": false
+  },
+  "protected_files": {
+    "count": 150,
+    "unchanged": 150,
+    "changed": 0,
+    "missing": 0
+  },
+  "new_failure_identities": []
+}

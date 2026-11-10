@@ -1,0 +1,334 @@
+{
+  "campaign": "narration",
+  "transcript": [
+    {
+      "input": "[start_campaign]",
+      "provenance": "campaign start, not a gameplay utterance",
+      "elapsed_ms": 12303.9,
+      "player_facing_text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. Nearby, a tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "after": {
+        "scene": "frontier_gate"
+      },
+      "usage": {
+        "requests": 16,
+        "tokens": 58474,
+        "input_tokens": 54094,
+        "output_tokens": 4380
+      }
+    },
+    {
+      "input": "I examine the notice board.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 346.3,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {},
+        "focus": null
+      },
+      "after": {
+        "scene": "frontier_gate",
+        "flags": {},
+        "focus": null,
+        "interlocutor": null
+      },
+      "player_facing_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": null,
+      "narration_adopted": false,
+      "narration_published": false,
+      "narration_text": "",
+      "narration_reasons": null,
+      "clarification": false,
+      "usage": {
+        "requests": 16,
+        "tokens": 58474,
+        "input_tokens": 54094,
+        "output_tokens": 4380
+      }
+    },
+    {
+      "input": "I follow the missing patrol rumor.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 368.8,
+      "before": {
+        "scene": "frontier_gate",
+        "flags": {},
+        "focus": null
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null,
+        "interlocutor": null
+      },
+      "player_facing_text": "You arrive at Old Milestone.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": null,
+      "narration_adopted": false,
+      "narration_published": false,
+      "narration_text": "",
+      "narration_reasons": null,
+      "clarification": false,
+      "usage": {
+        "requests": 16,
+        "tokens": 58474,
+        "input_tokens": 54094,
+        "output_tokens": 4380
+      }
+    },
+    {
+      "input": "I examine the weathered milestone.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 1951.6,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null,
+        "interlocutor": null
+      },
+      "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": null,
+      "narration_adopted": false,
+      "narration_published": false,
+      "narration_text": "",
+      "narration_reasons": null,
+      "clarification": false,
+      "usage": {
+        "requests": 17,
+        "tokens": 59451,
+        "input_tokens": 54977,
+        "output_tokens": 4474
+      }
+    },
+    {
+      "input": "I look at the mud prints.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 333.0,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null,
+        "interlocutor": null
+      },
+      "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": null,
+      "narration_adopted": false,
+      "narration_published": false,
+      "narration_text": "",
+      "narration_reasons": null,
+      "clarification": false,
+      "usage": {
+        "requests": 17,
+        "tokens": 59451,
+        "input_tokens": 54977,
+        "output_tokens": 4474
+      }
+    },
+    {
+      "input": "Look around.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 1730.5,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null,
+        "interlocutor": null
+      },
+      "player_facing_text": "You glance around and see a weathered stone milestone leaning beside the northwest mud track. The mud near the marker is churned with faint overlapping footprints that gradually fade into the scrub. The track extends a short distance past the stone before rainwater and brush obscure the way forward.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": null,
+      "narration_adopted": true,
+      "narration_published": true,
+      "narration_text": "You glance around and see a weathered stone milestone leaning beside the northwest mud track. The mud near the marker is churned with faint overlapping footprints that gradually fade into the scrub. The track extends a short distance past the stone before rainwater and brush obscure the way forward.",
+      "narration_reasons": [],
+      "clarification": false,
+      "usage": {
+        "requests": 18,
+        "tokens": 59614,
+        "input_tokens": 55084,
+        "output_tokens": 4530
+      }
+    },
+    {
+      "input": "I step back from the milestone.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 1416.1,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null,
+        "interlocutor": null
+      },
+      "player_facing_text": "There is nothing opposing you in this situation.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": null,
+      "narration_adopted": true,
+      "narration_published": true,
+      "narration_text": "There is nothing opposing you in this situation.",
+      "narration_reasons": [],
+      "clarification": false,
+      "usage": {
+        "requests": 19,
+        "tokens": 59684,
+        "input_tokens": 55144,
+        "output_tokens": 4540
+      }
+    },
+    {
+      "input": "What do we know about the prints?",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 48.9,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null,
+        "interlocutor": null
+      },
+      "player_facing_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. The missing patrol was last seen taking the northwest mud track past the crates. The northwest mud track reaches an old milestone beyond the gate. The mud around the marker is churned; any trail beyond it is unclear.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": null,
+      "narration_adopted": true,
+      "narration_published": false,
+      "narration_text": "There is nothing opposing you in this situation.",
+      "narration_reasons": [],
+      "clarification": false,
+      "usage": {
+        "requests": 19,
+        "tokens": 59684,
+        "input_tokens": 55144,
+        "output_tokens": 4540
+      }
+    },
+    {
+      "input": "I look around the milestone.",
+      "provenance": "developer acceptance script",
+      "elapsed_ms": 7158.0,
+      "before": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null
+      },
+      "after": {
+        "scene": "old_milestone",
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "focus": null,
+        "interlocutor": null
+      },
+      "player_facing_text": "The examination adds nothing new to what you already know.",
+      "dialogue_adopted": false,
+      "dialogue_published": false,
+      "dialogue_text": "",
+      "dialogue_reasons": null,
+      "narration_adopted": true,
+      "narration_published": false,
+      "narration_text": "There is nothing opposing you in this situation.",
+      "narration_reasons": [],
+      "clarification": false,
+      "usage": {
+        "requests": 21,
+        "tokens": 86606,
+        "input_tokens": 81239,
+        "output_tokens": 5367
+      }
+    }
+  ],
+  "usage": {
+    "requests": 21,
+    "tokens": 86606,
+    "input_tokens": 81239,
+    "output_tokens": 5367
+  }
+}

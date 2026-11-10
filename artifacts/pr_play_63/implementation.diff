@@ -1,0 +1,98 @@
+--- entry/game/integrated_investigation_narration.py
++++ current/game/integrated_investigation_narration.py
+@@ -22,7 +22,8 @@
+     "Use one or two concise sentences for routine observations and repeats; a discovery may need more. "
+     "The engine alone determined the outcome. Communicate every must_communicate fact naturally; "
+     "preserve its full meaning, including uncertainty. No rigid template or fact IDs in prose. "
+-    "For a repeated examination, acknowledge what was already known and that nothing new emerged. "
++    "For a repeated examination, acknowledge the repeat and that nothing new emerged; "
++    "do not present prior information as a new discovery. "
+     "Respond directly to the action, maintain continuity, and use concise, engaging description. "
+     "May_reference facts are optional; omit unrelated scene details and prior information. "
+     "For no-new-information outcomes, explicitly say no new clue was established. "
+@@ -44,9 +45,10 @@
+         hook_input['resolution'], hook_input['narration_payload'], inventory=True)
+     facts = []
+     for anchor in contract.anchors:
+-        # Ordinary scene observations are optional. Repeated knowledge is kept
+-        # mandatory so the candidate cannot replace the result with atmosphere.
+-        if anchor.source == 'public_observation':
++        # Current resolver disclosures remain mandatory even when already in
++        # post-resolution state. Accumulated knowledge is authorization, not a
++        # requirement to repeat it. Keep all anchors for safety validation.
++        if anchor.source in {'public_observation', 'player_knowledge'}:
+             continue
+         facts.append({'id': f'outcome:{anchor.order}', 'source': anchor.source,
+                       'status': anchor.status, 'text': anchor.text})
+@@ -77,7 +79,7 @@
+     """Existing integrated fallback, ordered by action then mandatory authority.
+ 
+     Public scene catalogues are optional context, not the action's outcome.
+-    Required discoveries and prior-knowledge anchors remain verbatim.
++    Current resolver disclosures remain verbatim; prior knowledge is optional.
+     """
+     view = contract.outcome
+     label = hook_input.get('target_label')
+@@ -88,7 +90,8 @@
+         'failed': f'You examine {target}, but no new clue is established.',
+         'observed': f'You examine {target}; no new clue is established.',
+     }[view.status]
+-    facts = [a.text for a in contract.anchors if a.source not in {'engine_status', 'public_observation'}]
++    facts = [a.text for a in contract.anchors
++             if a.source not in {'engine_status', 'public_observation', 'player_knowledge'}]
+     return ' '.join(filter(None, [opening, *facts, view.consequences]))
+ 
+ 
+--- entry/game/consequential_narration_validation.py
++++ current/game/consequential_narration_validation.py
+@@ -693,6 +693,8 @@
+ def _route_assertion(clause: str, authority: SemanticAuthority) -> list[dict]:
+     match = re.search(
+         r"\b(?:route|path|trail|passage)\s+leads?\s+(?:into|to|toward|north|south|east|west)\b"
++        # Reported movement is still a disclosure when phrased as history.
++        r"|\bwas\s+last\s+(?:seen|spotted|observed)\s+(?:taking|heading|following)\b"
+         r"|\b(?:prints|tracks|footprints|trail)\s+lead\w*\s+(?:straight\s+)?to\s+(?:the\s+)?(.+)$"
+         r"|\b(?:prints|tracks|footprints)\s+belong\s+to\s+(.+)$",
+         clause,
+--- entry/tests/test_pr_play_62_investigation_quality.py
++++ current/tests/test_pr_play_62_investigation_quality.py
+@@ -36,7 +36,8 @@
+     assert texts[2].startswith('You examine the notice board again; nothing new is established.')
+     assert texts[3].startswith('You examine the gate; no new clue is established.')
+     assert all('silver key' not in t and 'census' not in t for t in texts)
+-    assert all(ROUTE in t for t in texts)
++    assert ROUTE in texts[0]
++    assert all(ROUTE not in t for t in texts[1:])
+     after = _authority()
+     assert after['clues'] == [ROUTE]
+     assert after == expected
+--- entry/docs/NEXT_SESSION.md
++++ current/docs/NEXT_SESSION.md
+@@ -3,6 +3,27 @@
+ Ashen Thrones — Product Realization. Updated 2026-11-01 / PR-PLAY-13.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
++
++## Latest disclosure-aware integration — PR-PLAY-63 (2026-11-04)
++
++**B — PARTIAL / FURTHER INTEGRATION REQUIRED.** Prior knowledge is optional context
++in integrated narration/fallback; resolver-selected current facts remain mandatory
++even in post-state. One finite historical-route safety frame added.
++Five real HTTP actions: 2 published AI, 2 deterministic fallbacks, 1 repeat fast path;
++4 requests / 1939 tokens, no retries. Mean 2.642s, max 4.826s; categories differ
++from PR62, no causal improvement claim. Browser actions 0: Computer Use stopped on
++Opera URL/policy identification. 24 development tests; frozen holdout once 40/40;
++focused 771 pass / same 3 failures, 9 known broader failures. All completed states
++match deterministic controls; 12 faults recover; data/baseline hashes unchanged.
++A new conservative runtime false rejection remains: accepted PR62 discovery with
++learn-that introduction fails tightened route frame. Mandatory fallback stays
++complete. Free-text route follow-up is generic investigate. No global enablement;
++server stopped; no commit/push. Primary next step: targeted reported-route claim
++projection repair retaining no-authority negative; no broad cycle or PR64 yet.
++Read development/campaigns/product_realization/pr_play_63 reports 01, 04, 06, 11,
++12, 15, 19, 20, 21 and artifacts/pr_play_63 metrics/state_integrity/regression JSON.
++Exact review archive: artifacts/pr_play_63/archive_path.txt. Do not tune/rerun frozen
++holdout. Existing dirty work retained.
+ 
+ ## Latest investigation quality — PR-PLAY-62 (2026-11-03)
+ 

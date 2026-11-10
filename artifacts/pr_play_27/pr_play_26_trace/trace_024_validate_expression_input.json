@@ -1,0 +1,81 @@
+{
+  "function": "game.expressive_dialogue.validate_expression",
+  "args": [
+    "I've got hot stew and rumors to share.",
+    {
+      "speaker_id": "tavern_runner",
+      "speaker_name": "Tavern Runner",
+      "speaker_identity": {
+        "id": "tavern_runner",
+        "name": "Tavern Runner"
+      },
+      "addressee": "player",
+      "player_question": "I approach the tavern runner and ask what they're offering.",
+      "operation": "faithful_paraphrase",
+      "authorized_source": "dialogue_authority.public_fact:scene:frontier_gate:visible:2",
+      "source_identity": {
+        "ref": "dialogue_authority.public_fact:scene:frontier_gate:visible:2",
+        "proposition_id": "statement:bf3939512215"
+      },
+      "proposition_id": "statement:bf3939512215",
+      "authorized_propositions": [
+        "I offer hot stew and rumors."
+      ],
+      "knowledge_posture": "established",
+      "epistemic_posture": "established",
+      "answer_sufficiency": "directly_answers",
+      "disclosure_posture": "authorized_public_fact",
+      "permitted_expression_scope": "reword_authorized_proposition",
+      "permitted_meaning": {
+        "operation": "reword_authorized_proposition",
+        "preserve_entities": true,
+        "preserve_epistemic_posture": true,
+        "answer_sufficiency": "directly_answers",
+        "relation": "own_offerings"
+      },
+      "prohibited_speech_acts": [
+        "new_consequential_fact",
+        "new_obligation",
+        "hidden_disclosure",
+        "epistemic_strengthening",
+        "unauthorized_commitment",
+        "entity_substitution",
+        "factual_strengthening",
+        "security_information",
+        "new_relationship",
+        "secret"
+      ],
+      "prohibited_additions": [
+        "new_consequential_fact",
+        "new_obligation",
+        "hidden_disclosure",
+        "epistemic_strengthening",
+        "unauthorized_commitment",
+        "entity_substitution",
+        "factual_strengthening",
+        "security_information",
+        "new_relationship",
+        "secret"
+      ],
+      "entity_identities": [
+        {
+          "id": "speaker",
+          "forms": [
+            "Tavern Runner"
+          ],
+          "aliases": []
+        }
+      ],
+      "prior_delivered_statement": "",
+      "source_revision": "c6de25b34a623f20",
+      "fallback_response": "Tavern Runner says, \"I offer hot stew and rumors.\"",
+      "canonical": false,
+      "delivery_frame": "",
+      "prompt": {
+        "system": "You write one sentence spoken by Tavern Runner to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+        "user": "Player question: I approach the tavern runner and ask what they're offering.\nOperation: faithful_paraphrase\nAUTHORIZED FACTS:\n- I offer hot stew and rumors.\nOPTIONAL NONCANONICAL EXPRESSION: reword the authorized facts in one spoken sentence. You may use just, simply, called, named, or known. You may swap only these pairs: street/road, beyond/outside/past/beside, throughout/during, watch/watching, guard/guards. Keep every other fact. Do not add a place, person, time, number, cause, promise, or danger. For your own offerings, offer/sell/serve/I've got are also allowed. Keep every item description."
+      }
+    }
+  ],
+  "kwargs": {}
+}

@@ -1,0 +1,54 @@
+{
+  "scene": {
+    "id": "mill_loft",
+    "location": "Mill Loft",
+    "summary": "A dry loft, a grain hopper, and a tariff slate.",
+    "visible_facts": [
+      "A soot-stained skylight leaks pale noon light onto the loft floor.",
+      "Sacks of cracked maize lean against the hopper braces.",
+      "A tariff slate hangs from a nail by the loft stair."
+    ],
+    "hidden_facts": [
+      "A brass token is sealed under the grain hopper."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "tariff_slate_fees",
+        "text": "Dock fees rise after the second horn."
+      }
+    ],
+    "addressables": [
+      {
+        "id": "loft_clerk",
+        "name": "Loft Clerk",
+        "scene_id": "mill_loft",
+        "kind": "npc",
+        "addressable": true
+      }
+    ],
+    "interactables": [
+      {
+        "id": "grain_hopper",
+        "label": "Grain hopper",
+        "aliases": [
+          "hopper",
+          "feed chute"
+        ],
+        "type": "investigate"
+      },
+      {
+        "id": "tariff_slate",
+        "label": "Tariff slate",
+        "aliases": [
+          "slate",
+          "fee slate"
+        ],
+        "type": "read",
+        "reveals_clue": "tariff_slate_fees"
+      }
+    ],
+    "exits": [],
+    "enemies": [],
+    "actions": []
+  }
+}

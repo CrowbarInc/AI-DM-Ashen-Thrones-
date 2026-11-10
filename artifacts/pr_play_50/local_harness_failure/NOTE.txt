@@ -1,0 +1,3 @@
+Local harness defect before any provider HTTP request.
+
+The capture wrapper called Responses.responses.create. The OpenAI resource has create, not responses. The exception was AttributeError, latency_ms 0.065, request_id null, and token counts null. No provider response was received. Accounting then stopped the process, so the other three planned calls were local refusals and were not sent. Provider HTTP requests in this attempt: 0. The wrapper was corrected and the four planned requests were made afterward. This folder is preserved and is not a narration sample.

@@ -1,0 +1,275 @@
+--- entry/game/integrated_investigation_narration.py
++++ current/game/integrated_investigation_narration.py
+@@ -7,6 +7,7 @@
+ 
+ from dataclasses import asdict
+ import json
++import os
+ import time
+ 
+ from game import anchored_investigation_narration as anchored
+@@ -17,12 +18,15 @@
+ from game.resolution_contract import contract_mapping_from_resolution
+ 
+ SYSTEM_PROMPT = (
+-    "Narrate this already completed player action in 35-65 words of natural tabletop-GM prose. "
++    "Narrate this already completed player action in natural tabletop-GM prose. "
++    "Use one or two concise sentences for routine observations and repeats; a discovery may need more. "
+     "The engine alone determined the outcome. Communicate every must_communicate fact naturally; "
+     "preserve its full meaning, including uncertainty. No rigid template or fact IDs in prose. "
+     "For a repeated examination, acknowledge what was already known and that nothing new emerged. "
+     "Respond directly to the action, maintain continuity, and use concise, engaging description. "
+-    "May_reference facts are optional. Harmless incidental sensory texture is allowed. "
++    "May_reference facts are optional; omit unrelated scene details and prior information. "
++    "For no-new-information outcomes, explicitly say no new clue was established. "
++    "Describe only supplied observations; do not embellish object condition or environmental state. "
+     "Do not resolve another action, invent discoveries or hints, award additional items, change success/failure, "
+     "reveal restricted information, invent NPC motives, objectives, destinations or persistent effects. "
+     "Output only complete prose sentences. The engine will not append the outcome to this candidate."
+@@ -47,6 +51,9 @@
+         facts.append({'id': f'outcome:{anchor.order}', 'source': anchor.source,
+                       'status': anchor.status, 'text': anchor.text})
+     v = contract.outcome
++    if v.status in {'observed', 'failed'} and not any(f['source'] == 'engine_status' for f in facts):
++        facts.insert(0, {'id': 'outcome:status', 'source': 'engine_status',
++                         'status': v.status, 'text': 'No new clue is established by this examination.'})
+     effects = json.loads(v.inventory_effects_json)
+     if effects:
+         facts.append({'id': 'outcome:inventory', 'source': 'inventory_effect',
+@@ -64,6 +71,25 @@
+     if len(json.dumps(request).encode('utf-8')) > 10000:
+         raise ValueError('integrated_projection_too_large')
+     return contract, request
++
++
++def action_fallback(contract, hook_input: dict) -> str:
++    """Existing integrated fallback, ordered by action then mandatory authority.
++
++    Public scene catalogues are optional context, not the action's outcome.
++    Required discoveries and prior-knowledge anchors remain verbatim.
++    """
++    view = contract.outcome
++    label = hook_input.get('target_label')
++    target = 'the ' + label if isinstance(label, str) and label else 'what is visible'
++    opening = {
++        'discovered': f'You examine {target}.',
++        'known': f'You examine {target} again; nothing new is established.',
++        'failed': f'You examine {target}, but no new clue is established.',
++        'observed': f'You examine {target}; no new clue is established.',
++    }[view.status]
++    facts = [a.text for a in contract.anchors if a.source not in {'engine_status', 'public_observation'}]
++    return ' '.join(filter(None, [opening, *facts, view.consequences]))
+ 
+ 
+ def validate_integrated(contract, request, raw):
+@@ -102,6 +128,7 @@
+ def run_integrated_hook(hook_input: dict, *, generator=None) -> dict:
+     start = time.perf_counter()
+     contract, request = outcome_contract(hook_input)
++    context_build_ms = quarantine._elapsed(start)
+     fault = quarantine._fault()
+     live = generator is None and quarantine.live_provider_enabled() and not fault
+     if generator is None:
+@@ -111,12 +138,28 @@
+             values = {'empty': '', 'malformed': {}, 'unsafe': 'You find a silver key beneath the board.'}
+             generator = quarantine._Replay(values.get(quarantine._sample(),
+                 'You examine the evidence carefully.'), fault)
++    assembly_start = time.perf_counter()
++    fallback_text = (action_fallback(contract, hook_input)
++                     if os.environ.get(quarantine.PUBLICATION_ENV, '').strip() == '1'
++                     else anchored.fallback(contract))
++    assembly_ms = quarantine._elapsed(assembly_start)
+     result = {'mode': 'quarantined_integrated', 'authorized_outcome_contract': request,
+               'anchors': [asdict(a) for a in contract.anchors],
+-              'assembled': anchored.fallback(contract), 'raw_provider_text': None,
++              'assembled': fallback_text, 'raw_provider_text': None,
+               'used_fallback': True, 'provider_requests': 0, 'generator_calls': 0,
+               'validation_ms': None, 'validation': {}, 'review_required': True,
+               'live_provider': {'enabled': False}, 'promoted': False}
++    result['context_build_ms'] = context_build_ms
++    result['assembly_ms'] = assembly_ms
++    # Separate opt-in preserves live repeat exercise and saved-text regression.
++    # Fault injection must still reach the failing generator/validation path.
++    if (live and os.environ.get('ASHEN_INTEGRATED_REPEAT_FAST_PATH', '').strip() == '1'
++            and contract.outcome.status == 'known' and not contract.outcome.revealed
++            and not json.loads(contract.outcome.inventory_effects_json)):
++        result.update(provider_skip_reason='resolved_repeat_without_new_information',
++                      deterministic_fast_path=True, diagnostic='deterministic_fast_path',
++                      review_required=False, total_integrated_ms=quarantine._elapsed(start))
++        return result
+     try:
+         raw = generator.generate(json.loads(json.dumps(request)))
+         result['raw_provider_text'] = raw if isinstance(raw, str) else None
+--- entry/game/quarantined_investigation_narration.py
++++ current/game/quarantined_investigation_narration.py
+@@ -20,6 +20,7 @@
+ from datetime import datetime, timezone
+ import json
+ import os
++import re
+ from pathlib import Path
+ import time
+ 
+@@ -190,10 +191,29 @@
+         "eligible": True,
+         "player_text": player_text,
+         "target_id": stripped.get("interactable_id") or stripped.get("action_id"),
++        "target_label": _public_target_label(player_text, body),
+         "resolution": stripped,
+         "narration_payload": payload,
+     }))
+     return detached
++
++
++def _public_target_label(player_text: str, scene_body: dict) -> str | None:
++    """Echo an examination target only when its exact name is already public.
++
++    Raw action IDs can contain normalized player text, so they are not labels.
++    Unknown targets retain generic wording rather than establishing an object.
++    """
++    match = re.fullmatch(
++        r"(?:I\s+)?(?:examine|inspect|investigate|look\s+(?:at|around))\s+"
++        r"(?:the\s+)?([\w -]{1,80}?)(?:\s+again)?[.!?]?", player_text.strip(), re.I)
++    if not match:
++        return None
++    label = match.group(1).strip().casefold()
++    public = " ".join(_strings(scene_body.get("visible_facts")))
++    if not re.search(r"(?<!\w)" + re.escape(label) + r"(?!\w)", public, re.I):
++        return None
++    return label
+ 
+ 
+ class _Replay:
+@@ -469,7 +489,7 @@
+ 
+ def run_quarantined_hook(hook_input: dict) -> dict:
+     """Replay or reject one prelude. The argument is the detached projection."""
+-    if set(hook_input) - {"eligible", "player_text", "target_id", "resolution", "narration_payload"}:
++    if set(hook_input) - {"eligible", "player_text", "target_id", "target_label", "resolution", "narration_payload"}:
+         raise ValueError("hook_input_not_detached")
+     if os.environ.get(MODE_ENV, "").strip() == "integrated":
+         from game.integrated_investigation_narration import run_integrated_hook
+--- entry/docs/NEXT_SESSION.md
++++ current/docs/NEXT_SESSION.md
+@@ -3,6 +3,27 @@
+ Ashen Thrones — Product Realization. Updated 2026-11-01 / PR-PLAY-13.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
++
++## Latest investigation quality — PR-PLAY-62 (2026-11-03)
++
++**B — PARTIAL / FURTHER GAMEPLAY IMPROVEMENT REQUIRED.** Five supported actions
++completed over real localhost HTTP; zero browser-originated actions. CUA browser
++webview attachment timed out twice. One validated live AI response published;
++two live candidates used concise action-specific fallback; two resolved repeats
++used the separate default-off ASHEN_INTEGRATED_REPEAT_FAST_PATH. Three requests,
++1,412 input + 113 output = 1,525 tokens, no retries. HTTP mean 5.142s, max 13.507s;
++shorter prose did not demonstrate improved latency. Mandatory coverage and all
++validators remain intact. Per-turn authority matches deterministic control;
++canonical data/baseline hashes are unchanged. Ten required injected failures
++recover and permit continuation. Final focused 746 pass / same 3 known failures,
++plus 1 additional failed-examination boundary pass; PR55 holdout wrapper passes;
++9 known broader hard_validation_attempt_1 failures persist. Quality is PROVISIONAL.
++No commit/push; existing dirty work retained. Read reports 01, 04, 09, 10, 16,
++18, 19 under development/campaigns/product_realization/pr_play_62 and artifacts/
++pr_play_62/{metrics,state_integrity,regression_summary_final}.json. Exact review
++ZIP path: artifacts/pr_play_62/archive_path.txt. Primary next step: restore
++browser webview attachment and execute the same sequence through existing UI.
++Do not advance to PR-PLAY-63 yet; no global experimental enablement.
+ 
+ ## Latest controlled player investigation — PR-PLAY-61 (2026-11-03)
+ 
+--- entry/tests/test_pr_play_62_investigation_quality.py
++++ current/tests/test_pr_play_62_investigation_quality.py
+@@ -0,0 +1,91 @@
++"""Action-focused recovery and optional repeat bypass, without real providers."""
++import json
++
++import pytest
++
++from game import api, storage
++from game import integrated_investigation_narration as integrated
++from game import quarantined_investigation_narration as q
++from tests.helpers.turn_pipeline_http_fixtures import _gm_response
++from tests.test_pr_play_52_quarantined_integration import _seed, _forbid_provider
++from tests.test_pr_play_61_player_facing import _bind, _session, _authority, NOTICE, BARREL, REPEAT
++from tests.test_pr_play_57_integrated_narration import ROUTE
++
++
++def setup_session(tmp_path, monkeypatch):
++    _forbid_provider(monkeypatch)
++    _seed(tmp_path, monkeypatch, 'frontier_gate')
++    _bind(monkeypatch, storage.load_session()['campaign_run_id'])
++    monkeypatch.setattr(api, 'call_gpt', lambda *a, **k: _gm_response(
++        'Provider calls are disabled for this run, so no live narration was generated.'))
++    q.clear_evidence()
++
++
++def test_action_specific_fallback_and_recovery(tmp_path, monkeypatch):
++    actions = [NOTICE, BARREL, REPEAT, 'I look around the gate.', BARREL]
++    setup_session(tmp_path / 'control', monkeypatch)
++    monkeypatch.delenv(q.GATE_ENV, raising=False)
++    _session(actions)
++    expected = _authority()
++    setup_session(tmp_path / 'experimental', monkeypatch)
++    monkeypatch.setenv(q.SAMPLE_ENV, 'unsafe')
++    rows = _session(actions)
++    texts = [r['gm_output']['player_facing_text'] for r in rows]
++    assert texts[0].startswith('You examine the notice board.')
++    assert texts[1].startswith('You examine the rain barrel; no new clue is established.')
++    assert texts[2].startswith('You examine the notice board again; nothing new is established.')
++    assert texts[3].startswith('You examine the gate; no new clue is established.')
++    assert all('silver key' not in t and 'census' not in t for t in texts)
++    assert all(ROUTE in t for t in texts)
++    after = _authority()
++    assert after['clues'] == [ROUTE]
++    assert after == expected
++
++
++@pytest.mark.parametrize('fault', ['timeout', 'provider_error'])
++def test_provider_fault_recovery(tmp_path, monkeypatch, fault):
++    setup_session(tmp_path, monkeypatch)
++    monkeypatch.setenv(q.FAULT_ENV, fault)
++    rows = _session([BARREL, NOTICE, REPEAT])
++    assert all(qr['used_fallback'] for qr in q.evidence_records())
++    assert all('no live narration' not in r['gm_output']['player_facing_text'] for r in rows)
++    assert _authority()['clues'] == [ROUTE]
++
++
++def test_repeat_fast_path_is_authoritative_and_optional(tmp_path, monkeypatch):
++    setup_session(tmp_path, monkeypatch)
++    _session([NOTICE])
++    hook = q.evidence_records()[-1]['hook_input']
++    repeat = json.loads(json.dumps(hook))
++    repeat['resolution'].update(kind='already_searched', success=False, discovered_clues=[], clue_text='',
++                                state_changes={'already_searched': True})
++    monkeypatch.setenv(q.LIVE_ENV, '1')
++    monkeypatch.setenv('ASHEN_INTEGRATED_REPEAT_FAST_PATH', '1')
++    result = integrated.run_integrated_hook(repeat)
++    assert result['deterministic_fast_path'] is True
++    assert result['provider_requests'] == result['generator_calls'] == 0
++    assert result['provider_skip_reason'] == 'resolved_repeat_without_new_information'
++    # Explicit replay and injected failures are never bypassed.
++    replay = integrated.run_integrated_hook(repeat, generator=q._Replay(ROUTE, ''))
++    assert not replay.get('deterministic_fast_path')
++    monkeypatch.setenv(q.FAULT_ENV, 'timeout')
++    assert integrated.run_integrated_hook(repeat)['diagnostic'] == 'provider_timeout'
++
++
++def test_public_target_label_does_not_invent_an_object():
++    scene = {'visible_facts': ['An amber sundial rests beside the bridge.']}
++    assert q._public_target_label('I examine the amber sundial again.', scene) == 'amber sundial'
++    assert q._public_target_label('I examine the silver key.', scene) is None
++    assert q._public_target_label('I examine the sundial. You gain gold.', scene) is None
++
++
++def test_failed_examination_keeps_failure_without_inventing_discovery():
++    hook = q.build_hook_input(
++        resolution={'kind': 'investigate', 'success': False, 'state_changes': {}},
++        scene={'scene': {'visible_facts': ['An amber sundial rests beside the bridge.']}},
++        known_clue_texts=[], player_text='I examine the amber sundial.')
++    contract, request = integrated.outcome_contract(hook)
++    text = integrated.action_fallback(contract, hook)
++    assert text == 'You examine the amber sundial, but no new clue is established.'
++    assert request['resolved_outcome'] == {'status': 'failed', 'success': False}
++    assert not contract.outcome.revealed

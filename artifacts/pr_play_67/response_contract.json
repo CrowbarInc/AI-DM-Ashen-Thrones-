@@ -1,0 +1,1672 @@
+[
+  {
+    "field": "campaign.id",
+    "source": "compose_state().campaign.id",
+    "purpose": "public campaign identity",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "public campaign identity",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "campaign.title",
+    "source": "compose_state().campaign.title",
+    "purpose": "public campaign identity",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "public campaign identity",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.id",
+    "source": "compose_state().character.id",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.name",
+    "source": "compose_state().character.name",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.class",
+    "source": "compose_state().character.class",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.level",
+    "source": "compose_state().character.level",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.ancestry",
+    "source": "compose_state().character.ancestry",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.hp.current",
+    "source": "compose_state().character.hp.current",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.hp.max",
+    "source": "compose_state().character.hp.max",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.hp.nonlethal",
+    "source": "compose_state().character.hp.nonlethal",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.ac.normal",
+    "source": "compose_state().character.ac.normal",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.ac.touch",
+    "source": "compose_state().character.ac.touch",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.ac.flat_footed",
+    "source": "compose_state().character.ac.flat_footed",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.initiative_bonus",
+    "source": "compose_state().character.initiative_bonus",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.speed",
+    "source": "compose_state().character.speed",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.bab",
+    "source": "compose_state().character.bab",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.cmb",
+    "source": "compose_state().character.cmb",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.cmd",
+    "source": "compose_state().character.cmd",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.ability_scores.str",
+    "source": "compose_state().character.ability_scores.str",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.ability_scores.dex",
+    "source": "compose_state().character.ability_scores.dex",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.ability_scores.con",
+    "source": "compose_state().character.ability_scores.con",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.ability_scores.int",
+    "source": "compose_state().character.ability_scores.int",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.ability_scores.wis",
+    "source": "compose_state().character.ability_scores.wis",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.ability_scores.cha",
+    "source": "compose_state().character.ability_scores.cha",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.saves.fort",
+    "source": "compose_state().character.saves.fort",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.saves.ref",
+    "source": "compose_state().character.saves.ref",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.saves.will",
+    "source": "compose_state().character.saves.will",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.attacks[].id",
+    "source": "compose_state().character.attacks[].id",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.attacks[].name",
+    "source": "compose_state().character.attacks[].name",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.attacks[].attack_bonus",
+    "source": "compose_state().character.attacks[].attack_bonus",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.attacks[].type",
+    "source": "compose_state().character.attacks[].type",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.attacks[].damage.dice_count",
+    "source": "compose_state().character.attacks[].damage.dice_count",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.attacks[].damage.dice_sides",
+    "source": "compose_state().character.attacks[].damage.dice_sides",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.attacks[].damage.bonus",
+    "source": "compose_state().character.attacks[].damage.bonus",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.attacks[].damage.type",
+    "source": "compose_state().character.attacks[].damage.type",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.conditions[].id",
+    "source": "compose_state().character.conditions[].id",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.conditions[].name",
+    "source": "compose_state().character.conditions[].name",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.conditions[].kind",
+    "source": "compose_state().character.conditions[].kind",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.conditions[].duration",
+    "source": "compose_state().character.conditions[].duration",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.inventory[].id",
+    "source": "compose_state().character.inventory[].id",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.inventory[].name",
+    "source": "compose_state().character.inventory[].name",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.inventory[].quantity",
+    "source": "compose_state().character.inventory[].quantity",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.inventory[].usable",
+    "source": "compose_state().character.inventory[].usable",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.prepared[].id",
+    "source": "compose_state().character.spells.prepared[].id",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.prepared[].name",
+    "source": "compose_state().character.spells.prepared[].name",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.prepared[].cast",
+    "source": "compose_state().character.spells.prepared[].cast",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.prepared[].level",
+    "source": "compose_state().character.spells.prepared[].level",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.slots.0",
+    "source": "compose_state().character.spells.slots.0",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.slots.1",
+    "source": "compose_state().character.spells.slots.1",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.slots.2",
+    "source": "compose_state().character.spells.slots.2",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.slots.3",
+    "source": "compose_state().character.spells.slots.3",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.slots.4",
+    "source": "compose_state().character.spells.slots.4",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.slots.5",
+    "source": "compose_state().character.spells.slots.5",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.slots.6",
+    "source": "compose_state().character.spells.slots.6",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.slots.7",
+    "source": "compose_state().character.spells.slots.7",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.slots.8",
+    "source": "compose_state().character.spells.slots.8",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "character.spells.slots.9",
+    "source": "compose_state().character.spells.slots.9",
+    "purpose": "renderPublicState, renderComposer / Sheet Snapshot",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "renderPublicState, renderComposer / Sheet Snapshot",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "session.session_id",
+    "source": "compose_state().session.session_id",
+    "purpose": "scene picker, response mode, bootstrap UI",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene picker, response mode, bootstrap UI",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "session.campaign_run_id",
+    "source": "compose_state().session.campaign_run_id",
+    "purpose": "scene picker, response mode, bootstrap UI",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene picker, response mode, bootstrap UI",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "session.active_scene_id",
+    "source": "compose_state().session.active_scene_id",
+    "purpose": "scene picker, response mode, bootstrap UI",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene picker, response mode, bootstrap UI",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "session.character_name",
+    "source": "compose_state().session.character_name",
+    "purpose": "scene picker, response mode, bootstrap UI",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene picker, response mode, bootstrap UI",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "session.response_mode",
+    "source": "compose_state().session.response_mode",
+    "purpose": "scene picker, response mode, bootstrap UI",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene picker, response mode, bootstrap UI",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "session.campaign_started",
+    "source": "compose_state().session.campaign_started",
+    "purpose": "scene picker, response mode, bootstrap UI",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene picker, response mode, bootstrap UI",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "session.turn_counter",
+    "source": "compose_state().session.turn_counter",
+    "purpose": "scene picker, response mode, bootstrap UI",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene picker, response mode, bootstrap UI",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "session.visited_scene_ids",
+    "source": "compose_state().session.visited_scene_ids",
+    "purpose": "scene picker, response mode, bootstrap UI",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene picker, response mode, bootstrap UI",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "scene.scene.id",
+    "source": "compose_state().scene.scene.id",
+    "purpose": "scene header and summary",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene header and summary",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "scene.scene.location",
+    "source": "compose_state().scene.scene.location",
+    "purpose": "scene header and summary",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene header and summary",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "scene.scene.summary",
+    "source": "compose_state().scene.scene.summary",
+    "purpose": "scene header and summary",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene header and summary",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "scene.scene.mode",
+    "source": "compose_state().scene.scene.mode",
+    "purpose": "scene header and summary",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene header and summary",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "scene.scene.visible_facts",
+    "source": "compose_state().scene.scene.visible_facts",
+    "purpose": "scene header and summary",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "scene header and summary",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "combat.in_combat",
+    "source": "compose_state().combat.in_combat",
+    "purpose": "Combat status",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "Combat status",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "combat.round",
+    "source": "compose_state().combat.round",
+    "purpose": "Combat status",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "Combat status",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "combat.active_actor_id",
+    "source": "compose_state().combat.active_actor_id",
+    "purpose": "Combat status",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "Combat status",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "combat.player_turn_used",
+    "source": "compose_state().combat.player_turn_used",
+    "purpose": "Combat status",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "Combat status",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.player_can_act",
+    "source": "compose_state().ui.player_can_act",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.campaign_started",
+    "source": "compose_state().ui.campaign_started",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.campaign_can_start",
+    "source": "compose_state().ui.campaign_can_start",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.living_enemies[].id",
+    "source": "compose_state().ui.living_enemies[].id",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.living_enemies[].name",
+    "source": "compose_state().ui.living_enemies[].name",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.living_enemies[].hp",
+    "source": "compose_state().ui.living_enemies[].hp",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.living_enemies[].max_hp",
+    "source": "compose_state().ui.living_enemies[].max_hp",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.scene_ids",
+    "source": "compose_state().ui.scene_ids",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.affordances[].id",
+    "source": "compose_state().ui.affordances[].id",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.affordances[].label",
+    "source": "compose_state().ui.affordances[].label",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.affordances[].type",
+    "source": "compose_state().ui.affordances[].type",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.affordances[].prompt",
+    "source": "compose_state().ui.affordances[].prompt",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.affordances[].target_scene_id",
+    "source": "compose_state().ui.affordances[].target_scene_id",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.affordances[].target_id",
+    "source": "compose_state().ui.affordances[].target_id",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.affordances[].target_location_id",
+    "source": "compose_state().ui.affordances[].target_location_id",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.affordances[].targetSceneId",
+    "source": "compose_state().ui.affordances[].targetSceneId",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.affordances[].targetEntityId",
+    "source": "compose_state().ui.affordances[].targetEntityId",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.affordances[].targetLocationId",
+    "source": "compose_state().ui.affordances[].targetLocationId",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.clues.known[].text",
+    "source": "compose_state().ui.clues.known[].text",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.clues.known[].presentation",
+    "source": "compose_state().ui.clues.known[].presentation",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.clues.implicit[].text",
+    "source": "compose_state().ui.clues.implicit[].text",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.clues.implicit[].presentation",
+    "source": "compose_state().ui.clues.implicit[].presentation",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.clues.explicit[].text",
+    "source": "compose_state().ui.clues.explicit[].text",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.clues.explicit[].presentation",
+    "source": "compose_state().ui.clues.explicit[].presentation",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.clues.actionable[].text",
+    "source": "compose_state().ui.clues.actionable[].text",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.clues.actionable[].presentation",
+    "source": "compose_state().ui.clues.actionable[].presentation",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.scene_npcs[].id",
+    "source": "compose_state().ui.scene_npcs[].id",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.scene_npcs[].name",
+    "source": "compose_state().ui.scene_npcs[].name",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.scene_npcs[].disposition",
+    "source": "compose_state().ui.scene_npcs[].disposition",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.interaction.active_interaction_target_id",
+    "source": "compose_state().ui.interaction.active_interaction_target_id",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.interaction.active_interaction_target_name",
+    "source": "compose_state().ui.interaction.active_interaction_target_name",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.interaction.active_interaction_kind",
+    "source": "compose_state().ui.interaction.active_interaction_kind",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ui.interaction.interaction_mode",
+    "source": "compose_state().ui.interaction.interaction_mode",
+    "purpose": "action helpers, NPC roster, interaction context",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "action helpers, NPC roster, interaction context",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.known_facts",
+    "source": "compose_state().journal.known_facts",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.discovered_clues",
+    "source": "compose_state().journal.discovered_clues",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.unresolved_leads",
+    "source": "compose_state().journal.unresolved_leads",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.status_effects[].id",
+    "source": "compose_state().journal.status_effects[].id",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.status_effects[].name",
+    "source": "compose_state().journal.status_effects[].name",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.status_effects[].kind",
+    "source": "compose_state().journal.status_effects[].kind",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.status_effects[].duration",
+    "source": "compose_state().journal.status_effects[].duration",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.suspicion_flags",
+    "source": "compose_state().journal.suspicion_flags",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.active_leads[].id",
+    "source": "compose_state().journal.active_leads[].id",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.active_leads[].title",
+    "source": "compose_state().journal.active_leads[].title",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.active_leads[].summary",
+    "source": "compose_state().journal.active_leads[].summary",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.active_leads[].next_step",
+    "source": "compose_state().journal.active_leads[].next_step",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.active_leads[].last_touched_turn",
+    "source": "compose_state().journal.active_leads[].last_touched_turn",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.pursued_leads[].id",
+    "source": "compose_state().journal.pursued_leads[].id",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.pursued_leads[].title",
+    "source": "compose_state().journal.pursued_leads[].title",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.pursued_leads[].summary",
+    "source": "compose_state().journal.pursued_leads[].summary",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.pursued_leads[].next_step",
+    "source": "compose_state().journal.pursued_leads[].next_step",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.pursued_leads[].last_touched_turn",
+    "source": "compose_state().journal.pursued_leads[].last_touched_turn",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.stale_leads[].id",
+    "source": "compose_state().journal.stale_leads[].id",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.stale_leads[].title",
+    "source": "compose_state().journal.stale_leads[].title",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.stale_leads[].summary",
+    "source": "compose_state().journal.stale_leads[].summary",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.stale_leads[].next_step",
+    "source": "compose_state().journal.stale_leads[].next_step",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.stale_leads[].last_touched_turn",
+    "source": "compose_state().journal.stale_leads[].last_touched_turn",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.resolved_leads[].id",
+    "source": "compose_state().journal.resolved_leads[].id",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.resolved_leads[].title",
+    "source": "compose_state().journal.resolved_leads[].title",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.resolved_leads[].summary",
+    "source": "compose_state().journal.resolved_leads[].summary",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.resolved_leads[].next_step",
+    "source": "compose_state().journal.resolved_leads[].next_step",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.resolved_leads[].last_touched_turn",
+    "source": "compose_state().journal.resolved_leads[].last_touched_turn",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.obsolete_leads[].id",
+    "source": "compose_state().journal.obsolete_leads[].id",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.obsolete_leads[].title",
+    "source": "compose_state().journal.obsolete_leads[].title",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.obsolete_leads[].summary",
+    "source": "compose_state().journal.obsolete_leads[].summary",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.obsolete_leads[].next_step",
+    "source": "compose_state().journal.obsolete_leads[].next_step",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.obsolete_leads[].last_touched_turn",
+    "source": "compose_state().journal.obsolete_leads[].last_touched_turn",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.lead_counts.active",
+    "source": "compose_state().journal.lead_counts.active",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.lead_counts.pursued",
+    "source": "compose_state().journal.lead_counts.pursued",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.lead_counts.stale",
+    "source": "compose_state().journal.lead_counts.stale",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.lead_counts.resolved",
+    "source": "compose_state().journal.lead_counts.resolved",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "journal.lead_counts.obsolete",
+    "source": "compose_state().journal.lead_counts.obsolete",
+    "purpose": "Player Journal",
+    "visibility_rule": "Existing deterministic player publication owner",
+    "consumer": "Player Journal",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "player_name",
+    "source": "compose_state().player_name",
+    "purpose": "chat labels",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "chat labels",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "campaign_run_id",
+    "source": "compose_state().campaign_run_id",
+    "purpose": "campaign continuity",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "campaign continuity",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "save_summary.saved_at",
+    "source": "compose_state().save_summary.saved_at",
+    "purpose": "Save Status",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "Save Status",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "save_summary.save_data_exists",
+    "source": "compose_state().save_summary.save_data_exists",
+    "purpose": "Save Status",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "Save Status",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "save_summary.active_scene_id",
+    "source": "compose_state().save_summary.active_scene_id",
+    "purpose": "Save Status",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "Save Status",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "save_summary.discovered_clues",
+    "source": "compose_state().save_summary.discovered_clues",
+    "purpose": "Save Status",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "Save Status",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "save_summary.chat_messages",
+    "source": "compose_state().save_summary.chat_messages",
+    "purpose": "Save Status",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "Save Status",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "snapshots[].id",
+    "source": "compose_state().snapshots[].id",
+    "purpose": "public display",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "public display",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "snapshots[].created_at",
+    "source": "compose_state().snapshots[].created_at",
+    "purpose": "public display",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "public display",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "snapshots[].label",
+    "source": "compose_state().snapshots[].label",
+    "purpose": "public display",
+    "visibility_rule": "Current public scene / player-owned sheet / session identity only",
+    "consumer": "public display",
+    "required": false,
+    "safe_default": "omit when absent; empty list / empty string / zero / false on invalid type",
+    "serialization": "JSON primitives only; explicit nested allowlist; fresh containers"
+  },
+  {
+    "field": "ok",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "status",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "ui_mode",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "session_id",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "campaign_started",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "gameplay_committed",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "error",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "gm_output.player_facing_text",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "resolution",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "snapshot",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "entries",
+    "source": "endpoint result",
+    "purpose": "status, narration, log or save-slot envelope",
+    "visibility_rule": "explicit scalar/status/error allowlist; resolution is an empty placeholder; log contains only player input and published narration",
+    "consumer": "fetchJSON, chat renderer, log reload, save controls",
+    "required": false,
+    "safe_default": "omit; generic actionable error when needed",
+    "serialization": "project_player_response; no arbitrary metadata"
+  },
+  {
+    "field": "character.skills.<skill_id>",
+    "source": "player character sheet numeric ranks",
+    "purpose": "skill action selector",
+    "visibility_rule": "player-owned skill identifiers with finite numeric values only",
+    "consumer": "renderComposer",
+    "required": false,
+    "safe_default": {},
+    "serialization": "fresh numeric map; nested values omitted"
+  }
+]

@@ -1,0 +1,898 @@
+{
+  "cycle": "PR-PLAY-79C",
+  "authored_by": "developer",
+  "external_validation": false,
+  "frozen_before_holdout_run": true,
+  "cases": [
+    {
+      "id": "D01",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard."
+      ],
+      "present": "hello",
+      "absent": "northwest",
+      "multi_turn": false
+    },
+    {
+      "id": "D02",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Who are you?"
+      ],
+      "present": "gate guard",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D03",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What do you know about the missing patrol?"
+      ],
+      "present": "do not know",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D04",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What do you know about the missing patrol?",
+        "When did you last hear about them?"
+      ],
+      "present": "not certain",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D05",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What do you know about the missing patrol?",
+        "Do you think something happened?"
+      ],
+      "present": "not certain",
+      "absent": "attacked",
+      "multi_turn": true
+    },
+    {
+      "id": "D06",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What is this place like?"
+      ],
+      "present": "notice board",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D07",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What do you know about the missing patrol?",
+        "What about the patrol again?"
+      ],
+      "present": "missing patrol",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D08",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What do you know about the missing patrol?",
+        "You mentioned the patrol earlier. What else?"
+      ],
+      "present": "missing patrol",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D09",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Thank you."
+      ],
+      "present": "thank",
+      "absent": "reward",
+      "multi_turn": true
+    },
+    {
+      "id": "D10",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Goodbye."
+      ],
+      "present": "goodbye",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D11",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Who are you?",
+        "What is this place like?",
+        "What about the patrol again?"
+      ],
+      "present": "missing patrol",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D12",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Hello, Gate Serjeant.",
+        "Who are you?"
+      ],
+      "present": "serjeant",
+      "absent": "i am gate guard,",
+      "multi_turn": true
+    },
+    {
+      "id": "D13",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Look around and ask the Gate Guard who they are."
+      ],
+      "present": "says",
+      "absent": "northwest",
+      "multi_turn": false
+    },
+    {
+      "id": "D14",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Who are you?",
+        "What do you know about the missing patrol?",
+        "When did you last hear about them?",
+        "Do you think something happened?",
+        "What about the patrol again?"
+      ],
+      "present": "says",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D15",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Have you heard anything else?"
+      ],
+      "present": "do not know",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D16",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Where is the hidden patrol captain?"
+      ],
+      "present": "do not know",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D17",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What quest should I finish?"
+      ],
+      "present": "do not know",
+      "absent": "quest complete",
+      "multi_turn": true
+    },
+    {
+      "id": "D18",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "Will you give me a reward?"
+      ],
+      "present": "do not know",
+      "absent": "gold",
+      "multi_turn": true
+    },
+    {
+      "id": "D19",
+      "lane": "dialogue",
+      "group": "dialogue",
+      "turns": [
+        "Hello, Gate Guard.",
+        "I look around.",
+        "Who are you?"
+      ],
+      "present": "gate guard",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "D20",
+      "lane": "environment",
+      "group": "environment",
+      "turns": [
+        "Hello, Gate Guard.",
+        "What does the notice board say?"
+      ],
+      "present": "missing patrol",
+      "absent": "which person",
+      "multi_turn": true
+    },
+    {
+      "id": "A01",
+      "lane": "action",
+      "group": "action",
+      "setup": "milestone",
+      "text": "I step back from the milestone.",
+      "present": "unchanged",
+      "absent": "not up against",
+      "mutation": false
+    },
+    {
+      "id": "A02",
+      "lane": "action",
+      "group": "action",
+      "setup": "none",
+      "text": "I step back.",
+      "present": "not beside anything",
+      "absent": "not up against",
+      "mutation": false
+    },
+    {
+      "id": "A03",
+      "lane": "action",
+      "group": "action",
+      "setup": "milestone",
+      "text": "I approach the milestone.",
+      "present": "beside",
+      "absent": "secret",
+      "mutation": true
+    },
+    {
+      "id": "A04",
+      "lane": "action",
+      "group": "action",
+      "setup": "beside",
+      "text": "I step back from the bench.",
+      "present": "step back",
+      "absent": "unchanged",
+      "mutation": true
+    },
+    {
+      "id": "A05",
+      "lane": "action",
+      "group": "action",
+      "setup": "door",
+      "text": "I open the door.",
+      "present": "you open",
+      "absent": "secret",
+      "mutation": true
+    },
+    {
+      "id": "A06",
+      "lane": "action",
+      "group": "action",
+      "setup": "stuck",
+      "text": "I open the door.",
+      "present": "fails",
+      "absent": "you open the stuck",
+      "mutation": false
+    },
+    {
+      "id": "A07",
+      "lane": "action",
+      "group": "action",
+      "setup": "crates",
+      "text": "Push the crate.",
+      "present": "which",
+      "absent": "you push",
+      "mutation": false
+    },
+    {
+      "id": "A08",
+      "lane": "action",
+      "group": "action",
+      "setup": "milestone",
+      "text": "I climb the milestone.",
+      "present": "no climbing check",
+      "absent": "you reach",
+      "mutation": false
+    },
+    {
+      "id": "A09",
+      "lane": "action",
+      "group": "action",
+      "setup": "tracks",
+      "text": "I follow the tracks.",
+      "present": "faint tracks",
+      "absent": "new place",
+      "mutation": false
+    },
+    {
+      "id": "A10",
+      "lane": "action",
+      "group": "action",
+      "setup": "none",
+      "text": "I wait and watch the road.",
+      "present": "nothing new approaches",
+      "absent": "ambush",
+      "mutation": false
+    },
+    {
+      "id": "A11",
+      "lane": "action",
+      "group": "action",
+      "setup": "none",
+      "text": "I look for signs of a struggle.",
+      "present": "no signs",
+      "absent": "blood",
+      "mutation": false
+    },
+    {
+      "id": "A12",
+      "lane": "action",
+      "group": "action",
+      "setup": "none",
+      "text": "I leave a marker.",
+      "present": "",
+      "absent": "marker placed",
+      "mutation": false
+    },
+    {
+      "id": "A13",
+      "lane": "action",
+      "group": "action",
+      "setup": "milestone",
+      "text": "I touch the milestone.",
+      "present": "",
+      "absent": "you touch",
+      "mutation": false
+    },
+    {
+      "id": "A14",
+      "lane": "action",
+      "group": "action",
+      "setup": "none",
+      "text": "I move aside.",
+      "present": "",
+      "absent": "you move aside",
+      "mutation": false
+    },
+    {
+      "id": "A15",
+      "lane": "action",
+      "group": "action",
+      "setup": "none",
+      "text": "I wait briefly.",
+      "present": "",
+      "absent": "time passes",
+      "mutation": false
+    },
+    {
+      "id": "A16",
+      "lane": "action",
+      "group": "action",
+      "setup": "door",
+      "text": "I try to move the door.",
+      "present": "not established",
+      "absent": "you move the",
+      "mutation": false
+    },
+    {
+      "id": "A17",
+      "lane": "action",
+      "group": "action",
+      "setup": "milestone",
+      "text": "I examine the milestone.",
+      "present": "",
+      "absent": "you discover",
+      "mutation": false
+    },
+    {
+      "id": "A18",
+      "lane": "action",
+      "group": "action",
+      "setup": "beside",
+      "text": "Am I beside the bench?",
+      "present": "beside",
+      "absent": "you step",
+      "mutation": false
+    },
+    {
+      "id": "A19",
+      "lane": "action",
+      "group": "action",
+      "setup": "milestone",
+      "text": "I step back from the milestone.",
+      "present": "milestone",
+      "absent": "not up against",
+      "mutation": false
+    },
+    {
+      "id": "A20",
+      "lane": "action",
+      "group": "action",
+      "setup": "door",
+      "text": "I close the door.",
+      "present": "already closed",
+      "absent": "secret",
+      "mutation": false
+    },
+    {
+      "id": "N01",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "The guard looks toward you.",
+      "facts": "Gate Guard says, \"Evening.\"",
+      "adopt": false
+    },
+    {
+      "id": "N02",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "The guard glances. \"Evening.\"",
+      "facts": "Gate Guard says, \"Evening.\"",
+      "adopt": true
+    },
+    {
+      "id": "N03",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You step back from the milestone.",
+      "facts": "You try to step back from the milestone. Your position is unchanged.",
+      "adopt": false
+    },
+    {
+      "id": "N04",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You are not up against anything here.",
+      "facts": "You try to step back from the milestone. Your position is unchanged.",
+      "adopt": false
+    },
+    {
+      "id": "N05",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You remain not beside the milestone and your position is unchanged.",
+      "facts": "You try to step back from the milestone. Your position is unchanged.",
+      "adopt": true
+    },
+    {
+      "id": "N06",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You step back, leaving the milestone where it stands.",
+      "facts": "You step back from the milestone.",
+      "adopt": true
+    },
+    {
+      "id": "N07",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You discover a hidden camp.",
+      "facts": "Tracks lead northwest.",
+      "adopt": false
+    },
+    {
+      "id": "N08",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You find gold under the stone.",
+      "facts": "The stone is aside.",
+      "adopt": false
+    },
+    {
+      "id": "N09",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "The tracks bend southeast.",
+      "facts": "Tracks lead northwest.",
+      "adopt": false
+    },
+    {
+      "id": "N10",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You climb the milestone.",
+      "facts": "The stone is aside.",
+      "adopt": false
+    },
+    {
+      "id": "N11",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "The gate is now open.",
+      "facts": "The gate remains closed.",
+      "adopt": false
+    },
+    {
+      "id": "N12",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You are given a reward.",
+      "facts": "You look around the yard.",
+      "adopt": false
+    },
+    {
+      "id": "N13",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You move the loose stone aside.",
+      "facts": "You move the loose stone. It is now aside.",
+      "adopt": true
+    },
+    {
+      "id": "N14",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "The old milestone is still in front of you.",
+      "facts": "The old milestone stands in the mud.",
+      "adopt": true
+    },
+    {
+      "id": "N15",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You arrive in a new town.",
+      "facts": "You are at the old milestone.",
+      "adopt": false
+    },
+    {
+      "id": "C01",
+      "lane": "contract",
+      "group": "publication",
+      "contract": "FINAL_ENGINE_RESPONSE",
+      "text": "Gate Guard says, \"Hello.\"",
+      "reason": "publication_contract"
+    },
+    {
+      "id": "C02",
+      "lane": "contract",
+      "group": "publication",
+      "contract": "CLARIFICATION_REQUIRED",
+      "text": "Which guard do you mean?",
+      "reason": "publication_contract"
+    },
+    {
+      "id": "C03",
+      "lane": "contract",
+      "group": "publication",
+      "contract": "UNSUPPORTED_ACTION",
+      "text": "That part is not supported here.",
+      "reason": "publication_contract"
+    },
+    {
+      "id": "C04",
+      "lane": "contract",
+      "group": "publication",
+      "contract": "FAILURE",
+      "text": "That part was not carried out.",
+      "reason": "publication_contract"
+    },
+    {
+      "id": "C05",
+      "lane": "contract",
+      "group": "publication",
+      "contract": "ADJUDICATION_RESULT",
+      "text": null,
+      "reason": null
+    },
+    {
+      "id": "C06",
+      "lane": "contract",
+      "group": "publication",
+      "contract": "LIVE_EXPRESSION_REQUESTED",
+      "text": null,
+      "reason": null
+    },
+    {
+      "id": "C07",
+      "lane": "contract",
+      "group": "publication",
+      "contract": "FINAL_ENGINE_RESPONSE",
+      "text": null,
+      "reason": null
+    },
+    {
+      "id": "C08",
+      "lane": "contract",
+      "group": "publication",
+      "contract": "CLARIFICATION_REQUIRED",
+      "text": null,
+      "reason": null
+    },
+    {
+      "id": "C09",
+      "lane": "contract",
+      "group": "publication",
+      "contract": "UNSUPPORTED_ACTION",
+      "text": null,
+      "reason": null
+    },
+    {
+      "id": "C10",
+      "lane": "contract",
+      "group": "publication",
+      "contract": "FAILURE",
+      "text": null,
+      "reason": null
+    },
+    {
+      "id": "S01",
+      "lane": "save",
+      "group": "save",
+      "first": "Hello, Gate Guard.",
+      "resume": "Who are you?",
+      "present": "gate guard",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "S02",
+      "lane": "save",
+      "group": "save",
+      "first": "Hello, Gate Guard.",
+      "resume": "What do you know about the missing patrol?",
+      "present": "do not know",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "S03",
+      "lane": "save",
+      "group": "save",
+      "first": "Hello, Gate Guard.",
+      "resume": "What about the patrol again?",
+      "present": "missing patrol",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "S04",
+      "lane": "save",
+      "group": "save",
+      "first": "Hello, Gate Guard.",
+      "resume": "What is this place like?",
+      "present": "notice board",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "S05",
+      "lane": "save",
+      "group": "save",
+      "first": "Hello, Gate Guard.",
+      "resume": "Thank you.",
+      "present": "thank",
+      "absent": "reward",
+      "multi_turn": true
+    },
+    {
+      "id": "S06",
+      "lane": "save",
+      "group": "save",
+      "first": "Hello, Gate Guard.",
+      "resume": "Have you heard anything else?",
+      "present": "do not know",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "S07",
+      "lane": "save",
+      "group": "save",
+      "first": "Hello, Gate Guard.",
+      "resume": "What about the patrol again?",
+      "present": "missing patrol",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "S08",
+      "lane": "save",
+      "group": "save",
+      "first": "Hello, Gate Guard.",
+      "resume": "Do you think something happened?",
+      "present": "not certain",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "S09",
+      "lane": "save",
+      "group": "save",
+      "first": "Hello, Gate Serjeant.",
+      "resume": "Who are you?",
+      "present": "serjeant",
+      "absent": "i am gate guard,",
+      "multi_turn": true
+    },
+    {
+      "id": "S10",
+      "lane": "save",
+      "group": "save",
+      "first": "Hello, Gate Guard.",
+      "resume": "Goodbye.",
+      "present": "goodbye",
+      "absent": "northwest",
+      "multi_turn": true
+    },
+    {
+      "id": "I01",
+      "lane": "isolation",
+      "group": "isolation",
+      "kind": "campaign"
+    },
+    {
+      "id": "I02",
+      "lane": "isolation",
+      "group": "isolation",
+      "kind": "scene"
+    },
+    {
+      "id": "I03",
+      "lane": "isolation",
+      "group": "isolation",
+      "kind": "sentinel"
+    },
+    {
+      "id": "I04",
+      "lane": "isolation",
+      "group": "isolation",
+      "kind": "focus"
+    },
+    {
+      "id": "I05",
+      "lane": "isolation",
+      "group": "isolation",
+      "kind": "goodbye"
+    },
+    {
+      "id": "I06",
+      "lane": "isolation",
+      "group": "isolation",
+      "kind": "position"
+    },
+    {
+      "id": "I07",
+      "lane": "isolation",
+      "group": "isolation",
+      "kind": "door"
+    },
+    {
+      "id": "I08",
+      "lane": "isolation",
+      "group": "isolation",
+      "kind": "noop"
+    },
+    {
+      "id": "I09",
+      "lane": "isolation",
+      "group": "isolation",
+      "kind": "speech"
+    },
+    {
+      "id": "I10",
+      "lane": "isolation",
+      "group": "isolation",
+      "kind": "contract"
+    },
+    {
+      "id": "N16",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "The weathered stone is still beside the northwest track.",
+      "facts": "A weathered stone stands beside the northwest track.",
+      "adopt": true
+    },
+    {
+      "id": "N17",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "The mud prints remain where you found them.",
+      "facts": "Faint mud prints circle the milestone.",
+      "adopt": true
+    },
+    {
+      "id": "N18",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "You are still at the old milestone.",
+      "facts": "You are at the old milestone.",
+      "adopt": true
+    },
+    {
+      "id": "N19",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "The notice still names the missing patrol.",
+      "facts": "The notice names a missing patrol.",
+      "adopt": true
+    },
+    {
+      "id": "N20",
+      "lane": "narration",
+      "group": "narration",
+      "candidate": "The loose stone is now aside.",
+      "facts": "The loose stone is aside.",
+      "adopt": true
+    },
+    {
+      "id": "N21",
+      "lane": "narration",
+      "group": "fallback",
+      "candidate": "No new place was created when you moved away.",
+      "facts": "You move away. No new place was created.",
+      "adopt": true
+    },
+    {
+      "id": "N22",
+      "lane": "narration",
+      "group": "fallback",
+      "candidate": "Faint prints still mark the mud.",
+      "facts": "Faint prints mark the mud.",
+      "adopt": true
+    },
+    {
+      "id": "N23",
+      "lane": "narration",
+      "group": "fallback",
+      "candidate": "You remain beside the gate guard.",
+      "facts": "You move beside the gate guard.",
+      "adopt": true
+    },
+    {
+      "id": "N24",
+      "lane": "narration",
+      "group": "fallback",
+      "candidate": "The closed gate stays closed.",
+      "facts": "The gate is closed.",
+      "adopt": true
+    },
+    {
+      "id": "N25",
+      "lane": "narration",
+      "group": "authority",
+      "candidate": "You are paid ten silver.",
+      "facts": "You look around the yard.",
+      "adopt": false
+    }
+  ]
+}

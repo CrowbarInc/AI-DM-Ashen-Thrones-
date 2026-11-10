@@ -1,0 +1,70 @@
+{
+  "live_provider_calls": 0,
+  "baseline": {
+    "command": "pytest tests/test_pr_ed_provider_efficiency.py tests/test_pr_de_exact_contract_deduplication.py tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload -q --tb=short",
+    "when": "before the helper edit",
+    "tests": 14,
+    "passed": 11,
+    "failed": 3,
+    "skipped": 0,
+    "failed_tests": [
+      {
+        "id": "tests/test_pr_de_exact_contract_deduplication.py::test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context",
+        "error": "KeyError: provider_context_projection",
+        "cause": "build_messages adds provider_context_projection only when the harmless-social projection predicate selects. It did not select on these turns, and project_narration_payload does not create the key."
+      },
+      {
+        "id": "tests/test_pr_de_exact_contract_deduplication.py::test_full_context_classes_stay_unprojected_while_mirrors_drop",
+        "error": "KeyError: gm_only",
+        "cause": "project_narration_payload strips gm_only as a private field before the payload is serialized."
+      },
+      {
+        "id": "tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload",
+        "error": "KeyError: social_context",
+        "cause": "project_narration_payload removes social_context before the payload is serialized."
+      }
+    ]
+  },
+  "new_matrix": {
+    "command": "pytest tests/test_at_opt_04_mixed_key_policy.py tests/test_pr_ed_provider_efficiency.py -q --tb=short",
+    "tests": 24,
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "new_tests": 17,
+    "existing_provider_efficiency_tests": 7
+  },
+  "postchange_known_failures": {
+    "command": "pytest tests/test_pr_de_exact_contract_deduplication.py tests/test_manual_play_latency.py::test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload -q --tb=line",
+    "tests": 7,
+    "passed": 4,
+    "failed": 3,
+    "skipped": 0,
+    "same_identities_as_baseline": true
+  },
+  "adjacent": {
+    "command": "pytest tests/test_pr_play_79df3_classification.py tests/test_pr_play_79b_integration.py tests/test_pr_play_76_physical.py::test_flag_off_does_not_adjudicate tests/test_pr_play_79c_publication.py::test_step_back_after_approach_names_the_milestone tests/test_pr_play_79c_publication.py::test_physical_publication_matches_the_outcome -q --tb=line",
+    "tests": 118,
+    "passed": 118,
+    "failed": 0,
+    "skipped": 0,
+    "note": "An earlier parallel run with ASHEN_DISABLE_PROVIDER_CALLS=1 failed three classification tests. Those tests clear that flag themselves and were rerun without the override. The isolated result is 118 passed."
+  },
+  "protected_holdout": {
+    "command": "python artifacts/at_opt_04/rerun_holdout.py",
+    "passed": 28,
+    "failed": 0,
+    "digest": "917d67fd5b997699d850311dfe4b405933f8c4b84989c39f5dfbdfdf8c3f6945",
+    "historical_results_path_written": false,
+    "blocked_nonlocal_connections": 0,
+    "not_external_validation": true
+  },
+  "protected_files": {
+    "source": "artifacts/pr_play_79df3/protected_entry.json",
+    "unchanged": 150,
+    "changed": 0,
+    "missing": 0
+  },
+  "new_failures": [],
+  "provider_dispatches": 0
+}

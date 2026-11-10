@@ -1,0 +1,178 @@
+{
+  "enabled": true,
+  "player_text": "I examine the footprints.",
+  "provider_requests": 1,
+  "state_write_attempted": false,
+  "projection_build_ms": 0.213,
+  "hook_input": {
+    "eligible": true,
+    "player_text": "I examine the footprints.",
+    "target_id": "prints",
+    "resolution": {
+      "kind": "discover_clue",
+      "success": true,
+      "action_id": "prints",
+      "interactable_id": "prints",
+      "discovered_clues": [
+        "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      ],
+      "clue_text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+      "state_changes": {}
+    },
+    "narration_payload": {
+      "scene": {
+        "public": {
+          "location": "Old Milestone",
+          "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+          "visible_facts": [
+            "A weathered stone milestone leans beside the northwest mud track.",
+            "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+            "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+          ]
+        },
+        "discovered_clues": [
+          {
+            "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+          }
+        ]
+      }
+    }
+  },
+  "eligible": true,
+  "mode": "quarantined_integrated",
+  "authorized_outcome_contract": {
+    "player_action": "I examine the footprints.",
+    "resolved_outcome": {
+      "status": "discovered",
+      "success": true
+    },
+    "must_communicate": [
+      {
+        "id": "outcome:0",
+        "source": "resolved_action",
+        "status": "newly_revealed",
+        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+      }
+    ],
+    "may_reference": {
+      "visible_scene": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+        "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      ],
+      "continuity": []
+    },
+    "authorized_consequences": [],
+    "must_not_establish": [
+      "Only communicate completed engine outcomes; never establish additional facts or effects.",
+      "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+      "No inventory, condition, NPC, quest, travel or other persistent changes are authorized."
+    ]
+  },
+  "anchors": [
+    {
+      "order": 0,
+      "source": "resolved_action",
+      "status": "newly_revealed",
+      "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+    }
+  ],
+  "assembled": "You examine the evidence. Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear. A weathered stone milestone leans beside the northwest mud track. The mud around the marker is churned with faint overlapping prints that fade into the scrub. The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+  "raw_provider_text": "You carefully study the mud around the weathered milestone, noting faint overlapping footprints pressed into the earth. Though the prints are clear enough to see, their exact number, origin, and direction remain frustratingly indistinct, blending into the scrub and fading before you can trace them further along the track.",
+  "used_fallback": true,
+  "generator_calls": 1,
+  "validation_ms": 7.476,
+  "validation": {
+    "decision": "REVIEW_REQUIRED",
+    "semantic": {
+      "decision": "PASS",
+      "reasons": [],
+      "claims": [],
+      "provider_requests": 0,
+      "coverage": "deterministic_frames_not_semantic_proof"
+    },
+    "legacy": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "speaker": "",
+      "addressee": "",
+      "operation": "",
+      "interaction_complete": true,
+      "contract_satisfying": true,
+      "authority": [
+        {
+          "text": "You carefully study the mud around the weathered milestone, noting faint overlapping footprints pressed into the earth.",
+          "kind": "incidental_fact",
+          "epistemic_status": "world_truth",
+          "grounded": false,
+          "consequential": false,
+          "family": "incidental"
+        }
+      ],
+      "gm_resolution_decision_audit": null,
+      "mechanical_claim_audit": {
+        "coverage": "bounded_assertion_frames_not_semantic_proof",
+        "claims": [],
+        "reasons": []
+      },
+      "consequential_validation": {
+        "decision": "PASS",
+        "reasons": [],
+        "claims": [],
+        "provider_requests": 0,
+        "coverage": "deterministic_frames_not_semantic_proof"
+      }
+    },
+    "coverage": {
+      "decision": "REVIEW_REQUIRED",
+      "facts": [
+        {
+          "id": "outcome:0",
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+          "decision": "REVIEW_REQUIRED",
+          "classification": "ambiguous_paraphrase",
+          "evidence": null,
+          "content_overlap": 0.417
+        }
+      ],
+      "scope": "provisional_conservative_coverage_not_semantic_proof"
+    }
+  },
+  "review_required": true,
+  "live_provider": {
+    "enabled": true,
+    "provider": "openai",
+    "adapter": "game.expressive_dialogue.request_expression",
+    "purpose": "expression",
+    "configured_output_cap": 80,
+    "experiment_output_token_ceiling": 700,
+    "model": "gpt-4.1-mini-2025-04-14",
+    "request_started_at": "2026-11-04T00:29:36.380978+00:00",
+    "request_completed_at": "2026-11-04T00:29:37.764210+00:00",
+    "provider_latency_ms": 1379.503,
+    "outer_latency_ms": 1383.631,
+    "input_tokens": 380,
+    "output_tokens": 60,
+    "total_tokens": 440,
+    "retry_count": 0,
+    "sdk_max_retries": 0,
+    "timeout": false,
+    "provider_error": null,
+    "sent": true,
+    "estimated_cost": null,
+    "estimated_cost_reason": "no configured price table",
+    "sanitized_provider_user_message": "{\"player_action\": \"I examine the footprints.\", \"resolved_outcome\": {\"status\": \"discovered\", \"success\": true}, \"must_communicate\": [{\"id\": \"outcome:0\", \"source\": \"resolved_action\", \"status\": \"newly_revealed\", \"text\": \"Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.\"}], \"may_reference\": {\"visible_scene\": [\"A weathered stone milestone leans beside the northwest mud track.\", \"The mud around the marker is churned with faint overlapping prints that fade into the scrub.\", \"The track continues a short way past the stone before rainwater and brush make the next step unclear.\"], \"continuity\": []}, \"authorized_consequences\": [], \"must_not_establish\": [\"Only communicate completed engine outcomes; never establish additional facts or effects.\", \"Preserve failure, uncertainty and previously-known status; no misleading hints.\", \"No inventory, condition, NPC, quest, travel or other persistent changes are authorized.\"]}"
+  },
+  "promoted": false,
+  "diagnostic": "REVIEW_REQUIRED",
+  "total_integrated_ms": 1391.692,
+  "hook_work_ms": 1519.113,
+  "evidence_write": "ok",
+  "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_57\\hook_evidence\\D2_t1-006.json",
+  "serialization_ms": 0.638,
+  "evidence_write_ms": 1.612,
+  "total_hook_ms": 1526.94
+}

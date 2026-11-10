@@ -1,0 +1,71 @@
+FFFF.F..                                                                 [100%]
+================================== FAILURES ===================================
+________________________ test_publication_http[no_new] ________________________
+tests\test_pr_play_66_publication.py:123: in test_publication_http
+    assert trace['publication']['invariant']=='PASS'
+           ^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'publication'
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[CLUE DISCOVERED] milestone_mud_prints
+[PROMPT] fresh campaign prompt constructed
+______________________ test_publication_http[continuity] ______________________
+tests\test_pr_play_66_publication.py:123: in test_publication_http
+    assert trace['publication']['invariant']=='PASS'
+           ^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'publication'
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[CLUE DISCOVERED] milestone_mud_prints
+[PROMPT] fresh campaign prompt constructed
+______________________ test_publication_http[fast_path] _______________________
+tests\test_pr_play_66_publication.py:123: in test_publication_http
+    assert trace['publication']['invariant']=='PASS'
+           ^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'publication'
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[CLUE DISCOVERED] milestone_mud_prints
+[PROMPT] fresh campaign prompt constructed
+________________ test_four_actions_keep_authority_and_recover _________________
+tests\test_pr_play_61_player_facing.py:184: in test_four_actions_keep_authority_and_recover
+    assert ROUTE in played[2]["gm_output"]["player_facing_text"]
+E   AssertionError: assert 'The missing patrol was last seen taking the northwest mud track past the crates.' in 'You examine the notice board again. The examination adds nothing new to what you already know.'
+---------------------------- Captured stdout call -----------------------------
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[CLUE DISCOVERED] notice_patrol_route
+[PROMPT] fresh campaign prompt constructed
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[CLUE DISCOVERED] notice_patrol_route
+[PROMPT] fresh campaign prompt constructed
+_______________________________ test_matrix[5] ________________________________
+tests\test_pr_play_47_controlled_renderer.py:156: in test_matrix
+    assert row == original
+E   AssertionError: assert {'id': 'known....', ...}, ...} == {'id': 'known....', ...}, ...}
+E     
+E     Omitting 6 identical items, use -vv to show
+E     Differing items:
+E     {'resolution': {'kind': 'already_searched', 'action_id': 'rubbing', 'label': 'rubbing', 'prompt': 'I examine the rubbing.', ...}} != {'resolution': {'kind': 'already_searched', 'action_id': 'rubbing', 'label': 'rubbing', 'prompt': 'I examine the rubbing.', ...}}
+E     Use -v to get more diff
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_66_publication.py::test_publication_http[no_new] - ...
+FAILED tests/test_pr_play_66_publication.py::test_publication_http[continuity]
+FAILED tests/test_pr_play_66_publication.py::test_publication_http[fast_path]
+FAILED tests/test_pr_play_61_player_facing.py::test_four_actions_keep_authority_and_recover
+FAILED tests/test_pr_play_47_controlled_renderer.py::test_matrix[5] - Asserti...

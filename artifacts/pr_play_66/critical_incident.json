@@ -1,0 +1,1390 @@
+{
+  "verdict": "C — FAIL / CRITICAL DEFECT",
+  "classification": "implementation",
+  "scope": "Existing final HTTP payload visibility projection, separate from repaired mandatory-text selection",
+  "finding": "Hidden canary values survive in server-serialized JSON outside gm_output.player_facing_text. Hidden information is therefore published even when the narration correctly excludes it.",
+  "paths": [
+    {
+      "path": "/session/gm_notes/0",
+      "canary": "CANARY_GM_NOTE",
+      "value": "CANARY_GM_NOTE"
+    },
+    {
+      "path": "/world/gm_only/motivation",
+      "canary": "CANARY_NPC_MOTIVE",
+      "value": "CANARY_NPC_MOTIVE"
+    },
+    {
+      "path": "/scene/scene/discoverable_clues/1/text",
+      "canary": "CANARY_UNDISCOVERED_CLUE",
+      "value": "CANARY_UNDISCOVERED_CLUE"
+    },
+    {
+      "path": "/scene/scene/gm_notes/0",
+      "canary": "CANARY_GM_NOTE",
+      "value": "CANARY_GM_NOTE"
+    },
+    {
+      "path": "/scene/scene/private_notes",
+      "canary": "CANARY_NPC_MOTIVE",
+      "value": "CANARY_NPC_MOTIVE"
+    }
+  ],
+  "baseline_before_repair": [
+    {
+      "path": "/session/gm_notes/0",
+      "canary": "CANARY_GM_NOTE",
+      "value": "CANARY_GM_NOTE"
+    },
+    {
+      "path": "/world/gm_only/motivation",
+      "canary": "CANARY_NPC_MOTIVE",
+      "value": "CANARY_NPC_MOTIVE"
+    }
+  ],
+  "flag_disabled": [
+    {
+      "path": "/session/gm_notes/0",
+      "canary": "CANARY_GM_NOTE",
+      "value": "CANARY_GM_NOTE"
+    },
+    {
+      "path": "/world/gm_only/motivation",
+      "canary": "CANARY_NPC_MOTIVE",
+      "value": "CANARY_NPC_MOTIVE"
+    },
+    {
+      "path": "/scene/scene/discoverable_clues/1/text",
+      "canary": "CANARY_UNDISCOVERED_CLUE",
+      "value": "CANARY_UNDISCOVERED_CLUE"
+    },
+    {
+      "path": "/scene/scene/gm_notes/0",
+      "canary": "CANARY_GM_NOTE",
+      "value": "CANARY_GM_NOTE"
+    },
+    {
+      "path": "/scene/scene/private_notes",
+      "canary": "CANARY_NPC_MOTIVE",
+      "value": "CANARY_NPC_MOTIVE"
+    }
+  ],
+  "source_evidence": {
+    "module": "game/state_channels.py",
+    "functions": [
+      "_AUTHOR_EXACT_KEYS",
+      "is_author_key",
+      "_deep_project",
+      "deep_project_public_payload"
+    ],
+    "reason": "Unknown keys are public. gm_notes, gm_only, private_notes and discoverable_clues are not removed by existing author-key rules. API projects the whole state-bearing response recursively by key without leaf visibility policy."
+  },
+  "baseline_leak_present": true,
+  "flag_disabled_leak_present": true,
+  "matrix_responses_with_hidden_canaries": 41,
+  "matrix_cases": [
+    {
+      "name": "accepted",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "rejected",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "empty",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "malformed",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "unavailable",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "timeout",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "FAIL",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "REVIEW_REQUIRED",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "VALIDATION_ERROR",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "legacy_stub",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "legacy_refusal",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "legacy_unknown",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "legacy_empty",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "missing",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "multiple",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "context",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "no_new",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "hidden",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "persistent",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "inventory",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "death",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "route",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "contradiction",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "duplicate",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "unsupported",
+      "status": 200,
+      "leaks": []
+    },
+    {
+      "name": "resolution_failure",
+      "status": 500,
+      "leaks": []
+    },
+    {
+      "name": "init_failure",
+      "status": 500,
+      "leaks": []
+    },
+    {
+      "name": "flag_disabled",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "flag_enabled",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "continuity",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "state",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "cross_campaign",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "cross_session",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "schema",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "serialization",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "historical",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "accepted_publish",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "fast_path",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "one_call",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "no_loop",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "helper_exception",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "serialization_exception",
+      "status": 500,
+      "leaks": []
+    },
+    {
+      "name": "interruption",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "invariant_recovery",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    },
+    {
+      "name": "stale_evidence",
+      "status": 200,
+      "leaks": [
+        {
+          "path": "/session/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/world/gm_only/motivation",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        },
+        {
+          "path": "/scene/scene/discoverable_clues/1/text",
+          "canary": "CANARY_UNDISCOVERED_CLUE",
+          "value": "CANARY_UNDISCOVERED_CLUE"
+        },
+        {
+          "path": "/scene/scene/gm_notes/0",
+          "canary": "CANARY_GM_NOTE",
+          "value": "CANARY_GM_NOTE"
+        },
+        {
+          "path": "/scene/scene/private_notes",
+          "canary": "CANARY_NPC_MOTIVE",
+          "value": "CANARY_NPC_MOTIVE"
+        }
+      ]
+    }
+  ],
+  "tcp_actions_with_hidden_canaries": 5,
+  "disabled_controls_with_hidden_canaries": 5,
+  "stop": {
+    "experimental_execution": "STOPPED",
+    "live_provider_requests": 0,
+    "server": "TCP server was already shut down after capture",
+    "flags": "Default off, no persistent/global environment enablement; isolated test process interrupted",
+    "second_regression": "Interrupted after discovery; no further HTTP/provider execution",
+    "followup": "Safe offline diagnosis and evidence packaging only"
+  },
+  "repair_scope": "No post-holdout source change; do not silently expand mandatory-publication repair into a general state payload projection redesign.",
+  "next_step": "Repair hidden-information leakage in the final gameplay HTTP payload projection before resuming experimental publication."
+}

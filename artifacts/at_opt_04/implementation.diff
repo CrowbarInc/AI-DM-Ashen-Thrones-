@@ -1,0 +1,54 @@
+--- a/game/gm.py
++++ b/game/gm.py
+@@ -1,8 +1,10 @@
+ def omit_duplicate_turn_packet_policy(payload: Dict[str, Any]) -> Dict[str, Any]:
+-    """Drop provider-payload packet fields already present on the root policy.
++    """Drop packet policy keys whose complete JSON value equals the root policy.
+ 
+     Gate and retry code keep their own packet. This projection is serialized
+-    to the model only. Unequal policy is retained. The input mapping is not mutated.
++    to the model only. A nested key stays when its value differs or the root
++    lacks that key. If every nested key is removed, the empty nested policy
++    is omitted. The input mapping is not mutated.
+     """
+     if not isinstance(payload, dict):
+         return payload
+@@ -12,9 +14,16 @@
+         return payload
+     nested = packet.get("response_policy")
+     contracts = packet.get("contracts")
+-    drop_policy = isinstance(nested, dict) and bool(nested) and all(
+-        key in policy and _json_value_equal(nested.get(key), policy.get(key)) for key in nested
+-    )
++    kept_policy = nested
++    policy_changed = False
++    if isinstance(nested, dict) and nested:
++        kept_items = []
++        for key, value in nested.items():
++            if key in policy and _json_value_equal(value, policy.get(key)):
++                policy_changed = True
++                continue
++            kept_items.append((key, value))
++        kept_policy = dict(kept_items)
+     kept_contracts = contracts
+     if isinstance(contracts, dict):
+         kept_contracts = {
+@@ -23,12 +32,15 @@
+             if not (key in policy and _json_value_equal(value, policy.get(key)))
+         }
+     contracts_changed = isinstance(contracts, dict) and kept_contracts != contracts
+-    if not drop_policy and not contracts_changed:
++    if not policy_changed and not contracts_changed:
+         return payload
+     projected = dict(payload)
+     packet_copy = dict(packet)
+-    if drop_policy:
+-        packet_copy.pop("response_policy", None)
++    if policy_changed:
++        if kept_policy:
++            packet_copy["response_policy"] = kept_policy
++        else:
++            packet_copy.pop("response_policy", None)
+     if contracts_changed:
+         packet_copy["contracts"] = kept_contracts
+     projected["turn_packet"] = packet_copy

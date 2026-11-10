@@ -1,0 +1,113 @@
+{
+  "original_private_inputs": {
+    "id": "partial",
+    "category": "partial discovery",
+    "scene": {
+      "scene": {
+        "id": "unfamiliar_site",
+        "location": "Unfamiliar Site",
+        "visible_facts": [
+          "A cipher lies in plain view.",
+          "Light catches the uneven surface."
+        ],
+        "summary": "A quiet place for a closer look.",
+        "interactables": [
+          {
+            "id": "cipher",
+            "label": "cipher",
+            "type": "investigate",
+            "reveals_clue": "selected"
+          }
+        ],
+        "discoverable_clues": [
+          {
+            "id": "selected",
+            "text": "Only the first symbol can be read: a crescent. The rest remains illegible."
+          },
+          {
+            "id": "hidden",
+            "text": "CANARY_UNDISCOVERED"
+          }
+        ],
+        "hidden_facts": [
+          "CANARY_DESTINATION"
+        ],
+        "gm_notes": [
+          "CANARY_GM_NOTE"
+        ],
+        "npcs": [
+          {
+            "hidden_motivation": "CANARY_NPC_MOTIVE"
+          }
+        ],
+        "hidden_faction": "CANARY_FACTION_ACTIVITY",
+        "exits": []
+      }
+    },
+    "resolution": {
+      "kind": "discover_clue",
+      "action_id": "cipher",
+      "label": "cipher",
+      "prompt": "I examine the cipher.",
+      "success": true,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": "selected",
+      "discovered_clues": [
+        "Only the first symbol can be read: a crescent. The rest remains illegible."
+      ],
+      "world_updates": null,
+      "state_changes": {
+        "clue_revealed": true,
+        "interactable_id": "cipher"
+      },
+      "hint": "Player investigated [cipher] and discovered clue [selected]. Narrate the discovery and its significance.",
+      "interactable_id": "cipher",
+      "clue_text": "Only the first symbol can be read: a crescent. The rest remains illegible.",
+      "metadata": {
+        "referenced_surface_authority": "authored_interactable",
+        "referenced_surface_target": "cipher",
+        "referenced_surface_existence": true,
+        "referenced_surface_visibility": true,
+        "referenced_surface_inspectability": true,
+        "referenced_surface_interactable_id": "cipher",
+        "referenced_surface_visible_fact": "",
+        "referenced_surface_inspectable_text": "Only the first symbol can be read: a crescent. The rest remains illegible.",
+        "skip_unrelated_clue_discovery": false
+      }
+    },
+    "known": [],
+    "origin": "actual exploration resolver on synthetic scene",
+    "player": "I examine the cipher."
+  },
+  "renderer_inputs": {
+    "status": "discovered",
+    "success": true,
+    "target_id": "cipher",
+    "revealed": [
+      "Only the first symbol can be read: a crescent. The rest remains illegible."
+    ],
+    "known": [],
+    "observations": [
+      "A cipher lies in plain view.",
+      "Light catches the uneven surface."
+    ],
+    "consequences": ""
+  },
+  "output": {
+    "preview_text": "You examine the evidence. Only the first symbol can be read: a crescent. The rest remains illegible.",
+    "plan": {
+      "structure": "action_first",
+      "pace": "clipped",
+      "tone": "spare",
+      "sensory_focus": "none",
+      "detail": "lean",
+      "perspective": "second_person",
+      "transition": "direct",
+      "information_order": "new_first"
+    },
+    "diagnostic": "accepted",
+    "used_fallback": false
+  },
+  "state_unchanged": true
+}

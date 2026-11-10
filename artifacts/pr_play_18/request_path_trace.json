@@ -1,0 +1,154 @@
+[
+  {
+    "source": "game/api.py",
+    "line": 5246,
+    "function": "new_campaign",
+    "inputs": "New Campaign request; isolated fixture storage",
+    "outputs": "reset unstarted campaign",
+    "configuration_contract": "No provider call; engine authority"
+  },
+  {
+    "source": "game/api.py",
+    "line": 6346,
+    "function": "start_campaign",
+    "inputs": "Start Campaign request; readiness/admission",
+    "outputs": "opening scope",
+    "configuration_contract": "ASHEN_OPENING_RENDERER evaluated later"
+  },
+  {
+    "source": "game/api.py",
+    "line": 6386,
+    "function": "_start_campaign_after_admission",
+    "inputs": "campaign, character, session, world, combat, scene",
+    "outputs": "bootstrap resolution and provisional turn",
+    "configuration_contract": "synchronize addressability before opening_scope.track; provisional tick rolls back on rejection"
+  },
+  {
+    "source": "game/api.py",
+    "line": 4711,
+    "function": "_opening_scene_normalized_action_and_resolution",
+    "inputs": "internal_bootstrap=True; scene",
+    "outputs": "scene-opening normalized action/resolution",
+    "configuration_contract": "scene_opening intent"
+  },
+  {
+    "source": "game/api.py",
+    "line": 4418,
+    "function": "_run_resolved_turn_pipeline",
+    "inputs": "authoritative game documents; normalized action",
+    "outputs": "validated GM response and response contract",
+    "configuration_contract": "deterministic pipeline"
+  },
+  {
+    "source": "game/api.py",
+    "line": 3163,
+    "function": "_build_gpt_narration_from_authoritative_state",
+    "inputs": "narration bundle, scene and authority state",
+    "outputs": "provider messages and validated candidate",
+    "configuration_contract": "response_type_contract scene_opening; bounded call_gpt"
+  },
+  {
+    "source": "game/gm.py",
+    "line": 4590,
+    "function": "build_messages",
+    "inputs": "narration context call kwargs and game state",
+    "outputs": "legacy system + JSON user payload",
+    "configuration_contract": "shared construction remains unchanged"
+  },
+  {
+    "source": "game/prompt_context.py",
+    "line": 1527,
+    "function": "build_narration_context",
+    "inputs": "public scene, authority bundle, opening facts",
+    "outputs": "narration payload including realization claims",
+    "configuration_contract": "opening public facts/curation supplied here"
+  },
+  {
+    "source": "game/gm.py",
+    "line": 5182,
+    "function": "call_gpt",
+    "inputs": "assembled messages; route; response type",
+    "outputs": "rendered structured GM response or contract failure",
+    "configuration_contract": "only scene_opening reads renderer flag; enabled selects preparation before dispatch"
+  },
+  {
+    "source": "game/opening_presentation_renderer.py",
+    "line": 264,
+    "function": "prepare_opening_renderer",
+    "inputs": "original messages",
+    "outputs": "local catalog; public selection messages; strict text format",
+    "configuration_contract": "dedicated opening contract replaces legacy provider input"
+  },
+  {
+    "source": "game/opening_presentation_renderer.py",
+    "line": 137,
+    "function": "build_opening_public_catalog",
+    "inputs": "original JSON payload",
+    "outputs": "entries/by_id/required_ids or fail closed",
+    "configuration_contract": "public-only claims, curated coverage; authority stays local"
+  },
+  {
+    "source": "game/opening_presentation_renderer.py",
+    "line": 287,
+    "function": "opening_plan_text_format",
+    "inputs": "public catalog",
+    "outputs": "strict Responses API text.format",
+    "configuration_contract": "selected_entries required; per-ID variants; no additional properties"
+  },
+  {
+    "source": "game/provider_budget.py",
+    "line": 312,
+    "function": "dispatch",
+    "inputs": "SDK method plus model/input/text/max_output_tokens",
+    "outputs": "SDK response",
+    "configuration_contract": "admission and exactly-one dispatch; kwargs forwarded unchanged"
+  },
+  {
+    "source": "game/opening_presentation_renderer.py",
+    "line": 422,
+    "function": "realize_opening_provider_text",
+    "inputs": "extracted SDK text; local catalog",
+    "outputs": "render result or reason",
+    "configuration_contract": "JSON parser then renderer validator; no legacy fallback"
+  },
+  {
+    "source": "game/opening_presentation_renderer.py",
+    "line": 330,
+    "function": "validate_presentation_plan",
+    "inputs": "plan + local catalog",
+    "outputs": "approved choices or rejection",
+    "configuration_contract": "IDs, variants, unknown fields, required coverage, order, duplicates and bound"
+  },
+  {
+    "source": "game/opening_presentation_renderer.py",
+    "line": 378,
+    "function": "render_opening",
+    "inputs": "validated choices",
+    "outputs": "engine-authored text, declarations and trace",
+    "configuration_contract": "no model prose published"
+  },
+  {
+    "source": "game/opening_presentation_renderer.py",
+    "line": 429,
+    "function": "gm_response_from_render",
+    "inputs": "successful render",
+    "outputs": "structured response with immutable rendered metadata",
+    "configuration_contract": "engine declarations; null state proposals"
+  },
+  {
+    "source": "game/api.py",
+    "line": 5893,
+    "function": "_complete_opening_turn_persistence_like_chat",
+    "inputs": "validated result and tracked opening scope",
+    "outputs": "200 publication/one commit or 422 rollback",
+    "configuration_contract": "acceptance-gated persistence"
+  },
+  {
+    "source": "game/opening_presentation_renderer.py",
+    "line": 465,
+    "function": "enforce_rendered_publication",
+    "inputs": "GM response with render metadata",
+    "outputs": "restored engine text; null update proposals",
+    "configuration_contract": "applied in API final publication path"
+  }
+]

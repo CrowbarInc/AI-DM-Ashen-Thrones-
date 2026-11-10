@@ -1,0 +1,629 @@
+{
+  "campaign": {
+    "campaign_id": "pr_play_60",
+    "run_count": 1,
+    "turn_count": 2,
+    "gm_boundary": "Local complete validators plus provider-disabled HTTP comparison; no live narrator."
+  },
+  "evidence_scope": "same_session_synthetic_integration_and_historical_replay",
+  "examples": [
+    {
+      "example_id": "D01",
+      "campaign": "PR-PLAY-60",
+      "run_id": "local-validator-replay",
+      "turn_index": 1,
+      "player_input": "I examine the notice board.",
+      "player_input_classification": [
+        "synthetic_positive_control"
+      ],
+      "prior_context": "Completed investigation with detached synthetic engine deltas or trusted consequence text.",
+      "authorized_context": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "outcome:inventory",
+            "source": "inventory_effect",
+            "status": "resolved",
+            "text": "You receive key."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "Rain falls around the notice board."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": {
+          "items_added": [
+            "key"
+          ]
+        },
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+        ]
+      },
+      "exact_gm_output": "The missing patrol was last seen taking the northwest mud track past the crates. You pick up the key and place it in your pack.",
+      "publication": "Quarantine/local validation only",
+      "actual_result": {
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [
+              {
+                "category": "items_added",
+                "claim": "the key",
+                "supported": true
+              }
+            ],
+            "reasons": []
+          }
+        },
+        "persistent": [],
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "the missing patrol was last seen taking the northwest mud track past the crates.",
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            },
+            {
+              "id": "outcome:inventory",
+              "source": "inventory_effect",
+              "status": "resolved",
+              "text": "You receive key.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "The missing patrol was last seen taking the northwest mud track past the crates. You pick up the key and place it in your pack."
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        },
+        "combined": {
+          "decision": "PASS",
+          "semantic": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          },
+          "legacy": {
+            "hard_valid": true,
+            "reasons": [],
+            "soft_flags": [],
+            "speaker": "",
+            "addressee": "",
+            "operation": "",
+            "interaction_complete": true,
+            "contract_satisfying": true,
+            "authority": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "kind": "incidental_fact",
+                "epistemic_status": "world_truth",
+                "grounded": false,
+                "consequential": false,
+                "family": "incidental"
+              }
+            ],
+            "gm_resolution_decision_audit": null,
+            "mechanical_claim_audit": {
+              "coverage": "bounded_assertion_frames_not_semantic_proof",
+              "claims": [
+                {
+                  "category": "items_added",
+                  "claim": "the key",
+                  "supported": true
+                }
+              ],
+              "reasons": []
+            },
+            "consequential_validation": {
+              "decision": "PASS",
+              "reasons": [],
+              "claims": [],
+              "provider_requests": 0,
+              "coverage": "deterministic_frames_not_semantic_proof"
+            }
+          },
+          "coverage": {
+            "decision": "PASS",
+            "facts": [
+              {
+                "id": "outcome:0",
+                "source": "resolved_action",
+                "status": "newly_revealed",
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "decision": "PASS",
+                "classification": "covered",
+                "evidence": "the missing patrol was last seen taking the northwest mud track past the crates.",
+                "relation": {
+                  "subject": "missing patrol",
+                  "path": "northwest mud track",
+                  "landmark": "crates"
+                }
+              },
+              {
+                "id": "outcome:inventory",
+                "source": "inventory_effect",
+                "status": "resolved",
+                "text": "You receive key.",
+                "decision": "PASS",
+                "classification": "covered",
+                "evidence": "The missing patrol was last seen taking the northwest mud track past the crates. You pick up the key and place it in your pack."
+              }
+            ],
+            "scope": "bounded_deterministic_coverage_not_semantic_proof"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No human judgment claimed"
+      },
+      "source_artifact_path": "artifacts/pr_play_60/development_results.json"
+    },
+    {
+      "example_id": "H03",
+      "campaign": "PR-PLAY-60",
+      "run_id": "local-validator-replay",
+      "turn_index": 1,
+      "player_input": "I examine the notice board.",
+      "player_input_classification": [
+        "synthetic_positive_control"
+      ],
+      "prior_context": "Completed investigation with detached synthetic engine deltas or trusted consequence text.",
+      "authorized_context": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "outcome:inventory",
+            "source": "inventory_effect",
+            "status": "resolved",
+            "text": "You receive sealed letter."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "Rain falls around the notice board."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": {
+          "items_added": [
+            {
+              "id": "sealed_letter",
+              "name": "sealed letter",
+              "quantity": 1
+            }
+          ]
+        },
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+        ]
+      },
+      "exact_gm_output": "The missing patrol was last seen taking the northwest mud track past the crates. You obtain the sealed letter.",
+      "publication": "Quarantine/local validation only",
+      "actual_result": {
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "ungrounded_authoritative_rule"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [
+            {
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            },
+            {
+              "text": "You obtain the sealed letter.",
+              "kind": "consequential_proposal",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": true,
+              "family": "hidden_information"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [
+              {
+                "category": "items_added",
+                "claim": "the sealed letter",
+                "supported": true
+              }
+            ],
+            "reasons": []
+          }
+        },
+        "persistent": [],
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "the missing patrol was last seen taking the northwest mud track past the crates.",
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            },
+            {
+              "id": "outcome:inventory",
+              "source": "inventory_effect",
+              "status": "resolved",
+              "text": "You receive sealed letter.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "The missing patrol was last seen taking the northwest mud track past the crates. You obtain the sealed letter."
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        },
+        "combined": {
+          "decision": "FAIL",
+          "semantic": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          },
+          "legacy": {
+            "hard_valid": false,
+            "reasons": [
+              "ungrounded_authoritative_rule"
+            ],
+            "soft_flags": [],
+            "speaker": "",
+            "addressee": "",
+            "operation": "",
+            "interaction_complete": true,
+            "contract_satisfying": false,
+            "authority": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "kind": "incidental_fact",
+                "epistemic_status": "world_truth",
+                "grounded": false,
+                "consequential": false,
+                "family": "incidental"
+              },
+              {
+                "text": "You obtain the sealed letter.",
+                "kind": "consequential_proposal",
+                "epistemic_status": "world_truth",
+                "grounded": false,
+                "consequential": true,
+                "family": "hidden_information"
+              }
+            ],
+            "gm_resolution_decision_audit": null,
+            "mechanical_claim_audit": {
+              "coverage": "bounded_assertion_frames_not_semantic_proof",
+              "claims": [
+                {
+                  "category": "items_added",
+                  "claim": "the sealed letter",
+                  "supported": true
+                }
+              ],
+              "reasons": []
+            },
+            "consequential_validation": {
+              "decision": "PASS",
+              "reasons": [],
+              "claims": [],
+              "provider_requests": 0,
+              "coverage": "deterministic_frames_not_semantic_proof"
+            }
+          },
+          "coverage": {
+            "decision": "PASS",
+            "facts": [
+              {
+                "id": "outcome:0",
+                "source": "resolved_action",
+                "status": "newly_revealed",
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "decision": "PASS",
+                "classification": "covered",
+                "evidence": "the missing patrol was last seen taking the northwest mud track past the crates.",
+                "relation": {
+                  "subject": "missing patrol",
+                  "path": "northwest mud track",
+                  "landmark": "crates"
+                }
+              },
+              {
+                "id": "outcome:inventory",
+                "source": "inventory_effect",
+                "status": "resolved",
+                "text": "You receive sealed letter.",
+                "decision": "PASS",
+                "classification": "covered",
+                "evidence": "The missing patrol was last seen taking the northwest mud track past the crates. You obtain the sealed letter."
+              }
+            ],
+            "scope": "bounded_deterministic_coverage_not_semantic_proof"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No human judgment claimed"
+      },
+      "source_artifact_path": "artifacts/pr_play_60/holdout_results.json"
+    },
+    {
+      "example_id": "H26",
+      "campaign": "PR-PLAY-60",
+      "run_id": "local-validator-replay",
+      "turn_index": 1,
+      "player_input": "I examine the notice board.",
+      "player_input_classification": [
+        "synthetic_positive_control"
+      ],
+      "prior_context": "Completed investigation with detached synthetic engine deltas or trusted consequence text.",
+      "authorized_context": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "Rain falls around the notice board."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [
+          "The ferryman is dead."
+        ],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+        ]
+      },
+      "exact_gm_output": "The missing patrol was last seen taking the northwest mud track past the crates. The ferryman is now dead.",
+      "publication": "Quarantine/local validation only",
+      "actual_result": {
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "unsupported_mechanical_claim:npc_changes"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [
+            {
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [
+              {
+                "category": "npc_changes",
+                "claim": "The ferryman is now dead",
+                "supported": false
+              }
+            ],
+            "reasons": [
+              "unsupported_mechanical_claim:npc_changes"
+            ]
+          }
+        },
+        "persistent": [],
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "the missing patrol was last seen taking the northwest mud track past the crates.",
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        },
+        "combined": {
+          "decision": "FAIL",
+          "semantic": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          },
+          "legacy": {
+            "hard_valid": false,
+            "reasons": [
+              "unsupported_mechanical_claim:npc_changes"
+            ],
+            "soft_flags": [],
+            "speaker": "",
+            "addressee": "",
+            "operation": "",
+            "interaction_complete": true,
+            "contract_satisfying": false,
+            "authority": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "kind": "incidental_fact",
+                "epistemic_status": "world_truth",
+                "grounded": false,
+                "consequential": false,
+                "family": "incidental"
+              }
+            ],
+            "gm_resolution_decision_audit": null,
+            "mechanical_claim_audit": {
+              "coverage": "bounded_assertion_frames_not_semantic_proof",
+              "claims": [
+                {
+                  "category": "npc_changes",
+                  "claim": "The ferryman is now dead",
+                  "supported": false
+                }
+              ],
+              "reasons": [
+                "unsupported_mechanical_claim:npc_changes"
+              ]
+            },
+            "consequential_validation": {
+              "decision": "PASS",
+              "reasons": [],
+              "claims": [],
+              "provider_requests": 0,
+              "coverage": "deterministic_frames_not_semantic_proof"
+            }
+          },
+          "coverage": {
+            "decision": "PASS",
+            "facts": [
+              {
+                "id": "outcome:0",
+                "source": "resolved_action",
+                "status": "newly_revealed",
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+                "decision": "PASS",
+                "classification": "covered",
+                "evidence": "the missing patrol was last seen taking the northwest mud track past the crates.",
+                "relation": {
+                  "subject": "missing patrol",
+                  "path": "northwest mud track",
+                  "landmark": "crates"
+                }
+              }
+            ],
+            "scope": "bounded_deterministic_coverage_not_semantic_proof"
+          }
+        }
+      },
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "No human judgment claimed"
+      },
+      "source_artifact_path": "artifacts/pr_play_60/holdout_results.json"
+    }
+  ]
+}

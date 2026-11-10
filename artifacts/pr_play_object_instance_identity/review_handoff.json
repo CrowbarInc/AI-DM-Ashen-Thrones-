@@ -1,0 +1,519 @@
+{
+  "campaign_id": "pr_play_object_instance_identity",
+  "campaign_name": "PR-PLAY \u2014 Object Instance Identity",
+  "campaign_date": "2026-11-09",
+  "purpose": "Bounded production identity implementation and persistence verification",
+  "objective_status": "A/PASS \u2014 bounded identity foundation",
+  "executive_summary": "Verdict: **A/PASS for bounded identity implementation**. Milestone `pr_play_object_instance_identity`.\n\nImplemented explicit reusable singleton identity service and internal API migration entry; no player command or automatic migration. Production: game/object_instances.py, game/api.py, game/state_authority.py. Governance: docs/state_authority_model.md.\n\nPreservation: 143 passed / 0 failed / 0 errors / 0 skipped (143 tests) before and 143 passed / 0 failed / 0 errors / 0 skipped (143 tests) after. Combined: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests) before; 405 passed / 20 failed / 0 errors / 0 skipped (425 tests) after. New failing identities: []. Identity: 52 passed. Additional inventory/snapshot: 50 passed.\n\nSave/reload and real create_snapshot/load_snapshot preserve complete identity records. All twelve published turns unchanged; T06 unresolved. Zero live provider calls.\n\nOne authoritative character.json inventory per runtime store; duplicate scanning covers every declared identity in that host only. No authoritative multi-character/world registry exists; broader host indexing belongs to the later transfer/host-integration phase. UUID4 generation is collision resistant and checked against this host; no campaign-wide all-object uniqueness claim. Existing writer and exception rollback remain best effort, not crash-atomic or multi-process. Historical binaries stripping unknown keys are incompatible writers.",
+  "changes": {
+    "production": [
+      "game/object_instances.py: pure validation/staging; game/api.py: explicit internal migration; game/state_authority.py: narrow ownership."
+    ],
+    "validation": [
+      "52 new behavioral tests; existing suites unchanged."
+    ],
+    "documentation": [
+      "12 milestone reports, narrow state doctrine, NEXT_SESSION prepended."
+    ],
+    "tooling": [
+      "Cycle-local runner, measurement and evidence/seal helpers."
+    ],
+    "generated_artifacts": [
+      "Machine-readable evidence and fresh review exports."
+    ]
+  },
+  "testing": {
+    "focused": "52 identity tests passed; 50 inventory/snapshot controls passed.",
+    "broader": "Preservation: 143 passed / 0 failed / 0 errors / 0 skipped (143 tests) before and 143 passed / 0 failed / 0 errors / 0 skipped (143 tests) after. Combined: 405 passed / 20 failed / 0 errors / 0 skipped (425 tests) before; 405 passed / 20 failed / 0 errors / 0 skipped (425 tests) after. New failing identities: []. Identity: 52 passed. Additional inventory/snapshot: 50 passed.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Real save/reload/snapshot and all twelve provider-free turns.",
+    "model_runtime_boundary": "0 live calls; external network and production-data writes guarded.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "20 known baseline identities; detailed evidence retained."
+  },
+  "decisions_requiring_human_review": [
+    "No additional approval required; review bounded implementation and deferred phase 2."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "One authoritative character.json inventory per runtime store; duplicate scanning covers every declared identity in that host only. No authoritative multi-character/world registry exists; broader host indexing belongs to the later transfer/host-integration phase. UUID4 generation is collision resistant and checked against this host; no campaign-wide all-object uniqueness claim. Existing writer and exception rollback remain best effort, not crash-atomic or multi-process. Historical binaries stripping unknown keys are incompatible writers.",
+      "T06 remains unresolved."
+    ],
+    "pre_existing": [
+      "Known combined-selection failures remain; no baseline repair claim."
+    ]
+  },
+  "missing_concepts": [
+    "Object markings, durable operation digest, equipment/material binding and transfer deferred."
+  ],
+  "does_not_prove": [
+    "Global object uniqueness, crash/multi-process durability, alternate-ruleset engine, improved gameplay or full suite."
+  ],
+  "recommended_next_step": "Recommend acceptance A/PASS for this bounded identity foundation. Exactly one proposed next implementation cycle: `pr_play_object_marking_mutation` \u2014 one validated marking on an explicitly established compatible singleton, deterministic service tests first, with atomic save primitive and durable request/digest semantics before activation as required by approved roadmap phase 2. Do not begin automatically.\n\nDefer original T06 routing/material/clothing/parts, inspection/removal, transfer/host indexing, NPC custody, scene promotion, stack splitting, ruleset loader, crafting, baseline repair and crash/multi-process persistence. Remaining identity scope and writer limitations are documented, not fabricated capabilities.",
+  "self_contained_review_test": "Reopen stable/dated archives; verify canonical hashes, milestone, production implementation, persistence, regressions, twelve-turn comparison and handoff.",
+  "primary_report": "development/campaigns/product_realization/pr_play_object_instance_identity/SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/BASELINE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/IDENTITY_CONTRACT.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/IMPLEMENTATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/INTEGRITY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/MIGRATION_SAFETY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/NEGATIVE_CONTROLS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/NEXT_STEP_DECISION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/PERFORMANCE.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/PERSISTENCE_VERIFICATION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/REGRESSION_RESULTS.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/SUMMARY.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_instance_identity/TWELVE_TURN_COMPARISON.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/before_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/after_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/source_changes.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/entry_identity.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/entry_git_status.txt",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/identity_traces.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/persistence_round_trip.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/performance.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/regression_results.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/twelve_turn_comparison.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/twelve_turn_state_evidence.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/production.diff",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/milestone_identity.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/run_checks.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/measure.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/finalize.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/files_created.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/final_git_status.txt",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/before_preservation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/before_preservation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/before_preservation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/before_combined_retry_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/before_combined_retry_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/before_combined_retry_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/after_preservation_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/after_preservation_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/after_preservation_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/after_combined_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/after_combined_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/after_combined_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/final_identity_v2_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/final_identity_v2_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/final_identity_v2_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/after_inventory_snapshot_command.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/after_inventory_snapshot_execution.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/after_inventory_snapshot_junit.xml",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/evidence_manifest.json",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/object_instances.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/state_authority.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_object_instances.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/state_authority_model.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/storage.py",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_object_identity_architecture/OBJECT_INSTANCE_CONTRACT.md",
+      "role": "implementation_or_evidence",
+      "canonical": true,
+      "why": "Bounded implementation, verification or handoff provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_play_object_instance_identity/seal_review.py",
+      "role": "verification_tool",
+      "canonical": true,
+      "why": "Reproducible archive verification."
+    }
+  ]
+}

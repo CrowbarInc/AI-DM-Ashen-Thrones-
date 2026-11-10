@@ -17,6 +17,119 @@ class QualityReviewer(Protocol):
     def review(self, action: dict, text: str, prior: list[str]) -> dict: ...
 
 
+def can_start_interaction(usage, request_limit):
+    """Reserve interpretation plus optional expression before starting a turn."""
+    return (not usage.get('stopped')
+            and request_limit - usage.get('dispatched_requests', 0) >= 2)
+
+
+def expression_outcome(gm):
+    """Evaluate delivered wording against native authority, never candidate adoption alone."""
+    from game.expressive_dialogue import validate_expression, spoken_text, wrap_speech, _norm, _UNCERTAIN
+    metadata = gm.get('metadata') or {}
+    audit = metadata.get('expression_generation') or {}
+    accepted = metadata.get('accepted_response') or {}
+    decision = audit.get('decision') or accepted.get('expression_decision')
+    if decision not in {'adopted', 'rejected'}:
+        return 'EXPRESSION_NOT_INVOKED', []
+    contract = audit.get('contract') or {}
+    text = str(gm.get('player_facing_text') or '')
+    reasons = []
+    if not text.strip():
+        reasons.append('unrecoverable_expression_failure')
+    elif contract:
+        spoken = spoken_text(text, str(contract.get('speaker_name') or ''))
+        props = contract.get('authorized_propositions') or []
+        if text != wrap_speech(str(contract.get('speaker_name') or ''), spoken, str(contract.get('fallback_response') or '')):
+            reasons.append('published_speaker_or_frame_changed')
+        if props and _UNCERTAIN.search(spoken):
+            reasons.append('semantic_dead_end')
+        # Exact canonical answer is a valid fallback, although expression
+        # adoption deliberately rejects verbatim repetition.
+        exact = len(props) == 1 and _norm(spoken) == _norm(props[0])
+        validation = validate_expression(spoken, contract)
+        if not exact and not validation['adopt']:
+            reasons.append('published_expression_not_authorized')
+    elif decision == 'rejected':
+        # Player projection may omit the full audit. Require native authority
+        # and validation evidence instead of inferring recovery from text alone.
+        proposition = str(accepted.get('authorized_proposition') or '')
+        spoken = spoken_text(text, '')
+        if (not proposition or _norm(spoken) != _norm(proposition)
+                or (accepted.get('hard_validation') or {}).get('hard_valid') is not True):
+            reasons.append('expression_recovery_unverified')
+    return ('EXPRESSION_ACCEPTED' if decision == 'adopted' else
+            'EXPRESSION_REJECTED_UNRECOVERED' if reasons else
+            'EXPRESSION_REJECTED_RECOVERED'), reasons
+
+
+def classify_turn(status, body, events=()):
+    """Separate delivery, execution and host rejection using native diagnostics.
+
+    A valid in-world failure (e.g. an unsuccessful check) still counts as
+    adjudication. Narrative quality is deliberately outside this predicate.
+    """
+    gm = body.get('gm_output') or {}
+    resolution = body.get('resolution') or {}
+    meta = resolution.get('metadata') or {}
+    decision = meta.get('conversational_decision') or {}
+    bridge = meta.get('stored_interpretation_bridge') or {}
+    live = meta.get('live_chat_interpretation') or {}
+    accepted = (gm.get('metadata') or {}).get('accepted_response') or {}
+    expression_status, expression_reasons = expression_outcome(gm)
+    reasons = list(expression_reasons)
+    if status != 200:
+        reasons.append('http_failure')
+    if body.get('ok') is False:
+        reasons.append('application_rejection')
+    if not str(gm.get('player_facing_text') or '').strip():
+        reasons.append('missing_player_response')
+    if (decision.get('reason') in {'proposal_not_eligible', 'unsupported_request',
+            'unsupported_single_intention', 'unsupported_compound_step', 'compound_intention_needs_confirmation'}
+            or decision.get('intent_family') == 'unsupported_world_operation'
+            or decision.get('category') == 'DECLINE'):
+        reasons.append('action_or_compound_rejection')
+    if bridge.get('accepted') is False:
+        reasons.append('action_binding_failure')
+    answered = (decision.get('category') == 'ANSWER'
+                and decision.get('reason') == 'communication_before_execution'
+                and accepted.get('interaction_completion') is True
+                and (accepted.get('hard_validation') or {}).get('hard_valid') is True)
+    if (live.get('status') == 'blocked' and meta.get('resolver_invoked') is not True
+            and not (answered and live.get('reason') == 'clarification_required')):
+        reasons.append('interpretation_rejection')
+    if any(e.get('classification') in {'provider_error', 'json_parse_failure', 'missing_structured_envelope',
+            'structured_validation_failure', 'empty_provider_content'}
+            or e.get('provider_status') in {'incomplete', 'failed', 'cancelled'}
+            or e.get('semantic_classification') == 'rejected' or e.get('event') == 'rejected'
+            or (e.get('event') == 'completed' and (e.get('error') or e.get('completion_status') in {'failed', 'interrupted'}))
+            for e in events):
+        reasons.append('provider_or_parser_failure')
+    if set(gm.get('tags') or []) & {'interpretation_rejected', 'provider_budget_refused'}:
+        reasons.append('provider_or_parser_failure')
+    if (accepted.get('hard_validation') or {}).get('hard_valid') is False:
+        reasons.append('validator_rejection')
+    # Player projection can omit internal resolution. Its canonical accepted
+    # response still identifies host refusals; never infer success from HTTP.
+    source = str(accepted.get('authorization_source') or '')
+    if source.startswith('conversational_decision:') and source.split(':', 1)[1] in {
+            'proposal_not_eligible', 'unsupported_request', 'unsupported_single_intention',
+            'unsupported_compound_step', 'compound_intention_needs_confirmation'}:
+        reasons.append('action_or_compound_rejection')
+    executed = bool(meta.get('resolver_invoked') is True or resolution.get('kind') in {
+        'social_probe', 'social_exchange', 'question', 'observe', 'investigate', 'scene_transition', 'travel'}
+        or accepted.get('speaker_id') and accepted.get('interaction_completion') is True)
+    partial = accepted.get('interaction_completion') is False and executed
+    completed = (executed or answered) and not reasons and not partial
+    pipeline_completed = (status == 200 and bool(str(gm.get('player_facing_text') or '').strip())
+                          and bool(resolution or accepted)
+                          and not set(reasons) & {'provider_or_parser_failure', 'interpretation_rejection', 'validator_rejection'})
+    return {'expression_status': expression_status, 'transport_completed': status == 200, 'pipeline_completed': pipeline_completed,
+            'action_executed': executed and not reasons, 'gameplay_completed': completed,
+            'interaction_outcome': 'rejected' if reasons else 'partial' if partial else 'completed' if completed else 'unknown',
+            'semantic_dead_end': bool(reasons), 'stop': bool(reasons), 'reasons': sorted(set(reasons))}
+
+
 def document(docs, name):
     return normalized_document(name, docs.get(name, {}))[0]
 
@@ -101,13 +214,22 @@ def evaluate(action, status, body, before, after, events, prior=()):
     session_before, session_after = (document(d, 'session.json') for d in (before, after))
     changes = diff({k: document(before, k) for k in before}, {k: document(after, k) for k in after})
     resolution = body.get('resolution') or {}
+    completion_status = classify_turn(status, body, events)
+    # Some experiments explicitly require an answer, rather than legitimate
+    # uncertainty. A generic host line must not satisfy that scenario gate.
+    if action.get('requires_substantive_answer'):
+        from game.expressive_dialogue import _UNCERTAIN
+        if _UNCERTAIN.search(text):
+            completion_status.update(gameplay_completed=False, semantic_dead_end=True,
+                                     stop=True, interaction_outcome='rejected')
+            completion_status['reasons'].append('decisive_conversational_dead_end')
     findings = []
     def finding(category, kind, evidence, source):
         findings.append({'category': category, 'kind': kind, 'evidence': evidence, 'source': source,
                          'step_id': action['step_id'], 'player_input': action['player_input'],
                          'dm_response': text[:8192], 'diagnostics': f"turns/{action['step_id']}/evaluation.json#diagnostics",
                          'state_comparison': f"turns/{action['step_id']}/evaluation.json#state_diff"})
-    overlays = compare_overlays(before, after)
+    overlays = compare_overlays(before, after, ordinary_action=action, turn_response=body)
     if not overlays['integrity']:
         finding('unauthorized_overlay_mutation', 'confirmed_mechanical_failure', overlays,
                 'Overlay mutation authority unresolved; fail closed')
@@ -179,15 +301,32 @@ def evaluate(action, status, body, before, after, events, prior=()):
             finding('nonmutating_contract_violation', 'confirmed_mechanical_failure', changes, 'resolution.metadata.authoritative_mutation=false')
     if scene_after != scene_before and not resolution:
         finding('movement_authority_unavailable', 'unknown', [scene_before, scene_after], 'resolution absent from response')
+    for reason in completion_status['reasons']:
+        finding(reason, 'confirmed_semantic_failure', completion_status, 'native turn diagnostics')
+    # An exact restricted authored value in the public reply is decisive.
+    # This bounded check cannot prove the absence of paraphrased disclosures.
+    from game.state_channels import is_author_key
+    def restricted_values(value, restricted=False):
+        if isinstance(value, dict):
+            for key, child in value.items():
+                yield from restricted_values(child, restricted or is_author_key(key))
+        elif isinstance(value, list):
+            for child in value:
+                yield from restricted_values(child, restricted)
+        elif restricted and isinstance(value, str) and len(value.strip()) >= 16:
+            yield value.strip()
+    if any(secret in text and secret not in action['player_input'] for secret in restricted_values(before)):
+        finding('hidden_information_disclosure', 'confirmed_semantic_failure',
+                'Exact restricted authored value present in public reply', 'authoritative snapshot/public reply comparison')
     q = quality(action, text, list(prior))
     for concern in q['concerns']:
         finding(concern, 'unknown' if not text else 'heuristic_quality_concern', q['probes'], 'pr-play-09-quality-v1')
     provider_records = [e for e in events if e.get('stage') == 'provider_response']
     technical = [f for f in findings if f['kind'] == 'confirmed_mechanical_failure']
     semantic = [f for f in findings if f['kind'] == 'confirmed_semantic_failure']
-    completion = not technical and not any(f['category'] == 'provider_budget_exhaustion' for f in findings) and bool(text)
+    completion = completion_status['gameplay_completed'] and not technical and not semantic
     return {'step_id': action['step_id'], 'player_input': action['player_input'], 'dm_response': text[:8192],
-            'response_truncated': len(text) > 8192, 'http_status': status,
+            'response_truncated': len(text) > 8192, 'http_status': status, 'completion': completion_status,
             'outcome_classification': {'kind': 'legitimate_gameplay_outcome' if hard_validation.get('hard_valid') is True and resolution.get('success') is False and not technical else 'unknown',
                                        'evidence': 'native accepted response and resolution; no invented success condition'},
             'state_diff': changes, 'overlay_comparison': overlays, 'state_before': f"turns/{action['step_id']}/before/documents.json",
@@ -252,6 +391,11 @@ def finalize(result):
     result.update(attempted_turns=len(turns), completed_turns=sum(t.get('mechanical', {}).get('status') == 'PASS' for t in turns),
                   gameplay_turns=turns, state_integrity_findings=[f for f in findings if f['kind'] == 'confirmed_mechanical_failure'])
     result['completed_turns'] = sum(t.get('mechanical', {}).get('completed_interaction', False) for t in turns)
+    result['http_requests_completed'] = sum(t.get('http_status') == 200 for t in turns)
+    result['ordinary_actions_attempted'] = len(turns)
+    result['ordinary_actions_executed'] = sum(t.get('completion', {}).get('action_executed', False) for t in turns)
+    result['meaningful_gameplay_turns_completed'] = result['completed_turns']
+    result['decisive_failures'] = sum(t.get('stop', False) for t in turns)
     result['earliest'] = {name: next((f for f in findings if f['kind'] == kind), None)
                           for name, kind in [('mechanical_failure', 'confirmed_mechanical_failure'),
                                              ('semantic_failure', 'confirmed_semantic_failure'), ('quality_concern', 'heuristic_quality_concern')]}
@@ -272,6 +416,10 @@ def finalize(result):
             result['verdict'] = 'BLOCKED'
         elif result.get('stop_reason') == 'scenario_divergence':
             result['verdict'] = 'PARTIAL'
+        elif any(t.get('completion', {}).get('interaction_outcome') == 'partial' for t in turns):
+            result['verdict'] = 'PARTIAL'
+        elif any(t.get('completion', {}).get('interaction_outcome') == 'unknown' for t in turns):
+            result['verdict'] = 'INCONCLUSIVE'
         elif len(turns) != 5 or any(t.get('semantic', {}).get('status') == 'UNKNOWN' for t in turns):
             result['verdict'] = 'INCONCLUSIVE'
     result['stop_reason'] = result.get('stop_reason') or ('completed' if len(turns) == 5 and all(t.get('ok') for t in turns) else (result.get('failure_classification') or {}).get('category') or 'opening_or_execution_stopped')

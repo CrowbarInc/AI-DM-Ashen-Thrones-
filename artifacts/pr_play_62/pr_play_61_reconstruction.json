@@ -1,0 +1,1956 @@
+{
+  "original_live": {
+    "initial": {
+      "campaign_run_id": "530e2155d458cd20c06d913e",
+      "scene": "frontier_gate",
+      "visited": [
+        "frontier_gate"
+      ],
+      "player": "galinor",
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [
+        {
+          "id": "spellbook",
+          "name": "Spellbook",
+          "quantity": 1,
+          "usable": false
+        }
+      ],
+      "equipment": null,
+      "clues": null,
+      "state_flags": null,
+      "npcs": {},
+      "quests": [
+        {
+          "secret": "CANARY_QUEST_TWIST"
+        }
+      ],
+      "conditions": {
+        "dazed": {
+          "name": "Dazed",
+          "kind": "condition",
+          "default_effects": {
+            "no_actions": true
+          }
+        },
+        "shaken": {
+          "name": "Shaken",
+          "kind": "condition",
+          "default_effects": {
+            "attack_penalty": 2,
+            "save_penalty": 2,
+            "skill_penalty": 2
+          }
+        },
+        "sickened": {
+          "name": "Sickened",
+          "kind": "condition",
+          "default_effects": {
+            "attack_penalty": 2,
+            "damage_penalty": 2,
+            "save_penalty": 2,
+            "skill_penalty": 2
+          }
+        },
+        "blinded": {
+          "name": "Blinded",
+          "kind": "condition",
+          "default_effects": {
+            "ac_penalty": 2,
+            "lose_dex_to_ac": true
+          }
+        },
+        "stunned": {
+          "name": "Stunned",
+          "kind": "condition",
+          "default_effects": {
+            "no_actions": true,
+            "ac_penalty": 2,
+            "lose_dex_to_ac": true
+          }
+        },
+        "risky_strike": {
+          "name": "Risky Strike",
+          "kind": "combat_toggle",
+          "default_effects": {}
+        },
+        "defensive_stance": {
+          "name": "Defensive Stance",
+          "kind": "combat_toggle",
+          "default_effects": {}
+        },
+        "shield": {
+          "name": "Shield",
+          "kind": "spell_effect",
+          "default_effects": {
+            "ac_bonus": 4
+          }
+        }
+      },
+      "combat": {
+        "in_combat": false,
+        "round": 0,
+        "initiative_order": [],
+        "turn_index": 0,
+        "active_actor_id": null,
+        "player_turn_used": false
+      },
+      "world_flags": {},
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      }
+    },
+    "state": {
+      "status_code": 200,
+      "scene_id": null,
+      "campaign_started": null,
+      "player_visible": [],
+      "ok": true
+    },
+    "actions": [
+      {
+        "input": "I examine the notice board.",
+        "status_code": 200,
+        "http_ms": 3330.874,
+        "facing": "You study the notice board more closely and uncover a crucial detail: the missing patrol was last spotted taking the northwest mud track past the crates. This new information sharpens your understanding of their last known movements amid the bustle of watchers, refugees, and the ever-watchful gate serjeant.",
+        "published_marker": "published",
+        "mechanical": {
+          "kind": "discover_clue",
+          "success": true,
+          "action_id": "notice_board",
+          "interactable_id": "notice_board",
+          "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "discovered_clues": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "state_changes": {
+            "clue_revealed": true,
+            "already_searched": null,
+            "items_added": null,
+            "npc_changes": null
+          }
+        },
+        "authority": {
+          "campaign_run_id": "530e2155d458cd20c06d913e",
+          "scene": "frontier_gate",
+          "visited": [
+            "frontier_gate"
+          ],
+          "player": "galinor",
+          "hp": {
+            "current": 8,
+            "max": 8,
+            "nonlethal": 0
+          },
+          "inventory": [
+            {
+              "id": "spellbook",
+              "name": "Spellbook",
+              "quantity": 1,
+              "usable": false
+            }
+          ],
+          "equipment": null,
+          "clues": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "state_flags": {},
+          "npcs": {
+            "guard_captain": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            },
+            "tavern_runner": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            }
+          },
+          "quests": [
+            {
+              "secret": "CANARY_QUEST_TWIST"
+            }
+          ],
+          "conditions": {
+            "dazed": {
+              "name": "Dazed",
+              "kind": "condition",
+              "default_effects": {
+                "no_actions": true
+              }
+            },
+            "shaken": {
+              "name": "Shaken",
+              "kind": "condition",
+              "default_effects": {
+                "attack_penalty": 2,
+                "save_penalty": 2,
+                "skill_penalty": 2
+              }
+            },
+            "sickened": {
+              "name": "Sickened",
+              "kind": "condition",
+              "default_effects": {
+                "attack_penalty": 2,
+                "damage_penalty": 2,
+                "save_penalty": 2,
+                "skill_penalty": 2
+              }
+            },
+            "blinded": {
+              "name": "Blinded",
+              "kind": "condition",
+              "default_effects": {
+                "ac_penalty": 2,
+                "lose_dex_to_ac": true
+              }
+            },
+            "stunned": {
+              "name": "Stunned",
+              "kind": "condition",
+              "default_effects": {
+                "no_actions": true,
+                "ac_penalty": 2,
+                "lose_dex_to_ac": true
+              }
+            },
+            "risky_strike": {
+              "name": "Risky Strike",
+              "kind": "combat_toggle",
+              "default_effects": {}
+            },
+            "defensive_stance": {
+              "name": "Defensive Stance",
+              "kind": "combat_toggle",
+              "default_effects": {}
+            },
+            "shield": {
+              "name": "Shield",
+              "kind": "spell_effect",
+              "default_effects": {
+                "ac_bonus": 4
+              }
+            }
+          },
+          "combat": {
+            "in_combat": false,
+            "round": 0,
+            "initiative_order": [],
+            "turn_index": 0,
+            "active_actor_id": null,
+            "player_turn_used": false
+          },
+          "world_flags": {},
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          }
+        },
+        "quarantine": {
+          "eligible": true,
+          "diagnostic": "PASS",
+          "error_type": null,
+          "mode": "quarantined_integrated",
+          "used_fallback": false,
+          "player_facing_published": true,
+          "decision": "PASS",
+          "semantic_decision": "PASS",
+          "coverage_decision": "PASS",
+          "legacy_hard_valid": true,
+          "raw_provider_text": "You study the notice board more closely and uncover a crucial detail: the missing patrol was last spotted taking the northwest mud track past the crates. This new information sharpens your understanding of their last known movements amid the bustle of watchers, refugees, and the ever-watchful gate serjeant.",
+          "assembled": "You study the notice board more closely and uncover a crucial detail: the missing patrol was last spotted taking the northwest mud track past the crates. This new information sharpens your understanding of their last known movements amid the bustle of watchers, refugees, and the ever-watchful gate serjeant.",
+          "provider_requests": 1,
+          "validation_ms": 27.224,
+          "total_integrated_ms": 3102.425,
+          "provider_latency_ms": 3071.704,
+          "input_tokens": 395,
+          "output_tokens": 59,
+          "total_tokens": 454,
+          "model": "gpt-4.1-mini-2025-04-14",
+          "anchors": [
+            {
+              "order": 0,
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+            }
+          ]
+        }
+      },
+      {
+        "input": "I examine the rain barrel.",
+        "status_code": 200,
+        "http_ms": 2266.065,
+        "facing": "Provider calls are disabled for this run, so no live narration was generated.",
+        "published_marker": null,
+        "mechanical": {
+          "kind": "investigate",
+          "success": true,
+          "action_id": "i_examine_the_rain_barrel",
+          "interactable_id": null,
+          "clue_text": null,
+          "discovered_clues": [],
+          "state_changes": {
+            "clue_revealed": null,
+            "already_searched": null,
+            "items_added": null,
+            "npc_changes": null
+          }
+        },
+        "authority": {
+          "campaign_run_id": "530e2155d458cd20c06d913e",
+          "scene": "frontier_gate",
+          "visited": [
+            "frontier_gate"
+          ],
+          "player": "galinor",
+          "hp": {
+            "current": 8,
+            "max": 8,
+            "nonlethal": 0
+          },
+          "inventory": [
+            {
+              "id": "spellbook",
+              "name": "Spellbook",
+              "quantity": 1,
+              "usable": false
+            }
+          ],
+          "equipment": null,
+          "clues": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "state_flags": {},
+          "npcs": {
+            "guard_captain": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            },
+            "tavern_runner": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            }
+          },
+          "quests": [
+            {
+              "secret": "CANARY_QUEST_TWIST"
+            }
+          ],
+          "conditions": {
+            "dazed": {
+              "name": "Dazed",
+              "kind": "condition",
+              "default_effects": {
+                "no_actions": true
+              }
+            },
+            "shaken": {
+              "name": "Shaken",
+              "kind": "condition",
+              "default_effects": {
+                "attack_penalty": 2,
+                "save_penalty": 2,
+                "skill_penalty": 2
+              }
+            },
+            "sickened": {
+              "name": "Sickened",
+              "kind": "condition",
+              "default_effects": {
+                "attack_penalty": 2,
+                "damage_penalty": 2,
+                "save_penalty": 2,
+                "skill_penalty": 2
+              }
+            },
+            "blinded": {
+              "name": "Blinded",
+              "kind": "condition",
+              "default_effects": {
+                "ac_penalty": 2,
+                "lose_dex_to_ac": true
+              }
+            },
+            "stunned": {
+              "name": "Stunned",
+              "kind": "condition",
+              "default_effects": {
+                "no_actions": true,
+                "ac_penalty": 2,
+                "lose_dex_to_ac": true
+              }
+            },
+            "risky_strike": {
+              "name": "Risky Strike",
+              "kind": "combat_toggle",
+              "default_effects": {}
+            },
+            "defensive_stance": {
+              "name": "Defensive Stance",
+              "kind": "combat_toggle",
+              "default_effects": {}
+            },
+            "shield": {
+              "name": "Shield",
+              "kind": "spell_effect",
+              "default_effects": {
+                "ac_bonus": 4
+              }
+            }
+          },
+          "combat": {
+            "in_combat": false,
+            "round": 0,
+            "initiative_order": [],
+            "turn_index": 0,
+            "active_actor_id": null,
+            "player_turn_used": false
+          },
+          "world_flags": {},
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          }
+        },
+        "quarantine": {
+          "eligible": true,
+          "diagnostic": "FAIL",
+          "error_type": null,
+          "mode": "quarantined_integrated",
+          "used_fallback": true,
+          "player_facing_published": null,
+          "decision": "FAIL",
+          "semantic_decision": "FAIL",
+          "coverage_decision": "REVIEW_REQUIRED",
+          "legacy_hard_valid": false,
+          "raw_provider_text": "You take a careful look at the rain barrel, noting its worn surface and the faint scent of damp wood. Aside from what you already knew about the missing patrol last seen heading northwest past the crates, this close inspection reveals nothing new or unusual. The bustle around the barrel continues, with the tavern runner nearby trading hot stew and rumors.",
+          "assembled": "You examine what is visible; no new clue is established. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+          "provider_requests": 1,
+          "validation_ms": 16.549,
+          "total_integrated_ms": 1992.845,
+          "provider_latency_ms": 1972.176,
+          "input_tokens": 410,
+          "output_tokens": 69,
+          "total_tokens": 479,
+          "model": "gpt-4.1-mini-2025-04-14",
+          "anchors": [
+            {
+              "order": 0,
+              "source": "player_knowledge",
+              "status": "previously_known",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+            }
+          ]
+        }
+      },
+      {
+        "input": "I examine the notice board again.",
+        "status_code": 200,
+        "http_ms": 2239.977,
+        "facing": "You take another careful look at the notice board, but nothing new catches your eye beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The posted taxes, curfew rules, and warnings remain unchanged, offering no fresh clues.",
+        "published_marker": "published",
+        "mechanical": {
+          "kind": "already_searched",
+          "success": false,
+          "action_id": "notice_board",
+          "interactable_id": "notice_board",
+          "clue_text": null,
+          "discovered_clues": [],
+          "state_changes": {
+            "clue_revealed": null,
+            "already_searched": true,
+            "items_added": null,
+            "npc_changes": null
+          }
+        },
+        "authority": {
+          "campaign_run_id": "530e2155d458cd20c06d913e",
+          "scene": "frontier_gate",
+          "visited": [
+            "frontier_gate"
+          ],
+          "player": "galinor",
+          "hp": {
+            "current": 8,
+            "max": 8,
+            "nonlethal": 0
+          },
+          "inventory": [
+            {
+              "id": "spellbook",
+              "name": "Spellbook",
+              "quantity": 1,
+              "usable": false
+            }
+          ],
+          "equipment": null,
+          "clues": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "state_flags": {},
+          "npcs": {
+            "guard_captain": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            },
+            "tavern_runner": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            }
+          },
+          "quests": [
+            {
+              "secret": "CANARY_QUEST_TWIST"
+            }
+          ],
+          "conditions": {
+            "dazed": {
+              "name": "Dazed",
+              "kind": "condition",
+              "default_effects": {
+                "no_actions": true
+              }
+            },
+            "shaken": {
+              "name": "Shaken",
+              "kind": "condition",
+              "default_effects": {
+                "attack_penalty": 2,
+                "save_penalty": 2,
+                "skill_penalty": 2
+              }
+            },
+            "sickened": {
+              "name": "Sickened",
+              "kind": "condition",
+              "default_effects": {
+                "attack_penalty": 2,
+                "damage_penalty": 2,
+                "save_penalty": 2,
+                "skill_penalty": 2
+              }
+            },
+            "blinded": {
+              "name": "Blinded",
+              "kind": "condition",
+              "default_effects": {
+                "ac_penalty": 2,
+                "lose_dex_to_ac": true
+              }
+            },
+            "stunned": {
+              "name": "Stunned",
+              "kind": "condition",
+              "default_effects": {
+                "no_actions": true,
+                "ac_penalty": 2,
+                "lose_dex_to_ac": true
+              }
+            },
+            "risky_strike": {
+              "name": "Risky Strike",
+              "kind": "combat_toggle",
+              "default_effects": {}
+            },
+            "defensive_stance": {
+              "name": "Defensive Stance",
+              "kind": "combat_toggle",
+              "default_effects": {}
+            },
+            "shield": {
+              "name": "Shield",
+              "kind": "spell_effect",
+              "default_effects": {
+                "ac_bonus": 4
+              }
+            }
+          },
+          "combat": {
+            "in_combat": false,
+            "round": 0,
+            "initiative_order": [],
+            "turn_index": 0,
+            "active_actor_id": null,
+            "player_turn_used": false
+          },
+          "world_flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 3
+          }
+        },
+        "quarantine": {
+          "eligible": true,
+          "diagnostic": "PASS",
+          "error_type": null,
+          "mode": "quarantined_integrated",
+          "used_fallback": false,
+          "player_facing_published": true,
+          "decision": "PASS",
+          "semantic_decision": "PASS",
+          "coverage_decision": "PASS",
+          "legacy_hard_valid": true,
+          "raw_provider_text": "You take another careful look at the notice board, but nothing new catches your eye beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The posted taxes, curfew rules, and warnings remain unchanged, offering no fresh clues.",
+          "assembled": "You take another careful look at the notice board, but nothing new catches your eye beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The posted taxes, curfew rules, and warnings remain unchanged, offering no fresh clues.",
+          "provider_requests": 1,
+          "validation_ms": 7.975,
+          "total_integrated_ms": 1958.829,
+          "provider_latency_ms": 1947.887,
+          "input_tokens": 448,
+          "output_tokens": 57,
+          "total_tokens": 505,
+          "model": "gpt-4.1-mini-2025-04-14",
+          "anchors": [
+            {
+              "order": 0,
+              "source": "engine_status",
+              "status": "known",
+              "text": "The examination adds nothing new to what you already know."
+            },
+            {
+              "order": 1,
+              "source": "player_knowledge",
+              "status": "previously_known",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+            }
+          ]
+        }
+      },
+      {
+        "input": "I look around the gate.",
+        "status_code": 200,
+        "http_ms": 2568.62,
+        "facing": "Provider calls are disabled for this run, so no live narration was generated.",
+        "published_marker": null,
+        "mechanical": {
+          "kind": "observe",
+          "success": null,
+          "action_id": "i_look_around_the_gate",
+          "interactable_id": null,
+          "clue_text": null,
+          "discovered_clues": [],
+          "state_changes": {
+            "clue_revealed": null,
+            "already_searched": null,
+            "items_added": null,
+            "npc_changes": null
+          }
+        },
+        "authority": {
+          "campaign_run_id": "530e2155d458cd20c06d913e",
+          "scene": "frontier_gate",
+          "visited": [
+            "frontier_gate"
+          ],
+          "player": "galinor",
+          "hp": {
+            "current": 8,
+            "max": 8,
+            "nonlethal": 0
+          },
+          "inventory": [
+            {
+              "id": "spellbook",
+              "name": "Spellbook",
+              "quantity": 1,
+              "usable": false
+            }
+          ],
+          "equipment": null,
+          "clues": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "state_flags": {},
+          "npcs": {
+            "guard_captain": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            },
+            "tavern_runner": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            }
+          },
+          "quests": [
+            {
+              "secret": "CANARY_QUEST_TWIST"
+            }
+          ],
+          "conditions": {
+            "dazed": {
+              "name": "Dazed",
+              "kind": "condition",
+              "default_effects": {
+                "no_actions": true
+              }
+            },
+            "shaken": {
+              "name": "Shaken",
+              "kind": "condition",
+              "default_effects": {
+                "attack_penalty": 2,
+                "save_penalty": 2,
+                "skill_penalty": 2
+              }
+            },
+            "sickened": {
+              "name": "Sickened",
+              "kind": "condition",
+              "default_effects": {
+                "attack_penalty": 2,
+                "damage_penalty": 2,
+                "save_penalty": 2,
+                "skill_penalty": 2
+              }
+            },
+            "blinded": {
+              "name": "Blinded",
+              "kind": "condition",
+              "default_effects": {
+                "ac_penalty": 2,
+                "lose_dex_to_ac": true
+              }
+            },
+            "stunned": {
+              "name": "Stunned",
+              "kind": "condition",
+              "default_effects": {
+                "no_actions": true,
+                "ac_penalty": 2,
+                "lose_dex_to_ac": true
+              }
+            },
+            "risky_strike": {
+              "name": "Risky Strike",
+              "kind": "combat_toggle",
+              "default_effects": {}
+            },
+            "defensive_stance": {
+              "name": "Defensive Stance",
+              "kind": "combat_toggle",
+              "default_effects": {}
+            },
+            "shield": {
+              "name": "Shield",
+              "kind": "spell_effect",
+              "default_effects": {
+                "ac_bonus": 4
+              }
+            }
+          },
+          "combat": {
+            "in_combat": false,
+            "round": 0,
+            "initiative_order": [],
+            "turn_index": 0,
+            "active_actor_id": null,
+            "player_turn_used": false
+          },
+          "world_flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 4
+          }
+        },
+        "quarantine": {
+          "eligible": true,
+          "diagnostic": "REVIEW_REQUIRED",
+          "error_type": null,
+          "mode": "quarantined_integrated",
+          "used_fallback": true,
+          "player_facing_published": null,
+          "decision": "REVIEW_REQUIRED",
+          "semantic_decision": "PASS",
+          "coverage_decision": "REVIEW_REQUIRED",
+          "legacy_hard_valid": true,
+          "raw_provider_text": "You take in the scene around the gate once more, noting the familiar bustle: the serjeant watching the crowd, the tavern runner hawking stew and gossip, and the weary watchers and refugees lining the muddy queue. The notice board still displays the same warnings, including the missing patrol last seen heading northwest past the crates\u00e2\u20ac\u201dinformation you already knew, with nothing new to add.",
+          "assembled": "You examine what is visible; no new clue is established. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+          "provider_requests": 1,
+          "validation_ms": 17.023,
+          "total_integrated_ms": 2208.876,
+          "provider_latency_ms": 2187.42,
+          "input_tokens": 410,
+          "output_tokens": 78,
+          "total_tokens": 488,
+          "model": "gpt-4.1-mini-2025-04-14",
+          "anchors": [
+            {
+              "order": 0,
+              "source": "player_knowledge",
+              "status": "previously_known",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+            }
+          ]
+        }
+      }
+    ],
+    "final": {
+      "campaign_run_id": "530e2155d458cd20c06d913e",
+      "scene": "frontier_gate",
+      "visited": [
+        "frontier_gate"
+      ],
+      "player": "galinor",
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [
+        {
+          "id": "spellbook",
+          "name": "Spellbook",
+          "quantity": 1,
+          "usable": false
+        }
+      ],
+      "equipment": null,
+      "clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_flags": {},
+      "npcs": {
+        "guard_captain": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        },
+        "tavern_runner": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        }
+      },
+      "quests": [
+        {
+          "secret": "CANARY_QUEST_TWIST"
+        }
+      ],
+      "conditions": {
+        "dazed": {
+          "name": "Dazed",
+          "kind": "condition",
+          "default_effects": {
+            "no_actions": true
+          }
+        },
+        "shaken": {
+          "name": "Shaken",
+          "kind": "condition",
+          "default_effects": {
+            "attack_penalty": 2,
+            "save_penalty": 2,
+            "skill_penalty": 2
+          }
+        },
+        "sickened": {
+          "name": "Sickened",
+          "kind": "condition",
+          "default_effects": {
+            "attack_penalty": 2,
+            "damage_penalty": 2,
+            "save_penalty": 2,
+            "skill_penalty": 2
+          }
+        },
+        "blinded": {
+          "name": "Blinded",
+          "kind": "condition",
+          "default_effects": {
+            "ac_penalty": 2,
+            "lose_dex_to_ac": true
+          }
+        },
+        "stunned": {
+          "name": "Stunned",
+          "kind": "condition",
+          "default_effects": {
+            "no_actions": true,
+            "ac_penalty": 2,
+            "lose_dex_to_ac": true
+          }
+        },
+        "risky_strike": {
+          "name": "Risky Strike",
+          "kind": "combat_toggle",
+          "default_effects": {}
+        },
+        "defensive_stance": {
+          "name": "Defensive Stance",
+          "kind": "combat_toggle",
+          "default_effects": {}
+        },
+        "shield": {
+          "name": "Shield",
+          "kind": "spell_effect",
+          "default_effects": {
+            "ac_bonus": 4
+          }
+        }
+      },
+      "combat": {
+        "in_combat": false,
+        "round": 0,
+        "initiative_order": [],
+        "turn_index": 0,
+        "active_actor_id": null,
+        "player_turn_used": false
+      },
+      "world_flags": {
+        "faction_house_verevin_agenda_advanced": true,
+        "faction_ash_cowl_agenda_advanced": true,
+        "faction_ordo_pyric_agenda_advanced": true
+      },
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 4
+      }
+    }
+  },
+  "original_replay": {
+    "provider_requests": 0,
+    "source": "saved raw provider text from experiment_results.json",
+    "session_dir": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_61\\replay_session\\data",
+    "actions": [
+      {
+        "input": "I examine the notice board.",
+        "facing": "You study the notice board more closely and uncover a crucial detail: the missing patrol was last spotted taking the northwest mud track past the crates. This new information sharpens your understanding of their last known movements amid the bustle of watchers, refugees, and the ever-watchful gate serjeant.",
+        "marker": "published",
+        "decision": "PASS",
+        "used_fallback": false,
+        "rejected_text_published": false
+      },
+      {
+        "input": "I examine the rain barrel.",
+        "facing": "You examine what is visible; no new clue is established. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "marker": "fallback",
+        "decision": "FAIL",
+        "used_fallback": true,
+        "rejected_text_published": false
+      },
+      {
+        "input": "I examine the notice board again.",
+        "facing": "You take another careful look at the notice board, but nothing new catches your eye beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The posted taxes, curfew rules, and warnings remain unchanged, offering no fresh clues.",
+        "marker": "published",
+        "decision": "PASS",
+        "used_fallback": false,
+        "rejected_text_published": false
+      },
+      {
+        "input": "I look around the gate.",
+        "facing": "You examine what is visible; no new clue is established. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "marker": "fallback",
+        "decision": "REVIEW_REQUIRED",
+        "used_fallback": true,
+        "rejected_text_published": false
+      }
+    ],
+    "authority": {
+      "campaign_run_id": "c47297cb044755809696f777",
+      "scene": "frontier_gate",
+      "visited": [
+        "frontier_gate"
+      ],
+      "player": "galinor",
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [
+        {
+          "id": "spellbook",
+          "name": "Spellbook",
+          "quantity": 1,
+          "usable": false
+        }
+      ],
+      "equipment": null,
+      "clues": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "state_flags": {},
+      "npcs": {
+        "guard_captain": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        },
+        "tavern_runner": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        }
+      },
+      "quests": [
+        {
+          "secret": "CANARY_QUEST_TWIST"
+        }
+      ],
+      "conditions": {
+        "dazed": {
+          "name": "Dazed",
+          "kind": "condition",
+          "default_effects": {
+            "no_actions": true
+          }
+        },
+        "shaken": {
+          "name": "Shaken",
+          "kind": "condition",
+          "default_effects": {
+            "attack_penalty": 2,
+            "save_penalty": 2,
+            "skill_penalty": 2
+          }
+        },
+        "sickened": {
+          "name": "Sickened",
+          "kind": "condition",
+          "default_effects": {
+            "attack_penalty": 2,
+            "damage_penalty": 2,
+            "save_penalty": 2,
+            "skill_penalty": 2
+          }
+        },
+        "blinded": {
+          "name": "Blinded",
+          "kind": "condition",
+          "default_effects": {
+            "ac_penalty": 2,
+            "lose_dex_to_ac": true
+          }
+        },
+        "stunned": {
+          "name": "Stunned",
+          "kind": "condition",
+          "default_effects": {
+            "no_actions": true,
+            "ac_penalty": 2,
+            "lose_dex_to_ac": true
+          }
+        },
+        "risky_strike": {
+          "name": "Risky Strike",
+          "kind": "combat_toggle",
+          "default_effects": {}
+        },
+        "defensive_stance": {
+          "name": "Defensive Stance",
+          "kind": "combat_toggle",
+          "default_effects": {}
+        },
+        "shield": {
+          "name": "Shield",
+          "kind": "spell_effect",
+          "default_effects": {
+            "ac_bonus": 4
+          }
+        }
+      },
+      "combat": {
+        "in_combat": false,
+        "round": 0,
+        "initiative_order": [],
+        "turn_index": 0,
+        "active_actor_id": null,
+        "player_turn_used": false
+      },
+      "world_flags": {
+        "faction_house_verevin_agenda_advanced": true,
+        "faction_ash_cowl_agenda_advanced": true,
+        "faction_ordo_pyric_agenda_advanced": true
+      },
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 4
+      }
+    }
+  },
+  "original_traces": [
+    {
+      "enabled": true,
+      "player_text": "I examine the notice board.",
+      "provider_requests": 1,
+      "state_write_attempted": false,
+      "projection_build_ms": 0.171,
+      "hook_input": {
+        "eligible": true,
+        "player_text": "I examine the notice board.",
+        "target_id": "notice_board",
+        "resolution": {
+          "kind": "discover_clue",
+          "success": true,
+          "action_id": "notice_board",
+          "interactable_id": "notice_board",
+          "discovered_clues": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ],
+          "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "state_changes": {}
+        },
+        "narration_payload": {
+          "scene": {
+            "public": {
+              "location": "Cinderwatch Gate District",
+              "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+              "visible_facts": [
+                "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                "A tavern runner trades hot stew and rumors near the rain barrel.",
+                "Threadbare watchers and refugees cluster along the muddy gate line.",
+                "Ash Compact census delays have tightened the eastern caravan choke point."
+              ]
+            },
+            "discovered_clues": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+              }
+            ]
+          }
+        }
+      },
+      "eligible": true,
+      "mode": "quarantined_integrated",
+      "authorized_outcome_contract": {
+        "player_action": "I examine the notice board.",
+        "resolved_outcome": {
+          "status": "discovered",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "resolved_action",
+            "status": "newly_revealed",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": []
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+        ]
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "resolved_action",
+          "status": "newly_revealed",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "assembled": "You study the notice board more closely and uncover a crucial detail: the missing patrol was last spotted taking the northwest mud track past the crates. This new information sharpens your understanding of their last known movements amid the bustle of watchers, refugees, and the ever-watchful gate serjeant.",
+      "raw_provider_text": "You study the notice board more closely and uncover a crucial detail: the missing patrol was last spotted taking the northwest mud track past the crates. This new information sharpens your understanding of their last known movements amid the bustle of watchers, refugees, and the ever-watchful gate serjeant.",
+      "used_fallback": false,
+      "generator_calls": 1,
+      "validation_ms": 27.224,
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "You study the notice board more closely and uncover a crucial detail: the missing patrol was last spotted taking the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "resolved_action",
+              "status": "newly_revealed",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "you study the notice board more closely and uncover a crucial detail: the missing patrol was last seen taking the northwest mud track past the crates.",
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "review_required": true,
+      "live_provider": {
+        "enabled": true,
+        "provider": "openai",
+        "adapter": "game.expressive_dialogue.request_expression",
+        "purpose": "expression",
+        "configured_output_cap": 80,
+        "experiment_output_token_ceiling": 700,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_started_at": "2026-11-04T01:40:47.022322+00:00",
+        "request_completed_at": "2026-11-04T01:40:50.097049+00:00",
+        "provider_latency_ms": 3071.704,
+        "outer_latency_ms": 3074.737,
+        "input_tokens": 395,
+        "output_tokens": 59,
+        "total_tokens": 454,
+        "retry_count": 0,
+        "sdk_max_retries": 0,
+        "timeout": false,
+        "provider_error": null,
+        "sent": true,
+        "estimated_cost": null,
+        "estimated_cost_reason": "no configured price table",
+        "sanitized_provider_user_message": "{\"player_action\": \"I examine the notice board.\", \"resolved_outcome\": {\"status\": \"discovered\", \"success\": true}, \"must_communicate\": [{\"id\": \"outcome:0\", \"source\": \"resolved_action\", \"status\": \"newly_revealed\", \"text\": \"The missing patrol was last seen taking the northwest mud track past the crates.\"}], \"may_reference\": {\"visible_scene\": [\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"Ash Compact census delays have tightened the eastern caravan choke point.\"], \"continuity\": []}, \"authorized_consequences\": [], \"must_not_establish\": [\"Only communicate completed engine outcomes; never establish additional facts or effects.\", \"Preserve failure, uncertainty and previously-known status; no misleading hints.\", \"Only explicitly supplied inventory deltas are authorized; no additional persistent changes.\"]}"
+      },
+      "promoted": false,
+      "diagnostic": "PASS",
+      "total_integrated_ms": 3102.425,
+      "hook_work_ms": 3102.651,
+      "evidence_write": "ok",
+      "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_61\\quarantine_evidence\\pr_play_61-001.json",
+      "serialization_ms": 0.122,
+      "evidence_write_ms": 0.721,
+      "total_hook_ms": 3107.734,
+      "player_facing_published": true
+    },
+    {
+      "enabled": true,
+      "player_text": "I examine the rain barrel.",
+      "provider_requests": 1,
+      "state_write_attempted": false,
+      "projection_build_ms": 0.217,
+      "hook_input": {
+        "eligible": true,
+        "player_text": "I examine the rain barrel.",
+        "target_id": "i_examine_the_rain_barrel",
+        "resolution": {
+          "kind": "investigate",
+          "success": true,
+          "action_id": "i_examine_the_rain_barrel",
+          "interactable_id": null,
+          "discovered_clues": [],
+          "clue_text": "",
+          "state_changes": {}
+        },
+        "narration_payload": {
+          "scene": {
+            "public": {
+              "location": "Cinderwatch Gate District",
+              "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+              "visible_facts": [
+                "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                "A tavern runner trades hot stew and rumors near the rain barrel.",
+                "Threadbare watchers and refugees cluster along the muddy gate line.",
+                "Ash Compact census delays have tightened the eastern caravan choke point."
+              ]
+            },
+            "discovered_clues": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+              }
+            ]
+          }
+        }
+      },
+      "eligible": true,
+      "mode": "quarantined_integrated",
+      "authorized_outcome_contract": {
+        "player_action": "I examine the rain barrel.",
+        "resolved_outcome": {
+          "status": "observed",
+          "success": true
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "player_knowledge",
+            "status": "previously_known",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ]
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+        ]
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "player_knowledge",
+          "status": "previously_known",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "assembled": "You examine what is visible; no new clue is established. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "raw_provider_text": "You take a careful look at the rain barrel, noting its worn surface and the faint scent of damp wood. Aside from what you already knew about the missing patrol last seen heading northwest past the crates, this close inspection reveals nothing new or unusual. The bustle around the barrel continues, with the tavern runner nearby trading hot stew and rumors.",
+      "used_fallback": true,
+      "generator_calls": 1,
+      "validation_ms": 16.549,
+      "validation": {
+        "decision": "FAIL",
+        "semantic": {
+          "decision": "FAIL",
+          "reasons": [
+            "unauthorized_persistent_consequence"
+          ],
+          "claims": [
+            {
+              "category": "persistent_consequence",
+              "reason": "unauthorized_persistent_consequence",
+              "decision": "FAIL",
+              "epistemic": "persistent_change",
+              "text": "Aside from what you already knew about the missing patrol last seen heading northwest past the crates, this close inspection reveals nothing new or unusual.",
+              "subject": "thi",
+              "property": "access",
+              "result": "closed",
+              "permanent": false,
+              "authority_match": "UNAUTHORIZED"
+            }
+          ],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": false,
+          "reasons": [
+            "consequential_fail"
+          ],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [
+            {
+              "text": "You take a careful look at the rain barrel, noting its worn surface and the faint scent of damp wood.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "FAIL",
+            "reasons": [
+              "unauthorized_persistent_consequence"
+            ],
+            "claims": [
+              {
+                "category": "persistent_consequence",
+                "reason": "unauthorized_persistent_consequence",
+                "decision": "FAIL",
+                "epistemic": "persistent_change",
+                "text": "Aside from what you already knew about the missing patrol last seen heading northwest past the crates, this close inspection reveals nothing new or unusual.",
+                "subject": "thi",
+                "property": "access",
+                "result": "closed",
+                "permanent": false,
+                "authority_match": "UNAUTHORIZED"
+              }
+            ],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "player_knowledge",
+              "status": "previously_known",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "partial",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "review_required": true,
+      "live_provider": {
+        "enabled": true,
+        "provider": "openai",
+        "adapter": "game.expressive_dialogue.request_expression",
+        "purpose": "expression",
+        "configured_output_cap": 80,
+        "experiment_output_token_ceiling": 700,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_started_at": "2026-11-04T01:40:50.423290+00:00",
+        "request_completed_at": "2026-11-04T01:40:52.398859+00:00",
+        "provider_latency_ms": 1972.176,
+        "outer_latency_ms": 1975.575,
+        "input_tokens": 410,
+        "output_tokens": 69,
+        "total_tokens": 479,
+        "retry_count": 0,
+        "sdk_max_retries": 0,
+        "timeout": false,
+        "provider_error": null,
+        "sent": true,
+        "estimated_cost": null,
+        "estimated_cost_reason": "no configured price table",
+        "sanitized_provider_user_message": "{\"player_action\": \"I examine the rain barrel.\", \"resolved_outcome\": {\"status\": \"observed\", \"success\": true}, \"must_communicate\": [{\"id\": \"outcome:0\", \"source\": \"player_knowledge\", \"status\": \"previously_known\", \"text\": \"The missing patrol was last seen taking the northwest mud track past the crates.\"}], \"may_reference\": {\"visible_scene\": [\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"Ash Compact census delays have tightened the eastern caravan choke point.\"], \"continuity\": [\"The missing patrol was last seen taking the northwest mud track past the crates.\"]}, \"authorized_consequences\": [], \"must_not_establish\": [\"Only communicate completed engine outcomes; never establish additional facts or effects.\", \"Preserve failure, uncertainty and previously-known status; no misleading hints.\", \"Only explicitly supplied inventory deltas are authorized; no additional persistent changes.\"]}"
+      },
+      "promoted": false,
+      "diagnostic": "FAIL",
+      "total_integrated_ms": 1992.845,
+      "hook_work_ms": 1993.11,
+      "evidence_write": "ok",
+      "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_61\\quarantine_evidence\\pr_play_61-002.json",
+      "serialization_ms": 0.139,
+      "evidence_write_ms": 1.42,
+      "total_hook_ms": 1996.882
+    },
+    {
+      "enabled": true,
+      "player_text": "I examine the notice board again.",
+      "provider_requests": 1,
+      "state_write_attempted": false,
+      "projection_build_ms": 0.211,
+      "hook_input": {
+        "eligible": true,
+        "player_text": "I examine the notice board again.",
+        "target_id": "notice_board",
+        "resolution": {
+          "kind": "already_searched",
+          "success": false,
+          "action_id": "notice_board",
+          "interactable_id": "notice_board",
+          "discovered_clues": [],
+          "clue_text": "",
+          "state_changes": {
+            "already_searched": true
+          }
+        },
+        "narration_payload": {
+          "scene": {
+            "public": {
+              "location": "Cinderwatch Gate District",
+              "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+              "visible_facts": [
+                "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                "A tavern runner trades hot stew and rumors near the rain barrel.",
+                "Threadbare watchers and refugees cluster along the muddy gate line.",
+                "Ash Compact census delays have tightened the eastern caravan choke point."
+              ]
+            },
+            "discovered_clues": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+              }
+            ]
+          }
+        }
+      },
+      "eligible": true,
+      "mode": "quarantined_integrated",
+      "authorized_outcome_contract": {
+        "player_action": "I examine the notice board again.",
+        "resolved_outcome": {
+          "status": "known",
+          "success": false
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "engine_status",
+            "status": "known",
+            "text": "The examination adds nothing new to what you already know."
+          },
+          {
+            "id": "outcome:1",
+            "source": "player_knowledge",
+            "status": "previously_known",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ]
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+        ]
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "engine_status",
+          "status": "known",
+          "text": "The examination adds nothing new to what you already know."
+        },
+        {
+          "order": 1,
+          "source": "player_knowledge",
+          "status": "previously_known",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "assembled": "You take another careful look at the notice board, but nothing new catches your eye beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The posted taxes, curfew rules, and warnings remain unchanged, offering no fresh clues.",
+      "raw_provider_text": "You take another careful look at the notice board, but nothing new catches your eye beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The posted taxes, curfew rules, and warnings remain unchanged, offering no fresh clues.",
+      "used_fallback": false,
+      "generator_calls": 1,
+      "validation_ms": 7.975,
+      "validation": {
+        "decision": "PASS",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "You take another careful look at the notice board, but nothing new catches your eye beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "PASS",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "engine_status",
+              "status": "known",
+              "text": "The examination adds nothing new to what you already know.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "You take another careful look at the notice board, but nothing new catches your eye beyond what you already know: the missing patrol was last seen heading along the northwest mud track past the crates. The posted taxes, curfew rules, and warnings remain unchanged, offering no fresh clues."
+            },
+            {
+              "id": "outcome:1",
+              "source": "player_knowledge",
+              "status": "previously_known",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "PASS",
+              "classification": "covered",
+              "evidence": "you take another careful look at the notice board, but nothing new catches your eye past what you already know: the missing patrol was last seen taking along the northwest mud track past the crates.",
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "review_required": true,
+      "live_provider": {
+        "enabled": true,
+        "provider": "openai",
+        "adapter": "game.expressive_dialogue.request_expression",
+        "purpose": "expression",
+        "configured_output_cap": 80,
+        "experiment_output_token_ceiling": 700,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_started_at": "2026-11-04T01:40:52.741449+00:00",
+        "request_completed_at": "2026-11-04T01:40:54.691613+00:00",
+        "provider_latency_ms": 1947.887,
+        "outer_latency_ms": 1950.164,
+        "input_tokens": 448,
+        "output_tokens": 57,
+        "total_tokens": 505,
+        "retry_count": 0,
+        "sdk_max_retries": 0,
+        "timeout": false,
+        "provider_error": null,
+        "sent": true,
+        "estimated_cost": null,
+        "estimated_cost_reason": "no configured price table",
+        "sanitized_provider_user_message": "{\"player_action\": \"I examine the notice board again.\", \"resolved_outcome\": {\"status\": \"known\", \"success\": false}, \"must_communicate\": [{\"id\": \"outcome:0\", \"source\": \"engine_status\", \"status\": \"known\", \"text\": \"The examination adds nothing new to what you already know.\"}, {\"id\": \"outcome:1\", \"source\": \"player_knowledge\", \"status\": \"previously_known\", \"text\": \"The missing patrol was last seen taking the northwest mud track past the crates.\"}], \"may_reference\": {\"visible_scene\": [\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"Ash Compact census delays have tightened the eastern caravan choke point.\"], \"continuity\": [\"The missing patrol was last seen taking the northwest mud track past the crates.\"]}, \"authorized_consequences\": [], \"must_not_establish\": [\"Only communicate completed engine outcomes; never establish additional facts or effects.\", \"Preserve failure, uncertainty and previously-known status; no misleading hints.\", \"Only explicitly supplied inventory deltas are authorized; no additional persistent changes.\"]}"
+      },
+      "promoted": false,
+      "diagnostic": "PASS",
+      "total_integrated_ms": 1958.829,
+      "hook_work_ms": 1959.077,
+      "evidence_write": "ok",
+      "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_61\\quarantine_evidence\\pr_play_61-003.json",
+      "serialization_ms": 0.123,
+      "evidence_write_ms": 1.818,
+      "total_hook_ms": 1962.987,
+      "player_facing_published": true
+    },
+    {
+      "enabled": true,
+      "player_text": "I look around the gate.",
+      "provider_requests": 1,
+      "state_write_attempted": false,
+      "projection_build_ms": 0.211,
+      "hook_input": {
+        "eligible": true,
+        "player_text": "I look around the gate.",
+        "target_id": "i_look_around_the_gate",
+        "resolution": {
+          "kind": "observe",
+          "success": null,
+          "action_id": "i_look_around_the_gate",
+          "interactable_id": null,
+          "discovered_clues": [],
+          "clue_text": "",
+          "state_changes": {}
+        },
+        "narration_payload": {
+          "scene": {
+            "public": {
+              "location": "Cinderwatch Gate District",
+              "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+              "visible_facts": [
+                "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                "A tavern runner trades hot stew and rumors near the rain barrel.",
+                "Threadbare watchers and refugees cluster along the muddy gate line.",
+                "Ash Compact census delays have tightened the eastern caravan choke point."
+              ]
+            },
+            "discovered_clues": [
+              {
+                "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+              }
+            ]
+          }
+        }
+      },
+      "eligible": true,
+      "mode": "quarantined_integrated",
+      "authorized_outcome_contract": {
+        "player_action": "I look around the gate.",
+        "resolved_outcome": {
+          "status": "observed",
+          "success": null
+        },
+        "must_communicate": [
+          {
+            "id": "outcome:0",
+            "source": "player_knowledge",
+            "status": "previously_known",
+            "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+          }
+        ],
+        "may_reference": {
+          "visible_scene": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "A tavern runner trades hot stew and rumors near the rain barrel.",
+            "Threadbare watchers and refugees cluster along the muddy gate line.",
+            "Ash Compact census delays have tightened the eastern caravan choke point."
+          ],
+          "continuity": [
+            "The missing patrol was last seen taking the northwest mud track past the crates."
+          ]
+        },
+        "authorized_consequences": [],
+        "must_not_establish": [
+          "Only communicate completed engine outcomes; never establish additional facts or effects.",
+          "Preserve failure, uncertainty and previously-known status; no misleading hints.",
+          "Only explicitly supplied inventory deltas are authorized; no additional persistent changes."
+        ]
+      },
+      "anchors": [
+        {
+          "order": 0,
+          "source": "player_knowledge",
+          "status": "previously_known",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "assembled": "You examine what is visible; no new clue is established. The missing patrol was last seen taking the northwest mud track past the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "raw_provider_text": "You take in the scene around the gate once more, noting the familiar bustle: the serjeant watching the crowd, the tavern runner hawking stew and gossip, and the weary watchers and refugees lining the muddy queue. The notice board still displays the same warnings, including the missing patrol last seen heading northwest past the crates\u00e2\u20ac\u201dinformation you already knew, with nothing new to add.",
+      "used_fallback": true,
+      "generator_calls": 1,
+      "validation_ms": 17.023,
+      "validation": {
+        "decision": "REVIEW_REQUIRED",
+        "semantic": {
+          "decision": "PASS",
+          "reasons": [],
+          "claims": [],
+          "provider_requests": 0,
+          "coverage": "deterministic_frames_not_semantic_proof"
+        },
+        "legacy": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "",
+          "addressee": "",
+          "operation": "",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [],
+          "gm_resolution_decision_audit": null,
+          "mechanical_claim_audit": {
+            "coverage": "bounded_assertion_frames_not_semantic_proof",
+            "claims": [],
+            "reasons": []
+          },
+          "consequential_validation": {
+            "decision": "PASS",
+            "reasons": [],
+            "claims": [],
+            "provider_requests": 0,
+            "coverage": "deterministic_frames_not_semantic_proof"
+          }
+        },
+        "coverage": {
+          "decision": "REVIEW_REQUIRED",
+          "facts": [
+            {
+              "id": "outcome:0",
+              "source": "player_knowledge",
+              "status": "previously_known",
+              "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+              "decision": "REVIEW_REQUIRED",
+              "classification": "partial",
+              "evidence": null,
+              "relation": {
+                "subject": "missing patrol",
+                "path": "northwest mud track",
+                "landmark": "crates"
+              }
+            }
+          ],
+          "scope": "bounded_deterministic_coverage_not_semantic_proof"
+        }
+      },
+      "review_required": true,
+      "live_provider": {
+        "enabled": true,
+        "provider": "openai",
+        "adapter": "game.expressive_dialogue.request_expression",
+        "purpose": "expression",
+        "configured_output_cap": 80,
+        "experiment_output_token_ceiling": 700,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_started_at": "2026-11-04T01:40:55.009989+00:00",
+        "request_completed_at": "2026-11-04T01:40:57.201315+00:00",
+        "provider_latency_ms": 2187.42,
+        "outer_latency_ms": 2191.325,
+        "input_tokens": 410,
+        "output_tokens": 78,
+        "total_tokens": 488,
+        "retry_count": 0,
+        "sdk_max_retries": 0,
+        "timeout": false,
+        "provider_error": null,
+        "sent": true,
+        "estimated_cost": null,
+        "estimated_cost_reason": "no configured price table",
+        "sanitized_provider_user_message": "{\"player_action\": \"I look around the gate.\", \"resolved_outcome\": {\"status\": \"observed\", \"success\": null}, \"must_communicate\": [{\"id\": \"outcome:0\", \"source\": \"player_knowledge\", \"status\": \"previously_known\", \"text\": \"The missing patrol was last seen taking the northwest mud track past the crates.\"}], \"may_reference\": {\"visible_scene\": [\"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"Ash Compact census delays have tightened the eastern caravan choke point.\"], \"continuity\": [\"The missing patrol was last seen taking the northwest mud track past the crates.\"]}, \"authorized_consequences\": [], \"must_not_establish\": [\"Only communicate completed engine outcomes; never establish additional facts or effects.\", \"Preserve failure, uncertainty and previously-known status; no misleading hints.\", \"Only explicitly supplied inventory deltas are authorized; no additional persistent changes.\"]}"
+      },
+      "promoted": false,
+      "diagnostic": "REVIEW_REQUIRED",
+      "total_integrated_ms": 2208.876,
+      "hook_work_ms": 2209.185,
+      "evidence_write": "ok",
+      "evidence_path": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_61\\quarantine_evidence\\pr_play_61-004.json",
+      "serialization_ms": 0.118,
+      "evidence_write_ms": 2.787,
+      "total_hook_ms": 2213.952
+    }
+  ]
+}

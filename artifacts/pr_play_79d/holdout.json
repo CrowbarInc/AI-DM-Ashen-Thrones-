@@ -1,0 +1,722 @@
+[
+  {
+    "id": "H001",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "known",
+    "input": "I examine the tablet again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H002",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "third",
+    "input": "I examine the tablet again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H003",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "reload",
+    "input": "I examine the tablet again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H004",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "travel_return",
+    "input": "I examine the tablet again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H005",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "conversation",
+    "input": "I examine the tablet again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H006",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "other_discovery",
+    "input": "I examine the tablet again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H007",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "hidden",
+    "input": "I examine the tablet again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H008",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "other_source",
+    "input": "I examine the tablet again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H009",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "modified",
+    "input": "I examine the tablet again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H010",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "removed",
+    "input": "I examine the tablet again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H011",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "stale",
+    "input": "I examine the tablet again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H012",
+    "source": "tablet",
+    "fact": "The tablet records six jars.",
+    "condition": "implicit",
+    "input": "I examine the tablet again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H013",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "known",
+    "input": "I examine the banner again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H014",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "third",
+    "input": "I examine the banner again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H015",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "reload",
+    "input": "I examine the banner again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H016",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "travel_return",
+    "input": "I examine the banner again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H017",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "conversation",
+    "input": "I examine the banner again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H018",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "other_discovery",
+    "input": "I examine the banner again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H019",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "hidden",
+    "input": "I examine the banner again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H020",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "other_source",
+    "input": "I examine the banner again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H021",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "modified",
+    "input": "I examine the banner again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H022",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "removed",
+    "input": "I examine the banner again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H023",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "stale",
+    "input": "I examine the banner again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H024",
+    "source": "banner",
+    "fact": "The banner bears a blue heron.",
+    "condition": "implicit",
+    "input": "I examine the banner again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H025",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "known",
+    "input": "I examine the logbook again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H026",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "third",
+    "input": "I examine the logbook again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H027",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "reload",
+    "input": "I examine the logbook again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H028",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "travel_return",
+    "input": "I examine the logbook again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H029",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "conversation",
+    "input": "I examine the logbook again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H030",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "other_discovery",
+    "input": "I examine the logbook again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H031",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "hidden",
+    "input": "I examine the logbook again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H032",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "other_source",
+    "input": "I examine the logbook again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H033",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "modified",
+    "input": "I examine the logbook again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H034",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "removed",
+    "input": "I examine the logbook again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H035",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "stale",
+    "input": "I examine the logbook again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H036",
+    "source": "logbook",
+    "fact": "The logbook dates the storm to midsummer.",
+    "condition": "implicit",
+    "input": "I examine the logbook again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H037",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "known",
+    "input": "I examine the rubbing again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H038",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "third",
+    "input": "I examine the rubbing again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H039",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "reload",
+    "input": "I examine the rubbing again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H040",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "travel_return",
+    "input": "I examine the rubbing again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H041",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "conversation",
+    "input": "I examine the rubbing again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H042",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "other_discovery",
+    "input": "I examine the rubbing again.",
+    "expected_recall": true,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H043",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "hidden",
+    "input": "I examine the rubbing again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H044",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "other_source",
+    "input": "I examine the rubbing again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H045",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "modified",
+    "input": "I examine the rubbing again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H046",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "removed",
+    "input": "I examine the rubbing again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H047",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "stale",
+    "input": "I examine the rubbing again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  },
+  {
+    "id": "H048",
+    "source": "rubbing",
+    "fact": "The rubbing shows a broken circle.",
+    "condition": "implicit",
+    "input": "I examine the rubbing again.",
+    "expected_recall": false,
+    "expected_resolution": "no new discoveries",
+    "expected_publication": "source-bound prior fact only",
+    "expected_trace": "one completed publication",
+    "hidden_exclusion": [
+      "CANARY_HIDDEN"
+    ],
+    "expected_mutation": false
+  }
+]

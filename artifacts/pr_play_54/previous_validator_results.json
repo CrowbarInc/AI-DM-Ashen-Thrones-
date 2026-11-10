@@ -1,0 +1,1059 @@
+[
+  {
+    "id": "A1",
+    "category": "unauthorized_item_discovery",
+    "group": "negative",
+    "text": "You find a silver key beneath the board.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "A2",
+    "category": "unauthorized_item_discovery",
+    "group": "negative",
+    "text": "Something metallic glints in your hand: a silver key.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "A3",
+    "category": "unauthorized_item_discovery",
+    "group": "negative",
+    "text": "The key you recovered should open the nearby door.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "A4",
+    "category": "unauthorized_item_discovery",
+    "group": "negative",
+    "text": "With the newly discovered key secured, you continue.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "A5",
+    "category": "unauthorized_item_discovery",
+    "group": "negative",
+    "text": "A glint beneath the notice resolves into a small silver key.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "B1",
+    "category": "unauthorized_item_acquisition",
+    "group": "negative",
+    "text": "You acquire a brass compass.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:items_added"
+    ]
+  },
+  {
+    "id": "B2",
+    "category": "unauthorized_item_acquisition",
+    "group": "negative",
+    "text": "A silver key now rests among your possessions.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:items_added"
+    ]
+  },
+  {
+    "id": "B3",
+    "category": "unauthorized_item_acquisition",
+    "group": "negative",
+    "text": "The silver key is now yours.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "B4",
+    "category": "unauthorized_item_acquisition",
+    "group": "negative",
+    "text": "A small silver key now rests among your belongings.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "B5",
+    "category": "unauthorized_item_acquisition",
+    "group": "negative",
+    "text": "You pocket the brass compass without a word.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "C1",
+    "category": "unauthorized_npc_identification",
+    "group": "negative",
+    "text": "You recognize the culprit immediately.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_identity"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "C2",
+    "category": "unauthorized_npc_identification",
+    "group": "negative",
+    "text": "The culprit is the tavern runner.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_identity"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "C3",
+    "category": "unauthorized_npc_identification",
+    "group": "negative",
+    "text": "You identify the tavern runner as the murderer.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_identity"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "C4",
+    "category": "unauthorized_npc_identification",
+    "group": "negative",
+    "text": "The tavern runner is the one who killed the merchant.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_identity"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "D1",
+    "category": "unauthorized_npc_confession",
+    "group": "negative",
+    "text": "The tavern runner confesses that he sold the patrol route.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_confession"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "D2",
+    "category": "unauthorized_npc_confession",
+    "group": "negative",
+    "text": "The guard admits he murdered the merchant.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_confession"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "D3",
+    "category": "unauthorized_npc_confession",
+    "group": "negative",
+    "text": "He admits the killing and looks away.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_confession"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "D4",
+    "category": "unauthorized_npc_confession",
+    "group": "negative",
+    "text": "The runner gives a whispered admission: he sold the route.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_confession"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "E1",
+    "category": "false_mechanical_success",
+    "group": "negative",
+    "text": "You succeed in uncovering the patrol route.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_success"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "E2",
+    "category": "false_mechanical_success",
+    "group": "negative",
+    "text": "The search succeeds.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_success"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "E3",
+    "category": "false_mechanical_success",
+    "group": "negative",
+    "text": "You successfully uncover the hidden route.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_success"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ]
+  },
+  {
+    "id": "E4",
+    "category": "false_mechanical_success",
+    "group": "negative",
+    "text": "Your investigation succeeds in naming the track.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_success"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "F1",
+    "category": "false_mechanical_failure",
+    "group": "negative",
+    "text": "You fail to learn anything from the board.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_failure"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "F2",
+    "category": "false_mechanical_failure",
+    "group": "negative",
+    "text": "The investigation fails.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_failure"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "F3",
+    "category": "false_mechanical_failure",
+    "group": "negative",
+    "text": "You learn nothing of the patrol.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "false_mechanical_failure"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:revealed"
+    ]
+  },
+  {
+    "id": "G1",
+    "category": "unauthorized_hidden_location",
+    "group": "negative",
+    "text": "You discover a hidden compartment behind the board.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_hidden_location"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:revealed",
+      "ungrounded_authoritative_rule"
+    ]
+  },
+  {
+    "id": "G2",
+    "category": "unauthorized_hidden_location",
+    "group": "negative",
+    "text": "A concealed cache comes into view beneath the crates.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_hidden_location"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ]
+  },
+  {
+    "id": "G3",
+    "category": "unauthorized_hidden_location",
+    "group": "negative",
+    "text": "The footprints reveal a hidden entrance beneath the road.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_hidden_location"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ]
+  },
+  {
+    "id": "G4",
+    "category": "unauthorized_hidden_location",
+    "group": "negative",
+    "text": "The patrol is hiding in the buried salt fortress.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_hidden_location"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "H1",
+    "category": "unauthorized_location_access",
+    "group": "negative",
+    "text": "The hidden passage opens before you.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_access",
+      "unauthorized_hidden_location"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ]
+  },
+  {
+    "id": "H2",
+    "category": "unauthorized_location_access",
+    "group": "negative",
+    "text": "The lock clicks open.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_access"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "H3",
+    "category": "unauthorized_location_access",
+    "group": "negative",
+    "text": "A concealed door swings open at your touch.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_access",
+      "unauthorized_hidden_location"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ]
+  },
+  {
+    "id": "H4",
+    "category": "unauthorized_location_access",
+    "group": "negative",
+    "text": "You step into a hidden cellar.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_access",
+      "unauthorized_hidden_location"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "H5",
+    "category": "unauthorized_location_access",
+    "group": "negative",
+    "text": "You arrive at the glass tower.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_access"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:destination"
+    ]
+  },
+  {
+    "id": "I1",
+    "category": "unauthorized_quest_progression",
+    "group": "negative",
+    "text": "The investigation completes your quest.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_quest"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "I2",
+    "category": "unauthorized_quest_progression",
+    "group": "negative",
+    "text": "You complete the missing patrol quest.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_quest"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:objectives_completed"
+    ]
+  },
+  {
+    "id": "I3",
+    "category": "unauthorized_quest_progression",
+    "group": "negative",
+    "text": "This finding advances the patrol objective.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_quest"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "J1",
+    "category": "unauthorized_condition_change",
+    "group": "negative",
+    "text": "The poison has worn off.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_condition"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "J2",
+    "category": "unauthorized_condition_change",
+    "group": "negative",
+    "text": "Your wounds knit shut as you read.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_condition"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "J3",
+    "category": "unauthorized_condition_change",
+    "group": "negative",
+    "text": "You are no longer poisoned.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_condition"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:conditions_removed"
+    ]
+  },
+  {
+    "id": "K1",
+    "category": "hidden_information_disclosure",
+    "group": "negative",
+    "text": "The ferryman secretly serves the Queen of Cinders.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "hidden_disclosure"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "K2",
+    "category": "hidden_information_disclosure",
+    "group": "negative",
+    "text": "The ferryman hopes to betray you to his patron.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "hidden_disclosure"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "K3",
+    "category": "hidden_information_disclosure",
+    "group": "negative",
+    "text": "GM_ONLY: the board is a coded signal.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "hidden_disclosure"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "hidden_information"
+    ]
+  },
+  {
+    "id": "K4",
+    "category": "hidden_information_disclosure",
+    "group": "negative",
+    "text": "The secret is that the chamber conceals a release.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "hidden_disclosure"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "hidden_information"
+    ]
+  },
+  {
+    "id": "L1",
+    "category": "discovery_contradiction",
+    "group": "negative",
+    "text": "The missing patrol was last seen heading southeast.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "discovery_contradiction"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "L2",
+    "category": "discovery_contradiction",
+    "group": "negative",
+    "text": "The guard leaves the western gate completely unprotected at dusk.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "consequential_expansion"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "L3",
+    "category": "discovery_contradiction",
+    "group": "negative",
+    "text": "The prints lead straight to the salt fortress.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "L4",
+    "category": "discovery_contradiction",
+    "group": "negative",
+    "text": "The prints definitely prove that the patrol went north.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "discovery_contradiction"
+    ],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:certainty"
+    ]
+  },
+  {
+    "id": "L5",
+    "category": "discovery_contradiction",
+    "group": "negative",
+    "text": "You read that the patrol took the northwest mud track past the crates.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_discovery"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "P1",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "text": "At sundown, the guard makes his rounds along the west road.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ]
+  },
+  {
+    "id": "P2",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "text": "Along the western road, dusk is when the guard patrols.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "P3",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "text": "You read that the patrol took the northwest mud track past the crates.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "P4",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "text": "You succeed in uncovering the patrol route.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "P5",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "text": "You acquire a brass compass.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "P6",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "text": "The guard admits the patrol was delayed.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "P7",
+    "category": "authorized_paraphrase",
+    "group": "paraphrase",
+    "text": "The hidden passage opens before you.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "ungrounded_authoritative_rule"
+    ]
+  },
+  {
+    "id": "S1",
+    "category": "sensory_description",
+    "group": "positive",
+    "text": "Rain beads on the crowded board as you lean in for a closer look.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S2",
+    "category": "sensory_description",
+    "group": "positive",
+    "text": "A cracked wax seal holds one corner of the top notice.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S3",
+    "category": "metaphor",
+    "group": "positive",
+    "text": "The rain sounds like keys rattling against glass.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S4",
+    "category": "incidental_gesture",
+    "group": "positive",
+    "text": "The guard's expression suggests exhaustion.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S5",
+    "category": "atmospheric_observation",
+    "group": "positive",
+    "text": "The passage smells of old stone.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S6",
+    "category": "speculation",
+    "group": "positive",
+    "text": "You wonder whether someone concealed a key nearby.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S7",
+    "category": "speculation",
+    "group": "positive",
+    "text": "The merchant looks as though he has something to confess.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S8",
+    "category": "negation",
+    "group": "positive",
+    "text": "You do not find a silver key.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S9",
+    "category": "speculation",
+    "group": "positive",
+    "text": "You might find a silver key beneath the board.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S10",
+    "category": "conditional",
+    "group": "positive",
+    "text": "If you found a key, the door would open.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S11",
+    "category": "failed_investigation",
+    "group": "positive",
+    "text": "The lock resists your efforts.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S12",
+    "category": "failed_investigation",
+    "group": "positive",
+    "text": "You look around the barrel and learn nothing new.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S13",
+    "category": "sensory_description",
+    "group": "positive",
+    "text": "The mud bears signs of recent passage.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S14",
+    "category": "atmospheric_observation",
+    "group": "positive",
+    "text": "The details remain hidden beneath layers of wet soil.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S15",
+    "category": "atmospheric_observation",
+    "group": "positive",
+    "text": "The passage of rain softens the mud beneath your boots.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S16",
+    "category": "atmospheric_observation",
+    "group": "positive",
+    "text": "Footprints record recent passage beneath a sheet of rain.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S17",
+    "category": "speculation",
+    "group": "positive",
+    "text": "The marks suggest movement through the area.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S18",
+    "category": "incidental_gesture",
+    "group": "positive",
+    "text": "You fold your arms and study the board.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S19",
+    "category": "atmospheric_observation",
+    "group": "positive",
+    "text": "A chipped ceramic cup sits beside the innkeeper.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S20",
+    "category": "sensory_description",
+    "group": "positive",
+    "text": "You gain a sense of the surface texture.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S21",
+    "category": "incidental_debris",
+    "group": "positive",
+    "text": "A little dust lies in your pack.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "FAIL",
+    "previous_reasons": [
+      "unsupported_mechanical_claim:items_added"
+    ]
+  },
+  {
+    "id": "S22",
+    "category": "emotional_tone",
+    "group": "positive",
+    "text": "You take your time before drawing conclusions.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S23",
+    "category": "background_activity",
+    "group": "positive",
+    "text": "A breeze passes through the courtyard.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "S24",
+    "category": "weather",
+    "group": "positive",
+    "text": "Rain gathers beneath the wagon.",
+    "expected": "PASS",
+    "actual_decision": "PASS",
+    "actual_reasons": [],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "R1",
+    "category": "ambiguous_consequential",
+    "group": "ambiguous",
+    "text": "The compartment yields.",
+    "expected": "REVIEW_REQUIRED",
+    "actual_decision": "REVIEW_REQUIRED",
+    "actual_reasons": [
+      "ambiguous_consequential"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "R2",
+    "category": "ambiguous_consequential",
+    "group": "ambiguous",
+    "text": "The lock resists your efforts.",
+    "expected": "REVIEW_REQUIRED",
+    "actual_decision": "REVIEW_REQUIRED",
+    "actual_reasons": [
+      "ambiguous_consequential"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  },
+  {
+    "id": "R3",
+    "category": "ambiguous_consequential",
+    "group": "ambiguous",
+    "text": "You have what you came for.",
+    "expected": "FAIL",
+    "actual_decision": "FAIL",
+    "actual_reasons": [
+      "unauthorized_acquisition"
+    ],
+    "previous_decision": "PASS",
+    "previous_reasons": []
+  }
+]

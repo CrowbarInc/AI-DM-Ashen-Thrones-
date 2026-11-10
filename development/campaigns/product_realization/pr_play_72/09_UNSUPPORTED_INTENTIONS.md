@@ -1,0 +1,3 @@
+# PR-PLAY-72 — 09 UNSUPPORTED INTENTIONS
+
+Unsupported pursuit explains that no onward route has been established and offers accessible evidence/known routes. NPC deployment requests decline command authority without inventing an NPC decision. Impossible abilities/routes and hidden-information requests receive distinct explanations. Inaccessible evidence requires returning through a known route. Unavailable authored choices give a generic current-choice limitation without leaking their hidden conditions. Unknown and ambiguous targets ask for clarification. No refusal grants inventory, travel, discoveries or flags.

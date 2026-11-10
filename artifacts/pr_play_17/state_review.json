@@ -1,0 +1,33 @@
+{
+  "comparison": {
+    "gameplay_mutations": [],
+    "bookkeeping_mutations": [
+      "combat.json",
+      "session.json"
+    ],
+    "unexpected_mutations": [],
+    "integrity": true,
+    "changed_fields": {},
+    "overlay_comparison": {
+      "integrity": true,
+      "changes": [],
+      "omitted_entries": 0,
+      "total_changes": 0
+    },
+    "turn_delta": 0,
+    "log_delta": 0,
+    "campaign_started": false,
+    "scene_identity": "frontier_gate",
+    "contract": "docs/state_authority_model.md; game.api.start_campaign; PR-PLAY-04 rollback"
+  },
+  "all_normalized_changes": [],
+  "review": {
+    "location": "frontier_gate unchanged",
+    "inventory_currency": "character.json unchanged",
+    "time": "Day 1; turn delta 0",
+    "quests_relationships_world_facts": "world.json unchanged; no overlay changes",
+    "combat": "Only harness-classified bookkeeping changes; see normalized diff",
+    "published_unsupported_consequential_narration": "None: no narration published",
+    "scope": "Rejected opening only; ordinary-turn authority untested"
+  }
+}
