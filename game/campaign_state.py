@@ -77,7 +77,9 @@ def create_fresh_session_document() -> Dict[str, Any]:
     sid = DEFAULT_STARTING_SCENE_ID
     # New campaign run id: invalidates client-side assumptions and log correlation.
     run_id = secrets.token_hex(12)
+    from game.campaign_ruleset import creation_binding
     return {
+        "ruleset_binding": creation_binding(),
         "active_scene_id": sid,
         "visited_scene_ids": [sid],
         "current_date": "Day 1",

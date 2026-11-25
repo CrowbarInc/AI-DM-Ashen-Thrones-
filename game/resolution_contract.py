@@ -340,6 +340,7 @@ _GENUINE_ACT_RE = re.compile(
 )
 _INSPECT_RE = re.compile(
     r"\b(?:inspect(?:ing|s|ed)?|examin(?:e|es|ed|ing)|look at|check(?:ing|s|ed)?|"
+    r"read(?:s|ing)?|"
     r"stud(?:y|ies|ied|ying)|investigat(?:e|es|ed|ing)|search(?:ing|es|ed)?)\b"
     r"|\b(?:rifle|dig)\s+through\b"
     r"|\blook(?:\s+\w+){0,3}\s+over\b"
@@ -2031,7 +2032,18 @@ def construct_resolution_contract(
         {"id": row.id, "type": row.type, "label": row.label}
         for row in export_referent_index(focus, referent_index if referent_index is not None else canonical_referents)
     ]
+    # Question purpose belongs to this existing interpretation, not to a later
+    # resolver guessing from scenery or an inherited NPC. It grants no action.
+    information_need = None
+    if operation == OP_ASK:
+        if re.search(r"\b(?:how many|headcount|number of)\b", text, re.IGNORECASE):
+            information_need = "count"
+        elif re.search(r"\b(?:compare|comparison|differ|difference|versus)\b", text, re.IGNORECASE):
+            information_need = "comparison"
+        elif re.search(r"\b(?:cost|price|how much)\b", text, re.IGNORECASE):
+            information_need = "price"
     construction = {
+        "information_need": information_need,
         "cues": cues,
         "referent_slot": referent_slot,
         "referent_reason": referent_reason,

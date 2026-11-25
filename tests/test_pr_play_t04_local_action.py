@@ -7,7 +7,9 @@ import json
 from game import immutable_valid_response as ivr
 from game import storage
 from game.local_interaction import resolve_transient_local_action
-from tests.test_pr_play_post_npc_handoff import CLUE, _say, client
+from tests.test_pr_play_post_npc_handoff import (
+    CAPTAIN_FOLLOWUP, CAPTAIN_OPENING, CLUE, _captain_exchange, _say, captain_client, client,
+)
 
 COMPOUND = "I walk over to the notice board and put a hand on the frame."
 MILESTONE_CLUE = "Faint overlapping prints"
@@ -175,8 +177,10 @@ def test_k_authorized_clue_survives_local_contact(client):
     assert reading["scene"] == "frontier_gate"
 
 
-def test_l_npc_dialogue_is_not_fixture_contact(client):
-    asked = _say(client, "You mentioned the patrol. What have you heard?")
+def test_l_npc_dialogue_is_not_fixture_contact(captain_client):
+    _captain_exchange(captain_client, CAPTAIN_OPENING)
+    client = captain_client
+    asked = _captain_exchange(client, CAPTAIN_FOLLOWUP)
     assert "Guard Captain" in asked["visible"] or "patrol went missing" in asked["visible"]
     assert "rest a hand" not in asked["visible"].lower()
     walked = _say(client, "I walk over to the guard captain and ask what he heard.")

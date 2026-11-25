@@ -15,6 +15,22 @@ TEXT = str
 NUMBER = float
 BOOL = bool
 
+# Public campaign identity and bounded read-only policy result. No implementation
+# module, hidden context, arbitrary policy payload or mutation instructions cross.
+RULESET_BINDING = dict(ruleset_id=TEXT, ruleset_version=TEXT, binding_version=NUMBER)
+CAMPAIGN_RULESET = dict(campaign_id=TEXT, status=TEXT, reason=TEXT,
+    binding=RULESET_BINDING, campaign_playable=BOOL, canonical=TEXT,
+    evaluation=dict(status=TEXT, reason=TEXT, ruleset_id=TEXT, ruleset_version=TEXT,
+        capability=TEXT, ruleset_result=dict(decision=TEXT, slot=TEXT,
+            mechanical_consequence=TEXT, execution_readiness=TEXT,
+            mechanically_complete=BOOL, transition_authorized=BOOL)))
+# Lifecycle statuses only. Resolver paths and ruleset payloads do not cross.
+MECHANICAL_ACTION = dict(
+    status=TEXT, reason=TEXT, action_id=TEXT, campaign_id=TEXT, ruleset_id=TEXT,
+    ruleset_version=TEXT, capability=TEXT, capability_status=TEXT, validation_status=TEXT,
+    authorization_status=TEXT, commit_status=TEXT, explanation=TEXT, retry=TEXT,
+    committed_marker=TEXT, publication=dict(published=BOOL, reason=TEXT, text=TEXT))
+
 
 def project(value, schema):
     if schema is TEXT:
@@ -115,6 +131,12 @@ def project_player_response(payload):
     """Endpoint envelope plus explicit state and narration. No execution metadata."""
     source = payload if isinstance(payload,dict) else {}
     out = project_player_state(source)
+    if 'ruleset_binding' in source:
+        out['ruleset_binding'] = project(source['ruleset_binding'], RULESET_BINDING)
+    if 'campaign_ruleset' in source:
+        out['campaign_ruleset'] = project(source['campaign_ruleset'], CAMPAIGN_RULESET)
+    if 'mechanical_action' in source:
+        out['mechanical_action'] = project(source['mechanical_action'], MECHANICAL_ACTION)
     if 'public_state' in source:
         out['public_state'] = project_player_state(source['public_state'])
     if isinstance(source.get('session_id'),str): out['session_id'] = source['session_id']

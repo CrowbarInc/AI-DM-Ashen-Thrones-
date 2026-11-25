@@ -256,6 +256,27 @@ def _visible_interactable_text(scene: dict | None, target_id: str) -> str:
     return ""
 
 
+def host_destination_binding_failed(resolution: dict | None) -> bool:
+    """True when the binder cleared a travel target before any world attempt.
+
+    This is a host failure to bind the named place. It is not a blocked route,
+    a failed check, or a transition the ruleset resolved and rejected.
+    """
+    if not isinstance(resolution, dict):
+        return False
+    kind = str(resolution.get("kind") or "").strip().lower()
+    if kind not in {"scene_transition", "travel"}:
+        return False
+    if resolution.get("resolved_transition") or resolution.get("skill_check"):
+        return False
+    meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+    if meta.get("blocked_incompatible_scene_transition"):
+        return False
+    if str(meta.get("route_destination_invariant") or "") == "failed":
+        return False
+    return str(meta.get("destination_binding_source") or "") == "explicit_named_place_unresolved"
+
+
 def _authoritative_resolution_fact_text(
     *,
     resolution: dict | None,

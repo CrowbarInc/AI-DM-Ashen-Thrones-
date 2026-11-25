@@ -339,8 +339,8 @@ def save_character(data: Dict[str, Any]) -> None:
 
 
 def load_session() -> Dict[str, Any]:
-    default_payload = default_session()
     if not SESSION_PATH.exists():
+        default_payload = default_session()
         # Fresh runtime document: write canonical envelope.
         now = utc_iso_now()
         default_payload = dict(default_payload)
@@ -349,30 +349,35 @@ def load_session() -> Dict[str, Any]:
         _atomic_save_json(SESSION_PATH, env)
         return copy.deepcopy(default_payload)
 
-    raw = _load_json(SESSION_PATH, default_payload)
-    try:
-        payload, decision = unwrap_and_validate(raw, expected_kind="session", allow_legacy_missing_envelope=True)
-    except PersistenceContractError as e:
-        # Safe failure: fall back to deterministic default for malformed/unsafe persisted data.
-        # This preserves fresh-session bootstrap behavior and prevents undefined state.
-        if e.category in (
-            PersistenceFailureCategory.MALFORMED_PAYLOAD,
-            PersistenceFailureCategory.UNSUPPORTED_VERSION,
-            PersistenceFailureCategory.WRONG_DOCUMENT_KIND,
-            PersistenceFailureCategory.INTEGRITY_MISMATCH,
-            PersistenceFailureCategory.MISSING_ENVELOPE,
-        ):
-            return copy.deepcopy(default_payload)
-        raise
+    raw = _load_json(SESSION_PATH, {})
+    # Creation defaults apply only to a missing file. A damaged legacy envelope
+    # also has no authority to become a new default-bound campaign: preserve it
+    # and propagate its persistence error for explicit resolution.
+    payload, decision = unwrap_and_validate(raw, expected_kind="session", allow_legacy_missing_envelope=True)
 
     return payload
 
 
-def save_session(data: Dict[str, Any]) -> None:
+def save_session(data: Dict[str, Any], *, _new_campaign: bool = False) -> None:
     """Persist session to disk. Sets last_saved_at timestamp for save summary."""
     with _runtime_persistence_guard("save_session"):
         _note_runtime_commit_origin()
         payload = dict(data)
+        # Binding is immutable for an existing playthrough. Old callers doing
+        # partial root updates cannot drop it; stale roots cannot change it.
+        from game.campaign_ruleset import BINDING_KEY, CampaignBindingError
+        if SESSION_PATH.exists() and not _new_campaign:
+            existing = load_session()
+            if BINDING_KEY in existing:
+                if BINDING_KEY in payload and payload[BINDING_KEY] != existing[BINDING_KEY]:
+                    raise CampaignBindingError('ruleset_switching_unsupported')
+                payload[BINDING_KEY] = copy.deepcopy(existing[BINDING_KEY])
+                if 'ruleset_binding_migration' in existing:
+                    provenance = existing['ruleset_binding_migration']
+                    if ('ruleset_binding_migration' in payload
+                            and payload['ruleset_binding_migration'] != provenance):
+                        raise CampaignBindingError('migration_provenance_immutable')
+                    payload['ruleset_binding_migration'] = copy.deepcopy(provenance)
         now = utc_iso_now()
         payload["last_saved_at"] = now
         env = wrap_runtime_payload(kind="session", payload=payload, saved_at=now, include_integrity=True)

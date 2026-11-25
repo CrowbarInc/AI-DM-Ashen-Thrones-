@@ -21,6 +21,7 @@ NARRATION_GATE = "ASHEN_EXPERIMENTAL_INTEGRATED_NARRATION"
 _USAGE: list[dict[str, Any]] = []
 _LANES: dict[str, "_Lane"] = {}
 _LANE_GUARD = threading.Lock()
+_REENTRY = threading.local()
 
 
 def presentation_usage() -> dict[str, Any]:
@@ -83,6 +84,12 @@ class ordered_turn:
         self._box = None
 
     def __enter__(self):
+        depth = getattr(_REENTRY, 'depth', 0)
+        if depth and getattr(_REENTRY, 'scope', None) == self.scope:
+            self._reentered = True
+            _REENTRY.depth = depth + 1
+            return self
+        self._reentered = False
         lane = _lane(self.scope)
         self._lane = lane
         keys = [key for key in (self.request_key, self.text_key) if key]
@@ -132,12 +139,26 @@ class ordered_turn:
                     lane.condition.wait()
                 lane.readers += 1
         self._held = True
+        _REENTRY.depth = 1
+        _REENTRY.scope = self.scope
         return self
 
     def __exit__(self, exc_type, exc, tb):
+        if getattr(self, '_reentered', False):
+            _REENTRY.depth = max(0, getattr(_REENTRY, 'depth', 1) - 1)
+            return False
         lane = self._lane
         if lane is None or self._waiting is not None or not self._held:
             return False
+        try:
+            self._release(exc)
+        finally:
+            if self._held:
+                _REENTRY.depth = 0
+        return False
+
+    def _release(self, exc):
+        lane = self._lane
         with lane.condition:
             if self.mutating:
                 lane.writer = False

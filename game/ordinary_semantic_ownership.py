@@ -160,8 +160,8 @@ def establish_ordinary_gameplay_contract(
     from game.live_resolution import attach_interaction_obligation
     from game.resolution_contract import contract_mapping_from_resolution
 
-    contract_text = player_text
     bridge = (normalized_action or {}).get("metadata", {}).get("stored_interpretation", {})
+    contract_text = bridge.get("dialogue_text") or player_text
     if bridge.get("operation") == "MOVE":
         # The visible-id bridge already grounded a committed movement. Feed
         # its canonical operation to the existing contract rather than asking
@@ -369,6 +369,59 @@ def select_ordinary_resolver(
     return ("generation", None)
 
 
+def ordinary_admission_decision(contract: Mapping[str, Any]):
+    """Disposition of an ordinary contract before time or execution is acquired.
+
+    Consume the existing contract, not a second interpretation of player text.
+    Specialized attempted actions retain their resolver and time semantics.
+    An unresolved operation cannot borrow authority from a generation fallback.
+    """
+    from game.conversational_orchestration import ConversationalDecision, ConversationalDecisionCategory
+
+    operation = str(contract.get("operation") or "")
+    construction = contract.get("construction") or {}
+    resolver, family = select_ordinary_resolver(contract)
+    text = str(contract.get("raw_input") or "")
+    from game.contract_adjudication_bridge import social_interaction_frame
+    binding = construction.get("entity_binding") or {}
+    addressed = social_interaction_frame(
+        text, operation=operation, explicit_addressee=bool(binding.get("explicit_new_interlocutor")),
+    )
+    unresolved = operation in {"", "unresolved", "clarify"}
+    information_gap = operation == "ask" and (
+        family == "state_query"
+        or (resolver in {"social", "generation"} and not contract.get("interlocutor_id") and not addressed)
+    )
+    if not unresolved and not information_gap:
+        return None
+    if information_gap:
+        category = ConversationalDecisionCategory.ANSWER
+        disposition = "UNRESOLVED_INFORMATION"
+        need = construction.get("information_need")
+        limitation = {
+            "count": "No reliable count for that group has been established in the available information. Unknown does not mean zero. You can investigate or ask someone about that group before relying on a number.",
+            "comparison": "I cannot establish both accounts well enough to compare them. Which two disclosed accounts should I compare?",
+            "price": "A price for that purchase has not been established in the available information. No purchase has been made; ask the seller for a quote before committing.",
+        }.get(need, "I haven't resolved that question from the disclosed information. No action has been attempted. You can ask me to recall a specific disclosed fact or account.")
+        answer = f"Your question: {text} {limitation}"
+    else:
+        category = ConversationalDecisionCategory.CLARIFY
+        disposition = "CLARIFICATION"
+        reference_gap = contract.get("referent_provenance") == "ambiguous" or contract.get("ambiguous")
+        question = "Which person, object, or place do you mean?" if reference_gap else "What specific action or information do you want to resolve now?"
+        answer = f"Your request: {text} I have not established an executable action from that request. Nothing has been attempted. {question}"
+    return ConversationalDecision(
+        category=category, primary_intention=text,
+        intent_family="ordinary_semantic_admission", reason="ordinary_contract_nonexecution",
+        disposition=disposition, player_facing_text=answer,
+        execution_policy="answer_only", intent_modality="informational",
+        missing_information=[] if information_gap else ["intention_or_reference"],
+        authorization={"authority_provenance": "resolution_contract", "contract_id": contract.get("contract_id"),
+                       "operation_eligibility": "no_consequential_operation", "mutation_eligibility": False,
+                       "selected_resolver": resolver, "resolver_family": family},
+    )
+
+
 def stage_permitted(resolver_name: str | None, stage: str, contract: Mapping[str, Any] | None = None) -> bool:
     """Primary resolver stages, plus a committed travel obligation's travel stage.
 
@@ -518,7 +571,7 @@ _NONUNIQUE_ADDRESSEE_RE = re.compile(
     re.IGNORECASE,
 )
 _ASK_VERB_RE = re.compile(
-    r"\b(?:ask|asking|tell|warn|inform|address|speak|talk)\b",
+    r"^(?:(?:i|we)\s+|please\s+)?(?:ask|asking|tell|warn|inform|address|speak|talk)\b",
     re.IGNORECASE,
 )
 _SECOND_PERSON_RE = re.compile(r"\b(?:you|your|you're|youre)\b", re.IGNORECASE)
@@ -607,6 +660,15 @@ def player_text_addresses_someone(text: str) -> bool:
     return bool(_ASK_VERB_RE.search(text or ""))
 
 
+def npc_followup_cue(text: str) -> bool:
+    """Require the interlocutor to participate in a follow-up's wording."""
+    return bool(re.match(
+        r"^(?:(?:who|what(?: else)?|where|when|why|how)\s+)?(?:do|did|are|were|have|has|can|could|would|will)\s+you\b"
+        r"|^you\s+(?:said|mentioned|told|know|saw|heard)\b",
+        text, re.I,
+    ))
+
+
 def addressee_authority_applies(*, operation: str | None, player_text: str) -> bool:
     """Person grounding belongs to communication, not to an object or a route.
 
@@ -651,15 +713,31 @@ def _scene_id_of(scene: Mapping[str, Any] | None) -> str:
     return str(inner.get("id") or "")
 
 
-def _active_npc_id(session: Mapping[str, Any] | None, npcs: list[Mapping[str, Any]]) -> str:
+def _active_npc_id(
+    session: Mapping[str, Any] | None, npcs: list[Mapping[str, Any]], scene_id: str | None = None,
+) -> str | None:
+    """Return None without a referent, or an empty string for invalid continuity."""
     if not isinstance(session, Mapping):
-        return ""
+        return None
+    if scene_id is None:
+        scene_id = str(session.get("active_scene_id") or "")
     ctx = session.get("interaction_context")
-    if not isinstance(ctx, Mapping):
-        return ""
-    if str(ctx.get("active_interaction_kind") or "").lower() != "social":
-        return ""
-    target = str(ctx.get("active_interaction_target_id") or "")
+    target = ""
+    if isinstance(ctx, Mapping) and str(ctx.get("active_interaction_kind") or "").lower() == "social":
+        target = str(ctx.get("active_interaction_target_id") or "")
+    conversation = session.get("conversational_context")
+    slot = conversation.get("active_interlocutor") if isinstance(conversation, Mapping) else None
+    if isinstance(slot, Mapping):
+        if (slot.get("status") != "active"
+                or (scene_id and slot.get("scene_id") and slot["scene_id"] != scene_id)
+                or (slot.get("campaign_id") and slot["campaign_id"] != session.get("campaign_run_id"))):
+            return ""
+        recorded = str(slot.get("npc_id") or "")
+        if target and recorded and target != recorded:
+            return ""
+        target = target or recorded
+    if not target:
+        return None
     ids = {str(npc.get("id") or "") for npc in npcs}
     return target if target in ids else ""
 
@@ -765,6 +843,275 @@ def _clarification_for(npcs: list[Mapping[str, Any]], *, single_offer: bool) -> 
     return "Which person do you mean? Nothing has been attempted."
 
 
+_GM_TELL_RE = re.compile(
+    r"^(?:please\s+)?(?:tell|inform)\s+(?:me|us)\b(?P<rest>.*)$",
+    re.IGNORECASE,
+)
+_GM_ABOUT_RE = re.compile(
+    r"^(?:please\s+)?what(?:\s+else)?\s+about\s+(?P<subject>.+?)\s*\??$",
+    re.IGNORECASE,
+)
+_YOU_ASKEE_RE = re.compile(r"\b(?:can|could|will|would|may)\s+you\b", re.IGNORECASE)
+_UNDISCLOSED_RE = re.compile(
+    r"\b(?:hidden|secret|motive|motives|allegiance|privately)\b",
+    re.IGNORECASE,
+)
+_PROPER_NAME_RE = re.compile(r"\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b")
+_OF_PHRASE_RE = re.compile(
+    r"\bof\s+((?:the|a|an)\s+[a-z0-9']+(?:\s+[a-z0-9']+){0,5})",
+    re.IGNORECASE,
+)
+
+
+def _scene_body(scene: Mapping[str, Any] | None) -> Mapping[str, Any]:
+    if not isinstance(scene, Mapping):
+        return {}
+    inner = scene.get("scene")
+    return inner if isinstance(inner, Mapping) else scene
+
+
+def _addressable_rows(scene: Mapping[str, Any] | None) -> list[Mapping[str, Any]]:
+    rows = []
+    for row in _scene_body(scene).get("addressables") or []:
+        if not isinstance(row, Mapping):
+            continue
+        if row.get("hidden") or row.get("addressable") is False:
+            continue
+        rows.append(row)
+    return rows
+
+
+def _identity_phrases(row: Mapping[str, Any]) -> tuple[list[str], set[str]]:
+    phrases: list[str] = []
+    words: set[str] = set()
+    parts = [row.get("name"), row.get("label"), str(row.get("id") or "").replace("_", " ")]
+    parts.extend(row.get("aliases") or [])
+    for part in parts:
+        text = " ".join(str(part or "").lower().replace("_", " ").split())
+        text = re.sub(r"^(?:the|a|an)\s+", "", text)
+        if not text:
+            continue
+        phrases.append(text)
+        words.update(re.findall(r"[a-z0-9']+", text))
+    return phrases, words
+
+
+def _reference_matches_identity(reference: str, row: Mapping[str, Any]) -> bool:
+    """True when the reference is that row's name, alias, or full role phrase."""
+    norm = " ".join(str(reference or "").lower().replace("_", " ").split())
+    norm = re.sub(r"^(?:the|a|an)\s+", "", norm).strip(" .!?")
+    if not norm:
+        return False
+    phrases, words = _identity_phrases(row)
+    if norm in phrases:
+        return True
+    ref_words = [word for word in re.findall(r"[a-z0-9']+", norm) if word not in {"of", "about"}]
+    if not ref_words or not set(ref_words) <= words:
+        return False
+    if len(ref_words) >= 2:
+        return True
+    token = ref_words[0]
+    return any(phrase == token or phrase.startswith(token + " ") or phrase.endswith(" " + token) for phrase in phrases)
+
+
+def _person_phrase(subject: str) -> str | None:
+    """The person named inside an information subject, when one is specified."""
+    from game.incidental_entity import personhood_of_span, referential_person_nominal
+
+    found: list[str] = []
+    for match in _OF_PHRASE_RE.finditer(subject or ""):
+        chunk = " ".join(match.group(1).split())
+        if personhood_of_span(chunk) == "nonperson":
+            continue
+        person = referential_person_nominal(chunk)
+        if person:
+            found.append(person)
+        elif _PROPER_NAME_RE.search(chunk):
+            found.append(chunk)
+    if personhood_of_span(subject) != "nonperson":
+        person = referential_person_nominal(subject)
+        if person:
+            found.append(person)
+        proper = _PROPER_NAME_RE.search(subject or "")
+        if proper:
+            found.append(proper.group(0))
+    if not found:
+        return None
+    return max(found, key=len)
+
+
+def _subject_from_rest(rest: str) -> str:
+    text = " ".join(str(rest or "").split()).strip(" .!?,")
+    text = re.sub(r"^(?:more\s+)?about\s+", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"\s+again$", "", text, flags=re.IGNORECASE)
+    return text.strip(" .!?")
+
+
+def _public_lines_about(scene: Mapping[str, Any] | None, subject: str) -> list[str]:
+    """Visible scene facts that mention the subject. Hidden facts stay hidden."""
+    tokens = [
+        word for word in re.findall(r"[a-z0-9']+", str(subject or "").lower())
+        if len(word) >= 4 and word not in _PUBLIC_REFERENCE_STOPWORDS and word not in _DETERMINERS
+        and word not in {"hidden", "secret", "motive", "motives", "about", "again", "more", "else"}
+    ]
+    if not tokens:
+        return []
+    lines = []
+    for fact in _scene_body(scene).get("visible_facts") or []:
+        if not isinstance(fact, str) or not fact.strip():
+            continue
+        lowered = fact.lower()
+        if any(token in lowered for token in tokens):
+            lines.append(fact.strip())
+    return lines[:2]
+
+
+def _matching_rows(reference: str, rows: list[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
+    found = []
+    seen: set[str] = set()
+    for row in rows:
+        if not _reference_matches_identity(reference, row):
+            continue
+        ident = str(row.get("id") or row.get("name") or "")
+        if ident in seen:
+            continue
+        seen.add(ident)
+        found.append(row)
+    return found
+
+
+def gm_information_disposition(
+    player_text: str,
+    *,
+    scene: Mapping[str, Any] | None = None,
+    world: Mapping[str, Any] | None = None,
+    session: Mapping[str, Any] | None = None,
+) -> dict[str, Any] | None:
+    """A DM information request that does not choose an NPC.
+
+    An ongoing conversation still owns "tell me more". A second-person
+    "can you tell me" still asks who "you" is. This returns None for both.
+    """
+    text = " ".join(str(player_text or "").split())
+    if not text or _YOU_ASKEE_RE.search(text):
+        return None
+    tell = _GM_TELL_RE.match(text)
+    about = _GM_ABOUT_RE.match(text)
+    if tell:
+        subject = _subject_from_rest(tell.group("rest") or "")
+    elif about:
+        subject = _subject_from_rest(about.group("subject") or "")
+    else:
+        return None
+    npcs = _visible_npcs(scene, world)
+    if tell and _active_npc_id(session, npcs, _scene_id_of(scene)):
+        return None
+    # "What about the missing supplies?" already names the people in that fact.
+    # Leave that clarification to the existing candidate selector. "What about
+    # the patrol?" names no person, so it stays a DM question.
+    if about and not tell:
+        kind, chosen = _public_npc_candidates(text, npcs, scene if isinstance(scene, Mapping) else None)
+        if kind in {"unique", "ambiguous"} and chosen:
+            return None
+    person = _person_phrase(subject)
+    npc_hits = _matching_rows(person, npcs) if person else []
+    addressable_hits = []
+    if person:
+        npc_ids = {str(row.get("id") or "") for row in npc_hits}
+        addressable_hits = [
+            row for row in _matching_rows(person, _addressable_rows(scene))
+            if str(row.get("id") or "") not in npc_ids
+        ]
+    hits = [*npc_hits, *addressable_hits]
+    undisclosed = bool(_UNDISCLOSED_RE.search(text))
+    if person and len(hits) > 1:
+        labels = [str(row.get("name") or row.get("label") or row.get("id")) for row in hits]
+        return {
+            "disposition": "ambiguous_person",
+            "subject": subject,
+            "person": person,
+            "lines": [],
+            "labels": [label for label in labels if label],
+        }
+    if person and len(hits) == 1:
+        row = hits[0]
+        label = str(row.get("name") or row.get("label") or person)
+        lines = [] if undisclosed else _public_lines_about(scene, label)
+        return {
+            "disposition": "unknown_information" if undisclosed or not lines else "public_fact",
+            "subject": subject,
+            "person": person,
+            "person_label": label,
+            "person_id": str(row.get("id") or ""),
+            "lines": lines,
+            "labels": [label],
+            "undisclosed": undisclosed,
+        }
+    if person:
+        return {
+            "disposition": "unmatched_person",
+            "subject": subject,
+            "person": person,
+            "lines": [],
+            "labels": [],
+        }
+    lines = _public_lines_about(scene, subject)
+    if lines:
+        return {
+            "disposition": "public_fact",
+            "subject": subject or "that",
+            "person": None,
+            "lines": lines,
+            "labels": [],
+        }
+    return {
+        "disposition": "unresolved_subject",
+        "subject": subject,
+        "person": None,
+        "lines": [],
+        "labels": [],
+    }
+
+
+def dialogue_attention_target(attention, *, scene, world, session):
+    """Resolve both parts of a bounded attention frame against current NPCs."""
+    from game.player_interpretation_bridge import dialogue_catalog
+    from game.present_npc import match_present_npc
+
+    roster = list(dialogue_catalog(scene, world, session).values())
+    gesture, speech, _ = attention
+    addressed = match_present_npc(gesture, roster)
+    if addressed["status"] != "unique":
+        return None
+    target = addressed["npc"]["id"]
+    if speech in {"him", "her", "them"}:
+        return target
+    spoken = match_present_npc(speech, roster)
+    return target if spoken["status"] == "unique" and spoken["npc"]["id"] == target else None
+
+
+def corrected_dialogue_target(dialogue, *, scene, world, session, nominal_only=""):
+    """Ground every address span in a correction against the current roster."""
+    from game.interaction_completion import _CORRECTION_OBJECT_PRONOUNS
+    from game.player_interpretation_bridge import dialogue_catalog
+    from game.present_npc import match_present_npc
+
+    if dialogue is None and not nominal_only:
+        return None
+    nominal, addressee, _, gesture = dialogue or (nominal_only, "", "", "")
+    roster = list(dialogue_catalog(scene, world, session).values())
+    match = match_present_npc(nominal, roster)
+    if match["status"] != "unique":
+        return None
+    target = match["npc"]["id"]
+    for span in (addressee, gesture):
+        if span and span not in _CORRECTION_OBJECT_PRONOUNS:
+            addressed = match_present_npc(span, roster)
+            if addressed["status"] != "unique" or addressed["npc"]["id"] != target:
+                return None
+    return target
+
+
 def assess_addressee_grounding(
     player_text: str,
     *,
@@ -772,6 +1119,7 @@ def assess_addressee_grounding(
     world: Mapping[str, Any] | None = None,
     session: Mapping[str, Any] | None = None,
     proposed_target_id: str | None = None,
+    npc_candidates: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Decide whether a person reference is grounded enough to attempt.
 
@@ -781,13 +1129,23 @@ def assess_addressee_grounding(
     name. Quantified or unmatched references stay unresolved even when one
     visible person would be convenient.
     """
-    from game.interaction_completion import addressed_person_nominal
+    from game.interaction_completion import addressed_person_nominal, corrected_dialogue, dialogue_attention
 
     text = " ".join(str(player_text or "").split())
     npcs = _visible_npcs(scene, world)
     proposed = str(proposed_target_id or "").strip() or None
-    nominal = addressed_person_nominal(text)
-    direct = bool(nominal) or bool(_ASK_VERB_RE.search(text) and nominal)
+    if npc_candidates is not None:
+        npcs = npc_candidates
+    elif proposed and not any(row["id"] == proposed for row in npcs):
+        from game.player_interpretation_bridge import dialogue_catalog
+
+        roster = dialogue_catalog(scene, world, session)
+        if proposed in roster:
+            npcs = list(roster.values())
+    attention = dialogue_attention(text)
+    nominal = attention[0] if attention else addressed_person_nominal(text)
+    speech_act = player_text_addresses_someone(text)
+    direct = bool(nominal or speech_act)
     words = _content_words(nominal)
     base = {
         "communication_ownership": "npc_directed" if direct else "gm_directed",
@@ -804,54 +1162,67 @@ def assess_addressee_grounding(
         "allowed_operation": None,
         "clarification": "",
         "choices": [_choice(npc) for npc in npcs],
-        "direct_address": bool(nominal),
+        "direct_address": direct,
     }
-    if not npcs or not nominal:
-        if nominal and not npcs:
-            return base
-        third_person_about_npc = bool(_THIRD_PERSON_RE.search(text)) and not _SECOND_PERSON_RE.search(text)
-        if not nominal and proposed and _active_npc_id(session, npcs) == proposed and not third_person_about_npc:
+    if gm_information_disposition(text, scene=scene, world=world, session=session) is not None:
+        return {
+            **base,
+            "communication_ownership": "gm_directed",
+            "intent_purpose": "request_information",
+            "target_resolution": "none_required",
+            "target_provenance": "none",
+            "target_id": None,
+            "candidate_target_ids": [],
+            "operation_eligibility": "not_assessed",
+            "mutation_eligibility": False,
+            "direct_address": False,
+            "choices": [],
+            "clarification": "",
+            "allowed_operation": None,
+        }
+    correction = corrected_dialogue(text)
+    if correction or attention:
+        target = (corrected_dialogue_target(correction, scene=scene, world=world, session=session)
+                  if correction else dialogue_attention_target(attention, scene=scene, world=world, session=session))
+        if target and (not proposed or proposed == target):
+            return {
+                **base, "target_resolution": "contextual", "target_provenance": "authoritative_world_state",
+                "target_id": target, "candidate_target_ids": [target], "operation_eligibility": "executable",
+                "allowed_operation": "ask", "pending_intention_relationship": "starts_new", "direct_address": True,
+                "communication_ownership": "npc_directed", "intent_purpose": "address_npc",
+            }
+        return {
+            **base, "communication_ownership": "ambiguous_unresolved", "target_resolution": "unresolved",
+            "operation_eligibility": "requires_clarification", "mutation_eligibility": False,
+            "clarification": "Who are you addressing? Nothing has been attempted.",
+        }
+    if not nominal:
+        active = _active_npc_id(session, npcs, _scene_id_of(scene))
+        if active and (speech_act or npc_followup_cue(text)):
             return {
                 **base,
                 "communication_ownership": "npc_directed",
                 "intent_purpose": "address_npc",
                 "target_resolution": "contextual",
                 "target_provenance": "established_interlocutor",
-                "target_id": proposed,
+                "target_id": active,
                 "operation_eligibility": "executable",
                 "mutation_eligibility": True,
                 "allowed_operation": "ask",
                 "pending_intention_relationship": "continues",
-                "direct_address": False,
+                "direct_address": speech_act,
+                "conflict_status": "resolved_by_context" if proposed and proposed != active else "none",
             }
-        if not nominal and proposed and _ASK_VERB_RE.search(text):
-            mentioned = [
-                npc for npc in npcs
-                if _npc_words(npc) & set(_content_words(text)) and any(len(word) > 2 and word in text.lower() for word in _npc_words(npc))
-            ]
-            if len(mentioned) == 1:
-                npc = mentioned[0]
-                target_id = str(npc.get("id") or "")
-                provenance = "explicit_canonical" if str(npc.get("name") or "").lower() in text.lower() else "unique_contextual"
-                return {
-                    **base,
-                    "communication_ownership": "npc_directed",
-                    "direct_address": True,
-                    "target_resolution": "explicit" if provenance == "explicit_canonical" else "contextual",
-                    "target_provenance": provenance,
-                    "target_id": target_id,
-                    "operation_eligibility": "executable",
-                    "mutation_eligibility": True,
-                    "allowed_operation": "ask",
-                    "pending_intention_relationship": "starts_new",
-                    "conflict_status": "resolved_by_explicit_wording" if proposed and proposed != target_id else "none",
-                    "conflict_details": {"provider_target": proposed, "grounded_target": target_id} if proposed and proposed != target_id else {},
-                }
-            # An ask that names nobody is not an unresolved person reference.
-            # Continuation, mixed intent, and the bridge decide it.
-        if not nominal:
-            if re.search(r"\b(?:look around|looking around|look about|glance around|what do i see|what can i see)\b", text, re.I):
-                return base
+        if speech_act:
+            return {
+                **base,
+                "communication_ownership": "ambiguous_unresolved",
+                "target_resolution": "unresolved",
+                "operation_eligibility": "requires_clarification",
+                "mutation_eligibility": False,
+                "clarification": _clarification_for(npcs, single_offer=False),
+            }
+        if npc_followup_cue(text):
             kind, chosen = _public_npc_candidates(text, npcs, scene if isinstance(scene, Mapping) else None)
             if kind == "unique" and chosen:
                 npc = chosen[0]
@@ -919,12 +1290,12 @@ def assess_addressee_grounding(
         }
 
     if len(words) == 1 and words[0] in _CONTEXTUAL_ADDRESSEE_PRONOUNS:
-        active = _active_npc_id(session, npcs)
+        active = _active_npc_id(session, npcs, _scene_id_of(scene))
         chosen = ""
         provenance = ""
         if active and (not proposed or proposed == active):
             chosen, provenance = active, "established_interlocutor"
-        elif len(npcs) == 1 and (not proposed or proposed == str(npcs[0].get("id") or "")):
+        elif active is None and len(npcs) == 1 and (not proposed or proposed == str(npcs[0].get("id") or "")):
             chosen, provenance = str(npcs[0].get("id") or ""), "unique_contextual"
         elif active and proposed and proposed != active:
             return {
@@ -940,7 +1311,7 @@ def assess_addressee_grounding(
                 "conflict_details": {"established_interlocutor": active, "provider_target": proposed},
                 "pending_intention_relationship": "requires_clarification",
             }
-        elif len(npcs) != 1:
+        else:
             return {
                 **base,
                 "direct_address": True,
@@ -972,17 +1343,18 @@ def assess_addressee_grounding(
     # unresolved pronouns have already failed closed above this seam.
     exact = _npcs_for_reference(re.sub(r"^the\s+", "", nominal, flags=re.IGNORECASE), npcs)
     hits = exact if len(exact) == 1 else [npc for npc in npcs if set(words) & _npc_words(npc)]
+    matched = list(hits)
     extras = [word for word in words if not any(word in _npc_words(npc) for npc in hits)]
     ambiguous_extras = False
     else_provenance = ""
-    if len(hits) > 1 and extras:
+    if extras and hits:
         narrowed = [npc for npc in hits if all(extra in _npc_public_blob(npc, scene) for extra in extras)]
         if len(narrowed) == 1:
             hits = narrowed
             else_provenance = "authoritative_world_state"
         else:
+            ambiguous_extras = len(hits) > 1
             hits = []
-            ambiguous_extras = True
     elif len(hits) > 1:
         ambiguous_extras = True
     if len(hits) == 1:
@@ -1006,6 +1378,7 @@ def assess_addressee_grounding(
             "conflict_details": {"provider_target": proposed, "grounded_target": target_id} if conflict != "none" else {},
         }
     if ambiguous_extras or hits:
+        chosen = hits or matched
         return {
             **base,
             "direct_address": True,
@@ -1014,20 +1387,65 @@ def assess_addressee_grounding(
             "target_provenance": "provider_candidate_only" if proposed else "none",
             "operation_eligibility": "requires_clarification",
             "mutation_eligibility": False,
-            "clarification": _clarification_for(hits or npcs, single_offer=False),
-            "choices": [_choice(npc) for npc in (hits or npcs)],
+            "clarification": _clarification_for(chosen, single_offer=False),
+            "choices": [_choice(npc) for npc in chosen],
             "pending_intention_relationship": "requires_clarification",
             "conflict_status": "unresolved" if proposed else "none",
         }
+    focused = _person_phrase(nominal) or nominal
+    npc_ids = {str(npc.get("id") or "") for npc in npcs}
+    established = [
+        row for row in _matching_rows(focused, _addressable_rows(scene))
+        if str(row.get("id") or "") not in npc_ids
+    ]
+    if len(established) > 1:
+        return {
+            **base,
+            "direct_address": True,
+            "communication_ownership": "ambiguous_unresolved",
+            "target_resolution": "ambiguous",
+            "target_provenance": "authoritative_world_state",
+            "operation_eligibility": "requires_clarification",
+            "mutation_eligibility": False,
+            "clarification": _clarification_for(established, single_offer=False),
+            "choices": [_choice(row) for row in established],
+            "pending_intention_relationship": "requires_clarification",
+            "conflict_status": "unresolved" if proposed else "none",
+        }
+    if len(established) == 1:
+        row = established[0]
+        label = str(row.get("name") or row.get("label") or focused)
+        ident = str(row.get("id") or "")
+        return {
+            **base,
+            "direct_address": True,
+            "communication_ownership": "ambiguous_unresolved",
+            "target_resolution": "explicit",
+            "target_provenance": "authoritative_world_state",
+            "target_id": ident or None,
+            "candidate_target_ids": [ident] if ident else [],
+            "operation_eligibility": "requires_clarification",
+            "mutation_eligibility": False,
+            "allowed_operation": None,
+            "clarification": f"{label} is an established person here. Nothing has been attempted.",
+            "choices": [],
+            "pending_intention_relationship": "requires_clarification",
+            "conflict_status": "unresolved" if proposed else "none",
+        }
+    shown = " ".join(str(focused or nominal).split())
+    shown = re.sub(r"^(?:the|a|an)\s+", "", shown, flags=re.IGNORECASE)
     return {
         **base,
         "direct_address": True,
         "communication_ownership": "ambiguous_unresolved",
         "target_resolution": "unresolved",
         "target_provenance": "provider_candidate_only" if proposed else "none",
+        "target_id": None,
+        "candidate_target_ids": [],
         "operation_eligibility": "requires_clarification",
         "mutation_eligibility": False,
-        "clarification": _clarification_for(npcs, single_offer=len(npcs) == 1),
+        "clarification": f"No established person matches {shown}. Nothing has been attempted.",
+        "choices": [],
         "pending_intention_relationship": "requires_clarification",
         "conflict_status": "unresolved" if proposed else "none",
     }

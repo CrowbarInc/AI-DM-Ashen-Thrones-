@@ -28,7 +28,7 @@ from game.storage import (
 from game.world import reset_world_playthrough_state
 
 
-def apply_new_campaign_hard_reset() -> Dict[str, Any]:
+def apply_new_campaign_hard_reset(ruleset=None) -> Dict[str, Any]:
     """Perform full New Campaign reset: session root replacement, fresh combat, world runtime clear, empty log.
 
     Session must be replaced before applying bootstrap-derived sync (e.g. clocks init in
@@ -37,6 +37,8 @@ def apply_new_campaign_hard_reset() -> Dict[str, Any]:
     """
     # Serialize against snapshot restore/save collisions: this flow rewrites runtime state.
     from game.storage import _runtime_persistence_guard
+    from game.campaign_ruleset import creation_binding
+    binding = creation_binding(ruleset)
 
     with _runtime_persistence_guard("new_campaign_hard_reset"):
         from game import storage
@@ -46,12 +48,13 @@ def apply_new_campaign_hard_reset() -> Dict[str, Any]:
             session = load_session()
             # Root replacement: stale keys from older engines cannot survive.
             reset_session_state(session)
+            session['ruleset_binding'] = binding
             # Explicit opt-in binds only this newly created identity.
             import os
             from game.authored_consequences import GATE, NEW_CAMPAIGNS, ENROLLMENT
             if os.environ.get(GATE) == '1' and os.environ.get(NEW_CAMPAIGNS) == '1':
                 session[ENROLLMENT] = session['campaign_run_id']
-            save_session(session)
+            save_session(session, _new_campaign=True)
 
             world = load_world()
             reset_world_playthrough_state(world)
@@ -84,6 +87,7 @@ def apply_new_campaign_hard_reset() -> Dict[str, Any]:
         )
     meta: Dict[str, Any] = {
         "campaign_run_id": session.get("campaign_run_id"),
+        "ruleset_binding": session['ruleset_binding'],
         "session_id": session.get("session_id"),
         # Operator/debug only (HTTP JSON for /api/new_campaign); proves reset + empty transcript.
         "transcript_entry_count_after_reset": 0,

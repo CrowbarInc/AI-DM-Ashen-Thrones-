@@ -65,6 +65,7 @@ def _source_disclosed_facts(scene, session, interactable):
         return ()
     if (entry.get("state") != "discovered" or entry.get("presentation") not in {"explicit", "actionable"}
             or entry.get("source_scene") != scene.get("id")
+            or entry.get("hidden") or entry.get("visible") is False or entry.get("gm_only")
             or entry.get("valid") is False or entry.get("stale") or entry.get("superseded_by")):
         return ()
     source = entry.get("source_interactable")
@@ -81,6 +82,8 @@ def _source_disclosed_facts(scene, session, interactable):
                if isinstance(c, dict) and c.get("id") == cid]
     if (not isinstance(text, str) or not text.strip() or len(current) != 1
             or current[0].get("text") != text or current[0].get("valid") is False
+            or current[0].get("hidden") or current[0].get("visible") is False
+            or current[0].get("gm_only")
             or current[0].get("stale") or current[0].get("superseded_by")):
         return ()
     return (text.strip(),)
@@ -143,8 +146,13 @@ def _infer_transition_target_from_prompt(
     """
     if not isinstance(prompt, str) or not prompt.strip():
         return None
-    from game.scene_destination_binding import resolve_authored_exit_from_player_travel
+    from game.scene_destination_binding import (
+        affirmative_travel_selection_allowed,
+        resolve_authored_exit_from_player_travel,
+    )
 
+    if not affirmative_travel_selection_allowed(prompt):
+        return None
     authored = resolve_authored_exit_from_player_travel(prompt, exits, known_scene_ids)
     if authored:
         return authored
@@ -269,6 +277,8 @@ def resolve_exploration_action(
     character: Optional[Dict[str, Any]] = None,
     scene_graph: Optional[Dict[str, set]] = None,
     load_scene_fn: Optional[Callable[[str], Dict[str, Any]]] = None,
+    *,
+    reconciled_inspection_alias: str | None = None,
 ) -> Dict[str, Any]:
     """Produce a structured resolution object for the GM prompt. No side effects; caller performs activate_scene etc.
 
@@ -376,6 +386,28 @@ def resolve_exploration_action(
                 blocked_incompatible_scene_transition = True
                 target_scene_id = None
 
+        # An authored route id and a different arrival are not a committed
+        # transition. Do not rewrite the route id to hide the disagreement.
+        if target_scene_id:
+            from game.route_authority import authored_exit_rows
+
+            route = next(
+                (
+                    row for row in authored_exit_rows({"scene": scene})
+                    if str(row.get("id") or "") == action_id
+                ),
+                None,
+            )
+            authored_destination = str(
+                (route or {}).get("target_scene_id") or (route or {}).get("targetSceneId") or ""
+            ).strip()
+            if authored_destination and authored_destination != target_scene_id:
+                binding_meta_subset["route_destination_invariant"] = "failed"
+                binding_meta_subset["route_destination"] = authored_destination
+                binding_meta_subset["rejected_arrival_scene"] = target_scene_id
+                blocked_incompatible_scene_transition = True
+                target_scene_id = None
+
     resolved_transition = False
     if transition_candidate and target_scene_id and target_scene_id in known_set:
         if scene_graph is not None:
@@ -409,7 +441,7 @@ def resolve_exploration_action(
         prompt_slug = slugify(prompt)
         action_target = str(normalized_action.get("target_id") or "").strip()
         extracted_target = extract_inspection_target(raw_player_text or prompt)
-        explicit_target = extracted_target or action_target or None
+        explicit_target = reconciled_inspection_alias or extracted_target or action_target or None
         classified = classify_referenced_surface(
             raw_player_text or prompt,
             scene_envelope if isinstance(scene_envelope, dict) else {"scene": scene},

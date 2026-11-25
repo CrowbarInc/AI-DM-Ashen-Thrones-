@@ -1,0 +1,114 @@
+{
+  "verdict": "PASS",
+  "unauthorized_deletions": 0,
+  "git_comparison": {
+    "head": true,
+    "branch": true,
+    "index": true,
+    "staged_sha256": true,
+    "staged": true,
+    "tracked_status": true,
+    "modified_tracked": true,
+    "missing_tracked": true,
+    "changed_tracked_content": true,
+    "tracked_tmp": true,
+    "root": true,
+    "handoff_sha256": true
+  },
+  "git_head": "6e59c070dcf522594c915ab39b61e198f56c3e28",
+  "prior_tracked_status_count": 91,
+  "prior_missing_tracked_count": 51,
+  "durable_journal_verified_exact_intents_and_absences": 60287,
+  "lost_untracked_paths": [],
+  "unexpected_untracked_paths": [],
+  "protected": {
+    "retained_evidence_anchor_count": 92,
+    "anchor_differences": [],
+    "protected_tmp_root_identity_match": true,
+    "exact_active_campaign_and_at_opt_roots": {
+      "development/tmp/pr_fresh_live_campaign": {
+        "observed": {
+          "objects": 71,
+          "sha256": "4e19b412252df3673832261a3448865122e02cca8f0d4acc21ad1f5a50cafd77",
+          "issues": []
+        },
+        "match_historical": true
+      },
+      "development/tmp/pr_fresh_live_campaign_reconciled": {
+        "observed": {
+          "objects": 72,
+          "sha256": "98c22e118b48bfb8641b5523ba0aaf9a7aa35eb1f1ff94884a6fd5601bbd8c01",
+          "issues": []
+        },
+        "match_historical": true
+      },
+      "development/campaigns/product_realization/pr_play_fresh_live_foundational_capability_validation": {
+        "observed": {
+          "objects": 135,
+          "sha256": "cce4f74b17796d9f9834175037ed5b281b5025bfa54fca3a3bf9d9a38125a238",
+          "issues": []
+        },
+        "match_historical": true
+      },
+      "artifacts/at_opt_01": {
+        "observed": {
+          "objects": 12,
+          "sha256": "902fa00498fcf674f1a7170c50389419d672f4603fe3546299182fa0f41126a6",
+          "issues": []
+        },
+        "match_historical": true
+      },
+      "artifacts/at_opt_02": {
+        "observed": {
+          "objects": 10,
+          "sha256": "5cd17d1313b115499d3a3cf79786ae601c5d2d0158c58f2d74db95cd2ed9236b",
+          "issues": []
+        },
+        "match_historical": true
+      },
+      "artifacts/at_opt_03": {
+        "observed": {
+          "objects": 9,
+          "sha256": "c820d1680051f7406e721feed121902c07ad844f1137d4e8830febdac7799175",
+          "issues": []
+        },
+        "match_historical": true
+      },
+      "artifacts/at_opt_04": {
+        "observed": {
+          "objects": 27,
+          "sha256": "3539c5be7c1cedd91b5b9ec4755141208f610c14477fb84d2b97fbed241fdae9",
+          "issues": []
+        },
+        "match_historical": true
+      },
+      "artifacts/at_opt_05": {
+        "observed": {
+          "objects": 7,
+          "sha256": "e94a3cae9cfd94afba2d87745fa4c394626ef68cabf394d0746db115005d5e8f",
+          "issues": []
+        },
+        "match_historical": true
+      },
+      "artifacts/at_opt_06": {
+        "observed": {
+          "objects": 18,
+          "sha256": "4ccbf8115dc71f11090b934731c410f4360c0f2f039f3feec7f2ad7e5eb450fe",
+          "issues": []
+        },
+        "match_historical": true
+      }
+    },
+    "match_current_execution_snapshot": true
+  },
+  "tmp_group_discrepancies": {},
+  "handoff_baseline_sha256": "035912cc5fe758d5110cde302ae653f7e2f4bcd9552357777aad9746543b1155",
+  "intentional_changes": [
+    "docs/ARTIFACT_RETENTION_POLICY.md",
+    "docs/NEXT_SESSION.md",
+    "development/reports/AT-FG-07_FINAL_REPORT.md",
+    "development/reports/AT-FG_CLOSEOUT_REPORT.md",
+    "artifacts/at_fg_07/",
+    "handoff/history/at_fg_07/"
+  ]
+}

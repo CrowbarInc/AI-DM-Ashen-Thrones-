@@ -51,7 +51,7 @@ _YOU = re.compile(r"\b(?:you|your|you're|youre)\b", re.IGNORECASE)
 _THIRD = re.compile(r"\b(?:she|he|her|him|his|hers)\b", re.IGNORECASE)
 _MEANING = re.compile(
     r"\b(?:what (?:did|do|does) (?:you|she|he|they) mean|what (?:you|she|he) (?:said|meant)|"
-    r"your answer|by that|what was that|that name)\b",
+    r"your answer|by that)\b",
     re.IGNORECASE,
 )
 _CONDITIONAL_ACTION = re.compile(
@@ -59,12 +59,85 @@ _CONDITIONAL_ACTION = re.compile(
     re.IGNORECASE,
 )
 _HIDDEN = re.compile(r"\b(?:passwords?|passcodes?)\b", re.IGNORECASE)
+_RECALL_REQUEST_PREFIX = (
+    r"^(?:(?:gm|dm|game master|dungeon master),\s*)?(?:please\s+)?"
+    r"(?:(?:can|could|would|will)\s+you\s+)?"
+)
 _REPEAT = re.compile(
-    r"\b(?:repeat|say (?:that|it) again|(?:simpler|plainer|plain|other) words|"
-    r"(?:put|say|in) (?:that |it )?another way|go back to|back to the|"
-    r"(?:tell|say|give)\s+me\b[^.!?]{0,48}\bagain|what did .{1,48}? just say)\b",
+    _RECALL_REQUEST_PREFIX
+    + r"(?:repeat(?: exactly)? (?:that|it)(?=[?!.]?$| (?:exactly|in )\b)|"
+    r"repeat (?:the|that|your) [^.!?]{0,48}(?:warning|statement|answer|remark|words)(?=[?!.]?$| about\b)|"
+    r"say (?:that|it) again|(?:in )?(?:simpler|plainer|plain|other) words|"
+    r"(?:put|say|in) (?:that |it )?another way|(?:go )?back to (?:what was said|the name of)|"
+    r"tell me (?:the|that|your) [^.!?]{0,48}(?:warning|statement|answer|remark|words) again)\b",
     re.IGNORECASE,
 )
+_REPEAT_SPEAKER_RE = re.compile(
+    _RECALL_REQUEST_PREFIX + r"repeat (?:the\s+)?(?P<speaker>[\w'’ -]+?)[?!.]?$",
+    re.IGNORECASE,
+)
+_CONTEXTUAL_STATEMENT_RE = re.compile(
+    r"^(?:what was (?:that(?: last)?(?: statement| remark| answer)?|that name|"
+    r"your (?:last )?(?:statement|remark|answer)))[?!.]?$",
+    re.IGNORECASE,
+)
+_RECALLED_SPEECH_RE = re.compile(
+    r"^(?:please\s+)?(?:(?:can|could|would|will)\s+you\s+)?"
+    r"(?P<request>repeat(?: exactly)?|remind me|tell me again) what "
+    r"(?:the\s+)?(?P<who>[\w'’ -]+?)\s+(?:said|told me)\b",
+    re.IGNORECASE,
+)
+_POSSESSIVE_STATEMENT_RE = re.compile(
+    r"^(?:what was (?:the\s+)?(?P<who>[\w'’ -]+?)['’]s|what was (?P<pronoun>his|her|their)) "
+    r"(?:last )?(?:statement|answer|remark)[?!.]?$",
+    re.IGNORECASE,
+)
+_ABANDON_SPAN_RE = re.compile(
+    r"^(?:please\s+)?(?:(?:i|we)\s+)?"
+    r"(?:(?:just|carefully|slowly|quietly)\s+)?"
+    r"(?:abandon(?:ing)?|forget(?:ting)?(?:\s+about)?|never\s+mind|"
+    r"set(?:ting)?\s+aside|stop(?:ping)?\s+(?:discussing|talking\s+about)|"
+    r"leave(?:\s+\S+){1,8}\s+aside)\b",
+    re.IGNORECASE,
+)
+_TOPIC_RETURN_CUE_RE = re.compile(
+    r"\b(?:return(?:ing|s)?\s+to|go(?:ing)?\s+back\s+to|back\s+to|revisit(?:ing)?)\b",
+    re.IGNORECASE,
+)
+_CLARIFICATION_DELIVERY_RE = re.compile(
+    r"nothing has been attempted|not established an executable|which single action",
+    re.IGNORECASE,
+)
+_ANAPHORIC_TOPIC_TOKENS = frozenset({
+    "lets", "let's", "want", "discuss", "discussing", "discussed", "question",
+    "inquiry", "warning", "conversation", "topic", "statement", "about", "were",
+    "revisit", "revisiting", "let",
+})
+_DISCOURSE_OBJECT_RE = re.compile(
+    r"\b(?:question|inquiry|discussion|conversation|topic|statement|remark|subject|warning)\b"
+    r"|\bwhat\s+(?:we|i|you|he|she|they|the)\b.{0,64}\b(?:said|say|discussed|discussing|talked|talking|asked)\b"
+    r"|\bwhat\s+we\s+were\s+discussing\b"
+    r"|\bearlier\s+conversation\b",
+    re.IGNORECASE,
+)
+_ATTRIBUTED_SPEECH_RE = re.compile(
+    r"^(?:(?:gm|dm|game master|dungeon master),\s*)?"
+    r"what did\s+(?:the\s+|this\s+|that\s+)?(?P<who>[\w'’ -]+?)\s+"
+    r"(?:just\s+)?(?:say\b|tell me(?: earlier| before| again)?(?=[?!.]?$))",
+    re.IGNORECASE,
+)
+_PRIOR_WARNING_RE = re.compile(
+    r"\bwhat was\s+(?:the\s+)?(?P<who>[a-z][a-z' -]{1,40}?)['’]s\s+warning\b",
+    re.IGNORECASE,
+)
+_NON_SPEAKER_WHO_RE = re.compile(
+    r"^(?:you|i|we|it|notice|notices|map|maps|board|sign|that|this)$",
+    re.IGNORECASE,
+)
+_WHO_MENTIONED_RE = re.compile(r"\bwho\s+(?:mentioned|said|told)\b", re.IGNORECASE)
+_LAST_PERSON_RE = re.compile(r"\bwhat did the last person say\b", re.IGNORECASE)
+_THAT_NPC_RE = re.compile(r"\bwhat did that npc mean\b", re.IGNORECASE)
+_CLAUSE_SPLIT_RE = re.compile(r"\s*;\s*|\s+\band\b\s+|\s+\bthen\b\s+|\s+\bbut\b\s+", re.IGNORECASE)
 _EARLIER = re.compile(
     r"\b(?:earlier|before|back when|still where you stand|is that still)\b",
     re.IGNORECASE,
@@ -114,6 +187,132 @@ _CONSEQUENTIAL_PREFERENCE = re.compile(
     r"\b(?:patrol schedule|abandon|password|reward|silver|quest)\b",
     re.IGNORECASE,
 )
+
+
+def _normalize_governed_span(text: str) -> str:
+    raw = " ".join(str(text or "").split())
+    raw = re.sub(r"\bwon't\b", "will not", raw, flags=re.IGNORECASE)
+    raw = re.sub(r"\bdon't\b", "do not", raw, flags=re.IGNORECASE)
+    raw = re.sub(r"\bcan't\b", "cannot", raw, flags=re.IGNORECASE)
+    return raw
+
+
+def span_abandons_intention(text: str) -> bool:
+    """The span drops a topic or plan. It is not a physical command."""
+    return bool(_ABANDON_SPAN_RE.search(_normalize_governed_span(text)))
+
+
+def _return_complement(text: str) -> str:
+    match = _TOPIC_RETURN_CUE_RE.search(str(text or ""))
+    if not match:
+        return ""
+    complement = str(text or "")[match.end():]
+    complement = re.split(r"[.!?]", complement, maxsplit=1)[0]
+    complement = re.split(r"\s+(?:and|then|but)\s+", complement, maxsplit=1, flags=re.IGNORECASE)[0]
+    return complement.strip(" ,;:")
+
+
+def conversational_topic_return(text: str) -> bool:
+    """True when return/back language points at a discussion, not a place."""
+    raw = " ".join(str(text or "").split())
+    if not raw or not _TOPIC_RETURN_CUE_RE.search(raw):
+        return False
+    return bool(_DISCOURSE_OBJECT_RE.search(_return_complement(raw)))
+
+
+def attributed_speech_request(text: str) -> str:
+    """The explicit speaker reference in a request for earlier speech."""
+    raw = str(text or "")
+    match = (_ATTRIBUTED_SPEECH_RE.search(raw) or _PRIOR_WARNING_RE.search(raw)
+             or _RECALLED_SPEECH_RE.search(raw) or _POSSESSIVE_STATEMENT_RE.search(raw))
+    if not match:
+        return ""
+    who = " ".join((match.group("who") or "").split())
+    # "What did you/the notice/the maps say" stays with the existing recall owner.
+    if _NON_SPEAKER_WHO_RE.match(who) or re.fullmatch(r"he|she|they", who, re.I):
+        return ""
+    return who
+
+
+def _split_governed_clauses(text: str) -> list[str]:
+    raw = " ".join(str(text or "").split())
+    return [part.strip(" ,.") for part in _CLAUSE_SPLIT_RE.split(raw) if part.strip(" ,.")]
+
+
+def without_abandoned_clauses(text: str) -> str:
+    parts = _split_governed_clauses(text)
+    kept = [part for part in parts if not span_abandons_intention(part)]
+    return " ".join(kept)
+
+
+def _row_voice(row: Mapping[str, Any], delivered: str) -> str:
+    speaker_id = str(row.get("speaker_id") or "").strip()
+    if speaker_id:
+        return speaker_id
+    name = str(row.get("speaker_name") or "").strip()
+    if name:
+        return name.casefold()
+    match = re.search(r"\b([A-Z][a-z]+(?: [A-Z][a-z]+)*)\b", delivered)
+    return match.group(1).casefold() if match else "host"
+
+
+def _heard_statement(text: str, session: Mapping[str, Any] | None, *,
+                     speaker_id: str = "", speaker_name: str = "",
+                     candidates: list[dict[str, Any]] | None = None):
+    """A line the player already heard, including a host delivery that names the speaker.
+
+    Returns a row, ``\"ambiguous\"`` when an anaphoric request matches more than
+    one speaker, or None.
+    """
+    from game.dialogue_authority import contains_protected_disclosure
+    from game.interaction_completion import attributed_speaker_label
+
+    tokens = reference_subject_tokens(text, speaker_name)
+    content = set(tokens) - _ANAPHORIC_TOPIC_TOKENS
+    best: tuple[int, dict[str, Any]] | None = None
+    voices: set[str] = set()
+    for row in (delivered_exchanges(session) if candidates is None else candidates):
+        if not isinstance(row, dict) or row.get("uncertain"):
+            continue
+        delivered = str(row.get("delivered_text") or "").strip()
+        if not delivered or contains_protected_disclosure(delivered):
+            continue
+        if _CLARIFICATION_DELIVERY_RE.search(delivered):
+            continue
+        if speaker_id or speaker_name:
+            id_match = bool(speaker_id) and str(row.get("speaker_id") or "") == speaker_id
+            label = str(row.get("speaker_name") or "") or attributed_speaker_label(delivered)
+            name_match = bool(speaker_name) and bool(re.search(rf"\b{re.escape(speaker_name)}\b", label, re.I))
+            if not id_match and not name_match:
+                continue
+        supplied = reference_subject_tokens(
+            str(row.get("supplied_text") or "") + " " + delivered, speaker_name,
+        )
+        asked = reference_subject_tokens(str(row.get("player_text") or ""), speaker_name)
+        if content:
+            score = len(content & supplied) * 10 + len(content & asked)
+            if score <= 0:
+                continue
+        else:
+            score = 1
+        voices.add(_row_voice(row, delivered))
+        if best is None or score >= best[0]:
+            best = (score, row)
+    if best is None:
+        return None
+    if not content and len(voices) > 1:
+        return "ambiguous"
+    return best[1]
+
+
+def without_nonphysical_clauses(text: str) -> str:
+    """Drop abandoned intentions and discourse returns. Keep physical clauses."""
+    parts = _split_governed_clauses(text)
+    kept = [
+        part for part in parts
+        if not span_abandons_intention(part) and not conversational_topic_return(part)
+    ]
+    return " ".join(kept)
 
 
 def is_incidental_personal(player_text: str) -> bool:
@@ -303,13 +502,6 @@ def last_delivered_exchange(session: Mapping[str, Any] | None) -> dict[str, Any]
     return rows[-1] if rows else None
 
 
-def _supplied_overlap(text: str, exchange: Mapping[str, Any] | None) -> bool:
-    if not isinstance(exchange, Mapping) or exchange.get("uncertain"):
-        return False
-    supplied = set(_tokens(str(exchange.get("supplied_text") or "")))
-    return any(token in supplied for token in _tokens(text))
-
-
 def _blob(row: Mapping[str, Any]) -> str:
     return " ".join(
         str(row.get(key) or "")
@@ -319,7 +511,8 @@ def _blob(row: Mapping[str, Any]) -> str:
 
 def _tokens(text: str) -> list[str]:
     found = []
-    for tok in re.findall(r"[a-z']{3,}", str(text or "").lower()):
+    raw = str(text or "").replace("\u2019", "'").replace("\u2018", "'").replace("`", "'")
+    for tok in re.findall(r"[a-z']{3,}", raw.lower()):
         tok = tok.strip("'")
         if tok.endswith("'s"):
             tok = tok[:-2]
@@ -330,7 +523,7 @@ def _tokens(text: str) -> list[str]:
 
 def reference_subject_tokens(text: str, names: str = "") -> set[str]:
     """Subject evidence from the request, excluding speech acts and names."""
-    structural = {"repeat", "recall", "simpler", "plain", "can", "going", "return",
+    structural = {"repeat", "recall", "remind", "told", "last", "answer", "simpler", "plain", "can", "going", "return",
                   "statement", "remark", "thing", "previous", "personally", "whether",
                   "sergeant", "corporal", "captain", "game", "master", "exactly",
                   "she", "her", "him", "his", "earlier", "speech", "one", "why"}
@@ -490,7 +683,6 @@ _REVISION_ONLY = re.compile(
     r"\b(?:instead|make that|change that|i meant|revise)\b",
     re.IGNORECASE,
 )
-_AGAIN = re.compile(r"\b(?:the same|asked again|that one)\b", re.IGNORECASE)
 _GM_HELP = re.compile(
     r"\b(?:interpret|explain the rules|summarize|help me understand)\b",
     re.IGNORECASE,
@@ -572,7 +764,7 @@ def supplied_clarification(
 ) -> str:
     """Quote the delivered statement when this question asks what it meant."""
     text = " ".join(str(player_text or "").split())
-    if not text or not (_MEANING.search(text) or _REPEAT.search(text)):
+    if not text or not (_MEANING.search(text) or _REPEAT.search(text) or _RECALLED_SPEECH_RE.search(text)):
         return ""
     if (_GM.search(text) or _THIRD.search(text)) and not _YOU.search(text):
         return ""
@@ -671,26 +863,199 @@ def continuity_directive(
         or _CONDITIONAL_ACTION.search(text)
     ):
         return None
-    if _WORLD.search(text) and not _REPEAT.search(text) and not _NEGOTIATION.search(text):
+    # "Go back to what was said" is a topic, even though "go" is also a world verb.
+    attributed = _ATTRIBUTED_SPEECH_RE.search(text)
+    possessive = _POSSESSIVE_STATEMENT_RE.fullmatch(text)
+    recalled_speech = _RECALLED_SPEECH_RE.search(text)
+    repeats = bool(_REPEAT.search(text) or recalled_speech
+                   or _CONTEXTUAL_STATEMENT_RE.fullmatch(text) or possessive
+                   or (attributed and re.fullmatch(r"he|she|they|you", attributed.group("who"), re.I)))
+    if (
+        _WORLD.search(text)
+        and not repeats
+        and not attributed
+        and not _NEGOTIATION.search(text)
+        and not conversational_topic_return(text)
+    ):
         return None
     if _pending_blocks(session, text):
         return None
+    if (re.match(r"^(?:(?:i|we)\s+)?(?:go back|return) to\b", text, re.I)
+            and not _QUESTION.search(text) and established_scene_object_ids(text, scene)):
+        return None
+    # "Go back to the Frontier Gate" is travel. "Go back to what was said" is not.
+    if _TOPIC_RETURN_CUE_RE.search(text) and not conversational_topic_return(text):
+        inner = scene.get("scene") if isinstance(scene, Mapping) and isinstance(scene.get("scene"), Mapping) else (scene or {})
+        exits = [dict(item) for item in (inner.get("exits") or []) if isinstance(item, Mapping)]
+        if exits:
+            from game.scene_destination_binding import resolve_authored_exit_from_player_travel
+
+            if resolve_authored_exit_from_player_travel(text, exits):
+                return None
     present = _present(scene, world)
     active = _active_id(session, present)
     from game.dialogue_authority import historical_disclosure_permitted
     people = {str(n.get("id") or ""): n for n in (world or {}).get("npcs") or [] if isinstance(n, Mapping)}
     rows = [r for r in delivered_exchanges(session)
             if historical_disclosure_permitted(r, people.get(str(r.get("speaker_id") or "")))]
+    if repeat_speaker := _REPEAT_SPEAKER_RE.fullmatch(text):
+        title = repeat_speaker.group("speaker").casefold()
+        repeats = repeats or any(
+            title == str(row.get("speaker_name") or "").casefold()
+            for row in rows if row.get("ownership") == "npc"
+        )
     ctx = (session or {}).get("conversational_context") or {}
     last_gm = ctx.get("last_gm_exchange") or {}
     # Conversational recency includes GM questions that are not NPC disclosures.
     # Keep the filtered rows for historical recall below.
     latest = last_delivered_exchange(session) or {}
     scene_id = str(((scene or {}).get("scene") or scene or {}).get("id") or "")
+
+    def _recall_line(exchange: Mapping[str, Any]) -> str:
+        delivered = str(exchange.get("delivered_text") or "").strip()
+        return delivered or _gm_quote(exchange)
+
+    def _recall_answer(exchange: Mapping[str, Any], reason: str) -> dict[str, Any]:
+        return {
+            "action": "answer",
+            "owner": "gm",
+            "npc_id": str(exchange.get("speaker_id") or ""),
+            "npc_name": str(exchange.get("speaker_name") or ""),
+            "line": _recall_line(exchange),
+            "reason": reason,
+            "proposition_id": str(exchange.get("proposition_id") or ""),
+            "topic_grounding": {
+                "speaker_id": exchange.get("speaker_id"),
+                "ownership": "gm",
+                "reference": "delivered_speech",
+                "topic_id": exchange.get("topic_id"),
+                "proposition_id": exchange.get("proposition_id"),
+                "selected_source": exchange.get("authorization_source"),
+                "delivered_turn": exchange.get("turn"),
+                "canonical": False,
+            },
+        }
+
+    def _not_established(line: str) -> dict[str, Any]:
+        return {
+            "action": "clarify",
+            "owner": "gm",
+            "npc_id": "",
+            "npc_name": "",
+            "line": line,
+            "reason": "missing_delivered_reference",
+        }
+
+    if conversational_topic_return(text):
+        focus = without_abandoned_clauses(text) or text
+        topic_found = _best_exchange(focus, rows, "")
+        if topic_found == "ambiguous":
+            return {
+                "action": "clarify",
+                "owner": "gm",
+                "npc_id": "",
+                "npc_name": "",
+                "line": _ambiguous_line(rows),
+                "reason": "ambiguous_delivered_reference",
+            }
+        if isinstance(topic_found, dict):
+            return _recall_answer(topic_found, "conversational_topic_return")
+        heard = _heard_statement(focus, session)
+        if heard == "ambiguous":
+            return {
+                "action": "clarify",
+                "owner": "gm",
+                "npc_id": "",
+                "npc_name": "",
+                "line": _ambiguous_line(rows),
+                "reason": "ambiguous_delivered_reference",
+            }
+        if isinstance(heard, dict):
+            return _recall_answer(heard, "conversational_topic_return")
+        return _not_established(
+            "That earlier discussion is not established. Nothing has been attempted."
+        )
+    if _WHO_MENTIONED_RE.search(text):
+        mentioned = _best_exchange(text, rows, "")
+        if isinstance(mentioned, dict):
+            return _recall_answer(mentioned, "delivered_speaker_attribution")
+        heard = _heard_statement(text, session)
+        if isinstance(heard, dict):
+            return _recall_answer(heard, "delivered_speaker_attribution")
+        if mentioned == "ambiguous":
+            return {
+                "action": "clarify",
+                "owner": "gm",
+                "npc_id": "",
+                "npc_name": "",
+                "line": _ambiguous_line(rows),
+                "reason": "ambiguous_delivered_reference",
+            }
+        return _not_established(
+            "Nobody in the conversation so far is established as having said that. Nothing has been attempted."
+        )
+    if _LAST_PERSON_RE.search(text) or _THAT_NPC_RE.search(text):
+        latest = [
+            row for row in delivered_exchanges(session)
+            if isinstance(row, dict)
+            and not row.get("uncertain")
+            and str(row.get("delivered_text") or "").strip()
+            and not _CLARIFICATION_DELIVERY_RE.search(str(row.get("delivered_text") or ""))
+        ]
+        if _LAST_PERSON_RE.search(text) and latest:
+            return _recall_answer(latest[-1], "delivered_speaker_attribution")
+        heard = _heard_statement("", session)
+        if heard == "ambiguous":
+            return {
+                "action": "clarify",
+                "owner": "gm",
+                "npc_id": "",
+                "npc_name": "",
+                "line": _ambiguous_line(rows) or "Which speaker do you mean?",
+                "reason": "ambiguous_delivered_reference",
+            }
+        if isinstance(heard, dict):
+            return _recall_answer(heard, "delivered_speaker_attribution")
+        return _not_established(
+            "No earlier statement is established. Nothing has been attempted."
+        )
+    named_speaker = ""
+    who = attributed_speech_request(text)
+    if who:
+        if established_scene_object_ids(who, scene):
+            return None
+        named_speaker = _unique_name_token(who, present)
+        if not named_speaker:
+            hits: list[str] = []
+            for row in rows:
+                if row.get("ownership") != "npc":
+                    continue
+                speaker_id = str(row.get("speaker_id") or "")
+                words = [word for word in str(row.get("speaker_name") or "").split() if len(word) >= 4]
+                if speaker_id and any(re.search(rf"\b{re.escape(word)}\b", who, re.IGNORECASE) for word in words):
+                    if speaker_id not in hits:
+                        hits.append(speaker_id)
+            named_speaker = hits[0] if len(hits) == 1 else ""
+        if not named_speaker:
+            heard = _heard_statement(text, session, speaker_name=who, candidates=rows)
+            if heard == "ambiguous":
+                return {
+                    "action": "clarify",
+                    "owner": "gm",
+                    "npc_id": "",
+                    "npc_name": "",
+                    "line": _ambiguous_line(rows),
+                    "reason": "ambiguous_delivered_reference",
+                }
+            if isinstance(heard, dict):
+                return _recall_answer(heard, "delivered_speaker_attribution")
+            return _not_established(
+                f"Nothing {who} said about that is established. Nothing has been attempted."
+            )
     # A bare request to repeat/clarify refers to the latest delivered question,
     # not an older NPC disclosure. Explicit speaker/subject recall still uses
     # the existing historical selector below. Keep the pending intent intact.
-    if (( _REPEAT.search(text) or _MEANING.search(text))
+    if ((repeats or _MEANING.search(text))
             and latest.get("ownership") == "gm"
             and last_gm.get("category") == "CLARIFY"
             and last_gm.get("scene_id") == scene_id
@@ -699,10 +1064,12 @@ def continuity_directive(
             and not reference_subject_tokens(text, " ".join(str(n.get("name") or "") for n in present.values()))):
         return {"action": "clarify", "owner": "gm", "npc_id": "", "npc_name": "",
                 "line": str(last_gm["response"]), "reason": "repeat_pending_clarification"}
-    if _names_other(text, present, active):
+    if _names_other(text, present, active) and not named_speaker:
         return None
-    found = _best_exchange(text, rows, "" if _GM.search(text) else active)
-    if found == "ambiguous" and (_GM.search(text) or _MEANING.search(text) or _REPEAT.search(text) or _DEICTIC.search(text)):
+    found = _best_exchange(
+        text, rows, named_speaker or ("" if _GM.search(text) else active),
+    )
+    if found == "ambiguous" and (named_speaker or repeats or _GM.search(text) or _MEANING.search(text) or _DEICTIC.search(text)):
         return {
             "action": "clarify",
             "owner": "gm",
@@ -712,6 +1079,40 @@ def continuity_directive(
             "reason": "ambiguous_delivered_reference",
         }
     exchange = found if isinstance(found, dict) else None
+    if named_speaker:
+        label = _named(present, named_speaker) if named_speaker in present else "That person"
+        for row in rows:
+            if str(row.get("speaker_id") or "") == named_speaker and str(row.get("speaker_name") or "").strip():
+                label = str(row.get("speaker_name") or label)
+                break
+        if not isinstance(exchange, dict):
+            # "What did the guard say?" names the speaker and no other subject.
+            subject = reference_subject_tokens(text, label)
+            speaker_rows = [
+                row for row in rows
+                if str(row.get("speaker_id") or "") == named_speaker
+                and row.get("ownership") == "npc"
+                and not row.get("uncertain")
+            ]
+            if speaker_rows and not subject:
+                exchange = speaker_rows[-1]
+        if not isinstance(exchange, dict):
+            exchange = _heard_statement(text, session, speaker_id=named_speaker,
+                                        speaker_name=label, candidates=rows)
+        if isinstance(exchange, dict) and (
+            str(exchange.get("speaker_id") or "") in {"", named_speaker}
+            or label.casefold() in str(exchange.get("delivered_text") or "").casefold()
+        ):
+            if (named_speaker not in present and exchange.get("speaker_id") == named_speaker
+                    and recalled_speech and recalled_speech.group("request").lower().startswith("repeat")):
+                return {
+                    "action": "clarify", "owner": "gm", "npc_id": named_speaker,
+                    "npc_name": label, "line": _absent_line(exchange), "reason": "absent_npc_reference",
+                }
+            return _recall_answer(exchange, "delivered_speaker_attribution")
+        return _not_established(
+            f"Nothing {label} said about that is established. Nothing has been attempted."
+        )
     named = _unique_named(text, present)
     speaker_id = named or active or (str(exchange.get("speaker_id") or "") if exchange else "")
     if not speaker_id and len(present) == 1:
@@ -806,30 +1207,36 @@ def continuity_directive(
             "line": f'{speaker_name} says, "I can\'t promise you a reward for that."',
             "reason": "npc_request_declined",
         }
-    if _REPEAT.search(text) and not isinstance(exchange, dict):
+    if repeats and not isinstance(exchange, dict):
+        from game.interaction_completion import attributed_speaker_label
+
         titled = _unique_name_token(text, present)
-        certain = [row for row in rows if isinstance(row, dict) and not row.get("uncertain")]
-        if titled and titled in present:
-            name = _named(present, titled).casefold()
-            matched = [
-                row for row in certain
-                if str(row.get("speaker_id") or "") == titled
-                or name in str(row.get("delivered_text") or "").casefold()
-                or name in str(row.get("speaker_name") or "").casefold()
-            ]
-        elif not titled:
-            matched = certain
-        else:
+        matched = []
+        for row in rows:
+            if row.get("uncertain"):
+                continue
+            bound = str(row.get("speaker_id") or "") if row.get("ownership") == "npc" else ""
+            if not bound and row.get("scene_id") == scene_id and row.get("supplied_text"):
+                # Legacy GM delivery can carry an explicitly attributed quote.
+                label = attributed_speaker_label(str(row.get("delivered_text") or ""))
+                speakers = [key for key in present if label.casefold() == _named(present, key).casefold()]
+                bound = speakers[0] if len(speakers) == 1 else ""
+            if bound and (not titled or titled == bound):
+                matched.append((row, bound))
+        subject = reference_subject_tokens(text, " ".join(_named(present, key) for key in present))
+        if subject - _ANAPHORIC_TOPIC_TOKENS or (not titled and len({key for _, key in matched}) > 1):
             matched = []
         if matched:
-            exchange = matched[-1]
-            bound = titled or _unique_name_token(str(exchange.get("delivered_text") or ""), present) or active
-            if bound and bound in present:
-                speaker_id = bound
-                speaker_present = True
-                speaker_name = _named(present, bound)
-    if _REPEAT.search(text) and exchange:
+            exchange, speaker_id = matched[-1]
+            speaker_present = speaker_id in present
+            speaker_name = _named(present, speaker_id) if speaker_present else str(exchange.get("speaker_name") or "")
+    if repeats and exchange:
+        if exchange.get("speaker_id") and exchange["speaker_id"] != speaker_id:
+            return _not_established("Which earlier statement do you mean?")
         if speaker_present:
+            if (latest.get("ownership") == "gm" and latest != exchange and not named and not active
+                    and not reference_subject_tokens(text) and not possessive):
+                return _not_established("Which earlier statement do you mean?")
             return {
                 "action": "answer",
                 "owner": "npc",
@@ -846,6 +1253,8 @@ def continuity_directive(
             "line": _absent_line(exchange),
             "reason": "absent_npc_reference",
         }
+    if repeats:
+        return _not_established("Which earlier statement do you mean?")
     if _EARLIER.search(text):
         # "What did that notice say earlier?" names the object, not the speaker.
         if established_scene_object_ids(text, scene) and not _unique_named(text, present):
@@ -871,34 +1280,6 @@ def continuity_directive(
             return _ask()
         return None
     if _MEANING.search(text):
-        if re.search(r"\b(?:what was that|that name)\b", text, re.IGNORECASE):
-            chosen = exchange if isinstance(exchange, dict) and not exchange.get("uncertain") else None
-            if chosen is None:
-                certain = [
-                    row for row in rows
-                    if row.get("ownership") == "npc" and not row.get("uncertain")
-                    and (not active or str(row.get("speaker_id") or "") == active)
-                ]
-                chosen = certain[-1] if certain else None
-            if isinstance(chosen, dict):
-                chosen_name = speaker_name or str(chosen.get("speaker_name") or "They")
-                if speaker_present:
-                    return {
-                        "action": "answer",
-                        "owner": "npc",
-                        "npc_id": speaker_id or str(chosen.get("speaker_id") or ""),
-                        "npc_name": chosen_name,
-                        "line": _npc_quote(chosen_name, chosen),
-                        "reason": "repeat_delivered_statement",
-                    }
-                return {
-                    "action": "clarify",
-                    "owner": "gm",
-                    "npc_id": str(chosen.get("speaker_id") or ""),
-                    "npc_name": str(chosen.get("speaker_name") or ""),
-                    "line": _absent_line(chosen),
-                    "reason": "absent_npc_reference",
-                }
         if speaker_present:
             return _ask()
         if exchange:
@@ -919,55 +1300,9 @@ def continuity_directive(
         # the previous speaker, and an ambiguous object is not given to them either.
         if established_scene_object_ids(text, scene):
             return None
-        if exchange and str(exchange.get("requested_information") or "") in {"opinion", "personal_state"}:
-            return {
-                "action": "answer",
-                "owner": "npc",
-                "npc_id": speaker_id,
-                "npc_name": speaker_name,
-                "line": _npc_quote(speaker_name, exchange),
-                "reason": "repeat_delivered_statement",
-            }
         return _ask()
     if _vocative(text, present) and speaker_present and _QUESTION.search(text) and not gm_about_speech:
         return _ask()
-    if _AGAIN.search(text) and speaker_present and exchange and str(exchange.get("requested_information") or "") in {"opinion", "personal_state"}:
-        return {
-            "action": "answer",
-            "owner": "npc",
-            "npc_id": speaker_id,
-            "npc_name": speaker_name,
-            "line": _npc_quote(speaker_name, exchange),
-            "reason": "repeat_delivered_statement",
-        }
-    if _supplied_overlap(text, exchange) and not re.search(r"\bwhich\b.+\bmean\b", text, re.IGNORECASE):
-        # Keyword overlap with the previous answer is not a request to replay it.
-        # Questions can still reuse a statement that already covers them.
-        if not _QUESTION.search(text) or established_scene_object_ids(text, scene):
-            return None
-        if isinstance(exchange, dict):
-            from game.dialogue_authority import classify_answer_sufficiency
-
-            supplied = str(exchange.get("authorized_proposition") or exchange.get("supplied_text") or "")
-            if classify_answer_sufficiency(text, supplied) == "partially_informs":
-                return None
-        if speaker_present:
-            return {
-                "action": "answer",
-                "owner": "npc",
-                "npc_id": speaker_id,
-                "npc_name": speaker_name,
-                "line": _npc_quote(speaker_name, exchange),
-                "reason": "repeat_delivered_statement",
-            }
-        return {
-            "action": "clarify",
-            "owner": "gm",
-            "npc_id": str(exchange.get("speaker_id") or ""),
-            "npc_name": str(exchange.get("speaker_name") or ""),
-            "line": _absent_line(exchange),
-            "reason": "absent_npc_reference",
-        }
     return None
 
 

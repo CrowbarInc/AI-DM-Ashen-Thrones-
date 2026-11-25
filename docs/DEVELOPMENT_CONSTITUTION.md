@@ -1,7 +1,7 @@
 # Development Constitution
 
 Date established: 2026-09-19
-Last amended: 2026-10-18
+Last amended: 2026-11-13
 
 `docs/DEVELOPMENT_CONSTITUTION.md` is the standing repository-wide authority for
 how development agents enter, conduct, and hand off material work on Ashen
@@ -42,7 +42,9 @@ Current specialized authorities include, without attempting a complete catalog:
   `docs/validation_evidence_standard.md`, for checkpoint claims about
   player-AI-DM communication;
 - campaign-specific authoritative reports under `development/campaigns/`;
-- current-session orientation (`docs/NEXT_SESSION.md`).
+- current-session orientation (`docs/NEXT_SESSION.md`);
+- ruleset independence, stated in this Constitution. Executable selection
+  and capability contracts stay in `docs/ruleset_contract_registry.md`.
 
 Review handoff and session handoff are different surfaces. Generated
 `handoff/CURRENT_REVIEW.*` files are review exports. `docs/NEXT_SESSION.md` is
@@ -51,6 +53,45 @@ mirrors as source.
 
 If two authorities genuinely conflict, investigate provenance and scope. Do not
 silently choose the more convenient instruction.
+
+## Ruleset Independence
+
+Ashen Thrones is a system-agnostic AI Game Master and tabletop engine. The
+core is independent of any particular tabletop ruleset. A ruleset is an
+attached, replaceable source of mechanical authority. Pathfinder 1e is the
+initial supported ruleset, not the defining architecture of the core.
+
+The core owns generic campaign, conversation, state, persistence, and
+action-management responsibilities. It must not require one ruleset's
+mechanics in order to perform those responsibilities. When a mechanical
+operation has a result, the core commits that result through its state
+transaction. Narration does not become mechanical authority.
+
+Ruleset-specific legality, calculations, and consequences originate from the
+active ruleset or from another explicitly authorized mechanical authority.
+A ruleset is selected by explicit identity and version through a defined
+interface. Selection does not authorize arbitrary mid-campaign switching,
+unrestricted plugin execution, or silent use of a different ruleset.
+
+The architecture must let a future ruleset define additional mechanics and
+actions without hardcoding those mechanics into the core. A ruleset declares
+the capabilities it supports. The core handles an unsupported capability
+without borrowing another ruleset. When the active ruleset cannot resolve a
+requested mechanical operation, the engine reports that limitation.
+
+Campaign content and ruleset mechanics stay distinct where their
+responsibilities differ. A campaign may declare a dependency on a ruleset. A
+ruleset may supply content definitions. Neither relationship transfers
+ownership of generic engine responsibilities.
+
+Existing Pathfinder functionality may remain on an explicit legacy pathway
+while it is migrated. New architecture respects this boundary. A migration
+exception must be named.
+
+This section is the invariant. It does not prescribe module layout, class
+names, serialization, function signatures, or ruleset-specific identifiers.
+Those belong to the ruleset contract registry and the implementation that
+registry records.
 
 ## Session Entry
 

@@ -77,6 +77,11 @@ For **post-resolution** narration, turn meaning is snapshotted once into **CTIR*
   must integrate through explicit action, mechanics, state, validation,
   compatibility, replay, and provenance contracts rather than scattered
   conditionals.
+- The executable ruleset boundary selects an explicit identity and version,
+  discovers declared capabilities, and evaluates side-effect-free policy
+  requests. It is not a plugin loader, and the turn spine does not consult
+  it. Pathfinder 1e is the initial mechanical implementation. Unmigrated
+  Pathfinder modules remain explicit legacy pathways.
 
 ---
 

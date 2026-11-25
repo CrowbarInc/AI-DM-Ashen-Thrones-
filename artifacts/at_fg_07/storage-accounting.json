@@ -1,0 +1,553 @@
+{
+  "method": "AT-FG-06 NTFS directory allocation enumerator. File and directory counts exclude the TMP root and unsupported objects.",
+  "before": {
+    "files": 2119826,
+    "directories": 210218,
+    "apparent_bytes": 8719977906,
+    "allocated_bytes": 9837818224
+  },
+  "after": {
+    "files": 2064871,
+    "directories": 204886,
+    "apparent_bytes": 8407115386,
+    "allocated_bytes": 9502380168
+  },
+  "verified_removed": {
+    "files": 54955,
+    "directories": 5332,
+    "apparent_bytes": 312862520,
+    "allocated_bytes": 335438056
+  },
+  "execution_free_change": 90636288,
+  "free_observed": {
+    "before_census_start": 376934539264,
+    "before_census_end": 376933679104,
+    "execution_start": 376930959360,
+    "execution_end": 377021595648,
+    "after_census_start": 377017716736,
+    "after_census_end": 377007632384
+  },
+  "baseline_reproduced_by_second_traversal": true,
+  "before_top_by_allocated": [
+    {
+      "path": "compound_guard",
+      "files": 86570,
+      "directories": 5838,
+      "apparent_bytes": 234065012,
+      "allocated_bytes": 272243008
+    },
+    {
+      "path": "pr_play_cross_scene_recall_routing_integrity",
+      "files": 89440,
+      "directories": 6384,
+      "apparent_bytes": 212015106,
+      "allocated_bytes": 252731128
+    },
+    {
+      "path": "scene-scope-regression",
+      "files": 128059,
+      "directories": 20614,
+      "apparent_bytes": 167107813,
+      "allocated_bytes": 250904240
+    },
+    {
+      "path": "inventory_binding",
+      "files": 68576,
+      "directories": 5992,
+      "apparent_bytes": 198167516,
+      "allocated_bytes": 232095216
+    },
+    {
+      "path": "ordinary_admission",
+      "files": 54311,
+      "directories": 4539,
+      "apparent_bytes": 180934033,
+      "allocated_bytes": 207977408
+    },
+    {
+      "path": "campaign_ruleset_binding",
+      "files": 79852,
+      "directories": 5956,
+      "apparent_bytes": 130278556,
+      "allocated_bytes": 166286056
+    },
+    {
+      "path": "pr_play_49_workspace",
+      "files": 4578,
+      "directories": 1069,
+      "apparent_bytes": 154000730,
+      "allocated_bytes": 162839368
+    },
+    {
+      "path": "pr_play_47_workspace",
+      "files": 4446,
+      "directories": 1059,
+      "apparent_bytes": 151592986,
+      "allocated_bytes": 160143024
+    },
+    {
+      "path": "pr_play_short_multiturn_live_validation",
+      "files": 57939,
+      "directories": 3985,
+      "apparent_bytes": 131604902,
+      "allocated_bytes": 156879936
+    },
+    {
+      "path": "pr77_regression",
+      "files": 19129,
+      "directories": 1215,
+      "apparent_bytes": 144121398,
+      "allocated_bytes": 153542264
+    },
+    {
+      "path": "pr_play_provider_disabled_narration_turn_integrity",
+      "files": 54550,
+      "directories": 4660,
+      "apparent_bytes": 116679522,
+      "allocated_bytes": 143926624
+    },
+    {
+      "path": "authored_topic_retrieval",
+      "files": 34725,
+      "directories": 2549,
+      "apparent_bytes": 122575980,
+      "allocated_bytes": 138427872
+    }
+  ],
+  "before_nested_by_allocated": [
+    {
+      "path": "pr78a_regression/focused",
+      "files": 16209,
+      "directories": 932,
+      "apparent_bytes": 112780658,
+      "allocated_bytes": 120698464
+    },
+    {
+      "path": "pr78_regression/focused",
+      "files": 16209,
+      "directories": 932,
+      "apparent_bytes": 112775171,
+      "allocated_bytes": 120698464
+    },
+    {
+      "path": "pr77_regression/focused",
+      "files": 16209,
+      "directories": 932,
+      "apparent_bytes": 112728628,
+      "allocated_bytes": 120637024
+    },
+    {
+      "path": "at-fg-05-exec-r2/continuation.sqlite3",
+      "files": 1,
+      "directories": 0,
+      "apparent_bytes": 110104576,
+      "allocated_bytes": 110104576
+    },
+    {
+      "path": "pr_play_49_workspace/artifacts",
+      "files": 1304,
+      "directories": 552,
+      "apparent_bytes": 80318955,
+      "allocated_bytes": 83026080
+    },
+    {
+      "path": "pr_play_47_workspace/artifacts",
+      "files": 1178,
+      "directories": 542,
+      "apparent_bytes": 78044861,
+      "allocated_bytes": 80473096
+    },
+    {
+      "path": "at-fg-05-r1b-s372mqlr/control",
+      "files": 67,
+      "directories": 28,
+      "apparent_bytes": 72192596,
+      "allocated_bytes": 72319184
+    },
+    {
+      "path": "git_sync/inventory.json",
+      "files": 1,
+      "directories": 0,
+      "apparent_bytes": 68496957,
+      "allocated_bytes": 68497408
+    },
+    {
+      "path": "pr_play_05/pre04",
+      "files": 2257,
+      "directories": 69,
+      "apparent_bytes": 38673558,
+      "allocated_bytes": 43210576
+    },
+    {
+      "path": "pr_play_49_workspace/development",
+      "files": 1458,
+      "directories": 466,
+      "apparent_bytes": 38564639,
+      "allocated_bytes": 41041408
+    },
+    {
+      "path": "pr_play_47_workspace/development",
+      "files": 1458,
+      "directories": 466,
+      "apparent_bytes": 38563708,
+      "allocated_bytes": 41041408
+    },
+    {
+      "path": "pr_play_positive_action_live_retest/entry_git_status.txt",
+      "files": 1,
+      "directories": 0,
+      "apparent_bytes": 32810778,
+      "allocated_bytes": 32813056
+    }
+  ],
+  "top_by_allocated": [
+    {
+      "path": "compound_guard",
+      "files": 86570,
+      "directories": 5838,
+      "apparent_bytes": 234065012,
+      "allocated_bytes": 272243008
+    },
+    {
+      "path": "pr_play_cross_scene_recall_routing_integrity",
+      "files": 89440,
+      "directories": 6384,
+      "apparent_bytes": 212015106,
+      "allocated_bytes": 252731128
+    },
+    {
+      "path": "scene-scope-regression",
+      "files": 128059,
+      "directories": 20614,
+      "apparent_bytes": 167107813,
+      "allocated_bytes": 250904240
+    },
+    {
+      "path": "inventory_binding",
+      "files": 68576,
+      "directories": 5992,
+      "apparent_bytes": 198167516,
+      "allocated_bytes": 232095216
+    },
+    {
+      "path": "ordinary_admission",
+      "files": 54311,
+      "directories": 4539,
+      "apparent_bytes": 180934033,
+      "allocated_bytes": 207977408
+    },
+    {
+      "path": "campaign_ruleset_binding",
+      "files": 79852,
+      "directories": 5956,
+      "apparent_bytes": 130278556,
+      "allocated_bytes": 166286056
+    },
+    {
+      "path": "pr_play_49_workspace",
+      "files": 4578,
+      "directories": 1069,
+      "apparent_bytes": 154000730,
+      "allocated_bytes": 162839368
+    },
+    {
+      "path": "pr_play_47_workspace",
+      "files": 4446,
+      "directories": 1059,
+      "apparent_bytes": 151592986,
+      "allocated_bytes": 160143024
+    },
+    {
+      "path": "pr_play_short_multiturn_live_validation",
+      "files": 57939,
+      "directories": 3985,
+      "apparent_bytes": 131604902,
+      "allocated_bytes": 156879936
+    },
+    {
+      "path": "pr_play_provider_disabled_narration_turn_integrity",
+      "files": 54550,
+      "directories": 4660,
+      "apparent_bytes": 116679522,
+      "allocated_bytes": 143926624
+    },
+    {
+      "path": "authored_topic_retrieval",
+      "files": 34725,
+      "directories": 2549,
+      "apparent_bytes": 122575980,
+      "allocated_bytes": 138427872
+    },
+    {
+      "path": "social-reconciliation",
+      "files": 47459,
+      "directories": 3063,
+      "apparent_bytes": 104398729,
+      "allocated_bytes": 124492664
+    }
+  ],
+  "nested_by_allocated": [
+    {
+      "path": "at-fg-05-exec-r2/continuation.sqlite3",
+      "files": 1,
+      "directories": 0,
+      "apparent_bytes": 110104576,
+      "allocated_bytes": 110104576
+    },
+    {
+      "path": "pr_play_49_workspace/artifacts",
+      "files": 1304,
+      "directories": 552,
+      "apparent_bytes": 80318955,
+      "allocated_bytes": 83026080
+    },
+    {
+      "path": "pr_play_47_workspace/artifacts",
+      "files": 1178,
+      "directories": 542,
+      "apparent_bytes": 78044861,
+      "allocated_bytes": 80473096
+    },
+    {
+      "path": "at-fg-05-r1b-s372mqlr/control",
+      "files": 67,
+      "directories": 28,
+      "apparent_bytes": 72192596,
+      "allocated_bytes": 72319184
+    },
+    {
+      "path": "git_sync/inventory.json",
+      "files": 1,
+      "directories": 0,
+      "apparent_bytes": 68496957,
+      "allocated_bytes": 68497408
+    },
+    {
+      "path": "pr_play_05/pre04",
+      "files": 2257,
+      "directories": 69,
+      "apparent_bytes": 38673558,
+      "allocated_bytes": 43210576
+    },
+    {
+      "path": "pr_play_49_workspace/development",
+      "files": 1458,
+      "directories": 466,
+      "apparent_bytes": 38564639,
+      "allocated_bytes": 41041408
+    },
+    {
+      "path": "pr_play_47_workspace/development",
+      "files": 1458,
+      "directories": 466,
+      "apparent_bytes": 38563708,
+      "allocated_bytes": 41041408
+    },
+    {
+      "path": "pr78a_regression/focused",
+      "files": 1067,
+      "directories": 37,
+      "apparent_bytes": 33555269,
+      "allocated_bytes": 35736776
+    },
+    {
+      "path": "pr78_regression/focused",
+      "files": 1067,
+      "directories": 37,
+      "apparent_bytes": 33547459,
+      "allocated_bytes": 35736776
+    },
+    {
+      "path": "pr77_regression/focused",
+      "files": 1067,
+      "directories": 37,
+      "apparent_bytes": 33500819,
+      "allocated_bytes": 35675336
+    },
+    {
+      "path": "pr_play_positive_action_live_retest/entry_git_status.txt",
+      "files": 1,
+      "directories": 0,
+      "apparent_bytes": 32810778,
+      "allocated_bytes": 32813056
+    }
+  ],
+  "top_by_files": [
+    {
+      "path": "scene-scope-regression",
+      "files": 128059,
+      "directories": 20614,
+      "apparent_bytes": 167107813,
+      "allocated_bytes": 250904240
+    },
+    {
+      "path": "pr_play_cross_scene_recall_routing_integrity",
+      "files": 89440,
+      "directories": 6384,
+      "apparent_bytes": 212015106,
+      "allocated_bytes": 252731128
+    },
+    {
+      "path": "compound_guard",
+      "files": 86570,
+      "directories": 5838,
+      "apparent_bytes": 234065012,
+      "allocated_bytes": 272243008
+    },
+    {
+      "path": "campaign_ruleset_binding",
+      "files": 79852,
+      "directories": 5956,
+      "apparent_bytes": 130278556,
+      "allocated_bytes": 166286056
+    },
+    {
+      "path": "inventory_binding",
+      "files": 68576,
+      "directories": 5992,
+      "apparent_bytes": 198167516,
+      "allocated_bytes": 232095216
+    },
+    {
+      "path": "pr_play_short_multiturn_live_validation",
+      "files": 57939,
+      "directories": 3985,
+      "apparent_bytes": 131604902,
+      "allocated_bytes": 156879936
+    },
+    {
+      "path": "pr_play_unresolved_action_consequence_integrity",
+      "files": 57224,
+      "directories": 3929,
+      "apparent_bytes": 99353881,
+      "allocated_bytes": 124468560
+    },
+    {
+      "path": "pr_play_provider_disabled_narration_turn_integrity",
+      "files": 54550,
+      "directories": 4660,
+      "apparent_bytes": 116679522,
+      "allocated_bytes": 143926624
+    },
+    {
+      "path": "ordinary_admission",
+      "files": 54311,
+      "directories": 4539,
+      "apparent_bytes": 180934033,
+      "allocated_bytes": 207977408
+    },
+    {
+      "path": "pr_play_inspection_communication_admission_integrity",
+      "files": 51709,
+      "directories": 2987,
+      "apparent_bytes": 87708960,
+      "allocated_bytes": 108963960
+    },
+    {
+      "path": "social-reconciliation",
+      "files": 47459,
+      "directories": 3063,
+      "apparent_bytes": 104398729,
+      "allocated_bytes": 124492664
+    },
+    {
+      "path": "pr_play_repeat_statement_routing_ownership_integrity",
+      "files": 39881,
+      "directories": 2475,
+      "apparent_bytes": 63903671,
+      "allocated_bytes": 80672600
+    }
+  ],
+  "nested_by_files": [
+    {
+      "path": "pr_play_unresolved_action_consequence_integrity/final_acceptance_tmp",
+      "files": 14616,
+      "directories": 628,
+      "apparent_bytes": 21294787,
+      "allocated_bytes": 26672936
+    },
+    {
+      "path": "pr_play_foundational_live_interpretation_validation/final_acceptance_tmp",
+      "files": 14616,
+      "directories": 628,
+      "apparent_bytes": 21294066,
+      "allocated_bytes": 26672936
+    },
+    {
+      "path": "pr_play_unresolved_action_consequence_integrity/acceptance_tmp",
+      "files": 14406,
+      "directories": 619,
+      "apparent_bytes": 21140673,
+      "allocated_bytes": 26419064
+    },
+    {
+      "path": "pr_play_inspection_communication_admission_integrity/scoped-3czf0jm7",
+      "files": 11546,
+      "directories": 504,
+      "apparent_bytes": 13621619,
+      "allocated_bytes": 17871056
+    },
+    {
+      "path": "pr_play_inspection_communication_admission_integrity/regression_base_recall",
+      "files": 11480,
+      "directories": 501,
+      "apparent_bytes": 13584401,
+      "allocated_bytes": 17812584
+    },
+    {
+      "path": "pr_play_repeat_statement_routing_ownership_integrity/scoped-kns7hh71",
+      "files": 11480,
+      "directories": 502,
+      "apparent_bytes": 13584287,
+      "allocated_bytes": 17812584
+    },
+    {
+      "path": "pr_play_inspection_communication_admission_integrity/regression_base_scoped",
+      "files": 11480,
+      "directories": 501,
+      "apparent_bytes": 13584053,
+      "allocated_bytes": 17812584
+    },
+    {
+      "path": "social-reconciliation/scoped-fb0uf5ct",
+      "files": 11480,
+      "directories": 502,
+      "apparent_bytes": 13584024,
+      "allocated_bytes": 17812584
+    },
+    {
+      "path": "pr_play_repeat_statement_routing_ownership_integrity/recall-b3zee9ut",
+      "files": 11480,
+      "directories": 502,
+      "apparent_bytes": 13583985,
+      "allocated_bytes": 17812584
+    },
+    {
+      "path": "pr_play_cross_scene_recall_routing_integrity/acceptance_verified_isolated",
+      "files": 11480,
+      "directories": 501,
+      "apparent_bytes": 13543315,
+      "allocated_bytes": 17779816
+    },
+    {
+      "path": "pr_play_interpretation_communication_contract_consistency/final_acceptance_isolated",
+      "files": 11480,
+      "directories": 501,
+      "apparent_bytes": 13542664,
+      "allocated_bytes": 17779816
+    },
+    {
+      "path": "pr_play_short_multiturn_live_validation/final_acceptance_isolated",
+      "files": 11480,
+      "directories": 501,
+      "apparent_bytes": 13542620,
+      "allocated_bytes": 17779816
+    }
+  ],
+  "excluded_census_objects": [],
+  "group_deltas_reconciled": 30480,
+  "prior_apparent": 7985297304,
+  "prior_files": 1338396,
+  "cumulative_removed_files": 1393351,
+  "cumulative_apparent_before_at_fg_07_overhead": 8298159824
+}

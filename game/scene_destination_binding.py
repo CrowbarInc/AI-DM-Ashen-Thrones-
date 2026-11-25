@@ -74,6 +74,35 @@ def known_scene_ids_from_exits(exits: List[Dict[str, Any]]) -> Set[str]:
     return out
 
 
+_NAMED_DEPARTURE_RE = re.compile(
+    r"(?P<place>[a-z][a-z0-9' -]*?),\s+then\.\s+(?:i|we)\s+set off that way[.!]?",
+    re.IGNORECASE,
+)
+
+
+def named_departure_destination(text: str | None) -> str | None:
+    """Extract the destination of a bare selection followed by explicit departure."""
+    match = _NAMED_DEPARTURE_RE.fullmatch(" ".join(str(text or "").split()))
+    return match["place"] if match else None
+
+
+def named_departure_route_ids(place: str, exits: list[dict]) -> set[str]:
+    """Match the complete name against authored route names and aliases."""
+    def key(name: str) -> str:
+        return slugify(re.sub(r"^(?:the|a|an)\s+", "", name.strip(), flags=re.I))
+
+    wanted = key(place)
+    matches = set()
+    for row in exits:
+        label = str(row.get("label") or "")
+        # Authored labels may describe an action such as "Seek the fortress trail".
+        subject = re.sub(r"^seek\s+", "", label, flags=re.I)
+        names = [label, subject, *(str(alias) for alias in row.get("aliases") or [])]
+        if wanted and any(wanted == key(name) for name in names):
+            matches.add(row["id"])
+    return matches
+
+
 def _strict_unique_exit_destination(dest: str, exits: List[Dict[str, Any]]) -> Optional[str]:
     raw = (dest or "").strip()
     if not raw or not isinstance(exits, list):
@@ -219,7 +248,7 @@ _COMMITMENT_PREFIX_RE = re.compile(
     re.IGNORECASE,
 )
 _TRAVEL_VERB_PREFIX_RE = re.compile(
-    r"^(?:(?:please\s+)?"
+    r"^(?:(?:i|we)\s+)?(?:(?:please\s+)?"
     r"(?:head|heads|heading|go|goes|going|walk|walks|walking|run|runs|running|"
     r"travel|travels|traveling|travelling|move|moves|moving|come|comes|coming|"
     r"return|returns|returning|journey|journeys|enter|enters|entering|"
@@ -307,12 +336,12 @@ def _unique_exit_target_from_destination_identity(
     return _unique_target(hits)
 
 
-def resolve_place_phrase_to_exit_target(
+def _resolve_known_place_phrase(
     phrase: str,
     exits: List[Dict[str, Any]],
     known_scene_ids: Set[str],
 ) -> Optional[str]:
-    """Map a free-text place phrase to a single exit ``target_scene_id``; fail closed."""
+    """Map one place phrase to a single known exit. Does not drop purpose language."""
     tid = _strict_unique_exit_destination(phrase, exits)
     if not tid:
         tid = _declared_unique_exit_target_for_dest(phrase, exits)
@@ -321,6 +350,26 @@ def resolve_place_phrase_to_exit_target(
     if tid and tid in known_scene_ids:
         return tid
     return None
+
+
+def resolve_place_phrase_to_exit_target(
+    phrase: str,
+    exits: List[Dict[str, Any]],
+    known_scene_ids: Set[str],
+) -> Optional[str]:
+    """Map a free-text place phrase to a single exit ``target_scene_id``; fail closed.
+
+    A purpose, reason, or dangling participle stays attached only when that full
+    phrase is itself an authored destination. Otherwise the remainder is tried
+    against the same catalog. No second binder and no new route.
+    """
+    tid = _resolve_known_place_phrase(phrase, exits, known_scene_ids)
+    if tid or _phrase_names_authored_destination(phrase, exits):
+        return tid
+    peeled = destination_phrase_respecting_purpose_tail(phrase, exits)
+    if not peeled or _normalized_destination_key(peeled) == _normalized_destination_key(phrase):
+        return None
+    return _resolve_known_place_phrase(peeled, exits, known_scene_ids)
 
 
 def _strip_travel_commitment_prefix(text: str) -> str:
@@ -410,6 +459,131 @@ def extract_travel_destination_phrase(text: str) -> Optional[str]:
     return None
 
 
+_TRAVEL_SELECTION_VERB_RE = re.compile(
+    r"\b(?:go|goes|going|head|heads|heading|enter|enters|entering|leave|leaves|leaving|"
+    r"travel|travels|traveling|travelling|walk|walks|walking|follow|follows|following|"
+    r"pursue|pursues|pursuing|take|takes|taking|return|returns|returning|exit|exits|exiting|"
+    r"proceed|proceeds|proceeding|depart|departs|departing)\b",
+    re.IGNORECASE,
+)
+_NONTRAVEL_GOVERNING_RE = re.compile(
+    r"\b(?:read|reads|reading|examine|examines|examining|inspect|inspects|inspecting|"
+    r"study|studies|studying|search|searching|ask|asks|asking|tell|tells|telling)\b",
+    re.IGNORECASE,
+)
+_COMPOUND_JOIN_RE = re.compile(r"\b(?:and then|and|then)\b", re.IGNORECASE)
+_GENERIC_DESTINATION_TOKENS = frozenset(
+    {
+        "gate",
+        "exit",
+        "door",
+        "road",
+        "street",
+        "way",
+        "path",
+        "track",
+        "trail",
+        "route",
+        "passage",
+        "entrance",
+        "lane",
+        "through",
+        "into",
+        "toward",
+        "towards",
+        "northwest",
+        "northeast",
+        "southwest",
+        "southeast",
+        "north",
+        "south",
+        "east",
+        "west",
+        "missing",
+        "patrol",
+        "rumor",
+        "rumour",
+    }
+)
+
+
+def _topic_return_travel_remainder(raw: str) -> str | None:
+    """'' blocks travel. A remainder is the physical clause. None means not a topic return."""
+    from game.conversational_continuity import conversational_topic_return, without_nonphysical_clauses
+
+    if not conversational_topic_return(raw):
+        return None
+    remainder = without_nonphysical_clauses(raw)
+    if not remainder or remainder == raw or not _TRAVEL_SELECTION_VERB_RE.search(remainder):
+        return ""
+    return remainder
+
+
+def affirmative_travel_selection_allowed(text: str | None) -> bool:
+    """True only when this utterance affirmatively authorizes exit selection.
+
+    Negation, questions, non-travel verbs, and a travel clause joined to another
+    action do not authorize a move. An earlier negated clause does not cancel a
+    later affirmative one: that case does not match the existing negation shape.
+    """
+    from game.player_commitment import committed_world_text
+    from game.intent_parser import _explicit_stay_or_travel_negation
+
+    raw = committed_world_text(str(text or ""))
+    if not raw:
+        return False
+    topic_remainder = _topic_return_travel_remainder(raw)
+    if topic_remainder == "":
+        return False
+    if isinstance(topic_remainder, str):
+        raw = topic_remainder
+    if _looks_like_information_question(raw):
+        return False
+    if _explicit_stay_or_travel_negation(raw):
+        return False
+    travel = _TRAVEL_SELECTION_VERB_RE.search(raw)
+    nontravel = _NONTRAVEL_GOVERNING_RE.search(raw)
+    if travel and nontravel and _COMPOUND_JOIN_RE.search(raw):
+        return False
+    return bool(travel or _looks_like_return_or_back_intent(raw))
+
+
+def _distinctive_destination_tokens(text: str) -> Set[str]:
+    return {
+        tok
+        for tok in _exit_content_tokens(text)
+        if tok not in _GENERIC_DESTINATION_TOKENS and len(tok) >= 4
+    }
+
+
+def _unique_exit_by_distinctive_tokens(
+    text: str,
+    exits: List[Dict[str, Any]],
+    known: Optional[Set[str]],
+) -> Optional[str]:
+    """One authored exit whose label, alias, or destination id shares a distinctive token."""
+    tokens = _distinctive_destination_tokens(text)
+    if not tokens:
+        return None
+    hits: List[str] = []
+    for ex in exits or []:
+        if not isinstance(ex, dict):
+            continue
+        label = str(ex.get("label") or "").strip()
+        target = str(ex.get("target_scene_id") or ex.get("targetSceneId") or "").strip()
+        if not target:
+            continue
+        if known is not None and target not in known:
+            continue
+        surface = _exit_content_tokens(label) | _exit_content_tokens(target.replace("_", " "))
+        for alias in ex.get("aliases") or []:
+            surface |= _exit_content_tokens(str(alias))
+        surface -= _GENERIC_DESTINATION_TOKENS
+        if tokens & surface:
+            hits.append(target)
+    return _unique_target(hits)
+
+
 def _looks_like_information_question(text: str) -> bool:
     raw = str(text or "").strip()
     if not raw:
@@ -454,6 +628,13 @@ def resolve_authored_exit_from_player_travel(
     raw = committed_world_text(text)
     if not raw or not exits:
         return None
+    topic_remainder = _topic_return_travel_remainder(raw)
+    if topic_remainder == "":
+        return None
+    if isinstance(topic_remainder, str):
+        raw = topic_remainder
+    if not affirmative_travel_selection_allowed(raw):
+        return None
     if _looks_like_information_question(raw):
         return None
     known = set(known_scene_ids) if known_scene_ids is not None else known_scene_ids_from_exits(exits)
@@ -471,7 +652,7 @@ def resolve_authored_exit_from_player_travel(
         tid = _unique_return_or_single_exit_target(exits)
         if tid and tid in known:
             return tid
-    return None
+    return _unique_exit_by_distinctive_tokens(raw, exits, known)
 
 
 def _pursuit_action_metadata(normalized_action: Dict[str, Any]) -> Dict[str, Any]:
@@ -768,6 +949,19 @@ def evaluate_destination_semantic_compatibility(
             "compatibility_clear_target": False,
         }
 
+    # The route catalog already named this arrival. A word inside that
+    # authored label (Inn, Looking) is not a reason to discard the route.
+    if _authored_name_selects_target(phrase, exits, tid):
+        return {
+            **base_meta,
+            "destination_compatibility_checked": True,
+            "destination_compatibility_passed": True,
+            "destination_compatibility_failure_reason": None,
+            "destination_compatibility_expected_kind": _TRAVEL_BUCKET_GENERIC,
+            "destination_compatibility_actual_kind": _TRAVEL_BUCKET_GENERIC,
+            "compatibility_clear_target": False,
+        }
+
     loaded: Optional[Dict[str, Any]] = None
     if load_scene_fn is not None:
         try:
@@ -874,6 +1068,38 @@ def reconcile_scene_transition_destination(
     source = "normalized_action_target"
     reason = "use_parser_or_affordance_target_scene_id"
     semantic = "explicit_scene_id"
+
+    choice = classify_destination_choice(raw, exits)
+    if choice.get("kind") == "unresolved":
+        # Neither alternative may become the arrival. The admitted route id
+        # stays untouched because this turn does not commit a transition.
+        return {
+            "effective_target_scene_id": None,
+            "destination_binding_source": "unresolved_destination_alternatives",
+            "destination_binding_conflict": True,
+            "destination_binding_conflict_candidates": list(choice.get("exit_ids") or []),
+            "destination_binding_resolution_reason": "unresolved_destination_alternatives",
+            "destination_semantic_kind": "named_place",
+            "suppress_loose_inference": True,
+            "clear_proposed_target": True,
+        }
+    if (
+        choice.get("kind") == "correction"
+        and proposed
+        and choice.get("target_scene_id") == proposed
+        and explicit_resolved
+        and explicit_resolved != proposed
+    ):
+        return {
+            "effective_target_scene_id": proposed,
+            "destination_binding_source": "corrected_destination",
+            "destination_binding_conflict": True,
+            "destination_binding_conflict_candidates": sorted({explicit_resolved, proposed}),
+            "destination_binding_resolution_reason": "correction_preserves_authoritative_route",
+            "destination_semantic_kind": "named_place",
+            "suppress_loose_inference": True,
+            "clear_proposed_target": False,
+        }
 
     if explicit_resolved:
         effective = explicit_resolved
@@ -1025,3 +1251,364 @@ def try_embedded_named_place_scene_action(
         "target_scene_id": tid,
         "metadata": bind_meta,
     }
+
+
+_HEDGE_OR_RE = re.compile(r"\bor\s+whatever\b", re.IGNORECASE)
+_HEDGE_SIDE_RE = re.compile(
+    r"^(?:whatever(?:\s+(?:they|you)\s+call\s+it)?|so\s+they\s+call\s+it|"
+    r"as\s+(?:they|folks)\s+call\s+it|or\s+so|something|the\s+like)\b",
+    re.IGNORECASE,
+)
+_CORRECTION_OR_RATHER_RE = re.compile(
+    r"\bor rather\b[,:\s-]*(?P<chosen>.+)$",
+    re.IGNORECASE,
+)
+_CORRECTION_MAKE_THAT_RE = re.compile(
+    r"\bactually,?\s+make that\s+(?P<chosen>.+)$",
+    re.IGNORECASE,
+)
+_CORRECTION_MEANT_RE = re.compile(
+    r"^(?:i|we)\s+meant\s+(?P<chosen>.+?)(?:[,.]?\s+not\s+(?P<rejected>.+))?$",
+    re.IGNORECASE,
+)
+_CORRECTION_NOT_THEN_RE = re.compile(
+    r"^not\s+(?:the\s+)?(?P<rejected>.+?)[.]\s*(?P<chosen>.+)$",
+    re.IGNORECASE,
+)
+_CATALOG_CHOICE_RE = re.compile(
+    r"\b(?:one of (?:those|these) two(?:\s+routes)?|whichever\s+(?:route|path|road|way|exit))\b",
+    re.IGNORECASE,
+)
+_EITHER_OR_RE = re.compile(r"\beither\s+(?P<a>.+?)\s+or\s+(?P<b>.+)$", re.IGNORECASE)
+_MAYBE_PAIR_RE = re.compile(
+    r"\bmaybe\s+(?P<a>.+?)\s*,?\s*maybe\s+(?P<b>.+)$",
+    re.IGNORECASE,
+)
+_VERSUS_RE = re.compile(r"\b(?P<a>.+?)\s+(?:versus|vs\.?)\s+(?P<b>.+)$", re.IGNORECASE)
+_BETWEEN_RE = re.compile(
+    r"\b(?:deciding|choosing|choose|decided)\s+between\s+(?P<a>.+?)\s+and\s+(?P<b>.+)$",
+    re.IGNORECASE,
+)
+_MODAL_QUESTION_RE = re.compile(r"\b(?:should|could|would)\s+(?:i|we)\b", re.IGNORECASE)
+_NONDESTINATION_ACTION_RE = re.compile(
+    r"\b(?:ask|attack|inspect|examine|search|persuade|open|read|tell|say)\b",
+    re.IGNORECASE,
+)
+_LEADING_DESTINATION_RE = re.compile(
+    r"^(?:either|maybe|perhaps|rather)\s+|"
+    r"^(?:(?:i|we)\s+)?(?:could|should|might|will|would|can|want(?:\s+to)?|need(?:\s+to)?)?\s*"
+    r"(?:go|head|walk|travel|return|take|leave|follow|exit|enter|proceed|depart)"
+    r"(?:\s+(?:back|off|out))?(?:\s+(?:to|toward|towards|for|along|down|through))?\s*",
+    re.IGNORECASE,
+)
+
+
+def _choice_none() -> Dict[str, Any]:
+    return {"kind": "none", "exit_ids": [], "target_scene_id": None, "phrases": []}
+
+
+def _authored_choice_rows(exits: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    from game.route_authority import authored_exit_rows
+
+    return authored_exit_rows({"scene": {"exits": list(exits or [])}})
+
+
+def _clean_destination_phrase(phrase: str) -> str:
+    text = " ".join(str(phrase or "").split()).strip(" \t\"'.,;:!?-")
+    return re.sub(r"^(?:the|a|an)\s+", "", text, flags=re.IGNORECASE).strip()
+
+
+# A trailing reason or participle is not part of the destination name.
+# Bare "to" and "for" are not tails: they occur inside authored place names.
+# "of Looking" is a name, not a dangling participle.
+_UNAMBIGUOUS_PURPOSE_TAIL_RE = re.compile(
+    r"\s+(?:"
+    r"(?:looking|hoping|searching|trying|seeking|waiting)\s+(?:for|to)\b"
+    r"|(?:thinking|wondering)\s+about\b"
+    r"|because\s+(?:i|we|a|an|the|it|he|she|they|there|my|our|you)\b"
+    r"|since\s+(?:i|we|it|he|she|they|there|my|our|you)\b"
+    r"|so\s+(?:i|we)\s+can\b"
+    r"|so\s+that\b"
+    r"|in\s+order\s+to\b"
+    r"|for\s+the\s+purpose\s+of\b"
+    r"|with\s+the\s+intention\s+of\b"
+    r").*$",
+    re.IGNORECASE,
+)
+_DANGLING_MOTIVATION_RE = re.compile(
+    r"^(?P<place>.+?)(?<!of)\s+(?:looking|hoping|searching|trying|seeking|thinking|waiting|wanting)\s*$",
+    re.IGNORECASE,
+)
+
+
+def _normalized_destination_key(phrase: str) -> str:
+    text = _clean_destination_phrase(phrase).casefold()
+    text = re.sub(r"^seek\s+", "", text).strip()
+    return " ".join(text.split())
+
+
+def _authored_name_rows(phrase: str, exits: List[Dict[str, Any]] | None) -> List[Dict[str, Any]]:
+    """Exits whose label, alias, or destination id is exactly this phrase."""
+    key = _normalized_destination_key(phrase)
+    if len(key) < 3 or not exits:
+        return []
+    found: List[Dict[str, Any]] = []
+    for row in exits:
+        if not isinstance(row, dict):
+            continue
+        label = str(row.get("label") or "")
+        names = [label, re.sub(r"^seek\s+", "", label, flags=re.IGNORECASE)]
+        names.extend(str(alias) for alias in (row.get("aliases") or []))
+        target = str(row.get("target_scene_id") or row.get("targetSceneId") or "").replace("_", " ")
+        names.append(target)
+        if any(key == _normalized_destination_key(name) for name in names):
+            found.append(row)
+    return found
+
+
+def _phrase_names_authored_destination(phrase: str, exits: List[Dict[str, Any]] | None) -> bool:
+    """True when the whole phrase is one authored label, alias, or destination id."""
+    return bool(_authored_name_rows(phrase, exits))
+
+
+def _authored_name_selects_target(phrase: str, exits: List[Dict[str, Any]] | None, target: str) -> bool:
+    """True when this phrase is the authored name of the exit that arrives at target."""
+    wanted = str(target or "").strip()
+    if not wanted:
+        return False
+    for row in _authored_name_rows(phrase, exits):
+        tid = str(row.get("target_scene_id") or row.get("targetSceneId") or "").strip()
+        if tid == wanted:
+            return True
+    return False
+
+
+def peel_destination_purpose_tail(phrase: str) -> str:
+    """Drop a structural purpose tail. Does not consult the route catalog."""
+    text = " ".join(str(phrase or "").split()).strip(" \t\"'.,;:!?")
+    if not text:
+        return ""
+    peeled = _UNAMBIGUOUS_PURPOSE_TAIL_RE.sub("", text).strip(" \t\"'.,;:!?")
+    if peeled:
+        text = peeled
+    dangling = _DANGLING_MOTIVATION_RE.match(text)
+    if dangling:
+        place = dangling.group("place").strip(" \t\"'.,;:!?")
+        if place and not re.search(r"\bof$", place, flags=re.IGNORECASE):
+            text = place
+    return text
+
+
+def destination_phrase_respecting_purpose_tail(
+    phrase: str,
+    exits: List[Dict[str, Any]] | None = None,
+) -> str:
+    """Return the destination the player named, without a trailing purpose.
+
+    An authored name that contains purpose words is kept whole. A dangling
+    participle is removed only when the remainder is an authored name. A
+    reason clause (because, so I can, looking for) is not a destination.
+    """
+    raw = " ".join(str(phrase or "").split()).strip(" \t\"'.,;:!?")
+    if not raw:
+        return ""
+    if exits and _phrase_names_authored_destination(raw, exits):
+        return raw
+    peeled = peel_destination_purpose_tail(raw)
+    if not peeled or _normalized_destination_key(peeled) == _normalized_destination_key(raw):
+        return raw
+    if not exits:
+        return peeled
+    if _phrase_names_authored_destination(peeled, exits):
+        return peeled
+    if _UNAMBIGUOUS_PURPOSE_TAIL_RE.search(raw):
+        return peeled
+    # "the gate hoping" is not the full label "Return to the Gate".
+    # Keep the peel only when that remainder is one existing route.
+    known = known_scene_ids_from_exits(exits)
+    if _resolve_known_place_phrase(peeled, exits, known):
+        return peeled
+    return raw
+
+
+def _side_phrase(part: str) -> str:
+    """Destination words on one side of a choice. Empty means a bare return."""
+    clause = re.split(r"\s+and\s+", str(part or ""), maxsplit=1, flags=re.IGNORECASE)[0]
+    clause = " ".join(clause.split()).strip(" \t\"'.,;:!?")
+    extracted = extract_travel_destination_phrase(clause)
+    if extracted:
+        return _clean_destination_phrase(extracted)
+    if extracted == "":
+        return ""
+    trimmed = _LEADING_DESTINATION_RE.sub("", clause).strip()
+    return _clean_destination_phrase(trimmed or clause)
+
+
+def _rows_for_phrase(phrase: str, rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    raw = _clean_destination_phrase(phrase)
+    if not raw or _HEDGE_SIDE_RE.match(raw) or len(raw) < 3:
+        return []
+    dh = raw.casefold()
+    hits: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+    for row in rows:
+        names = [str(row.get("label") or "")]
+        names.extend(str(alias) for alias in (row.get("aliases") or []))
+        if names[0]:
+            names.append(re.sub(r"^seek\s+", "", names[0], flags=re.IGNORECASE))
+        matched = False
+        for name in names:
+            cleaned = " ".join(name.split()).strip()
+            bare = re.sub(r"^(?:the|a|an)\s+", "", cleaned, flags=re.IGNORECASE).casefold()
+            if len(bare) < 3:
+                continue
+            if dh == bare or dh in bare or bare in dh:
+                matched = True
+                break
+        ident = str(row.get("id") or "")
+        if matched and ident and ident not in seen:
+            seen.add(ident)
+            hits.append(row)
+    return hits
+
+
+def _pack_choice(kind: str, chosen: List[Dict[str, Any]], phrases: List[str]) -> Dict[str, Any]:
+    ids: List[str] = []
+    seen: Set[str] = set()
+    for row in chosen:
+        ident = str(row.get("id") or "")
+        if ident and ident not in seen:
+            seen.add(ident)
+            ids.append(ident)
+    target = None
+    if kind == "correction" and len(chosen) == 1:
+        target = str(chosen[0].get("target_scene_id") or chosen[0].get("targetSceneId") or "") or None
+    return {"kind": kind, "exit_ids": ids, "target_scene_id": target, "phrases": [p for p in phrases if p]}
+
+
+def _substantive_place(phrase: str) -> bool:
+    tokens = [
+        tok for tok in re.findall(r"[a-z0-9']+", phrase.casefold())
+        if len(tok) >= 3 and tok not in _EXIT_PHRASE_STOPWORDS and tok not in _TRAVEL_VERB_STOPWORDS
+        and tok not in _GENERIC_DESTINATION_TOKENS and tok not in {"maybe", "either", "rather", "actually"}
+    ]
+    return bool(tokens)
+
+
+def classify_destination_choice(text: str | None, exits: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Tell a supported correction from unresolved destination alternatives.
+
+    A unique corrected destination is not travel authority by itself. Two
+    requested destinations are not permission to choose one. Questions stay
+    with the existing question owners. Synonym hedges such as ``or whatever``
+    are not a second destination.
+    """
+    none = _choice_none()
+    body = " ".join(str(text or "").split())
+    if not body or not exits:
+        return none
+    if "?" in body or re.match(
+        r"^\s*(?:who|what|when|where|why|how|is|are|do|does|did|can|could|should|would)\b",
+        body,
+        re.IGNORECASE,
+    ):
+        return none
+    rows = _authored_choice_rows(exits)
+    if not rows:
+        return none
+
+    def correction_from(chosen_text: str) -> Dict[str, Any] | None:
+        # A later independent action is not part of the corrected destination.
+        if _NONDESTINATION_ACTION_RE.search(body) or re.search(r"\band\b", chosen_text, re.IGNORECASE):
+            return None
+        phrase = _side_phrase(chosen_text) or _clean_destination_phrase(chosen_text)
+        matched = _rows_for_phrase(phrase, rows) if phrase else []
+        if len(matched) == 1:
+            return _pack_choice("correction", matched, [phrase])
+        # A correction marker that still does not name one route is not travel.
+        return _pack_choice("unresolved", matched, [phrase or _clean_destination_phrase(chosen_text)])
+
+    make_that = _CORRECTION_MAKE_THAT_RE.search(body)
+    if make_that:
+        found = correction_from(make_that.group("chosen"))
+        if found is not None:
+            return found
+    rather = _CORRECTION_OR_RATHER_RE.search(body)
+    if rather:
+        found = correction_from(rather.group("chosen"))
+        if found is not None:
+            return found
+    meant = _CORRECTION_MEANT_RE.match(body.rstrip(".!?"))
+    if meant:
+        found = correction_from(meant.group("chosen"))
+        if found is not None:
+            return found
+    not_then = _CORRECTION_NOT_THEN_RE.match(body.rstrip())
+    if not_then:
+        found = correction_from(not_then.group("chosen"))
+        if found is not None:
+            return found
+    if _HEDGE_OR_RE.search(body):
+        return none
+    if _CATALOG_CHOICE_RE.search(body) and len(rows) > 1:
+        return _pack_choice("unresolved", rows[:4], [])
+
+    parts: List[str] | None = None
+    either = _EITHER_OR_RE.search(body)
+    maybe = _MAYBE_PAIR_RE.search(body)
+    versus = _VERSUS_RE.search(body)
+    between = _BETWEEN_RE.search(body)
+    if either:
+        parts = [either.group("a"), either.group("b")]
+    elif maybe:
+        parts = [maybe.group("a"), maybe.group("b")]
+    elif versus:
+        parts = [versus.group("a"), versus.group("b")]
+    elif between:
+        parts = [between.group("a"), between.group("b")]
+    else:
+        pieces = [piece for piece in re.split(r"\s+or\s+", body, flags=re.IGNORECASE) if piece.strip()]
+        if len(pieces) >= 2:
+            parts = pieces
+    if not parts:
+        return none
+
+    phrases: List[str] = []
+    matched: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+    unmatched: List[str] = []
+    for part in parts:
+        phrase = _side_phrase(part)
+        if phrase == "" and _looks_like_return_or_back_intent(part):
+            for row in rows:
+                if re.search(r"\b(?:return|back)\b", str(row.get("label") or ""), re.IGNORECASE):
+                    ident = str(row.get("id") or "")
+                    if ident and ident not in seen:
+                        seen.add(ident)
+                        matched.append(row)
+            phrases.append("return")
+            continue
+        if not phrase or _HEDGE_SIDE_RE.match(phrase):
+            continue
+        phrases.append(phrase)
+        found = _rows_for_phrase(phrase, rows)
+        if found:
+            for row in found:
+                ident = str(row.get("id") or "")
+                if ident and ident not in seen:
+                    seen.add(ident)
+                    matched.append(row)
+        else:
+            # A side the catalog does not name is still an alternative.
+            # Generic words such as "north road" must not disappear and
+            # leave some other route free to travel.
+            unmatched.append(phrase)
+    distinct = len({str(row.get("id") or "") for row in matched})
+    alternatives = distinct + len(unmatched)
+    modal = bool(_MODAL_QUESTION_RE.search(body))
+    if distinct > 1 or (distinct == 1 and unmatched) or len(unmatched) >= 2 or (modal and alternatives >= 2):
+        return _pack_choice("unresolved", matched, phrases)
+    # Two names for one authoritative route are synonyms, not a choice.
+    if distinct == 1 and not unmatched and not modal:
+        return _pack_choice("correction", matched, phrases)
+    return none

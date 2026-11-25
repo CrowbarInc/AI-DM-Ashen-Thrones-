@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import os
 import platform
-import shutil
 import subprocess
 import sys
 import time
@@ -31,6 +30,7 @@ from tools.atgb.isolation import (
     prepare_isolated_store,
     repo_root,
 )
+from tools.execution_workspace import OwnedWorkspace
 from tools.atgb.results import (
     blank_judgment,
     evidence_distinction,
@@ -347,22 +347,26 @@ def _run_scenario(
     cost_status: str,
 ) -> tuple[dict[str, Any], list[dict[str, Any]], str | None]:
     store_parent = Path(config.output_dir) / "stores" if config.keep_stores and config.output_dir else None
+    owned_workspace: OwnedWorkspace | None = None
+    caller_store: Path | None = None
     if store_parent is not None:
         store_parent.mkdir(parents=True, exist_ok=True)
-        store = store_parent / f"{scenario['scenario_id']}-{uuid.uuid4().hex}"
+        caller_store = store_parent / f"{scenario['scenario_id']}-{uuid.uuid4().hex}"
+        store = caller_store
     else:
-        from tempfile import mkdtemp
-
-        temporary_root = repo / "development" / "tmp"
-        temporary_root.mkdir(parents=True, exist_ok=True)
-        store = Path(mkdtemp(prefix=f"atgb-{scenario['scenario_id']}-", dir=temporary_root))
-    prepared = prepare_isolated_store(
-        store,
-        scenario_id=scenario["scenario_id"],
-        repo=repo,
-        player_campaign_dir=player_campaign,
-    )
+        owned_workspace = OwnedWorkspace.allocate(
+            repo / "development" / "tmp",
+            f"atgb-{scenario['scenario_id']}-",
+        )
+        store = owned_workspace.root
+    execution_error: BaseException | None = None
     try:
+        prepared = prepare_isolated_store(
+            store,
+            scenario_id=scenario["scenario_id"],
+            repo=repo,
+            player_campaign_dir=player_campaign,
+        )
         location_id = _location_id(scenario, manifest)
         if config.mode == "provider_disabled_simulated":
             captured, stop = _simulate_scenario(
@@ -422,9 +426,19 @@ def _run_scenario(
             "authoritative_context": authoritative_context(scenario, manifest),
         }
         return record, turns, stop
+    except BaseException as exc:
+        execution_error = exc
+        if caller_store is not None:
+            print(f"ATGB left caller-owned store at {caller_store}", file=sys.stderr)
+        raise
     finally:
-        if not config.keep_stores:
-            shutil.rmtree(prepared, ignore_errors=True)
+        if owned_workspace is not None:
+            try:
+                owned_workspace.discard()
+            except OSError as exc:
+                print(f"ATGB could not remove owned store {owned_workspace.root}: {exc}", file=sys.stderr)
+                if execution_error is None:
+                    raise
 
 
 def _location_id(scenario: Mapping[str, Any], manifest: Mapping[str, Any]) -> Any:

@@ -8,6 +8,7 @@ the existing production turn pipeline already understands.
 
 from __future__ import annotations
 
+import re
 from typing import Any, Callable
 
 
@@ -72,6 +73,106 @@ def visible_catalog(scene: dict | None, world: dict | None) -> dict[str, dict[st
         if str(npc.get("location") or "").strip() == scene_id:
             out[entity_id] = {"kind": "npc", "row": npc}
     return out
+
+
+def dialogue_catalog(scene: dict | None, world: dict | None, session: dict | None) -> dict[str, dict]:
+    """Public NPCs backed by the same current-scene roster as the social resolver."""
+    from game.interaction_context import canonical_scene_addressable_roster
+
+    def available(row):
+        return (not any(row.get(key) for key in ("hidden", "gm_only"))
+                and all(row.get(key) is not False for key in (
+                    "visible", "public", "accessible", "reachable", "addressable", "interaction_available"))
+                and row.get("availability") in (None, "", "available"))
+
+    current = _scene_obj(scene)
+    sid = current.get("id")
+    if not sid or (session or {}).get("active_scene_id", sid) != sid:
+        return {}
+    presence = ((session or {}).get("scene_state") or {}).get("entity_presence") or {}
+    sources: dict[str, list[dict]] = {}
+    for row in (world or {}).get("npcs") or []:
+        if isinstance(row, dict) and row.get("id"):
+            sources.setdefault(row["id"], []).append(row)
+    specs: dict[str, list[dict]] = {}
+    for row in current.get("addressables") or []:
+        if isinstance(row, dict) and row.get("id"):
+            specs.setdefault(row["id"], []).append(row)
+    result = {}
+    for row in canonical_scene_addressable_roster(world, sid, scene_envelope={"scene": current}, session=session):
+        entity_id = row.get("id")
+        native = sources.get(entity_id, [])
+        authored = specs.get(entity_id, [])
+        if (presence.get(entity_id) == "offscene" or len(native) > 1 or len(authored) > 1 or not available(row)
+                or any(not available(source) for source in (*native, *authored))):
+            continue
+        if (native and native[0].get("location") == sid) or (
+            not native and authored and authored[0].get("kind") == "npc"
+            and authored[0].get("scene_id", sid) == sid
+        ):
+            result[entity_id] = row
+    return result
+
+
+def reconcile_visible_target(ref, operation, *, evidence, player_text, scene, world, session):
+    """Bind a current prompt passage only when the request independently agrees."""
+    from game.conversational_orchestration import _aliases, _scene_object_reference_matches
+    from game.ordinary_semantic_ownership import assess_addressee_grounding
+    from game.referenced_surface import AUTHORITY_AUTHORED_INTERACTABLE, classify_referenced_surface
+
+    if operation not in {"ASK", "INSPECT"}:
+        return None, "unsupported_operation"
+    fact = evidence.get(ref)
+    if not fact or not re.fullmatch(r"visible:[0-9]+", ref):
+        return None, "missing_current_visible_evidence"
+    sid = _scene_obj(scene).get("id")
+    if not sid or (session or {}).get("active_scene_id", sid) != sid:
+        return None, "scene_mismatch"
+
+    if operation == "ASK":
+        rows = dialogue_catalog(scene, world, session)
+    else:
+        rows = {
+            entity_id: info["row"] for entity_id, info in visible_catalog(scene, world).items()
+            if info["kind"] in {"inspect_target", "perceive_target"}
+            and not info["row"].get("gm_only") and info["row"].get("public") is not False
+            and info["row"].get("reachable") is not False
+            and info["row"].get("availability") in (None, "", "available")
+        }
+    candidates = [
+        entity_id for entity_id, row in rows.items()
+        if any(re.search(r"(?<!\w)" + re.escape(alias.replace("_", " ")) + r"(?!\w)", fact, re.I)
+               for alias in _aliases(row, entity_id))
+    ]
+    if len(candidates) != 1:
+        return None, "ambiguous_target" if candidates else "no_public_executable_target"
+    target_id = candidates[0]
+    if operation == "ASK":
+        grounding = assess_addressee_grounding(
+            player_text, scene=scene, world=world, session=session, proposed_target_id=target_id,
+            npc_candidates=list(rows.values()),
+        )
+        agrees = (grounding["operation_eligibility"] == "executable" and grounding["target_id"] == target_id
+                  and grounding["target_provenance"] in {
+                      "explicit_canonical", "authoritative_world_state", "established_interlocutor",
+                  })
+        # A unique authored alias can also ground an explicit nominal. A
+        # pronoun or an unqualified model proposal cannot borrow that alias.
+        if not agrees and grounding["operation_eligibility"] == "executable" and grounding["target_id"] == target_id:
+            from game.interaction_completion import addressed_person_nominal
+            nominal = re.sub(r"^(?:the|a|an)\s+", "", addressed_person_nominal(player_text), flags=re.I).casefold()
+            npc = rows[target_id]
+            surfaces = [*_aliases(npc, target_id), *(npc.get("address_roles") or [])]
+            agrees = nominal in {alias.replace("_", " ").casefold() for alias in surfaces}
+    else:
+        surface = classify_referenced_surface(player_text, scene, world=world)
+        matches = _scene_object_reference_matches(surface.get("target"), scene)
+        duplicate_id = sum(1 for row in _scene_obj(scene).get("interactables") or []
+                           if isinstance(row, dict) and row.get("id") == target_id) > 1
+        agrees = (len(matches) == 1 and matches[0]["id"] == target_id and not duplicate_id
+                  and surface.get("authority") == AUTHORITY_AUTHORED_INTERACTABLE
+                  and surface.get("interactable_id") == target_id)
+    return (target_id, "grounded") if agrees else (None, "request_target_unconfirmed")
 
 
 def _single_component(record: dict[str, Any]) -> tuple[str, str | None]:
@@ -246,6 +347,17 @@ def normalized_action_from_interpretation(
             "reference_reconciliation": reconciliation,
         }
     operation, target_ref = _single_component(record)
+    from game.interaction_completion import corrected_dialogue, npc_correction_prefix
+    from game.ordinary_semantic_ownership import corrected_dialogue_target
+
+    correction = corrected_dialogue(player_text)
+    if npc_correction_prefix(player_text):
+        corrected_target = corrected_dialogue_target(correction, scene=scene, world=world, session=session)
+        if operation != "ASK" or not corrected_target or target_ref != corrected_target:
+            return None, {
+                "source": "stored_interpretation", "accepted": False,
+                "reason": "unconfirmed_corrected_dialogue", "operation": operation, "target_ref": target_ref,
+            }
     if operation == "ELABORATE":
         from game.bounded_improvisation import controlled_request
         plan = controlled_request(player_text, scene=scene, world=world, session=session)
@@ -338,7 +450,7 @@ def normalized_action_from_interpretation(
             "operation": operation,
         }
     target_id = str(target_ref or "").strip()
-    if not target_id:
+    if not target_id and operation != "ASK":
         return None, {
             "source": "stored_interpretation",
             "accepted": False,
@@ -347,7 +459,7 @@ def normalized_action_from_interpretation(
         }
 
     confirmed = str(authorized_target_id or "").strip()
-    if operation == "ASK" and confirmed != target_id:
+    if operation == "ASK" and (not confirmed or confirmed != target_id):
         from game.ordinary_semantic_ownership import assess_addressee_grounding, pending_addressee_clarification
 
         grounding = assess_addressee_grounding(
@@ -380,6 +492,10 @@ def normalized_action_from_interpretation(
             }
     catalog = visible_catalog(scene, world)
     target = catalog.get(target_id)
+    if operation == "ASK" and target is None:
+        row = dialogue_catalog(scene, world, session).get(target_id)
+        if row is not None:
+            target = {"kind": "npc", "row": row}
     if not target:
         return None, {
             "source": "stored_interpretation",
@@ -420,6 +536,15 @@ def normalized_action_from_interpretation(
         },
     }
     semantic_plan = record.get("unified_semantic_plan")
+    if operation == "ASK":
+        from game.interaction_completion import dialogue_attention
+        from game.ordinary_semantic_ownership import dialogue_attention_target
+
+        attention = dialogue_attention(player_text)
+        if correction:
+            normalized["metadata"]["stored_interpretation"]["dialogue_text"] = correction[2]
+        elif attention and dialogue_attention_target(attention, scene=scene, world=world, session=session) == target_id:
+            normalized["metadata"]["stored_interpretation"]["dialogue_text"] = attention[2]
     if isinstance(record.get("local_approach_normalization"), dict):
         normalized["metadata"]["stored_interpretation"]["local_approach_normalization"] = dict(record["local_approach_normalization"])
     if isinstance(semantic_plan, dict) and semantic_plan.get("locked"):
@@ -433,10 +558,23 @@ def normalized_action_from_interpretation(
     if operation == "MOVE":
         row = target.get("row") if isinstance(target.get("row"), dict) else {}
         from game.route_authority import route_status
+        from game.scene_destination_binding import named_departure_destination, named_departure_route_ids
+
+        departure = named_departure_destination(player_text)
+        if departure is not None:
+            scene_id = str(_scene_obj(scene).get("id") or "")
+            exits = [entry["row"] for entry in catalog.values() if entry["kind"] == "exit"]
+            if ((session or {}).get("active_scene_id", scene_id) != scene_id
+                    or named_departure_route_ids(departure, exits) != {target_id}):
+                return None, {"source": "stored_interpretation", "accepted": False,
+                              "reason": "unreconciled_departure_route", "operation": operation, "target_ref": target_id}
         if route_status(row, str(_scene_obj(scene).get("id") or ""), session or {}, world or {}) != "available":
             return None, {"source": "stored_interpretation", "accepted": False,
                           "reason": "route_requires_prerequisite", "operation": operation, "target_ref": target_id}
         destination = str(row.get("target_scene_id") or "").strip()
+        if departure is not None and destination == scene_id:
+            return None, {"source": "stored_interpretation", "accepted": False,
+                          "reason": "unreconciled_departure_route", "operation": operation, "target_ref": target_id}
         if not destination:
             return None, {
                 "source": "stored_interpretation",

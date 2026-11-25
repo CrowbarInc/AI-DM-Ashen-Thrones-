@@ -5,17 +5,22 @@ These tests post real /api/chat turns. They do not assert a helper label in isol
 from __future__ import annotations
 
 import json
+from contextlib import contextmanager
 
 import pytest
 from fastapi.testclient import TestClient
 
 from game import storage
 from game.api import app
+from game.conversational_continuity import delivered_exchanges
 from tests.helpers.storage_isolation import install
 from tests.pr_play_79df3_harness import seed_gate
+from tests.test_pr_play_52_quarantined_integration import _seed
 
 CLUE = "northwest mud track"
 CAPTAIN = "patrol went missing near the old milestone"
+CAPTAIN_OPENING = "I ask the guard captain about the missing patrol."
+CAPTAIN_FOLLOWUP = "You mentioned the patrol. What have you heard?"
 HIDDEN = (
     "Ash Cowl",
     "coordinated signal",
@@ -70,21 +75,48 @@ def _say(client, text):
     }
 
 
-@pytest.fixture
-def client(tmp_path, monkeypatch):
+@contextmanager
+def _gate_client(tmp_path, monkeypatch, seed):
     _env(monkeypatch)
     install(tmp_path)
-    seed_gate(tmp_path, monkeypatch)
-    http = TestClient(app)
-    http.__enter__()
-    try:
+    seed(tmp_path, monkeypatch)
+    with TestClient(app) as http:
         yield http
-    finally:
-        http.__exit__(None, None, None)
 
 
-def test_recorded_handoff_leaves_the_previous_npc_line(client):
-    captain = _say(client, "You mentioned the patrol. What have you heard?")
+@pytest.fixture
+def client(tmp_path, monkeypatch):
+    with _gate_client(tmp_path, monkeypatch, seed_gate) as http:
+        yield http
+
+
+@pytest.fixture
+def captain_client(tmp_path, monkeypatch):
+    def seed(path, patch):
+        _seed(path, patch, "frontier_gate")
+
+    with _gate_client(tmp_path, monkeypatch, seed) as http:
+        yield http
+
+
+def _captain_exchange(client, text):
+    before = storage.load_session()["turn_counter"]
+    reply = _say(client, text)
+    receipt = storage.load_log()[-1]["resolution"]
+    assert receipt["success"] is True
+    assert receipt["social"]["target_resolved"] is True
+    assert receipt["social"]["npc_id"] == "guard_captain"
+    assert CAPTAIN in reply["visible"]
+    session = storage.load_session()
+    assert delivered_exchanges(session)[-1]["speaker_id"] == "guard_captain"
+    assert session["turn_counter"] == before + 1
+    return reply
+
+
+def test_recorded_handoff_leaves_the_previous_npc_line(captain_client):
+    _captain_exchange(captain_client, CAPTAIN_OPENING)
+    client = captain_client
+    captain = _captain_exchange(client, CAPTAIN_FOLLOWUP)
     assert "Guard Captain" in captain["visible"]
     assert CAPTAIN in captain["visible"]
     assert captain["scene"] == "frontier_gate"
@@ -127,8 +159,10 @@ def test_recorded_handoff_leaves_the_previous_npc_line(client):
         assert secret.casefold() not in recall["visible"].casefold()
 
 
-def test_explicit_repetition_stays_with_the_captain(client):
-    _say(client, "You mentioned the patrol. What have you heard?")
+def test_explicit_repetition_stays_with_the_captain(captain_client):
+    _captain_exchange(captain_client, CAPTAIN_OPENING)
+    client = captain_client
+    _captain_exchange(client, CAPTAIN_FOLLOWUP)
     repeated = _say(client, "Could you repeat that?")
     assert CAPTAIN in repeated["visible"]
     assert CLUE not in repeated["visible"]
@@ -155,7 +189,9 @@ def test_genuine_travel_still_changes_scene(client):
     assert "Old Milestone" in moved["visible"]
     refused = _say(client, "I step back from the notice board.")
     assert refused["scene"] == "old_milestone"
-    assert "not supported here" in refused["visible"]
+    assert "notice board" in refused["visible"]
+    assert "Nothing was carried out" in refused["visible"]
+    assert "accessible target" in refused["visible"]
     assert refused["completed"] is not True
 
 

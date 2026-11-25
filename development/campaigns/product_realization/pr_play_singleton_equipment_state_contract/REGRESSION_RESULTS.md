@@ -1,0 +1,7 @@
+# Regression Results
+
+Current-source combined baseline: **455 passed / 17 failed / 472 tests**. Historical predecessor: 455/17 on 472 tests. New failure identities: `[]`. Missing historical failure identities: `[]`.
+
+Focused existing identity, character persistence, snapshots, inventory, state authority and marking selection: **331 passed / 0 failed / 331 tests**. Commands, selected modules, exact failure identities, JUnit and logs are in `combined_command.json`, `combined_result.json`, `combined.xml`, `combined.log` and corresponding `focused_*` evidence. No assertion or fixture was edited. Initial attempts completed test execution but failed to write JUnit because basetemp was under the evidence artifact root; those attempts are not counted. Both selections were rerun with the repository-conventional development/tmp roots. See `harness_correction.json` and preserved initial logs.
+
+One baseline only: there is no production implementation and therefore no meaningful before/after implementation comparison. Live interpretation, expression generation, provider retries and preflight are disabled; the global provider-disable flag is UNSET for regression parity. External socket/DNS destinations are blocked by an audit hook, API key removed, and data/evidence isolated. Provider records: combined 0, focused 0; blocked external network attempts: combined 0, focused 0. See command JSON for exact environment and Python version.

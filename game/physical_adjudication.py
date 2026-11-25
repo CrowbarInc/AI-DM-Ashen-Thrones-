@@ -241,6 +241,48 @@ def disabled_retreat_skip(text: str, session) -> str | None:
     return UNADJUDICATED_RETREAT_SENTENCE
 
 
+def disabled_action_disposition(text: str, session, scene, *, operation=None) -> dict | None:
+    """Explain a recognized, unadmitted physical request without adjudicating it.
+
+    Reuse this owner's operation vocabulary and public object grounding. A
+    visible object is not an authorization to manipulate it. Missing grounding
+    is not proof that the object does not exist. Callers must give established
+    action resolvers first refusal; this helper never grants execution.
+    """
+    raw = re.sub(r"\s+", " ", text or "").strip()
+    if enabled(session) or not raw or _question(raw):
+        return None
+    if any(mark in raw for mark in ('"', '“', '”')) or (not operation and not _actionish(raw)):
+        return None
+    if len(_split_sequence(raw)) != 1:
+        return None
+    operation = operation or _operation(raw)
+    if not operation:
+        return None
+    row, ambiguity = _ground(raw, session or {}, scene, _objects(session or {}, scene), operation)
+    acknowledgment = f"Your request: {raw} "
+    if ambiguity is not None:
+        return {
+            "category": "CLARIFY", "reason": "ambiguous_physical_target",
+            "disposition": "CLARIFICATION", "missing": ["physical_target"],
+            "text": acknowledgment + ambiguity["message"],
+        }
+    if row is None:
+        return {
+            "category": "CLARIFY", "reason": "unestablished_physical_target",
+            "disposition": "MISSING_PREREQUISITE", "missing": ["established_accessible_target"],
+            "text": acknowledgment + "I cannot establish an accessible target for that physical action here. "
+                    "Nothing was carried out. Which object in your current surroundings do you mean?",
+        }
+    return {
+        "category": "DECLINE", "reason": "unavailable_physical_authorization",
+        "disposition": "UNSUPPORTED_OPERATION", "missing": ["authorized_physical_resolver"],
+        "target_id": row["id"],
+        "text": acknowledgment + f"{row['label']} is established here, but the available actions do not "
+                f"authorize that {operation} operation. Nothing was carried out.",
+    }
+
+
 def _operation(text: str) -> str | None:
     low = text.casefold()
     if _CLIMB.search(low):

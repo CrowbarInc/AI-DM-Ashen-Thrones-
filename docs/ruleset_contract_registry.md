@@ -1,10 +1,17 @@
 # Ruleset Contract Registry
 
 This registry centralizes ruleset-facing architectural contracts currently
-present in the repository. It is documentation-only. It does not introduce a
-new ruleset, modify gameplay logic, alter replay schemas, change provenance
-behavior, update runtime routing, add governance enforcement, or move
-implementation authority from code into documentation.
+present in the repository. It is the contract inventory. It does not itself
+execute mechanics, modify gameplay routing, alter replay schemas, change
+provenance behavior, or move implementation authority from code into
+documentation.
+
+A bounded executable boundary now exists at `game/ruleset_contract.py` and
+`game/ruleset_registry.py` (RCR-15). That boundary selects an explicit
+identity and version, discovers declared capabilities, and delegates
+side-effect-free policy evaluation. It is not a plugin loader. Ordinary chat
+consults it for one Pathfinder social skill check. Unmigrated Pathfinder modules remain explicit
+legacy pathways.
 
 ## Registry Scope
 
@@ -21,7 +28,7 @@ adding ruleset conditionals in prompt, Final Emission, replay, or backend code.
 
 | Contract ID | Contract | Canonical Owner | Authoritative Implementation | Repository Location | Purpose | Consumers | Lifecycle Expectations | Compatibility Requirements | Replay Implications | Provenance Implications | Version Status | Verification Method | Extensibility Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| RCR-01 | Ruleset identity and current gameplay posture | Architecture/gameplay contract owner | Manual docs and current engine modules | `docs/ai_gm_contract.md`, `docs/system_overview.md`, `docs/README.md` | State that the engine owns mechanics/state and GPT narrates only; current mechanics are PF1e-inspired but not exposed as a pluggable ruleset loader. | Maintainers, feature planners, future ruleset package authors. | Manual doctrine; refresh when an approved package introduces ruleset identity, capabilities, or alternate ruleset loading. | Do not imply alternate ruleset support before implementation exists. Preserve engine-first authority. | Low. Replay observes finalized outcomes, not a formal ruleset id today. | Low. Ruleset identity is not realization provenance today. | Manual, unversioned doctrine. | Link/source review; no gameplay behavior change. | Future ruleset work should publish explicit identity/version/capability fields before behavior branches. |
+| RCR-01 | Ruleset identity and current gameplay posture | Architecture/gameplay contract owner | Constitutional invariant plus RCR-15 | `docs/DEVELOPMENT_CONSTITUTION.md`, `docs/system_overview.md`, `docs/README.md`, RCR-15 | State that the core is independent of any one ruleset and GPT narrates only; Pathfinder 1e is the initial supported ruleset, not a plugin loader. | Maintainers, feature planners, future ruleset authors. | Refresh when a capability moves off a named legacy pathway. | Do not describe an identity-only ruleset as a playable implementation. Preserve engine authority over state transactions. | Low. Replay still observes finalized outcomes. RCR-15 is not on the turn spine. | Low. Ruleset identity is not realization provenance today. | Constitutional invariant; executable identity and version are RCR-15. | `tests/test_ruleset_boundary.py`; link/source review. | Future rulesets declare capabilities. They do not branch prompt, Final Emission, or replay code. |
 | RCR-02 | Action normalization contract | Scene/action owner | `normalize_scene_action`, `normalize_scene_actions_list`, action type constants | `game/scene_actions.py` | Normalize legacy strings, legacy affordance dicts, and structured actions into a stable action shape. | `game.api`, `game.affordances`, exploration/noncombat flow, schema boundary tests, UI-facing action consumers. | Runtime ingress contract; keep shape stable and explicit. | Preserve legacy string/dict adaptation and mirrored camelCase/snake_case target keys until a retirement package approves removal. | Medium. Action shape can affect resolved turns and replay-observed outcomes. | Low. Normalization is input structure, not content provenance. | Stable unversioned shape. | `tests/test_validation_journal_affordances.py`, `tests/test_affordance_generation.py`, `tests/test_runtime_schema_boundaries.py`, `tests/test_schema_contracts.py`. | Future rulesets should add action types through this boundary and corresponding schema/affordance tests. |
 | RCR-03 | Affordance availability and action-option contract | Affordance owner | `generate_scene_affordances`, `get_available_affordances`; canonical affordance schema helpers | `game/affordances.py`, `game/schema_contracts.py` | Produce bounded, deduped, action-oriented options from scenes, exits, interactables, objects, NPCs, and pending leads. | API/client payloads, UI action buttons, validation journal tests, scene/action flows. | Runtime read-side generation; may consume state but should not mutate mechanics truth. | Preserve 3-5 action-option expectation and legacy affordance adaptation. | Medium. Affordance choice can feed deterministic resolution and replay paths. | Low. Affordance generation does not own realization provenance. | Stable unversioned shape with schema-contract support. | `tests/test_affordance_generation.py`, `tests/test_affordance_canonical_pipeline.py`, `tests/test_validation_journal_affordances.py`. | Alternate rulesets can contribute domain actions by producing canonical affordance rows rather than bypassing action normalization. |
 | RCR-04 | Skill-check decision and deterministic roll contract | Skill-check owner | `should_trigger_check`, `resolve_skill_check`, DC constants | `game/skill_checks.py` | Decide whether exploration/social actions require checks and resolve deterministic d20 skill checks. | `game.exploration`, `game.social`, tests, prompt narration consumers through resolved results. | Engine-owned mechanics; GPT narrates the result only. | Preserve `difficulty` plus backward-compatible `dc`; preserve deterministic seed behavior for non-live checks. | High. Skill outcomes can appear in protected turn payloads, logs, and downstream narration. | Low to medium. Skill result metadata explains engine outcomes but is not realization provenance. | Stable unversioned mechanics contract. | `tests/test_skill_checks.py`, `tests/test_exploration_skill_checks.py`, `tests/test_social.py`. | Future rulesets may replace or extend DC/roll policy only behind explicit ruleset identity and focused tests. |
@@ -35,6 +42,7 @@ adding ruleset conditionals in prompt, Final Emission, replay, or backend code.
 | RCR-12 | Realization/final-emission boundary contract for mechanics outputs | Final Emission/realization boundary owners | Final emission boundary, realization authority/provenance, upstream response repair boundaries | `game/final_emission_boundary_contract.py`, `game/realization_authority.py`, `game/realization_provenance.py`, `game/upstream_response_repairs.py`, `docs/realization_seam_inventory.md` | Ensure mechanics outcomes are narrated without moving mechanics truth into realization or final-emission repair layers. | Final Emission gate, prompt/GPT output path, protected replay projection, provenance tests. | Downstream legality/packaging only; mechanics truth must already be decided by engine/planner contracts. | Preserve existing fallback/provenance compatibility until separately retired. | High. Finalized output and metadata are replay-observed. | High. Realization provenance is explicit and must remain separate from ruleset mechanics authority. | Stable mixed contract surfaces, no single ruleset version. | Final Emission boundary/provenance tests, split-owner checks, protected replay focused tests when touched. | Future rulesets should produce engine outcomes that realization consumes; Final Emission must not branch on ruleset mechanics directly. |
 | RCR-13 | Gameplay validation coverage contract | Validation coverage owner | Machine-readable coverage registry and validation contract docs | `tests/validation_coverage_registry.py`, `docs/objective12_validation_contract.md` | Map feature/domain validation obligations to existing tests, tools, scenarios, and gauntlets. | Reviewers, maintainers, validation tooling, future ruleset package authors. | Governance/testing only; does not score or enforce gameplay behavior. | Do not duplicate evaluator logic or scatter validation policy into prose-only fields. | Low to medium. Coverage maps protect replay/behavior indirectly. | Low. Coverage registry does not author runtime provenance. | Active executable registry for coverage declarations. | `tests/test_validation_coverage_registry.py`, `tools/validation_coverage_audit.py --strict`. | Future ruleset work should add/adjust coverage rows when validation obligations change. |
 | RCR-14 | Ruleset compatibility boundary | Compatibility planning owner plus domain owners | Compatibility residue rows for schema adapters and future ruleset surfaces | `docs/compatibility_residue_register.md`, especially `CR-12`; this registry | Track historical payload, schema, and ruleset-facing compatibility that cannot be retired by intuition. | Maintainers, future compatibility retirement packages, contract reviewers. | Manual planning surface; compatibility changes require evidence and focused tests. | Do not retire legacy action/schema adapters or compatibility behavior from this registry alone. | Medium. Compatibility changes may affect persisted/replayed historical payloads. | Low. Compatibility metadata should not become behavior selection without owner approval. | Manual status; compatibility rows own lifetime/status. | Compatibility register review plus focused tests for touched surface. | Future ruleset migrations should start with compatibility inventory and explicit retirement prerequisites. |
+| RCR-15 | Ruleset selection, capability discovery, and side-effect-free policy evaluation | Ruleset boundary owner | `get_ruleset`, `discover_capability`, `evaluate_policy`, `dispatch` | `game/ruleset_contract.py`, `game/ruleset_registry.py`; Pathfinder equipment delegation in `game/pf1e_equipment_policy.py` | Select an explicit ruleset identity and version, discover declared capabilities, and delegate a policy request to that authority only. | Ordinary chat calls this boundary for one social skill check. Other turns do not. | Closed registry. No filesystem scan, network access, or arbitrary code loading. Policy evaluation does not mutate state. | Unknown identities and unsupported versions are rejected. A ruleset that does not declare a capability does not inherit another ruleset. `supported` is not execution permission. | The social skill check commits through the core. Other capabilities have no turn-spine caller. | None. This boundary is not realization provenance. | `pf1e` version `1` delegates `equipment_policy` and resolves `social_skill_check`. `rules_light` version `1` and `scifi` version `1` are identity-only. | `tests/test_ruleset_boundary.py` and `tests/test_pf1e_equipment_policy.py`. | A future ruleset implements the authority methods and is added to the closed registry by an authorized change. Packaging, permissions, and sandboxing are not part of RCR-15. |
 
 ## Ownership Mapping
 
@@ -54,6 +62,7 @@ adding ruleset conditionals in prompt, Final Emission, replay, or backend code.
 | Final Emission/realization owners | Last-mile legality, packaging, and provenance boundaries for emitted output. | Ruleset mechanics truth. |
 | Validation coverage owner | Mapping features to existing verification surfaces. | New gameplay validation behavior or evaluator scoring. |
 | Compatibility planning owner | Compatibility inventory and retirement prerequisites. | Compatibility retirement by documentation alone. |
+| Ruleset boundary owner | Explicit identity, version, capability discovery, and side-effect-free delegation. | Plugin installation, gameplay routing, legacy combat/skill/condition resolution, or character mutation. |
 
 ## Consumer Mapping
 
@@ -76,14 +85,14 @@ adding ruleset conditionals in prompt, Final Emission, replay, or backend code.
 | CamelCase/snake_case action target mirrors | Active | Preserve UI/API compatibility for target scene/entity/location keys. |
 | Skill-check `difficulty` plus `dc` | Active | Keep `dc` as backward-compatible alias while `difficulty` remains canonical. |
 | Schema-contract legacy adapters | Active | Maintain adapters and metadata parking for historical payloads; see compatibility register `CR-12`. |
-| Current single PF1e-inspired mechanics posture | Active | Do not claim alternate ruleset support until explicit identity/loading/capability contracts exist. |
+| Current single PF1e-inspired mechanics posture | Active | RCR-15 supplies explicit identity, version, and capability selection. `rules_light@1` and `scifi@1` are identity-only sentinels, not playable rulesets. Do not claim another ruleset is implemented. Legacy Pathfinder modules are not selected through RCR-15. |
 | Final Emission/provenance compatibility fields | Active | Do not collapse ruleset mechanics, realization provenance, and replay projection fields. |
 
 ## Lifecycle and Version Status
 
 | Area | Lifecycle | Version Status |
 |---|---|---|
-| Current ruleset identity | Manual doctrine; no loader | Unversioned. |
+| Current ruleset identity | Executable closed registry for RCR-15; legacy modules remain direct | `pf1e` version `1` (`pf1e@1`). Identity-only: `rules_light` version `1`, `scifi` version `1`. |
 | Action normalization | Runtime ingress | Stable unversioned shape. |
 | Affordance contract | Runtime read-side generation | Stable unversioned shape. |
 | Skill checks | Engine mechanics | Stable unversioned mechanics contract. |
@@ -113,6 +122,7 @@ adding ruleset conditionals in prompt, Final Emission, replay, or backend code.
 | Realization/provenance boundary | Focused Final Emission boundary/provenance tests, split-owner checks, and protected replay checks for touched surfaces. |
 | Coverage registry changes | `python -m pytest tests/test_validation_coverage_registry.py -q`; `python tools/validation_coverage_audit.py --strict`. |
 | Documentation-only registry update | Link/source checks and `git status --short` scope check confirming no gameplay behavior changed. |
+| RCR-15 ruleset boundary | `python -m pytest tests/test_ruleset_boundary.py tests/test_pf1e_equipment_policy.py -q` |
 
 ## Reviewer Checklist
 
@@ -133,6 +143,88 @@ adding ruleset conditionals in prompt, Final Emission, replay, or backend code.
 
 ## Maintenance Rules
 
+### Campaign ruleset binding (RCR-15 integration)
+
+`game/campaign_ruleset.py` resolves the active `campaign_run_id` against the
+existing persisted session. `session.ruleset_binding` contains `ruleset_id`,
+`ruleset_version` (strings), and `binding_version` (integer 1). It is authoritative
+for generic policy delegation. `campaign.json` remains authored bootstrap
+configuration; character imports and action text cannot select this binding.
+
+New Campaign and fresh-session bootstrap explicitly default to `pf1e@1`.
+`POST /api/new_campaign` optionally accepts
+`{"ruleset":{"ruleset_id":"pf1e","ruleset_version":"1"}}`.
+Registry membership, implemented capability, and campaign playability are distinct:
+only `pf1e@1` is admitted by the current legacy-engine creation policy. Identity-only
+entries remain discoverable and cannot create playable campaigns. Invalid selection
+returns HTTP 422 before reset. There is no registry fallback.
+
+`GET /api/campaign_ruleset?campaign_id=...` returns the persisted identity;
+`POST /api/campaign_ruleset/policy` accepts campaign identity, capability, request,
+and context, and evaluates without execution. Responses use a bounded public DTO.
+Conflicting top-level request ruleset identity returns HTTP 409. A mismatched
+campaign id, missing binding, unknown ruleset, bad version, or unsupported
+capability cannot borrow another campaign or ruleset's authority.
+
+`POST /api/campaign_ruleset/migrate` uses only explicit persisted session
+`ruleset_id` and `ruleset_version`. Missing provenance stays ambiguous. Existing
+unbound campaigns remain on named legacy gameplay pathways; generic policy
+evaluation refuses their missing binding. This milestone does not retire those
+legacy mechanics, convert imported sheets, or provide a manual ambiguity-resolution
+editor. Session saves retain an omitted binding and reject replacement. Snapshot
+restore restores the entire campaign identity and binding together. Ruleset
+switching within a campaign remains unsupported.
+
+Verify with `tests/test_campaign_ruleset_binding.py`; persistence limitations and
+HTTP evidence are in the `pr_play_campaign_ruleset_binding` milestone reports.
+
+### Bounded equipment definition policy (PF1e foundation)
+
+`game/pf1e_equipment_policy.py` owns the explicit `pf1e@1` equipment-definition
+policy `pf1e.equipment.light_armor`, version 1. It accepts a catalog-bound padded
+armor definition in `body_armor`, without asserting possession or worn state.
+`main_hand` is recognized only to reject armor placement; this does not provide
+wielding support. Shield and simple-melee categories have body-armor exclusions,
+not executable policies. Medium/heavy armor remains unsupported.
+
+The independent eligibility result separates compatibility from unresolved
+mechanical consequences and blocked execution. It never reads character state,
+changes imported totals, or routes gameplay actions. Direct callers must supply
+an explicit ruleset; other identities receive UNSUPPORTED. The generic boundary
+reaches this policy only after selecting `pf1e` version `1`. Other registered
+identities do not enter this module. Generic inventory UUID/revision and
+character persistence remain separate owners.
+
+Verify with `tests/test_pf1e_equipment_policy.py`; milestone evidence and the
+future mutation prerequisites are in
+`development/campaigns/product_realization/pr_play_ruleset_equipment_policy_foundation/`.
+
+### Mechanical action contract
+
+`game/mechanical_action_contract.py` names a ruleset-neutral request, a
+single-owner proposed change, and a result envelope. `game/mechanical_action.py`
+loads the active campaign binding, discovers the capability through RCR-15, and
+asks only that ruleset to resolve. Policy evaluation cannot authorize a commit.
+A ruleset may propose one `session_mechanical_ledger` / `record_marker` change.
+The core validates the owner, target, revision, operation, field, and value,
+then writes the session envelope itself. Ruleset modules do not call session or
+character saves.
+
+Terminal statuses stay distinct: capability support, validation, authorization,
+and commitment are separate fields. `committed` is the only status that
+publishes success. A matching durable receipt replays that commitment and does
+not apply it again. Unknown rulesets and unsupported versions do not fall back
+to Pathfinder. A request-supplied ruleset identity cannot replace the binding.
+
+`POST /api/mechanical_action` is the bounded caller. The chat and action turn
+spine does not call this boundary. Pathfinder equipment policy remains
+unresolved and proposes no change. Combat, skills, conditions, non-combat
+resolution, and character import remain named legacy pathways. The test-only
+contract fixture is not registered and is not a gameplay action.
+
+Verify with `tests/test_mechanical_action_contract.py`. Milestone evidence is in
+`development/campaigns/product_realization/pr_play_generic_mechanical_action_contract/`.
+
 - Update this registry when a ruleset-facing contract shape, owner, lifecycle,
   compatibility requirement, version status, verification method, or extension
   boundary changes.
@@ -141,5 +233,6 @@ adding ruleset conditionals in prompt, Final Emission, replay, or backend code.
   Register and an approved retirement package.
 - Do not treat GPT, prompt construction, Final Emission, replay projection, or
   backend routing as ruleset mechanics owners.
-- Keep this registry manual until a future executable ruleset registry is
-  approved.
+- RCR-15 is the approved executable identity and capability boundary. Keep
+  this document as the manual contract inventory. Do not treat it as a plugin
+  manifest or add a filesystem loader here.

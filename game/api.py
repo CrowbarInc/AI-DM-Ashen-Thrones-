@@ -289,12 +289,14 @@ from game.live_chat_interpretation import (
     reset_live_interpretation_consumed,
 )
 from game.conversational_orchestration import (
+    GROUNDED_READING_AUTHORITY,
     ConversationalDecision,
     ConversationalDecisionCategory,
     decision_from_bridge_rejection,
     decision_from_interpretation_record,
     deterministic_conversational_decision,
     grounded_move_processing_text,
+    settled_reading_decision,
 )
 from game.player_interpretation_bridge import normalized_action_from_interpretation
 
@@ -659,6 +661,7 @@ def _public_live_interpretation(outcome: dict | None) -> dict | None:
         "model_communication_mode",
         "interpretation_status",
         "raw_interpretation",
+        "normalized_record",
         "provider_requests",
         "bridge",
         "provider_error",
@@ -765,7 +768,7 @@ def _unadjudicated_retreat_response(req: ChatRequest, mode_decision: _Communicat
 
     No turn increment, no position write, and no completed gameplay publication.
     """
-    from game.physical_adjudication import UNADJUDICATED_RETREAT_SENTENCE
+    from game.physical_adjudication import UNADJUDICATED_RETREAT_SENTENCE, disabled_action_disposition
     from game.publication_contract import (
         UNADJUDICATED_RETREAT_REASON,
         UNSUPPORTED_ACTION,
@@ -774,7 +777,8 @@ def _unadjudicated_retreat_response(req: ChatRequest, mode_decision: _Communicat
     )
 
     original_text = mode_decision.original_text or req.text or ""
-    sentence = UNADJUDICATED_RETREAT_SENTENCE
+    disposition = disabled_action_disposition(original_text, load_session(), load_active_scene())
+    sentence = disposition["text"] if disposition is not None else UNADJUDICATED_RETREAT_SENTENCE
     gm = {
         "player_facing_text": sentence,
         "tags": ["deterministic_narration", "provider_narration_skipped", UNADJUDICATED_RETREAT_REASON, "non_mutating"],
@@ -792,6 +796,7 @@ def _unadjudicated_retreat_response(req: ChatRequest, mode_decision: _Communicat
         },
     }
     meta = {
+        "admission_disposition": disposition,
         "communication_mode": mode_decision.mode,
         "mode_source": mode_decision.source,
         "authoritative_mutation": False,
@@ -878,6 +883,8 @@ def _nonmutating_conversational_decision_response(
     *,
     live_outcome: dict | None = None,
     bridge_meta: dict | None = None,
+    rejected_social_receipt: dict | None = None,
+    resolver_invoked: bool = False,
 ) -> dict:
     original_text = mode_decision.original_text or req.text or ""
     public_live = _public_live_interpretation(live_outcome) if isinstance(live_outcome, dict) else None
@@ -911,7 +918,7 @@ def _nonmutating_conversational_decision_response(
             "communication_mode": mode_decision.mode,
             "mode_source": mode_decision.source,
             "authoritative_mutation": False,
-            "resolver_invoked": False,
+            "resolver_invoked": resolver_invoked,
             "gameplay_parser_invoked": False,
             "narration_invoked": False,
             "processing_outcome": f"conversational_{category.lower()}",
@@ -934,6 +941,9 @@ def _nonmutating_conversational_decision_response(
             ),
         },
     }
+    if rejected_social_receipt is not None:
+        resolution["metadata"]["rejected_social_receipt"] = rejected_social_receipt
+        resolution["metadata"]["resolver_invoked"] = True
     session = load_session()
     context_changed = _apply_conversational_context_update(session, decision)
     if decision.intent_family not in {"ooc_help", "player_initiative"}:
@@ -953,6 +963,21 @@ def _nonmutating_conversational_decision_response(
             world=load_world(),
         )
         attach_expression_audit(gm, expression_audit)
+    if decision.reason == "unresolved_object_reference":
+        # The closed inspection publication still records its surface authority.
+        # The turn counter is not incremented on this early return.
+        from game.publication_contract import note_completed_publication
+
+        surface_authority = ""
+        if isinstance(decision.authorization, dict):
+            surface_authority = str(decision.authorization.get("referenced_surface_authority") or "")
+        if surface_authority:
+            resolution["metadata"]["referenced_surface_authority"] = surface_authority
+        resolution["state_changes"] = {}
+        note_completed_publication(
+            session, text=str(gm.get("player_facing_text") or ""), resolution=resolution, gm=gm,
+        )
+        context_changed = True
     transient = decision.authorization.get("transient_local_action") if isinstance(decision.authorization, dict) else None
     if (
         isinstance(transient, dict)
@@ -1033,7 +1058,7 @@ def _nonmutating_conversational_decision_response(
                 "mode_source": mode_decision.source,
                 "processing_outcome": f"conversational_{category.lower()}",
                 "authoritative_mutation": False,
-                "resolver_invoked": False,
+                "resolver_invoked": resolver_invoked or rejected_social_receipt is not None,
             },
         }
     )
@@ -4757,6 +4782,54 @@ def _observe_quarantined_investigation_narration(resolution, scene, session, pla
         return
 
 
+def _resolution_needs_narration(resolution: dict) -> bool:
+    """An indeterminate result with no engine outcome still needs expression.
+
+    Explicit waiting is an admitted time-consuming action even without a new
+    observation. Checks (including failures), changes and authored publications
+    remain on their existing authoritative execution path.
+    """
+    meta = resolution.get("metadata") or {}
+    return bool(
+        resolution.get("success") is None
+        and not resolution.get("state_changes")
+        and not resolution.get("world_updates")
+        and not resolution.get("resolved_transition")
+        and not resolution.get("discovered_clues")
+        and not resolution.get("skill_check")
+        and not resolution.get("requires_check")
+        and not meta.get("engine_publication")
+        and not meta.get("passive_interruption_wait")
+        and not (resolution.get("social") or {}).get("target_resolved")
+    )
+
+
+def _uncommitted_narration_failure(gm: dict | None) -> str | None:
+    """Infrastructure/validation fallbacks cannot admit an unresolved action."""
+    if not isinstance(gm, dict) or not str(gm.get("player_facing_text") or "").strip():
+        return "missing_narration"
+    meta = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+    tags = set(gm.get("tags") or [])
+    if meta.get("provider_calls_disabled") or "provider_calls_disabled" in tags:
+        return "provider_disabled"
+    error = meta.get("upstream_api_error")
+    if isinstance(error, dict):
+        return "timeout" if error.get("failure_class") == "timeout" else "provider_failure"
+    if tags & {"fast_fallback", "upstream_api_fast_fallback", "provider_budget_refused",
+               "provider_retry_disabled", "structured_contract_failure", "structured_output_rejected"}:
+        return "narration_unavailable"
+    if any(meta.get(key) for key in ("provider_budget_refusal", "structured_contract_failure",
+                                    "structured_output_rejected", "provider_retry_disabled")):
+        return "narration_unavailable"
+    accepted = meta.get("accepted_response") or {}
+    if isinstance(accepted, dict) and (accepted.get("provenance") == "safe_nonresolution"
+            or accepted.get("authorization_source") == "safe_nonresolution"):
+        return "safe_nonresolution"
+    if str(gm.get("debug_notes") or "").startswith("call_gpt error"):
+        return "provider_failure"
+    return None
+
+
 def _run_resolved_turn_pipeline(
     *,
     campaign: dict,
@@ -4772,19 +4845,24 @@ def _run_resolved_turn_pipeline(
     segmented_turn: dict | None = None,
     route_choice: str | None = None,
     directed_social_entry: dict | None = None,
+    prepared_gm: dict | None = None,
     latency_sink: dict | None = None,
 ) -> tuple[dict, dict, dict, dict, list[str], dict]:
     """Shared resolved-turn flow for both `/api/action` and `/api/chat`.
 
-    Stage 5: authoritative engine mutation is applied first.
-    Stage 6-7: prompt context and GPT narration are built only from that post-resolution state.
+    Resolved outcomes apply authoritative engine mutation before optional
+    narration. An indeterminate result can instead arrive with ``prepared_gm``
+    from pre-commit narration admission; reuse that expression without another
+    generation or execution.
 
-    **CTIR:** ``detach_ctir`` is the first step so any prior turn's session-backed CTIR cannot leak into
-    this mutation. Fresh CTIR for this turn is attached later inside
+    **CTIR:** Normally ``detach_ctir`` prevents a prior turn's context leaking
+    into this mutation. Prepared admission narration already has this turn's
+    context and retains it. Otherwise fresh CTIR is attached later inside
     :func:`_build_gpt_narration_from_authoritative_state` (after hygiene on ``resolution``). Do not attach
     CTIR here—keep build/attach next to prompt construction for retry-stable stamps.
     """
-    detach_ctir(session)
+    if prepared_gm is None:
+        detach_ctir(session)
     from game.semantic_interpreter import player_visible_turns
 
     attach_interaction_obligation(
@@ -4848,24 +4926,43 @@ def _run_resolved_turn_pipeline(
               'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None,
               'suggested_action': None, 'debug_notes': 'engine_authored_consequence'}
         return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
-    gm = _build_gpt_narration_from_authoritative_state(
-        campaign=campaign,
-        world=world,
-        session=session,
-        character=character,
-        scene=scene,
-        combat=combat,
-        recent_log=recent_log,
-        user_text=user_text,
-        resolution=resolution,
-        scene_runtime=scene_rt,
-        segmented_turn=segmented_turn,
-        route_choice=route_choice,
-        directed_social_entry=directed_social_entry,
-        response_type_contract=response_type_contract,
-        latency_sink=latency_sink,
-        normalized_action=normalized_action,
-    )
+    narration_failure = None
+    try:
+        gm = prepared_gm if prepared_gm is not None else _build_gpt_narration_from_authoritative_state(
+            campaign=campaign,
+            world=world,
+            session=session,
+            character=character,
+            scene=scene,
+            combat=combat,
+            recent_log=recent_log,
+            user_text=user_text,
+            resolution=resolution,
+            scene_runtime=scene_rt,
+            segmented_turn=segmented_turn,
+            route_choice=route_choice,
+            directed_social_entry=directed_social_entry,
+            response_type_contract=response_type_contract,
+            latency_sink=latency_sink,
+            normalized_action=normalized_action,
+        )
+        narration_failure = _uncommitted_narration_failure(gm)
+    except Exception as exc:
+        # Opening has its own fail-closed operation and rollback contract.
+        if _opening_operation_required(resolution, response_type_contract):
+            raise
+        narration_failure = "timeout" if isinstance(exc, TimeoutError) else "provider_failure"
+    if narration_failure and not _opening_operation_required(resolution, response_type_contract):
+        meta = resolution.setdefault("metadata", {})
+        meta["narration_failure"] = {"reason": narration_failure, "timing": "after_resolution"}
+        gm = {
+            "player_facing_text": str(meta.get("engine_publication") or
+                "The action was resolved, but narration is unavailable."),
+            "tags": ["narration_unavailable"],
+            "scene_update": None, "activate_scene_id": None, "new_scene_draft": None,
+            "world_updates": None, "suggested_action": None,
+            "metadata": {"narration_failure": narration_failure},
+        }
     # Quarantine sits after authoritative mutation and after the deterministic
     # player-facing object is built. It is not consulted by finalization.
     _observe_quarantined_investigation_narration(resolution, scene, session, user_text)
@@ -4883,6 +4980,7 @@ def _resolve_engine_noncombat_seam(
     turn_counter: int,
     exploration_kwargs: dict,
     explicit_route: str | None = None,
+    structured_request: bool = False,
 ) -> dict:
     """Single runtime seam for structured non-combat: classify fail-closed, delegate when routable.
 
@@ -4898,6 +4996,8 @@ def _resolve_engine_noncombat_seam(
     )
 
     classification = classify_noncombat_kind(normalized_action, explicit_route=explicit_route)
+    if structured_request and classification.route == "social" and normalized_action.get("target_id"):
+        normalized_action.setdefault("metadata", {})["structured_social_target"] = True
     if classification.route in ("exploration", "social"):
         return resolve_noncombat_action(
             scene,
@@ -4943,6 +5043,16 @@ def _is_pending_check_resolution(resolution: dict | None) -> bool:
     if resolution.get("skill_check"):
         return False
     return isinstance(resolution.get("check_request"), dict)
+
+
+def _social_resolution_completed(resolution: dict) -> bool:
+    social = resolution.get("social") or {}
+    return bool(
+        resolution.get("success") is True
+        and social.get("target_resolved") is True
+        and social.get("npc_id")
+        and not social.get("offscene_target")
+    )
 
 
 def _is_offscene_social_target_resolution(resolution: dict | None) -> bool:
@@ -5519,6 +5629,9 @@ def update_campaign(request: Request, payload: dict):
         assert_mode_allows_author_write(ui_mode)
     except UiModePolicyError as e:
         return _ui_mode_error_response(e)
+    if any(k in payload for k in ('ruleset', 'ruleset_binding', 'ruleset_id', 'ruleset_version')):
+        return JSONResponse(status_code=409, content={'ok': False, 'campaign_ruleset': {
+            'status': 'unsupported', 'reason': 'ruleset_switching_unsupported'}})
     save_campaign(payload)
     return {'ok': True, 'ui_mode': ui_mode, 'campaign': load_campaign()}
 
@@ -5632,8 +5745,57 @@ def api_reset_combat(request: Request):
     return {'ok': True, 'ui_mode': ui_mode}
 
 
+@app.get('/api/campaign_ruleset')
+def campaign_ruleset_identity(campaign_id: str):
+    from game.campaign_ruleset import resolve_campaign_ruleset
+    result = resolve_campaign_ruleset(campaign_id)
+    return JSONResponse(status_code=200 if result['status'] == 'valid' else 409, content={'campaign_ruleset': result})
+
+
+@app.post('/api/campaign_ruleset/migrate')
+def campaign_ruleset_migrate(request: Request, payload: dict):
+    from game.campaign_ruleset import migrate_legacy_campaign
+    try:
+        assert_mode_allows_runtime_action(resolve_requested_ui_mode(request, payload))
+    except UiModePolicyError as exc:
+        return _ui_mode_error_response(exc)
+    from game.integrated_play import ordered_turn
+    with ordered_turn(str(DATA_DIR), mutating=True):
+        result = migrate_legacy_campaign(payload.get('campaign_id'))
+    return JSONResponse(status_code=200 if result['status'] in ('migrated', 'already_bound') else 409, content={'campaign_ruleset': result})
+
+
+@app.post('/api/campaign_ruleset/policy')
+def campaign_ruleset_policy(payload: dict):
+    from game.campaign_ruleset import resolve_campaign_ruleset, evaluate_campaign_policy
+    # The request may describe an item, never select mechanical authority.
+    active = resolve_campaign_ruleset(payload.get('campaign_id'))
+    binding = active.get('binding')
+    if isinstance(binding, dict) and any(
+        k in payload and payload[k] != binding.get(k) for k in ('ruleset_id', 'ruleset_version')):
+        return JSONResponse(status_code=409, content={'campaign_ruleset': {'status': 'invalid', 'reason': 'request_ruleset_conflict'}})
+    result = evaluate_campaign_policy(payload.get('campaign_id'), payload.get('capability'),
+                                     payload.get('request'), payload.get('context'))
+    return JSONResponse(status_code=200 if 'evaluation' in result else 409, content={'campaign_ruleset': result})
+
+
+@app.post('/api/mechanical_action')
+def mechanical_action(request: Request, payload: dict):
+    """Campaign-selected mechanical resolution. The ruleset proposes; the core commits."""
+    try:
+        ui_mode = resolve_requested_ui_mode(request, payload)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as exc:
+        return _ui_mode_error_response(exc)
+    from game.mechanical_action import execute_mechanical_action, http_status_for, public_action
+    result = execute_mechanical_action(payload)
+    published = result.get('publication', {}).get('published') is True and result.get('commit_status') == 'committed'
+    return JSONResponse(status_code=http_status_for(result), content={
+        'ok': published, 'ui_mode': ui_mode, 'mechanical_action': public_action(result)})
+
+
 @app.post('/api/new_campaign')
-def new_campaign(request: Request):
+def new_campaign(request: Request, payload: dict | None = None):
     """Hard reset: new session graph, fresh combat, world playthrough cleared, transcript empty."""
     try:
         ui_mode = resolve_requested_ui_mode(request)
@@ -5655,7 +5817,18 @@ def new_campaign(request: Request):
                 "upstream_dependent_run_gate_operator": gate_operator,
             },
         )
-    meta = apply_new_campaign_hard_reset()
+    from game.campaign_ruleset import CampaignBindingError
+    if payload is not None and 'ruleset' in payload and payload['ruleset'] is None:
+        return JSONResponse(status_code=422, content={'ok': False, 'campaign_ruleset': {'status': 'invalid', 'reason': 'invalid_binding'}})
+    selection = (payload or {}).get('ruleset')
+    if payload and any(k in payload for k in ('ruleset_id', 'ruleset_version', 'ruleset_binding')):
+        return JSONResponse(status_code=422, content={'ok': False, 'campaign_ruleset': {'status': 'invalid', 'reason': 'use_ruleset_selection_object'}})
+    try:
+        from game.integrated_play import ordered_turn
+        with ordered_turn(str(DATA_DIR), mutating=True):
+            meta = apply_new_campaign_hard_reset(selection)
+    except CampaignBindingError as exc:
+        return JSONResponse(status_code=422, content={'ok': False, 'campaign_ruleset': {'status': 'unsupported', 'reason': str(exc)}})
     # When ASHEN_THRONES_DEV_VERIFY=1, ``campaign_reset`` prints a compact runtime-clean summary.
     if "dev_verify_ok" not in meta:
         print("[API] New campaign started", meta.get("campaign_run_id"))
@@ -5889,7 +6062,7 @@ def api_action(request: Request, req: ActionRequest):
                 result = _project_player_runtime_response(raw_result)
             from game.publication_contract import OPERATIONAL_REFUSAL, response_is_operational_refusal
             operational = response_is_operational_refusal(raw_result)
-            if operational:
+            if operational or (isinstance(raw_result, dict) and raw_result.get("gameplay_committed") is False):
                 request.state.skip_publication_trace = True
             request.state.publication_provenance = dict(source_handler='api_action',
                 presentation_rows=presentation_usage()['log'][usage_start:],
@@ -6063,6 +6236,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             turn_counter=int(session.get("turn_counter", 0) or 0),
             exploration_kwargs=_ex_kw,
             explicit_route=None,
+            structured_request=True,
         )
         fallback_user_text = req.intent or resolution.get('label', '')
         run_resolved_pipeline = True
@@ -6079,7 +6253,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             scene=scene,
             normalized_action=normalized_action,
         )
-        if raw and (raw.get('type') or '').strip().lower() in SOCIAL_KINDS:
+        if isinstance(raw, dict) and (raw.get('type') or '').strip().lower() in SOCIAL_KINDS:
             normalized_action['type'] = (raw.get('type') or 'social_probe').strip().lower()
         _ex_kw_social = {"list_scene_ids": list_scene_ids, "load_scene_fn": lambda sid: get_effective_scene(session, sid)}
         resolution = _resolve_engine_noncombat_seam(
@@ -6092,6 +6266,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             turn_counter=int(session.get("turn_counter", 0) or 0),
             exploration_kwargs=_ex_kw_social,
             explicit_route="social",
+            structured_request=True,
         )
         fallback_user_text = req.intent or resolution.get('label', '')
         run_resolved_pipeline = True
@@ -6100,6 +6275,15 @@ def action(req: ActionRequest, ui_mode: str = "player"):
         trace["latency_ms"] = _finalize_latency_breakdown(latency_ms)
         _finalize_and_append_trace(session, trace, False, f'Unsupported action type: {req.action_type}')
         return {'ok': False, 'error': f'Unsupported action type: {req.action_type}'}
+
+    if isinstance(resolution.get("social"), dict) and not (
+        _social_resolution_completed(resolution) or _is_pending_check_resolution(resolution)
+    ):
+        if _is_offscene_social_target_resolution(resolution):
+            gm = _build_offscene_target_gm_output(resolution)
+        else:
+            gm = {"player_facing_text": "The interaction could not be completed. Nothing has been attempted."}
+        return {"ok": False, "gameplay_committed": False, "gm_output": gm, "resolution": resolution}
 
     _record_scene_pressure_input(
         session,
@@ -7441,6 +7625,114 @@ def _publish_reconciled_narration(req, mode_decision, *, text: str, outcome: str
     return {"ok": True, "gm_output": _strip_internal_gm_keys(gm), "resolution": resolution}
 
 
+def _finish_ordinary_social_turn(req, mode_decision, plan: dict):
+    """Publish one social skill check only after the core commits it."""
+    if plan.get('disposition') in {'read', 'limitation'}:
+        category = (ConversationalDecisionCategory.ANSWER if plan.get('disposition') == 'read'
+                    else ConversationalDecisionCategory.DECLINE)
+        decision = ConversationalDecision(
+            category=category,
+            primary_intention=req.text or '',
+            intent_family='social_skill_check',
+            reason='social_check_' + str(plan.get('disposition')),
+            player_facing_text=str(plan.get('text') or ''),
+            missing_information=[str(plan.get('reason'))] if plan.get('reason') else [],
+        )
+        return _nonmutating_conversational_decision_response(req, mode_decision, decision)
+    from game.mechanical_action import execute_mechanical_action
+    from game.ordinary_social_check import limitation_text
+
+    result = execute_mechanical_action(plan.get('request'))
+    committed = result.get('commit_status') == 'committed' and (result.get('publication') or {}).get('published') is True
+    if not committed:
+        decision = ConversationalDecision(
+            category=ConversationalDecisionCategory.DECLINE,
+            primary_intention=req.text or '',
+            intent_family='social_skill_check',
+            reason=str(result.get('reason') or 'social_check_not_committed'),
+            player_facing_text=limitation_text(result),
+        )
+        return _nonmutating_conversational_decision_response(req, mode_decision, decision)
+    success = (result.get('mechanical_outcome') or {}).get('success') is True
+    return _publish_social_check(req, mode_decision, text=str(result.get('explanation') or ''),
+                                 success=success, result=result)
+
+
+def _publish_social_check(req, mode_decision, *, text: str, success: bool, result: dict) -> dict:
+    """Player text follows the committed check. A contradictory seal is not published."""
+    from game.immutable_valid_response import restore_accepted_text, seal_host_speech
+    from game.marking_observation import install_published_line, reconcile_publication
+    from game.publication_contract import note_completed_publication
+
+    original_text = mode_decision.original_text or req.text or ''
+    gm = {
+        'player_facing_text': text,
+        'tags': ['social_skill_check', 'committed' if success else 'failed'],
+        'scene_update': None, 'activate_scene_id': None, 'new_scene_draft': None,
+        'world_updates': None, 'suggested_action': None, 'debug_notes': 'social_skill_check',
+    }
+    resolution = {
+        'kind': 'social_skill_check',
+        'action_id': result.get('action_id') or 'social_skill_check',
+        'label': original_text, 'prompt': original_text, 'success': success,
+        'resolved_transition': False, 'target_scene_id': None, 'discovered_clues': [],
+        'world_updates': None,
+        'state_changes': {'social_skill_check': 'applied'},
+        'metadata': {
+            'authoritative_mutation': True, 'resolver_invoked': True,
+            'gameplay_parser_invoked': False, 'narration_invoked': False,
+            'processing_outcome': 'social_skill_check',
+            'social_skill_check': {
+                'success': success, 'reason': result.get('reason'),
+                'ruleset_id': result.get('ruleset_id'), 'ruleset_version': result.get('ruleset_version'),
+            },
+            'provider_calls': {'interpretation_requests': 0, 'narration_requests': 0,
+                               'ooc_assistance_requests': 0, 'retries': 0},
+        },
+    }
+
+    def compatible(published: str) -> bool:
+        needed = 'succeeds' if success else 'fails'
+        other = 'fails' if success else 'succeeds'
+        return needed in published and other not in published and 'vs DC' in published
+
+    sealed = None
+    try:
+        seal_host_speech(gm, text=text, source='social_skill_check', speaker_id='', speaker_name='GM',
+                         resolution=resolution, player_text=original_text, world=load_world())
+        sealed = str(gm.get('player_facing_text') or '')
+    except Exception:
+        sealed = None
+    decision = reconcile_publication(proposed=text, sealed=sealed, compatible=compatible)
+    if sealed != decision['text']:
+        install_published_line(gm, text=decision['text'], resolution=resolution,
+                               player_text=original_text, source='social_skill_check')
+    published_text = decision['text']
+    resolution['metadata']['publication_disposition'] = decision['disposition']
+    resolution['metadata']['publication_failure'] = decision['disposition'] not in {'unchanged', 'paraphrase'}
+    resolution['metadata']['commit_status'] = 'committed'
+    session = load_session()
+    from game.conversational_continuity import record_delivered_exchange
+    try:
+        record_delivered_exchange(session, player_text=original_text, delivered_text=published_text,
+                                  scene_id=str(session.get('active_scene_id') or ''),
+                                  turn=int(session.get('turn_counter') or 0), ownership='gm')
+        note_completed_publication(session, text=published_text, resolution=resolution, gm=gm)
+        save_session(session)
+        append_log({
+            'timestamp': utc_iso_now(), 'player_input': original_text, 'player_facing_text': published_text,
+            'request': {'chat': original_text}, 'resolution': resolution, 'gm_output': gm,
+            'log_meta': {'player_input': original_text, 'communication_mode': mode_decision.mode,
+                         'mode_source': mode_decision.source, 'processing_outcome': 'social_skill_check',
+                         'authoritative_mutation': True, 'resolver_invoked': True},
+        })
+    except Exception:
+        resolution['metadata']['publication_failure'] = True
+    restore_accepted_text(gm)
+    gm['player_facing_text'] = published_text
+    return {'ok': True, 'gm_output': _strip_internal_gm_keys(gm), 'resolution': resolution}
+
+
 def _finish_grounded_marking(req, mode_decision, proposal, character, session, *, operation_id: str):
     """Resolve, commit, then publish. Unresolved attempts do not write objects."""
     from uuid import uuid4
@@ -7717,6 +8009,54 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
     scene_before_id = scene['scene']['id']
     recent_log = load_log()
     campaign_start = _is_campaign_start_turn_request(req.text, session, recent_log)
+    if not campaign_start:
+        # Cached singleton interpretations and marking shortcuts must not
+        # override a whole-request admission refusal.
+        from game.conversational_orchestration import full_request_admission
+
+        full_request_decision = full_request_admission(
+            req.text or "", scene=scene, world=world, session=session,
+        )
+        if full_request_decision is not None:
+            if full_request_decision.execution_policy == "interpret_before_execution":
+                # Coverage still withholds every consequence. Use the existing
+                # interpreter and publication owners, then terminate before any
+                # deterministic singleton, marking, social or legacy fallback.
+                from game.conversational_orchestration import decision_from_uncertain_interpretation
+                import copy
+
+                stored = _stored_interpretation_for_player_text(req.text, session, scene, world)
+                outcome = None
+                if stored is None and mode_decision.mode in {"AUTO", "IC"}:
+                    outcome = interpret_production_turn(
+                        player_text=req.text or "", mode=mode_decision.mode,
+                        scene=copy.deepcopy(scene), world=copy.deepcopy(world),
+                        log=copy.deepcopy(recent_log), session=copy.deepcopy(session),
+                        character=copy.deepcopy(character),
+                        coverage_restriction=copy.deepcopy(full_request_decision.authorization),
+                    )
+                record = stored
+                if outcome is not None:
+                    # Only validated records from the existing adapter can
+                    # supply meaning. Failed/skipped calls cannot fall through.
+                    record = (outcome.get("record") if outcome.get("reason") in {
+                        "eligible_for_bridge", "clarification_required",
+                    } else None)
+                decision = decision_from_uncertain_interpretation(
+                    full_request_decision, record, scene=scene, world=world,
+                    session=session, character=character, log=recent_log,
+                )
+                return _nonmutating_conversational_decision_response(
+                    req, mode_decision, decision, live_outcome=outcome,
+                )
+            return _nonmutating_conversational_decision_response(req, mode_decision, full_request_decision)
+        from game.ordinary_social_check import plan_ordinary_social_turn
+
+        social_plan = plan_ordinary_social_turn(
+            req.text or "", character=character, session=session, world=world, scene=scene,
+        )
+        if social_plan is not None:
+            return _finish_ordinary_social_turn(req, mode_decision, social_plan)
     stored_interpretation = None if campaign_start else _stored_interpretation_for_player_text(
         req.text,
         session,
@@ -7731,7 +8071,16 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             world=world,
             session=session,
             log=recent_log,
+            character=character,
         )
+        if combat.get("in_combat") and deterministic_decision is not None and deterministic_decision.reason == "grounded_posted_reading":
+            decision = ConversationalDecision(
+                category=ConversationalDecisionCategory.CLARIFY,
+                primary_intention=req.text or "", intent_family="world_operation",
+                reason="reading_during_combat", execution_policy="answer_only",
+                player_facing_text="The fight is still underway. What do you do in combat?",
+            )
+            return _nonmutating_conversational_decision_response(req, mode_decision, decision)
     if stored_interpretation is None and not campaign_start:
         from game.marking_action import recognize_marking
 
@@ -7823,6 +8172,7 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             stored_interpretation,
             player_text=req.text,
             scene=scene, world=world, session=session,
+            character=character, log=recent_log, in_combat=bool(combat.get("in_combat")),
         )
         if stored_decision.reason == "interpretation_not_interpreted":
             return _nonmutating_interpretation_failure_response(req, {"reason": "not_interpreted"})
@@ -7862,6 +8212,7 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             world=world,
             log=recent_log,
             session=session,
+            character=character,
         )
         if live_outcome.get("status") == "blocked":
             live_record = live_outcome.get("record") if isinstance(live_outcome.get("record"), dict) else None
@@ -7871,6 +8222,7 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                     bridge_meta=live_outcome,
                     player_text=req.text or "",
                     scene=scene, world=world, session=session,
+                    character=character, log=recent_log, in_combat=bool(combat.get("in_combat")),
                 )
                 if decision.category == ConversationalDecisionCategory.EXECUTE:
                     live_locked_action, stored_bridge_meta = normalized_action_from_interpretation(
@@ -7913,6 +8265,7 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                 bridge_meta=live_outcome,
                 player_text=req.text or "",
                 scene=scene, world=world, session=session,
+                character=character, log=recent_log, in_combat=bool(combat.get("in_combat")),
             )
             if decision.category != ConversationalDecisionCategory.EXECUTE:
                 return _nonmutating_conversational_decision_response(
@@ -7947,6 +8300,24 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             bridged_from_stored_interpretation = live_locked_action
             execution_decision = decision
             live_outcome = {**live_outcome, "bridge": stored_bridge_meta}
+
+    inspection_alias = None
+    inspection_authority = None
+    incidental_inspection_target = None
+    if bridged_from_stored_interpretation is not None and execution_decision is not None:
+        normalized_record = execution_decision.proposed_record or {}
+        consistency = normalized_record.get("contract_consistency") or {}
+        inspection_authority = consistency.get("authority")
+        if inspection_authority in {
+            GROUNDED_READING_AUTHORITY,
+            "complete_affirmative_examination_and_unique_visible_target",
+            "incidental_posture_and_unique_visible_inspection_target",
+        }:
+            if isinstance(live_outcome, dict):
+                live_outcome["normalized_record"] = normalized_record
+            inspection_alias = consistency.get("inspection_alias")
+        if inspection_authority == "incidental_posture_and_unique_visible_inspection_target":
+            incidental_inspection_target = consistency.get("target_id")
 
     live_locked_action = bridged_from_stored_interpretation
     if bridged_from_stored_interpretation is not None and execution_decision is not None and execution_decision.context_update:
@@ -8007,7 +8378,15 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
         and isinstance(bridged_from_stored_interpretation, dict)
         and _npc_plan.get('id') == bridged_from_stored_interpretation.get('target_id')
     )
-    if not grounded_authored_choice and not grounded_general_social and not grounded_background_social and _confirmed_addressee_target(execution_decision) is None and addressee_authority_applies(
+    from game.conversational_orchestration import destination_correction_authorizes_move
+
+    supported_correction = destination_correction_authorizes_move(
+        gate_text,
+        scene=scene,
+        action=bridged_from_stored_interpretation if isinstance(bridged_from_stored_interpretation, dict) else None,
+    )
+    addressee = {}
+    if not grounded_authored_choice and not grounded_general_social and not grounded_background_social and not supported_correction and _confirmed_addressee_target(execution_decision) is None and addressee_authority_applies(
         operation=bridged_operation,
         player_text=gate_text,
     ):
@@ -8069,6 +8448,44 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                 bridge_meta=stored_bridge_meta,
             )
 
+    if addressee.get("operation_eligibility") == "executable" and re.search(
+        r"^(?:(?:I|we)\s+)?ask\b.*\s+(?:a|another|one more)\s+question[.!?]*$", gate_text, re.I,
+    ):
+        decision = ConversationalDecision(
+            category=ConversationalDecisionCategory.CLARIFY,
+            primary_intention=gate_text,
+            intent_family="clarification",
+            reason="missing_social_question",
+            proposed_target=addressee["target_id"],
+            missing_information=["question"],
+            player_facing_text="What do you want to ask? Nothing has been attempted.",
+            execution_policy="answer_only",
+        )
+        return _nonmutating_conversational_decision_response(
+            req, mode_decision, decision, live_outcome=live_outcome, bridge_meta=stored_bridge_meta,
+        )
+
+    # Establish the ordinary contract once, before it can acquire action time.
+    # Deterministic, marking, stored/live bridge and addressee owners above keep
+    # first refusal. Reuse this same contract in ordinary resolver selection.
+    pre_tick_resolution: dict = {}
+    pre_tick_contract = None
+    if not campaign_start and bridged_from_stored_interpretation is None:
+        from game.ordinary_semantic_ownership import establish_ordinary_gameplay_contract, ordinary_admission_decision
+        from game.semantic_interpreter import player_visible_turns
+
+        pre_tick_contract = establish_ordinary_gameplay_contract(
+            pre_tick_resolution, player_text=req.text, session=session,
+            scene_id=scene_before_id, scene=scene, world=world,
+            visible_turns=player_visible_turns(recent_log),
+        )
+        admission = ordinary_admission_decision(pre_tick_contract)
+        if admission is not None:
+            return _nonmutating_conversational_decision_response(
+                req, mode_decision, admission, live_outcome=live_outcome,
+                bridge_meta=stored_bridge_meta,
+            )
+
     trace: dict = {
         'timestamp': utc_iso_now(),
         'source': 'chat',
@@ -8117,42 +8534,90 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                     },
                 )
             opening_scope.track(session, world, combat)
-    if session.get('turn_counter') is None:
-        session['turn_counter'] = 0
-    committed = session.setdefault("conversational_context", {})
-    if not isinstance(committed, dict):
-        committed = {}
-        session["conversational_context"] = committed
-    committed["last_executed_intention"] = {
-        "status": "executed",
-        "text": (req.text or "")[:500],
-        "operation": getattr(execution_decision, "proposed_operation", None) if execution_decision is not None else None,
-        "target": getattr(execution_decision, "proposed_target", None) if execution_decision is not None else None,
-        "scene_id": session.get("active_scene_id"),
-    }
-    committed["pending_intention"] = None
-    session['turn_counter'] += 1
-
-    # A revalidated background exchange or routine posture change consumes a
-    # transcript turn, but does not advance factions or pressure clocks.
-    from game.bounded_improvisation import controlled_request as _controlled_plan
-    _routine_plan = _controlled_plan(req.text or '', session=session, scene=scene, world=world)
-    _routine_turn = bool(
-        bridged_from_stored_interpretation is not None
-        and (bridged_from_stored_interpretation.get('metadata') or {}).get('controlled_world_fact')
-        and _routine_plan and _routine_plan.get('id') == bridged_from_stored_interpretation.get('target_id')
-        and (_routine_plan.get('npc_mode') in {'creation', 'conversation'} or _routine_plan.get('routine') in {'sit', 'stand', 'open', 'close', 'move', 'push', 'pull', 'lift', 'place', 'approach', 'retreat', 'establish', 'inspect_result'} or _routine_plan.get('physical') is True)
-    )
-    tick = {'events': []} if _routine_turn else advance_world_tick(world, campaign)
-    if not campaign_start and not _routine_turn:
-        save_world(world)
-
+    tick = {'events': []}
     clocks_before = dict(get_or_init_clocks(session))
-    time_pressure_after = clocks_before.get('time_pressure', 0) if _routine_turn else advance_clock(session, "time_pressure", 1)
+    time_pressure_after = clocks_before.get('time_pressure', 0)
+    action_time_committed = False
+    chat_turn_staged = False
 
+    def _stage_chat_turn():
+        # Session is an unsaved working document here. A failed proposal is
+        # discarded, never persisted and never rolled back over a real action.
+        nonlocal chat_turn_staged
+        if not action_time_committed and not chat_turn_staged:
+            session['turn_counter'] = int(session.get('turn_counter') or 0) + 1
+            chat_turn_staged = True
+
+    def _commit_chat_action_time():
+        nonlocal tick, time_pressure_after, action_time_committed
+        if action_time_committed:
+            return
+        if session.get('turn_counter') is None:
+            session['turn_counter'] = 0
+        committed = session.setdefault("conversational_context", {})
+        if not isinstance(committed, dict):
+            committed = {}
+            session["conversational_context"] = committed
+        committed["last_executed_intention"] = {
+            "status": "executed",
+            "text": (req.text or "")[:500],
+            "operation": getattr(execution_decision, "proposed_operation", None) if execution_decision is not None else None,
+            "target": getattr(execution_decision, "proposed_target", None) if execution_decision is not None else None,
+            "scene_id": session.get("active_scene_id"),
+        }
+        if inspection_authority == GROUNDED_READING_AUTHORITY:
+            committed["last_executed_intention"]["authority"] = inspection_authority
+        committed["pending_intention"] = None
+        if not chat_turn_staged:
+            session['turn_counter'] += 1
+
+        # A revalidated background exchange or routine posture change consumes a
+        # transcript turn, but does not advance factions or pressure clocks.
+        from game.bounded_improvisation import controlled_request as _controlled_plan
+        _routine_plan = _controlled_plan(req.text or '', session=session, scene=scene, world=world)
+        _routine_turn = bool(
+            bridged_from_stored_interpretation is not None
+            and (bridged_from_stored_interpretation.get('metadata') or {}).get('controlled_world_fact')
+            and _routine_plan and _routine_plan.get('id') == bridged_from_stored_interpretation.get('target_id')
+            and (_routine_plan.get('npc_mode') in {'creation', 'conversation'} or _routine_plan.get('routine') in {'sit', 'stand', 'open', 'close', 'move', 'push', 'pull', 'lift', 'place', 'approach', 'retreat', 'establish', 'inspect_result'} or _routine_plan.get('physical') is True)
+        )
+        tick = {'events': []} if _routine_turn else advance_world_tick(world, campaign)
+        if not campaign_start and not _routine_turn:
+            save_world(world)
+
+        time_pressure_after = clocks_before.get('time_pressure', 0) if _routine_turn else advance_clock(session, "time_pressure", 1)
+        action_time_committed = True
+
+    def _unavailable_narration_response(narration_failure):
+        decision = ConversationalDecision(
+            category=ConversationalDecisionCategory.DECLINE,
+            primary_intention=req.text or "",
+            intent_family="narration_unavailable",
+            reason=narration_failure,
+            player_facing_text=(
+                "That request was not completed because narration is unavailable. "
+                "No action was performed and no turn was spent. You can retry the request."
+            ),
+            execution_policy="answer_only",
+            authorization={
+                "authority_provenance": "ordinary_narration_admission",
+                "operation_eligibility": "unavailable",
+                "mutation_eligibility": False,
+                "commit_status": "not_committed",
+                "selected_resolver": trace.get("selected_resolver"),
+                "narration_failure": narration_failure,
+            },
+        )
+        return _nonmutating_conversational_decision_response(
+            req, mode_decision, decision, live_outcome=live_outcome,
+            bridge_meta=stored_bridge_meta,
+        )
+
+    _stage_chat_turn()
     scene_rt = get_scene_runtime(session, scene['scene']['id'])
 
-    resolution: dict = {'world_tick_events': tick.get('events', [])}
+    resolution: dict = pre_tick_resolution
+    resolution['world_tick_events'] = tick.get('events', [])
     routed_via_exploration = False
     routed_via_adjudication = False
     normalized_chat: dict | None = None
@@ -8244,6 +8709,7 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
     # Stages 1-3: player input -> deterministic intent normalization/expansion -> classification.
     # Try social first when world has npcs; then exploration; then minimal intent fallback.
     if _is_campaign_start_turn_request(req.text, session, recent_log):
+        _commit_chat_action_time()
         routed_via_exploration = True
         route_choice = "action"
         normalized_chat, resolution = _opening_scene_normalized_action_and_resolution(
@@ -8295,7 +8761,7 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
         )
         from game.semantic_interpreter import player_visible_turns
 
-        ordinary_contract = establish_ordinary_gameplay_contract(
+        ordinary_contract = pre_tick_contract if pre_tick_contract is not None else establish_ordinary_gameplay_contract(
             resolution,
             player_text=req.text,
             session=session,
@@ -8485,6 +8951,9 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                 elif "declared_travel_override" not in trace:
                     trace["declared_travel_override"] = {"applied": False}
         _accumulate_latency(latency_ms, "intent_classification", _elapsed_ms(classify_started))
+    if gm is not None:
+        _commit_chat_action_time()
+        resolution['world_tick_events'] = tick.get('events', [])
     _record_scene_pressure_input(
         session,
         scene_before_id,
@@ -8493,11 +8962,46 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
         resolution=None,
     )
     if parsed is not None and gm is None:
+        # Complete coverage does not establish an inspection target. Admit it
+        # before commitment-break bookkeeping, search resolution or time; the
+        # nonmutating publisher reloads persisted state, discarding proposals.
+        from game.conversational_orchestration import inspection_action_admission
+
+        inspection_admission = inspection_action_admission(
+            req.text or "", normalize_scene_action(parsed),
+            scene=scene, world=world, character=character,
+            reconciled_inspection_alias=inspection_alias,
+        )
+        if inspection_admission is not None:
+            return _nonmutating_conversational_decision_response(
+                req, mode_decision, inspection_admission, live_outcome=live_outcome,
+                bridge_meta=stored_bridge_meta,
+            )
         # Stage 4: engine resolution from classified action.
         parsed_type = (parsed.get("type") or "").strip().lower()
+        if (
+            parsed_type in {"question", "social_probe"}
+            and bridged_from_stored_interpretation is None
+            and addressee.get("communication_ownership") == "gm_directed"
+            and "?" in gate_text
+            and not canonical_entry.get("open_social_solicitation")
+        ):
+            decision = ConversationalDecision(
+                category=ConversationalDecisionCategory.ANSWER,
+                primary_intention=gate_text,
+                intent_family="context_question",
+                communication_owner="GM",
+                reason="information_unresolved",
+                player_facing_text="I haven't resolved that question from the disclosed information.",
+                execution_policy="answer_only",
+            )
+            return _nonmutating_conversational_decision_response(
+                req, mode_decision, decision, live_outcome=live_outcome,
+            )
         normalized: dict | None = None
         # Route attack to combat when in_combat; social to social engine; else exploration
         if parsed_type == "attack" and combat.get("in_combat"):
+            _commit_chat_action_time()
             if not player_can_act(character, combat, conditions):
                 return {'ok': False, 'error': 'You cannot act right now.', **compose_state()}
             attacks = character.get("attacks") or []
@@ -8521,6 +9025,10 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             routed_via_exploration = True
             normalized = parsed  # Social actions use own shape; ensure type is set
             normalized_chat = normalized
+            if (bridged_from_stored_interpretation is None
+                    and addressee.get("operation_eligibility") == "executable"
+                    and addressee.get("target_id")):
+                normalized["target_id"] = normalized["targetEntityId"] = addressee["target_id"]
             implied_context.update(
                 apply_explicit_non_social_commitment_break(
                     session, world, scene_before_id, req.text, normalized, scene_envelope=scene
@@ -8569,6 +9077,8 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                 )
             )
             _ex_kw_chat2 = {"list_scene_ids": list_scene_ids, "load_scene_fn": lambda sid: get_effective_scene(session, sid)}
+            if inspection_alias:
+                _ex_kw_chat2["reconciled_inspection_alias"] = inspection_alias
             resolution = _resolve_engine_noncombat_seam(
                 scene,
                 session,
@@ -8585,7 +9095,29 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             stamp_downstream_provenance,
         )
 
+        if (parsed_type == "investigate" and not action_time_committed and not combat.get("in_combat")
+                and execution_decision is not None and execution_decision.proposed_operation == "INSPECT"):
+            settled_reading = settled_reading_decision(
+                req.text or "", resolution, session=session,
+                target_id=normalized.get("target_id"), scene_id=scene_before_id,
+            )
+            if settled_reading is not None:
+                return _nonmutating_conversational_decision_response(
+                    req, mode_decision, settled_reading, live_outcome=live_outcome,
+                    bridge_meta=stored_bridge_meta, resolver_invoked=True,
+                )
         resolution = carry_authoritative_contract(contract_holder, resolution)
+        if (incidental_inspection_target and isinstance(resolution, dict)
+                and resolution.get("kind") == "discover_clue" and resolution.get("success") is True
+                and resolution.get("interactable_id") == incidental_inspection_target):
+            # Publish the admitted inspection's receipt without echoing the
+            # discarded posture as a completed operation.
+            from game.api_turn_support import _authoritative_resolution_fact_text
+            from game.publication_contract import FINAL_ENGINE_RESPONSE, stamp
+
+            line, source = _authoritative_resolution_fact_text(resolution=resolution, scene=scene, world=world)
+            if line and source.get("source") == "clue_text":
+                stamp(resolution.setdefault("metadata", {}), FINAL_ENGINE_RESPONSE, publication=line)
         if isinstance(normalized, dict) and compact_segmented:
             meta = normalized.get("metadata")
             if not isinstance(meta, dict):
@@ -8629,6 +9161,64 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                     "answer_type": embedded_adjudication.get("answer_type"),
                     "requires_check": embedded_adjudication.get("requires_check"),
                 }
+        pending_check = _is_pending_check_resolution(resolution)
+        if parsed_type in SOCIAL_KINDS and not (_social_resolution_completed(resolution) or pending_check):
+            offscene = _is_offscene_social_target_resolution(resolution)
+            decision = ConversationalDecision(
+                category=ConversationalDecisionCategory.DECLINE,
+                primary_intention=req.text or "",
+                intent_family="social_resolution",
+                reason="offscene_social_target" if offscene else "social_action_unresolved",
+                player_facing_text=(
+                    _build_offscene_target_gm_output(resolution)["player_facing_text"] if offscene
+                    else "The interaction could not be completed. Nothing has been attempted."
+                ),
+                execution_policy="answer_only",
+            )
+            return _nonmutating_conversational_decision_response(
+                req, mode_decision, decision, live_outcome=live_outcome,
+                bridge_meta=stored_bridge_meta, rejected_social_receipt=resolution,
+            )
+        prepared_gm = None
+        if not action_time_committed and _resolution_needs_narration(resolution):
+            _stage_chat_turn()
+            # A parser match alone is not an executed observation or exchange.
+            # Resolve expression first; speculative in-memory work is discarded
+            # on failure by the existing nonmutating publication owner.
+            try:
+                prepared_gm = _build_gpt_narration_from_authoritative_state(
+                    campaign=campaign, world=world, session=session, character=character,
+                    scene=scene, combat=combat, recent_log=recent_log, user_text=req.text,
+                    resolution=resolution, scene_runtime=scene_rt,
+                    segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                    route_choice=route_choice, directed_social_entry=canonical_entry,
+                    latency_sink=latency_ms, normalized_action=normalized,
+                )
+                failure = _uncommitted_narration_failure(prepared_gm)
+            except Exception as exc:
+                failure = "timeout" if isinstance(exc, TimeoutError) else "provider_failure"
+            if failure:
+                return _unavailable_narration_response(failure)
+        if not action_time_committed:
+            from game.api_turn_support import host_destination_binding_failed
+
+            if host_destination_binding_failed(resolution):
+                # The route may already have been selected. The binder then
+                # failed to name a destination. That is not a world attempt.
+                from game.conversational_orchestration import _unknown_destination
+                from game.scene_destination_binding import extract_last_explicit_named_place
+
+                place = extract_last_explicit_named_place(req.text or "") or ""
+                decision = _unknown_destination(req.text or "", place, clear=False)
+                return _nonmutating_conversational_decision_response(
+                    req, mode_decision, decision, live_outcome=live_outcome,
+                    bridge_meta=stored_bridge_meta, resolver_invoked=True,
+                )
+        if not (parsed_type in SOCIAL_KINDS and pending_check):
+            _commit_chat_action_time()
+        else:
+            session["turn_counter"] = int(session.get("turn_counter") or 0) - 1
+        resolution['world_tick_events'] = tick.get('events', [])
         if _is_offscene_social_target_resolution(resolution):
             trace['gpt_called'] = False
             response_type_contract = _derive_response_type_contract_for_turn(
@@ -8677,6 +9267,7 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
             annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
         else:
             scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
+                prepared_gm=prepared_gm,
                 campaign=campaign,
                 character=character,
                 session=session,
@@ -8760,6 +9351,7 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                 has_active_interaction=_has_active_interaction,
             )
         if adjudication is not None:
+            _commit_chat_action_time()
             routed_via_adjudication = True
             trace['gpt_called'] = False
             trace['canonical_entry_path'] = 'adjudication'
@@ -8884,23 +9476,35 @@ def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
                 directed_social_entry=canonical_entry,
                 attach_to_resolution=False,
             )
-            gm = _build_gpt_narration_from_authoritative_state(
-                campaign=campaign,
-                world=world,
-                session=session,
-                character=character,
-                scene=scene,
-                combat=combat,
-                recent_log=recent_log,
-                user_text=req.text,
-                resolution=resolution,
-                scene_runtime=scene_rt,
-                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
-                route_choice=route_choice,
-                directed_social_entry=canonical_entry,
-                response_type_contract=response_type_contract,
-                latency_sink=latency_ms,
-            )
+            # No deterministic action resolved. Generation must finish before
+            # this fallback can acquire action time; failure is not execution.
+            narration_failure = None
+            _stage_chat_turn()
+            try:
+                gm = _build_gpt_narration_from_authoritative_state(
+                    campaign=campaign,
+                    world=world,
+                    session=session,
+                    character=character,
+                    scene=scene,
+                    combat=combat,
+                    recent_log=recent_log,
+                    user_text=req.text,
+                    resolution=resolution,
+                    scene_runtime=scene_rt,
+                    segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                    route_choice=route_choice,
+                    directed_social_entry=canonical_entry,
+                    response_type_contract=response_type_contract,
+                    latency_sink=latency_ms,
+                )
+                narration_failure = _uncommitted_narration_failure(gm)
+            except Exception as exc:
+                narration_failure = "timeout" if isinstance(exc, TimeoutError) else "provider_failure"
+            if narration_failure:
+                return _unavailable_narration_response(narration_failure)
+            _commit_chat_action_time()
+            resolution['world_tick_events'] = tick.get('events', [])
             record_explicit_nonplan_model_narration(
                 session,
                 reason="chat_procedural_unparsed_freeform",

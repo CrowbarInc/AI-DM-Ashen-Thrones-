@@ -184,6 +184,28 @@ def _prefix_token_lists(target: str) -> List[List[str]]:
     return [tokens[:end] for end in range(len(tokens), 0, -1)]
 
 
+def reference_compatible(phrase: str, name: str) -> bool:
+    """Match an established name, alias, word suffix, or compound head.
+
+    ``book`` is compatible with ``spellbook`` and with ``prayer book``.
+    It is not compatible with an unrelated token that merely shares letters
+    in the middle, and a spacing variant such as ``spell book`` stays the
+    same identity. This does not create an alias.
+    """
+    left = content_tokens(phrase)
+    right = content_tokens(name)
+    if not left or not right:
+        return False
+    if left == right or (len(left) <= len(right) and right[-len(left) :] == left):
+        return True
+    if len(left) > 1 and len(right) == 1 and "".join(left) == right[0]:
+        return True
+    if len(left) == 1 and len(left[0]) >= 4:
+        head = left[0]
+        return any(len(token) > len(head) and token.endswith(head) for token in right)
+    return False
+
+
 def _contains_token_phrase(surface_text: str, phrase: Sequence[str]) -> bool:
     if not phrase:
         return False
@@ -230,6 +252,8 @@ def _interactable_surfaces(scene_inner: Mapping[str, Any]) -> List[Dict[str, Any
         return out
     for item in raw:
         if not isinstance(item, Mapping):
+            continue
+        if item.get("hidden") is True or item.get("visible") is False or item.get("accessible") is False:
             continue
         iid = _clean(item.get("id"))
         if not iid:
@@ -406,6 +430,23 @@ def classify_referenced_surface(
             matched_prefix = [tok for tok in full_tokens if tok in set(content_tokens(str(hit.get("text") or "")))]
 
     if hit is None:
+        # A unique interactable may be named by its compound head. Several
+        # such objects stay unresolved here so the caller can ask which one.
+        compound: List[Dict[str, Any]] = []
+        seen_ids: set[str] = set()
+        for row in surfaces:
+            if str(row.get("kind") or "") != "interactable":
+                continue
+            iid = _clean(row.get("interactable_id"))
+            if not iid or iid in seen_ids:
+                continue
+            if reference_compatible(target, str(row.get("text") or "")):
+                seen_ids.add(iid)
+                compound.append(row)
+        if len(seen_ids) == 1:
+            hit = compound[0]
+            matched_prefix = content_tokens(target)
+    if hit is None:
         return _empty_classification(target, AUTHORITY_UNSUPPORTED)
 
     kind = str(hit.get("kind") or "")
@@ -543,7 +584,7 @@ def render_referenced_surface_inspection_line(
     # Nonconfirmation does not assert absence or expose the hidden target.
     # Keep the classified authority intact; only its public rendering is shared.
     if authority in {AUTHORITY_AUTHORED_HIDDEN, AUTHORITY_UNSUPPORTED}:
-        return f"Nothing here matches that. What you can actually see is {surroundings}."
+        return "Nothing here matches that reference. Which established object do you mean?"
     if authority == AUTHORITY_UNTARGETED:
         return (
             "You look again. Nothing new resolves into evidence. "

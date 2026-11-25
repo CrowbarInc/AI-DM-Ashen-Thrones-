@@ -334,14 +334,21 @@ def requested_information(player_text: str) -> str:
     from game.conversational_continuity import is_incidental_personal
     if is_incidental_personal(text):
         return "opinion"
+    # Reuse the social owner's quantitative/comparative axes before the broad
+    # surveillance vocabulary. A role such as "Guard" is not the asked fact.
+    from game.social import classify_social_question_dimension
+    dimension = classify_social_question_dimension(text)
+    information_axis = dimension if dimension in {"quantity", "comparison"} else "general"
     for name, pattern in sorted(_REQUESTS, key=lambda item: item[0] == "surveillance"):
+        if name == "surveillance" and information_axis != "general":
+            return information_axis
         if pattern.search(text):
             return name
     from game.conversational_continuity import is_incidental_personal
 
     if is_incidental_personal(text):
         return "opinion"
-    return "general"
+    return information_axis
 
 
 def subject_phrase(player_text: str, *, speaker_name: str = "") -> str:
@@ -438,10 +445,15 @@ def _single_partial_topic(npc: Mapping[str, Any] | None, player_text: str) -> di
 def topic_supports_requested_information(player_text: str, topic_text: str) -> bool:
     """A subject mention is not an answer to a more specific request."""
     kind = requested_information(player_text)
+    if re.search(r"\bwhat\s+(?:can\s+(?:you|he|she|they)|(?:he|she|they)\s+can)\s+see\s*[?.!]*$", player_text, re.I):
+        return bool(re.search(r"\b(?:see|visible|in view|in sight)\b", topic_text, re.I))
     # A positive watch assertion does not establish the time of an absence.
     absence = re.compile(r"\b(?:unattended|unguarded|unwatched)\b", re.I)
     if absence.search(player_text) and not absence.search(topic_text):
         return False
+    if kind in {"quantity", "comparison"}:
+        from game.social import _stored_text_supports_dimension
+        return _stored_text_supports_dimension(topic_text, kind)
     if kind == "general":
         return True
     pattern = _SUPPORT.get(kind)

@@ -1,0 +1,7 @@
+# Next-step decision
+
+The scoped offline contract repair succeeded: **A/PASS**. The exact A4/B1/E02/N1 records reproduced all four historical responses before editing; the final replay answers A4's known prepared subset, preserves B1's unresolved-addressee clarification, withholds E02 with scene context, and executes N1's legitimate examination with its authored clue persisted and exactly one turn/tick. Final acceptance 191/191; 50/50 requirement rows; combined/focused have zero new failure identities. Safe refusal alone is not the basis for this verdict.
+
+A separately authorized, frozen **positive-action live retest is justified** as the next foundational priority. Distinguish an established-description question from an affirmative examination and require actual authoritative consequence/time/persistence evidence. This milestone authorizes no provider calls; LIVE PROVIDER CALLS: 0. LIVE MODEL VALIDATION: NOT EXECUTED. Do not start the retest or another milestone automatically.
+
+The remaining primary bottleneck is live communication/action consistency and generalization beyond four retained envelopes. Related authored controls are not independent held-out evidence. E02 broad-search capability, B1 officer identity, unavailable spellbook contents, conditional execution and full narration quality remain separate limits. Longer live play and new gameplay subsystems remain premature. Social repeat/legacy stance stays PAUSED. STOP after verified archive packaging.

@@ -686,6 +686,118 @@ def speech_participant_head(nominal: str | None) -> str:
     return _clean(" ".join(kept).strip("\"'"))
 
 
+_ATTENTION_POSE = (
+    r"(?:catch\s+(?P<eye>.+?)['’]s\s+eye(?:\s+to\s+get\s+(?:their|his|her)\s+attention)?"
+    r"|(?:turn\s+(?:to\s+face|to|towards?)|face|(?:nod|incline)\s+(?:(?:my|our|the)\s+)?head\s+towards?"
+    r"|nod\s+to|glance\s+(?:at|towards?)|look\s+(?:at|towards?))\s+(?P<orientation>.+?))"
+)
+_ATTENTION_NOMINAL = re.compile(r"[\w'’-]+(?:\s+[\w'’-]+){0,5}")
+_ATTENTION_OTHER_INTENT = re.compile(
+    r"\b(?:and|or|but|then|before|after|while|unless|until|secretly|instead|without|to)\b", re.I,
+)
+
+
+def attention_nominal(posture: str) -> str:
+    """Read the addressee of a complete, bounded attention gesture."""
+    match = re.fullmatch(r"(?:I\s+)?" + _ATTENTION_POSE + r"[.]?", posture.strip(), re.I)
+    nominal = (match['eye'] or match['orientation']) if match else ""
+    if not _ATTENTION_NOMINAL.fullmatch(nominal) or _ATTENTION_OTHER_INTENT.search(nominal):
+        return ""
+    return re.sub(r"^(?:the|a|an)\s+", "", nominal.casefold())
+
+
+_NPC_CORRECTION_PREFIX = re.compile(
+    r"^(?:(?:no,\s*)?I\s+(?:mean|meant)|I['’]m\s+talking\s+about"
+    r"|I\s+was\s+referring\s+to|by\s+(?:him|her|them),\s*I\s+mean)\s+"
+    r"(?P<person>[^.!?;]+)(?:\.\s*(?P<remainder>.*))?$", re.I | re.S,
+)
+_CORRECTION_OBJECT_PRONOUNS = frozenset({"him", "her", "them"})
+
+
+def npc_correction_prefix(text: str) -> tuple[str, str] | None:
+    """Read an initial identity clarification bounded by a sentence break."""
+    match = _NPC_CORRECTION_PREFIX.fullmatch(text.strip())
+    if not match:
+        return None
+    person = match["person"].strip()
+    if not _ATTENTION_NOMINAL.fullmatch(person) or _ATTENTION_OTHER_INTENT.search(person):
+        return None
+    return person, (match["remainder"] or "").strip()
+
+
+def _bounded_question(speech: str) -> bool:
+    return bool(speech) and not re.search(r"[.;!?]", speech.rstrip('.?')) and not re.search(
+        r"\b(?:and|or|then|while|unless|until|otherwise|instead)\b", speech, re.I,
+    )
+
+
+def _question_addressee(speech: str, default: str) -> str | None:
+    if not _bounded_question(speech):
+        return None
+    match = re.fullmatch(
+        r"(?:I\s+)?(?:ask|question)\s+(?:(?P<person>[\w'’-]+(?:\s+[\w'’-]+){0,5}?)\s+)?"
+        r"(?:whether|if|how|where|when|why|what|who|about)\s+.+", speech, re.I,
+    )
+    return (match["person"] or default) if match else None
+
+
+def correction_attention_nominal(posture: str) -> str:
+    match = re.fullmatch(r"(?:I\s+)?catch\s+(their|his|her)\s+eye[.]?", posture.strip(), re.I)
+    if match:
+        return {"their": "them", "his": "him", "her": "her"}[match[1].casefold()]
+    return attention_nominal(posture)
+
+
+def _corrected_question_addressee(speech: str, default: str) -> str | None:
+    addressee = _question_addressee(speech, default)
+    if not addressee or _ATTENTION_OTHER_INTENT.search(addressee) or re.search(r"[,–—:]", speech):
+        return None
+    # An unmarked second first-person clause can be an independent attempt.
+    # Keep this grammar bounded instead of absorbing that clause into a topic.
+    tail = re.sub(r"^I\s+", "", speech, flags=re.I)
+    if re.search(r"\b(?:I|we)\s+(?!(?:can|could|should|would)\b)", tail, re.I):
+        return None
+    return addressee
+
+
+def corrected_dialogue(text: str) -> tuple[str, str, str, str] | None:
+    """Return the correction, spoken addressee, original speech and optional gesture."""
+    prefix = npc_correction_prefix(text)
+    if prefix is None:
+        return None
+    person, remainder = prefix
+    addressee = _corrected_question_addressee(remainder, "")
+    if addressee:
+        return person, addressee.casefold(), remainder, ""
+    parts = re.split(r"\s+and\s+(?=(?:I\s+)?(?:ask|question)\b)|[.]\s+",
+                     remainder, maxsplit=1, flags=re.I)
+    if len(parts) != 2 or not (gesture := correction_attention_nominal(parts[0])):
+        return None
+    speech = parts[1].strip()
+    addressee = _corrected_question_addressee(speech, person)
+    if not addressee:
+        return None
+    return person, addressee.casefold(), speech, gesture
+
+
+def dialogue_attention(text: str) -> tuple[str, str, str] | None:
+    """Recognize one bounded gesture followed by a dialogue question."""
+    parts = re.split(r"\s+and\s+(?=(?:I\s+)?(?:ask|question)\b)|[.]\s+", text.strip(), maxsplit=1, flags=re.I)
+    if len(parts) != 2 or not (nominal := attention_nominal(parts[0])):
+        return None
+    speech = parts[1].strip()
+    quoted = speech[:1] in ('"', "'", "“", "‘") and speech[-1:] in ('"', "'", "”", "’")
+    speech = speech[1:-1] if quoted else speech
+    if quoted and speech.endswith('?') and _bounded_question(speech):
+        addressee = addressed_person_nominal(speech) or nominal
+    else:
+        addressee = _question_addressee(speech, nominal)
+    if not addressee or _ATTENTION_OTHER_INTENT.search(addressee):
+        return None
+    addressee = re.sub(r"^(?:the|a|an)\s+", "", addressee.casefold())
+    return nominal, addressee, speech
+
+
 def addressed_person_nominal(text: str | None) -> str:
     """Nominal of a direct address, or empty when the utterance does not address anyone.
 
@@ -697,14 +809,28 @@ def addressed_person_nominal(text: str | None) -> str:
     raw = _clean(text)
     if not raw:
         return ""
+    # In a question such as "Do the prints tell us ...?", the speech verb
+    # belongs to the subject of the question, not to a player speech act.
+    embedded_speech = re.match(
+        r"^(?:(?:what|where|when|why|how)\s+)?(?:do|does|did|can|could|will|would|should|may|might)\s+"
+        r"(?!i\b|we\b|you\b)", raw, re.I,
+    )
     greeting = _GREETING_ADDRESS_RE.match(raw)
     if greeting:
         nominal = speech_participant_head(_nominal_chunk(greeting.group("nominal") or ""))
         if nominal and not _QUESTION_NOMINAL_RE.match(nominal) and not _INTERJECTION_RE.match(nominal):
             return nominal
+    from game.scene_destination_binding import named_departure_destination
+
     for pattern in (_VOCATIVE_RE, _SPEECH_ADDRESS_RE, _TELL_RE):
+        if pattern is _VOCATIVE_RE and named_departure_destination(raw) is not None:
+            continue
+        if embedded_speech and pattern is not _VOCATIVE_RE:
+            continue
         for match in pattern.finditer(raw):
             span = _complement_cut(match.group("nominal") or "")
+            if pattern is _SPEECH_ADDRESS_RE:
+                span = re.split(r"\s+(?:a|another|one more)\s+question\b", span, maxsplit=1, flags=re.I)[0]
             nominal = speech_participant_head(_nominal_chunk(span))
             if not nominal or _QUESTION_NOMINAL_RE.match(nominal) or _INTERJECTION_RE.match(nominal):
                 continue

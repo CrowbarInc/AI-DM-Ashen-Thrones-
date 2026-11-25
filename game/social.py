@@ -1044,6 +1044,10 @@ def classify_social_followup_dimension(player_text: str) -> str:
         low,
     ):
         return "quantity"
+    if re.search(r"\b(?:shorter|longer|faster|slower|safer|cheaper|costlier)\b", low) and re.search(
+        r"\b(?:which|is|are|than)\b", low
+    ):
+        return "comparison"
     if re.search(r"\b(?:what condition|what state|how damaged|how intact)\b", low):
         return "status"
     if re.search(
@@ -2017,11 +2021,15 @@ def _stored_text_supports_dimension(stored: str, dimension: str) -> bool:
             return True
         return bool(
             re.search(
-                r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|"
-                r"twelve|dozen|score)\s+[a-z]+s\b",
+                r"\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|"
+                r"twelve|dozen|score)\s+(?:(?:copper|silver|gold|platinum)\s+)?[a-z]+\b",
                 low,
             )
         )
+    if dimension == "comparison":
+        return bool(re.search(
+            r"\b(?:shorter|longer|faster|slower|safer|cheaper|costlier)\s+than\b", low
+        ))
     if dimension == "status":
         return bool(
             re.search(
@@ -2948,6 +2956,11 @@ def realize_authored_knowledge_answer(
 ) -> dict | None:
     """If existing owners already have a revealable answer, return formatted player-facing text."""
     social_plan = ((resolution or {}).get("social") or {}) if isinstance(resolution, dict) else {}
+    if social_plan and (
+        resolution.get("success") is False or resolution.get("requires_check")
+        or social_plan.get("target_resolved") is False
+    ):
+        return None
     locked = social_plan.get("unified_semantic_plan") if isinstance(social_plan, dict) else None
     if isinstance(locked, dict) and locked.get("locked"):
         if str(locked.get("response_kind") or "") != "direct" or not str(locked.get("authorized_text") or "").strip():
@@ -3258,6 +3271,12 @@ def apply_authored_knowledge_realization_to_gm(
     """
     if not isinstance(gm, dict):
         return gm if gm is not None else {}
+    social_receipt = (resolution or {}).get("social")
+    if isinstance(social_receipt, dict) and (
+        resolution.get("success") is False or resolution.get("requires_check")
+        or social_receipt.get("target_resolved") is False
+    ):
+        return gm
     from game.immutable_valid_response import leave_text_unchanged
 
     if leave_text_unchanged(gm, "apply_authored_knowledge_realization_to_gm"):
@@ -3981,7 +4000,15 @@ def resolve_social_action(
     )
     na = normalized_action if isinstance(normalized_action, dict) else {}
     explicit_norm = str(na.get("target_id") or na.get("targetEntityId") or "").strip()
-    if explicit_norm and not (auth.get("target_resolved") and auth.get("npc_id")):
+    structured_target_unresolved = bool(
+        explicit_norm and incoming_action_meta.get("structured_social_target") and auth.get("source") != "explicit_target"
+    )
+    if structured_target_unresolved:
+        # A structured target selection cannot be replaced by an active
+        # conversation or by a person mentioned in the prompt.
+        auth = {**auth, "target_resolved": False, "npc_id": None, "npc_name": None,
+                "source": "none", "reason": "structured target is not addressable"}
+    elif explicit_norm and not (auth.get("target_resolved") and auth.get("npc_id")):
         inv_dbg: Dict[str, Any] = {}
         if is_actor_addressable_in_current_scene(
             session,
@@ -4057,7 +4084,7 @@ def resolve_social_action(
         )
         return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
-    if incoming_action_meta.get("open_social_solicitation") and not (
+    if incoming_action_meta.get("open_social_solicitation") and not structured_target_unresolved and not (
         auth.get("target_resolved") and auth.get("npc_id")
     ):
         cand_raw = incoming_action_meta.get("candidate_addressable_ids")
@@ -4143,7 +4170,7 @@ def resolve_social_action(
                 action_id=action_id,
                 label=label,
                 prompt=prompt,
-                success=None,
+                success=True,
                 hint=hint_ob,
                 social=acquired_social,
                 requires_check=False,
@@ -4250,7 +4277,8 @@ def resolve_social_action(
             session=session if isinstance(session, dict) else None,
         )
         npc = next((x for x in roster if isinstance(x, dict) and str(x.get("id") or "").strip() == npc_id), None)
-    if not isinstance(npc, dict):
+    if (not isinstance(npc, dict) or npc.get("hidden")
+            or npc.get("visible") is False or npc.get("accessible") is False):
         result = SocialEngineResult(
             kind=action_type,
             action_id=action_id,
@@ -4291,6 +4319,9 @@ def resolve_social_action(
 
     # Question/social_probe: no skill check by default; may reveal topic
     if action_type in ("question", "social_probe"):
+        bridge = incoming_action_meta.get("stored_interpretation") or {}
+        if bridge.get("operation") == "ASK" and bridge.get("target_ref") == npc_id:
+            raw_player_text = bridge.get("dialogue_text") or raw_player_text
         # Migrated information questions bind one semantic plan. Legacy topic
         # selection does not run once that plan is accepted.
         from game.unified_semantic_planning import locked_plan_for_social_turn
@@ -4552,7 +4583,9 @@ def resolve_social_action(
             action_id=action_id,
             label=label,
             prompt=prompt,
-            success=None,
+            # The exchange occurred. Uncertainty about the subject is not
+            # a failure to perform the exchange or authority to reveal a fact.
+            success=True,
             hint=fallback_hint,
             social=social_payload,
             requires_check=False,
@@ -4614,7 +4647,7 @@ def resolve_social_action(
             action_id=action_id,
             label=label,
             prompt=prompt,
-            success=None,
+            success=True,
             hint=f"Player attempted {action_type} toward {npc_name}. Narrate the outcome.",
             social=social_payload,
             requires_check=False,
@@ -4656,7 +4689,7 @@ def resolve_social_action(
             action_id=action_id,
             label=label,
             prompt=prompt,
-            success=None,
+            success=True,
             hint=f"Player attempted {action_type} toward {npc_name}. Narrate the outcome.",
             social=social_payload,
             requires_check=False,

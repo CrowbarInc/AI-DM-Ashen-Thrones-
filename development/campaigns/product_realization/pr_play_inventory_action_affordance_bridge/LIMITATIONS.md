@@ -1,0 +1,3 @@
+# Limitations
+
+No new executable capability. No selected-action lifecycle, three-sequence playability, broad replay, fresh-process retry acceptance or before/after performance evidence. The gate stops those phases; their absence must not be presented as passing. Existing unsupported coat operations sometimes publish irrelevant destination clarification. Existing compound drop/travel partially executes travel; this safety control does not hold on the current source. No production repair was attempted after the feasibility stop. Atomic one-file persistence and trusted visibility metadata are not physical authority. The reported candidate scores are qualitative judgments.

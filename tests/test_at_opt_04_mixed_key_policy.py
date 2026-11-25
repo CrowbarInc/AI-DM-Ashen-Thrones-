@@ -267,9 +267,11 @@ def test_malformed_policy_structures_are_preserved() -> None:
     assert odd["turn_packet"]["response_policy"]["a"] is box
 
 
-def test_f3_primary_narration_assembly_drops_only_equal_nested_keys() -> None:
+def test_f3_primary_narration_assembly_drops_only_equal_nested_keys(tmp_path: Path) -> None:
     script = ROOT / "artifacts" / "at_opt_04" / "measure_primary_narration.py"
-    destination = ROOT / "artifacts" / "at_opt_04" / "optimized_measurement.json"
+    protected = ROOT / "artifacts" / "at_opt_04" / "optimized_measurement.json"
+    destination = tmp_path / "optimized_measurement.json"
+    assert destination.resolve() != protected.resolve()
     completed = subprocess.run(
         [
             sys.executable,

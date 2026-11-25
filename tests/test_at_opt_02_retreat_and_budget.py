@@ -99,7 +99,9 @@ def test_f3_retreat_is_not_primary_narration_when_physical_is_disabled(tmp_path,
     position = (session.get("bounded_improvisation_ledger") or {}).get("position") or {}
     assert calls["n"] == 0
     assert result["provider_calls"] == 0
-    assert result["visible"] == REFUSAL
+    assert F3 in result["visible"]
+    assert "Nothing was carried out" in result["visible"]
+    assert "accessible target" in result["visible"] or "do not authorize" in result["visible"]
     assert result["operational"] is True
     assert result["refusal_category"] == "unresolved_retreat_without_adjudication"
     assert result["failure_stage"] == "routing"
@@ -141,14 +143,19 @@ def test_enabled_retreat_remains_on_the_physical_pathway(monkeypatch):
     assert disabled_retreat_skip(F3, session) is None
 
 
-def test_unrelated_unresolved_utterance_keeps_primary_narration_eligible(tmp_path, monkeypatch):
+def test_unrelated_unresolved_utterance_requires_admission(tmp_path, monkeypatch):
     monkeypatch.delenv("ASHEN_EXPERIMENTAL_PHYSICAL_ADJUDICATION", raising=False)
     calls = {"n": 0}
     monkeypatch.setattr("game.api.call_gpt", _narration(calls))
     session, scene, world = gate()
     assert _route("I whistle at the clouds.", session, scene, world) is None
     result = chat_turn(tmp_path, monkeypatch, "I whistle at the clouds.", interpret=False)
-    assert calls["n"] >= 1
+    assert calls["n"] == 0
+    assert "Nothing has been attempted" in result["visible"]
+    assert result["turn_after"] == result["turn_before"]
+    assert result["world_unchanged"] is True
+    assert result["pointer_unchanged"] is True
+    assert result["provider_calls"] == 0
     assert result["refusal_category"] != "unresolved_retreat_without_adjudication"
     assert result["visible"] != REFUSAL
 
@@ -204,7 +211,10 @@ def test_ambiguous_step_back_reference_does_not_move_position(tmp_path, monkeypa
         assert result["refusal_category"] != "unresolved_retreat_without_adjudication"
         assert result["visible"] != REFUSAL
         assert position.get("kind") != "back"
-    assert calls["n"] >= 1
+    assert calls["n"] == 0
+    assert result["turn_after"] == result["turn_before"]
+    assert result["world_unchanged"] is True
+    assert result["pointer_unchanged"] is True
 
 
 def test_compound_and_directed_step_back_are_not_intercepted():

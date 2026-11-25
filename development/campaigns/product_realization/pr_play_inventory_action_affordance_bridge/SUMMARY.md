@@ -1,0 +1,15 @@
+Milestone: `pr_play_inventory_action_affordance_bridge`. Verdict: **BLOCKED**.
+
+The feasibility gate found no additional physical operation with all required existing authority. No action was selected or implemented. No production files or existing owners were modified. The mandatory stop condition supersedes the instruction to select one action when none qualifies.
+
+Drop/pickup lacks a durable inventory/scene transfer contract. Equip/unequip lacks slot, compatibility, equipped-state and ruleset ownership. Existing writing/removal already executes; counting it again would not add a capability. A visibility mutation service requires upstream physical adjudication; it cannot itself authorize hiding/revealing a marking. No new properties, inventory items or capabilities were invented.
+
+Fresh verification: combined 405 passed / 20 failed; focused 65 passed / 0 failed. Three additional combined failure identities against the predecessor were investigated: forcing ASHEN_DISABLE_PROVIDER_CALLS changes the operational-refusal path. All 3/3 pass when that flag is unset with external network sockets blocked and request limits enforced by the tests. This targeted recheck does not replace the 405/20 combined result or establish a fresh 408/17 full run. This is one current-source baseline, not an implementation before/after comparison. Fourteen ordinary HTTP probes made zero provider calls. Existing mark/create/observe/remove works; there is no new executable action.
+
+One current compound control fails: “I drop my coat and enter Cinderwatch.” moves from frontier gate to market quarter, turn 4→5, without dropping the coat. Other candidate-action probes do not mutate inventory or scene and remain at turn 4. Some refusals ask an irrelevant destination question. This review does not certify the existing compound boundary.
+
+The predecessor's saved evidence was independently parsed: 12/40 SUCCESS, quality 22/40, actionability 1.675/3; supplementary 18 information /5 executable successes among 55; combined 408/17 before and after with the same failure identities; focused module XML totals 611/0. These historical broad samples and four six-turn sequences were not rerun after the gate stopped. No claim of unchanged fresh broad metrics is made.
+
+Recommended prerequisite, not started: `pr_play_singleton_equipment_state_contract`, defining explicit authored wearable eligibility, one ruleset-owned slot and compatible equipped-state transition, revision/receipt semantics, and player projection before an ordinary-language action bridge. Equipment avoids a two-document item transfer, but its authority must be designed first. All transfer, consumable, key/lock, conceal/reveal and other physical actions remain deferred.
+
+Reports and machine evidence are in this campaign directory and `artifacts/pr_play_inventory_action_affordance_bridge/`. Archive verification is external in `archive_verification.json` after packaging. No commit, push, live provider call, global experimental gate, or next milestone.

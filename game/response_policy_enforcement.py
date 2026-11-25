@@ -1444,9 +1444,6 @@ def enforce_scene_momentum(
     if not scene_id:
         return gm
 
-    if not _scene_momentum_due(session, scene_id):
-        return gm
-
     if _extract_scene_momentum_kind(gm):
         return gm
 
@@ -1467,6 +1464,9 @@ def enforce_scene_momentum(
             "excluded_source": "render_scene_momentum_diegetic_append",
         }
         return out
+
+    if not _scene_momentum_due(session, scene_id):
+        return gm
 
     gm = dict(gm)
     tags = gm.get("tags") if isinstance(gm.get("tags"), list) else []

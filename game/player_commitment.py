@@ -42,7 +42,8 @@ _IF_SENTENCE_RE = re.compile(r"^\s*if\b", re.IGNORECASE)
 _HYPOTHETICAL_RE = re.compile(r"\b(?:would|could)\b", re.IGNORECASE)
 _CONDITIONAL_RE = re.compile(r"^\s*if\b|\bif\s+necessary\b", re.IGNORECASE)
 _LATER_RE = re.compile(
-    r"\b(?:later|afterwards)\b|\bafter\s+i\b|\bonce\s+i\b|\bwhen\s+i(?:'m| am)\s+done\b"
+    r"\b(?:later|afterwards|tomorrow)\b|\bafter\s+i\b|\bonce\s+i\b|\bwhen\s+i(?:'m| am)\s+done\b"
+    r"|\bafter\s+(?:speaking|talking|meeting)\b"
     r"|^\s*then\s+i(?:'ll| will)\s+(?:go|head|walk|leave|travel|follow)\b",
     re.IGNORECASE,
 )
@@ -185,6 +186,13 @@ def executable_obligations(text: str | None) -> dict[str, object]:
 
     move_text = _move_span(committed)
     move = bool(move_text) and not ask_governs_embedded_act(committed) and not _MODAL_MOVE_RE.search(committed)
+    if move:
+        from game.intent_parser import _explicit_stay_or_travel_negation
+
+        # A refused move is not an executable travel obligation.
+        # "I don't wait; I enter" does not match this negation.
+        if _explicit_stay_or_travel_negation(committed):
+            move = False
     social = _social_act(committed)
     if social is None and move:
         social = _quoted_farewell(str(text or ""))
@@ -259,7 +267,7 @@ def _sentence_uncommitted(sentence: str) -> bool:
         return True
     if _IF_SENTENCE_RE.search(raw):
         return True
-    if _LATER_RE.search(raw) and not re.search(r"\b(?:inspect|examine|check|ask)\b", raw, re.IGNORECASE):
+    if _LATER_RE.search(raw) and not re.search(r"\b(?:inspect|examine|check|ask|read)\b", raw, re.IGNORECASE):
         return True
     if _CONTEMPLATED_RE.search(raw) and not re.search(
         r"\b(?:inspect|examine|check|read|study)\b",

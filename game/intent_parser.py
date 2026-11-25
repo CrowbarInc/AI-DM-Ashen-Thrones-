@@ -178,8 +178,10 @@ _RE_STAY_LOCATION = re.compile(
 )
 _RE_NOT_LEAVING = re.compile(r"\b(?:not|n't)\s+leaving\b", re.IGNORECASE)
 _RE_NEGATED_TRAVEL = re.compile(
-    r"\b(?:don'?t|do\s+not|won't|will\s+not|not)\s+"
-    r"(?:want\s+to\s+)?(?:rush|leave|follow|pursue|go|head|enter|travel)\b",
+    r"\b(?:don'?t|do\s+not|won't|will\s+not|not|never)\s+"
+    r"(?:want\s+to\s+)?(?:rush|leave|follow|pursue|go|head|enter|travel|take|move|exit)\b"
+    r"|\b(?:refuse|refuses)\s+to\s+(?:enter|go|take|follow|head|travel|move|leave|exit)\b"
+    r"|\bdon'?t\s+move\s+me\b",
     re.IGNORECASE,
 )
 _RE_INSTEAD_OF_TRAVEL = re.compile(
@@ -2448,6 +2450,19 @@ def _declared_travel_negation_blocks_match(declared: str, m: re.Match) -> bool:
     if re.search(r"\brefuses?\s+to\s+go\s+to\s*$", pre):
         return True
     if re.search(r"\bchooses?\s+not\s+to\s+go\s+to\s*$", pre):
+        return True
+
+    # "do not enter", "won't go through", "refuse to take", "don't move".
+    # The negated word must sit on this match, so an earlier "don't wait" does not block a later enter.
+    if re.search(
+        r"(?:\b(?:do|does|did|will)\s+not|\bnot|\b(?:won't|wont|don't|dont)|\bnever|\brefuses?\s+to)\s*$",
+        pre,
+    ) and re.match(
+        r"(?:enter|enters|entering|go|goes|going|head|heads|heading|take|takes|taking|"
+        r"follow|follows|following|move|moves|moving|leave|leaves|leaving|exit|exits|exiting|"
+        r"travel|travels|traveling|travelling|walk|walks|walking|pursue|pursues|pursuing)\b",
+        g0_head,
+    ):
         return True
 
     # Postponement scoped to this destination (e.g. "against … to … for now").

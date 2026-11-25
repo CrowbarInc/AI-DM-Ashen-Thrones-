@@ -12,6 +12,7 @@ import shutil
 from pathlib import Path
 
 from tools.atgb.baseline import load_baseline, provenance, verify_files
+from tools.execution_workspace import OWNER_FILE
 
 MARKER_NAME = ".atgb-isolated"
 RUNTIME_MARKERS = (
@@ -122,7 +123,7 @@ def assert_fresh_store(resolved: Path) -> None:
             f"Refusing to reset {resolved}. It already contains campaign files ({', '.join(occupied)}). "
             "Benchmark execution will not call the campaign reset on an existing campaign."
         )
-    extras = [entry.name for entry in resolved.iterdir()]
+    extras = [entry.name for entry in resolved.iterdir() if entry.name != OWNER_FILE]
     if extras:
         raise UnsafeBenchmarkDataDir(
             f"Refusing benchmark data directory {resolved}. It is not empty ({', '.join(extras)})."

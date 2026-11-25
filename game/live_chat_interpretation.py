@@ -14,7 +14,6 @@ import time
 from contextvars import ContextVar
 from typing import Any
 
-from game.player_interpretation_bridge import visible_catalog
 from game.provider_budget import (
     accounting_active,
     admit_request,
@@ -82,7 +81,8 @@ def redact(text: str) -> str:
     return _SECRET_RE.sub("[REDACTED]", str(text or ""))
 
 
-def normalize_social_scope(payload: dict, communication: dict | None) -> tuple[dict, list[str]]:
+def normalize_social_scope(payload: dict, communication: dict | None, *, resolved_addressees=None,
+                           player_text=None, attention_target=None, unresolved_attention=False) -> tuple[dict, list[str]]:
     """Separate nonconsequential posture and question subject from ASK targets.
 
     This is a conservative compatibility normalization of the existing record,
@@ -105,22 +105,107 @@ def normalize_social_scope(payload: dict, communication: dict | None) -> tuple[d
         return result, []
     incidental = []
     kept = []
+    from game.interaction_completion import (
+        attention_nominal, corrected_dialogue, correction_attention_nominal, dialogue_attention,
+    )
+
+    attention = dialogue_attention(player_text) if player_text is not None else None
+    correction = corrected_dialogue(player_text) if player_text is not None else None
     # Require the whole component to describe only orientation/attention. This
     # cannot swallow drawing weapons, threats, movement, unlocking or sequences.
     posture = re.compile(r"^(?:I\s+)?(?:turn\s+(?:to|toward|towards)|face|(?:nod|incline)\s+(?:(?:my|our|their|the)\s+)?head\s+(?:to|toward|towards)|glance\s+(?:at|toward|towards)|look\s+(?:at|toward|towards))\s+(?P<person>[\w '\-]+?)(?:\s+as a social signal)?[.]?$", re.I)
+    identity = (resolved_addressees or {}).get(target, target) if isinstance(target, str) else target
+    target_words = set(re.findall(r"[a-z]+", str(identity).replace('_', ' ').casefold()))
     for component in components:
         description = str(component.get("description") or "").strip()
         match = posture.fullmatch(description)
         nominal = set(re.findall(r"[a-z]+", match['person'].casefold())) - {'the'} if match else set()
-        target_words = set(re.findall(r"[a-z]+", str(target).replace('_', ' ').casefold()))
+        if player_text is None:
+            same_attention = bool(nominal and nominal <= target_words)
+        else:
+            same_attention = bool(
+                attention and len(components) == 2 and communication.get("purpose") in {"QUESTION", "ACTION"}
+                and attention_nominal(description) == attention[0]
+                and ((attention_target and identity == attention_target) or unresolved_attention)
+            )
+            if correction and correction[3] and len(components) == 2:
+                same_attention = bool(
+                    identity == attention_target and communication.get("purpose") in {"QUESTION", "ACTION"}
+                    and correction_attention_nominal(description) == correction[3]
+                )
         if (component.get("operation_class") == "SOCIAL_SIGNAL"
-                and component.get("target_ref") == target and nominal and nominal <= target_words
+                and component.get("target_ref") == target and same_attention
                 and not re.search(r"\b(?:and|then|after|before|if|unless|sword|weapon|draw|unlock|threaten)\b", description, re.I)):
             incidental.append(description)
         else:
             kept.append(component)
     result["action_components"] = kept
     return result, incidental
+
+
+def _ground_evidence_targets(payload, communication, *, adapt, permitted_ids, evidence, player_text, scene, world,
+                             session, attention_target):
+    """Keep evidence labels within this provider exchange and out of the bridge."""
+    from game.player_interpretation_bridge import reconcile_visible_target
+
+    def evidence_target(component):
+        ref = component.get("target_ref") if isinstance(component, dict) else None
+        if isinstance(ref, str) and ref not in permitted_ids and (ref.strip() in {"scene", "npc_latest_reply"}
+                                     or ref.strip().startswith(("visible:", "reply:", "cause:", "npc:"))):
+            return ref
+        return None
+
+    components = payload.get("action_components")
+    if not isinstance(components, list):
+        return payload, [], []
+    refs = {ref for component in components if (ref := evidence_target(component)) is not None}
+    if not refs:
+        return payload, [], []
+    references = payload.get("references")
+    if not isinstance(references, dict) or not isinstance(references.get("permitted_entity_ids"), list):
+        return payload, [], []
+    declared = references["permitted_entity_ids"]
+    # Validate the entire shape with provisional declarations. The resulting
+    # record and eligibility never leave this check.
+    provisional = {**payload, "references": {**references, "permitted_entity_ids": [*declared, *sorted(refs)]}}
+    if not adapt(provisional, permitted_ids=permitted_ids)["structurally_valid"]:
+        return payload, [], []
+    mappings = {}
+    for item in components:
+        ref = evidence_target(item)
+        if ref is not None:
+            op = item["operation_class"]
+            mappings[(op, ref)] = reconcile_visible_target(
+                ref, op, evidence=evidence, player_text=player_text, scene=scene, world=world, session=session,
+            )
+    from game.interaction_completion import dialogue_attention
+
+    attention = dialogue_attention(player_text)
+    # A same-nominal gesture can be classified before identity is settled. The
+    # unresolved ASK still blocks execution and supplies the clarification.
+    unresolved_attention = bool(attention and not attention_target and attention[0] == attention[1]
+                                and any(op == "ASK" and reason == "request_target_unconfirmed"
+                                        for (op, _), (_, reason) in mappings.items()))
+    payload, incidental = normalize_social_scope(
+        payload, communication, player_text=player_text, attention_target=attention_target,
+        unresolved_attention=unresolved_attention, resolved_addressees={
+            ref: target for (op, ref), (target, _) in mappings.items() if op == "ASK" and target
+        },
+    )
+    audit = []
+    grounded_ids = []
+    for item in payload["action_components"]:
+        ref = evidence_target(item)
+        if ref is not None:
+            target, reason = mappings[(item["operation_class"], ref)]
+            audit.append({"reference": ref, "operation": item["operation_class"], "target_id": target, "reason": reason})
+            if target:
+                item["target_ref"] = target
+                grounded_ids.append(target)
+    payload["references"]["permitted_entity_ids"] = list(dict.fromkeys([
+        *(item for item in declared if item not in refs), *grounded_ids,
+    ]))
+    return payload, audit, incidental
 
 
 def reset_live_interpretation_consumed() -> None:
@@ -175,9 +260,11 @@ def _scene_summary(scene: dict | None) -> str:
     return f"{location}. {summary}".strip()
 
 
-def _catalog_rows(scene: dict | None, world: dict | None) -> list[tuple[str, str, str]]:
+def _catalog_rows(scene: dict | None, world: dict | None, character: dict | None = None) -> list[tuple[str, str, str]]:
+    from game.carried_object_grounding import interpretation_catalog
+
     rows: list[tuple[str, str, str]] = []
-    for entity_id, info in sorted(visible_catalog(scene, world).items()):
+    for entity_id, info in interpretation_catalog(scene, world, character).items():
         row = info.get("row") if isinstance(info.get("row"), dict) else {}
         label = str(row.get("label") or row.get("name") or entity_id)
         aliases = [str(item) for item in (row.get("aliases") or []) if str(item).strip()]
@@ -306,6 +393,8 @@ def interpret_production_turn(
     world: dict | None,
     log: list | None,
     session: dict | None = None,
+    character: dict | None = None,
+    coverage_restriction: dict | None = None,
 ) -> dict[str, Any]:
     """Return skipped, blocked, or accepted. Accepted carries a bridge record."""
     if not production_live_interpretation_enabled():
@@ -313,7 +402,7 @@ def interpret_production_turn(
         return {"status": "skipped", "reason": reason, "record": None, "provider_requests": []}
 
     adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
-    catalog = _catalog_rows(scene, world)
+    catalog = _catalog_rows(scene, world, character)
     recent = player_visible_turns(log or [], limit=2)
     messages = build_messages_for_catalog(
         player_text,
@@ -363,6 +452,9 @@ def interpret_production_turn(
         "Ask a targeted question when meaningful ambiguity remains: competing subjects, people, a missing interlocutor "
         "or action parameter, or conflicting intentions. Clarify the unresolved subject separately from an established "
         "addressee; never guess to avoid clarification. "
+        "Carried and equipped ids in the permitted list are this character's authoritative possessions. "
+        "Use a listed id for that object. Do not invent an id. "
+        "A question about a carried object or about prepared spells is not a cast and does not change inventory. "
         "Acknowledgments asserting no world facts may use empty evidence_refs. "
         "Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation."
         " A declaration of what I/we do is CHARACTER/ACTION, including inspection; "
@@ -408,6 +500,14 @@ def interpret_production_turn(
         ],
         "pending_choices": (context.get("pending_clarification") or {}).get("choices", [])[:4],
     }, ensure_ascii=False)
+    if coverage_restriction is not None:
+        messages[0]["content"] += (
+            " The host has withheld execution for uncertain whole-request coverage. "
+            "Interpret the complete original meaning read-only, preserving negation, "
+            "hypothetical conditions, context and unresolved clauses. This record "
+            "cannot authorize consequences or remove the host restriction."
+        )
+        messages[1]["content"] += "\nHost coverage restriction: " + json.dumps(coverage_restriction, ensure_ascii=False)
     leaks = context_leaks(messages, player_text)
     for turn in recent:
         for value in turn.values():
@@ -486,8 +586,44 @@ def interpret_production_turn(
             communication["recipient"] = "CHARACTER"
         elif len(components) > 1:
             communication["recipient"] = "MIXED"
-    payload, incidental = normalize_social_scope(payload, communication)
-    adapted = adapt_interpretation(payload, permitted_ids=[entity_id for entity_id, _label, _kind in catalog])
+    permitted_ids = [entity_id for entity_id, _label, _kind in catalog]
+    from game.interaction_completion import corrected_dialogue, dialogue_attention
+    from game.ordinary_semantic_ownership import corrected_dialogue_target, dialogue_attention_target
+
+    attention = dialogue_attention(player_text)
+    correction = corrected_dialogue(player_text)
+    attention_target = (dialogue_attention_target(attention, scene=scene, world=world, session=session)
+                        if attention else None)
+    if correction:
+        attention_target = corrected_dialogue_target(correction, scene=scene, world=world, session=session)
+    if attention_target and attention_target not in permitted_ids:
+        permitted_ids.append(attention_target)
+    payload, target_audit, grounded_incidental = _ground_evidence_targets(
+        payload, communication, adapt=adapt_interpretation, permitted_ids=permitted_ids,
+        evidence=evidence, player_text=player_text, scene=scene, world=world, session=session,
+        attention_target=attention_target,
+    )
+    if any(item["target_id"] is None for item in target_audit):
+        action = target_audit[0]["operation"] if len(target_audit) == 1 else ""
+        question = {
+            "ASK": "Who are you addressing?",
+            "INSPECT": "Which accessible object or feature do you want to examine?",
+        }.get(action, "Which action and target do you mean?")
+        return _blocked(
+            "unresolved_evidence_target",
+            question + " Nothing has been attempted.",
+            tags=["interpretation_clarification", "non_mutating"],
+            extra={"raw_interpretation": raw, "provider_requests": provider_requests,
+                   "reference_reconciliation": {"public_targets": target_audit},
+                   "incidental_context": grounded_incidental},
+        )
+    permitted_ids.extend(item["target_id"] for item in target_audit)
+    incidental = grounded_incidental
+    if (attention or correction) and not target_audit and adapt_interpretation(payload, permitted_ids=permitted_ids)["structurally_valid"]:
+        payload, incidental = normalize_social_scope(
+            payload, communication, player_text=player_text, attention_target=attention_target,
+        )
+    adapted = adapt_interpretation(payload, permitted_ids=permitted_ids)
     reconciliation = None
     if adapted.get("structurally_valid"):
         from game.player_interpretation_bridge import reconcile_reference_annotations
@@ -502,7 +638,9 @@ def interpret_production_turn(
                 scene=scene, world=world, session=session)
             communication = prepared.get("communication", communication)
             payload = {key: prepared[key] for key in payload}
-        adapted = adapt_interpretation(payload, permitted_ids=[entity_id for entity_id, _label, _kind in catalog])
+        adapted = adapt_interpretation(payload, permitted_ids=permitted_ids)
+    if target_audit:
+        reconciliation = {**(reconciliation or {}), "public_targets": target_audit}
     record = adapted.get("record") if isinstance(adapted.get("record"), dict) else None
     if record is not None and communication is not None:
         record["communication"] = communication
@@ -520,6 +658,13 @@ def interpret_production_turn(
         "model_communication_mode": parsed.get("communication_mode"),
         "interpretation_status": None if record is None else record.get("interpretation_status"),
     }
+    if target_audit and eligibility.get("rejected_identifiers"):
+        return _blocked(
+            "unresolved_evidence_target",
+            "I can't establish all the targets for that request. Nothing has been attempted.",
+            tags=["interpretation_clarification", "non_mutating"],
+            extra=common,
+        )
     if not adapted.get("structurally_valid") or record is None:
         return _blocked(
             "malformed_interpretation",

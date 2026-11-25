@@ -1,0 +1,7 @@
+# Limitations
+
+No equipment gameplay capability was delivered: no selected item/slot, equip, unequip, committed inspection, persistence or retry acceptance. Ten diagnostics are not 58 controls or four equipment sequences. Broad evaluations and performance comparisons are unrun. Current imported aggregate mechanics lack equipment contribution provenance. No travel-coat eligibility, ownership of attack records, generic ruleset loader or character-wide revision was inferred. The contextual NPC ‘Knowing the road is dangerous’ limitation remains untouched. Existing inherited regression failures remain documented.
+
+**BLOCKED.** No approach meets the complete lifecycle gate. No production implementation is authorized. Existing identity, persistence, and receipt primitives make a future narrow contract plausible; they do not supply equipment eligibility or slot compatibility. The mandatory stop also applies when no existing item can be authorized safely (Phase D).
+
+Smallest missing prerequisite: an explicit ruleset-owned equipment policy and an existing item mapped to its validated category and slot, including whether changing equipped state changes already-imported statistics. Then a bounded character-owned association and revision/receipt mutation can reuse current storage and publication. This does not require a universal equipment engine, but authoring new eligibility from names would violate this milestone. No next milestone was started.

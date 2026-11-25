@@ -4,9 +4,10 @@ import copy
 
 import pytest
 
-from experiments.pr_dq.world import LANTERN_ID, MARA_ID
+from experiments.pr_dq.world import LANTERN_ID, MARA_ANSWER, MARA_ID
 from game import storage
 from game.api import chat
+from game.conversational_continuity import delivered_exchanges
 from game.interaction_context import set_social_target
 from game.models import ChatRequest
 from tests.test_pr_du_player_pipeline import _fake_gm_for_resolution, _seed_pr_du_world
@@ -22,20 +23,27 @@ def _activate_mara() -> None:
 
 def test_pr_eb_active_npc_followup_routes_to_existing_social_resolver(tmp_path, monkeypatch) -> None:
     _seed_pr_du_world(tmp_path, monkeypatch)
-    _activate_mara()
     monkeypatch.setattr("game.api.call_gpt", _fake_gm_for_resolution)
     monkeypatch.setattr(
         "game.live_chat_interpretation.request_interpretation",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("interpretation provider called")),
     )
 
-    data = chat(ChatRequest(text="Which captain?", ui_mode="player"))
+    opening = chat(ChatRequest(text="Sergeant Mara, is the road on the other side of this gate?", ui_mode="player"))
+    assert opening["resolution"]["success"] is True
+    assert opening["resolution"]["social"]["npc_id"] == MARA_ID
+    assert MARA_ANSWER.casefold() in opening["gm_output"]["player_facing_text"].casefold()
+    session = storage.load_session()
+    assert delivered_exchanges(session)[-1]["speaker_id"] == MARA_ID
+
+    data = chat(ChatRequest(text="What else do you know about the north road?", ui_mode="player"))
 
     assert data["ok"] is True
     assert data["resolution"]["kind"] == "question"
+    assert data["resolution"]["success"] is True
     assert data["resolution"]["social"]["npc_id"] == MARA_ID
     assert data["resolution"]["metadata"]["stored_interpretation"]["operation"] == "ASK"
-    assert storage.load_session()["turn_counter"] == 1
+    assert storage.load_session()["turn_counter"] == session["turn_counter"] + 1
 
 
 def test_pr_eb_conversation_exit_clears_active_interlocutor_without_world_mutation(tmp_path, monkeypatch) -> None:
